@@ -3,6 +3,9 @@
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Debug\Debug;
 
+// @@1 martin jonasse 10.08.2013 disabled caching for debugging
+//                              Ref cookbook chapter "How to optimize your development Environment for debugging"
+
 // If you don't want to setup permissions the proper way, just uncomment the following PHP line
 // read http://symfony.com/doc/current/book/installation.html#configuration-and-setup for more information
 //umask(0000);
@@ -17,13 +20,18 @@ if (isset($_SERVER['HTTP_CLIENT_IP'])
     exit('You are not allowed to access this file. Check '.basename(__FILE__).' for more information.');
 }
 
-$loader = require_once __DIR__.'/../app/bootstrap.php.cache';
+// @@1 begin martin jonasse 10.08.2013 disable cache for debugger
+// $loader = require_once __DIR__.'/../app/bootstrap.php.cache';
+$loader = require_once __DIR__.'/../app/autoload.php';
+// @@1 end
 Debug::enable();
 
 require_once __DIR__.'/../app/AppKernel.php';
 
 $kernel = new AppKernel('dev', true);
-$kernel->loadClassCache();
+// @@1 begin martin jonasse 10.08.2013 disable cache for debugger
+// $kernel->loadClassCache();
+// @@1 end
 $request = Request::createFromGlobals();
 $response = $kernel->handle($request);
 $response->send();
