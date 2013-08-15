@@ -1,0 +1,3 @@
+tixi_home_homepage:
+    pattern:  /home
+    defaults: { _controller: TixiHomeBundle:Default:index }

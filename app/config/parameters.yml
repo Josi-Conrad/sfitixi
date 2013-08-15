@@ -1,9 +1,11 @@
 # This file is auto-generated during the composer install
+# @@ martin jonasse 13.08.2013 changed database_name from symfony to itixi
+
 parameters:
     database_driver: pdo_mysql
     database_host: 127.0.0.1
     database_port: null
-    database_name: symfony
+    database_name: itixi
     database_user: root
     database_password: null
     mailer_transport: smtp

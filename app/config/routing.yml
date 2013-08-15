@@ -1,0 +1,4 @@
+tixi_home:
+    resource: "@TixiHomeBundle/Resources/config/routing.yml"
+    prefix:   /
+

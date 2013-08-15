@@ -1,0 +1,79 @@
+{# src\Tixi\HomeBundle\Resources\views\Default\index.html.twig #}
+{% extends '::base.html.twig' %}
+
+{% block title %}iTixi cloud computing - home{% endblock %}
+{% block stylesheets %}<link href="{{ asset('css/sfitixi.css') }}" rel="stylesheet" type="text/css" />{% endblock %}
+{% block body %}
+    {% block frame %}
+        <!--FRAME: without function points (anchors) which will added later-->
+        <div class="frame">
+            <div class="frame-table">
+                <div class="frame-row">
+                    <div class="frame-logo">
+                        <img src="{{ asset('images/logo44px.png') }}" alt="Logo iTIXI" />
+                    </div>
+                    <div class="frame-left">
+                        <div>{{ application }}&nbsp;{{ version }}</div>
+                        <div>Mandant:&nbsp;{{ customer }}</div>
+                    </div>
+                    <div class="frame-left">
+                        <div>{{ breadcrumbs }}</div>
+                    </div>
+                    <div class="frame-right">
+                        <div>{{ username }}</div>
+                        <div>Einstellungen | Support | Hilfe</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endblock %}
+
+    <!-- MENU-BAR: without function points (anchors) which will added later -->
+    {% block menubar %}
+        <div>
+            {{ render(controller( 'TixiHomeBundle:Menutree:menuitems' )) }}
+        </div>
+    {% endblock %}
+
+    <!--SUBJECT & TASK BAR: without function points (anchors) which will added later-->
+    <div class="subject-taskbars">
+    {% block subject %}
+        <div class="subject">
+            <div class="subject-row">
+                <div class="subject-left">
+                    <div>{{ subject }}</div>
+                </div>
+                <div class="subject-right">
+                    <img src="{{ asset('images/printer-blue.png') }}" alt="printer" />
+                </div>
+            </div>
+        </div>
+    {% endblock %}
+    {% block taskbar %}
+        <div class="taskbar">
+            <div class="taskbar-row">
+                <div class="taskbar-left">
+                    <form class="taskbar-filter">
+                        <input id="fpw_filter" class="taskbar-left-filter-text" type="text" value="Filter..."
+                               onfocus="if (this.value == 'Filter...') {this.value = '';}"
+                               onblur="if (this.value == '') {this.value = 'Filter...';}" />
+                        <input id="fpm_filter" class="taskbar-left-filter-button" type="button" value="Go" />
+                    </form>
+                </div>
+                <div class="taskbar-right">
+                    <input id="fpm_add" type="button" value="Hinzuf&uuml;gen"
+                           onclick="location.href='{{ path( routeid, {'action':'add'} ) }}'"/>
+                    <!-- @todo: modify buttons here -->
+                    <button id="fpm_modify">Bearbeiten</button>
+                    <button id="fpm_delete">L&ouml;schen</button>
+                    <button id="fpm_submit" hidden>Speichern</button>
+                    <button id="fpm_quit" hidden>Abbrechen</button>
+                </div>
+            </div>
+        </div>
+    {% endblock %}
+    </div>
+    {% block errormsg %}{% endblock %}
+
+    {% block content %}{% endblock %}
+{% endblock %}
