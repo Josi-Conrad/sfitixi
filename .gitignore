@@ -11,3 +11,7 @@ web/bundles/*
 # Configuration files
 app/config/parameters.ini
 app/config/parameters.yml
+
+# IDE files, @@ 19.08.2013 martin jonasse add igores for phpstorm ide
+.idea/workspace.xml
+.idea/tasks.xml
