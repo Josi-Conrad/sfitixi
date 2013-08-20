@@ -17,6 +17,7 @@ class AppKernel extends Kernel
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new Tixi\HomeBundle\TixiHomeBundle(),
+            new Tixi\Pub\AboutBundle\TixiPubAboutBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

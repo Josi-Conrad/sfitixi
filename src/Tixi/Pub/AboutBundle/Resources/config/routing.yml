@@ -1,0 +1,3 @@
+tixi_pub_about_homepage:
+    pattern:  /public/about
+    defaults: { _controller: TixiPubAboutBundle:Default:index }

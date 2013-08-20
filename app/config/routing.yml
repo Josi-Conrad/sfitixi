@@ -1,3 +1,7 @@
+tixi_pub_about:
+    resource: "@TixiPubAboutBundle/Resources/config/routing.yml"
+    prefix:   /
+
 tixi_home:
     resource: "@TixiHomeBundle/Resources/config/routing.yml"
     prefix:   /
