@@ -1,4 +1,5 @@
 {# src\Tixi\HomeBundle\Resources\views\Default\index.html.twig #}
+{# 17.08.2013 martin jonasse initial file #}
 {% extends '::base.html.twig' %}
 
 {% block title %}iTixi cloud computing - home{% endblock %}
@@ -26,9 +27,15 @@
                         <div>{{ breadcrumbs }}</div>
                     </div>
                     <div class="frame-right">
-                        <a href="{{ baseurl }}/public/logout" id="fpm_public_logout">
-                            <div>{{ username }}:logout</div>
-                        </a>
+                        {%  if username == 'Anonym' %}
+                            <a href="{{ baseurl }}/public/login" id="fpm_public_login">
+                                <div>login</div>
+                            </a>
+                        {%  else %}
+                            <a href="{{ baseurl }}/public/logout" id="fpm_public_logout">
+                                <div>{{ username }}:logout</div>
+                            </a>
+                        {% endif %}
                         <div><a href="{{ baseurl }}/home/preferences" id="fpm_home_preferences">Einstellungen</a> | <a href="{{ baseurl }}/home/support" id="fpm_home_support">Support</a> | <a href="{{ baseurl }}/home/help" id="fpm_home_help">Hilfe</a>
                         </div>
                     </div>
@@ -97,5 +104,9 @@
     </div>
     {% block errormsg %}{% endblock %}
 
-    {% block content %}{% endblock %}
+    {% block content %}
+        {{ include(
+            'TixiHomeBundle:Default:splash.html.twig'
+        ) }}
+    {% endblock %}
 {% endblock %}

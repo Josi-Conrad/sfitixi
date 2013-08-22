@@ -1,5 +1,7 @@
 <?php
 
+// 21.08.2013 martin jonasse initial file
+
 namespace Tixi\Pub\AboutBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -13,7 +15,7 @@ class DefaultController extends Controller
 
      // render the about page
         return $this->render('TixiPubAboutBundle:Default:index.html.twig',
-            $paramservice->getTemplateParameters('about', 'Informationen zu iTixi')
+            $paramservice->getTemplateParameters('about', 'Informationen zur iTixi Applikation')
         );
     }
 }

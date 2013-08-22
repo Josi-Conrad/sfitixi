@@ -1,3 +1,5 @@
+# 22.08.2013 martin jonasse initial file
+
 tixi_pub_about_homepage:
     pattern:  /public/about
     defaults: { _controller: TixiPubAboutBundle:Default:index }

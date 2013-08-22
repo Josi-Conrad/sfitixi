@@ -1,4 +1,6 @@
 {# src\Tixi\Pub\AboutBundle\Resources\views\Default\index.html.twig #}
+{# 21.08.2013 martin jonasse initial file #}
+{# 22.08.2013 martin jonasse added gnu v2 text and symfony #}
 
 {% extends 'TixiHomeBundle:Default:index.html.twig' %}
 
@@ -15,23 +17,44 @@
     <div class="frame-table">
         <div class="frame-row">
             <div class="frame-logo">
-                <img src="{{ asset('images/opensource_logo.gif') }}" alt="Logo Open Source" height="38" width="44"/>
+                <img src="{{ asset('images/traffic_sign.png') }}" alt="Verkehrstafel 'Arbeit'" height="37" width="44"/>
             </div>
             <div class="frame-left">
-                <p>Lizenz: GPL (general public licence) version 2.<br>
-                   Referenz: Open Source Projekt in <a href="http://sourceforge.net/projects/itixi/">SourceForge</a>.
+                <p>Die iTixi Open Source Applikation wurde m&ouml;glich durch freiwillige Beitr&auml;ge von den
+                   folgenden Personen (Organisationen):<br>
+                   Yeldez Gwerder (TIXIZUG), Josef Conrad (ehemals UBS), Martin Jonasse (ehemals CS),
+                   Stefan Keller (HSR), Carmelo Schumacher (HSR).
+                </p>
+                <p>F&uuml;r Details, siehe Open Source Projekt in <a href="http://sourceforge.net/projects/itixi/">SourceForge</a>.
                 </p>
             </div>
         </div>
         <div class="frame-row">
             <div class="frame-logo">
-                <img src="{{ asset('images/traffic_sign.png') }}" alt="Verkehrstafel 'Arbeit'" height="37" width="44"/>
+                <img src="{{ asset('images/symfony_logo.png') }}" alt="Symfony Logo" height="44" width="44"/>
             </div>
             <div class="frame-left">
-                <p>Dieser Open Source Applikation wurde m&ouml;glich durch Beitr&auml;ge folgender Personen:<br>
-                   Yeldez Gwerder (TIXIZUG), Josef Conrad (ehemals UBS), Martin Jonasse (ehemals CS),
-                   Stefan Keller (HSR), Carmelo Schumacher (HSR).
-                </p>
+                <h3>Symfony (MIT) Lizenzbedingungen:</h3>
+                <p>Siehe Symfony Webseite <a href="http://symfony.com/doc/current/contributing/code/license.html">http://symfony.com/doc/current/contributing/code/license.html</a></p>
+                <p>Bemerkung:<br>The MIT license is also GPL-compatible, meaning that the GPL permits combination and redistribution with software that uses the MIT License.</p>
+            </div>
+        </div>
+        <div class="frame-row">
+            <div class="frame-logo">
+                <img src="{{ asset('images/logo44px.png') }}" alt="iTixi Logo"/>
+            </div>
+            <div class="frame-left">
+                <h3>iTixi (GNU) Lizenzbedingungen:</h3>
+            </div>
+        </div>
+        <div class="frame-row">
+            <div class="frame-logo">
+                <img src="{{ asset('images/opensource_logo.gif') }}" alt="Logo Open Source" height="38" width="44"/>
+            </div>
+            <div class="frame-left">
+                {{ include(
+                    'TixiPubAboutBundle:Default:gpl_license.html.twig'
+                ) }}
             </div>
         </div>
     </div>
