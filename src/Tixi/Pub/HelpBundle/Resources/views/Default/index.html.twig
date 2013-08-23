@@ -1,0 +1,28 @@
+{# src\Tixi\Pub\HelpBundle\Resources\views\Default\index.html.twig #}
+{# 23.08.2013 martin jonasse initial file #}
+
+{% extends 'TixiHomeBundle:Default:index.html.twig' %}
+
+{% block title %}iTixi cloud computing - help{% endblock %}
+
+{% block menubar %}{%  endblock %}
+
+{% block subject %}{% endblock %}
+
+{% block taskbar %}{% endblock %}
+
+{% block content %}
+<div>
+    <p>Die iTixi Applikation ist mittels PDF Dateien dokumentiert:</p>
+    <ul>
+        <li><a href="{{ asset('doc/sfitixi_help.pdf') }}">Bedienungsanleitung für den Benutzer</a></li>
+        <li>Disposition</li>
+        <li>Fahrgast</li>
+        <li>OVI</li>
+        <li>Fahrer</li>
+        <li>Fahrzeug</li>
+        <li>Export</li>
+        <li>Unterhalt</li>
+    </ul>
+</div>
+{% endblock %}
