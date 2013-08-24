@@ -1,3 +1,7 @@
+tixi_pub_logout:
+    resource: "@TixiPubLogoutBundle/Resources/config/routing.yml"
+    prefix:   /
+
 tixi_pub_support:
     resource: "@TixiPubSupportBundle/Resources/config/routing.yml"
     prefix:   /
