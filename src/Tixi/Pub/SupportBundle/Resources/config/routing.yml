@@ -1,0 +1,4 @@
+# 24.08.2013 martin jonasse initial file
+tixi_pub_support_page:
+    pattern:  /public/support
+    defaults: { _controller: TixiPubSupportBundle:Default:index }
