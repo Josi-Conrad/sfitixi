@@ -33,7 +33,7 @@ Class HomepageController
         $version = '2.0.4'; // @todo: get this from the session
         $customer = 'Undefined'; // @todo: get this from the session
         $breadcrumbs = 'Startseite'; // @todo: solve this function point
-        $username = 'Anonym'; // @todo: get this from the session
+        $username = 'Martin Jonasse'; // @todo: get this from the session
 
     // set parameters for the menubar
     //  $baseurl
