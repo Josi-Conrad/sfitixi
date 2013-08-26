@@ -33,15 +33,15 @@
                     </div>
                     <div class="frame-right">
                         {%  if username == 'Anonym' %}
-                            <a href="{{ baseurl }}/public/login" id="fpm_public_login">
+                            <a href="{{ baseurl }}/login" id="fpm_public_login">
                                 <div>login</div>
                             </a>
                         {%  else %}
-                            <a href="{{ baseurl }}/public/logout" id="fpm_public_logout">
+                            <a href="{{ baseurl }}/logout" id="fpm_public_logout">
                                 <div>{{ username }}:logout</div>
                             </a>
                         {% endif %}
-                        <div><a href="{{ baseurl }}/home/preferences" id="fpm_home_preferences">Einstellungen</a> | <a href="{{ baseurl }}/public/support" id="fpm_home_support">Support</a> | <a href="{{ baseurl }}/public/help" id="fpm_home_help">Hilfe</a>
+                        <div><a href="{{ baseurl }}/preferences" id="fpm_home_preferences">Einstellungen</a> | <a href="{{ baseurl }}/public/support" id="fpm_home_support">Support</a> | <a href="{{ baseurl }}/public/help" id="fpm_home_help">Hilfe</a>
                         </div>
                     </div>
                 </div>

@@ -1,6 +1,7 @@
 {# src/Tixi/Pub/CustomerBundle/Tesources/views/Default/index.html.twig#}
 {# 25.08.2018 martin jonasse initial page #}
-{# 26.08.2013 martin jonasse upgraded zoom=11, center = Oberwil, test customer #}
+{# 26.08.2013 martin jonasse upgraded zoom=11, center = Oberwil, and test customer #}
+
 {% extends 'TixiHomeBundle:Default:index.html.twig' %}
 
 {% block title %}iTixi cloud computing - customer{% endblock %}
@@ -15,7 +16,7 @@
 {# @todo: make the /customer page sensitive to multiple customerd and add "todays routes" #}
 <div class="frame">
     <div class="frame-table">
-        {% if customer == 'tixizug' %}
+        {% if customer == 'tixizug.ch' %}
             <div class="frame-row">
                 <div class="frame-logo">
                 {# credits: https://developers.google.com/maps/documentation/staticmaps/?hl=de#quick_example #}
@@ -29,7 +30,7 @@
                         alt="Einzugsgebiet TIXI ZUG"  />
                     <p>
                         Nutzungsbegrenzung: 25'000 Google Static Map Abfragen pro Tag <br>(darüber erhalten Sie
-                        HTTP 403 Fehlermeldung)
+                        eine HTTP 403 Fehlermeldung)
                     </p>
                 </div>
                 <div class="frame-left">
@@ -41,7 +42,7 @@
                     </p>
                 </div>
             </div>
-        {% elseif (customer == 'undefined') or (customer == 'test') or (customer == '')%}
+        {% elseif (customer == 'test') or (customer == 'btb.ch') or (customer == '')%}
             <div class="frame-row">
                 <div class="frame-logo">
                     {# credits: https://developers.google.com/maps/documentation/staticmaps/?hl=de#quick_example #}
@@ -55,7 +56,7 @@
                          alt="Test Umgebung iTixi"  />
                     <p>
                         Nutzungsbegrenzung: 25'000 Google Static Map Abfragen pro Tag <br>(darüber erhalten Sie
-                        HTTP 403 Fehlermeldung)
+                        eine HTTP 403 Fehlermeldung)
                     </p>
                 </div>
                 <div class="frame-left">
@@ -64,7 +65,8 @@
                 <div class="frame-left">
                     <p>
                         Test Umgebung für das iTixi Projekt.<br>
-                        Mandant ist "test", "undefined" oder "".
+                        Mandant ist "btb.ch" Behinderten Transport Basel.<br>
+                        Bemerkung: Domäne und Mandant sind beide fiktiv.
                     </p>
                 </div>
             </div>

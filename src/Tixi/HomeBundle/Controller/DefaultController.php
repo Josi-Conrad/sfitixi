@@ -26,6 +26,10 @@ class DefaultController extends Controller
 
      // render /home/ page
         $paramservice = $this->get('tixi_homepage_service');
+
+        $usr = $this->getUser();
+        if (is_object($usr)) { $username = $usr->getUsername(); };
+
         return $this->render(
             'TixiHomeBundle:Default:index.html.twig',
             $paramservice->getTemplateParameters('home', 'Startseite der Dispo-Software',$err)

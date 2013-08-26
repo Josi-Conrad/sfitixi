@@ -4,21 +4,19 @@
  * User: jonasse
  * Date: 21.08.13
  * Time: 16:09
+ * 26.08.2013 martin jonasse get username and customer from session
  */
 // src/Tixi/HomeBundle/Controller/HomepageController.php
 
 namespace Tixi\HomeBundle\Controller;
 
-// use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-// Class HomepageController extends Controller
-// not needed at the moment: simple and fast
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-Class HomepageController
+Class HomepageController extends Controller
 {
-    public function showAction($_route) {
+/*   public function showAction($_route) {
         var_dump($_route);
-    }
-
+    } */
     public function getTemplateParameters( $title, $subject, $errormsg='', $content='')
     {
     // set the parameters array for the default home page environment, some are constants, some variables ...
@@ -31,9 +29,16 @@ Class HomepageController
     // set parameters for the top frame
         $application = 'iTixi'; // @todo: get this from the session
         $version = '2.0.4'; // @todo: get this from the session
-        $customer = 'tixizug'; // @todo: get this from the session
         $breadcrumbs = 'Startseite'; // @todo: solve this function point
-        $username = 'Martin Jonasse'; // @todo: get this from the session
+
+        $username = 'Anonym';
+        $customer = '';
+        // get username and customer from session (crashes)
+        // $usr = $this->getUser();
+        // $usr = $this->('security.context')->getToken()->getUser();
+        // if (is_object($usr)) {
+        //    $username = $usr->getUsername();
+        // }
 
     // set parameters for the menubar
     //  $baseurl

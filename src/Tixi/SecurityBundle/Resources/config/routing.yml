@@ -1,0 +1,6 @@
+# 26.08.2013 martin jonasse initial file, credit the book - chapter 13 - security
+login:
+    pattern:  /login
+    defaults: { _controller: TixiSecurityBundle:Security:login }
+login_check:
+    pattern: /login_check

@@ -1,3 +1,7 @@
+tixi_security:
+    resource: "@TixiSecurityBundle/Resources/config/routing.yml"
+    prefix:   /
+
 tixi_pub_customer:
     resource: "@TixiPubCustomerBundle/Resources/config/routing.yml"
     prefix:   /
