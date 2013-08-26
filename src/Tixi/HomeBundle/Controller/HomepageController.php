@@ -31,7 +31,7 @@ Class HomepageController
     // set parameters for the top frame
         $application = 'iTixi'; // @todo: get this from the session
         $version = '2.0.4'; // @todo: get this from the session
-        $customer = 'Undefined'; // @todo: get this from the session
+        $customer = 'tixizug'; // @todo: get this from the session
         $breadcrumbs = 'Startseite'; // @todo: solve this function point
         $username = 'Martin Jonasse'; // @todo: get this from the session
 

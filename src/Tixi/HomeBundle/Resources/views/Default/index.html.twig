@@ -1,5 +1,6 @@
 {# src\Tixi\HomeBundle\Resources\views\Default\index.html.twig #}
 {# 17.08.2013 martin jonasse initial file #}
+{# 26.08.2013 martin jonasse added errormsg code #}
 {% extends '::base.html.twig' %}
 
 {% block title %}iTixi cloud computing - home{% endblock %}
@@ -106,7 +107,11 @@
         </div>
     {% endblock %}
     </div>
-    {% block errormsg %}{% endblock %}
+    {% block errormsg %}
+        {% if errormsg != '' %}
+            <p style="color:red">{{ errormsg }}</p>
+        {% endif %}
+    {% endblock %}
 
     {% block content %}
         {{ include(
