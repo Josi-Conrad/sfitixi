@@ -1,10 +1,13 @@
+# 26.08.2013 martin jonasse initial file
+# 27.08.2013 martin jonasse added @service_container
+
 parameters:
 #    tixi_home.example.class: Tixi\HomeBundle\Example
 
 services:
     tixi_homepage_service:
         class: Tixi\HomeBundle\Controller\HomepageController
-        arguments: [HomepageController]
+        arguments: [@service_container]
 #    tixi_home.example:
 #        class: %tixi_home.example.class%
 #        arguments: [@service_id, "plain_value", %parameter%]

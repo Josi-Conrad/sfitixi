@@ -5,18 +5,24 @@
  * Date: 21.08.13
  * Time: 16:09
  * 26.08.2013 martin jonasse get username and customer from session
+ * 27.08.2013 martin jonasse added __construct
  */
 // src/Tixi/HomeBundle/Controller/HomepageController.php
 
 namespace Tixi\HomeBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 Class HomepageController extends Controller
 {
-/*   public function showAction($_route) {
-        var_dump($_route);
-    } */
+    protected $container;
+
+    public function __construct (ContainerInterface $container)
+    {
+        $this->container = $container;
+    }
+
     public function getTemplateParameters( $title, $subject, $errormsg='', $content='')
     {
     // set the parameters array for the default home page environment, some are constants, some variables ...
@@ -31,14 +37,17 @@ Class HomepageController extends Controller
         $version = '2.0.4'; // @todo: get this from the session
         $breadcrumbs = 'Startseite'; // @todo: solve this function point
 
-        $username = 'Anonym';
-        $customer = '';
-        // get username and customer from session (crashes)
-        // $usr = $this->getUser();
-        // $usr = $this->('security.context')->getToken()->getUser();
-        // if (is_object($usr)) {
-        //    $username = $usr->getUsername();
-        // }
+        // get username, roles and customer from session (crashes)
+        $usr = $this->getUser();
+        if (is_object($usr)) {
+            $email = explode('@', $usr->getUsername());
+            $username = $email[0];
+            $customer = $email[1];
+            $roles = $usr->getRoles();
+        } else {
+            $username = 'Anonym';
+            $customer = '';
+        };
 
     // set parameters for the menubar
     //  $baseurl

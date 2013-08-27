@@ -1,5 +1,6 @@
 # 26.08.2013 martin jonasse initial file, credit the book - chapter 13 - security
 #                           reference: security.yml.dist is the original file
+# 27.08.2013 martin jonasse set access control to /app (needs login credentials)
 
 security:
     firewalls:
@@ -14,7 +15,7 @@ security:
 
     access_control:
         - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: /customer, roles: [ROLE_USER, ROLE_ADMIN] }
+        - { path: /app, roles: [ROLE_USER, ROLE_ADMIN] }
 
     role_hierarchy:
         ROLE_ADMIN:       ROLE_USER

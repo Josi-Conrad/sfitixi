@@ -2,6 +2,7 @@
 
 // src/Tixi/Pub/LogoutBundle/DefaultController.php
 // 23.08.2013 martin jonasse inital file
+// 27.08.2013 @todo: reset the user somehow
 
 namespace Tixi\Pub\LogoutBundle\Controller;
 

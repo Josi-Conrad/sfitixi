@@ -1,0 +1,7 @@
+parameters:
+#    tixi_app_preferences.example.class: Tixi\App\PreferencesBundle\Example
+
+services:
+#    tixi_app_preferences.example:
+#        class: %tixi_app_preferences.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

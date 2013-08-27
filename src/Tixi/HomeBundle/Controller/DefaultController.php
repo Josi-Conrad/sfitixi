@@ -24,12 +24,20 @@ class DefaultController extends Controller
             $err = '';
         };
 
-     // render /home/ page
+     // get username and roles methode 1
+        $usr1 = $this->getUser();
+        if (is_object($usr1)) {
+            $username = $usr1->getUsername();
+            $roles = $usr1->getRoles();
+        }
+        else {
+            $username = '';
+            $roles = '';
+        };
+
+
+        // render /home/ page
         $paramservice = $this->get('tixi_homepage_service');
-
-        $usr = $this->getUser();
-        if (is_object($usr)) { $username = $usr->getUsername(); };
-
         return $this->render(
             'TixiHomeBundle:Default:index.html.twig',
             $paramservice->getTemplateParameters('home', 'Startseite der Dispo-Software',$err)
