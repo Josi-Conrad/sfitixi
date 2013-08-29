@@ -1,6 +1,7 @@
 # 26.08.2013 martin jonasse initial file, credit the book - chapter 13 - security
 #                           reference: security.yml.dist is the original file
 # 27.08.2013 martin jonasse set access control to /app (needs login credentials)
+# 28.08.2013 martin jonasse set all links to lowercase
 
 security:
     firewalls:

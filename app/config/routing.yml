@@ -1,3 +1,7 @@
+tixi_app_team:
+    resource: "@TixiAppTeamBundle/Resources/config/routing.yml"
+    prefix:   /
+
 tixi_app_preferences:
     resource: "@TixiAppPreferencesBundle/Resources/config/routing.yml"
     prefix:   /

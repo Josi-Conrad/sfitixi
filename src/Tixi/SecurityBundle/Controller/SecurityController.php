@@ -12,6 +12,8 @@ class SecurityController extends Controller
 {
     public function loginAction()
     {
+    //  @todo: add the remember_me function
+
         $request = $this->getRequest();
         $session = $request->getSession();
 

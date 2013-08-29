@@ -1,0 +1,7 @@
+parameters:
+#    tixi_app_team.example.class: Tixi\App\TeamBundle\Example
+
+services:
+#    tixi_app_team.example:
+#        class: %tixi_app_team.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

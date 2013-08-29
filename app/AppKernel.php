@@ -24,6 +24,7 @@ class AppKernel extends Kernel
             new Tixi\Pub\CustomerBundle\TixiPubCustomerBundle(),
             new Tixi\SecurityBundle\TixiSecurityBundle(),
             new Tixi\App\PreferencesBundle\TixiAppPreferencesBundle(),
+            new Tixi\App\TeamBundle\TixiAppTeamBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

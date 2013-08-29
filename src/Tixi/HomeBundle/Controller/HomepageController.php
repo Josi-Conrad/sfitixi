@@ -40,9 +40,9 @@ Class HomepageController extends Controller
         // get username, roles and customer from session (crashes)
         $usr = $this->getUser();
         if (is_object($usr)) {
-            $email = explode('@', $usr->getUsername());
-            $username = $email[0];
-            $customer = $email[1];
+            $username = $usr->getUsername();
+            $parts = explode('@', $username);
+            $customer = $parts[1];
             $roles = $usr->getRoles();
         } else {
             $username = 'Anonym';
