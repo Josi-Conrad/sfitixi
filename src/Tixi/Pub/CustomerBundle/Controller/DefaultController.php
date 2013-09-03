@@ -1,6 +1,7 @@
 <?php
 // src/Tixi/Pub/CustomerBundle/Controller/DefaultController
 // 25.08.2013 martin jonasse initial file
+// 03.09.2013 martin jonasse renamed getTemplateParamenters to setTemplateParameters
 
 namespace Tixi\Pub\CustomerBundle\Controller;
 
@@ -15,7 +16,7 @@ class DefaultController extends Controller
 
         // render the about page
         return $this->render('TixiPubCustomerBundle:Default:index.html.twig',
-            $paramservice->getTemplateParameters('customer', 'Informationen zum Mandant')
+            $paramservice->setTemplateParameters('customer', 'Informationen zum Mandant')
         );
     }
 }

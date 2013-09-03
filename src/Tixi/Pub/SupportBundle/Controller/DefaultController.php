@@ -2,6 +2,7 @@
 
 // src/Tixi/Pub/SupportBundle/Controller/DefaultController.php
 // 24.08.2013 martin jonasse initial file
+// 03.09.2013 martin jonasse renamed getTemplateParamenters to setTemplateParameters
 
 namespace Tixi\Pub\SupportBundle\Controller;
 
@@ -16,7 +17,7 @@ class DefaultController extends Controller
 
         // render the about page
         return $this->render('TixiPubSupportBundle:Default:index.html.twig',
-            $paramservice->getTemplateParameters('support', 'Informationen zur Support der iTixi Applikation')
+            $paramservice->setTemplateParameters('support', 'Informationen zur Support der iTixi Applikation')
         );
     }
 }

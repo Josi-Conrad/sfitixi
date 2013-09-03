@@ -7,6 +7,7 @@
  * 26.08.2013 martin jonasse added action item for database connection
  */
 // src/Tixi/HomeBundle/Controller/MenutreeController.php
+// 03.09.2013 martin jonasse renamed getTemplateParamenters to setTemplateParameters
 
 namespace Tixi\HomeBundle\Controller;
 

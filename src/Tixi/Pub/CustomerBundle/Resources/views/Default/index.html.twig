@@ -1,10 +1,11 @@
 {# src/Tixi/Pub/CustomerBundle/Tesources/views/Default/index.html.twig#}
 {# 25.08.2018 martin jonasse initial page #}
 {# 26.08.2013 martin jonasse upgraded zoom=11, center = Oberwil, and test customer #}
+{# 03.09.2013 martin jonasse update for session variables #}
 
 {% extends 'TixiHomeBundle:Default:index.html.twig' %}
 
-{% block title %}iTixi cloud computing - customer{% endblock %}
+{% block title %}{{ app.session.get('title') }}{% endblock %}
 
 {% block menubar %}{%  endblock %}
 
@@ -13,10 +14,10 @@
 {% block taskbar %}{% endblock %}
 
 {% block content %}
-{# @todo: make the /customer page sensitive to multiple customerd and add "todays routes" #}
+{# @todo: make the /customer page sensitive to multiple customers and add "todays routes" #}
 <div class="frame">
     <div class="frame-table">
-        {% if customer == 'tixizug.ch' %}
+        {% if app.session.get('customer') == 'tixizug.ch' %}
             <div class="frame-row">
                 <div class="frame-logo">
                 {# credits: https://developers.google.com/maps/documentation/staticmaps/?hl=de#quick_example #}
@@ -42,7 +43,7 @@
                     </p>
                 </div>
             </div>
-        {% elseif (customer == 'test') or (customer == 'btb.ch') or (customer == '')%}
+        {% elseif (app.session.get('customer') == 'undefined') or (app.session.get('customer') == 'btb.ch') %}
             <div class="frame-row">
                 <div class="frame-logo">
                     {# credits: https://developers.google.com/maps/documentation/staticmaps/?hl=de#quick_example #}

@@ -1,9 +1,10 @@
 {# src\Tixi\Pub\LogoutBundle\Resources\views\Default\index.html.twig #}
 {# 23.08.2013 martin jonasse initial file #}
+{# 03.09.2013 martin jonasse update for session variables #}
 
 {% extends 'TixiHomeBundle:Default:index.html.twig' %}
 
-{% block title %}iTixi cloud computing - logout{% endblock %}
+{% block title %}{{ app.session.get('title') }}{% endblock %}
 
 {% block menubar %}{%  endblock %}
 

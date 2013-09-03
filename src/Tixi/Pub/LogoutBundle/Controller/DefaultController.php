@@ -3,6 +3,7 @@
 // src/Tixi/Pub/LogoutBundle/DefaultController.php
 // 23.08.2013 martin jonasse initial file
 // 28.08.2013 martin jonasse added logout code: security context and session
+// 03.09.2013 martin jonasse renamed getTemplateParamenters to setTemplateParameters
 
 namespace Tixi\Pub\LogoutBundle\Controller;
 
@@ -21,7 +22,7 @@ class DefaultController extends Controller
 
         // render the about page
         return $this->render('TixiPubLogoutBundle:Default:index.html.twig',
-            $paramservice->getTemplateParameters('logout', 'Informationen zur iTixi logout Funktion')
+            $paramservice->setTemplateParameters('logout', 'Informationen zur iTixi logout Funktion')
         );
     }
 }

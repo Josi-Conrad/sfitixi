@@ -1,9 +1,10 @@
 {# src/Tixi/App/TeamBundle/Resources/views/Default/index.html.twig #}
 {# 28.08.2013 martin jonasse initial file #}
+{# 03.09.2013 martin jonasse update for session variables #}
 
 {% extends 'TixiHomeBundle:Default:index.html.twig' %}
 
-{% block title %}iTixi cloud computing - team{% endblock %}
+{% block title %}{{ app.session.get('title') }}{% endblock %}
 
 {% block content %}
     <div>

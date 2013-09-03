@@ -3,6 +3,7 @@
 // src/Tixi/HomeBundle/Controller/DefaultController.php
 // 12.08.2013 martin jonasse initial file
 // 26.08.2013 martin jonasse added errormsg code
+// 03.09.2013 martin jonasse renamed getTemplateParamenters to setTemplateParameters
 
 namespace Tixi\HomeBundle\Controller;
 
@@ -12,7 +13,7 @@ class DefaultController extends Controller
 {
     public function indexAction($slug = '')
     {
-     // called for all /home requests
+     // this controller is called for all /home requests
 
      // test for actions: $act = NULL, add, modify, delete, save, cancel, filter, print
         if (isset($_REQUEST['action'])) {
@@ -20,27 +21,19 @@ class DefaultController extends Controller
             $err = "Aktionen ($act) werden auf diese Seite nicht unterstüzt.";
         }
         else {
-            $act = NULL;
             $err = '';
         };
 
-     // get username and roles methode 1
-        $usr1 = $this->getUser();
-        if (is_object($usr1)) {
-            $username = $usr1->getUsername();
-            $roles = $usr1->getRoles();
-        }
-        else {
-            $username = '';
-            $roles = '';
-        };
-
+     // set mode (test)
+     //   $session = $this->container->get('session');
+     //   $mode = $session->get('mode_edit_record');
+        $mode = '';
 
         // render /home/ page
         $paramservice = $this->get('tixi_homepage_service');
         return $this->render(
             'TixiHomeBundle:Default:index.html.twig',
-            $paramservice->getTemplateParameters('home', 'Startseite der Dispo-Software',$err)
+            $paramservice->setTemplateParameters('home', 'Startseite der Dispo-Software', $mode, $err)
         );
     }
 }

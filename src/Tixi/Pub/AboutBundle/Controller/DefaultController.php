@@ -1,6 +1,7 @@
 <?php
 
 // 21.08.2013 martin jonasse initial file
+// 03.09.2013 martin jonasse renamed getTemplateParamenters to setTemplateParameters
 
 namespace Tixi\Pub\AboutBundle\Controller;
 
@@ -15,7 +16,7 @@ class DefaultController extends Controller
 
      // render the about page
         return $this->render('TixiPubAboutBundle:Default:index.html.twig',
-            $paramservice->getTemplateParameters('about', 'Informationen zur iTixi Applikation')
+            $paramservice->setTemplateParameters('about', 'Informationen zur iTixi Applikation')
         );
     }
 }
