@@ -61,9 +61,7 @@
 
     <!-- MENU-BAR: with function points and anchors -->
     {% block menubar %}
-        <div>
-            {{ render(controller( 'TixiHomeBundle:Menutree:menuitems' )) }}
-        </div>
+        {{ include( 'TixiHomeBundle:Default:menu.html.twig' ) }}
     {% endblock %}
 
     <!--SUBJECT & TASK BAR: with function points and anchors -->

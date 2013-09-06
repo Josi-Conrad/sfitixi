@@ -2,42 +2,26 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="62e5c67d-7d26-4ab6-9002-e15bdd08ef22" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Tixi/App/PreferencesBundle/Controller/DefaultController.php" afterPath="$PROJECT_DIR$/src/Tixi/App/PreferencesBundle/Controller/DefaultController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Tixi/App/TeamBundle/Controller/DefaultController.php" afterPath="$PROJECT_DIR$/src/Tixi/App/TeamBundle/Controller/DefaultController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Tixi/HomeBundle/Controller/DefaultController.php" afterPath="$PROJECT_DIR$/src/Tixi/HomeBundle/Controller/DefaultController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Tixi/Pub/AboutBundle/Controller/DefaultController.php" afterPath="$PROJECT_DIR$/src/Tixi/Pub/AboutBundle/Controller/DefaultController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Tixi/Pub/CustomerBundle/Controller/DefaultController.php" afterPath="$PROJECT_DIR$/src/Tixi/Pub/CustomerBundle/Controller/DefaultController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Tixi/Pub/HelpBundle/Controller/DefaultController.php" afterPath="$PROJECT_DIR$/src/Tixi/Pub/HelpBundle/Controller/DefaultController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Tixi/Pub/LogoutBundle/Controller/DefaultController.php" afterPath="$PROJECT_DIR$/src/Tixi/Pub/LogoutBundle/Controller/DefaultController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Tixi/Pub/SupportBundle/Controller/DefaultController.php" afterPath="$PROJECT_DIR$/src/Tixi/Pub/SupportBundle/Controller/DefaultController.php" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/Tixi/HomeBundle/Resources/views/Default/menu.html.twig" />
+      <change type="DELETED" beforePath="C:\myprojects\sfitixi\src\Tixi\HomeBundle\Controller\MenutreeController.php" afterPath="" />
+      <change type="DELETED" beforePath="C:\myprojects\sfitixi\src\Tixi\HomeBundle\Resources\views\Default\menu.html.php" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Tixi/HomeBundle/Controller/HomepageController.php" afterPath="$PROJECT_DIR$/src/Tixi/HomeBundle/Controller/HomepageController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Tixi/HomeBundle/Controller/MenutreeController.php" afterPath="$PROJECT_DIR$/src/Tixi/HomeBundle/Controller/MenutreeController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Tixi/App/PreferencesBundle/Resources/views/Default/index.html.twig" afterPath="$PROJECT_DIR$/src/Tixi/App/PreferencesBundle/Resources/views/Default/index.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Tixi/App/TeamBundle/Resources/views/Default/index.html.twig" afterPath="$PROJECT_DIR$/src/Tixi/App/TeamBundle/Resources/views/Default/index.html.twig" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Tixi/HomeBundle/Resources/views/Default/index.html.twig" afterPath="$PROJECT_DIR$/src/Tixi/HomeBundle/Resources/views/Default/index.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Tixi/Pub/AboutBundle/Resources/views/Default/index.html.twig" afterPath="$PROJECT_DIR$/src/Tixi/Pub/AboutBundle/Resources/views/Default/index.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Tixi/Pub/CustomerBundle/Resources/views/Default/index.html.twig" afterPath="$PROJECT_DIR$/src/Tixi/Pub/CustomerBundle/Resources/views/Default/index.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Tixi/Pub/HelpBundle/Resources/views/Default/index.html.twig" afterPath="$PROJECT_DIR$/src/Tixi/Pub/HelpBundle/Resources/views/Default/index.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Tixi/Pub/LogoutBundle/Resources/views/Default/index.html.twig" afterPath="$PROJECT_DIR$/src/Tixi/Pub/LogoutBundle/Resources/views/Default/index.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Tixi/Pub/SupportBundle/Resources/views/Default/index.html.twig" afterPath="$PROJECT_DIR$/src/Tixi/Pub/SupportBundle/Resources/views/Default/index.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Tixi/SecurityBundle/Resources/views/Security/login.html.twig" afterPath="$PROJECT_DIR$/src/Tixi/SecurityBundle/Resources/views/Security/login.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Tixi/App/PreferencesBundle/Resources/config/routing.yml" afterPath="$PROJECT_DIR$/src/Tixi/App/PreferencesBundle/Resources/config/routing.yml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Tixi/HomeBundle/Resources/config/services.yml" afterPath="$PROJECT_DIR$/src/Tixi/HomeBundle/Resources/config/services.yml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Tixi/HomeBundle/Resources/views/Default/splash.html.twig" afterPath="$PROJECT_DIR$/src/Tixi/HomeBundle/Resources/views/Default/splash.html.twig" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/config/security.yml" afterPath="$PROJECT_DIR$/app/config/security.yml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="sfitixi.iws" />
     <ignored path=".idea/workspace.xml" />
-    <file path="/Dummy.txt" changelist="62e5c67d-7d26-4ab6-9002-e15bdd08ef22" time="1378182443180" ignored="false" />
+    <file path="/Dummy.txt" changelist="62e5c67d-7d26-4ab6-9002-e15bdd08ef22" time="1378461992090" ignored="false" />
     <file path="/a.php" changelist="62e5c67d-7d26-4ab6-9002-e15bdd08ef22" time="1376116399438" ignored="false" />
     <file path="/dummy.txt" changelist="62e5c67d-7d26-4ab6-9002-e15bdd08ef22" time="1377750445506" ignored="false" />
-    <file path="/index.html.twig" changelist="62e5c67d-7d26-4ab6-9002-e15bdd08ef22" time="1378187858261" ignored="false" />
+    <file path="/index.html.twig" changelist="62e5c67d-7d26-4ab6-9002-e15bdd08ef22" time="1378460511642" ignored="false" />
     <file path="/routing.yml" changelist="62e5c67d-7d26-4ab6-9002-e15bdd08ef22" time="1378112385528" ignored="false" />
     <file path="/sfitixi.css" changelist="62e5c67d-7d26-4ab6-9002-e15bdd08ef22" time="1376418734505" ignored="false" />
     <file path="/DefaultController.php" changelist="62e5c67d-7d26-4ab6-9002-e15bdd08ef22" time="1378188853489" ignored="false" />
     <file path="/menuetree.php" changelist="62e5c67d-7d26-4ab6-9002-e15bdd08ef22" time="1376378696622" ignored="false" />
-    <file path="/a.dummy" changelist="62e5c67d-7d26-4ab6-9002-e15bdd08ef22" time="1377516624949" ignored="false" />
-    <file path="/MenutreeController.php" changelist="62e5c67d-7d26-4ab6-9002-e15bdd08ef22" time="1376929061054" ignored="false" />
+    <file path="/a.dummy" changelist="62e5c67d-7d26-4ab6-9002-e15bdd08ef22" time="1378443852470" ignored="false" />
+    <file path="/MenutreeController.php" changelist="62e5c67d-7d26-4ab6-9002-e15bdd08ef22" time="1378443074602" ignored="false" />
     <file path="/menuItems.html.php" changelist="62e5c67d-7d26-4ab6-9002-e15bdd08ef22" time="1376387193877" ignored="false" />
     <file path="/parameters.yml" changelist="62e5c67d-7d26-4ab6-9002-e15bdd08ef22" time="1376381841705" ignored="false" />
     <file path="/menuitems.html.php" changelist="62e5c67d-7d26-4ab6-9002-e15bdd08ef22" time="1376389764346" ignored="false" />
@@ -45,7 +29,7 @@
     <file path="/config.yml" changelist="62e5c67d-7d26-4ab6-9002-e15bdd08ef22" time="1376391180264" ignored="false" />
     <file path="/HomeParamController.php" changelist="62e5c67d-7d26-4ab6-9002-e15bdd08ef22" time="1377096075673" ignored="false" />
     <file path="/services.yml" changelist="62e5c67d-7d26-4ab6-9002-e15bdd08ef22" time="1378131628370" ignored="false" />
-    <file path="/HomepageController.php" changelist="62e5c67d-7d26-4ab6-9002-e15bdd08ef22" time="1378187637638" ignored="false" />
+    <file path="/HomepageController.php" changelist="62e5c67d-7d26-4ab6-9002-e15bdd08ef22" time="1378460008825" ignored="false" />
     <file path="/gpl_license.html.twig" changelist="62e5c67d-7d26-4ab6-9002-e15bdd08ef22" time="1377147512065" ignored="false" />
     <file path="/splash.html.twig.html" changelist="62e5c67d-7d26-4ab6-9002-e15bdd08ef22" time="1377155615949" ignored="false" />
     <file path="/splash.html.twig" changelist="62e5c67d-7d26-4ab6-9002-e15bdd08ef22" time="1378188322172" ignored="false" />
@@ -71,31 +55,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="DefaultController.php" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/Tixi/App/PreferencesBundle/Controller/DefaultController.php">
+      <file leaf-file-name="security.yml" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/config/security.yml">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="4" column="97" selection-start="209" selection-end="209" vertical-scroll-proportion="0.1271028">
+            <state line="14" column="0" selection-start="547" selection-end="547" vertical-scroll-proportion="0.24242425">
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="DefaultController.php" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/Tixi/App/TeamBundle/Controller/DefaultController.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="4" column="97" selection-start="213" selection-end="213" vertical-scroll-proportion="-2.6153846">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="DefaultController.php" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/Tixi/HomeBundle/Controller/DefaultController.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="29" column="0" selection-start="800" selection-end="932" vertical-scroll-proportion="-18.961538">
-              <folding>
-                <element signature="e#7#62#0" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -138,22 +102,22 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/src/Tixi/Pub/AboutBundle/Resources/views/Default/index.html.twig" />
-        <option value="$PROJECT_DIR$/src/Tixi/Pub/CustomerBundle/Resources/views/Default/index.html.twig" />
-        <option value="$PROJECT_DIR$/src/Tixi/App/PreferencesBundle/Resources/views/Default/index.html.twig" />
         <option value="$PROJECT_DIR$/src/Tixi/App/TeamBundle/Resources/views/Default/index.html.twig" />
         <option value="$PROJECT_DIR$/src/Tixi/Pub/SupportBundle/Controller/DefaultController.php" />
         <option value="$PROJECT_DIR$/src/Tixi/Pub/LogoutBundle/Controller/DefaultController.php" />
         <option value="$PROJECT_DIR$/src/Tixi/Pub/HelpBundle/Controller/DefaultController.php" />
         <option value="$PROJECT_DIR$/src/Tixi/Pub/CustomerBundle/Controller/DefaultController.php" />
         <option value="$PROJECT_DIR$/src/Tixi/Pub/AboutBundle/Controller/DefaultController.php" />
-        <option value="$PROJECT_DIR$/src/Tixi/HomeBundle/Controller/MenutreeController.php" />
         <option value="$PROJECT_DIR$/src/Tixi/HomeBundle/Controller/DefaultController.php" />
-        <option value="$PROJECT_DIR$/src/Tixi/HomeBundle/Resources/views/Default/index.html.twig" />
         <option value="$PROJECT_DIR$/src/Tixi/HomeBundle/Resources/views/Default/splash.html.twig" />
-        <option value="$PROJECT_DIR$/src/Tixi/HomeBundle/Controller/HomepageController.php" />
         <option value="$PROJECT_DIR$/src/Tixi/App/TeamBundle/Controller/DefaultController.php" />
         <option value="$PROJECT_DIR$/src/Tixi/App/PreferencesBundle/Controller/DefaultController.php" />
+        <option value="$PROJECT_DIR$/src/Tixi/App/PreferencesBundle/Resources/views/Default/index.html.twig" />
+        <option value="$PROJECT_DIR$/src/Tixi/HomeBundle/Controller/MenutreeController.php" />
+        <option value="$PROJECT_DIR$/src/Tixi/HomeBundle/Resources/views/Default/menu.html.twig" />
+        <option value="$PROJECT_DIR$/src/Tixi/HomeBundle/Resources/views/Default/index.html.twig" />
+        <option value="$PROJECT_DIR$/src/Tixi/HomeBundle/Controller/HomepageController.php" />
+        <option value="$PROJECT_DIR$/app/config/security.yml" />
       </list>
     </option>
   </component>
@@ -217,6 +181,7 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -307,11 +272,19 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="App" />
+              <option name="myItemId" value="HomeBundle" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="TeamBundle" />
+              <option name="myItemId" value="Resources" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="views" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Default" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -333,11 +306,33 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="App" />
+              <option name="myItemId" value="HomeBundle" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="TeamBundle" />
+              <option name="myItemId" value="Resources" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sfitixi" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sfitixi" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Tixi" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="HomeBundle" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -355,19 +350,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Tixi" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="App" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="PreferencesBundle" />
+              <option name="myItemId" value="app" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -381,43 +364,30 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
+              <option name="myItemId" value="app" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="Tixi" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="App" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="PreferencesBundle" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Controller" />
+              <option name="myItemId" value="config" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth0" value="128" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth1" value="157" />
     <property name="options.splitter.main.proportions" value="0.3" />
-    <property name="recentsLimit" value="5" />
-    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder1" value="1" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth0" value="154" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder1" value="1" />
+    <property name="recentsLimit" value="5" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder0" value="0" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth2" value="159" />
-    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth3" value="829" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth3" value="833" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth3" value="829" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth2" value="154" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth1" value="153" />
     <property name="WebServerToolWindowFactoryState" value="false" />
@@ -592,11 +562,10 @@
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32879046" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4241908" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32879046" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.49744463" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Framework" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32954547" sideWeight="0.49914822" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.23636363" sideWeight="0.6712095" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25530303" sideWeight="0.6712095" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.44463372" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2901515" sideWeight="0.21294719" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3291714" sideWeight="0.5" order="10" side_tool="true" content_ui="tabs" />
@@ -605,6 +574,8 @@
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32879046" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -670,127 +641,87 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="62" />
+      <option name="time" value="63" />
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/Tixi/Pub/LogoutBundle/Resources/views/Default/index.html.twig">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="3" column="0" selection-start="178" selection-end="178" vertical-scroll-proportion="0.0953271">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Tixi/Pub/SupportBundle/Resources/views/Default/index.html.twig">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="3" column="0" selection-start="118" selection-end="179" vertical-scroll-proportion="0.0953271">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Tixi/App/PreferencesBundle/Resources/views/Default/index.html.twig">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="3" column="0" selection-start="183" selection-end="183" vertical-scroll-proportion="-1.9615384">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Tixi/App/TeamBundle/Resources/views/Default/index.html.twig">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="3" column="0" selection-start="176" selection-end="176" vertical-scroll-proportion="0.0953271">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Tixi/Pub/SupportBundle/Controller/DefaultController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="0" selection-start="112" selection-end="196" vertical-scroll-proportion="0.13793103">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Tixi/Pub/LogoutBundle/Controller/DefaultController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="84" selection-start="261" selection-end="261" vertical-scroll-proportion="0.16536964">
-          <folding>
-            <element signature="e#7#57#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Tixi/Pub/HelpBundle/Controller/DefaultController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="3" column="84" selection-start="192" selection-end="192" vertical-scroll-proportion="0.09922179">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/Tixi/Pub/CustomerBundle/Controller/DefaultController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="3" column="84" selection-start="192" selection-end="192" vertical-scroll-proportion="0.09922179">
-          <folding />
-        </state>
+        <state line="3" column="84" selection-start="192" selection-end="192" vertical-scroll-proportion="0.09922179" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Tixi/Pub/AboutBundle/Controller/DefaultController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="3" column="84" selection-start="133" selection-end="133" vertical-scroll-proportion="0.09922179">
-          <folding />
-        </state>
+        <state line="3" column="84" selection-start="133" selection-end="133" vertical-scroll-proportion="0.09922179" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Tixi/HomeBundle/Controller/MenutreeController.php">
+    <entry file="file://$PROJECT_DIR$/vendor/psr/log/README.md">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="0" selection-start="311" selection-end="311" vertical-scroll-proportion="0.1271028">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Tixi/HomeBundle/Resources/views/Default/index.html.twig">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="71" column="29" selection-start="3354" selection-end="3354" vertical-scroll-proportion="0.53722334">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Tixi/HomeBundle/Resources/views/Default/splash.html.twig">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="8" column="0" selection-start="507" selection-end="507" vertical-scroll-proportion="0.2542056">
-          <folding>
-            <element signature="n#style#0;n#td#0;n#tr#0;n#table#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#td#1;n#tr#0;n#table#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Tixi/HomeBundle/Controller/HomepageController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="114" column="0" selection-start="4198" selection-end="4198" vertical-scroll-proportion="1.9214953">
-          <folding>
-            <element signature="e#461#518#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Tixi/App/TeamBundle/Controller/DefaultController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="97" selection-start="213" selection-end="213" vertical-scroll-proportion="-2.6153846">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Tixi/HomeBundle/Controller/DefaultController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="29" column="0" selection-start="800" selection-end="932" vertical-scroll-proportion="-18.961538">
-          <folding>
-            <element signature="e#7#62#0" expanded="true" />
-          </folding>
-        </state>
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Tixi/App/PreferencesBundle/Controller/DefaultController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="97" selection-start="209" selection-end="209" vertical-scroll-proportion="0.1271028">
+        <state line="4" column="97" selection-start="209" selection-end="209" vertical-scroll-proportion="0.0317757" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Tixi/App/TeamBundle/Controller/DefaultController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="4" column="97" selection-start="213" selection-end="213" vertical-scroll-proportion="0.078504674" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Tixi/App/PreferencesBundle/Resources/views/Default/index.html.twig">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="11" column="0" selection-start="386" selection-end="386" vertical-scroll-proportion="0.34953272" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Tixi/HomeBundle/TixiHomeBundle.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Tixi/SecurityBundle/Controller/SecurityController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Tixi/HomeBundle/Controller/DefaultController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="29" column="0" selection-start="800" selection-end="932" vertical-scroll-proportion="0.20467836" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/vendor/symfony/symfony/composer.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="15" column="9" selection-start="433" selection-end="433" vertical-scroll-proportion="-0.34210527" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Tixi/HomeBundle/Resources/views/Default/menu.html.twig">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="114" column="12" selection-start="8242" selection-end="8242" vertical-scroll-proportion="0.7140187" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Tixi/HomeBundle/Resources/views/Default/index.html.twig">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="63" column="0" selection-start="3076" selection-end="3076" vertical-scroll-proportion="0.348659" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Tixi/HomeBundle/Resources/views/Default/splash.html.twig">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="8" column="0" selection-start="507" selection-end="507" vertical-scroll-proportion="0.2542056" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Tixi/HomeBundle/Controller/HomepageController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="12" column="96" selection-start="517" selection-end="517" vertical-scroll-proportion="0.22796935">
+          <folding>
+            <element signature="e#558#615#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/config/security.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="14" column="0" selection-start="547" selection-end="547" vertical-scroll-proportion="0.24242425">
           <folding />
         </state>
       </provider>
