@@ -6,17 +6,21 @@
 namespace Tixi\Pub\CustomerBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class DefaultController extends Controller
 {
     public function indexAction($name='')
     {
-        // set parameters for the rendering of the about page
+        // set parameters for the rendering of the customer page
         $paramservice = $this->get('tixi_homepage_service');
+        $paramservice->setTemplateParameters('tixi_customer_page');
+
+        // set subject
+        $session = $this->container->get('session');
+        $session->set('subject', 'Informationen zum Mandant');
 
         // render the about page
-        return $this->render('TixiPubCustomerBundle:Default:index.html.twig',
-            $paramservice->setTemplateParameters('customer', 'Informationen zum Mandant')
-        );
+        return $this->render('TixiPubCustomerBundle:Default:index.html.twig');
     }
 }

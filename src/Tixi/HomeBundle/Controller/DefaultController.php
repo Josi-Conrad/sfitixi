@@ -8,32 +8,27 @@
 namespace Tixi\HomeBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class DefaultController extends Controller
 {
     public function indexAction($slug = '')
     {
-     // this controller is called for all /home requests
+     // initialize home page
+        $tixiservice = $this->get('tixi_homepage_service');
+        $tixiservice->setTemplateParameters('tixi_home_page');
+
+     // set subject
+        $session = $this->container->get('session');
+        $session->set('subject', 'Homepage der iTixi application');
 
      // test for actions: $act = NULL, add, modify, delete, save, cancel, filter, print
         if (isset($_REQUEST['action'])) {
             $act = $_REQUEST['action'];
-            $err = "Aktionen ($act) werden auf diese Seite nicht unterstüzt.";
+            $session->set('errormsg', "Aktion($act) wird auf diese Seite nicht unterstüzt." );
         }
-        else {
-            $err = '';
-        };
-
-     // set mode (test)
-     //   $session = $this->container->get('session');
-     //   $mode = $session->get('mode_edit_record');
-        $mode = '';
 
         // render /home/ page
-        $paramservice = $this->get('tixi_homepage_service');
-        return $this->render(
-            'TixiHomeBundle:Default:index.html.twig',
-            $paramservice->setTemplateParameters('home', 'Startseite der Dispo-Software', $mode, $err)
-        );
+        return $this->render( 'TixiHomeBundle:Default:index.html.twig' );
     }
 }

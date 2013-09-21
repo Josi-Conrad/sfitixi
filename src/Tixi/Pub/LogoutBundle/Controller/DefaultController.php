@@ -8,21 +8,25 @@
 namespace Tixi\Pub\LogoutBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class DefaultController extends Controller
 {
     public function indexAction($name='')
     {
-        // logout the current user
+    // logout the current user
         $this->get('security.context')->setToken(Null);
         $this->get('request')->getSession()->invalidate();
 
-        // set parameters for the rendering of the about page
+    // set parameters for the rendering of the logout page
         $paramservice = $this->get('tixi_homepage_service');
+        $paramservice->setTemplateParameters('tixi_logout_page');
 
-        // render the about page
-        return $this->render('TixiPubLogoutBundle:Default:index.html.twig',
-            $paramservice->setTemplateParameters('logout', 'Informationen zur iTixi logout Funktion')
-        );
+    // set subject
+        $session = $this->container->get('session');
+        $session->set('subject', 'Informationen zur iTixi logout Funktion');
+
+    // render the logout page
+        return $this->render('TixiPubLogoutBundle:Default:index.html.twig');
     }
 }

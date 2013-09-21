@@ -106,7 +106,7 @@
                            onclick="location.href='{{ path( app.request.attributes.get('_route'), {'action':'modify'} ) }}'"/>
                         <input id="fpm_delete" type="button" value="L&ouml;schen"
                            onclick="location.href='{{ path( app.request.attributes.get('_route'), {'action':'delete'} ) }}'"/>
-                    {% elseif app.session.get('mode') == app.session.get('mode_edit_list_element') %}
+                    {% elseif app.session.get('mode') == app.session.get('mode_edit_in_list') %}
                         <input id="fpm_save" type="button" value="Speichern"
                            onclick="location.href='{{ path( app.request.attributes.get('_route'), {'action':'save'} ) }}'"/>
                         <input id="fpm_cancel" type="button" value="Abbrechen"

@@ -1,4 +1,4 @@
 # 23.08.2013 martin jonasse initial file
-tixi_pub_logout_page:
+tixi_logout_page:
     pattern:  /public/logout
     defaults: { _controller: TixiPubLogoutBundle:Default:index }

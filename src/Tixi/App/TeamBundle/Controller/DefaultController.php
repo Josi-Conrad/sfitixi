@@ -7,6 +7,7 @@
 namespace Tixi\App\TeamBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class DefaultController extends Controller
 {
@@ -14,14 +15,14 @@ class DefaultController extends Controller
     {
     // set parameters for the rendering of the about page
         $paramservice = $this->get('tixi_homepage_service');
+        $paramservice->setTemplateParameters('tixi_unterhalt_teamdaten_page');
 
-    // set mode (test)
+    // set subject and mode
         $session = $this->container->get('session');
-        $mode = $session->get('mode_select_list');
+        $session->set('mode', 'mode_select_list'); // provisional
+        $session->set('subject', 'Teamdaten (liste)');
 
     // render the about page
-        return $this->render('TixiAppTeamBundle:Default:index.html.twig',
-            $paramservice->setTemplateParameters( 'team', 'Informationen zur Teamdaten ', $mode)
-        );
+        return $this->render('TixiAppTeamBundle:Default:index.html.twig');
     }
 }

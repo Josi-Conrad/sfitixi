@@ -9,7 +9,7 @@ security:
             pattern:    ^/
             anonymous:  ~
             form_login:
-                login_path: login
+                login_path: tixi_login
                 check_path: login_check
                 default_target_path: tixi_home_page
 

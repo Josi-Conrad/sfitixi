@@ -6,19 +6,23 @@
 namespace Tixi\Pub\HelpBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class DefaultController extends Controller
 {
     public function indexAction($slug='')
     {
 //      return $this->render('TixiPubHelpBundle:Default:index.html.twig');
-        // set parameters for the rendering of the about page
-        $paramservice = $this->get('tixi_homepage_service');
+    // set parameters for the rendering of the help page
+        $paramservice = $this->get( 'tixi_homepage_service' );
+        $paramservice->setTemplateParameters( 'tixi_help_page' );
 
-        // render the about page
-        return $this->render('TixiPubHelpBundle:Default:index.html.twig',
-            $paramservice->setTemplateParameters('help', 'Hilfe zur iTixi Applikation')
-        );
+    // set subject
+        $session = $this->container->get('session');
+        $session->set('subject', 'Hilfe zur iTixi Applikation');
+
+    // render the help page
+        return $this->render( 'TixiPubHelpBundle:Default:index.html.twig' );
 
     }
 }

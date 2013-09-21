@@ -1,5 +1,6 @@
 # 29.08.2013 martin jonasse initial file
+# 20.09.2013 martin jonasse changed route name from tixi_app_team_page to tixi_unterhalt_teamdaten_page
 
-tixi_app_team_page:
+tixi_unterhalt_teamdaten_page:
     pattern:  /app/unterhalt/teamdaten
     defaults: { _controller: TixiAppTeamBundle:Default:index }

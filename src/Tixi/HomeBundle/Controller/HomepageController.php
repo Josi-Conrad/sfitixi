@@ -11,6 +11,7 @@
 // 02.09.2013 martin jonasse added session variables and constants
 // 03.09.2013 martin jonasse renamed getTemplateParameters to setTemplateParameters
 // 06.09.2013 martin jonasse added automatic generation of menu.html.twig (improved performance)
+// 21.09.2013 martin jonasse simplified setTemplateParameters
 
 namespace Tixi\HomeBundle\Controller;
 
@@ -27,7 +28,7 @@ Class HomepageController extends Controller
 {
     protected $container;       // container
     protected $initMenutree;    // boolean
-    protected $menuitems;       // array
+    protected $menutree;        // array
 
     public function __construct (ContainerInterface $container)
     {
@@ -36,43 +37,49 @@ Class HomepageController extends Controller
     }
 
     private function makeMenuHtmlTwig(Session $session)
-    {
-        // build the twig file from the data in $menuitems
+    {   /**
+         * build the twig file from the data in $menutree, which is a replica of table itixi.menutree.
+         * the twig file is rebuilt after each build of the iTixi application (when initMenutree=true)
+        */
+
         // prefix
         $mytext = '<div id="menu-bar">'."\n";
         $mytext .= '<ul class="nav">'."\n";
 
         // page variables
         $myurl = 'http://'.$_SERVER['SERVER_NAME'].$_SERVER['SCRIPT_NAME'];
-        $items = count($this->menuitems);
+        $items = count($this->menutree);
 
         //loop
-        foreach ($this->menuitems as $key => $menuitem):
-            // calculate fully qualified URL and ID
-            $route = $myurl.$menuitem["URL"];
-            $id = 'fpm'.str_replace('/', '_', $menuitem["URL"] );
+        foreach ($this->menutree as $key => $menuitem):
+            if ($menuitem["LOCATION"] == 'menu-bar') {
+            // this is a menu-bar item
 
-            // calculate level changes: down, same, up
-            $thislevel = substr_count($menuitem["URL"],'/');
-            if (($key + 1) >= $items) {
-                $nextlevel = 2;
-            } else {
-                $nextlevel = substr_count($this->menuitems[$key+1]["URL"],'/');
+                // calculate fully qualified URL and ID
+                $route = $myurl.$menuitem["URL"];
+                $id = 'fpm'.str_replace('/', '_', $menuitem["URL"] );
+
+                // calculate level changes: down, same, up
+                $thislevel = substr_count($menuitem["URL"],'/');
+                if (($key + 1) >= $items) {
+                    $nextlevel = 2;
+                } else {
+                    $nextlevel = substr_count($this->menutree[$key+1]["URL"],'/');
+                }
+
+                // build list elements
+                if ($nextlevel == $thislevel) {
+                    $mytext .= '<li><a href="'.$route.'" id="'.$id.'">'.$menuitem["CAPTION"].'</a></li>'."\n"; // same level
+                } elseif ($nextlevel > $thislevel) {
+                    $mytext .= '<li class="dropdown"><a href="'.$route.'" id="'.$id.'">'.$menuitem["CAPTION"].'</a>'."\n"; // down level
+                    $mytext .= '<ul>'."\n"; // down
+                } elseif ($nextlevel < $thislevel) {
+                    $mytext .= '<li><a href="'.$route.'" id="'.$id.'">'.$menuitem["CAPTION"].'</a></li>'."\n"; // up level
+                    for ($i = 1; $i <= ($thislevel - $nextlevel); $i++) {
+                        $mytext .= '</ul></li>'."\n"; // up
+                    };
+                }
             }
-
-            // build list elements
-            if ($nextlevel == $thislevel) {
-                $mytext .= '<li><a href="'.$route.'" id="'.$id.'">'.$menuitem["CAPTION"].'</a></li>'."\n"; // same level
-            } elseif ($nextlevel > $thislevel) {
-                $mytext .= '<li class="dropdown"><a href="'.$route.'" id="'.$id.'">'.$menuitem["CAPTION"].'</a>'."\n"; // down level
-                $mytext .= '<ul>'."\n"; // down
-            } elseif ($nextlevel < $thislevel) {
-                $mytext .= '<li><a href="'.$route.'" id="'.$id.'">'.$menuitem["CAPTION"].'</a></li>'."\n"; // up level
-                for ($i = 1; $i <= ($thislevel - $nextlevel); $i++) {
-                    $mytext .= '</ul></li>'."\n"; // up
-                };
-            }
-
         endforeach;
 
         // postfix
@@ -82,12 +89,15 @@ Class HomepageController extends Controller
     }
 
     private function initMenuHtmlTwig(Session $session)
-    {
+    {   /**
+         * copy the twig file build to the file system.
+         * this is faster than using the database (due to Symfony cache).
+         */
         $this->get('logger')->debug('TIXI initializing mytextdumpfile.txt');
 
         // make new file
         $myfile = "{# ".TIXI_MENUTREE." #}\n";
-        $myfile .= "{# ".date("d.m.Y H:i:s")." created automatically by application #}\n";
+        $myfile .= "{# built automatically by the iTixi application #}\n";
         $myfile .= $this->makeMenuHtmlTwig($session);
 
         // write new file to the filesystem as menu.html.twig
@@ -99,14 +109,16 @@ Class HomepageController extends Controller
         }
     }
 
-    private function initMenuitems(Session $session)
-    {
+    private function initmenutree(Session $session)
+    {   /**
+         * get the data in $menutreefrom the database table itixi.menutree.
+         */
         try {
             // make a database call to get the menu items
             $conn = $this->get('database_connection'); // @todo: fix this quick and dirty item
 
             // connected to database defined in parameters.yml (itixi)
-            $this->menuitems = $conn->fetchAll('SELECT * from menutree');
+            $this->menutree = $conn->fetchAll('SELECT * from menutree');
 
             $this->initMenuHtmlTwig($session); // proceed to create a twig file
 
@@ -116,9 +128,12 @@ Class HomepageController extends Controller
     }
 
     private function initSession(Session $session)
-    {
+    {   /**
+         * initialize all constants and variables available to the iTixi application and in all twig files.
+         * rebuilt after each build of the iTixi application (when initMenutree=true).
+         */
+
      // initialize all constants available in the iTixi application
-     // global to the whole application, not hampered by namespace
         $session->set("const_application", "iTixi");
         $session->set("const_version", "2.0.0");
         $session->set("const_filter", "Filter...");
@@ -127,7 +142,7 @@ Class HomepageController extends Controller
         $session->set("mode_read_record", "read record");
         $session->set("mode_edit_record", "edit record");
         $session->set("mode_select_list", "select list");
-        $session->set("mode_edit_list_element", "edit list");
+        $session->set("mode_edit_in_list", "edit in list");
 
      // initialize all attributes available in the itixi user session
         $session->set("title", TIXI_UNDEFINED);
@@ -145,13 +160,18 @@ Class HomepageController extends Controller
         if ($this->initMenutree) {
             $this->initMenutree = false;
             $this->get('logger')->debug('TIXI initializing menutree');
-            $this->initMenuitems($session);
+            $this->initmenutree($session);
         }
     }
 
-    public function setTemplateParameters( $title, $subject, $mode='', $errormsg='')
-    {
-        $this->get('logger')->debug('TIXI transaction page '.$title);
+    public function setTemplateParameters( $route )
+    {   /**
+         * dynamically set / reset the session parameters in the iTixi application.
+         * this service is called in each and every controller of the iTixi app.
+         * input: $route the route defined in the bundles config.yml e.g. 'tixi_home_page'
+         */
+
+        $this->get('logger')->debug('TIXI transaction page '.$route);
 
     // initialize session attributes
         $session = new Session();
@@ -160,10 +180,7 @@ Class HomepageController extends Controller
             $this->get('logger')->debug('TIXI initializing session variables');
             $this->initSession($session);
         };
-        $session->set("title", $session->get("const_title")." - ".$title);
-        $session->set("subject", $subject);
-        $session->set("mode", $mode);
-        $session->set("errormsg", $errormsg);
+        $session->set("title", $session->get("const_title")." - @todo");
 
     // set common parameters
         $session->set("baseurl",'http://'.$_SERVER['SERVER_NAME'].$_SERVER['SCRIPT_NAME']);
@@ -171,7 +188,7 @@ Class HomepageController extends Controller
     // set parameters for the top frame
         $session->set("breadcrumbs", '...'); // @todo: implement this function point
 
-    // get username, roles and customer from session
+    // check for changed username in this session
         $usr = $this->getUser();
         if (is_object($usr)) {
             $username = $usr->getUsername();
@@ -189,10 +206,9 @@ Class HomepageController extends Controller
         };
 
     // set parameters for the menubar
-    //  baseurl, see above
 
     // set parameters for the subject
-    //  subject, see above
+        $session->set("subject", TIXI_UNDEFINED);
 
     // set parameters for the taskbar
         if (isset($_REQUEST['filter']))
@@ -202,9 +218,9 @@ Class HomepageController extends Controller
             $session->set("filter", $session->get("const_filter"));
         };
 
-    // set parameters for the error message
-    // $errormsg = '', no error message)
+    // reset error message
+        $session->set('errormsg', '');
 
-    return array ('dummy' => 'dummy');
+    return;
     }
 }
