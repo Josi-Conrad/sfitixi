@@ -2,6 +2,7 @@
 {# 17.08.2013 martin jonasse initial file #}
 {# 26.08.2013 martin jonasse added errormsg code #}
 {# 02.09.2013 martin jonasse modified all variables to be read from session #}
+{# 21.09.2013 martin jonasse changed error line to alert message #}
 
 {% extends '::base.html.twig' %}
 
@@ -125,15 +126,18 @@
         </div>
     {% endblock %}
     </div>
-    {% block errormsg %}
-        {% if app.session.get('errormsg') != '' %}
-            <p style="color:red">{{ app.session.get('errormsg') }}</p>
-        {% endif %}
-    {% endblock %}
 
+    <!--Content: with lists and forms -->
     {% block content %}
         {{ include(
             'TixiHomeBundle:Default:splash.html.twig'
         ) }}
+    {% endblock %}
+
+    <!--Errormessage: rendered last, displayed as a pop-up -->
+    {% block errormsg %}
+        {% if app.session.get('errormsg') != '' %}
+            <script>alert("{{ app.session.get('errormsg') }}")</script>
+        {% endif %}
     {% endblock %}
 {% endblock %}

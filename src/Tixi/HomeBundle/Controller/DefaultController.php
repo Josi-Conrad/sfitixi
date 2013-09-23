@@ -4,6 +4,7 @@
 // 12.08.2013 martin jonasse initial file
 // 26.08.2013 martin jonasse added errormsg code
 // 03.09.2013 martin jonasse renamed getTemplateParamenters to setTemplateParameters
+// 21.09.2013 martin jonasse simplified setTemplateParameters, added $route, dropped all others
 
 namespace Tixi\HomeBundle\Controller;
 
@@ -14,21 +15,15 @@ class DefaultController extends Controller
 {
     public function indexAction($slug = '')
     {
-     // initialize home page
-        $tixiservice = $this->get('tixi_homepage_service');
-        $tixiservice->setTemplateParameters('tixi_home_page');
+     // initialize page
+        $tixi_housekeeping = $this->get('tixi_housekeeping');
+        $tixi_housekeeping->setTemplateParameters('tixi_home_page');
 
      // set subject
         $session = $this->container->get('session');
         $session->set('subject', 'Homepage der iTixi application');
 
-     // test for actions: $act = NULL, add, modify, delete, save, cancel, filter, print
-        if (isset($_REQUEST['action'])) {
-            $act = $_REQUEST['action'];
-            $session->set('errormsg', "Aktion($act) wird auf diese Seite nicht unterstüzt." );
-        }
-
-        // render /home/ page
+     // render /home/ page
         return $this->render( 'TixiHomeBundle:Default:index.html.twig' );
     }
 }

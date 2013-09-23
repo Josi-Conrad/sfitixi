@@ -11,7 +11,8 @@
 // 02.09.2013 martin jonasse added session variables and constants
 // 03.09.2013 martin jonasse renamed getTemplateParameters to setTemplateParameters
 // 06.09.2013 martin jonasse added automatic generation of menu.html.twig (improved performance)
-// 21.09.2013 martin jonasse simplified setTemplateParameters
+// 21.09.2013 martin jonasse simplified setTemplateParameters, added $route, dropped all others
+// 22.09.2013 martin jonasse $menutree is not persistent, set it as a Symfony2 Parameter
 
 namespace Tixi\HomeBundle\Controller;
 
@@ -28,7 +29,7 @@ Class HomepageController extends Controller
 {
     protected $container;       // container
     protected $initMenutree;    // boolean
-    protected $menutree;        // array
+    protected $menutree;        // array (not persistent)
 
     public function __construct (ContainerInterface $container)
     {
@@ -55,9 +56,16 @@ Class HomepageController extends Controller
             if ($menuitem["LOCATION"] == 'menu-bar') {
             // this is a menu-bar item
 
-                // calculate fully qualified URL and ID
+                // calculate fully qualified anchor or placeholder anchor (w.o. href)
                 $route = $myurl.$menuitem["URL"];
                 $id = 'fpm'.str_replace('/', '_', $menuitem["URL"] );
+                if ($menuitem["ENABLED"] == 0) {
+                // placeholder anchor
+                    $anchor = '<a id="'.$id.'">'.$menuitem["CAPTION"].'</a>';
+                } else {
+                // normal anchor
+                    $anchor = '<a href="'.$route.'" id="'.$id.'">'.$menuitem["CAPTION"].'</a>';
+                }
 
                 // calculate level changes: down, same, up
                 $thislevel = substr_count($menuitem["URL"],'/');
@@ -67,14 +75,14 @@ Class HomepageController extends Controller
                     $nextlevel = substr_count($this->menutree[$key+1]["URL"],'/');
                 }
 
-                // build list elements
+               // build list elements
                 if ($nextlevel == $thislevel) {
-                    $mytext .= '<li><a href="'.$route.'" id="'.$id.'">'.$menuitem["CAPTION"].'</a></li>'."\n"; // same level
+                    $mytext .= '<li>'.$anchor.'</li>'."\n"; // same level
                 } elseif ($nextlevel > $thislevel) {
-                    $mytext .= '<li class="dropdown"><a href="'.$route.'" id="'.$id.'">'.$menuitem["CAPTION"].'</a>'."\n"; // down level
+                    $mytext .= '<li class="dropdown">'.$anchor."\n"; // down level
                     $mytext .= '<ul>'."\n"; // down
                 } elseif ($nextlevel < $thislevel) {
-                    $mytext .= '<li><a href="'.$route.'" id="'.$id.'">'.$menuitem["CAPTION"].'</a></li>'."\n"; // up level
+                    $mytext .= '<li>'.$anchor.'</li>'."\n"; // up level
                     for ($i = 1; $i <= ($thislevel - $nextlevel); $i++) {
                         $mytext .= '</ul></li>'."\n"; // up
                     };
@@ -112,14 +120,29 @@ Class HomepageController extends Controller
     private function initmenutree(Session $session)
     {   /**
          * get the data in $menutreefrom the database table itixi.menutree.
+         * and also store some menuitems to the session (persistent)
          */
         try {
             // make a database call to get the menu items
-            $conn = $this->get('database_connection'); // @todo: fix this quick and dirty item
+            $conn = $this->get('database_connection');
+            $this->menutree = $conn->fetchAll('SELECT * from itixi.menutree');
 
-            // connected to database defined in parameters.yml (itixi)
-            $this->menutree = $conn->fetchAll('SELECT * from menutree');
+            // add all captions to the session (persistant)
+            $myarray = array();
+            foreach ($this->menutree as $menuitems) {
+                $myarray[$menuitems["ROUTE"]] = $menuitems["CAPTION"];
+            }
+            $session->set( 'captions', $myarray );
 
+            // add all permissions to the session (persistant)
+            reset( $this->menutree );
+            $myarray = array();
+            foreach ($this->menutree as $menuitems) {
+                $myarray[$menuitems["ROUTE"]] = $menuitems["PERMISSION"];
+            }
+            $session->set( 'permissions', $myarray );
+
+            // create a twig file
             $this->initMenuHtmlTwig($session); // proceed to create a twig file
 
         } catch (PDOException $e) {
@@ -152,6 +175,8 @@ Class HomepageController extends Controller
         $session->set("customer",TIXI_UNDEFINED);
         $session->set("breadcrumbs",TIXI_UNDEFINED);
         $session->set("subject",TIXI_UNDEFINED);
+        $session->set("action", TIXI_UNDEFINED);
+        $session->set("cursor", TIXI_UNDEFINED);
         $session->set("filter",TIXI_UNDEFINED);
         $session->set("mode",TIXI_UNDEFINED);
         $session->set("errormsg",TIXI_UNDEFINED);
@@ -172,6 +197,7 @@ Class HomepageController extends Controller
          */
 
         $this->get('logger')->debug('TIXI transaction page '.$route);
+        $errormsg = ''; // error messages in this function
 
     // initialize session attributes
         $session = new Session();
@@ -180,7 +206,10 @@ Class HomepageController extends Controller
             $this->get('logger')->debug('TIXI initializing session variables');
             $this->initSession($session);
         };
-        $session->set("title", $session->get("const_title")." - @todo");
+
+    // set title parameter in the session (conditional)
+        $caps = $session->get("captions");
+        $session->set("title", ($session->get("const_title")." - ".$caps[ $route ]));
 
     // set common parameters
         $session->set("baseurl",'http://'.$_SERVER['SERVER_NAME'].$_SERVER['SCRIPT_NAME']);
@@ -205,21 +234,31 @@ Class HomepageController extends Controller
             $session->set("customer",TIXI_UNDEFINED);
         };
 
-    // set parameters for the menubar
-
-    // set parameters for the subject
+    // reset parameters for the subject
         $session->set("subject", TIXI_UNDEFINED);
 
-    // set parameters for the taskbar
-        if (isset($_REQUEST['filter']))
-        {
+    // set parameters for actions
+        if (isset($_REQUEST['action'])) {
+            $session->set('action', $_REQUEST['action'] );
+            if ($_REQUEST['action'] == 'select') {
+                 $cursor = (isset($_REQUEST['cursor']) ? $_REQUEST['cursor'] : 1);
+            }
+        } else {
+            $session->set('action', '' );
+        };
+        if ($session->get('action') == 'print'){
+            $errormsg .= "Aktion(print) wird auf diese Seite nicht unterstützt.";
+        }
+
+    // set / reset filters
+        if (isset($_REQUEST['filter'])) {
             $session->set("filter", $_REQUEST['filter']);
         } else {
             $session->set("filter", $session->get("const_filter"));
         };
 
     // reset error message
-        $session->set('errormsg', '');
+        $session->set('errormsg', $errormsg);
 
     return;
     }

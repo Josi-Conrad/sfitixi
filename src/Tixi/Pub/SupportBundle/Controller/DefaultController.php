@@ -14,8 +14,8 @@ class DefaultController extends Controller
     public function indexAction($name='')
     {
         // set parameters for the rendering of the support page
-        $paramservice = $this->get('tixi_homepage_service');
-        $paramservice->setTemplateParameters('tixi_support_page');
+        $tixi_housekeeping = $this->get('tixi_housekeeping');
+        $tixi_housekeeping->setTemplateParameters('tixi_support_page');
 
         // set subject
         $session = $this->container->get('session');

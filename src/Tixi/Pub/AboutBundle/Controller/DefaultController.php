@@ -13,8 +13,8 @@ class DefaultController extends Controller
     public function indexAction($slug='')
     {
      // set parameters for the rendering of the about page
-        $paramservice = $this->get('tixi_homepage_service');
-        $paramservice->setTemplateParameters('tixi_about_page');
+        $tixi_housekeeping = $this->get('tixi_housekeeping');
+        $tixi_housekeeping->setTemplateParameters('tixi_about_page');
 
      // set subject
         $session = $this->container->get('session');

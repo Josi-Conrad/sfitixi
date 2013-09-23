@@ -14,13 +14,16 @@ class DefaultController extends Controller
     public function indexAction($name='')
     {
     // set parameters for the rendering of the about page
-        $paramservice = $this->get('tixi_homepage_service');
-        $paramservice->setTemplateParameters('tixi_unterhalt_teamdaten_page');
+        $tixi_housekeeping = $this->get('tixi_housekeeping');
+        $tixi_housekeeping->setTemplateParameters('tixi_unterhalt_teamdaten_page');
 
     // set subject and mode
         $session = $this->container->get('session');
         $session->set('mode', 'mode_select_list'); // provisional
         $session->set('subject', 'Teamdaten (liste)');
+
+    // get / set password (hash)
+    // @todo: get / set hashed password from database
 
     // render the about page
         return $this->render('TixiAppTeamBundle:Default:index.html.twig');

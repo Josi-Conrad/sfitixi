@@ -19,8 +19,8 @@ class DefaultController extends Controller
         $this->get('request')->getSession()->invalidate();
 
     // set parameters for the rendering of the logout page
-        $paramservice = $this->get('tixi_homepage_service');
-        $paramservice->setTemplateParameters('tixi_logout_page');
+        $tixi_housekeeping = $this->get('tixi_housekeeping');
+        $tixi_housekeeping->setTemplateParameters('tixi_logout_page');
 
     // set subject
         $session = $this->container->get('session');
