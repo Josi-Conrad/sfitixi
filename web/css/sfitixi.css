@@ -328,4 +328,9 @@ p, div {
 
 /* --------------------------------------------------------------------------- */
 /* CONTENT                                                                     */
-
+/* wrapper class for subject and taskbar */
+.content-wrapper {
+    margin: 5px 0px;
+    vertical-align: top;
+    horizontal-align:left;
+}

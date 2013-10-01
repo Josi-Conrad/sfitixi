@@ -29,8 +29,9 @@ class DefaultController extends Controller
         $state->setListObjectStates();
 
     // build list according to state
-        $list = new ListBuilder();
-        $list->setView('vBenutzer');
+    //  $list = new ListBuilder();
+        $list = $this->get('tixi_listbuilder');
+        $list->setView('vbenutzerperson');
         $list->setConstraints('');
         if ($session->get('mode') == $session->get('mode_select_list')) {
             $list->makeList();
@@ -42,7 +43,8 @@ class DefaultController extends Controller
     // render the team data page
         return $this->render('TixiAppTeamBundle:Default:index.html.twig',
                     array('message' => $state->getMessage(),
-                        'mylist' => $list->getList(),
+                        'myheader' => $list->getHeader(),
+                        'myrows' => $list->getRows(),
                     ));
     }
 }

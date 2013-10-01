@@ -12,22 +12,7 @@ use Symfony\Component\HttpFoundation\Session\Session;
 
 class StateBuilder
 {
-    protected $tables;
-    protected $view;
-    protected $constraints;
-    protected $message;
-
-    public function setTables($value) {
-        $this->tables = $value;
-    }
-
-    public function setView($value) {
-        $this->view = $value;
-    }
-
-    public function setConstraints($value) {
-        $this->constraints = $value;
-    }
+   protected $message;
 
 public function setListObjectStates()
     { /*

@@ -9,6 +9,10 @@ services:
     tixi_housekeeping:
         class: Tixi\HomeBundle\Controller\HomepageController
         arguments: [@service_container]
+    tixi_listbuilder:
+        class: Tixi\HomeBundle\Controller\ListBuilder
+        arguments: [@service_container]
+
 #    tixi_home.example:
 #        class: %tixi_home.example.class%
 #        arguments: [@service_id, "plain_value", %parameter%]

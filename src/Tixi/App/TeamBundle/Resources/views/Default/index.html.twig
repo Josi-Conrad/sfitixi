@@ -8,26 +8,27 @@
 {% block title %}{{ app.session.get('title') }}{% endblock %}
 
 {% block content %}
-    <div>
-        {% if app.session.get('mode') == app.session.get('mode_select_list') %}
-        {# render a list (table) for the variable mylist (array)............ #}
-            <table border="1">
-            {% for myrow in mylist %}
-                <tr>
-                    {% if loop.first %}
-                        {% for mycell in myrow %}
-                            <th>{{ mycell }} </th>
-                        {% endfor %}
-                    {% else %}
-                        {% for mycell in myrow %}
-                            <td>{{ mycell }} </td>
-                        {% endfor %}
-                    {% endif %}
-                </tr>
-            {% endfor %}
-            </table>
-        {% else %}
-            <p>{{ message }}</p>
-        {% endif %}
-    </div>
+{# render a list (table) for the variable mylist (array)............ #}
+{% if app.session.get('mode') == app.session.get('mode_select_list') %}
+<div class="content-wrapper">
+    <table class="bordered" summary="Auswahlliste">
+        <tr>
+        {% for mycell in myheader %}
+            <th>{{ mycell }}</th>
+        {% endfor %}
+        </tr>
+        {% for myrow in myrows %}
+        <tr>
+        {% for mycell in myrow %}
+            <td>{{ mycell }}</td>
+        {% endfor %}
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+{% else %}
+<div class="content-wrapper">
+    <p>{{ message }}</p>
+</div>
+{% endif %}
 {% endblock %}

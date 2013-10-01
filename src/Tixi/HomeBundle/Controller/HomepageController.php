@@ -14,6 +14,7 @@
 // 21.09.2013 martin jonasse simplified setTemplateParameters, added $route, dropped all others
 // 22.09.2013 martin jonasse $menutree is not persistent, set it as a Symfony2 Parameter
 // 30.09.2013 martin jonasse updated management of actions and modes
+// 01.10.2013 martin jonasse removed .ch from customer name
 
 namespace Tixi\HomeBundle\Controller;
 
@@ -225,8 +226,9 @@ Class HomepageController extends Controller
             if ($username != $session->get("username"))
                 {
                     $session->set("username", $username);
-                    $parts = explode('@', $username);
-                    $session->set("customer", $parts[1]);
+                    $part1 = explode('@', $username);
+                    $part2 = explode('.',$part1[1]);
+                    $session->set("customer", $part2[0]);
                     $session->set("userroles", $usr->getRoles());
                 };
         } else {

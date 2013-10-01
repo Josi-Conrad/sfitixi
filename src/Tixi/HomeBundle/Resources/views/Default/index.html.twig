@@ -8,7 +8,10 @@
 
 {% block title %}{{ app.session.get('title') }}{% endblock %}
 
-{% block stylesheets %}<link href="{{ asset('css/sfitixi.css') }}" rel="stylesheet" type="text/css" />{% endblock %}
+{% block stylesheets %}
+    <link href="{{ asset('css/sfitixi.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('css/table_style.css') }}" rel="stylesheet" type="text/css" />
+{% endblock %}
 
 {% block body %}
 
