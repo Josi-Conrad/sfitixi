@@ -1,6 +1,7 @@
 {# src/Tixi/App/TeamBundle/Resources/views/Default/index.html.twig #}
 {# 28.08.2013 martin jonasse initial file #}
 {# 03.09.2013 martin jonasse update for session variables #}
+{# 01.10.2013 martin jonasse update for list (table) object #}
 
 {% extends 'TixiHomeBundle:Default:index.html.twig' %}
 
@@ -8,6 +9,25 @@
 
 {% block content %}
     <div>
-        This is the default Team page!
+        {% if app.session.get('mode') == app.session.get('mode_select_list') %}
+        {# render a list (table) for the variable mylist (array)............ #}
+            <table border="1">
+            {% for myrow in mylist %}
+                <tr>
+                    {% if loop.first %}
+                        {% for mycell in myrow %}
+                            <th>{{ mycell }} </th>
+                        {% endfor %}
+                    {% else %}
+                        {% for mycell in myrow %}
+                            <td>{{ mycell }} </td>
+                        {% endfor %}
+                    {% endif %}
+                </tr>
+            {% endfor %}
+            </table>
+        {% else %}
+            <p>{{ message }}</p>
+        {% endif %}
     </div>
 {% endblock %}

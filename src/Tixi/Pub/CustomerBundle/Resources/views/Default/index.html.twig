@@ -14,7 +14,6 @@
 {% block taskbar %}{% endblock %}
 
 {% block content %}
-{# @todo: make the /customer page sensitive to multiple customers and add "todays routes" #}
 <div class="frame">
     <div class="frame-table">
         {% if app.session.get('customer') == 'tixizug.ch' %}
@@ -22,6 +21,7 @@
                 <div class="frame-logo">
                 {# credits: https://developers.google.com/maps/documentation/staticmaps/?hl=de#quick_example #}
                 {# note: the static map is rendered on the client, not on the server                         #}
+                {# @todo: render the routes driven in the current day see requirement R-165 #}
                     <br>
                     <img border="0"
                         src="//maps.googleapis.com/maps/api/staticmap?center=Oberwil bei Zug,Schweiz

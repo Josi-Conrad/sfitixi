@@ -13,6 +13,7 @@
 // 06.09.2013 martin jonasse added automatic generation of menu.html.twig (improved performance)
 // 21.09.2013 martin jonasse simplified setTemplateParameters, added $route, dropped all others
 // 22.09.2013 martin jonasse $menutree is not persistent, set it as a Symfony2 Parameter
+// 30.09.2013 martin jonasse updated management of actions and modes
 
 namespace Tixi\HomeBundle\Controller;
 
@@ -171,7 +172,7 @@ Class HomepageController extends Controller
         $session->set("title", TIXI_UNDEFINED);
         $session->set("baseurl",TIXI_UNDEFINED);
         $session->set("username",TIXI_UNDEFINED);
-        $session->set("userroles",TIXI_UNDEFINED);
+        $session->set("userroles",array());
         $session->set("customer",TIXI_UNDEFINED);
         $session->set("breadcrumbs",TIXI_UNDEFINED);
         $session->set("subject",TIXI_UNDEFINED);
@@ -226,11 +227,11 @@ Class HomepageController extends Controller
                     $session->set("username", $username);
                     $parts = explode('@', $username);
                     $session->set("customer", $parts[1]);
-                    $session->set("roles", $usr->getRoles());
+                    $session->set("userroles", $usr->getRoles());
                 };
         } else {
             $session->set("username",TIXI_UNDEFINED);
-            $session->set("userroles",TIXI_UNDEFINED);
+            $session->set("userroles",array());
             $session->set("customer",TIXI_UNDEFINED);
         };
 
@@ -244,11 +245,17 @@ Class HomepageController extends Controller
                  $cursor = (isset($_REQUEST['cursor']) ? $_REQUEST['cursor'] : 1);
             }
         } else {
-            $session->set('action', '' );
+            // no action in request
+            $session->set('action', '' ); // action is empty
+            $session->set('mode', ''); // mode is empty too
+            // @todo: check if an incomplete transaction is pending
+            // e.g. mode = mode_edit_in_list or mode_edit_record
+            // if yes, redirect back to the prevoius page with an error message
         };
         if ($session->get('action') == 'print'){
             $errormsg .= "Aktion(print) wird auf diese Seite nicht unterstützt.";
         }
+        $session->set('route', $route); // set current route
 
     // set / reset filters
         if (isset($_REQUEST['filter'])) {
