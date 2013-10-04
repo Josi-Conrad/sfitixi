@@ -10,25 +10,47 @@
 {% block content %}
 {# render a list (table) for the variable mylist (array)............ #}
 {% if app.session.get('mode') == app.session.get('mode_select_list') %}
-<div class="content-wrapper">
-    <table class="bordered" summary="Auswahlliste">
-        <tr>
-        {% for mycell in myheader %}
-            <th>{{ mycell }}</th>
-        {% endfor %}
-        </tr>
-        {% for myrow in myrows %}
-        <tr>
-        {% for mycell in myrow %}
-            <td>{{ mycell }}</td>
-        {% endfor %}
-        </tr>
-        {% endfor %}
-    </table>
-</div>
+    {% set currentid = app.session.get('cursors')[app.session.get('route')] %}
+    <div class="content-wrapper">
+        <table class="ExcelTable2003" summary="Auswahlliste">
+            <thead>
+            <tr>
+                {% for mycell in myheader %}
+                    {% if loop.first %}
+                        <th class="heading">{{ mycell }}</th>
+                    {% else %}
+                        <th>{{ mycell }}</th>
+                    {% endif %}
+                {% endfor %}
+            </tr>
+            </thead>
+            <tbody>
+            {% for myrow in myrows %}
+                <tr>
+                    {% for mycell in myrow %}
+                        {% if loop.first %}
+                            {% if currentid == mycell %}
+                                <td class="selected">
+                            {% else %}
+                                <td class="heading">
+                            {% endif %}
+                                    <a href="{{ path( app.request.attributes.get('_route'),
+                                        {'action':'select', 'cursor': ''} ) }}{{ mycell }}"
+                                        id="fpm_select_{{ mycell }}">{{ mycell }}
+                                    <a>
+                            </td>
+                        {% else %}
+                            <td>{{ mycell }}</td>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 {% else %}
-<div class="content-wrapper">
-    <p>{{ message }}</p>
-</div>
+    <div class="content-wrapper">
+        <p>{{ message }}</p>
+    </div>
 {% endif %}
 {% endblock %}

@@ -15,6 +15,7 @@
 // 22.09.2013 martin jonasse $menutree is not persistent, set it as a Symfony2 Parameter
 // 30.09.2013 martin jonasse updated management of actions and modes
 // 01.10.2013 martin jonasse removed .ch from customer name
+// 03.10.2013 martin jonasse upgrade cursor to array type
 
 namespace Tixi\HomeBundle\Controller;
 
@@ -178,7 +179,7 @@ Class HomepageController extends Controller
         $session->set("breadcrumbs",TIXI_UNDEFINED);
         $session->set("subject",TIXI_UNDEFINED);
         $session->set("action", TIXI_UNDEFINED);
-        $session->set("cursor", TIXI_UNDEFINED);
+        $session->set("cursors", array());
         $session->set("filter",TIXI_UNDEFINED);
         $session->set("mode",TIXI_UNDEFINED);
         $session->set("errormsg",TIXI_UNDEFINED);
@@ -244,7 +245,9 @@ Class HomepageController extends Controller
         if (isset($_REQUEST['action'])) {
             $session->set('action', $_REQUEST['action'] );
             if ($_REQUEST['action'] == 'select') {
-                 $cursor = (isset($_REQUEST['cursor']) ? $_REQUEST['cursor'] : 1);
+                $cursors = $session->get('cursors');
+                $cursors[ $route ] = $_REQUEST['cursor'];
+                $session->set('cursors', $cursors);
             }
         } else {
             // no action in request
@@ -259,12 +262,10 @@ Class HomepageController extends Controller
         }
         $session->set('route', $route); // set current route
 
-    // set / reset filters
+    // set filters
         if (isset($_REQUEST['filter'])) {
             $session->set("filter", $_REQUEST['filter']);
-        } else {
-            $session->set("filter", $session->get("const_filter"));
-        };
+        }
 
     // reset error message
         $session->set('errormsg', $errormsg);
