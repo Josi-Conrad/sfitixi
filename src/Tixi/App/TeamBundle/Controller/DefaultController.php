@@ -29,9 +29,7 @@ class DefaultController extends Controller
         $state->setListObjectStates();
 
     // build list according to state
-    //  $list = new ListBuilder();
-        $list = $this->get('tixi_listbuilder');
-        $list->setRoute('tixi_unterhalt_teamdaten_page');
+        $list = $this->get('tixi_listbuilder'); // service
         $list->setView('vbenutzerperson');
         if ($session->get('mode') == $session->get('mode_select_list')) {
             $list->makeList();

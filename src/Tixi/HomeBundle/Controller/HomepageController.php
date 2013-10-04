@@ -180,7 +180,7 @@ Class HomepageController extends Controller
         $session->set("subject",TIXI_UNDEFINED);
         $session->set("action", TIXI_UNDEFINED);
         $session->set("cursors", array());
-        $session->set("filter",TIXI_UNDEFINED);
+        $session->set("filter",$session->get('const_filter'));
         $session->set("mode",TIXI_UNDEFINED);
         $session->set("errormsg",TIXI_UNDEFINED);
 

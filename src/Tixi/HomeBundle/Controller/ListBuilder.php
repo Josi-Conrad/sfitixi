@@ -7,7 +7,7 @@
  * initial file
  */
 // src\Tixi\HomeBundle\Controller\ListBuilder.php
-// martin jonasse 03.10.2013 upgrade code w. uppercase, cursors, filters
+// martin jonasse 04.10.2013 upgrade code w. uppercase, cursors, filters, route
 
 namespace Tixi\HomeBundle\Controller;
 
@@ -19,25 +19,16 @@ class ListBuilder extends Controller
 { /*
    * class for displaying a SQL view as a HTML table on the screen,
    * the user can select rows and / or filter these rows
-   * inputs: the view and all other inputs are stored in the session
+   * input: the view, all other inputs are stored in the session
    * feature: the number of rows displayed is limited to 30
    */
     protected $container;   // container
-    protected $route;       // route (index for cursors)
-    protected $view;        // inputs (name of MySQL view)
+    protected $view;        // input (name of the MySQL view)
     protected $list;        // output
 
     public function __construct (ContainerInterface $container)
     {
         $this->container = $container;
-    }
-
-    public function setRoute($value)
-    {/*
-      * route name which references the ROUTE column in the menutree table
-      */
-        $this->route = $value;
-        $this->list = array();
     }
 
     public function setView($value)
@@ -54,20 +45,33 @@ class ListBuilder extends Controller
       * return: array of headers (success) empty array and error message (failure)
       */
         $customer = $session->get('customer');
-        $sql = "select * from $customer.$this->view";
+        $sql = "select * from $customer.$this->view ";
         if ($session->get('filter') != $session->get('const_filter'))
         {
-            $sql .= " where benutzername like '%".$session->get('filter')."%'";
-            $sql .= " or anrede like '%".$session->get('filter')."%'";
+            $filter = $session->get('filter'); // continues below
         }
         $mylist = array(); // initialize array
 
         try {
             // make a database call to get the meta data
             $connection = $this->container->get('database_connection');
+            if (isset($filter)) { // get fields that shall be filtered
+                $sqlconditions = '';
+                $textfields = $connection->fetchAll("show fields from btb.vbenutzerperson where type like 'varchar%'");
+                if (count($textfields) >0) { // indeed there are fields to be filtered
+                    foreach($textfields as $key => $value) {
+                        if ($key == 0) {
+                            $sqlconditions .= "where ".$value["Field"]." like '%".$filter."%' ";
+                        } else {
+                            $sqlconditions .= "or ".$value["Field"]." like '%".$filter."%' ";
+                        }
+                    }
+                }
+                $sql .= $sqlconditions;
+            }
             $mylist = $connection->fetchAll( $sql );
             if (count($mylist) == 0) {
-                $session->set("errormsg","Leere Tabelle ".$this->view." keine Werte zum anzeigen.");
+                $session->set("errormsg","Leere Tabelle ".$this->view." keine Werte zum anzeigen (Filter?).");
             }
             return $mylist; // header information
 
@@ -91,7 +95,7 @@ class ListBuilder extends Controller
             $connection = $this->container->get('database_connection');
             $mylist = $connection->fetchAll( $sql );
             if (count($mylist) == 0) {
-                $session->set("errormsg","Leere Tabelle ".$this->view." keine Werte zum anzeigen.");
+                $session->set("errormsg","Leere Tabelle ".$this->view." keine Werte zum anzeigen (Hinzufügen?).");
                 return "0";
             } else {
                 return $mylist[0]["id"];
@@ -110,8 +114,9 @@ class ListBuilder extends Controller
         $session = new session;
 
         $cursors = $session->get('cursors');
-        if (!isset($cursors[$this->route])) {
-            $cursors[$this->route] = $this->getDefaultID($session);
+        $route = $session->get('route');
+        if (!isset($cursors[$route])) { // previous id not set, get default
+            $cursors[$route] = $this->getDefaultID($session);
             $session->set('cursors', $cursors);
         }
 
