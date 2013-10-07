@@ -1,42 +1,40 @@
 {# src/Tixi/SecurityBundle/Resources/views/Security/login.html.twig #}
 {# 26.08.2013 martin jonasse initial file, credit the book - chapter 13 - security #}
+{# 07.10.2013 martin jonasse simplified design and presentation #}
 
 {% extends 'TixiHomeBundle:Default:index.html.twig' %}
 
 {% block title %}{{ app.session.get('title') }}{% endblock %}
 
-{% block stylesheets %}<link href="{{ asset('css/login_style.css') }}" rel="stylesheet" type="text/css" />{% endblock %}
-
-{% block frame %}{%  endblock %}
+{# {% block frame %}{%  endblock %} #}
 {% block menubar %}{%  endblock %}
 {% block subject %}{% endblock %}
 {% block taskbar %}{% endblock %}
-{% block errormsg %}{%  endblock %}
 
 {% block content %}
     <div class="login">
         <section>
-        <br>
-        <h3 style="text-align:center">Anmeldung an die iTixi Wolke</h3>
-       {% if error %}
-            <div style="text-align:center; color:red;">{{ error.message }}</div>
-        {% endif %}
-        <form action="{{ path('login_check') }}" method="post">
-            <label for="fpw_username">Email (name@firma.ch):</label>
-            <input type="text" id="fpw_username" autocomplete="on" name="_username" value="{{ last_username }}" required />
-
-            <label for="fpw_password">Password:</label>
-            <input type="password" id="fpw_password" autocomplete="on" name="_password" required/>
-
-            <button type="submit" class="loginbutton" id="fpm_login">Login</button>
-
-            <br>
-            <p>Benutzernamen und Passwörter werden durch die Geschäftsleitungen der Tixi Betriebe (Mandant)
-               an berechtigte Mitarbeiter vergeben.</p>
-            <p>Alle personenbezogene Daten in der iTixi Applikation müssen als vertraulich behandelt werden
-               (Bundesgesetz über den Datenschutz (DSG)).</p>
-
-        </form>
+            <h3 style="text-align:center">Anmelden an die iTixi Wolke</h3>
+            <form action="{{ path('login_check') }}" method="post">
+                <p>
+                    <label for="fpw_username">Email (name@firma.ch):</label>
+                    <input type="text" id="fpw_username" autocomplete="on" name="_username" required autofocus />
+                </p>
+                <p>
+                    <label for="fpw_password">Passwort:</label>
+                    <input type="password" id="fpw_password" autocomplete="on" name="_password" required />
+                <p>
+                    <button type="submit" class="loginbutton" id="fpm_login">Anmelden</button>
+                </p>
+                <p>
+                    Benutzernamen und Passwörter werden durch die Geschäftsleitungen der Tixi Betriebe (Mandant)
+                    an berechtigte Mitarbeiter vergeben.
+                </p>
+                <p>
+                    Alle personenbezogene Daten, in der iTixi Applikation, müssen als vertraulich behandelt werden
+                    (Bundesgesetz über den Datenschutz (DSG)).
+                </p>
+            </form>
         </section>
     </div>
 {% endblock %}

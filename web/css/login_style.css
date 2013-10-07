@@ -1,219 +1,54 @@
 /* Basic Styles with class="login"
    26.08.2013 MARTIN JONASSE adapted FOR Symfony 2
+   06.10.2013 martin jonasse simplified design
 ================================================== */
 
 .login {
-/*	background: #FFF url(../images/light_wool.png) 0 0 repeat; */
-	color: #444;
-	font: 14px/24px "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
-	-webkit-font-smoothing: antialiased; /* Fix for webkit rendering */
-	-webkit-text-size-adjust: 100%;
+    font: 14px Helvetica, Arial, Sans-Serif;
 }
 
 .login section {
-	background: #FFF;
-	border: 1px solid #bababa;
-	margin: 40px auto;
-	padding: 0;
-	width: 350px;
-	-webkit-border-radius: 10px;
-	-moz-border-radius: 10px;
-	border-radius: 10px;
-	-webkit-box-shadow: 0 2px 4px #efefef;
-	-moz-box-shadow: 0 2px 4px #efefef;
-	box-shadow: 0 2px 4px #efefef;	
+    border: 1px solid #bababa;
+    width: 300px;
+    border-radius: 3px;
+    margin: auto;
+    margin-top: 50px;
 }
 
-.login section header {
-		background: #fafafa; 
-		border: none;
-		border-bottom: 1px solid #bababa;
-		padding: 14px 40px 15px;
-		-webkit-border-top-left-radius: 9px;
-		-webkit-border-top-right-radius: 9px;
-		-moz-border-radius-topleft: 9px;
-		-moz-border-radius-topright: 9px;
-		border-top-left-radius: 9px;
-		border-top-right-radius: 9px;		
-		-webkit-box-shadow: inset 0 -1px 0 #f9f9f9, 0 2px 2px #efefef;
-		-moz-box-shadow: inset 0 -1px 0 #f9f9f9, 0 2px 2px #efefef;
-		box-shadow: inset 0 -1px 0 #f9f9f9, 0 2px 2px #efefef;		
-	}
-	
-.login section header h1 {
-			color: #444;
-			font-size: 16px;
-			line-height: 16px;
-			margin: 0;
-			padding: 0;
-			text-align: left;
-			-webkit-text-shadow: 0 1px 0 #FFF;
-			-moz-text-shadow: 0 1px 0 #FFF;
-			text-shadow: 0 1px 0 #FFF;
-		}
- 
- 
-/* Form Styles with class="login"
-================================================== */
-
-.login form {padding: 20px 30px;}
-.login fieldset {}
-	
-.login input[type="text"],
-.login input[type="password"],
-.login input[type="email"],
-.login textarea {
-		background: #efefef;
-		border: 1px #CCC solid;
-		padding: 10px;
-		outline: none;
-		font: 16px "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
-		color: #666;
-		width: 100%;
-		display: block;
-		margin-bottom: 15px;
-		-moz-border-radius: 3px;
-		-webkit-border-radius: 3px;
-		border-radius: 3px;		
-		-webkit-box-shadow: inset 0 3px 3px rgba(0,0,0,0.10);
-		-moz-box-shadow: inset 0 3px 3px rgba(0,0,0,0.10);
-		box-shadow: inset 0 3px 3px rgba(0,0,0,0.10);
-		-webkit-text-shadow: 0 1px 0 #FFF;
-		-moz-text-shadow: 0 1px 0 #FFF;
-		text-shadow: 0 1px 0 #FFF;
-		-moz-box-sizing: border-box;
-		-webkit-box-sizing: border-box;
-		box-sizing: border-box;		
-		-webkit-transition: all 0.2s linear;
-		-moz-transition: all 0.2s linear;
-		transition: all 0.2s linear;
-	}
-	
-.login input[type="text"]:focus,
-.login input[type="password"]:focus,
-.login input[type="email"]:focus,
-.login textarea:focus {
-		background: #fcfff5;
-		border: 1px #a8d34e solid;
-		color: #444;
-		-webkit-text-shadow: 0 1px 0 #FFF;
-		-moz-text-shadow: 0 1px 0 #FFF;
-		text-shadow: 0 1px 0 #FFF;
-		-webkit-box-shadow: inset 0 3px 3px rgba(0,0,0,0.05), 0 0 5px #a6e32d;
-		-moz-box-shadow: inset 0 3px 3px rgba(0,0,0,0.05), 0 0 5px #a6e32d;
-		box-shadow: inset 0 3px 3px rgba(0,0,0,0.05), 0 0 5px #a6e32d;
-	}
-	
-.login textarea {min-height: 60px;}
-	
-.login label {
-		color: #999;
-		font-weight: bold;
-		-webkit-text-shadow: 0 1px 0 #FFF;
-		-moz-text-shadow: 0 1px 0 #FFF;
-		text-shadow: 0 1px 0 #FFF;
-	}
-
-
-
-/* Button Style for class ="login"
-================================================== */
-
-	.loginbutton {
-		background: rgb(168,211,78); /* Old browsers */
-		background: -moz-linear-gradient(top,  rgba(168,211,78,1) 0%, rgba(116,185,49,1) 100%); /* FF3.6+ */
-		background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(168,211,78,1)), color-stop(100%,rgba(116,185,49,1))); /* Chrome,Safari4+ */
-		background: -webkit-linear-gradient(top,  rgba(168,211,78,1) 0%,rgba(116,185,49,1) 100%); /* Chrome10+,Safari5.1+ */
-		background: -o-linear-gradient(top,  rgba(168,211,78,1) 0%,rgba(116,185,49,1) 100%); /* Opera 11.10+ */
-		background: -ms-linear-gradient(top,  rgba(168,211,78,1) 0%,rgba(116,185,49,1) 100%); /* IE10+ */
-		background: linear-gradient(to bottom,  rgba(168,211,78,1) 0%,rgba(116,185,49,1) 100%); /* W3C */
-		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a8d34e', endColorstr='#74b931',GradientType=0 ); /* IE6-9 */		
-		border: 1px solid #5e8c22;
-		border-bottom: 1px solid #50771d;
-		-webkit-text-shadow: 0 1px 0 #6a9a2e;
-		-moz-text-shadow: 0 1px 0 #6a9a2e;
-		text-shadow: 0 1px 0 #6a9a2e;
-		-webkit-box-shadow: inset 0 1px 0 #d4eaa7, 0 2px 2px #efefef;
-		-moz-box-shadow: inset 0 1px 0 #d4eaa7, 0 2px 2px #efefef;
-		box-shadow: inset 0 1px 0 #d4eaa7, 0 2px 2px #efefef;	
-		
-		/* Constant settings between button states */
-		color: #FFF;
-		cursor: pointer;
-		display: inline-block;
-		font-family: "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
-		font-size: 14px;
-		font-weight: bold;
-		line-height: normal;
-		padding: 10px 20px;
-		text-decoration: none;
-		-webkit-border-radius: 3px;
-		-moz-border-radius: 3px;
-		border-radius: 3px;  
-	}
-	
-	.loginbutton:hover,
-	.loginbutton:focus {
-		background: rgb(141,198,51); /* Old browsers */
-		background: -moz-linear-gradient(top,  rgba(141,198,51,1) 0%, rgba(83,152,29,1) 100%); /* FF3.6+ */
-		background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(141,198,51,1)), color-stop(100%,rgba(83,152,29,1))); /* Chrome,Safari4+ */
-		background: -webkit-linear-gradient(top,  rgba(141,198,51,1) 0%,rgba(83,152,29,1) 100%); /* Chrome10+,Safari5.1+ */
-		background: -o-linear-gradient(top,  rgba(141,198,51,1) 0%,rgba(83,152,29,1) 100%); /* Opera 11.10+ */
-		background: -ms-linear-gradient(top,  rgba(141,198,51,1) 0%,rgba(83,152,29,1) 100%); /* IE10+ */
-		background: linear-gradient(to bottom,  rgba(141,198,51,1) 0%,rgba(83,152,29,1) 100%); /* W3C */
-		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#8dc633', endColorstr='#53981d',GradientType=0 ); /* IE6-9 */
-		-webkit-text-shadow: 0 1px 0 #50881c;
-		-moz-text-shadow: 0 1px 0 #50881c;
-		text-shadow: 0 1px 0 #50881c;
-		-webkit-box-shadow: inset 0 1px 0 #bada7f, 0 2px 2px #efefef;
-		-moz-box-shadow: inset 0 1px 0 #bada7f, 0 2px 2px #efefef;
-		box-shadow: inset 0 1px 0 #bada7f, 0 2px 2px #efefef;	
-	}
-	
-	.loginbutton:active {
-		background: rgb(83,152,29); /* Old browsers */
-		background: -moz-linear-gradient(top,  rgba(83,152,29,1) 0%, rgba(141,198,51,1) 100%); /* FF3.6+ */
-		background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(83,152,29,1)), color-stop(100%,rgba(141,198,51,1))); /* Chrome,Safari4+ */
-		background: -webkit-linear-gradient(top,  rgba(83,152,29,1) 0%,rgba(141,198,51,1) 100%); /* Chrome10+,Safari5.1+ */
-		background: -o-linear-gradient(top,  rgba(83,152,29,1) 0%,rgba(141,198,51,1) 100%); /* Opera 11.10+ */
-		background: -ms-linear-gradient(top,  rgba(83,152,29,1) 0%,rgba(141,198,51,1) 100%); /* IE10+ */
-		background: linear-gradient(to bottom,  rgba(83,152,29,1) 0%,rgba(141,198,51,1) 100%); /* W3C */
-		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#53981d', endColorstr='#8dc633',GradientType=0 ); /* IE6-9 */
-		-webkit-text-shadow: 0 -1px 0 #50881c;
-		-moz-text-shadow: 0 -1px 0 #50881c;
-		text-shadow: 0 -1px 0 #50881c;
-		-webkit-box-shadow: 0 2px 2px #efefef;
-		-moz-box-shadow: 0 2px 2px #efefef;
-		box-shadow: 0 2px 2px #efefef;	
-	}
-	
-	.loginbutton {
-		width: 100%;
-		padding-left: 0 !important;
-		padding-right: 0 !important;
-		text-align: center; 
-	}
-	
-	/* Fix for odd Mozilla border & padding issues */
-	button::-moz-focus-inner,
-	input::-moz-focus-inner {
-		border: 0;
-		padding: 0;
-	}
-	
-	
-/* IE Tidy-ups
-================================================== */	
-
-/* IE9: border-radius + gradient background = train wreck */
-.ie9 * {
-	border-radius: 0 !important;  	
+.login p {
+    margin-left: 10px;
+    margin-right: 10px;
 }
 
-.ie7 input {
-	width: 92%;
+.login form p label {
+    width: 240px;
+    float: left;
+    margin-top: 2px;
 }
 
-.ie7 button {
-	border: none;
+.login form p input {
+    width: 270px;
+}
+
+.login form p button {
+    font-size: 14px;
+    height: 30px;
+    border-radius: 3px;
+    border: 1px solid #c1c1c1;
+    /* Background and effects */
+    background: #eaeaea; /* Background for IE9 and older browsers */
+    background: -webkit-linear-gradient(bottom, #e1e1e1, #f4f4f4); /* Background for Chrome & Safari */
+    background: -moz-linear-gradient(bottom, #e1e1e1, #f4f4f4); /* Background for Firefox */
+    background: -o-linear-gradient(bottom, #e1e1e1, #f4f4f4); /* Background for Opera */
+    background: -ms-linear-gradient(bottom, #e1e1e1, #f4f4f4); /* Background for Internet Explorer 10 */
+    box-shadow: inset 0 1px 0 #fff;
+}
+
+.login form p button:hover {
+    background: lightblue;
+    background: -webkit-linear-gradient(bottom, lightblue, #f4f4f4); /* Background for Chrome & Safari */
+    background: -moz-linear-gradient(bottom, lightblue, #f4f4f4); /* Background for Firefox */
+    background: -o-linear-gradient(bottom, lightblue, #f4f4f4); /* Background for Opera */
+    background: -ms-linear-gradient(bottom, lightblue, #f4f4f4); /* Background for Internet Explorer 10 */
+    box-shadow: inset 0 1px 0 #fff;
 }
