@@ -26,6 +26,10 @@ framework:
 twig:
     debug:            %kernel.debug%
     strict_variables: %kernel.debug%
+    #@@ begin martin jonasse 07.10.2013 added globals: tixi
+    globals:
+      tixi: %tixi%
+      #@@ end
 
 # Assetic Configuration
 assetic:

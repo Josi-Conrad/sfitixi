@@ -25,13 +25,13 @@ class DefaultController extends Controller
         $session->set('subject', 'Teamdaten (liste)');
 
     // set states according to actions
-        $state = new StateBuilder();
+        $state = new StateBuilder($this->container);
         $state->setListObjectStates();
 
     // build list according to state
         $list = $this->get('tixi_listbuilder'); // service
         $list->setView('vbenutzerperson');
-        if ($session->get('mode') == $session->get('mode_select_list')) {
+        if ($session->get('mode') == $this->container->getParameter('tixi')["mode_select_list"] ) {
             $list->makeList();
         }
 

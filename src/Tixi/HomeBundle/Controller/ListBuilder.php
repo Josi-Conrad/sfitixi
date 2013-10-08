@@ -46,7 +46,7 @@ class ListBuilder extends Controller
       */
         $customer = $session->get('customer');
         $sql = "select * from $customer.$this->view ";
-        if ($session->get('filter') != $session->get('const_filter'))
+        if ($session->get('filter') != $this->container->getParameter('tixi')["filter"] )
         {
             $filter = $session->get('filter'); // continues below
         }
@@ -133,7 +133,7 @@ class ListBuilder extends Controller
 
     public function getHeader()
     {/*
-      * return an array containing the (uupercase) header data of the database query,
+      * return an array containing the (uppercase) header data of the database query,
       * but can also return an empty array
       */
         if (count($this->list) == 0) {

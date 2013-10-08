@@ -16,7 +16,7 @@
 {% block content %}
 <div class="frame">
     <div class="frame-table">
-        {% if app.session.get('customer') == 'tixizug.ch' %}
+        {% if app.session.get('customer') == 'tixizug' %}
             <div class="frame-row">
                 <div class="frame-logo">
                 {# credits: https://developers.google.com/maps/documentation/staticmaps/?hl=de#quick_example #}
@@ -39,11 +39,11 @@
                 </div>
                 <div class="frame-left">
                     <p> TIXI ZUG<br>General Guisanstr. 22<br>6300 Zug<br>041 711 84 84<br>
-                        <a href="http://www.zg.ch/behoerden/weitere-organisationen/tixizug">homepage</a>
+                        <a href="http://www.tixizug.ch">homepage</a>
                     </p>
                 </div>
             </div>
-        {% elseif (app.session.get('customer') == 'undefined') or (app.session.get('customer') == 'btb.ch') %}
+        {% elseif (app.session.get('customer') == tixi.undefined) or (app.session.get('customer') == 'btb') %}
             <div class="frame-row">
                 <div class="frame-logo">
                     {# credits: https://developers.google.com/maps/documentation/staticmaps/?hl=de#quick_example #}
@@ -66,7 +66,7 @@
                 <div class="frame-left">
                     <p>
                         Test Umgebung für das iTixi Projekt.<br>
-                        Mandant ist "btb.ch" Behinderten Transport Basel.<br>
+                        Mandant ist "btb" Behinderten Transport Basel.<br>
                         Bemerkung: Domäne und Mandant sind beide fiktiv.
                     </p>
                 </div>

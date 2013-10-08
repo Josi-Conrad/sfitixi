@@ -14,3 +14,14 @@ parameters:
     mailer_password: null
     locale: en
     secret: ThisTokenIsNotSoSecretChangeIt
+    tixi:
+      application: iTixi
+      version: 2.0.0
+      filter: Filter...
+      title: iTixi cloud computing
+      undefined: undefined
+      mode_read_record: 1
+      mode_edit_record: 2
+      mode_select_list: 3
+      mode_edit_in_list: 4
+

@@ -9,7 +9,7 @@
 
 {% block content %}
 {# render a list (table) for the variable mylist (array)............ #}
-{% if app.session.get('mode') == app.session.get('mode_select_list') %}
+{% if app.session.get('mode') == tixi.mode_select_list %}
     {% set currentid = app.session.get('cursors')[app.session.get('route')] %}
     <div class="content-wrapper">
         <table class="ExcelTable2003" summary="Auswahlliste">

@@ -155,22 +155,11 @@ Class HomepageController extends Controller
 
     private function initSession(Session $session)
     {   /**
-         * initialize all constants and variables available to the iTixi application and in all twig files.
+         * initialize all variables for the iTixi application and for all twig files.
          * rebuilt after each build of the iTixi application (when initMenutree=true).
          */
 
-     // initialize all constants available in the iTixi application
-        $session->set("const_application", "iTixi");
-        $session->set("const_version", "2.0.0");
-        $session->set("const_filter", "Filter...");
-        $session->set("const_title", "iTixi cloud computing");
-        $session->set("const_undefined", "undefined");
-        $session->set("mode_read_record", "read record");
-        $session->set("mode_edit_record", "edit record");
-        $session->set("mode_select_list", "select list");
-        $session->set("mode_edit_in_list", "edit in list");
-
-     // initialize all attributes available in the itixi user session
+     // initialize all variables in the itixi user session
         $session->set("title", TIXI_UNDEFINED);
         $session->set("baseurl",TIXI_UNDEFINED);
         $session->set("username",TIXI_UNDEFINED);
@@ -180,7 +169,7 @@ Class HomepageController extends Controller
         $session->set("subject",TIXI_UNDEFINED);
         $session->set("action", TIXI_UNDEFINED);
         $session->set("cursors", array());
-        $session->set("filter",$session->get('const_filter'));
+        $session->set("filter",'');
         $session->set("mode",TIXI_UNDEFINED);
         $session->set("errormsg",TIXI_UNDEFINED);
 
@@ -204,15 +193,16 @@ Class HomepageController extends Controller
 
     // initialize session attributes
         $session = new Session();
-        if ($session->has("const_application")==false)
+        if ($session->has("title")==false)
         {
             $this->get('logger')->debug('TIXI initializing session variables');
             $this->initSession($session);
         };
+        $tixi = $this->container->getParameter('tixi'); // array with constants
 
     // set title parameter in the session (conditional)
         $caps = $session->get("captions");
-        $session->set("title", ($session->get("const_title")." - ".$caps[ $route ]));
+        $session->set("title", $tixi["title"]." - ".$caps[ $route ]);
 
     // set common parameters
         $session->set("baseurl",'http://'.$_SERVER['SERVER_NAME'].$_SERVER['SCRIPT_NAME']);
@@ -233,13 +223,13 @@ Class HomepageController extends Controller
                     $session->set("userroles", $usr->getRoles());
                 };
         } else {
-            $session->set("username",TIXI_UNDEFINED);
-            $session->set("userroles",array());
-            $session->set("customer",TIXI_UNDEFINED);
+            $session->set( "username", $tixi["undefined"] );
+            $session->set( "userroles", array());
+            $session->set( "customer", $tixi["undefined"] );
         };
 
     // reset parameters for the subject
-        $session->set("subject", TIXI_UNDEFINED);
+        $session->set("subject", $tixi["undefined"] );
 
     // set parameters for actions
         if (isset($_REQUEST['action'])) {

@@ -23,7 +23,6 @@ class SecurityController extends Controller
         // set subject
         $request = $this->getRequest();
         $session = $request->getSession();
-        //$session = $this->container->get('session');
         $session->set('subject', 'Anmelden an der iTixi Applikation');
 
       // get the login error if there is one
