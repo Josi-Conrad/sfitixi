@@ -17,8 +17,8 @@ class SecurityController extends Controller
       * and password (which will be encrypted with salt)
       */
         // initialize page
-        $tixi_housekeeping = $this->get('tixi_housekeeping');
-        $tixi_housekeeping->setTemplateParameters('tixi_login');
+        $tixi_housekeeper = $this->get('tixi_housekeeper');
+        $tixi_housekeeper->setTemplateParameters('tixi_login');
 
         // set subject
         $request = $this->getRequest();

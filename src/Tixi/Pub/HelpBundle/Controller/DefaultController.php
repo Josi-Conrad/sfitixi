@@ -14,8 +14,8 @@ class DefaultController extends Controller
     {
 //      return $this->render('TixiPubHelpBundle:Default:index.html.twig');
     // set parameters for the rendering of the help page
-        $tixi_housekeeping = $this->get( 'tixi_housekeeping' );
-        $tixi_housekeeping->setTemplateParameters( 'tixi_help_page' );
+        $tixi_housekeeper = $this->get( 'tixi_housekeeper' );
+        $tixi_housekeeper->setTemplateParameters( 'tixi_help_page' );
 
     // set subject
         $session = $this->container->get('session');

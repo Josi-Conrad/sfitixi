@@ -28,7 +28,7 @@ use Symfony\Component\Filesystem\Exception\IOException;
 define("TIXI_UNDEFINED", "undefined");
 define("TIXI_MENUTREE", "/src/Tixi/HomeBundle/Resources/views/Default/menu.html.twig");
 
-Class HomepageController extends Controller
+Class HouseKeeper extends Controller
 {
     protected $container;       // container
     protected $initMenutree;    // boolean

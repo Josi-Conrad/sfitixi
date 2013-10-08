@@ -16,8 +16,8 @@ class DefaultController extends Controller
     public function indexAction($slug = '')
     {
      // initialize page
-        $tixi_housekeeping = $this->get('tixi_housekeeping');
-        $tixi_housekeeping->setTemplateParameters('tixi_home_page');
+        $tixi_housekeeper = $this->get('tixi_housekeeper');
+        $tixi_housekeeper->setTemplateParameters('tixi_home_page');
 
      // set subject
         $session = $this->container->get('session');

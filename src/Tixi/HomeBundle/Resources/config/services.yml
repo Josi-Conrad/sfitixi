@@ -1,13 +1,13 @@
 # 26.08.2013 martin jonasse initial file
 # 27.08.2013 martin jonasse added @service_container
-# 23.09.2013 martin jonasse renamed service from tixi_homepage_service to tixi_housekeeping
+# 23.09.2013 martin jonasse renamed service from tixi_homepage_service to tixi_housekeeper
 
 parameters:
 #    tixi_home.example.class: Tixi\HomeBundle\Example
 
 services:
-    tixi_housekeeping:
-        class: Tixi\HomeBundle\Controller\HomepageController
+    tixi_housekeeper:
+        class: Tixi\HomeBundle\Controller\HouseKeeper
         arguments: [@service_container]
     tixi_listbuilder:
         class: Tixi\HomeBundle\Controller\ListBuilder
