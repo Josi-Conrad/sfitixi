@@ -1,6 +1,7 @@
 # 26.08.2013 martin jonasse initial file
 # 27.08.2013 martin jonasse added @service_container
-# 23.09.2013 martin jonasse renamed service from tixi_homepage_service to tixi_housekeeper
+# 08.10.2013 martin jonasse renamed service from tixi_homepage_service to tixi_housekeeper
+# 08.19.2013 martin jonasse added services statebuilder and formbuilder
 
 parameters:
 #    tixi_home.example.class: Tixi\HomeBundle\Example
@@ -9,8 +10,14 @@ services:
     tixi_housekeeper:
         class: Tixi\HomeBundle\Controller\HouseKeeper
         arguments: [@service_container]
+    tixi_statebuilder:
+        class: Tixi\HomeBundle\Controller\StateBuilder
+        arguments: [@service_container]
     tixi_listbuilder:
         class: Tixi\HomeBundle\Controller\ListBuilder
+        arguments: [@service_container]
+    tixi_formbuilder:
+        class: Tixi\HomeBundle\Controller\FormBuilder
         arguments: [@service_container]
 
 #    tixi_home.example:

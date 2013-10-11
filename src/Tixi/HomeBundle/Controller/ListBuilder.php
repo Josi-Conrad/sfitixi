@@ -24,6 +24,7 @@ class ListBuilder extends Controller
    */
     protected $container;   // container
     protected $view;        // input (name of the MySQL view)
+    protected $pkey;        // input (name of the primary key, defines record)
     protected $list;        // output
 
     public function __construct (ContainerInterface $container)
@@ -39,6 +40,14 @@ class ListBuilder extends Controller
         $this->list = array();
     }
 
+    public function setPkey($value)
+    {/*
+      * primary key name for the view
+      */
+        $this->pkey = $value;
+        $this->list = array();
+    }
+
     private function getTable($session)
     {/*
       * retrieve headers for the view from the customer database
@@ -46,7 +55,7 @@ class ListBuilder extends Controller
       */
         $customer = $session->get('customer');
         $sql = "select * from $customer.$this->view ";
-        if ($session->get('filter') != $this->container->getParameter('tixi')["filter"] )
+        if ( $session->get('filter') != '' )
         {
             $filter = $session->get('filter'); // continues below
         }
@@ -57,7 +66,7 @@ class ListBuilder extends Controller
             $connection = $this->container->get('database_connection');
             if (isset($filter)) { // get fields that shall be filtered
                 $sqlconditions = '';
-                $textfields = $connection->fetchAll("show fields from btb.vbenutzerperson where type like 'varchar%'");
+                $textfields = $connection->fetchAll("show fields from $customer.$this->view where type like 'varchar%'");
                 if (count($textfields) >0) { // indeed there are fields to be filtered
                     foreach($textfields as $key => $value) {
                         if ($key == 0) {
@@ -87,7 +96,7 @@ class ListBuilder extends Controller
       * return: id 1..10E11 (success) 0 and error message (failure)
       */
         $customer = $session->get('customer');
-        $sql = "select id from $customer.$this->view";
+        $sql = "select $this->pkey from $customer.$this->view limit 0, 2";
         $mylist = array(); // initialize array
 
         try {
@@ -98,7 +107,7 @@ class ListBuilder extends Controller
                 $session->set("errormsg","Leere Tabelle ".$this->view." keine Werte zum anzeigen (Hinzufügen?).");
                 return "0";
             } else {
-                return $mylist[0]["id"];
+                return $mylist[0][$this->pkey];
             }
 
         } catch (PDOException $e) {

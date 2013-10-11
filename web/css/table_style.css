@@ -70,3 +70,31 @@
     -ms-transition: all 0.1s ease-in-out;
     transition: all 0.1s ease-in-out;
 }
+
+/*
+ * FORM styles
+ * martin jonasse 10.10.2013 initial file section
+ */
+label {
+    text-transform: capitalize;
+}
+p.control-standard label {
+    width: 160px;
+    float: left;
+    margin-top: 2px;
+}
+
+p.control-standard input {
+    width: 240px;
+    text-align: left;
+}
+
+p.control-standard textarea {
+    width: 240px;
+    height: 100px;
+}
+
+p.control-standard span {
+    padding-left: 160px;
+    color: lightgrey;
+}

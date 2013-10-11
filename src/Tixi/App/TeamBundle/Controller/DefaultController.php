@@ -16,33 +16,57 @@ class DefaultController extends Controller
 {
     public function indexAction($name='')
     {
-    // set parameters for the rendering of the team data page
-        $tixi_housekeeper = $this->get('tixi_housekeeper');
-        $tixi_housekeeper->setTemplateParameters('tixi_unterhalt_teamdaten_page');
-
-    // set subject
+    // set local variables
+        $page = 'tixi_unterhalt_teamdaten_page';
         $session = $this->container->get('session');
-        $session->set('subject', 'Teamdaten (liste)');
+        $tixi = $this->container->getParameter('tixi');
+
+    // set parameters for the rendering of this page
+        $tixi_housekeeper = $this->get('tixi_housekeeper');
+        $tixi_housekeeper->setTemplateParameters($page);
 
     // set states according to actions
         $state = new StateBuilder($this->container);
         $state->setListObjectStates();
 
-    // build list according to state
-        $list = $this->get('tixi_listbuilder'); // service
-        $list->setView('vbenutzerperson');
-        if ($session->get('mode') == $this->container->getParameter('tixi')["mode_select_list"] ) {
+    // rendering options
+        if ($session->get('mode') == $tixi["mode_select_list"])
+        {/*
+          * display a list of team members
+          */
+            $session->set('subject', 'Teamdaten (liste)');
+
+            $list = $this->get('tixi_listbuilder'); // service
+            $list->setView('list_benutzer_person');
+            $list->setPkey('benutzer_id');
             $list->makeList();
+            // render list
+            return $this->render('TixiAppTeamBundle:Default:list.html.twig',
+                           array('message' => $state->getMessage(),
+                                 'myheader' => $list->getHeader(),
+                                 'myrows' => $list->getRows() ));
+
+        } elseif ($session->get('mode') == $tixi["mode_edit_in_list"])
+        {/*
+          * display a form for the selected team member
+          */
+            $cursors = $session->get('cursors');
+            $session->set('subject', 'Teamdaten['.$cursors[$page].']');
+
+            $form = $this->get('tixi_formbuilder');
+            $form->setView('form_benutzer_person');
+            $form->setPkey('benutzer_id');
+            $form->makeForm($page); // do we need $page?
+            // render form
+            return $this->render('TixiAppTeamBundle:Default:form.html.twig',
+                           array('message' => $state->getMessage(),
+                                 'myform' => $form->getForm() ));
+
+        } else {
+            $session->set('errormsg', 'shit happenz!');
+            // render page
+            return $this->render('TixiAppTeamBundle:Default:index.html.twig',
+                           array('message' => $state->getMessage() ));
         }
-
-    // get / set password (hash)
-    // @todo: get / set hashed password from database
-
-    // render the team data page
-        return $this->render('TixiAppTeamBundle:Default:index.html.twig',
-                    array('message' => $state->getMessage(),
-                        'myheader' => $list->getHeader(),
-                        'myrows' => $list->getRows(),
-                    ));
     }
 }

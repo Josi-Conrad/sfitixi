@@ -1,0 +1,43 @@
+{# src/Tixi/App/TeamBundle/Resources/views/Default/index.html.twig #}
+{# 01.10.2013 martin jonasse update for list (table) object #}
+{# 11.10.2013 martin jonasse split list and form files #}
+
+{% extends 'TixiHomeBundle:Default:index.html.twig' %}
+
+{% block title %}{{ app.session.get('title') }}{% endblock %}
+
+{% block content %}
+{# render a form for the variable myform ............ #}
+<div class="content-wrapper">
+{% for record in myform %}
+    <p class="control-standard">
+        <label for="fpw_{{ record.Field }}">{{ record.Field }}</label>
+        {% if record.Rendered == 'checkbox' %}
+            <input id="fpw_{{ record.Field }}"
+                type="checkbox" value="0"
+                style="width: 20px">
+
+        {% elseif record.Rendered == 'textarea' %}
+            <textarea id="fpw_{{ record.Field }}">test value...</textarea>
+
+        {% elseif record.Rendered == 'text' %}
+            <input id="fpw_{{ record.Field }}" type="text"
+                value="test value..."
+                {% if record.Length != '0' %} maxlength={{ record.Length }}{% endif %}
+                {% if record.Null == 'NO' %} required{% endif %}
+                {% if record.Readonly %} disabled{% endif %} />
+        {% else %}
+            <input id="fpw_{{ record.Field }}" type="text"
+                   value="Field type '{{ record.Type }}' not mapped to HTML."
+                   style="color:red" disabled />
+        {% endif %}
+        <i id="fpr_{{ record.Field }}_error" style="color:red">test error...</i><br />
+        <span><small>{{ record.Comment }}</small></span>
+    </p>
+{% endfor %}
+</div>
+{# render a message ............ #}
+<div class="content-wrapper">
+    <p>{{ message }}</p>
+</div>
+{% endblock %}
