@@ -74,6 +74,7 @@ class StateBuilder extends Controller
             if ($action == 'save') {
                 // action code for saving the form data to the database
                 $this->message = 'actions for saving the list-object to the database';
+                // set new state
                 $session->set('mode', $tixi['mode_select_list']);
             } elseif ($action == 'cancel') {
                 // action code for printing

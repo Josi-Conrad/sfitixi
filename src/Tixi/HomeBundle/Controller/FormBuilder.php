@@ -20,7 +20,7 @@ class FormBuilder extends Controller
   */
     protected $container; // container awareness
     protected $view;      // input (name of the MySQL view)
-    protected $pkey;      // input (name of the primary key, defines record)
+    protected $pkey;      // input (name of the primary key)
     protected $meta;      // meta form data and values
 
     public function __construct (ContainerInterface $container)
@@ -77,8 +77,12 @@ class FormBuilder extends Controller
 
                 // readonly?
                 $postfix = substr($value["Field"], -3 ); // last three characters
-                $readonly = (($postfix == '_id') or ($postfix == '_fk') or ($value == 'MID'));
+                $readonly = (($postfix == '_id') or ($value == 'MID')); // primary key and migration id
                 $this->meta[$key]["Readonly"] = $readonly;
+
+                // hidden?
+                $hidden = ($postfix == '_fk');
+                $this->meta[$key]["Hidden"] = $hidden;
 
                 // maxlength?
                 $this->meta[$key]["Length"] = $this->getLen($value["Type"]);
@@ -96,6 +100,9 @@ class FormBuilder extends Controller
                 } elseif ($basetype == 'text')       { $this->meta[$key]["Rendered"] = 'textarea';
                 } else {                               $this->meta[$key]["Rendered"] = 'undefined';
                 }
+
+                // error message
+                $this->meta[$key]["Error"] = ''; // empty
             }
 
             return $this->meta;
@@ -106,22 +113,36 @@ class FormBuilder extends Controller
         }
     }
 
-    public function makeForm($page)
+    public function getFormMeta()
     {/*
-      * make the form meta data, based upon the data in the (joined) table(s)
+      * get the forms meta data, based upon the data in the (joined) table(s)
       * the submitted user data will be persisted to the database
       */
         $session = new session;
-        $test = $this->getMetaData($session);
-        $this->meta = $test;
+        $this->meta = $this->getMetaData($session);
+        return $this->meta;
     }
 
-    public function getForm()
+    public function getFormData($cursor)
     {/*
-      * return an array containing meta data of the form and values,
-      * the form is rendered to html in a twig file
+      * return an array containing the persistent data values for the form
       */
-        return $this->meta;
+        $session = new session;
+        $customer = $session->get('customer');
+
+        try {
+            // make a database call to get the meta data
+            $connection = $this->container->get('database_connection');
+            $sql = "select * from $customer.$this->view where $this->pkey=$cursor";
+            $data = $connection->fetchAll( $sql );
+            // return an array with persistent data (query has only record)
+            return $data[0];
+
+        } catch (PDOException $e) {
+            $session->set("errormsg","Cannot access database : ".$e);
+            return "0";
+        }
+
     }
 
 }

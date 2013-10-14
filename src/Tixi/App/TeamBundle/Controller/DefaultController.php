@@ -56,11 +56,14 @@ class DefaultController extends Controller
             $form = $this->get('tixi_formbuilder');
             $form->setView('form_benutzer_person');
             $form->setPkey('benutzer_id');
-            $form->makeForm($page); // do we need $page?
+            // test
+            $meta = $form->getFormMeta();
+            $data = $form->getFormData($cursors[$page]);
             // render form
             return $this->render('TixiAppTeamBundle:Default:form.html.twig',
                            array('message' => $state->getMessage(),
-                                 'myform' => $form->getForm() ));
+                                 'form_meta' => $form->getFormMeta(),
+                                 'form_data' => $form->getFormData($cursors[$page]) ));
 
         } else {
             $session->set('errormsg', 'shit happenz!');
