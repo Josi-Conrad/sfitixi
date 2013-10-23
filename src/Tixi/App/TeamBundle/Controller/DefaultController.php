@@ -11,6 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Tixi\HomeBundle\Controller\StateBuilder;
 use Tixi\HomeBundle\Controller\ListBuilder;
+use Tixi\HomeBundle\Controller\FormBuilder;
 
 class DefaultController extends Controller
 {
@@ -18,6 +19,7 @@ class DefaultController extends Controller
     {
     // set local variables
         $page = 'tixi_unterhalt_teamdaten_page';
+        $pkey = 'benutzer_id';
         $session = $this->container->get('session');
         $tixi = $this->container->getParameter('tixi');
 
@@ -26,8 +28,10 @@ class DefaultController extends Controller
         $tixi_housekeeper->setTemplateParameters($page);
 
     // set states according to actions
-        $state = new StateBuilder($this->container);
-        $state->setListObjectStates();
+        $state = $this->get('tixi_formstatebuilder'); // start service
+        $state->setFormView('form_benutzer_person');
+        $state->setPkey($pkey);
+        $state->setListObjectStates($page);
 
     // rendering options
         if ($session->get('mode') == $tixi["mode_select_list"])
@@ -36,14 +40,13 @@ class DefaultController extends Controller
           */
             $session->set('subject', 'Teamdaten (liste)');
 
-            $list = $this->get('tixi_listbuilder'); // service
-            $list->setView('list_benutzer_person');
-            $list->setPkey('benutzer_id');
+            $list = $this->get('tixi_listbuilder'); // start service
+            $list->setListView('list_benutzer_person');
+            $list->setPkey($pkey);
             $list->makeList();
             // render list
             return $this->render('TixiAppTeamBundle:Default:list.html.twig',
-                           array('message' => $state->getMessage(),
-                                 'myheader' => $list->getHeader(),
+                           array('myheader' => $list->getHeader(),
                                  'myrows' => $list->getRows() ));
 
         } elseif ($session->get('mode') == $tixi["mode_edit_in_list"])
@@ -52,24 +55,15 @@ class DefaultController extends Controller
           */
             $cursors = $session->get('cursors');
             $session->set('subject', 'Teamdaten['.$cursors[$page].']');
-
-            $form = $this->get('tixi_formbuilder');
-            $form->setView('form_benutzer_person');
-            $form->setPkey('benutzer_id');
-            // test
-            $meta = $form->getFormMeta();
-            $data = $form->getFormData($cursors[$page]);
             // render form
             return $this->render('TixiAppTeamBundle:Default:form.html.twig',
-                           array('message' => $state->getMessage(),
-                                 'form_meta' => $form->getFormMeta(),
-                                 'form_data' => $form->getFormData($cursors[$page]) ));
+                           array('myform' => $state->getFormMetaData() ));
 
         } else {
-            $session->set('errormsg', 'shit happenz!');
-            // render page
-            return $this->render('TixiAppTeamBundle:Default:index.html.twig',
-                           array('message' => $state->getMessage() ));
+            $msg = "Unerwartete Zustand $session->get('mode') in Seite $page.";
+            $session->set('errormsg', $msg);
+            trigger_error( $msg );
+            return $this->render('TixiAppTeamBundle:Default:form.html.twig' );
         }
     }
 }

@@ -32,7 +32,7 @@ class ListBuilder extends Controller
         $this->container = $container;
     }
 
-    public function setView($value)
+    public function setListView($value)
     {/*
       * view name, must match an existing MySQL view in the customer database
       */

@@ -1,50 +1,53 @@
 {# src/Tixi/App/TeamBundle/Resources/views/Default/index.html.twig #}
 {# 01.10.2013 martin jonasse update for list (table) object #}
 {# 11.10.2013 martin jonasse split list and form files #}
+{# 15.10.2013 martin jonasse rework for checkboxes #}
 
 {% extends 'TixiHomeBundle:Default:index.html.twig' %}
 
 {% block title %}{{ app.session.get('title') }}{% endblock %}
 
 {% block content %}
-{# render a form for the variable form_meta ............ #}
+{# render a form for the variable myform ............ #}
 <div class="content-wrapper">
     <form name="tixi_form"
           action="{{ path( app.request.attributes.get('_route'), {'action':'save'} ) }}"
           method="POST"  >
-        {% for record in form_meta %}
+        {% for record in myform %}
             <p class="control-standard">
                 {% if ((record.Rendered == 'checkbox') and (record.Hidden == '0')) %}
                     <label for="fpw_{{ record.Field }}">{{ record.Field }}</label>
                     <input name="{{ record.Field }}"
+                           type="hidden"
+                           value="0">
+                    <input name="{{ record.Field }}"
                            id="fpw_{{ record.Field }}"
                            type="checkbox"
-                           value="{{ form_data[record.Field] }}"
+                           value="1"
+                           title="{{ record.Comment }}{% if record.Null == 'NO' %}(obligatorisch){% endif %}"
+                           {% if record.Value == "1" %} checked {% endif %}
                            style="width: 20px">
                     <i id="fpr_{{ record.Field }}_error" style="color:red">{{ record.Error }}</i><br />
-                    <span><small>{{ record.Comment }}
-                                 {% if record.Null == 'NO' %}(obligatorisch){% endif %}</small></span>
 
                 {% elseif ((record.Rendered == 'textarea') and (record.Hidden == '0')) %}
                     <label for="fpw_{{ record.Field }}">{{ record.Field }}</label>
                     <textarea name="{{ record.Field }}"
-                              id="fpw_{{ record.Field }}">{{ form_data[record.Field] }}</textarea>
+                              id="fpw_{{ record.Field }}"
+                              title="{{ record.Comment }}{% if record.Null == 'NO' %}(obligatorisch){% endif %}"
+                              >{{ record.Value }}</textarea>
                     <i id="fpr_{{ record.Field }}_error" style="color:red">{{ record.Error }}</i><br />
-                    <span><small>{{ record.Comment }}
-                                 {% if record.Null == 'NO' %}(obligatorisch){% endif %}</small></span>
 
                 {% elseif ((record.Rendered == 'text') and (record.Hidden == '0')) %}
                     <label for="fpw_{{ record.Field }}">{{ record.Field }}</label>
                     <input name="{{ record.Field }}"
                            id="fpw_{{ record.Field }}"
                            type="text"
-                           value="{{ form_data[record.Field] }}"
+                           value="{{ record.Value }}"
+                           title="{{ record.Comment }}{% if record.Null == 'NO' %}(obligatorisch){% endif %}"
                            {% if record.Length != '0' %} maxlength={{ record.Length }}{% endif %}
                            {% if record.Null == 'NO' %} required{% endif %}
                            {% if record.Readonly %} disabled{% endif %} />
                     <i id="fpr_{{ record.Field }}_error" style="color:red">{{ record.Error }}</i><br />
-                    <span><small>{{ record.Comment }}
-                                 {% if record.Null == 'NO' %}(obligatorisch){% endif %}</small></span>
 
                 {% elseif (record.Hidden == '0') %}
                     <label for="fpw_{{ record.Field }}">{{ record.Field }}</label>
@@ -52,18 +55,13 @@
                            id="fpw_{{ record.Field }}"
                            type="text"
                            value="Field type '{{ record.Type }}' not mapped to HTML."
+                           title="{{ record.Comment }}{% if record.Null == 'NO' %}(obligatorisch){% endif %}"
                            style="color:red" disabled />
                     <i id="fpr_{{ record.Field }}_error" style="color:red">{{ record.Error }}</i><br />
-                    <span><small>{{ record.Comment }}
-                                 {% if record.Null == 'NO' %}(obligatorisch){% endif %}</small></span>
 
                 {% endif %}
             </p>
         {% endfor %}
     </form>
-</div>
-{# render a message ............ #}
-<div class="content-wrapper">
-    <p>{{ message }}</p>
 </div>
 {% endblock %}

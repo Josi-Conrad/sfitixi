@@ -16,6 +16,7 @@
 // 30.09.2013 martin jonasse updated management of actions and modes
 // 01.10.2013 martin jonasse removed .ch from customer name
 // 03.10.2013 martin jonasse upgrade cursor to array type
+// 23.10.2013 martin jonasse added "tainted" to session
 
 namespace Tixi\HomeBundle\Controller;
 
@@ -172,6 +173,7 @@ Class HouseKeeper extends Controller
         $session->set("filter",'');
         $session->set("mode",TIXI_UNDEFINED);
         $session->set("errormsg",TIXI_UNDEFINED);
+        $session->set("tainted", TIXI_UNDEFINED);
 
      // initialize menutree (conditional)
         if ($this->initMenutree) {

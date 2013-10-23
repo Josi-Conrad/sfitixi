@@ -10,14 +10,11 @@ services:
     tixi_housekeeper:
         class: Tixi\HomeBundle\Controller\HouseKeeper
         arguments: [@service_container]
-    tixi_statebuilder:
-        class: Tixi\HomeBundle\Controller\StateBuilder
+    tixi_formstatebuilder:
+        class: Tixi\HomeBundle\Controller\FormStateBuilder
         arguments: [@service_container]
     tixi_listbuilder:
         class: Tixi\HomeBundle\Controller\ListBuilder
-        arguments: [@service_container]
-    tixi_formbuilder:
-        class: Tixi\HomeBundle\Controller\FormBuilder
         arguments: [@service_container]
 
 #    tixi_home.example:
