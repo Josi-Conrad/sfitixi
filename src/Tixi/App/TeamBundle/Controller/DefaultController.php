@@ -15,6 +15,22 @@ use Tixi\HomeBundle\Controller\FormBuilder;
 
 class DefaultController extends Controller
 {
+    public function validateTeamdata($myform=array())
+    {/*
+      * callback function for validating the formdata for special conditions
+      * please note: passing $myform as a reference is not possible
+      * return: true = OK, false = Error (errormsg already set in session)
+      */
+        foreach ($myform as $key => $values) {
+            if ($values["Field"] == "passwort") {
+                if (strlen($values["Value"]) < 8) {
+                    $myform[$key]["Error"] = "Validierungsfehler: Passwörter müssen mindestens 8 Zeichen lang sein.";
+                }
+            }
+        }
+        return $myform; // return the changed local copy of the myform array
+    }
+
     public function indexAction($name='')
     {
     // set local variables
@@ -31,6 +47,7 @@ class DefaultController extends Controller
         $state = $this->get('tixi_formstatebuilder'); // start service
         $state->setFormView('form_benutzer_person');
         $state->setPkey($pkey);
+        $state->setCallback(array($this, "validateTeamdata"));
         $state->setListObjectStates($page);
 
     // rendering options

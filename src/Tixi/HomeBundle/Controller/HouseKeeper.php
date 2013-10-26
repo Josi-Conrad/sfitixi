@@ -17,6 +17,7 @@
 // 01.10.2013 martin jonasse removed .ch from customer name
 // 03.10.2013 martin jonasse upgrade cursor to array type
 // 23.10.2013 martin jonasse added "tainted" to session
+// 25.10.2013 martin jonasse added "breadcrumbs" to session (new menutree)
 
 namespace Tixi\HomeBundle\Controller;
 
@@ -146,6 +147,14 @@ Class HouseKeeper extends Controller
             }
             $session->set( 'permissions', $myarray );
 
+            // add all breadcrumbs to the session (persistant)
+            reset( $this->menutree );
+            $myarray = array();
+            foreach ($this->menutree as $menuitems) {
+                $myarray[$menuitems["ROUTE"]] = $menuitems["BREADCRUMB"];
+            }
+            $session->set( 'breadcrumbs', $myarray );
+
             // create a twig file
             $this->initMenuHtmlTwig($session); // proceed to create a twig file
 
@@ -166,7 +175,8 @@ Class HouseKeeper extends Controller
         $session->set("username",TIXI_UNDEFINED);
         $session->set("userroles",array());
         $session->set("customer",TIXI_UNDEFINED);
-        $session->set("breadcrumbs",TIXI_UNDEFINED);
+        $session->set("breadcrumbs", array());
+        $session->set("breadcrumb", TIXI_UNDEFINED);
         $session->set("subject",TIXI_UNDEFINED);
         $session->set("action", TIXI_UNDEFINED);
         $session->set("cursors", array());
@@ -210,7 +220,8 @@ Class HouseKeeper extends Controller
         $session->set("baseurl",'http://'.$_SERVER['SERVER_NAME'].$_SERVER['SCRIPT_NAME']);
 
     // set parameters for the top frame
-        $session->set("breadcrumbs", '...'); // @todo: implement this function point
+        $breadcrumbs = $session->get('breadcrumbs');
+        $session->set("breadcrumb", $breadcrumbs[$route]);
 
     // check for changed username in this session
         $usr = $this->getUser();

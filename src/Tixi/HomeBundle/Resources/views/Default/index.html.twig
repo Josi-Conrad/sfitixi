@@ -3,6 +3,7 @@
 {# 26.08.2013 martin jonasse added errormsg code #}
 {# 02.09.2013 martin jonasse modified all variables to be read from session #}
 {# 21.09.2013 martin jonasse changed error line to alert message #}
+{# 25.10.2013 martin jonasse added modal dialog (overlay) #}
 
 {% extends '::base.html.twig' %}
 
@@ -39,7 +40,7 @@
                         </div>
                     </div>
                     <div class="frame-left">
-                        <div>{{ app.session.get('breadcrumbs') }}</div>
+                        <div>{{ app.session.get('breadcrumb') }}</div>
                     </div>
                     <div class="frame-right">
                         {%  if app.session.get('username') == tixi.undefined %}
@@ -85,6 +86,7 @@
             </div>
         </div>
     {% endblock %}
+
     {% block taskbar %}
         <div class="taskbar">
             <div class="taskbar-row">
@@ -94,11 +96,11 @@
                             <input id="fpw_filter" class="taskbar-left-filter-text" type="text"
                                    value="{{ app.session.get('filter') }}"
                                    placeholder="{{ tixi.filter }}"
-                                   oninput="location.href='{{ path( app.request.attributes.get('_route'), {'action':'filter', 'filter': '' } ) }}'
-                                           +document.getElementById('fpw_filter').value;" />
+                                   onblur="location.href='{{ path( app.request.attributes.get('_route'), {'action':'filter', 'filter': '' } ) }}'
+                                           +document.getElementById('fpw_filter').value; overlay();" />
                             <input id="fpm_filter" class="taskbar-left-filter-button" type="button" value="Filtern"
                                    onclick="location.href='{{ path( app.request.attributes.get('_route'), {'action':'filter', 'filter': '' } ) }}'
-                                           +document.getElementById('fpw_filter').value;"/>
+                                           +document.getElementById('fpw_filter').value; overlay();"/>
                         </form>
                     {% endif %}
                 </div>
@@ -139,8 +141,25 @@
 
     <!--Errormessage: rendered last, displayed as a pop-up -->
     {% block errormsg %}
+        <div id="overlay">
+            <div>
+                <p>Bitte warten...</p>
+                <img  src="{{ asset('images/pleasewait.gif') }}" alt="Bitte warten ..." />
+            </div>
+        </div>
         {% if app.session.get('errormsg') != '' %}
             <script>alert("{{ app.session.get('errormsg') }}")</script>
         {% endif %}
     {% endblock %}
+
+    <!--Javascripts: with lists and forms -->
+    {% block javascripts %}
+        <script>
+            function overlay() {
+                el = document.getElementById("overlay");
+                el.style.visibility = (el.style.visibility == "visible") ? "hidden" : "visible";
+            }
+        </script>
+    {% endblock %}
+
 {% endblock %}

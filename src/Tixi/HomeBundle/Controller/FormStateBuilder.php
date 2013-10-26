@@ -23,6 +23,7 @@ class FormStateBuilder extends Controller
     protected $myform;    // meta plus values for rendering a form
     protected $mytabs;    // tables and value pairs for the insert function
     protected $conn;      // database connection
+    protected $callback;  // callback fuction for validating the formdata
 
     public function __construct (ContainerInterface $container)
     {
@@ -36,7 +37,10 @@ class FormStateBuilder extends Controller
       * please observe MySQL chapter 18.4.3 Updateable amd Insertable Views
       */
         $this->view = $value;
+        // set defaults
         $this->conn = $this->get('database_connection');
+        $this->pkey = null;
+        $this->callback = null;
     }
 
     public function setPkey($value)
@@ -45,6 +49,14 @@ class FormStateBuilder extends Controller
       */
         $this->pkey = $value;
     }
+
+    public function setCallback($value=null)
+    {/*
+      * define the name of the callback function, default = empty
+      */
+        $this->callback = $value;
+    }
+
 
     private function getLen($mysqltype)
     {/*
@@ -497,36 +509,36 @@ class FormStateBuilder extends Controller
             {/* action code for saving the form data to the database */
                 $cursors = $session->get('cursors');
                 $record = $this->getFormData($cursors[$page]); // database record
-                $idx = 0; $ecnt = 0;
+                $idx = 0;
                 foreach ($record as $name => $value) {
                     $this->myform[$idx]["Value"] = $value;  // set database value
                     $this->myform[$idx]["Error"] = "";      // reset error
                     $this->myform[$idx]["Change"] = false;  // mark as not changed
                     if (array_key_exists($name, $_REQUEST))
                     {/* field in request */
-                        // $secure = $this->getEscapeString($_REQUEST[$name]);
                         $secure = $_REQUEST[$name]; // quotes and html bracket escaped in DBAL
                         if ($value != $secure)
                         {/* validate data in the request */
                             $err = $this->validate($secure, $idx);
-                            if ($err) { /* invalid data element */
-                                $ecnt += 1; /* increment error count */
-                            } else {
-                                $this->myform[$idx]["Change"] = true;
-                            }
+                            $this->myform[$idx]["Change"] = true;
                         } else
                         {/* validate data in the database */
                             $err = $this->validate($value, $idx);
-                            if ($err) { /* invalid data element */
-                                $ecnt += 1; /* increment error count */
-                            } else {
-                                $this->myform[$idx]["Change"] = false;
-                            }
+                            $this->myform[$idx]["Change"] = false;
                         }
                     }
                     $idx += 1;
                 }
-
+                if (is_callable($this->callback)) {
+                    $this->myform = call_user_func($this->callback, $this->myform);
+                }
+                $ecnt = 0;
+                foreach ($this->myform as $values) {
+                    if ($values["Error"] != "") {
+                        $ecnt = 1;
+                        break;
+                    }
+                }
                 if ($ecnt >= 1) {
                     $session->set('errormsg', 'Validierungsfehler in ein oder mehrer Felder, bitte korrigieren.');
                 } else {

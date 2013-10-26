@@ -61,22 +61,34 @@ class ListBuilder extends Controller
         }
         $mylist = array(); // initialize array
 
-        try {
-            // make a database call to get the meta data
+        try
+        {/* initialize variables */
+            $match = '';
             $connection = $this->container->get('database_connection');
-            if (isset($filter)) { // get fields that shall be filtered
-                $sqlconditions = '';
-                $textfields = $connection->fetchAll("show fields from $customer.$this->view where type like 'varchar%'");
-                if (count($textfields) >0) { // indeed there are fields to be filtered
-                    foreach($textfields as $key => $value) {
-                        if ($key == 0) {
-                            $sqlconditions .= "where ".$value["Field"]." like '%".$filter."%' ";
-                        } else {
-                            $sqlconditions .= "or ".$value["Field"]." like '%".$filter."%' ";
+
+            if (isset($filter))
+            {/* get columns in view */
+                $temp = $connection->fetchAll("show columns from $customer.$this->view");
+                foreach ($temp as $values) {
+                    $viewcols[] = $values["Field"];
+                }
+            /*  get tablenames that shall be filtered */
+                $tables = $connection->fetchAll("explain select * from $customer.$this->view");
+                foreach ($tables as $values)
+                {/* for each table in view */
+                    $fulltext = $connection->fetchAll("show index from $customer.".$values["table"]);
+                    foreach ($fulltext as $indices)
+                    {/* get fulltext index fields */
+                        if ($indices["Index_type"] == "FULLTEXT") {
+                            if (in_array($indices["Column_name"], $viewcols)) {
+                                $match .= $indices["Column_name"].", ";
+                            }
                         }
                     }
                 }
-                $sql .= $sqlconditions;
+                $match = substr($match, 0, strlen($match)-2 );
+                $match = " where match ($match) against ('".$filter."' in boolean mode)";
+                $sql .= $match;
             }
             $mylist = $connection->fetchAll( $sql );
             if (count($mylist) == 0) {
@@ -105,14 +117,14 @@ class ListBuilder extends Controller
             $mylist = $connection->fetchAll( $sql );
             if (count($mylist) == 0) {
                 $session->set("errormsg","Leere Tabelle ".$this->view." keine Werte zum anzeigen (Hinzufügen?).");
-                return "0";
+                return 0;
             } else {
                 return $mylist[0][$this->pkey];
             }
 
         } catch (PDOException $e) {
             $session->set("errormsg","Cannot access database : ".$e);
-            return "0";
+            return 0;
         }
     }
 

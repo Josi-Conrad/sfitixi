@@ -1,6 +1,7 @@
 /* table_style.css
  * credits: Yoav Ezer, How to Get a Microsoft Excel Look With HTML/CSS Tables
- * autor: martin jonasse 02.10.2013 version 1
+ * martin jonasse 02.10.2013 version 1
+ * martin jonasse 25.10.2013 added overlay class and ".ExcelTable2003 td a"
  *
  * usage: <table class="ExcelTable2003" summary="explained">
  *          <td class="heading">
@@ -44,6 +45,12 @@
     text-align: left;
 	border: 1px solid #C0C0C0;
 	border-width: 0px 1px 1px 0px;
+}
+
+.ExcelTable2003 td a {
+    display: block;
+    width: 100%;
+    height: 100%;
 }
 
 .ExcelTable2003 td.heading {
@@ -99,3 +106,27 @@ p.control-standard span {
     color: lightgrey;
 }
 
+/*
+ * Modal Dialog
+ * martin jonasse 25.10.2013
+ */
+#overlay {
+    visibility: hidden;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width:100%;
+    height:100%;
+    text-align:center;
+    z-index: 1000;
+    background-image: url(../images/background.png);
+}
+
+#overlay div {
+    width:300px;
+    margin: 100px auto;
+    background-color: #fff;
+    border:1px solid #000;
+    padding:15px;
+    text-align:center;
+}

@@ -33,10 +33,10 @@
                         {% else %}
                             <td class="heading">
                         {% endif %}
-                                <a href="{{ path( app.request.attributes.get('_route'),
-                                    {'action':'select', 'cursor': ''} ) }}{{ mycell }}"
-                                    id="fpm_select_{{ mycell }}">{{ mycell }}
-                                <a>
+                        <a href="{{ path( app.request.attributes.get('_route'),
+                        {'action':'select', 'cursor': ''} ) }}{{ mycell }}"
+                           id="fpm_select_{{ mycell }}">{{ mycell }}
+                            <a>
                         </td>
                     {% else %}
                         <td>{{ mycell }}</td>
