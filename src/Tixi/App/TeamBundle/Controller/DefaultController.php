@@ -4,6 +4,7 @@
 // 28.08.2013 martin jonasse initial file
 // 03.09.2013 martin jonasse renamed getTemplateParamenters to setTemplateParameters, added $mode
 // 30.09.2013 martin jonasse implemented first version of StateBuilder
+// 28.10.2013 martin jonasse finished unit tests, after some fixing and fine tuning
 
 namespace Tixi\App\TeamBundle\Controller;
 
@@ -19,12 +20,38 @@ class DefaultController extends Controller
     {/*
       * callback function for validating the formdata for special conditions
       * please note: passing $myform as a reference is not possible
-      * return: true = OK, false = Error (errormsg already set in session)
+      * this may not be efficient, but at least it works well
+      *
+      * return: true = OK, false = Error (errormsg and any other data set in session and or $myform)
       */
         foreach ($myform as $key => $values) {
             if ($values["Field"] == "passwort") {
-                if (strlen($values["Value"]) < 8) {
-                    $myform[$key]["Error"] = "Validierungsfehler: Passwörter müssen mindestens 8 Zeichen lang sein.";
+                if (strlen($values["Value"]) < 6) {
+                    $myform[$key]["Error"] = "Validierungsfehler: Passwörter müssen mindestens 6 Zeichen lang sein.";
+                }
+
+            } elseif ($values["Field"] == "geburtstag") {
+                $bday = date_create($values["Value"]);
+                $today = date_create(date("Y-m-d"));
+                if ($bday >= $today) {
+                    $myform[$key]["Error"] = "Validierungsfehler: Geburtstag muss in der Vergangenheit liegen.";
+                }
+
+            } elseif ($values["Field"] == "benutzername") {
+                $barr = explode("@", $values["Value"]);
+                if (count($barr) != 2) {
+                    $myform[$key]["Error"] = "Validierungsfehler: kein Email Format (benutzer@firma.ch).";
+                } else {
+                    $firma = explode(".", $barr[1]);
+                    if (count($firma) != 2) {
+                        $myform[$key]["Error"] = "Validierungsfehler: kein Email Format (benutzer@firma.ch).";
+                    } else {
+                        $session = new Session;
+                        $customer = $session->get('customer');
+                        if ($customer != $firma[0]) {
+                            $myform[$key]["Error"] = "Validierungsfehler: falsche Firmaname ($customer erwartet).";
+                        }
+                    }
                 }
             }
         }

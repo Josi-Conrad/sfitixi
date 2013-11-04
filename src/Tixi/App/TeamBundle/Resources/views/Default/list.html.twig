@@ -1,7 +1,8 @@
 {# src/Tixi/App/TeamBundle/Resources/views/Default/index.html.twig #}
 {# 28.08.2013 martin jonasse initial file #}
 {# 03.09.2013 martin jonasse update for session variables #}
-{# 11.10.2013 martin jonasse split list and form files #}
+{# 11.10.2013 martin jonasse split list and form files    #}
+{# 04.11.2013 martin jonasse upgrade for cursor/$route    #}
 
 {% extends 'TixiHomeBundle:Default:index.html.twig' %}
 
@@ -9,7 +10,7 @@
 
 {% block content %}
 {# render a list (table) for the variable mylist (array)............ #}
-{% set currentid = app.session.get('cursors')[app.session.get('route')] %}
+{% set currentid = app.session.get('cursor/' ~ app.session.get('route')) %}
 <div class="content-wrapper">
     <table class="ExcelTable2003" summary="Auswahlliste">
         <thead>

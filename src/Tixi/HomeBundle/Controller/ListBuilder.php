@@ -7,7 +7,8 @@
  * initial file
  */
 // src\Tixi\HomeBundle\Controller\ListBuilder.php
-// martin jonasse 04.10.2013 upgrade code w. uppercase, cursors, filters, route
+// 04.10.2013 martin jonasse  upgrade code w. uppercase, cursors, filters, route
+// 04.11.2013 martin jonasse upgrade cursor to structured namespace
 
 namespace Tixi\HomeBundle\Controller;
 
@@ -134,15 +135,20 @@ class ListBuilder extends Controller
       */
         $session = new session;
 
-        $cursors = $session->get('cursors');
         $route = $session->get('route');
-        if (!isset($cursors[$route])) { // previous id not set, get default
-            $cursors[$route] = $this->getDefaultID($session);
-            $session->set('cursors', $cursors);
+        if (!$session->has("cursor/$route")) {
+            $session->set("cursor/$route", $this->getDefaultID($session));
         }
 
         $this->list = $this->getTable($session);
      }
+
+    public function getNames()
+    {/*
+      * get the names of the object at cursor/$route
+      */
+        $dummy = 'stop';
+    }
 
     public function getRows()
     {/*

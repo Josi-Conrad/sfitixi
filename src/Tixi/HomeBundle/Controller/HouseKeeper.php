@@ -18,6 +18,8 @@
 // 03.10.2013 martin jonasse upgrade cursor to array type
 // 23.10.2013 martin jonasse added "tainted" to session
 // 25.10.2013 martin jonasse added "breadcrumbs" to session (new menutree)
+// 03.11.2013 martin jonasse added Menutree.php, fixed caption, permission and breadcrunmb
+// 04.11.2013 martin jonasse added structured namespace for cursor session variables
 
 namespace Tixi\HomeBundle\Controller;
 
@@ -28,7 +30,8 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Filesystem\Exception\IOException;
 
 define("TIXI_UNDEFINED", "undefined");
-define("TIXI_MENUTREE", "/src/Tixi/HomeBundle/Resources/views/Default/menu.html.twig");
+define("TWIG_MENUTREE", "/src/Tixi/HomeBundle/Resources/views/Default/menu.html.twig");
+define("PHP_MENUTREE", "/src/Tixi/HomeBundle/Controller/MenuTree.php");
 
 Class HouseKeeper extends Controller
 {
@@ -109,53 +112,98 @@ Class HouseKeeper extends Controller
         $this->get('logger')->debug('TIXI initializing mytextdumpfile.txt');
 
         // make new file
-        $myfile = "{# ".TIXI_MENUTREE." #}\n";
+        $myfile = "{# ".TWIG_MENUTREE." #}\n";
         $myfile .= "{# built automatically by the iTixi application #}\n";
         $myfile .= $this->makeMenuHtmlTwig($session);
 
         // write new file to the filesystem as menu.html.twig
         $fs = new Filesystem();
         try {
-            $fs->dumpFile( '..'.TIXI_MENUTREE, $myfile );
+            $fs->dumpFile( '..'.TWIG_MENUTREE, $myfile );
         } catch (IOException $e) {
             $session->set("errormsg","IO filesystem error: ".$e);
         }
     }
 
+    private function makeMenutreePhp()
+    {/*
+      * build the file MenuTree.php content
+      */
+        // create header (php code)
+        $header = <<<EOH
+<?php
+/**
+ * Created automatically in HouseKeeper.php
+ */
+
+namespace Tixi\HomeBundle\Controller;
+
+final class MenuTree
+{
+    public static
+EOH;
+        $header .= ' $table = array('."\n";
+
+        // create footer (php code)
+        $footer = str_repeat(" ", 4).');'."\n\n";
+        $footer .= str_repeat(" ", 4).'public static function getRow($row){'."\n";
+        $footer .= str_repeat(" ", 8).'if (array_key_exists($row, self::$table)) {'."\n";
+        $footer .= str_repeat(" ", 12).'return self::$table[$row]; // return an array'."\n";
+        $footer .= str_repeat(" ", 8).'} else {'."\n";
+        $footer .= str_repeat(" ", 12).'return array(); // error exit, empty array'."\n";
+        $footer .= str_repeat(" ", 8).'}'."\n";
+        $footer .= str_repeat(" ", 4).'}'."\n\n";
+        $footer .= str_repeat(" ", 4).'public static function getCell($row, $col){'."\n";
+        $footer .= str_repeat(" ", 8).'if (array_key_exists($row, self::$table)) {'."\n";
+        $footer .= str_repeat(" ", 12).'if (array_key_exists($col,self::$table[$row])) {'."\n";
+        $footer .= str_repeat(" ", 16).'return self::$table[$row][$col];'."\n";
+        $footer .= str_repeat(" ", 12).'} else {'."\n";
+        $footer .= str_repeat(" ", 16).'return null; // error exit 1'."\n";
+        $footer .= str_repeat(" ", 12).'}'."\n";
+        $footer .= str_repeat(" ", 8).'} else {'."\n";
+        $footer .= str_repeat(" ", 12).'return null; // error exit 2'."\n";
+        $footer .= str_repeat(" ", 8).'}'."\n";
+        $footer .= str_repeat(" ", 4).'}'."\n";
+        $footer .= '}'."\n";
+
+        // create body from $this->menutree
+        $body = "";
+        foreach ($this->menutree as $menuitems){
+            $body .= str_repeat(" ", 8)."'".$menuitems["ROUTE"]."' => array(\n";
+            foreach ($menuitems as $key => $item){
+                if ($key != "ROUTE"){
+                    $body .= str_repeat(" ", 12)."'".$key."' => '".$item."', \n";
+                }
+            }
+            $pos = strripos($body, ",");
+            $body[$pos] = ")";
+            $body[$pos+1] = ",";
+        }
+        $pos = strripos($body, ",");
+        $body[$pos] = " ";
+
+        return $header.$body.$footer;
+    }
+
     private function initmenutree(Session $session)
     {   /**
-         * get the data in $menutreefrom the database table itixi.menutree.
-         * and also store some menuitems to the session (persistent)
+         * get the data in $menutree from the database table itixi.menutree.
+         * create derived files (persistent) for efficient access to the menutree data
          */
         try {
             // make a database call to get the menu items
             $conn = $this->get('database_connection');
             $this->menutree = $conn->fetchAll('SELECT * from itixi.menutree');
 
-            // add all captions to the session (persistant)
-            $myarray = array();
-            foreach ($this->menutree as $menuitems) {
-                $myarray[$menuitems["ROUTE"]] = $menuitems["CAPTION"];
+            // write grid as new file MenuTree.php to the filesystem
+            $fs = new Filesystem();
+            try {
+                $fs->dumpFile( '..'.PHP_MENUTREE, $this->makeMenutreePhp() );
+            } catch (IOException $e) {
+                $session->set("errormsg","PHP Menutree IO filesystem error: ".$e);
             }
-            $session->set( 'captions', $myarray );
 
-            // add all permissions to the session (persistant)
-            reset( $this->menutree );
-            $myarray = array();
-            foreach ($this->menutree as $menuitems) {
-                $myarray[$menuitems["ROUTE"]] = $menuitems["PERMISSION"];
-            }
-            $session->set( 'permissions', $myarray );
-
-            // add all breadcrumbs to the session (persistant)
-            reset( $this->menutree );
-            $myarray = array();
-            foreach ($this->menutree as $menuitems) {
-                $myarray[$menuitems["ROUTE"]] = $menuitems["BREADCRUMB"];
-            }
-            $session->set( 'breadcrumbs', $myarray );
-
-            // create a twig file
+            // use grid to create a twig file
             $this->initMenuHtmlTwig($session); // proceed to create a twig file
 
         } catch (PDOException $e) {
@@ -174,16 +222,18 @@ Class HouseKeeper extends Controller
         $session->set("baseurl",TIXI_UNDEFINED);
         $session->set("username",TIXI_UNDEFINED);
         $session->set("userroles",array());
+        $session->set("permission", TIXI_UNDEFINED);
         $session->set("customer",TIXI_UNDEFINED);
-        $session->set("breadcrumbs", array());
         $session->set("breadcrumb", TIXI_UNDEFINED);
         $session->set("subject",TIXI_UNDEFINED);
         $session->set("action", TIXI_UNDEFINED);
-        $session->set("cursors", array());
         $session->set("filter",'');
         $session->set("mode",TIXI_UNDEFINED);
         $session->set("errormsg",TIXI_UNDEFINED);
         $session->set("tainted", TIXI_UNDEFINED);
+        $session->set("route", TIXI_UNDEFINED);
+        /* $session->set("cursor/$route", $value); // cache cursor in structured namespace */
+        /* $session->set("myform/$route", $array); // cache metadata in structured namespace */
 
      // initialize menutree (conditional)
         if ($this->initMenutree) {
@@ -213,15 +263,13 @@ Class HouseKeeper extends Controller
         $tixi = $this->container->getParameter('tixi'); // array with constants
 
     // set title parameter in the session (conditional)
-        $caps = $session->get("captions");
-        $session->set("title", $tixi["title"]." - ".$caps[ $route ]);
+        $session->set("title", $tixi["title"]." - ".menutree::getCell($route,"CAPTION"));
 
     // set common parameters
         $session->set("baseurl",'http://'.$_SERVER['SERVER_NAME'].$_SERVER['SCRIPT_NAME']);
 
     // set parameters for the top frame
-        $breadcrumbs = $session->get('breadcrumbs');
-        $session->set("breadcrumb", $breadcrumbs[$route]);
+        $session->set("breadcrumb", menutree::getCell($route,"BREADCRUMB"));
 
     // check for changed username in this session
         $usr = $this->getUser();
@@ -240,6 +288,7 @@ Class HouseKeeper extends Controller
             $session->set( "userroles", array());
             $session->set( "customer", $tixi["undefined"] );
         };
+        $session->set("permission", menutree::getCell($route,"PERMISSION"));
 
     // reset parameters for the subject
         $session->set("subject", $tixi["undefined"] );
@@ -248,9 +297,7 @@ Class HouseKeeper extends Controller
         if (isset($_REQUEST['action'])) {
             $session->set('action', $_REQUEST['action'] );
             if ($_REQUEST['action'] == 'select') {
-                $cursors = $session->get('cursors');
-                $cursors[ $route ] = $_REQUEST['cursor'];
-                $session->set('cursors', $cursors);
+                $session->set("cursor/$route", $_REQUEST['cursor']);
             }
         } else {
             // no action in request

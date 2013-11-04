@@ -16,6 +16,19 @@ services:
     tixi_listbuilder:
         class: Tixi\HomeBundle\Controller\ListBuilder
         arguments: [@service_container]
+    tixi_autoform:
+        class: Tixi\HomeBundle\Controller\AutoForm
+        arguments: [@service_container]
+#
+#   stackoverflow "How to use Namespaced Sessions in Symfony2"
+#    session:
+#        class: Symfony\Component\HttpFoundation\Session\Session
+#        arguments:
+#            - @session.storage
+#            - @tixi.session.attribute_bag
+#            - @session.flash_bag
+#    tixi.session.attribute_bag:
+#        class: Symfony\Component\HttpFoundation\Session\Attribute\NamespacedAttributeBag
 
 #    tixi_home.example:
 #        class: %tixi_home.example.class%

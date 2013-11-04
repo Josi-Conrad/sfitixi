@@ -5,7 +5,9 @@
  * Date: 30.09.13
  * Time: 12:15
  */
-// martin jonasse 23.10.2013 finished basic form functions add, modify, save, delete, and quit
+// 23.10.2013 martin jonasse finished basic form functions add, modify, save, delete, and quit
+// 28.10.2013 martin jonasse fixed some features
+// 04.11.2013 martin jonasse upgrade cursor to structured namespace, split off $mydata from $myform
 
 namespace Tixi\HomeBundle\Controller;
 
@@ -18,12 +20,11 @@ use Doctrine\DBAL\Types\Type;
 class FormStateBuilder extends Controller
 {
     protected $container; // container
+    protected $conn;      // database connection
     protected $view;      // input (name of the MySQL view)
     protected $pkey;      // input (name of the primary key)
-    protected $myform;    // meta plus values for rendering a form
-    protected $mytabs;    // tables and value pairs for the insert function
-    protected $conn;      // database connection
-    protected $callback;  // callback fuction for validating the formdata
+    protected $myform;    // meta plus values for rendering and validating a form
+    protected $callback;  // callback fuction for validating the data in $myform
 
     public function __construct (ContainerInterface $container)
     {
@@ -72,19 +73,39 @@ class FormStateBuilder extends Controller
         return $len;
     }
 
-    private function getMetaData($session)
+    private function map2InputType($sqltype)
     {/*
-      * retrieve the meta data for the table(s) from the customer database
+      * map  each MySQL type to the corresponding html input tag type
+      * example: <input type="text" name="Vorname">
       */
-        $customer = $session->get('customer');
+        if       ($sqltype == 'int')        { $mapped = 'number';
+        } elseif ($sqltype == 'varchar')    { $mapped = 'text';
+        } elseif ($sqltype == 'tinyint')    { $mapped = 'checkbox';
+        } elseif ($sqltype == 'mediumtext') { $mapped = 'textarea';
+        } elseif ($sqltype == 'text')       { $mapped = 'textarea';
+        } elseif ($sqltype == 'date')       { $mapped = 'date';
+        } else {                              $mapped = 'undefined';
+        }
+        return $mapped;
+    }
+
+    private function setMetaData($session, $route)
+    {/*
+      * retrieve the meta data for the table(s) from the customer database or the session cache
+      */
+        if ($session->has("myform/$route"))
+        {/* get metadata from session cache */
+            $this->myform = $session->get("myform/$route");
+            return true; // successfully set data in $this->myform
+        }
 
         try {
             // make a database call to get the meta data
-            $rownr = 0;
+            $customer = $session->get('customer');
             $sql = "show full columns from $customer.$this->view";
             $this->myform = $this->conn->fetchAll( $sql );
 
-            // update meta data
+            // upgrade the meta data with some derived fields
             foreach ($this->myform as $key => $value) {
 
                 // readonly?
@@ -99,30 +120,23 @@ class FormStateBuilder extends Controller
                 // maxlength?
                 $this->myform[$key]["Length"] = $this->getLen($value["Type"]);
 
-                // basetype?
+                // types?
                 $paranthesis = strpos($value["Type"], "(");
                 $basetype = ($paranthesis !== false) ? substr($value["Type"], 0, $paranthesis ) : $value["Type"];
-                $this->myform[$key]["Basetype"] = $basetype;
-
-                // map to (render as) html input type
-                if       ($basetype == 'int')        { $this->myform[$key]["Rendered"] = 'text';
-                } elseif ($basetype == 'varchar')    { $this->myform[$key]["Rendered"] = 'text';
-                } elseif ($basetype == 'tinyint')    { $this->myform[$key]["Rendered"] = 'checkbox';
-                } elseif ($basetype == 'mediumtext') { $this->myform[$key]["Rendered"] = 'textarea';
-                } elseif ($basetype == 'text')       { $this->myform[$key]["Rendered"] = 'textarea';
-                } else {                               $this->myform[$key]["Rendered"] = 'undefined';
-                }
+                $this->myform[$key]["Basetype"] = $basetype; // sql type
+                $this->myform[$key]["Rendered"] = $this->map2InputType($basetype); // html type
 
                 // error message, previous value
                 $this->myform[$key]["Error"] = ""; // empty
                 $this->myform[$key]["Value"] = ""; // empty
             }
-
-            return $this->myform;
+            $session->set("myform/$route", $this->myform); // cache metadata
+            return true; // successfully set data in $this->myform
 
         } catch (PDOException $e) {
             $session->set("errormsg","Cannot access database : ".$e);
-            return "0";
+            $session->remove("myform/$route"); // clear cached metadata
+            return false; // error message
         }
     }
 
@@ -404,7 +418,26 @@ class FormStateBuilder extends Controller
                 if (($this->myform[$idx]["Null"] == "NO") and ($value == "")) {
                     $err = "Validierungs Fehler: ein leeren Eintrag ist hier nicht erlaubt.";
                 } elseif (($value != "0") and ($value != "1")) {
-                    $err = "Validation error, illegal value=$value in tinyint.";
+                    $err = "Validierungs Fehler, ungültige Wert($value) in tinyint.";
+                }
+                break;
+
+            case 'date':
+                $dummy = 'stop';
+                if (($this->myform[$idx]["Null"] == "NO") and ($value == "")) {
+                    $err = "Validierungs Fehler: ein leeren Eintrag ist hier nicht erlaubt.";
+                } else {
+                    $arr = explode("-", $value);
+                    if (count($arr) == 3) {
+                        $year = $arr[0];
+                        $month = $arr[1];
+                        $day = $arr[2];
+                        if (!checkdate($month, $day, $year)) {
+                            $err = "Validierungs Fehler, ungültige Datum (jjjj-mm-tt).";
+                        }
+                    } else {
+                        $err = "Validierungs Fehler, ungültiges Datumsformat (jjjj-mm-tt).";
+                    }
                 }
                 break;
 
@@ -428,7 +461,7 @@ class FormStateBuilder extends Controller
         return ($err != "");                   // true if error encountered
     }
 
-    public function setListObjectStates($page)
+    public function setListObjectStates($route)
     { /*
        * state machine for one list object (= one object of many!)
        * inputs: session > mode and session > action
@@ -439,7 +472,7 @@ class FormStateBuilder extends Controller
     // initialize variables
         $session = new session;
         $tixi = $this->container->getParameter('tixi');
-        $this->myform = $this->getMetaData($session);
+        $this->setMetaData($session, $route);
 
     // state machine for a list object
         $action = ($session->get('action'));
@@ -453,12 +486,10 @@ class FormStateBuilder extends Controller
                 $idx = $this->insertFormData();
                 if ($idx > 0)
                 {/* set cursor to match the inserted object(s) */
-                    $cursors = $session->get('cursors');
-                    $cursors[$page] = $idx;
-                    $session->set('cursors', $cursors);
-                    $session->set('tainted', "$page:$idx");
+                    $session->set("cursor/$route", $idx);
+                    $session->set('tainted', "$route:$idx");
                 /*  get persistent data and set mode */
-                    $record = $this->getFormData($cursors[$page]); // database record
+                    $record = $this->getFormData($idx); // database record
                     $idx = 0;
                     foreach ($record as $name => $value) {
                         $this->myform[$idx]["Value"] = $value; // copy column value to form object
@@ -468,9 +499,9 @@ class FormStateBuilder extends Controller
                 }
 
             } elseif ($action == 'modify') {
-                // action code for modify list object
-                $cursors = $session->get('cursors');
-                $record = $this->getFormData($cursors[$page]); // database record
+                /* action code for modify list object */
+                $cursor = $session->get("cursor/$route");
+                $record = $this->getFormData($cursor); // database record
                 $idx = 0;
                 foreach ($record as $name => $value) {
                     $this->myform[$idx]["Value"] = $value; // copy column value to form object
@@ -478,22 +509,22 @@ class FormStateBuilder extends Controller
                 }
                 $session->set('mode', $tixi['mode_edit_in_list']); // set new state
 
-            } else { // state mode_select_list remains the same
+            } else { /* state mode_select_list remains the same */
                 if ($action == 'delete') {
-                    // action code for delete list object
-                    $cursors = $session->get('cursors');
-                    $this->deleteFormData($cursors[$page]); // delete the database record
-                    $cursors[$page] = $this->getDefaultID($session); // get new default cursor
-                    $session->set('cursors', $cursors); // write it back to the session
+                    /* action code for delete list object */
+                    $cursor = $session->get("cursor/$route");
+                    $this->deleteFormData($cursor); // delete the database record
+                    $cursor = $this->getDefaultID($session);
+                    $session->set("cursor/$route", $cursor); // set new cursor (default)
 
                 } elseif ($action == 'select') {
-                    // action code for select (changed cursor)
+                    /* action code for select (changed cursor) */
 
                 } elseif ($action == 'filter') {
-                    // action code for filter (changed filter criteria)
+                    /* action code for filter (changed filter criteria) */
 
                 } elseif ($action == 'print') {
-                    // action code for printing
+                    /* action code for printing */
                     $session->set('errormsg',
                         'Die Druckfunktion ist noch nicht implementiert.');
 
@@ -501,14 +532,14 @@ class FormStateBuilder extends Controller
                     $session->set('errormsg',
                         'Fehler(1): illegaler action '.$session->get('action').' in state '.$session->get('mode'));
                 }
-                // action code for displaying list
+                /* action code for displaying list, see ListBuilder service */
 
             }
         } elseif ($session->get('mode') == $tixi['mode_edit_in_list']) {
             if ($action == 'save')
             {/* action code for saving the form data to the database */
-                $cursors = $session->get('cursors');
-                $record = $this->getFormData($cursors[$page]); // database record
+                $cursor = $session->get("cursor/$route");
+                $record = $this->getFormData($cursor); // get database record
                 $idx = 0;
                 foreach ($record as $name => $value) {
                     $this->myform[$idx]["Value"] = $value;  // set database value
@@ -542,27 +573,29 @@ class FormStateBuilder extends Controller
                 if ($ecnt >= 1) {
                     $session->set('errormsg', 'Validierungsfehler in ein oder mehrer Felder, bitte korrigieren.');
                 } else {
-                    $this->setFormData($cursors[$page]); // update database
+                    $this->setFormData($cursor); // update database
                     $session->set('mode', $tixi['mode_select_list']); // set new state
                 }
 
             } elseif ($action == 'cancel') {
-                // action code for canceling
-                $cursors = $session->get('cursors');
+                /* action code for canceling */
+                $cursor = $session->get("cursor/$route");
                 $tainted = $session->get('tainted');
-                if ($tainted != $session->get('undefined'))
+                if ($tainted != $tixi['undefined'])
                 {/* the inserted object has not been properly validated */
                     $a = explode(":", $tainted);
-                    if ($a[0] == $page) {
-                        $this->deleteFormData($cursors[$page]); // delete the database record(s)
-                        $cursors[$page] = $this->getDefaultID($session); // get new default cursor
-                        $session->set('cursors', $cursors); // write it back to the session
-                        $session->set('errormsg', "Deleted object no. $a[1], not validated.");
-                    } else {
-                        $session->set('errormsg', "Error on page $page, object no. $a[1] not validated.");
+                    if (count($a)==2) {
+                        if ($a[0] == $route) {
+                            $this->deleteFormData($cursor); // delete the database record
+                            $cursor = $this->getDefaultID($session); // get new cursor (default)
+                            $session->set("cursor/$route", $cursor);
+                            $session->set('errormsg', "Deleted object no. $a[1], not validated.");
+                        } else {
+                            $session->set('errormsg', "Error on page $route, object no. $a[1] not validated.");
+                        }
                     }
                 }
-                $session->set('tainted', $session->get('undefined'));
+                $session->set('tainted', $tixi['undefined']); // reset tainted
                 $session->set('mode', $tixi['mode_select_list']); // set new state
 
             } else {
