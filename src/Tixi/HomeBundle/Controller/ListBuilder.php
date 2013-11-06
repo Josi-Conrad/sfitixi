@@ -7,8 +7,9 @@
  * initial file
  */
 // src\Tixi\HomeBundle\Controller\ListBuilder.php
-// 04.10.2013 martin jonasse  upgrade code w. uppercase, cursors, filters, route
+// 04.10.2013 martin jonasse upgrade code w. uppercase, cursors, filters, route
 // 04.11.2013 martin jonasse upgrade cursor to structured namespace
+// 96.11.2013 martin jonasse added $this->session
 
 namespace Tixi\HomeBundle\Controller;
 
@@ -26,6 +27,7 @@ class ListBuilder extends Controller
     protected $container;   // container
     protected $view;        // input (name of the MySQL view)
     protected $pkey;        // input (name of the primary key, defines record)
+    protected $session;     // input&output
     protected $list;        // output
 
     public function __construct (ContainerInterface $container)
@@ -38,7 +40,9 @@ class ListBuilder extends Controller
       * view name, must match an existing MySQL view in the customer database
       */
         $this->view = $value;
+        // init other variables
         $this->list = array();
+        $this->session = new session;
     }
 
     public function setPkey($value)
@@ -49,16 +53,16 @@ class ListBuilder extends Controller
         $this->list = array();
     }
 
-    private function getTable($session)
+    private function getTable()
     {/*
       * retrieve headers for the view from the customer database
       * return: array of headers (success) empty array and error message (failure)
       */
-        $customer = $session->get('customer');
+        $customer = $this->session->get('customer');
         $sql = "select * from $customer.$this->view ";
-        if ( $session->get('filter') != '' )
+        if ( $this->session->get('filter') != '' )
         {
-            $filter = $session->get('filter'); // continues below
+            $filter = $this->session->get('filter'); // continues below
         }
         $mylist = array(); // initialize array
 
@@ -93,22 +97,23 @@ class ListBuilder extends Controller
             }
             $mylist = $connection->fetchAll( $sql );
             if (count($mylist) == 0) {
-                $session->set("errormsg","Leere Tabelle ".$this->view." keine Werte zum anzeigen (Filter?).");
+                $this->session->set("errormsg",
+                    "Leere Tabelle ".$this->view." keine Werte zum anzeigen (Filter?).");
             }
             return $mylist; // header information
 
         } catch (PDOException $e) {
-            $session->set("errormsg","Cannot access database : ".$e);
+            $this->session->set("errormsg","Cannot access database : ".$e);
             return array(); // empty headers
         }
     }
 
-    private function getDefaultID($session)
+    private function getDefaultID()
     {/*
       * retrieve the default (first) id in the view from the customer database
       * return: id 1..10E11 (success) 0 and error message (failure)
       */
-        $customer = $session->get('customer');
+        $customer = $this->session->get('customer');
         $sql = "select $this->pkey from $customer.$this->view limit 0, 2";
         $mylist = array(); // initialize array
 
@@ -117,14 +122,15 @@ class ListBuilder extends Controller
             $connection = $this->container->get('database_connection');
             $mylist = $connection->fetchAll( $sql );
             if (count($mylist) == 0) {
-                $session->set("errormsg","Leere Tabelle ".$this->view." keine Werte zum anzeigen (Hinzufügen?).");
+                $this->session->set("errormsg",
+                    "Leere Tabelle ".$this->view." keine Werte zum anzeigen (Hinzufügen?).");
                 return 0;
             } else {
                 return $mylist[0][$this->pkey];
             }
 
         } catch (PDOException $e) {
-            $session->set("errormsg","Cannot access database : ".$e);
+            $this->session->set("errormsg","Cannot access database : ".$e);
             return 0;
         }
     }
@@ -132,23 +138,18 @@ class ListBuilder extends Controller
     public function makeList()
     {/*
       * make a list (array) with data (headers, values) from the customer database
+      * call this before rendering the list
       */
-        $session = new session;
-
-        $route = $session->get('route');
-        if (!$session->has("cursor/$route")) {
-            $session->set("cursor/$route", $this->getDefaultID($session));
+        $route = $this->session->get('route');
+        if (!$this->session->has("cursor/$route"))
+        {/* no cursor defined yet, get default */
+            $this->session->set("cursor/$route", $this->getDefaultID());
         }
-
-        $this->list = $this->getTable($session);
+        /* set subject in the session */
+        $this->session->set("subject", MenuTree::getCell($route, "CAPTION")." (Liste)");
+        /* get list data (table) */
+        $this->list = $this->getTable();
      }
-
-    public function getNames()
-    {/*
-      * get the names of the object at cursor/$route
-      */
-        $dummy = 'stop';
-    }
 
     public function getRows()
     {/*

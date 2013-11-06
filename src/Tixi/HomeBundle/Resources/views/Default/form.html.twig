@@ -15,6 +15,7 @@
           method="POST"  >
         {% for record in myform %}
             <p class="control-standard">
+
                 {% if ((record.Rendered == 'checkbox') and (record.Hidden == '0')) %}
                     <label for="fpw_{{ record.Field }}">{{ record.Field }}</label>
                     <input name="{{ record.Field }}"
@@ -25,7 +26,8 @@
                            type="checkbox"
                            value="1"
                            title="{{ record.Comment }}{% if record.Null == 'NO' %}(obligatorisch){% endif %}"
-                           {% if record.Value == "1" %} checked {% endif %}
+                           {% if record.Value == "1" %} checked{% endif %}
+                           {% if record.Readonly %} disabled{% endif %}
                            style="width: 20px">
                     <i id="fpr_{{ record.Field }}_error" style="color:red">{{ record.Error }}</i><br />
 
@@ -34,6 +36,7 @@
                     <textarea name="{{ record.Field }}"
                               id="fpw_{{ record.Field }}"
                               title="{{ record.Comment }}{% if record.Null == 'NO' %}(obligatorisch){% endif %}"
+                              {% if record.Readonly %} disabled{% endif %}
                               >{{ record.Value }}</textarea>
                     <i id="fpr_{{ record.Field }}_error" style="color:red">{{ record.Error }}</i><br />
 

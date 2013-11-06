@@ -8,24 +8,78 @@ namespace Tixi\App\PreferencesBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Tixi\HomeBundle\Controller\HouseKeeper;
+use Tixi\HomeBundle\Controller\AutoForm;
+use Symfony\Component\HttpFoundation\Response;
 
 class DefaultController extends Controller
-{
+{/*
+  * controller for the user preference page
+  * basically the same as in teamdata, but for one user (constraint)
+  * with the exception of details (manager only, not in the view)
+  *
+  * see also: team data page
+  */
+    public function validatePreferences($myform=array())
+    {/*
+      * callback function for validating the formdata for special conditions
+      * please note: passing $myform as a reference is not possible
+      * this may not be efficient, but at least it works well
+      *
+      * return: the modified myform array: Value and or Error or ...
+      */
+        foreach ($myform as $key => $values)
+        {
+            if ($values["Field"] == "passwort")
+            {
+                if (strlen($values["Value"]) < 8)
+                {/* ensure minimal length of the password entered by the user */
+                    $myform[$key]["Error"] =
+                        "Validierungsfehler: Passwörter müssen mindestens 8 Zeichen lang sein.";
+                } elseif ($values["Change"] == true)
+                {/* password has been changed by user, hash password with salt in httpd.conf SetEnv APACHE_SALT */
+                    $myform[$key]["Value"] = hash("sha256", $values["Value"].getenv("APACHE_SALT")); // 64 characters
+                }
+            }
+            elseif ($values["Field"] == "geburtstag")
+            {
+                $bday = date_create($values["Value"]);
+                $today = date_create(date("Y-m-d"));
+                if ($bday >= $today)
+                {
+                    $myform[$key]["Error"] = "Validierungsfehler: Geburtstag muss in der Vergangenheit liegen.";
+                }
+
+            } elseif ($values["Field"] == "benutzername") {
+                if ($values["Change"] == true)
+                {
+                    $myform[$key]["Error"] = "Validierungsfehler: Benutzername darf nicht geändert werden (Abbrechen).";
+                }
+            }
+        }
+        return $myform; // return the changed local copy of the myform array
+    }
+
     public function indexAction($name='')
-    {
-    // set parameters for the rendering of the preferences page
-        $tixi_housekeeper = $this->get('tixi_housekeeper');
-        $tixi_housekeeper->setTemplateParameters('tixi_preferences_page');
+    {/* initialize the context */
+        $route = 'tixi_preferences_page';
+        $housekeeper = $this->get('tixi_housekeeper');
+        $housekeeper->setTemplateParameters($route);
 
-    // set subject
+    /*  get username */
         $session = $this->container->get('session');
-        $usr = $session->get('username');
-        $session->set('subject', 'Einstellungen für Benutzer '.$usr);
+        $username = $session->get('username');
 
-    // get / set password (hash)
-    // @todo: get / set hashed password from database
+    /*  start service */
+        $autoform = $this->get('tixi_autoform'); // service name
+        /* set attributes */
+        $autoform->setFormview("form_benutzer_einstellungen"); // name of view
+        $autoform->setPkey("benutzer_id"); // name of primary key
+        $autoform->setCollection(false); // this is an individual object
+        $autoform->setCallback(array($this, "validatePreferences")); // callback
+        $autoform->setConstraint("benutzername = '".$username."'"); // sql expression
 
-    // render the about page
-        return $this->render('TixiAppPreferencesBundle:Default:index.html.twig');
+    /*  render form */
+        return $autoform->makeAutoForm($route);
     }
 }

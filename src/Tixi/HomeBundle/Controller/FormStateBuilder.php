@@ -19,16 +19,28 @@ use Doctrine\DBAL\Types\Type;
 
 class FormStateBuilder extends Controller
 {
-    protected $container; // container
-    protected $conn;      // database connection
-    protected $view;      // input (name of the MySQL view)
-    protected $pkey;      // input (name of the primary key)
-    protected $myform;    // meta plus values for rendering and validating a form
-    protected $callback;  // callback fuction for validating the data in $myform
+    protected $container;   // container
+    protected $session;     // session
+    protected $conn;        // database connection
+
+    protected $callback;        // input: callback function for validating the data in $myform
+    protected $view;            // input (name of the MySQL view)
+    protected $pkey;            // input (name of the primary key)
+    protected $collection;      // true: collection of objects (many), false: one object
+    protected $constraint = ""; // input: where foo = 'bar' (resolves to one record)
+
+    protected $myform;      // meta plus values for rendering and validating a form
 
     public function __construct (ContainerInterface $container)
     {
         $this->container = $container;
+    }
+
+    public function setCallback($value)
+    {/*
+      * define the name of the callback function, default = empty
+      */
+        $this->callback = $value;
     }
 
     public function setFormView($value)
@@ -38,10 +50,8 @@ class FormStateBuilder extends Controller
       * please observe MySQL chapter 18.4.3 Updateable amd Insertable Views
       */
         $this->view = $value;
-        // set defaults
+        $this->session = new session;
         $this->conn = $this->get('database_connection');
-        $this->pkey = null;
-        $this->callback = null;
     }
 
     public function setPkey($value)
@@ -51,13 +61,19 @@ class FormStateBuilder extends Controller
         $this->pkey = $value;
     }
 
-    public function setCallback($value=null)
+    public function setCollection($value)
     {/*
-      * define the name of the callback function, default = empty
+      * true: collection of objects (many), false: one object
       */
-        $this->callback = $value;
+        $this->collection = $value;
     }
 
+    public function setConstraint($value = "")
+    {/*
+      * define the constraint for the $view (where foo = 'bar')
+      */
+        $this->constraint = $value;
+    }
 
     private function getLen($mysqltype)
     {/*
@@ -89,19 +105,19 @@ class FormStateBuilder extends Controller
         return $mapped;
     }
 
-    private function setMetaData($session, $route)
+    private function setMetaData($route)
     {/*
       * retrieve the meta data for the table(s) from the customer database or the session cache
       */
-        if ($session->has("myform/$route"))
+        if ($this->session->has("myform/$route"))
         {/* get metadata from session cache */
-            $this->myform = $session->get("myform/$route");
+            $this->myform = $this->session->get("myform/$route");
             return true; // successfully set data in $this->myform
         }
 
         try {
             // make a database call to get the meta data
-            $customer = $session->get('customer');
+            $customer = $this->session->get('customer');
             $sql = "show full columns from $customer.$this->view";
             $this->myform = $this->conn->fetchAll( $sql );
 
@@ -130,12 +146,12 @@ class FormStateBuilder extends Controller
                 $this->myform[$key]["Error"] = ""; // empty
                 $this->myform[$key]["Value"] = ""; // empty
             }
-            $session->set("myform/$route", $this->myform); // cache metadata
+            $this->session->set("myform/$route", $this->myform); // cache metadata
             return true; // successfully set data in $this->myform
 
         } catch (PDOException $e) {
-            $session->set("errormsg","Cannot access database : ".$e);
-            $session->remove("myform/$route"); // clear cached metadata
+            $this->session->set("errormsg","Cannot access database : ".$e);
+            $this->session->remove("myform/$route"); // clear cached metadata
             return false; // error message
         }
     }
@@ -148,12 +164,34 @@ class FormStateBuilder extends Controller
         return $this->myform;
     }
 
+    private function setSubject($arr)
+    {/* set the session subject/$route variable
+      * Syntax: CAPTION: name1 name2 ...
+      * where name1 and name2 are values from all columns containing "name"
+      * output: subject is what is displayed on screen
+      *         context is for future use with child objects
+      */
+        $route = $this->session->get("route");
+        $caps = MenuTree::getCell($route, "CAPTION");
+        $subject = $caps.": ";
+        foreach ($arr as $key => $value){
+            if (strpos($key, "name")!==false){
+                $subject .= $value." ";
+            }
+        }
+        if (strlen($subject) > 80) {
+            $subject = substr($subject, 0, 77)."...";
+        }
+        $this->session->set("context/$route", $subject);
+        $this->session->set("subject", $subject);
+        return;
+    }
+
     private function getFormData($cursor)
     {/*
       * return an array containing the persistent data values for the form
       */
-        $session = new session;
-        $customer = $session->get('customer');
+        $customer = $this->session->get('customer');
 
         try {
             // make a database call to get the meta data
@@ -162,21 +200,21 @@ class FormStateBuilder extends Controller
             $stmt->bindValue( 1, "$cursor", Type::INTEGER);
             $stmt->execute();
             // return an array with persistent data (query has only one record)
-            return $stmt->fetch();
+            $arr = $stmt->fetch();
+            $this->setSubject($arr);
+            return $arr;
 
         } catch (PDOException $e) {
-            $session->set("errormsg","Error reading the database: ".$e);
+            $this->session->set("errormsg","Error reading the database: ".$e);
             return array();
         }
-
     }
 
     private function setFormData($cursor)
     {/*
       * update the data, changed by the user, in the customer database
       */
-        $session = new session;
-        $customer = $session->get('customer');
+        $customer = $this->session->get('customer');
 
         try {
             $count = 0;
@@ -191,7 +229,7 @@ class FormStateBuilder extends Controller
             return $count;
 
         } catch (PDOException $e) {
-            $session->set("errormsg","Error updating the database: ".$e);
+            $this->session->set("errormsg","Error updating the database: ".$e);
             return 0;
         }
     }
@@ -200,8 +238,7 @@ class FormStateBuilder extends Controller
     {/*
       * delete a record from the database, not per view, but for each table in the view ...
       */
-        $session = new session;
-        $customer = $session->get('customer');
+        $customer = $this->session->get('customer');
 
         /* get database record for the view, containg the table indices */
         $record = $this->getFormData($cursor);
@@ -226,7 +263,7 @@ class FormStateBuilder extends Controller
             return true; // success
 
         } catch (PDOException $e) {
-            $session->set("errormsg","Error deleting record from database: ".$e);
+            $this->session->set("errormsg","Error deleting record from database: ".$e);
             return false; // error
         }
     }
@@ -283,7 +320,7 @@ class FormStateBuilder extends Controller
             return $id;
         }
         catch (PDOException $e) {
-            $session->set("errormsg","Error(1) inserting record into database: ".$e);
+            $this->session->set("errormsg","Error(1) inserting record into database: ".$e);
             return 0; // error
         }
     }
@@ -293,8 +330,7 @@ class FormStateBuilder extends Controller
       * insert an empty view record into the database, where the view contains one or more linked tables.
       * result: the id of the view or 0 (error)
       */
-        $session = new session;
-        $customer = $session->get('customer');
+        $customer = $this->session->get('customer');
 
         try
         {/* initialize 1: get tables used in the query */
@@ -340,7 +376,7 @@ class FormStateBuilder extends Controller
                             unset($this->mytabs[$table]);
                             /* success, drop through or loop again */
                         } else {
-                            $session->set("errormsg","Error(2) inserting record into database (record id=0).");
+                            $this->session->set("errormsg","Error(2) inserting record into database (record id=0).");
                             return false;
                         }
                     }
@@ -349,17 +385,17 @@ class FormStateBuilder extends Controller
             return $id; // success, the id is the views key (first parent id)
 
         } catch (PDOException $e) {
-            $session->set("errormsg","Error(3) inserting record into database: ".$e);
+            $this->session->set("errormsg","Error(3) inserting record into database: ".$e);
             return 0; // error
         }
     }
 
-    private function getDefaultID($session)
+    private function getDefaultID()
     {/*
       * retrieve the default (first) id in the view from the customer database
       * return: id 1..10E11 (success) 0 and error message (failure)
       */
-        $customer = $session->get('customer');
+        $customer = $this->session->get('customer');
         $sql = "select $this->pkey from $customer.$this->view limit 0, 2";
         $mylist = array(); // initialize array
 
@@ -368,14 +404,14 @@ class FormStateBuilder extends Controller
             $connection = $this->container->get('database_connection');
             $mylist = $connection->fetchAll( $sql );
             if (count($mylist) == 0) {
-                $session->set("errormsg","Leere Tabelle ".$this->view." keine Werte zum anzeigen (Hinzufügen?).");
+                $this->session->set("errormsg","Leere Tabelle ".$this->view." keine Werte zum anzeigen (Hinzufügen?).");
                 return 0;
             } else {
                 return $mylist[0][$this->pkey];
             }
 
         } catch (PDOException $e) {
-            $session->set("errormsg","Cannot access database : ".$e);
+            $this->session->set("errormsg","Cannot access database : ".$e);
             return 0;
         }
     }
@@ -399,6 +435,7 @@ class FormStateBuilder extends Controller
 
     private function validate($value, $idx)
     {/*
+      * Standard Validation for AutoForms, not to be confused callback validation
       * validate the request value for $this->myform[$idx]
       * $value is written to $this->myform[$idx]["Value"]
       * error message is written to $this->myform[$idx]["Error"]
@@ -461,84 +498,149 @@ class FormStateBuilder extends Controller
         return ($err != "");                   // true if error encountered
     }
 
-    public function setListObjectStates($route)
+    private function hasErrorsMyform()
+    {/* tests for errors in myform: 0 = none, 1 = error encountered */
+        foreach ($this->myform as $values) {
+            if ($values["Error"] != "") {
+                return 1;
+            }
+        }
+        return 0;
+    }
+
+    private function copyFormData2Myform($cursor)
+    {/*
+      * macro code for appending record data to the form object
+      */
+        $record = $this->getFormData($cursor); // database record
+        $idx = 0;
+        foreach ($record as $name => $value) {
+            $this->myform[$idx]["Value"] = $value; // copy column value to form object
+            $idx += 1;
+        }
+    }
+
+    private function copyReadonly2Myform()
+    {/*
+      * macro code for setting all fields in myform to readonly
+      */
+        foreach ($this->myform as $key => $values)
+        {/* set all fields as readonly */
+            $this->myform[$key]["Readonly"] = true;
+        }
+    }
+
+    private function getIndividualID()
+    {/*
+      * retrieve the cursor of the forms view with the constraint applied
+      * return the records cursor (pkey) or zero if none found
+      */
+        $customer = $this->session->get('customer');
+        $sql = "select $this->pkey from $customer.$this->view";
+        if ($this->constraint != "") {
+            $sql .= " where $this->constraint";
+        }
+
+        try {
+            // make a database call to get the data
+            $connection = $this->container->get('database_connection');
+            $mylist = $connection->fetchAll( $sql );
+            $cntr = count($mylist);
+            if ($cntr == 0)
+            {/* record not found */
+                $this->session->set("errormsg",
+                    "Leere Tabelle ".$this->view." keine Werte zum anzeigen (Hinzufügen?).");
+                return 0;
+            } elseif ($cntr == 1)
+            {/* found exactly one record */
+                return $mylist[0][$this->pkey];
+            } else
+            {/* found > 1 records */
+                $this->session->set("errormsg",
+                    "Mehrdeutige Abfrage ($sql), mehrere($cntr) Datensätze gefunden.");
+                return $mylist[0][$this->pkey];
+            }
+
+        } catch (PDOException $e) {
+            $this->session->set("errormsg","Cannot access database : ".$e);
+            return 0;
+        }
+    }
+
+    public function makeCollectionObjectStates($route)
     { /*
-       * state machine for one list object (= one object of many!)
-       * inputs: session > mode and session > action
+       * state machine for one list object (collection = true)
+       * inputs: session > mode and session > action and
+       *         session > cursor/$route (selected in list mode)
        * outputs: session > mode and session > action
        * database: new records, deleted records (modify is external)
        */
 
     // initialize variables
-        $session = new session;
         $tixi = $this->container->getParameter('tixi');
-        $this->setMetaData($session, $route);
+        $this->setMetaData($route);
 
     // state machine for a list object
-        $action = ($session->get('action'));
-        if ($action=='') { $session->set('mode', $tixi['mode_select_list']); };
-        if ($session->get('mode') == $tixi['mode_select_list']) {
-            if ($action == '') {
-                // action code for the first call
-
-            } elseif ($action == 'add') {
-                // action code for a new list object
-                $idx = $this->insertFormData();
-                if ($idx > 0)
+        $action = ($this->session->get('action'));
+        if ($action=='') { $this->session->set('mode', $tixi['mode_select_list']); };
+        if ($this->session->get('mode') == $tixi['mode_select_list']) {
+            if ($action == '')
+            {/* action code for the first call */
+                /* this is managed in the ListBuilder service */
+            }
+            elseif ($action == 'add')
+            {/* action code for a new list object ------------------------------------- */
+                $cursor = $this->insertFormData();
+                if ($cursor > 0)
                 {/* set cursor to match the inserted object(s) */
-                    $session->set("cursor/$route", $idx);
-                    $session->set('tainted', "$route:$idx");
-                /*  get persistent data and set mode */
-                    $record = $this->getFormData($idx); // database record
-                    $idx = 0;
-                    foreach ($record as $name => $value) {
-                        $this->myform[$idx]["Value"] = $value; // copy column value to form object
-                        $idx += 1;
-                    }
-                    $session->set('mode', $tixi['mode_edit_in_list']); // set new state
+                    $this->session->set("cursor/$route", $cursor);
+                    $this->session->set('tainted', "$route:$cursor");
+                    $this->copyFormData2Myform($cursor);
+                    /* set new state */
+                    $this->session->set('mode', $tixi['mode_edit_in_list']); // set new state
                 }
-
-            } elseif ($action == 'modify') {
-                /* action code for modify list object */
-                $cursor = $session->get("cursor/$route");
-                $record = $this->getFormData($cursor); // database record
-                $idx = 0;
-                foreach ($record as $name => $value) {
-                    $this->myform[$idx]["Value"] = $value; // copy column value to form object
-                    $idx += 1;
-                }
-                $session->set('mode', $tixi['mode_edit_in_list']); // set new state
-
-            } else { /* state mode_select_list remains the same */
-                if ($action == 'delete') {
-                    /* action code for delete list object */
-                    $cursor = $session->get("cursor/$route");
+            }
+            elseif ($action == 'modify')
+            {/* action code for modify list object ------------------------------------- */
+                $cursor = $this->session->get("cursor/$route");
+                $this->copyFormData2Myform($cursor);
+                /* set new state */
+                $this->session->set('mode', $tixi['mode_edit_in_list']); // set new state
+            }
+            else
+            { /* state mode_select_list remains the same */
+                if ($action == 'delete')
+                {/* action code for delete list object ---------------------------------- */
+                    $cursor = $this->session->get("cursor/$route");
                     $this->deleteFormData($cursor); // delete the database record
-                    $cursor = $this->getDefaultID($session);
-                    $session->set("cursor/$route", $cursor); // set new cursor (default)
-
-                } elseif ($action == 'select') {
-                    /* action code for select (changed cursor) */
-
-                } elseif ($action == 'filter') {
-                    /* action code for filter (changed filter criteria) */
-
-                } elseif ($action == 'print') {
-                    /* action code for printing */
-                    $session->set('errormsg',
-                        'Die Druckfunktion ist noch nicht implementiert.');
-
-                } else {
-                    $session->set('errormsg',
-                        'Fehler(1): illegaler action '.$session->get('action').' in state '.$session->get('mode'));
+                    $cursor = $this->getDefaultID();
+                    $this->session->set("cursor/$route", $cursor); // set new cursor (default)
+                }
+                elseif ($action == 'select')
+                {/* action code for select (changed cursor) ----------------------------- */
+                    /* this is managed in the ListBuilder service */
+                }
+                elseif ($action == 'filter')
+                {/* action code for filter (changed filter criteria) -------------------- */
+                    /* this is managed in the ListBuilder service */
+                }
+                elseif ($action == 'print')
+                {/* action code for printing -------------------------------------------- */
+                    $this->session->set('errormsg', 'Die Druckfunktion ist noch nicht implementiert.');
+                }
+                else
+                {// unexpected action in this state
+                    $this->session->set('errormsg',
+                        'Fehler(1): illegaler action '.$this->session->get('action').' in state '.$this->session->get('mode'));
                 }
                 /* action code for displaying list, see ListBuilder service */
-
             }
-        } elseif ($session->get('mode') == $tixi['mode_edit_in_list']) {
+        }
+        elseif ($this->session->get('mode') == $tixi['mode_edit_in_list'])
+        {/* action code for edit state */
             if ($action == 'save')
-            {/* action code for saving the form data to the database */
-                $cursor = $session->get("cursor/$route");
+            {/* action code for saving the form data to the database -------------------- */
+                $cursor = $this->session->get("cursor/$route");
                 $record = $this->getFormData($cursor); // get database record
                 $idx = 0;
                 foreach ($record as $name => $value) {
@@ -563,48 +665,189 @@ class FormStateBuilder extends Controller
                 if (is_callable($this->callback)) {
                     $this->myform = call_user_func($this->callback, $this->myform);
                 }
-                $ecnt = 0;
-                foreach ($this->myform as $values) {
-                    if ($values["Error"] != "") {
-                        $ecnt = 1;
-                        break;
-                    }
+                if ($this->hasErrorsMyform() > 0) {
+                    $this->session->set('errormsg', 'Validierungsfehler in ein oder mehrer Felder, bitte korrigieren.');
+                } else
+                {/* update database */
+                    $this->setFormData($cursor);
+                    $this->session->set('tainted', $tixi['undefined']); // reset tainted
+                    $this->session->set('mode', $tixi['mode_select_list']); // set new state
                 }
-                if ($ecnt >= 1) {
-                    $session->set('errormsg', 'Validierungsfehler in ein oder mehrer Felder, bitte korrigieren.');
-                } else {
-                    $this->setFormData($cursor); // update database
-                    $session->set('mode', $tixi['mode_select_list']); // set new state
-                }
-
-            } elseif ($action == 'cancel') {
-                /* action code for canceling */
-                $cursor = $session->get("cursor/$route");
-                $tainted = $session->get('tainted');
+            }
+            elseif ($action == 'cancel')
+            {/* action code for canceling ------------------------------------------ */
+                $cursor = $this->session->get("cursor/$route");
+                $tainted = $this->session->get('tainted');
                 if ($tainted != $tixi['undefined'])
                 {/* the inserted object has not been properly validated */
                     $a = explode(":", $tainted);
                     if (count($a)==2) {
                         if ($a[0] == $route) {
                             $this->deleteFormData($cursor); // delete the database record
-                            $cursor = $this->getDefaultID($session); // get new cursor (default)
-                            $session->set("cursor/$route", $cursor);
-                            $session->set('errormsg', "Deleted object no. $a[1], not validated.");
+                            $cursor = $this->getDefaultID(); // get new cursor (default)
+                            $this->session->set("cursor/$route", $cursor);
+                            $this->session->set('errormsg', "Objekt Nr. $a[1] gelöscht, nicht validiert.");
                         } else {
-                            $session->set('errormsg', "Error on page $route, object no. $a[1] not validated.");
+                            $this->session->set('errormsg', "Fehler in Seite $route, Objekt Nr.. $a[1] nicht validiert.");
                         }
                     }
                 }
-                $session->set('tainted', $tixi['undefined']); // reset tainted
-                $session->set('mode', $tixi['mode_select_list']); // set new state
-
-            } else {
-                $session->set('errormsg',
-                    'Fehler(2): illegaler action '.$session->get('action').' in state '.$session->get('mode'));
+                $this->session->set('tainted', $tixi['undefined']); // reset tainted
+                $this->session->set('mode', $tixi['mode_select_list']); // set new state
+            } else
+            {// unexpected action in this state
+                $this->session->set('errormsg',
+                    'Fehler(2): illegaler action '.$this->session->get('action').' in state '.$this->session->get('mode'));
             }
-        } else {
-            $session->set('errormsg',
-                'Fehler(3): illegaler Zustand '.$session->get('mode'));
+        }
+        else
+        {// unexpected state
+            $this->session->set('errormsg',
+                'Fehler(3): illegaler Zustand '.$this->session->get('mode'));
+        }
+    }
+
+    public function makeIndividualObjectStates($route)
+    {/*
+      * state machine for one single object (collection = false)
+      * inputs: session > mode and session > action and
+      *         constraint (defines one or zero records)
+      * outputs: session > mode and session > action
+      * database: new records, or modified records
+      */
+
+        /* initialize variables */
+        $tixi = $this->container->getParameter('tixi');
+        $this->setMetaData($route);
+
+        /* state machine for an idividual object */
+        $action = ($this->session->get('action'));
+        if ($action=='') { $this->session->set('mode', $tixi['mode_read_record']); }
+        if ($this->session->get('mode') == $tixi['mode_read_record'])
+        {/* individual object read mode  */
+            if ($action == '')
+            {/* action code for the first call (read only) -------------------------- */
+                $cursor = $this->getIndividualID();
+                if ($cursor == 0)
+                {/* not found, insert an empty record */
+                    $cursor = $this->insertFormData();
+                    if ($cursor > 0)
+                    {/* set cursor to match the inserted object(s) */
+                        $this->session->set("cursor/$route", $cursor);
+                        $this->session->set('tainted', "$route:$cursor");
+                        $this->copyFormData2Myform($cursor);
+                    }
+                } else
+                {/* cursor found, get record from database */
+                    $this->session->set("cursor/$route", $cursor);
+                    $this->copyFormData2Myform($cursor);
+                }
+                $this->copyReadonly2Myform();
+            }
+            elseif ($action == 'modify')
+            {/* action code for modify --------------------------------------------- */
+                $cursor = $this->session->get("cursor/$route");
+                $this->copyFormData2Myform($cursor);
+                /* set new state */
+                $this->session->set('mode', $tixi['mode_edit_record']); // set new state
+            }
+            elseif ($action == 'print')
+            {/* action code for print ---------------------------------------------- */
+                $cursor = $this->session->get("cursor/$route");
+                $this->copyFormData2Myform($cursor);
+                $this->copyReadonly2Myform();
+                $this->session->set('errormsg',
+                    'Die Druckfunktion ist noch nicht implementiert.');
+            }
+            else
+            {/* unexpected action in this state */
+                $this->session->set('errormsg',
+                    'Fehler(6): illegaler Aktion '.$this->session->get('action')." in Zustand ".$this->session->get('mode'));
+            }
+        }
+        elseif ($this->session->get('mode') == $tixi['mode_edit_record'])
+        {/* individual object edit mode (modify) */
+            if ($action == 'save')
+            {/* action code for saving the changed data ----------------------------- */
+                $cursor = $this->session->get("cursor/$route");
+                $record = $this->getFormData($cursor); // get database record
+                $idx = 0;
+                foreach ($record as $name => $value) {
+                    $this->myform[$idx]["Value"] = $value;  // set database value
+                    $this->myform[$idx]["Error"] = "";      // reset error
+                    $this->myform[$idx]["Change"] = false;  // mark as not changed
+                    if (array_key_exists($name, $_REQUEST))
+                    {/* field in request */
+                        $secure = $_REQUEST[$name]; // quotes and html bracket escaped in DBAL
+                        if ($value != $secure)
+                        {/* validate data in the request */
+                            $err = $this->validate($secure, $idx);
+                            $this->myform[$idx]["Change"] = true;
+                        } else
+                        {/* validate data in the database */
+                            $err = $this->validate($value, $idx);
+                            $this->myform[$idx]["Change"] = false;
+                        }
+                    }
+                    $idx += 1;
+                }
+                if (is_callable($this->callback)) {
+                    $this->myform = call_user_func($this->callback, $this->myform);
+                }
+                if ($this->hasErrorsMyform() > 0) {
+                    $this->session->set('errormsg',
+                        'Validierungsfehler in ein oder mehrer Felder, bitte korrigieren.');
+                } else
+                {/* update database */
+                    $this->setFormData($cursor);
+                    $this->copyReadonly2Myform();
+                    /* set new mode */
+                    $this->session->set('mode', $tixi['mode_read_record']); // set new state
+                }
+            }
+            elseif ($action == 'cancel')
+            {/* action code for canceling the changes made ------------------------- */
+                /* action code for canceling */
+                $cursor = $this->session->get("cursor/$route");
+                $tainted = $this->session->get('tainted');
+                if ($tainted != $tixi['undefined'])
+                {/* the inserted object has not been properly validated */
+                    $a = explode(":", $tainted);
+                    if (count($a)==2) {
+                        if ($a[0] == $route) {
+                            $this->deleteFormData($cursor); // delete the database record
+                            $this->session->remove("cursor/$route");
+                            $this->session->set('errormsg', "Objekt Nr. $a[1] gelöscht, nicht validiert.");
+                        } else {
+                            $this->session->set('errormsg', "Fehler in Seite $route, Objekt Nr.. $a[1] nicht validiert.");
+                        }
+                    }
+                    $this->session->set('tainted', $tixi['undefined']); // reset tainted
+                }
+                else
+                {/* the object was not inserted, redisplay object */
+                    $this->copyFormData2Myform($cursor);
+                    $this->copyReadonly2Myform();
+                }
+                /* set new mode */
+                $this->session->set('mode', $tixi['mode_read_record']); // set new state
+            }
+            elseif ($action == 'print')
+            {/* action code for print --------------------------------------------- */
+                $cursor = $this->session->get("cursor/$route");
+                $this->copyFormData2Myform($cursor);
+                $this->session->set('errormsg',
+                    'Die Druckfunktion ist noch nicht implementiert.');
+            }
+            else
+            {/* unexpected action in this state */
+                $this->session->set('errormsg',
+                    'Fehler(5): illegaler Aktion '.$this->session->get('action')." in Zustand ".$this->session->get('mode'));
+            }
+        } else
+        {/* unexpected state encountered */
+            $this->session->set('errormsg',
+                'Fehler(4): illegaler Zustand '.$this->session->get('mode'));
         }
     }
 }

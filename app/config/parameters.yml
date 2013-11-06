@@ -1,5 +1,6 @@
 # This file is auto-generated during the composer install
-# @@ martin jonasse 13.08.2013 changed database_name from symfony to itixi
+# 13.08.2013 martin jonasse changed database_name from symfony to itixi
+# 06.11.2013 martin jonasse added brine for simple encryption
 
 parameters:
     database_driver: pdo_mysql
@@ -14,6 +15,7 @@ parameters:
     mailer_password: null
     locale: en
     secret: ThisTokenIsNotSoSecretChangeIt
+    brine: 599d6905932b2e2fc9b5854393c36611
     tixi:
       application: iTixi
       version: 2.0.0
