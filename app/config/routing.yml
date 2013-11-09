@@ -1,3 +1,15 @@
+tixi_app_vehicle_serviceplan:
+    resource: "@TixiAppVehicleServiceplanBundle/Resources/config/routing.yml"
+    prefix:   /
+
+tixi_app_vehicle_details:
+    resource: "@TixiAppVehicleDetailsBundle/Resources/config/routing.yml"
+    prefix:   /
+
+tixi_app_vehicle_data:
+    resource: "@TixiAppVehicleDataBundle/Resources/config/routing.yml"
+    prefix:   /
+
 tixi_app_team:
     resource: "@TixiAppTeamBundle/Resources/config/routing.yml"
     prefix:   /

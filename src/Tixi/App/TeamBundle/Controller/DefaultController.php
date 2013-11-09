@@ -71,48 +71,21 @@ class DefaultController extends Controller
 
     public function indexAction($name='')
     {
-    // set local variables
-        $route = 'tixi_unterhalt_teamdaten_page';
-        $pkey = 'benutzer_id';
-        $session = $this->container->get('session');
-        $tixi = $this->container->getParameter('tixi');
+        /* initialize the context */
+        $route = 'tixi_unterhalt_team_daten_page';
+        $housekeeper = $this->get('tixi_housekeeper');
+        $housekeeper->setTemplateParameters($route);
 
-    // set parameters for the rendering of this page
-        $tixi_housekeeper = $this->get('tixi_housekeeper');
-        $tixi_housekeeper->setTemplateParameters($route);
+        /*  start service */
+        $autoform = $this->get('tixi_autoform'); // service name
+        /* set attributes */
+        $autoform->setCallback(array($this, "validateTeamdata")); // callback
+        $autoform->setCollection(true);
+        $autoform->setPkey("benutzer_id"); // name of primary key
+        $autoform->setFormview("form_benutzer_person");
+        $autoform->setListView("list_benutzer_person");
 
-    // set states according to actions
-        $state = $this->get('tixi_formstatebuilder'); // start service
-        $state->setFormView('form_benutzer_person');
-        $state->setPkey($pkey);
-        $state->setCallback(array($this, "validateTeamdata"));
-        $state->makeCollectionObjectStates($route);
-
-    // rendering options
-        if ($session->get('mode') == $tixi["mode_select_list"])
-        {/*
-          * display a list of team members
-          */
-            $list = $this->get('tixi_listbuilder'); // start service
-            $list->setListView('list_benutzer_person');
-            $list->setPkey($pkey);
-            $list->makeList();
-            // render list
-            return $this->render('TixiHomeBundle:Default:list.html.twig',
-                           array('myheader' => $list->getHeader(),
-                                 'myrows' => $list->getRows() ));
-
-        } elseif ($session->get('mode') == $tixi["mode_edit_in_list"])
-        {/*
-          * display a form for the selected team member
-          */
-            return $this->render('TixiHomeBundle:Default:form.html.twig',
-                           array('myform' => $state->getFormMetaData() ));
-
-        } else
-        {// unexpected state encountered
-            $session->set('errormsg', "Unerwartete Zustand $session->get('mode') in Seite $route.");
-            return $this->render('TixiHomeBundle:Default:form.html.twig' );
-        }
+        /*  render form */
+        return $autoform->makeAutoForm($route);
     }
 }

@@ -24,7 +24,7 @@ class FormStateBuilder extends Controller
     protected $conn;        // database connection
 
     protected $callback;        // input: callback function for validating the data in $myform
-    protected $view;            // input (name of the MySQL view)
+    protected $formview;        // input (name of the MySQL view)
     protected $pkey;            // input (name of the primary key)
     protected $collection;      // true: collection of objects (many), false: one object
     protected $constraint = ""; // input: where foo = 'bar' (resolves to one record)
@@ -49,7 +49,7 @@ class FormStateBuilder extends Controller
       * the mysql database defines the data structure and constraints
       * please observe MySQL chapter 18.4.3 Updateable amd Insertable Views
       */
-        $this->view = $value;
+        $this->formview = $value;
         $this->session = new session;
         $this->conn = $this->get('database_connection');
     }
@@ -118,7 +118,7 @@ class FormStateBuilder extends Controller
         try {
             // make a database call to get the meta data
             $customer = $this->session->get('customer');
-            $sql = "show full columns from $customer.$this->view";
+            $sql = "show full columns from $customer.$this->formview";
             $this->myform = $this->conn->fetchAll( $sql );
 
             // upgrade the meta data with some derived fields
@@ -195,7 +195,7 @@ class FormStateBuilder extends Controller
 
         try {
             // make a database call to get the meta data
-            $sql = "select * from $customer.$this->view where $this->pkey=?";
+            $sql = "select * from $customer.$this->formview where $this->pkey=?";
             $stmt = $this->conn->prepare($sql);
             $stmt->bindValue( 1, "$cursor", Type::INTEGER);
             $stmt->execute();
@@ -221,7 +221,7 @@ class FormStateBuilder extends Controller
             foreach ($this->myform as $value) {
                 if ($value["Change"]) {
                     // make a database call to update one changed data column
-                    $sql = "UPDATE ".$customer.".".$this->view." SET ".$value["Field"]." = ? WHERE ".$this->pkey." = ?";
+                    $sql = "UPDATE ".$customer.".".$this->formview." SET ".$value["Field"]." = ? WHERE ".$this->pkey." = ?";
                     $count += $this->conn->executeUpdate($sql, array($value["Value"], $cursor));
                 }
             }
@@ -396,7 +396,7 @@ class FormStateBuilder extends Controller
       * return: id 1..10E11 (success) 0 and error message (failure)
       */
         $customer = $this->session->get('customer');
-        $sql = "select $this->pkey from $customer.$this->view limit 0, 2";
+        $sql = "select $this->pkey from $customer.$this->formview limit 0, 2";
         $mylist = array(); // initialize array
 
         try {
@@ -404,7 +404,7 @@ class FormStateBuilder extends Controller
             $connection = $this->container->get('database_connection');
             $mylist = $connection->fetchAll( $sql );
             if (count($mylist) == 0) {
-                $this->session->set("errormsg","Leere Tabelle ".$this->view." keine Werte zum anzeigen (Hinzufügen?).");
+                $this->session->set("errormsg","Leere Tabelle ".$this->formview." keine Werte zum anzeigen (Hinzufügen?).");
                 return 0;
             } else {
                 return $mylist[0][$this->pkey];
@@ -536,7 +536,7 @@ class FormStateBuilder extends Controller
       * return the records cursor (pkey) or zero if none found
       */
         $customer = $this->session->get('customer');
-        $sql = "select $this->pkey from $customer.$this->view";
+        $sql = "select $this->pkey from $customer.$this->formview";
         if ($this->constraint != "") {
             $sql .= " where $this->constraint";
         }
@@ -549,7 +549,7 @@ class FormStateBuilder extends Controller
             if ($cntr == 0)
             {/* record not found */
                 $this->session->set("errormsg",
-                    "Leere Tabelle ".$this->view." keine Werte zum anzeigen (Hinzufügen?).");
+                    "Leere Tabelle ".$this->formview." keine Werte zum anzeigen (Hinzufügen?).");
                 return 0;
             } elseif ($cntr == 1)
             {/* found exactly one record */

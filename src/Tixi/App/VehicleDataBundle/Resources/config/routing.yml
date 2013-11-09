@@ -1,0 +1,3 @@
+tixi_fahrzeug_daten_page:
+    pattern:  /app/fahrzeug/daten
+    defaults: { _controller: TixiAppVehicleDataBundle:Default:index }

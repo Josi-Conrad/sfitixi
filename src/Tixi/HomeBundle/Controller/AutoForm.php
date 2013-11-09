@@ -19,8 +19,9 @@ define("TIXI_LISTTWIGFILE",'TixiHomeBundle:Default:list.html.twig' );
 
 class AutoForm extends Controller
 {/*
-  * all in one package using the form and list builder services
+  * all in one package using both form and list builder services
   * forms are generated automatically using MySQL metadata and data
+  * the metadata is cached in the session, ready to be reused
   */
     protected $container;
     protected $session;
@@ -30,7 +31,8 @@ class AutoForm extends Controller
     protected $pkey;              // name of the primary key in both views
     protected $formview;          // the name of the MySQL view for the form
     protected $listview = "";     // the name of the MySQL view for the list
-    protected $constraint = "";   // restriction(s) for subqueries (sql expression: foo = 'bar')
+    protected $constraint = "";   // restriction(s) for subqueries
+                                  // empty or a sql expression: foo = 'bar'
     protected $formtwig = TIXI_FORMTWIGFILE; // renders form
     protected $listtwig = TIXI_LISTTWIGFILE; // renders list
 
@@ -61,12 +63,12 @@ class AutoForm extends Controller
     }
 
     public function setListview( $listview= "" )
-    {/* mandatory : the name of the MySQL view for the list */
+    {/* optional : the name of the MySQL view for the list */
         $this->listview = $listview;
     }
 
     public function setConstraint( $constraint="" )
-    {/* optional : empty or abc = def (sql expression: foo = 'bar') */
+    {/* optional : empty or abc = 'def' (sql expression: foo = 'bar') */
         $this->constraint = $constraint;
     }
 
@@ -81,7 +83,7 @@ class AutoForm extends Controller
     }
 
     private function checkAttributes()
-    {/* test that all mandatory attributes have been set properly
+    {/* test that all attributes have been set properly
       */
         if (isset($this->callback) and isset($this->formview) and isset($this->listview) and
             isset($this->pkey) and isset($this->collection) and isset ($this->constraint) and
@@ -97,33 +99,57 @@ class AutoForm extends Controller
     }
 
     public function makeAutoForm($route)
-    {/* select, build, render form and persiste data to MySQL */
+    {/* select, build, render form and persist data to MySQL database */
+
+        $tixi = $this->container->getParameter('tixi');
+
         if ($this->checkAttributes()==true)
-        {/* its safe to continue */
+        {/* it's safe to continue, initialize formstatebuilder service */
+            $state = $this->get('tixi_formstatebuilder'); // start service
+            $state->setFormView($this->formview);
+            $state->setPkey($this->pkey);
+            $state->setCallback($this->callback);
+            $state->setCollection($this->collection);
+            $state->setConstraint($this->constraint);
+
             if ($this->collection == true)
             {/* code for managing a collection of objects */
-                $this->session->set('errormsg',
-                    'Fehler in AutoForm, collection noch nicht ausprogrammiert.'); // todo
+
+                $state->makeCollectionObjectStates($route);
+
+                if ($this->session->get('mode') == $tixi["mode_select_list"])
+                {/* display a list of objects */
+                    $list = $this->get('tixi_listbuilder'); // start service
+                    $list->setListView($this->listview);
+                    $list->setPkey($this->pkey);
+                    $list->makeList();
+                    return $this->render($this->listtwig,
+                                         array('myheader' => $list->getHeader(),
+                                               'myrows' => $list->getRows() ));
+
+                } elseif ($this->session->get('mode') == $tixi["mode_edit_in_list"])
+                {/* display a form for the selected object */
+                    return $this->render($this->formtwig,
+                                         array('myform' => $state->getFormMetaData() ));
+
+                } else
+                {/* unexpected state encountered */
+                    $this->session->set('errormsg',
+                        "Unerwartete Zustand $this->session->get('mode') in Seite $route.");
+                    return $this->render($this->formtwig,
+                                         array('myform' => array()));
+                }
             }
             else
             {/* code for managing a single object */
-                // initialize formstatebuilder service
-                $state = $this->get('tixi_formstatebuilder'); // start service
-                $state->setFormView($this->formview);
-                $state->setPkey($this->pkey);
-                $state->setCallback($this->callback);
-                $state->setCollection($this->collection); // false
-                $state->setConstraint($this->constraint); // sql expression
-                $state->makeIndividualObjectStates($route); // redundant to collection?
-                // render form
+                $state->makeIndividualObjectStates($route);
                 return $this->render($this->formtwig,
-                    array('myform' => $state->getFormMetaData() ));
+                                     array('myform' => $state->getFormMetaData() ));
             }
         }
         else
         {/* render error page */
-            return $this->render($this->formtwig,
-                array('myform' => array() ));
+            return $this->render($this->formtwig, array('myform' => array()));
         }
     }
 }

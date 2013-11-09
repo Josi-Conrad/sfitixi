@@ -25,7 +25,7 @@ class ListBuilder extends Controller
    * feature: the number of rows displayed is limited to 30
    */
     protected $container;   // container
-    protected $view;        // input (name of the MySQL view)
+    protected $listview;    // input (name of the MySQL view)
     protected $pkey;        // input (name of the primary key, defines record)
     protected $session;     // input&output
     protected $list;        // output
@@ -39,7 +39,7 @@ class ListBuilder extends Controller
     {/*
       * view name, must match an existing MySQL view in the customer database
       */
-        $this->view = $value;
+        $this->listview = $value;
         // init other variables
         $this->list = array();
         $this->session = new session;
@@ -59,7 +59,7 @@ class ListBuilder extends Controller
       * return: array of headers (success) empty array and error message (failure)
       */
         $customer = $this->session->get('customer');
-        $sql = "select * from $customer.$this->view ";
+        $sql = "select * from $customer.$this->listview ";
         if ( $this->session->get('filter') != '' )
         {
             $filter = $this->session->get('filter'); // continues below
@@ -73,12 +73,12 @@ class ListBuilder extends Controller
 
             if (isset($filter))
             {/* get columns in view */
-                $temp = $connection->fetchAll("show columns from $customer.$this->view");
+                $temp = $connection->fetchAll("show columns from $customer.$this->listview");
                 foreach ($temp as $values) {
                     $viewcols[] = $values["Field"];
                 }
             /*  get tablenames that shall be filtered */
-                $tables = $connection->fetchAll("explain select * from $customer.$this->view");
+                $tables = $connection->fetchAll("explain select * from $customer.$this->listview");
                 foreach ($tables as $values)
                 {/* for each table in view */
                     $fulltext = $connection->fetchAll("show index from $customer.".$values["table"]);
@@ -98,7 +98,7 @@ class ListBuilder extends Controller
             $mylist = $connection->fetchAll( $sql );
             if (count($mylist) == 0) {
                 $this->session->set("errormsg",
-                    "Leere Tabelle ".$this->view." keine Werte zum anzeigen (Filter?).");
+                    "Leere Tabelle ".$this->listview." keine Werte zum anzeigen (Filter?).");
             }
             return $mylist; // header information
 
@@ -114,7 +114,7 @@ class ListBuilder extends Controller
       * return: id 1..10E11 (success) 0 and error message (failure)
       */
         $customer = $this->session->get('customer');
-        $sql = "select $this->pkey from $customer.$this->view limit 0, 2";
+        $sql = "select $this->pkey from $customer.$this->listview limit 0, 2";
         $mylist = array(); // initialize array
 
         try {
@@ -123,7 +123,7 @@ class ListBuilder extends Controller
             $mylist = $connection->fetchAll( $sql );
             if (count($mylist) == 0) {
                 $this->session->set("errormsg",
-                    "Leere Tabelle ".$this->view." keine Werte zum anzeigen (Hinzufügen?).");
+                    "Leere Tabelle ".$this->listview." keine Werte zum anzeigen (Hinzufügen?).");
                 return 0;
             } else {
                 return $mylist[0][$this->pkey];

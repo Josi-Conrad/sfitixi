@@ -15,7 +15,6 @@ parameters:
     mailer_password: null
     locale: en
     secret: ThisTokenIsNotSoSecretChangeIt
-    brine: 599d6905932b2e2fc9b5854393c36611
     tixi:
       application: iTixi
       version: 2.0.0
