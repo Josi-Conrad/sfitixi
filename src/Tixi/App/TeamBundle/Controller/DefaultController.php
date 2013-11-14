@@ -1,10 +1,11 @@
 <?php
 
-// src/Tixi/App/TeamBundle/Resources/views/Default/index.html.twig
-// 28.08.2013 martin jonasse initial file
-// 03.09.2013 martin jonasse renamed getTemplateParamenters to setTemplateParameters, added $mode
-// 30.09.2013 martin jonasse implemented first version of StateBuilder
-// 28.10.2013 martin jonasse finished unit tests, after some fixing and fine tuning
+/* src/Tixi/App/TeamBundle/Controller/Default/DefaultController.php
+ * 28.08.2013 martin jonasse initial file
+ * 03.09.2013 martin jonasse renamed getTemplateParamenters to setTemplateParameters, added $mode
+ * 30.09.2013 martin jonasse implemented first version of StateBuilder
+ * 28.10.2013 martin jonasse finished unit tests, after some fixing and fine tuning
+ */
 
 namespace Tixi\App\TeamBundle\Controller;
 
@@ -19,6 +20,26 @@ class DefaultController extends Controller
   * controller for the team page (manager only view)
   * see also: preferences page
   */
+    public function indexAction($name='')
+    {
+        /* initialize the context */
+        $route = 'tixi_unterhalt_teamdaten_page';
+        $housekeeper = $this->get('tixi_housekeeper');
+        $housekeeper->setTemplateParameters($route);
+
+        /*  start service */
+        $autoform = $this->get('tixi_autoform'); // service name
+        /* set attributes */
+        $autoform->setCallback(array($this, "validateTeamdata")); // callback
+        $autoform->setCollection(true);
+        $autoform->setPkey("benutzer_id"); // name of primary key
+        $autoform->setFormview("form_benutzer_person");
+        $autoform->setListView("list_benutzer_person");
+
+        /*  render form */
+        return $autoform->makeAutoForm($route);
+    }
+
     public function validateTeamdata($myform=array())
     {/*
       * callback function for validating the formdata for special conditions
@@ -67,25 +88,5 @@ class DefaultController extends Controller
             }
         }
         return $myform; // return the changed local copy of the myform array
-    }
-
-    public function indexAction($name='')
-    {
-        /* initialize the context */
-        $route = 'tixi_unterhalt_team_daten_page';
-        $housekeeper = $this->get('tixi_housekeeper');
-        $housekeeper->setTemplateParameters($route);
-
-        /*  start service */
-        $autoform = $this->get('tixi_autoform'); // service name
-        /* set attributes */
-        $autoform->setCallback(array($this, "validateTeamdata")); // callback
-        $autoform->setCollection(true);
-        $autoform->setPkey("benutzer_id"); // name of primary key
-        $autoform->setFormview("form_benutzer_person");
-        $autoform->setListView("list_benutzer_person");
-
-        /*  render form */
-        return $autoform->makeAutoForm($route);
     }
 }

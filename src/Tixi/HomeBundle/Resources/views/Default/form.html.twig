@@ -32,13 +32,26 @@
                     <i id="fpr_{{ record.Field }}_error" style="color:red">{{ record.Error }}</i><br />
 
                 {% elseif ((record.Rendered == 'textarea') and (record.Hidden == '0')) %}
+
+                {% if (record.Basetype == 'mediumtext') %}
                     <label for="fpw_{{ record.Field }}">{{ record.Field }}</label>
-                    <textarea name="{{ record.Field }}"
+                    <textarea style="width: 99.5%; height: auto"
+                              rows="40" cols="132"
+                              name="{{ record.Field }}"
                               id="fpw_{{ record.Field }}"
                               title="{{ record.Comment }}{% if record.Null == 'NO' %}(obligatorisch){% endif %}"
                               {% if record.Readonly %} disabled{% endif %}
                               >{{ record.Value }}</textarea>
                     <i id="fpr_{{ record.Field }}_error" style="color:red">{{ record.Error }}</i><br />
+                {% else %}
+                    <label for="fpw_{{ record.Field }}">{{ record.Field }}</label>
+                    <textarea name="{{ record.Field }}"
+                              id="fpw_{{ record.Field }}"
+                              title="{{ record.Comment }}{% if record.Null == 'NO' %}(obligatorisch){% endif %}"
+                            {% if record.Readonly %} disabled{% endif %}
+                            >{{ record.Value }}</textarea>
+                    <i id="fpr_{{ record.Field }}_error" style="color:red">{{ record.Error }}</i><br />
+                {% endif %}
 
                 {% elseif ((record.Rendered == 'text') and (record.Hidden == '0')) %}
                     <label for="fpw_{{ record.Field }}">{{ record.Field }}</label>
@@ -62,6 +75,18 @@
                            {% if record.Length != '0' %} maxlength={{ record.Length }}{% endif %}
                            {% if record.Null == 'NO' %} required{% endif %}
                            {% if record.Readonly %} disabled{% endif %} />
+                    <i id="fpr_{{ record.Field }}_error" style="color:red">{{ record.Error }}</i><br />
+
+                {% elseif ((record.Rendered == 'datetime') and (record.Hidden == '0')) %}
+                    <label for="fpw_{{ record.Field }}">{{ record.Field }}</label>
+                    <input name="{{ record.Field }}"
+                           id="fpw_{{ record.Field }}"
+                           type="datetime"
+                           value="{{ record.Value }}"
+                           title="{{ record.Comment }}{% if record.Null == 'NO' %}(obligatorisch){% endif %}"
+                            {% if record.Length != '0' %} maxlength={{ record.Length }}{% endif %}
+                           {% if record.Null == 'NO' %} required{% endif %}
+                            {% if record.Readonly %} disabled{% endif %} />
                     <i id="fpr_{{ record.Field }}_error" style="color:red">{{ record.Error }}</i><br />
 
                 {% elseif ((record.Rendered == 'number') and (record.Hidden == '0')) %}

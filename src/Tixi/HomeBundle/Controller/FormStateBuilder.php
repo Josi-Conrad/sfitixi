@@ -19,9 +19,9 @@ use Doctrine\DBAL\Types\Type;
 
 class FormStateBuilder extends Controller
 {
-    protected $container;   // container
-    protected $session;     // session
-    protected $conn;        // database connection
+    protected $container;       // container
+    protected $session;         // session
+    protected $conn;            // database connection
 
     protected $callback;        // input: callback function for validating the data in $myform
     protected $formview;        // input (name of the MySQL view)
@@ -29,7 +29,11 @@ class FormStateBuilder extends Controller
     protected $collection;      // true: collection of objects (many), false: one object
     protected $constraint = ""; // input: where foo = 'bar' (resolves to one record)
 
-    protected $myform;      // meta plus values for rendering and validating a form
+    protected $constraint_key;  // input: derived from $constraint
+    protected $constraint_id;   // input: derived from $constraint
+
+    protected $myform;          // meta plus values for rendering and validating a form
+    protected $mytabs;          // meta data of the tables used in the formview
 
     public function __construct (ContainerInterface $container)
     {
@@ -52,6 +56,7 @@ class FormStateBuilder extends Controller
         $this->formview = $value;
         $this->session = new session;
         $this->conn = $this->get('database_connection');
+        $this->mytabs = array();
     }
 
     public function setPkey($value)
@@ -68,11 +73,26 @@ class FormStateBuilder extends Controller
         $this->collection = $value;
     }
 
-    public function setConstraint($value = "")
+    public function setConstraint($value="")
     {/*
       * define the constraint for the $view (where foo = 'bar')
+      * use case 1: benutzername = martin@btb.ch
+      *             (one of many relationship)
+      * use case 2: fahrzeug_fk = 13
+      *             (one to many relationship)
       */
-        $this->constraint = $value;
+        if ($value != "") {
+            $this->constraint = $value;
+            $temp = explode("=", $value);
+            if (count($temp) == 2) {
+                $this->constraint_key = trim($temp[0]); // always a column name
+                $this->constraint_id = trim($temp[1]); // can be a text or a number
+            } else {
+                $this->constraint_key = null;
+                $this->constraint_id = null;
+                $this->session->set('errormsg', "Error in constraint (SQL expression?): $value.");
+            }
+        }
     }
 
     private function getLen($mysqltype)
@@ -100,6 +120,7 @@ class FormStateBuilder extends Controller
         } elseif ($sqltype == 'mediumtext') { $mapped = 'textarea';
         } elseif ($sqltype == 'text')       { $mapped = 'textarea';
         } elseif ($sqltype == 'date')       { $mapped = 'date';
+        } elseif ($sqltype == 'datetime')   { $mapped = 'datetime';
         } else {                              $mapped = 'undefined';
         }
         return $mapped;
@@ -164,26 +185,17 @@ class FormStateBuilder extends Controller
         return $this->myform;
     }
 
-    private function setSubject($arr)
-    {/* set the session subject/$route variable
-      * Syntax: CAPTION: name1 name2 ...
-      * where name1 and name2 are values from all columns containing "name"
-      * output: subject is what is displayed on screen
-      *         context is for future use with child objects
+    private function setSubject()
+    {/* set the session subject variable
+      * based upon the cached context/$route
       */
         $route = $this->session->get("route");
-        $caps = MenuTree::getCell($route, "CAPTION");
-        $subject = $caps.": ";
-        foreach ($arr as $key => $value){
-            if (strpos($key, "name")!==false){
-                $subject .= $value." ";
-            }
+        $subject = MenuTree::getCell($route, "CAPTION");
+        $parent = menutree::getCell($route, "PARENT");
+        if ($parent != "") {
+            $subject = $this->session->get("context/$parent")." - ".$subject;
         }
-        if (strlen($subject) > 80) {
-            $subject = substr($subject, 0, 77)."...";
-        }
-        $this->session->set("context/$route", $subject);
-        $this->session->set("subject", $subject);
+        $this->session->set('subject', $subject);
         return;
     }
 
@@ -194,14 +206,14 @@ class FormStateBuilder extends Controller
         $customer = $this->session->get('customer');
 
         try {
-            // make a database call to get the meta data
+            // make a database call to get the form data (one record)
             $sql = "select * from $customer.$this->formview where $this->pkey=?";
             $stmt = $this->conn->prepare($sql);
             $stmt->bindValue( 1, "$cursor", Type::INTEGER);
             $stmt->execute();
             // return an array with persistent data (query has only one record)
             $arr = $stmt->fetch();
-            $this->setSubject($arr);
+            $this->setSubject();
             return $arr;
 
         } catch (PDOException $e) {
@@ -327,19 +339,17 @@ class FormStateBuilder extends Controller
 
     private function insertFormData()
     {/*
-      * insert an empty view record into the database, where the view contains one or more linked tables.
+      * insert an empty view record into the database, where a view can contain one or more linked tables.
       * result: the id of the view or 0 (error)
       */
         $customer = $this->session->get('customer');
+        $id = 0;
 
         try
         {/* initialize 1: get tables used in the query */
-            foreach ($this->myform as $key => $values) {
-                if (strpos($values["Field"], "_id") !== false)
-                {/* this is the primary key (convention='tablename_id') */
-                    $temp = explode("_", $values["Field"])[0];
-                    $this->mytabs[$temp] = array();
-                }
+            $tabledef = $this->conn->fetchAll("explain select * from $customer.$this->formview");
+            foreach ($tabledef as $values) {
+                $this->mytabs[$values["table"]] = array();
             }
 
         /*  initialize 2: get field names and set default values */
@@ -349,40 +359,71 @@ class FormStateBuilder extends Controller
                 $tabledef = $this->conn->fetchAll( $sql );
                 foreach ($tabledef as $idx => $arr)
                 {/* set field => value pairs */
-                    $this->mytabs[$key][$arr["Field"]] = "NULL"; // instead of default
-                }
-            }
-
-        /*  loop: insert foreign keys and insert parent / child records */
-            while (count($this->mytabs) > 0) {
-                $temp = count($this->mytabs);
-                $acntr = 0; // counts the number of actions in each loop
-                reset($this->mytabs); // rewind pointer to beginning
-
-                foreach ($this->mytabs as $table => $valuepairs)
-                {/* for each table in the form view */
-                    $unresolved = 0;
-                    foreach ($valuepairs as $key => $value)
-                    {/* search each column for unresolved (NULL) foreign keys (convention = tablename_fk) */
-                        if ((strpos($key, "_fk") !== false) and ($value == "NULL")) {
-                            $unresolved +=1;
-                        }
-                    }
-                    if ($unresolved == 0)
-                    {/* child record: insert $valuepairs to database $customer, $table */
-                        $id = $this->insertEmptyRecord($customer, $table, $valuepairs);
-                        if ($id > 0) {
-                            $temp = $this->setForeignKey($table."_fk", $id, $this->mytabs);
-                            unset($this->mytabs[$table]);
-                            /* success, drop through or loop again */
+                    if ($this->constraint != "")
+                    {/* use case 1: one to many relationship */
+                        if ($arr["Field"]=$this->constraint_key) {
+                            $this->mytabs[$key][$arr["Field"]] = $this->constraint_id; // parent key
                         } else {
-                            $this->session->set("errormsg","Error(2) inserting record into database (record id=0).");
-                            return false;
+                            $this->mytabs[$key][$arr["Field"]] = "NULL"; // instead of default
                         }
+                    } else
+                    {/* normal: insert record */
+                        $this->mytabs[$key][$arr["Field"]] = "NULL"; // instead of default
                     }
                 }
             }
-            return $id; // success, the id is the views key (first parent id)
+        /*  insert one or more tables */
+            switch (count($this->mytabs)) {
+            case 0: /* nothing to insert */
+                $this->session->set("errormsg","Error(1) cannot insert record in database.");
+                return 0;
+            case 1: /* insert one table */
+                foreach ($this->mytabs as $table => $valuepairs) {
+                    if (strpos($this->pkey, "_fk") !== false)
+                    {/* key is a foreign key, 1:c relationship */
+                        $route = $this->session->get('route');
+                        $parent = menutree::getCell($route, "PARENT");
+                        $cursor = $this->session->get("cursor/$parent");
+                        $valuepairs[$this->pkey] = $cursor; // set key pointing to parent object
+                        $id = $this->insertEmptyRecord($customer, $table, $valuepairs);
+                        $this->session->set('errormsg', ""); // delete error message
+                        $id = $cursor; // set same as parent object (1:c)
+                    } else {
+                        $id = $this->insertEmptyRecord($customer, $table, $valuepairs);
+                    }
+                }
+                return $id;
+
+            default: /* insert more than one table */
+                while (count($this->mytabs) > 0) {
+                    $temp = count($this->mytabs);
+                    $acntr = 0; // counts the number of actions in each loop
+                    reset($this->mytabs); // rewind pointer to beginning
+                    foreach ($this->mytabs as $table => $valuepairs)
+                    {/* for each table in the form view */
+                        $unresolved = 0;
+                        foreach ($valuepairs as $key => $value)
+                        {/* search each column for unresolved (NULL) foreign keys (convention = tablename_fk) */
+                            if ((strpos($key, "_fk") !== false) and ($value == "NULL")) {
+                                $unresolved +=1;
+                            }
+                        }
+                        if ($unresolved == 0)
+                        {/* child record: insert $valuepairs to database $customer, $table */
+                            $id = $this->insertEmptyRecord($customer, $table, $valuepairs);
+                            if ($id > 0) {
+                                $temp = $this->setForeignKey($table."_fk", $id, $this->mytabs);
+                                unset($this->mytabs[$table]);
+                                /* success, drop through or loop again */
+                            } else {
+                                $this->session->set("errormsg","Error(2) inserting record into database (record id=0).");
+                                return 0;
+                            }
+                        }
+                    }
+                }
+                return $id; // success, the id is the views key (first parent id)
+            }
 
         } catch (PDOException $e) {
             $this->session->set("errormsg","Error(3) inserting record into database: ".$e);
@@ -433,6 +474,50 @@ class FormStateBuilder extends Controller
         return $raw;
     }
 
+    private function validDate($value)
+    {/* input jjjj-mm-dd
+      * validate the date (without using UNIX datetime)
+      * output: true is a valide date
+      *         false is invalid
+      */
+        $arr = explode("-", $value);
+        if (count($arr) == 3) {
+            if (ctype_digit($arr[0]) and ctype_digit($arr[1]) and ctype_digit($arr[2])) {
+                return checkdate($arr[1], $arr[2], $arr[0]);
+            }
+        }
+        return false;
+    }
+
+    private function validDateTime($value)
+    {/* input jjjj-mm-dd hh:mm:ss
+      * validate the datetime (without using UNIX datetime)
+      * output: true is a valide date
+      *         false is invalid
+      */
+        $arr = explode(" ", $value);
+        if (count($arr)==2) {
+            if ($this->validDate($arr[0])==true) {
+                $tim = explode(":", $arr[1]);
+                switch (count($tim)) {
+                case 1: // hh
+                    $dummy = (($tim[0] >= 0 && $tim[0] <= 23));
+                    break;
+                case 2: // hh:mm
+                    $dummy = (($tim[0] >= 0 && $tim[0] <= 23) and
+                              ($tim[1] >= 0 && $tim[1] <= 59));
+                    break;
+                case 3: // hh:mm:ss
+                    $dummy = (($tim[0] >= 0 && $tim[0] <= 23) and
+                              ($tim[1] >= 0 && $tim[1] <= 59) and
+                              ($tim[2] >= 0 && $tim[2] <= 59));
+                }
+                return $dummy;
+            }
+        }
+        return false;
+    }
+
     private function validate($value, $idx)
     {/*
       * Standard Validation for AutoForms, not to be confused callback validation
@@ -446,8 +531,8 @@ class FormStateBuilder extends Controller
             case 'int':
                 if (($this->myform[$idx]["Null"] == "NO") and ($value == "")) {
                     $err = "Validierungs Fehler: ein leeren Eintrag ist hier nicht erlaubt.";
-                } elseif (is_numeric($value) != true){
-                    $err = "Validierungs Fehler: dies ist kein Integerzahl.";
+                } elseif (($value != "") and (is_numeric($value) != true)) {
+                        $err = "Validierungs Fehler: dies ist kein Integerzahl.";
                 }
                 break;
 
@@ -460,21 +545,18 @@ class FormStateBuilder extends Controller
                 break;
 
             case 'date':
-                $dummy = 'stop';
                 if (($this->myform[$idx]["Null"] == "NO") and ($value == "")) {
                     $err = "Validierungs Fehler: ein leeren Eintrag ist hier nicht erlaubt.";
-                } else {
-                    $arr = explode("-", $value);
-                    if (count($arr) == 3) {
-                        $year = $arr[0];
-                        $month = $arr[1];
-                        $day = $arr[2];
-                        if (!checkdate($month, $day, $year)) {
-                            $err = "Validierungs Fehler, ungültige Datum (jjjj-mm-tt).";
-                        }
-                    } else {
-                        $err = "Validierungs Fehler, ungültiges Datumsformat (jjjj-mm-tt).";
-                    }
+                } elseif (($value != "") and ($this->validDate($value) == false)) {
+                    $err = "Validierungs Fehler, ungültiges Datum oder Format (jjjj-mm-tt).";
+                }
+                break;
+
+            case 'datetime':
+                if (($this->myform[$idx]["Null"] == "NO") and ($value == "")) {
+                    $err = "Validierungs Fehler: ein leeren Eintrag ist hier nicht erlaubt.";
+                } elseif (($value != "") and ($this->validDateTime($value) == false)) {
+                    $err = "Validierungs Fehler, ungültiges Datum/Zeit oder Format (jjjj-mm-tt hh:mm:ss).";
                 }
                 break;
 
@@ -568,13 +650,13 @@ class FormStateBuilder extends Controller
     }
 
     public function makeCollectionObjectStates($route)
-    { /*
-       * state machine for one list object (collection = true)
-       * inputs: session > mode and session > action and
-       *         session > cursor/$route (selected in list mode)
-       * outputs: session > mode and session > action
-       * database: new records, deleted records (modify is external)
-       */
+    {/*
+      * state machine for one list object (collection = true)
+      * inputs: session > mode and session > action and
+      *         session > cursor/$route (selected in list mode)
+      * outputs: session > mode and session > action
+      * database: new records, deleted records (modify is external)
+      */
 
     // initialize variables
         $tixi = $this->container->getParameter('tixi');
@@ -720,7 +802,7 @@ class FormStateBuilder extends Controller
         $tixi = $this->container->getParameter('tixi');
         $this->setMetaData($route);
 
-        /* state machine for an idividual object */
+        /* state machine for an individual object */
         $action = ($this->session->get('action'));
         if ($action=='') { $this->session->set('mode', $tixi['mode_read_record']); }
         if ($this->session->get('mode') == $tixi['mode_read_record'])
@@ -734,12 +816,13 @@ class FormStateBuilder extends Controller
                     if ($cursor > 0)
                     {/* set cursor to match the inserted object(s) */
                         $this->session->set("cursor/$route", $cursor);
-                        $this->session->set('tainted', "$route:$cursor");
+                        $this->session->set("context/$route", MenuTree::getCell($route, "CAPTION")."[$cursor]");
                         $this->copyFormData2Myform($cursor);
                     }
                 } else
                 {/* cursor found, get record from database */
                     $this->session->set("cursor/$route", $cursor);
+                    $this->session->set("context/$route", MenuTree::getCell($route, "CAPTION")."[$cursor]");
                     $this->copyFormData2Myform($cursor);
                 }
                 $this->copyReadonly2Myform();
@@ -809,26 +892,8 @@ class FormStateBuilder extends Controller
             {/* action code for canceling the changes made ------------------------- */
                 /* action code for canceling */
                 $cursor = $this->session->get("cursor/$route");
-                $tainted = $this->session->get('tainted');
-                if ($tainted != $tixi['undefined'])
-                {/* the inserted object has not been properly validated */
-                    $a = explode(":", $tainted);
-                    if (count($a)==2) {
-                        if ($a[0] == $route) {
-                            $this->deleteFormData($cursor); // delete the database record
-                            $this->session->remove("cursor/$route");
-                            $this->session->set('errormsg', "Objekt Nr. $a[1] gelöscht, nicht validiert.");
-                        } else {
-                            $this->session->set('errormsg', "Fehler in Seite $route, Objekt Nr.. $a[1] nicht validiert.");
-                        }
-                    }
-                    $this->session->set('tainted', $tixi['undefined']); // reset tainted
-                }
-                else
-                {/* the object was not inserted, redisplay object */
-                    $this->copyFormData2Myform($cursor);
-                    $this->copyReadonly2Myform();
-                }
+                $this->copyFormData2Myform($cursor);
+                $this->copyReadonly2Myform();
                 /* set new mode */
                 $this->session->set('mode', $tixi['mode_read_record']); // set new state
             }

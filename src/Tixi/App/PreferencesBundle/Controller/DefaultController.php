@@ -20,6 +20,29 @@ class DefaultController extends Controller
   *
   * see also: team data page
   */
+    public function indexAction($name='')
+    {/* initialize the context */
+        $route = 'tixi_preferences_page';
+        $housekeeper = $this->get('tixi_housekeeper');
+        $housekeeper->setTemplateParameters($route);
+
+        /*  get username */
+        $session = $this->container->get('session');
+        $username = $session->get('username');
+
+        /*  start service */
+        $autoform = $this->get('tixi_autoform'); // service name
+        /* set attributes */
+        $autoform->setFormview("form_benutzer_einstellungen"); // name of view
+        $autoform->setPkey("benutzer_id"); // name of primary key
+        $autoform->setCollection(false); // this is an individual object
+        $autoform->setCallback(array($this, "validatePreferences")); // callback
+        $autoform->setConstraint("benutzername = '".$username."'"); // sql expression
+
+        /*  render form */
+        return $autoform->makeAutoForm($route);
+    }
+
     public function validatePreferences($myform=array())
     {/*
       * callback function for validating the formdata for special conditions
@@ -58,28 +81,5 @@ class DefaultController extends Controller
             }
         }
         return $myform; // return the changed local copy of the myform array
-    }
-
-    public function indexAction($name='')
-    {/* initialize the context */
-        $route = 'tixi_preferences_page';
-        $housekeeper = $this->get('tixi_housekeeper');
-        $housekeeper->setTemplateParameters($route);
-
-    /*  get username */
-        $session = $this->container->get('session');
-        $username = $session->get('username');
-
-    /*  start service */
-        $autoform = $this->get('tixi_autoform'); // service name
-        /* set attributes */
-        $autoform->setFormview("form_benutzer_einstellungen"); // name of view
-        $autoform->setPkey("benutzer_id"); // name of primary key
-        $autoform->setCollection(false); // this is an individual object
-        $autoform->setCallback(array($this, "validatePreferences")); // callback
-        $autoform->setConstraint("benutzername = '".$username."'"); // sql expression
-
-    /*  render form */
-        return $autoform->makeAutoForm($route);
     }
 }

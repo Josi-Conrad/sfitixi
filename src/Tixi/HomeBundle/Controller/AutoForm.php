@@ -122,7 +122,8 @@ class AutoForm extends Controller
                     $list = $this->get('tixi_listbuilder'); // start service
                     $list->setListView($this->listview);
                     $list->setPkey($this->pkey);
-                    $list->makeList();
+                    $list->setConstraint($this->constraint);
+                    $list->makeList($route);
                     return $this->render($this->listtwig,
                                          array('myheader' => $list->getHeader(),
                                                'myrows' => $list->getRows() ));

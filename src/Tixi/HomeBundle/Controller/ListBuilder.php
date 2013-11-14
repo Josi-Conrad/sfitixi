@@ -24,11 +24,12 @@ class ListBuilder extends Controller
    * input: the view, all other inputs are stored in the session
    * feature: the number of rows displayed is limited to 30
    */
-    protected $container;   // container
-    protected $listview;    // input (name of the MySQL view)
-    protected $pkey;        // input (name of the primary key, defines record)
-    protected $session;     // input&output
-    protected $list;        // output
+    protected $container;      // container
+    protected $listview;       // input (name of the MySQL view)
+    protected $pkey;           // input (name of the primary key, defines record)
+    protected $constraint="";  // input (optional where clause)
+    protected $session;        // input&output
+    protected $list;           // output
 
     public function __construct (ContainerInterface $container)
     {
@@ -37,7 +38,7 @@ class ListBuilder extends Controller
 
     public function setListView($value)
     {/*
-      * view name, must match an existing MySQL view in the customer database
+      * MANDATORY: view name, must match an existing MySQL view in the customer database
       */
         $this->listview = $value;
         // init other variables
@@ -47,10 +48,16 @@ class ListBuilder extends Controller
 
     public function setPkey($value)
     {/*
-      * primary key name for the view
+      * MANDATORY: primary key name for the list view
       */
         $this->pkey = $value;
-        $this->list = array();
+    }
+
+    public function setConstraint($value="")
+    {/*
+      * OPTIONAL: constraint (SQL expression) for the view
+      */
+        $this->constraint = $value;
     }
 
     private function getTable()
@@ -60,9 +67,16 @@ class ListBuilder extends Controller
       */
         $customer = $this->session->get('customer');
         $sql = "select * from $customer.$this->listview ";
-        if ( $this->session->get('filter') != '' )
+        $constraint = $this->constraint;
+        $filter = $this->session->get('filter');
+        if (($constraint != "") or ($filter != ""))
         {
-            $filter = $this->session->get('filter'); // continues below
+            $sql .= "where "; // append where
+        }
+        if ($constraint != "")
+        {
+            $sql .= $this->constraint." "; // append constraint
+            if ($filter != "") { $sql .= "and "; }
         }
         $mylist = array(); // initialize array
 
@@ -71,7 +85,7 @@ class ListBuilder extends Controller
             $match = '';
             $connection = $this->container->get('database_connection');
 
-            if (isset($filter))
+            if ($filter != "")
             {/* get columns in view */
                 $temp = $connection->fetchAll("show columns from $customer.$this->listview");
                 foreach ($temp as $values) {
@@ -92,7 +106,7 @@ class ListBuilder extends Controller
                     }
                 }
                 $match = substr($match, 0, strlen($match)-2 );
-                $match = " where match ($match) against ('".$filter."' in boolean mode)";
+                $match = "match ($match) against ('".$filter."' in boolean mode)";
                 $sql .= $match;
             }
             $mylist = $connection->fetchAll( $sql );
@@ -114,7 +128,11 @@ class ListBuilder extends Controller
       * return: id 1..10E11 (success) 0 and error message (failure)
       */
         $customer = $this->session->get('customer');
-        $sql = "select $this->pkey from $customer.$this->listview limit 0, 2";
+        $constraint = "";
+        if ($this->constraint != "") {
+            $constraint = "where ".$this->constraint." ";
+        }
+        $sql = "select $this->pkey from $customer.$this->listview $constraint limit 0, 2";
         $mylist = array(); // initialize array
 
         try {
@@ -135,21 +153,100 @@ class ListBuilder extends Controller
         }
     }
 
-    public function makeList()
+    private function checkChildID ($route)
+    {/*
+      * check that the cursor selected for this route
+      * belongs to the current parent object: return true
+      * otherwise reset the cursor to the first id mylist
+      */
+        $cursor = $this->session->get("cursor/$route");
+        $customer = $this->session->get('customer');
+        $constraint = "";
+        if ($this->constraint != "") {
+            $constraint = "where ".$this->constraint." ";
+        }
+        $sql = "select $this->pkey from $customer.$this->listview $constraint";
+
+        try
+        {/* make a database call to get the meta data */
+            $connection = $this->container->get('database_connection');
+            $mylist = $connection->fetchAll( $sql );
+            if (count($mylist) == 0)
+            {/* empty list, no match for $cursor possible */
+                $this->session->set("errormsg",
+                    "Leere Tabelle ".$this->listview." keine Werte zum anzeigen (Hinzufügen?).");
+                return false;
+            } else
+            {/* test values in the array */
+                foreach ($mylist as $key => $values){
+                    if ($values[$this->pkey] == $cursor){
+                        return true; // cursor OK
+                    }
+                }
+                $this->session->set("cursor/$route", $mylist[0][$this->pkey]); // reset to first id in mylist
+                return true; // cursor reseted
+            }
+        }
+        catch (PDOException $e)
+        {
+            $this->session->set("errormsg","Cannot access database : ".$e);
+            return false; // failed
+        }
+    }
+
+    private function setSubject($route)
+    {/*
+      * set the session variable "subject" and "context",
+      * based on data in $this->list
+      */
+        $cursor = $this->session->get("cursor/$route");
+        $subject = MenuTree::getCell($route, "CAPTION").": ";
+        /* add names to subject */
+        foreach ($this->list as $key => $values) {
+            if ($cursor == $values[$this->pkey])
+            {/* forund the selected row */
+                foreach ($values as $col => $cell){
+                    if ((strpos($col, "name")!==false) or (strpos($col, "betreff")!==false)){
+                        $subject .= $cell." ";
+                    }
+                }
+                break;
+            }
+        }
+        /* if applicable, prefix subject with context info */
+        $parent = menutree::getCell($route, "PARENT");
+        if ($parent != "") {
+            $subject = $this->session->get("context/$parent")." - ".$subject;
+        }
+        /* restrict length */
+        if (strlen($subject) > 80) {
+            $subject = substr($subject, 0, 77)."...";
+        }
+        /* return (persist) data */
+        $this->session->set("subject", $subject);
+        $this->session->set("context/$route", $subject);
+    }
+
+    public function makeList($route)
     {/*
       * make a list (array) with data (headers, values) from the customer database
       * call this before rendering the list
       */
-        $route = $this->session->get('route');
-        if (!$this->session->has("cursor/$route"))
-        {/* no cursor defined yet, get default */
-            $this->session->set("cursor/$route", $this->getDefaultID());
+        if (menutree::getCell($route, "PARENT") == "")
+        {/* parent object */
+            if (!$this->session->has("cursor/$route"))
+            {/* get default */
+                $this->session->set("cursor/$route", $this->getDefaultID());
+            }
         }
-        /* set subject in the session */
-        $this->session->set("subject", MenuTree::getCell($route, "CAPTION")." (Liste)");
-        /* get list data (table) */
-        $this->list = $this->getTable();
-     }
+        else
+        {/* child object */
+            $this->checkChildID($route);
+        }
+
+        $this->list = $this->getTable(); /* get list data (table) */
+        $this->setSubject($route);       /* set subject in the session */
+    }
 
     public function getRows()
     {/*
