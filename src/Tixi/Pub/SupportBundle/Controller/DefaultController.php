@@ -2,7 +2,6 @@
 
 // src/Tixi/Pub/SupportBundle/Controller/DefaultController.php
 // 24.08.2013 martin jonasse initial file
-// 03.09.2013 martin jonasse renamed getTemplateParamenters to setTemplateParameters
 
 namespace Tixi\Pub\SupportBundle\Controller;
 

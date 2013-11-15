@@ -28,6 +28,7 @@ class AppKernel extends Kernel
             new Tixi\App\VehicleDataBundle\TixiAppVehicleDataBundle(),
             new Tixi\App\VehicleDetailsBundle\TixiAppVehicleDetailsBundle(),
             new Tixi\App\VehicleServiceplanBundle\TixiAppVehicleServiceplanBundle(),
+            new Tixi\App\MysqlDumpBundle\TixiAppMysqlDumpBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

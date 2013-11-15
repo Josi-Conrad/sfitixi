@@ -21,7 +21,7 @@
 }
 
 .ExcelTable2003 th {
-	background-color: #D4D0C8;
+	background-color: rgb(222, 222, 222); /*#D4D0C8*/
 	border: 1px solid #808080;
 	border-width: 0px 1px 1px 0px;
 	font-weight: normal;
@@ -30,7 +30,7 @@
 }
 
 .ExcelTable2003 th.heading {
-	background-color: #D4D0C8;
+    background-color: rgb(222, 222, 222); /*#D4D0C8*/
 	border: 1px solid #808080;
 	border-width: 0px 1px 1px 0px;
 	font-weight: normal;
@@ -54,7 +54,7 @@
 }
 
 .ExcelTable2003 td.heading {
-	background-color: #D4D0C8;
+    background-color: rgb(222, 222, 222); /*#D4D0C8*/
 	border: 1px solid #808080;
 	border-width: 0px 1px 1px 0px;
 	text-align: center;

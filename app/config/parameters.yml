@@ -1,6 +1,6 @@
 # This file is auto-generated during the composer install
 # 13.08.2013 martin jonasse changed database_name from symfony to itixi
-# 06.11.2013 martin jonasse added brine for simple encryption
+# 15.11.2013 martin jonasse added database_dump
 
 parameters:
     database_driver: pdo_mysql
@@ -9,6 +9,7 @@ parameters:
     database_name: itixi
     database_user: root
     database_password: null
+    database_dump: C:\myserver\binaries\mysql\bin\mysqldump.exe
     mailer_transport: smtp
     mailer_host: 127.0.0.1
     mailer_user: null
@@ -25,4 +26,5 @@ parameters:
       mode_edit_record: 2
       mode_select_list: 3
       mode_edit_in_list: 4
+      backup_path: C:\myprojects\backup\
 

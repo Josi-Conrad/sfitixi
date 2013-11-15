@@ -1,0 +1,3 @@
+tixi_unterhalt_datenbank_backup_page:
+    pattern:  /app/unterhalt/datenbank/backup
+    defaults: { _controller: TixiAppMysqlDumpBundle:Default:index }

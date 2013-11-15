@@ -1,3 +1,7 @@
+tixi_app_mysql_dump:
+    resource: "@TixiAppMysqlDumpBundle/Resources/config/routing.yml"
+    prefix:   /
+
 tixi_app_vehicle_serviceplan:
     resource: "@TixiAppVehicleServiceplanBundle/Resources/config/routing.yml"
     prefix:   /

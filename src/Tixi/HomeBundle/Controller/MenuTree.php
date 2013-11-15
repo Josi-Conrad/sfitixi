@@ -432,7 +432,7 @@ final class MenuTree
             'ORDER' => '43', 
             'LOCATION' => 'menu-bar', 
             'PARENT' => '', 
-            'ENABLED' => '0', 
+            'ENABLED' => '1', 
             'URL' => '/app/unterhalt/datenbank/backup', 
             'CAPTION' => 'Backup', 
             'BREADCRUMB' => 'Unterhalt - Datenbank - Backup', 
