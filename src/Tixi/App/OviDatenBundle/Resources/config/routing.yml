@@ -1,0 +1,3 @@
+tixi_ovi_page:
+    pattern:  /app/ovi
+    defaults: { _controller: TixiAppOviDatenBundle:Default:index }

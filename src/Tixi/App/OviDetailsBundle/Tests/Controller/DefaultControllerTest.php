@@ -1,6 +1,6 @@
 <?php
 
-namespace Tixi\App\VehicleDetailsBundle\Tests\Controller;
+namespace Tixi\App\OviDetailsBundle\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 

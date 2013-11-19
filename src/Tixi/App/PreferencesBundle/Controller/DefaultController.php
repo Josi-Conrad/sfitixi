@@ -66,13 +66,15 @@ class DefaultController extends Controller
             }
             elseif ($values["Field"] == "benutzer_geburtstag")
             {
-                $bday = date_create($values["Value"]);
-                $today = date_create(date("Y-m-d"));
-                if ($bday >= $today)
-                {
-                    $myform[$key]["Error"] = "Validierungsfehler: Geburtstag muss in der Vergangenheit liegen.";
+                if ($values["Value"] != "") {
+                    $bday = date_create($values["Value"]);
+                    $today = date_create(date("Y-m-d"));
+                    if ($bday >= $today) {
+                        $myform[$key]["Error"] = "Validierungsfehler: Geburtstag muss in der Vergangenheit liegen.";
+                    }
+                } else {
+                    $myform[$key]["Value"] = NULL;
                 }
-
             } elseif ($values["Field"] == "benutzername") {
                 if ($values["Change"] == true)
                 {

@@ -1,13 +1,17 @@
+tixi_app_ovi_details:
+    resource: "@TixiAppOviDetailsBundle/Resources/config/routing.yml"
+    prefix:   /
+
+tixi_app_ovi_daten:
+    resource: "@TixiAppOviDatenBundle/Resources/config/routing.yml"
+    prefix:   /
+
 tixi_app_mysql_dump:
     resource: "@TixiAppMysqlDumpBundle/Resources/config/routing.yml"
     prefix:   /
 
 tixi_app_vehicle_serviceplan:
     resource: "@TixiAppVehicleServiceplanBundle/Resources/config/routing.yml"
-    prefix:   /
-
-tixi_app_vehicle_details:
-    resource: "@TixiAppVehicleDetailsBundle/Resources/config/routing.yml"
     prefix:   /
 
 tixi_app_vehicle_data:

@@ -301,16 +301,22 @@ class FormStateBuilder extends Controller
 
     private function setForeignKey($fkey, $fkid, $myarray)
     {/*
-      * set the foreign key ($fkey) to $fval anywhere in $myarray (whole)
+      * set the foreign key ($fkey) to $fkid anywhere in $myarray
+      * the fully qualified foreign key must be unique in the database (mysql constraint)
+      * syntax:  source_destination_fk
+      * where:   source is the name of the table where the foreign key is stored
+      *          destination is the name of the table where the foreign key points to
+      * postfix: _fk
       * return: number of keys set or 0 (none)
       */
         $cntr = 0; // initial counter value
-        foreach ($myarray as $key => $value)
+        foreach ($myarray as $tab => $value)
         {/* loop over local copy */
-            if (array_key_exists($fkey, $value)) {
-                if ($value[$fkey] = "NULL")
+            $fqfk = $tab."_".$fkey; // fully qualified foreign key
+            if (array_key_exists($fqfk, $value)) {
+                if ($value[$fqfk] = "NULL")
                 {/* set record number */
-                    $this->mytabs[$key][$fkey] = $fkid;
+                    $this->mytabs[$tab][$fqfk] = $fkid;
                     $cntr += 1; // increment counter
                 }
             }
