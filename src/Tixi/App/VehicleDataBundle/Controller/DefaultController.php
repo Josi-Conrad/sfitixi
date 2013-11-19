@@ -30,7 +30,7 @@ class DefaultController extends Controller
         $autoform->setCollection(true);
         $autoform->setPkey("fahrzeug_id"); // name of primary key
         $autoform->setFormview("form_fahrzeug");
-        $autoform->setListView("form_fahrzeug");
+        $autoform->setListView("list_fahrzeug");
 
         /*  render form */
         return $autoform->makeAutoForm($route);
@@ -54,7 +54,7 @@ class DefaultController extends Controller
                     $myform[$key]["Error"] = "Validierungsfehler: Inverkehrsetzung muss in der Vergangenheit liegen.";
                 }
             }
-            elseif ($values["Field"] == "anzahl_sitz")
+            elseif ($values["Field"] == "anzahl_sitze")
             {
                 $i = $values["Value"];
                 $max = 8;
@@ -62,7 +62,7 @@ class DefaultController extends Controller
                     $myform[$key]["Error"] = "Validierungsfehler: Zahl im Bereich 1 bis $max erlaubt.";
                 }
             }
-            elseif ($values["Field"] == "anzahl_rollstuhl")
+            elseif ($values["Field"] == "anzahl_rollstuehle")
             {
                 $i = $values["Value"];
                 $max = 8;

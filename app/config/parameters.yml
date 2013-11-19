@@ -1,6 +1,6 @@
 # This file is auto-generated during the composer install
 # 13.08.2013 martin jonasse changed database_name from symfony to itixi
-# 15.11.2013 martin jonasse added database_dump
+# 15.11.2013 martin jonasse added tixi, added database_dump
 
 parameters:
     database_driver: pdo_mysql

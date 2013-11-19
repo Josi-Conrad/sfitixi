@@ -90,7 +90,7 @@ class FormStateBuilder extends Controller
             } else {
                 $this->constraint_key = null;
                 $this->constraint_id = null;
-                $this->session->set('errormsg', "Error in constraint (SQL expression?): $value.");
+                $this->session->set('errormsg', "Fehler in constraint (SQL expression?): $value.");
             }
         }
     }
@@ -410,6 +410,7 @@ class FormStateBuilder extends Controller
                         }
                         if ($unresolved == 0)
                         {/* child record: insert $valuepairs to database $customer, $table */
+                            $acntr += 1; // increment counter
                             $id = $this->insertEmptyRecord($customer, $table, $valuepairs);
                             if ($id > 0) {
                                 $temp = $this->setForeignKey($table."_fk", $id, $this->mytabs);
@@ -421,6 +422,10 @@ class FormStateBuilder extends Controller
                             }
                         }
                     }
+                if ($acntr == 0) {
+                    $this->session->set("errormsg","Error(4) Fehler in view, nicht alle Tabellen sind vorhanden!");
+                    return 0;
+                }
                 }
                 return $id; // success, the id is the views key (first parent id)
             }
@@ -445,7 +450,7 @@ class FormStateBuilder extends Controller
             $connection = $this->container->get('database_connection');
             $mylist = $connection->fetchAll( $sql );
             if (count($mylist) == 0) {
-                $this->session->set("errormsg","Leere Tabelle ".$this->formview." keine Werte zum anzeigen (Hinzufügen?).");
+                $this->session->set("errormsg","Leere Tabelle (2) ".$this->formview." keine Werte zum anzeigen (Hinzufügen?).");
                 return 0;
             } else {
                 return $mylist[0][$this->pkey];
@@ -631,7 +636,7 @@ class FormStateBuilder extends Controller
             if ($cntr == 0)
             {/* record not found */
                 $this->session->set("errormsg",
-                    "Leere Tabelle ".$this->formview." keine Werte zum anzeigen (Hinzufügen?).");
+                    "Leere Tabelle(1) ".$this->formview." keine Werte zum anzeigen (Hinzufügen?).");
                 return 0;
             } elseif ($cntr == 1)
             {/* found exactly one record */

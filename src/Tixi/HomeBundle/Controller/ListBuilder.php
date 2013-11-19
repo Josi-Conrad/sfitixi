@@ -10,6 +10,7 @@
 // 04.10.2013 martin jonasse upgrade code w. uppercase, cursors, filters, route
 // 04.11.2013 martin jonasse upgrade cursor to structured namespace
 // 96.11.2013 martin jonasse added $this->session
+// 19.11.2013 martin jonasse rolled back filter methode, MATCH ... AGAINST is instable
 
 namespace Tixi\HomeBundle\Controller;
 
@@ -82,37 +83,29 @@ class ListBuilder extends Controller
 
         try
         {/* initialize variables */
-            $match = '';
             $connection = $this->container->get('database_connection');
 
             if ($filter != "")
-            {/* get columns in view */
-                $temp = $connection->fetchAll("show columns from $customer.$this->listview");
-                foreach ($temp as $values) {
-                    $viewcols[] = $values["Field"];
-                }
-            /*  get tablenames that shall be filtered */
-                $tables = $connection->fetchAll("explain select * from $customer.$this->listview");
-                foreach ($tables as $values)
-                {/* for each table in view */
-                    $fulltext = $connection->fetchAll("show index from $customer.".$values["table"]);
-                    foreach ($fulltext as $indices)
-                    {/* get fulltext index fields */
-                        if ($indices["Index_type"] == "FULLTEXT") {
-                            if (in_array($indices["Column_name"], $viewcols)) {
-                                $match .= $indices["Column_name"].", ";
-                            }
+            {/* get fields that shall be filtered */
+                $match ="";
+                $textfields = $connection->fetchAll(
+                    "show fields from $customer.$this->listview where type like 'varchar%' or type like 'text%'");
+                if (count($textfields) >0) { // indeed there are fields to be filtered
+                    foreach($textfields as $key => $value) {
+                        if ($key == 0) {
+                            $match .= "(".$value["Field"]." like '%".$filter."%' ";
+                        } else {
+                            $match .= "or ".$value["Field"]." like '%".$filter."%' ";
                         }
                     }
+                    $match .= ")";
                 }
-                $match = substr($match, 0, strlen($match)-2 );
-                $match = "match ($match) against ('".$filter."' in boolean mode)";
                 $sql .= $match;
             }
             $mylist = $connection->fetchAll( $sql );
-            if (count($mylist) == 0) {
+            if ((count($mylist) == 0) and ($this->session->get("errormsg") == "")) {
                 $this->session->set("errormsg",
-                    "Leere Tabelle ".$this->listview." keine Werte zum anzeigen (Filter?).");
+                    "Leere Tabelle (3) ".$this->listview." keine Werte zum anzeigen (Filter?).");
             }
             return $mylist; // header information
 
@@ -141,7 +134,7 @@ class ListBuilder extends Controller
             $mylist = $connection->fetchAll( $sql );
             if (count($mylist) == 0) {
                 $this->session->set("errormsg",
-                    "Leere Tabelle ".$this->listview." keine Werte zum anzeigen (Hinzufügen?).");
+                    "Leere Tabelle (4) ".$this->listview." keine Werte zum anzeigen (Hinzufügen?).");
                 return 0;
             } else {
                 return $mylist[0][$this->pkey];
@@ -174,7 +167,7 @@ class ListBuilder extends Controller
             if (count($mylist) == 0)
             {/* empty list, no match for $cursor possible */
                 $this->session->set("errormsg",
-                    "Leere Tabelle ".$this->listview." keine Werte zum anzeigen (Hinzufügen?).");
+                    "Leere Tabelle (5) ".$this->listview." keine Werte zum anzeigen (Hinzufügen?).");
                 return false;
             } else
             {/* test values in the array */

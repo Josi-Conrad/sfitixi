@@ -33,7 +33,7 @@ class DefaultController extends Controller
         /*  start service */
         $autoform = $this->get('tixi_autoform'); // service name
         /* set attributes */
-        $autoform->setFormview("form_benutzer_einstellungen"); // name of view
+        $autoform->setFormview("form_benutzer"); // name of view
         $autoform->setPkey("benutzer_id"); // name of primary key
         $autoform->setCollection(false); // this is an individual object
         $autoform->setCallback(array($this, "validatePreferences")); // callback
@@ -64,7 +64,7 @@ class DefaultController extends Controller
                     $myform[$key]["Value"] = hash("sha256", $values["Value"].getenv("APACHE_SALT")); // 64 characters
                 }
             }
-            elseif ($values["Field"] == "geburtstag")
+            elseif ($values["Field"] == "benutzer_geburtstag")
             {
                 $bday = date_create($values["Value"]);
                 $today = date_create(date("Y-m-d"));

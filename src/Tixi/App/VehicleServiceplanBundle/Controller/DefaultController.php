@@ -41,7 +41,7 @@ class DefaultController extends Controller
         $autoform->setPkey("serviceplan_id"); // name of primary key
         $autoform->setFormview("form_serviceplan");
         $autoform->setListView("list_serviceplan");
-        $autoform->setConstraint("fahrzeug_fk = $parentid");
+        $autoform->setConstraint("serviceplan_fahrzeug_fk = $parentid");
 
         /*  render form */
         return $autoform->makeAutoForm($route);
@@ -55,6 +55,43 @@ class DefaultController extends Controller
       *
       * return: the modified myform array: Value and or Error or ...
       */
+
+        $sbegin = null;
+        $send = null;
+        foreach ($myform as $key => $values) {
+            if (($values["Field"] == "service_kosten") and ($values["Value"] != ""))
+            {
+                if (!is_numeric($values["Value"]))
+                {
+                    $myform[$key]["Error"] = "Validierungsfehler: Kosten sind leer oder ein Zahl.";
+                }
+                elseif ($values["Value"] < 0)
+                {
+                    $myform[$key]["Error"] = "Validierungsfehler: negative Kosten sind nicht erlaubt.";
+                }
+            }
+
+            if ($values["Field"] == "service_anfang")
+            {
+                $sbegin = date_create($values["Value"]);
+                if ($values["Value"]=="") {
+                    $myform[$key]["Value"] = NULL; // otherwise it's stored as 0000-00-00 00:00:00
+                }
+            }
+
+            if ($values["Field"] == "service_ende")
+            {
+                $send = date_create($values["Value"]);
+                if ($sbegin > $send) {
+                    $myform[$key]["Error"] = "Validierungsfehler: Service Ende muss nach Service Anfang liegen.";
+                }
+                elseif ($values["Value"]==""){
+                    $myform[$key]["Value"] = NULL; // otherwise it's stored as 0000-00-00 00:00:00
+                }
+            }
+
+        }
+
         return $myform; // return the changed local copy of the myform array
     }
 }

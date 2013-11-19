@@ -33,8 +33,8 @@ class DefaultController extends Controller
         $autoform->setCallback(array($this, "validateTeamdata")); // callback
         $autoform->setCollection(true);
         $autoform->setPkey("benutzer_id"); // name of primary key
-        $autoform->setFormview("form_benutzer_person");
-        $autoform->setListView("list_benutzer_person");
+        $autoform->setFormview("form_team");
+        $autoform->setListView("list_team");
 
         /*  render form */
         return $autoform->makeAutoForm($route);
@@ -60,7 +60,7 @@ class DefaultController extends Controller
                     $myform[$key]["Value"] = hash("sha256", $values["Value"].getenv("APACHE_SALT")); // 64 characters
                 }
             }
-            elseif ($values["Field"] == "geburtstag")
+            elseif ($values["Field"] == "benutzer_geburtstag")
             {
                 $bday = date_create($values["Value"]);
                 $today = date_create(date("Y-m-d"));
