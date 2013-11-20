@@ -1,3 +1,15 @@
+tixi_app_driver_vacation:
+    resource: "@TixiAppDriverVacationBundle/Resources/config/routing.yml"
+    prefix:   /
+
+tixi_app_driver_details:
+    resource: "@TixiAppDriverDetailsBundle/Resources/config/routing.yml"
+    prefix:   /
+
+tixi_app_driver_data:
+    resource: "@TixiAppDriverDataBundle/Resources/config/routing.yml"
+    prefix:   /
+
 tixi_app_ovi_details:
     resource: "@TixiAppOviDetailsBundle/Resources/config/routing.yml"
     prefix:   /

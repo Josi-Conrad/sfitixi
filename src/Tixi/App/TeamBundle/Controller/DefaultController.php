@@ -74,20 +74,8 @@ class DefaultController extends Controller
             }
             elseif ($values["Field"] == "benutzername")
             {
-                $barr = explode("@", $values["Value"]);
-                if (count($barr) != 2) {
-                    $myform[$key]["Error"] = "Validierungsfehler: kein Email Format (benutzer@firma.ch).";
-                } else {
-                    $firma = explode(".", $barr[1]);
-                    if (count($firma) != 2) {
-                        $myform[$key]["Error"] = "Validierungsfehler: kein Email Format (benutzer@firma.ch).";
-                    } else {
-                        $session = new Session;
-                        $customer = $session->get('customer');
-                        if ($customer != $firma[0]) {
-                            $myform[$key]["Error"] = "Validierungsfehler: falsche Firmaname ($customer erwartet).";
-                        }
-                    }
+                if (filter_var($values["Value"], FILTER_VALIDATE_EMAIL) == false) {
+                    $myform[$key]["Error"] = "Validierungsfehler: Benutzername ungültig (Format: name@firma.ch).";
                 }
             }
         }

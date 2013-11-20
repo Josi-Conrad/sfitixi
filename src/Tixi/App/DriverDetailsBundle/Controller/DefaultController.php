@@ -1,6 +1,6 @@
 <?php
 
-namespace Tixi\App\OviDetailsBundle\Controller;
+namespace Tixi\App\DriverDetailsBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -13,10 +13,10 @@ class DefaultController extends Controller
 {
     public function indexAction($name='')
     {/*
-      * controller for confidential details for points of interest
+      * controller for confidential details for drivers
       */
         /* initialize the context */
-        $route = 'tixi_ovi_details_page';
+        $route = 'tixi_fahrer_details_page';
         $housekeeper = $this->get('tixi_housekeeper');
         $housekeeper->setTemplateParameters($route);
 
@@ -26,23 +26,23 @@ class DefaultController extends Controller
         $parent_id = $session->get("cursor/$parent");
         if ($parent_id == null)
         {/* no parent active in this session, redirect to parent page */
-            return $this->redirect($this->generateUrl('tixi_ovi_page'));
+            return $this->redirect($this->generateUrl('tixi_fahrer_page'));
         }
 
         /*  start service */
         $autoform = $this->get('tixi_autoform'); // service name
         /* set attributes */
-        $autoform->setCallback(array($this, "validateOvidetails")); // callback
+        $autoform->setCallback(array($this, "validateFahrerDetails")); // callback
         $autoform->setCollection(false);
-        $autoform->setPkey("ovi_details_ovi_fk"); // name of primary key
-        $autoform->setFormview("form_ovi_details");
-        $autoform->setConstraint("ovi_details_ovi_fk = $parent_id");
+        $autoform->setPkey("fahrer_details_fahrer_fk"); // name of primary key
+        $autoform->setFormview("form_fahrer_details");
+        $autoform->setConstraint("fahrer_details_fahrer_fk = $parent_id");
 
         /*  render form */
         return $autoform->makeAutoForm($route);
     }
 
-    public function validateOvidetails($myform=array())
+    public function validateFahrerDetails($myform=array())
     {/*
       * callback function for validating the formdata for special conditions
       * please note: passing $myform as a reference is not possible

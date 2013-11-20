@@ -97,10 +97,10 @@
                                    value="{{ app.session.get('filter') }}"
                                    placeholder="{{ tixi.filter }}"
                                    onblur="location.href='{{ path( app.request.attributes.get('_route'), {'action':'filter', 'filter': '' } ) }}'
-                                           +document.getElementById('fpw_filter').value; overlay();" />
+                                           +document.getElementById('fpw_filter').value; progressbar();" />
                             <input id="fpm_filter" class="taskbar-left-filter-button" type="button" value="Filtern"
                                    onclick="location.href='{{ path( app.request.attributes.get('_route'), {'action':'filter', 'filter': '' } ) }}'
-                                           +document.getElementById('fpw_filter').value; overlay();"/>
+                                           +document.getElementById('fpw_filter').value; progressbar();"/>
                         </form>
                     {% endif %}
                 </div>
@@ -140,7 +140,7 @@
 
     <!--Errormessage: rendered last, displayed as a pop-up -->
     {% block errormsg %}
-        <div id="overlay">
+        <div id="progressbar">
             <div>
                 <p>Bitte warten...</p>
                 <img  src="{{ asset('images/pleasewait.gif') }}" alt="Bitte warten ..." />
@@ -154,8 +154,8 @@
     <!--Javascripts: with lists and forms -->
     {% block javascripts %}
         <script>
-            function overlay() {
-                el = document.getElementById("overlay");
+            function progressbar() {
+                el = document.getElementById("progressbar");
                 el.style.visibility = (el.style.visibility == "visible") ? "hidden" : "visible";
             }
         </script>

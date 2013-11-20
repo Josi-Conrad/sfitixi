@@ -1,0 +1,3 @@
+tixi_fahrer_page:
+    pattern:  /app/fahrer
+    defaults: { _controller: TixiAppDriverDataBundle:Default:index }

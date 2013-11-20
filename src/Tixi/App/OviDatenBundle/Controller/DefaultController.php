@@ -12,7 +12,7 @@ class DefaultController extends Controller
 {
     public function indexAction($name='')
     {/*
-      * controller for the team page (manager only view)
+      * controller for the points of interest page
       */
         /* initialize the context */
         $route = 'tixi_ovi_page';

@@ -30,6 +30,9 @@ class AppKernel extends Kernel
             new Tixi\App\MysqlDumpBundle\TixiAppMysqlDumpBundle(),
             new Tixi\App\OviDatenBundle\TixiAppOviDatenBundle(),
             new Tixi\App\OviDetailsBundle\TixiAppOviDetailsBundle(),
+            new Tixi\App\DriverDataBundle\TixiAppDriverDataBundle(),
+            new Tixi\App\DriverDetailsBundle\TixiAppDriverDetailsBundle(),
+            new Tixi\App\DriverVacationBundle\TixiAppDriverVacationBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
