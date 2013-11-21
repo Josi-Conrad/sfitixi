@@ -1,7 +1,7 @@
 /* table_style.css
  * credits: Yoav Ezer, How to Get a Microsoft Excel Look With HTML/CSS Tables
  * martin jonasse 02.10.2013 version 1
- * martin jonasse 25.10.2013 added progressbar class and ".ExcelTable2003 td a"
+ * martin jonasse 25.10.2013 added overlay class and ".ExcelTable2003 td a"
  *
  * usage: <table class="ExcelTable2003" summary="explained">
  *          <td class="heading">
@@ -110,7 +110,7 @@ p.control-standard span {
  * Modal Dialog
  * martin jonasse 25.10.2013
  */
-#progressbar {
+#overlay {
     visibility: hidden;
     position: absolute;
     left: 0px;
@@ -122,7 +122,7 @@ p.control-standard span {
     background-image: url(../images/background.png);
 }
 
-#progressbar div {
+#overlay div {
     width:300px;
     margin: 100px auto;
     background-color: #fff;

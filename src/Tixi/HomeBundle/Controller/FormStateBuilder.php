@@ -576,9 +576,10 @@ class FormStateBuilder extends Controller
             case 'mediumtext':
                 if (($this->myform[$idx]["Null"] == "NO") and ($value == "")) {
                     $err = "Validierungs Fehler: ein leeren Eintrag ist hier nicht erlaubt.";
-                } elseif ($this->myform[$idx]["Length"] > 0) {
-                    if (strlen($value) > $this->myform[$idx]["Length"]) {
-                        $err = "Validierungs Fehler: Feldinhalt ist länger als erlaubt($this->myform[$idx]['Length']).";
+                } else {
+                    $len =  $this->myform[$idx]["Length"];
+                    if (($len > 0) and (strlen($value) > $len)) {
+                        $err = "Validierungs Fehler: Feldinhalt ist länger als erlaubt($len).";
                     }
                 }
                 break;

@@ -63,6 +63,9 @@
                            {% if record.Length != '0' %} maxlength={{ record.Length }}{% endif %}
                            {% if record.Null == 'NO' %} required{% endif %}
                            {% if record.Readonly %} disabled{% endif %} />
+                    {% if (record.Field == "geocode") %}
+                    <input type="button" value="googlen" style="width: auto" onclick="codeAddress()">
+                    {% endif %}
                     <i id="fpr_{{ record.Field }}_error" style="color:red">{{ record.Error }}</i><br />
 
                 {% elseif ((record.Rendered == 'date') and (record.Hidden == '0')) %}
@@ -113,7 +116,13 @@
 
                 {% endif %}
             </p>
+
+            {% if (record.Field == "geocode") %}
+                <div id="map-canvas" style="width: 600px; height: 400px"></div>
+            {% endif %}
+
         {% endfor %}
     </form>
 </div>
 {% endblock %}
+
