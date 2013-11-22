@@ -19,7 +19,9 @@
                 {% if loop.first %}
                     <th class="heading">{{ mycell }}</th>
                 {% else %}
-                    <th>{{ mycell }}</th>
+                    {% if mycell|slice(-3)!="_FK" %}
+                        <th>{{ mycell }}</th>
+                    {% endif %}
                 {% endif %}
             {% endfor %}
         </tr>
@@ -27,7 +29,7 @@
         <tbody>
         {% for myrow in myrows %}
             <tr>
-                {% for mycell in myrow %}
+                {% for mykey, mycell in myrow %}
                     {% if loop.first %}
                         {% if currentid == mycell %}
                             <td class="selected">
@@ -40,7 +42,9 @@
                             <a>
                         </td>
                     {% else %}
-                        <td>{{ mycell }}</td>
+                        {% if mykey|slice(-3)!="_fk" %}
+                            <td>{{ mycell }}</td>
+                        {% endif %}
                     {% endif %}
                 {% endfor %}
             </tr>
