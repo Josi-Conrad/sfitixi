@@ -1,3 +1,23 @@
+tixi_app_holiday:
+    resource: "@TixiAppHolidayBundle/Resources/config/routing.yml"
+    prefix:   /
+
+tixi_app_zoneplan:
+    resource: "@TixiAppZoneplanBundle/Resources/config/routing.yml"
+    prefix:   /
+
+tixi_app_passenger_absence:
+    resource: "@TixiAppPassengerAbsenceBundle/Resources/config/routing.yml"
+    prefix:   /
+
+tixi_app_passenger_details:
+    resource: "@TixiAppPassengerDetailsBundle/Resources/config/routing.yml"
+    prefix:   /
+
+tixi_app_passenger_data:
+    resource: "@TixiAppPassengerDataBundle/Resources/config/routing.yml"
+    prefix:   /
+
 tixi_app_driver_vacation:
     resource: "@TixiAppDriverVacationBundle/Resources/config/routing.yml"
     prefix:   /

@@ -1,0 +1,7 @@
+parameters:
+#    tixi_app_passenger_absence.example.class: Tixi\App\PassengerAbsenceBundle\Example
+
+services:
+#    tixi_app_passenger_absence.example:
+#        class: %tixi_app_passenger_absence.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

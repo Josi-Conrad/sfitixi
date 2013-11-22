@@ -1,0 +1,7 @@
+parameters:
+#    tixi_app_passenger_details.example.class: Tixi\App\PassengerDetailsBundle\Example
+
+services:
+#    tixi_app_passenger_details.example:
+#        class: %tixi_app_passenger_details.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

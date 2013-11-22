@@ -1,0 +1,3 @@
+tixi_unterhalt_feiertage_page:
+    pattern:  /app/unterhalt/feiertage
+    defaults: { _controller: TixiAppHolidayBundle:Default:index }

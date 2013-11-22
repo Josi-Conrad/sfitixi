@@ -33,6 +33,11 @@ class AppKernel extends Kernel
             new Tixi\App\DriverDataBundle\TixiAppDriverDataBundle(),
             new Tixi\App\DriverDetailsBundle\TixiAppDriverDetailsBundle(),
             new Tixi\App\DriverVacationBundle\TixiAppDriverVacationBundle(),
+            new Tixi\App\PassengerDataBundle\TixiAppPassengerDataBundle(),
+            new Tixi\App\PassengerDetailsBundle\TixiAppPassengerDetailsBundle(),
+            new Tixi\App\PassengerAbsenceBundle\TixiAppPassengerAbsenceBundle(),
+            new Tixi\App\ZoneplanBundle\TixiAppZoneplanBundle(),
+            new Tixi\App\HolidayBundle\TixiAppHolidayBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
