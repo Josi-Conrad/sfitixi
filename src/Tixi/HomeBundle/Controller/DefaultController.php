@@ -21,7 +21,7 @@ class DefaultController extends Controller
 
      // set subject
         $session = $this->container->get('session');
-        $session->set('subject', 'Homepage der iTixi Applikation');
+        $session->set('subject', 'Startseite der iTixi Applikation');
 
      // render /home/ page
         return $this->render( 'TixiHomeBundle:Default:index.html.twig' );

@@ -4,6 +4,7 @@
 {# 02.09.2013 martin jonasse modified all variables to be read from session #}
 {# 21.09.2013 martin jonasse changed error line to alert message #}
 {# 25.10.2013 martin jonasse added modal dialog (overlay) #}
+{# 26.11.2013 martin jonasse fixed ticket#3 added breadcrumb ID #}
 
 {% extends '::base.html.twig' %}
 
@@ -40,7 +41,7 @@
                         </div>
                     </div>
                     <div class="frame-left">
-                        <div>{{ app.session.get('breadcrumb') }}</div>
+                        <div id="fpr_breadcrumb">{{ app.session.get('breadcrumb') }}</div>
                     </div>
                     <div class="frame-right">
                         {%  if app.session.get('username') == tixi.undefined %}
