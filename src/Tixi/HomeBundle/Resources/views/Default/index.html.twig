@@ -5,6 +5,7 @@
 {# 21.09.2013 martin jonasse changed error line to alert message #}
 {# 25.10.2013 martin jonasse added modal dialog (overlay) #}
 {# 26.11.2013 martin jonasse fixed ticket#3 added breadcrumb ID #}
+{# 27.11.2013 martin jonasse fixed ticket#5 replaced alert #}
 
 {% extends '::base.html.twig' %}
 
@@ -147,8 +148,20 @@
                 <img  src="{{ asset('images/pleasewait.gif') }}" alt="Bitte warten ..." />
             </div>
         </div>
+
+        <div id="errbox">
+            <div>
+                <p>{{ app.session.get('errormsg') }}</p>
+                <input id="fpm_acknowledge" type="button" value="Bestätigen" onclick="errbox();"/>
+            </div>
+        </div>
+
         {% if app.session.get('errormsg') != '' %}
-            <script>alert("{{ app.session.get('errormsg') }}")</script>
+            <script>
+                /* old code: alert("{{ app.session.get('errormsg') }}") */
+                elx = document.getElementById("errbox");
+                elx.style.visibility = (elx.style.visibility == "visible") ? "hidden" : "visible";
+            </script>
         {% endif %}
     {% endblock %}
 
@@ -158,6 +171,11 @@
             function overlay() {
                 el = document.getElementById("overlay");
                 el.style.visibility = (el.style.visibility == "visible") ? "hidden" : "visible";
+            }
+
+            function errbox() {
+                elx = document.getElementById("errbox");
+                elx.style.visibility = (elx.style.visibility == "visible") ? "hidden" : "visible";
             }
         </script>
     {% endblock %}
