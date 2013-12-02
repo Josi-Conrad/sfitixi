@@ -8,6 +8,7 @@
 // 23.10.2013 martin jonasse finished basic form functions add, modify, save, delete, and quit
 // 28.10.2013 martin jonasse fixed some features
 // 04.11.2013 martin jonasse upgrade cursor to structured namespace, split off $mydata from $myform
+// 02.12.2013 martin jonasse added time format
 
 namespace Tixi\HomeBundle\Controller;
 
@@ -121,6 +122,7 @@ class FormStateBuilder extends Controller
         } elseif ($sqltype == 'text')       { $mapped = 'textarea';
         } elseif ($sqltype == 'date')       { $mapped = 'date';
         } elseif ($sqltype == 'datetime')   { $mapped = 'datetime';
+        } elseif ($sqltype == 'time')       { $mapped = 'time';
         } else {                              $mapped = 'undefined';
         }
         return $mapped;
@@ -500,31 +502,39 @@ class FormStateBuilder extends Controller
         return false;
     }
 
+    private function validTime($value)
+    {/* input hh:mm:ss
+      * validate the time format
+      */
+        $valid = false;
+        $tim = explode(":", $value);
+        switch (count($tim))
+        {
+            case 1: // hh
+                $valid = (($tim[0] >= 0 && $tim[0] <= 23));
+                break;
+            case 2: // hh:mm
+                $valid = (($tim[0] >= 0 && $tim[0] <= 23) and
+                    ($tim[1] >= 0 && $tim[1] <= 59));
+                break;
+            case 3: // hh:mm:ss
+                $valid = (($tim[0] >= 0 && $tim[0] <= 23) and
+                    ($tim[1] >= 0 && $tim[1] <= 59) and
+                    ($tim[2] >= 0 && $tim[2] <= 59));
+        }
+        return $valid;
+    }
+
     private function validDateTime($value)
     {/* input jjjj-mm-dd hh:mm:ss
       * validate the datetime (without using UNIX datetime)
-      * output: true is a valide date
+      * output: true is a valide date time
       *         false is invalid
       */
         $arr = explode(" ", $value);
-        if (count($arr)==2) {
-            if ($this->validDate($arr[0])==true) {
-                $tim = explode(":", $arr[1]);
-                switch (count($tim)) {
-                case 1: // hh
-                    $dummy = (($tim[0] >= 0 && $tim[0] <= 23));
-                    break;
-                case 2: // hh:mm
-                    $dummy = (($tim[0] >= 0 && $tim[0] <= 23) and
-                              ($tim[1] >= 0 && $tim[1] <= 59));
-                    break;
-                case 3: // hh:mm:ss
-                    $dummy = (($tim[0] >= 0 && $tim[0] <= 23) and
-                              ($tim[1] >= 0 && $tim[1] <= 59) and
-                              ($tim[2] >= 0 && $tim[2] <= 59));
-                }
-                return $dummy;
-            }
+        if (count($arr)==2)
+        {
+            return (($this->validDate($arr[0])) and ($this->validTime($arr[1])));
         }
         return false;
     }
@@ -568,6 +578,14 @@ class FormStateBuilder extends Controller
                     $err = "Validierungs Fehler: ein leeren Eintrag ist hier nicht erlaubt.";
                 } elseif (($value != "") and ($this->validDateTime($value) == false)) {
                     $err = "Validierungs Fehler, ungültiges Datum/Zeit oder Format (jjjj-mm-tt hh:mm:ss).";
+                }
+                break;
+
+            case 'time':
+                if (($this->myform[$idx]["Null"] == "NO") and ($value == "")) {
+                    $err = "Validierungs Fehler: ein leeren Eintrag ist hier nicht erlaubt.";
+                } elseif (($value != "") and ($this->validTime($value) == false)) {
+                    $err = "Validierungs Fehler, ungültiges Zeitformat (hh:mm:ss).";
                 }
                 break;
 

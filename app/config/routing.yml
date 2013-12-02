@@ -1,3 +1,7 @@
+tixi_app_shift:
+    resource: "@TixiAppShiftBundle/Resources/config/routing.yml"
+    prefix:   /
+
 tixi_app_holiday:
     resource: "@TixiAppHolidayBundle/Resources/config/routing.yml"
     prefix:   /

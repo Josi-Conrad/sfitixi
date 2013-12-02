@@ -1,0 +1,3 @@
+tixi_unterhalt_dienste_page:
+    pattern:  /app/unterhalt/dienste
+    defaults: { _controller: TixiAppShiftBundle:Default:index }
