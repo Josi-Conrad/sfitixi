@@ -23,15 +23,13 @@ security:
         ROLE_SUPER_ADMIN: [ROLE_USER, ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
 
     providers:
-        in_memory:
-            memory:
-                users:
-                    josi@btb.ch:  { password: josi, roles: ['ROLE_USER', 'ROLE_ADMIN'] }
-                    josi@tixizug.ch:  { password: josi, roles: ['ROLE_USER', 'ROLE_ADMIN'] }
-                    martin@btb.ch: { password: martin, roles: ['ROLE_USER', 'ROLE_ADMIN'] }
-                    martin@tixizug.ch: { password: martin, roles: ['ROLE_USER', 'ROLE_ADMIN'] }
-                    carmelo@btb.ch: { password: carmelo, roles: ['ROLE_USER', 'ROLE_ADMIN'] }
-                    carmelo@tixizug.ch: { password: carmelo, roles: ['ROLE_USER', 'ROLE_ADMIN'] }
+        main:
+            id: tixi_user_provider
+#        in_memory:
+#            memory:
+#                users:
+#                    josi@btb.ch:  { password: josi, roles: ['ROLE_USER', 'ROLE_ADMIN'] }
+#                    martin@btb.ch: { password: martin, roles: ['ROLE_USER', 'ROLE_ADMIN'] }
 
     encoders:
         Symfony\Component\Security\Core\User\User: plaintext

@@ -1,0 +1,3 @@
+tixi_user_homepage:
+    pattern:  /forbidden
+    defaults: { _controller: TixiUserBundle:Default:index }
