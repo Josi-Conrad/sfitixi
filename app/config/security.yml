@@ -23,14 +23,17 @@ security:
         ROLE_SUPER_ADMIN: [ROLE_USER, ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
 
     providers:
+        chain_provider:
+            chain:
+                providers: [main, in_memory]
         main:
             id: tixi_user_provider
-#        in_memory:
-#            memory:
-#                users:
-#                    josi@btb.ch:  { password: josi, roles: ['ROLE_USER', 'ROLE_ADMIN'] }
-#                    martin@btb.ch: { password: martin, roles: ['ROLE_USER', 'ROLE_ADMIN'] }
+        in_memory:
+            memory:
+                users:
+                    admin@btb.ch: { password: admin, roles: ['ROLE_USER', 'ROLE_ADMIN'] }
 
     encoders:
         Symfony\Component\Security\Core\User\User: plaintext
+        Tixi\UserBundle\Service\MyUser: plaintext
 

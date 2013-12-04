@@ -21,9 +21,10 @@ class UserProvider implements UserProviderInterface
   * http://symfony.com/doc/current/cookbook/security/custom_provider.html
   */
 
-    public function loadUserByUsername($username)
+    private function getUserdata($username)
     {
         // make a call to your webservice or whatever here
+
         $userdata[] = array(
             'username' => 'martin@btb.ch',
             'password' => 'martin',
@@ -32,33 +33,39 @@ class UserProvider implements UserProviderInterface
             'username' => 'josi@btb.ch',
             'password' => 'josi',
             'roles' => array('ROLE_USER'));
-        $userdata[] = array(
-            'username' => 'admin@btb.ch',
-            'password' => 'admin',
-            'roles' => array('ROLE_USER', 'ROLE_ADMIN'));
-
-        // pretend it returns an array on success, false if there is no user
-
+      // pretend it returns an array on success, false if there is no user
         foreach ($userdata as $key => $values)
         {
             if ($values['username'] == $username)
             {
-                $salt = getenv("APACHE_SALT");
-                return new User($values['username'], $values['password'], $values['roles']);
+                return $values;
             }
+        }
+        return false;
+    }
+
+    public function loadUserByUsername($username)
+    {
+        $uarray = $this->getUserdata($username);
+        if (is_array($uarray))
+        {
+            $salt = getenv("APACHE_SALT");
+            $salt = null; // todo: remove this line of code
+            return new MyUser($uarray['username'], $uarray['password'], $salt, $uarray['roles']);
         }
         throw new UsernameNotFoundException(sprintf('Username "%s" does not exist.', $username));
     }
 
     public function refreshUser(UserInterface $user)
     {
-        // if (!$user instanceof WebserviceUser) {
         return $this->loadUserByUsername($user->getUsername());
     }
 
     public function supportsClass($class)
     {
-        return $class === 'Symfony\Component\Security\Core\User\User';
+        return $class === 'Tixi\UserBundle\Service\MyUser';
+        // return $class === 'Tixi\UserBundle\Service\TixiUser';
+        // return $class === 'Symfony\Component\Security\Core\User\User';
     }
 
 }
