@@ -14,6 +14,9 @@ use Symfony\Component\Security\Core\User\User;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
+use Tixi\UserBundle\Service\MyUser;
+// dependancy injection: UserData
+use Tixi\UserBundle\Controller\UserData;
 
 class UserProvider implements UserProviderInterface
 {/*
@@ -21,27 +24,28 @@ class UserProvider implements UserProviderInterface
   * http://symfony.com/doc/current/cookbook/security/custom_provider.html
   */
 
+    protected $userdata;       // dependancy injection
+    protected $usercache = array(); // cached user data
+
+    public function __construct(UserData $userdata)
+    {
+        $this->userdata = $userdata;
+    }
+
     private function getUserdata($username)
     {
-        // make a call to your webservice or whatever here
+        /* make a call to your database service
+         * if the user doesn't exist an exception is thrown
+         * user data is cached and refreshed when the username changes
+         */
 
-        $userdata[] = array(
-            'username' => 'martin@btb.ch',
-            'password' => 'martin',
-            'roles' => array('ROLE_USER'));
-        $userdata[] = array(
-            'username' => 'josi@btb.ch',
-            'password' => 'josi',
-            'roles' => array('ROLE_USER'));
-      // pretend it returns an array on success, false if there is no user
-        foreach ($userdata as $key => $values)
+        if ((!array_key_exists('benutzername', $this->usercache)) or
+            ($this->usercache['benutzername'] != $username ))
         {
-            if ($values['username'] == $username)
-            {
-                return $values;
-            }
+            $myrecord = $this->userdata->getUserData($username);
+            $this->usercache = $myrecord[0];
         }
-        return false;
+        return $this->usercache;
     }
 
     public function loadUserByUsername($username)
@@ -49,9 +53,12 @@ class UserProvider implements UserProviderInterface
         $uarray = $this->getUserdata($username);
         if (is_array($uarray))
         {
+            if (!$uarray['ist_aktive']) { $uarray['passwort'] = 'password-is-expired'; }
             $salt = getenv("APACHE_SALT");
-            $salt = null; // todo: remove this line of code
-            return new MyUser($uarray['username'], $uarray['password'], $salt, $uarray['roles']);
+            $roles = array();
+            if ($uarray['ist_manager']) { $roles[] = 'ROLE_ADMIN'; }
+            if ($uarray['ist_disponent']) { $roles[] = 'ROLE_USER'; }
+            return new MyUser($uarray['benutzername'], $uarray['passwort'], $salt, $roles);
         }
         throw new UsernameNotFoundException(sprintf('Username "%s" does not exist.', $username));
     }

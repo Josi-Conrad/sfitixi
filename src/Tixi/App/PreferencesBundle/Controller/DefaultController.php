@@ -61,7 +61,11 @@ class DefaultController extends Controller
                         "Validierungsfehler: Passwörter müssen mindestens 8 Zeichen lang sein.";
                 } elseif ($values["Change"] == true)
                 {/* password has been changed by user, hash password with salt in httpd.conf SetEnv APACHE_SALT */
-                    $myform[$key]["Value"] = hash("sha256", $values["Value"].getenv("APACHE_SALT")); // 64 characters
+                    $password = $values["Value"];
+                    $salt = getenv("APACHE_SALT");
+                    $password = hash("sha512", $password.'{'.$salt.'}'); // 128 characters
+                    $myform[$key]["Value"] = $password;
+
                 }
             }
             elseif ($values["Field"] == "benutzer_geburtstag")

@@ -26,17 +26,33 @@ class UserData extends Controller
         $this->container = $container;
     }
 
+    private function getCustomer($username)
+    {/*
+      * extract customer from username name@btb.ch
+      */
+        if (filter_var($username, FILTER_VALIDATE_EMAIL) == true)
+        {
+            $adr = explode("@", $username);
+            if (count($adr) == 2){
+                $dom = explode(".", $adr[1]);
+                if (count($dom) == 2){
+                    return $dom[0]; // success
+                }
+            }
+
+        }
+        return null; // failed
+    }
+
     public function getUserData($username)
     {
-        $session = new session;
-        $customer = $session->get('customer');
-        $sql = "select benutzer_id, benutzername, passwort, ist_manager, ist_disponent, ist_aktive ";
-        $sql .= "from $customer.form_benutzer where benutzername ='".$username."'";
+        $customer = $this->getCustomer($username);
+        $sql = "select * from $customer.form_team where benutzername ='".$username."'";
 
         try
         {
             $conn = $this->get('database_connection');
-            $udata = $this->conn->fetchAll( $sql );
+            $udata = $conn->fetchAll( $sql );
             return $udata; // success
         }
         catch (PDOException $e)

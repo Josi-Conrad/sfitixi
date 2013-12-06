@@ -4,6 +4,7 @@ parameters:
 services:
     tixi_user_provider:
         class: Tixi\UserBundle\Service\UserProvider
+        arguments: ['@tixi_user_data']
 
     tixi_user_data:
         class: Tixi\UserBundle\Controller\UserData

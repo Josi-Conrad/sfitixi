@@ -5,6 +5,7 @@
  * 03.09.2013 martin jonasse renamed getTemplateParamenters to setTemplateParameters, added $mode
  * 30.09.2013 martin jonasse implemented first version of StateBuilder
  * 28.10.2013 martin jonasse finished unit tests, after some fixing and fine tuning
+ * 05.12.2013 martin jonasse upgraded password encryption to the official Symfony2 standard
  */
 
 namespace Tixi\App\TeamBundle\Controller;
@@ -14,6 +15,7 @@ use Symfony\Component\HttpFoundation\Session\Session;
 use Tixi\HomeBundle\Controller\Housekeeper;
 use Tixi\HomeBundle\Controller\FormBuilder;
 use Tixi\HomeBundle\Controller\ListBuilder;
+use Tixi\UserBundle\Service\MyUser;
 
 class DefaultController extends Controller
 {/*
@@ -57,7 +59,10 @@ class DefaultController extends Controller
                         "Validierungsfehler: Passwörter müssen mindestens 8 Zeichen lang sein.";
                 } elseif ($values["Change"] == true)
                 {/* password has been changed by user, hash password with salt in httpd.conf SetEnv APACHE_SALT */
-                    $myform[$key]["Value"] = hash("sha256", $values["Value"].getenv("APACHE_SALT")); // 64 characters
+                    $password = $values["Value"];
+                    $salt = getenv("APACHE_SALT");
+                    $password = hash("sha512", $password.'{'.$salt.'}'); // 128 characters
+                    $myform[$key]["Value"] = $password;
                 }
             }
             elseif ($values["Field"] == "benutzer_geburtstag")
