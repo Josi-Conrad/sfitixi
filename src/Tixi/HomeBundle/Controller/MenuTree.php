@@ -217,7 +217,7 @@ final class MenuTree
             'CAPTION' => 'Monatsrechnung', 
             'BREADCRUMB' => 'Bereitstellen - Monatsrechnung', 
             'DESCRIPTION' => 'Monatlich, als Datei Lieferscheine.xls', 
-            'PERMISSION' => 'ROLE_ADMIN'),
+            'PERMISSION' => 'ROLE_USER'),
         'tixi_fahrgast_page' => array(
             'ORDER' => '22', 
             'LOCATION' => 'menu-bar', 
@@ -237,7 +237,7 @@ final class MenuTree
             'CAPTION' => 'Details', 
             'BREADCRUMB' => 'Fahrgast - Details', 
             'DESCRIPTION' => 'Vertrauliche Daten zu Fahrgast', 
-            'PERMISSION' => 'ROLE_USER'),
+            'PERMISSION' => 'ROLE_ADMIN'),
         'tixi_fahrgast_dauerauftrag_page' => array(
             'ORDER' => '24', 
             'LOCATION' => 'menu-bar', 
@@ -447,7 +447,7 @@ final class MenuTree
             'CAPTION' => 'Feiertage', 
             'BREADCRUMB' => 'Unterhalt - Feiertage', 
             'DESCRIPTION' => 'Nationale und Kantonale Feiertage eintragen', 
-            'PERMISSION' => 'ROLE_USER'),
+            'PERMISSION' => 'ROLE_ADMIN'),
         'tixi_unterhalt_dienste_page' => array(
             'ORDER' => '45', 
             'LOCATION' => 'menu-bar', 

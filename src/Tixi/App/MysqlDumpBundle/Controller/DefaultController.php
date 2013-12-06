@@ -17,7 +17,10 @@ class DefaultController extends Controller
       */
         $route = 'tixi_unterhalt_datenbank_backup_page';
         $housekeeper = $this->get('tixi_housekeeper');
-        $housekeeper->setTemplateParameters($route);
+        if ($housekeeper->setTemplateParameters($route) != 0) {
+            return $this->render('TixiHomeBundle:Default:error403.html.twig');
+        }
+
         /* set subject */
         $session = $this->container->get('session');
         $customer = $session->get('customer');

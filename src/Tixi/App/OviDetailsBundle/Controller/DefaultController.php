@@ -18,7 +18,9 @@ class DefaultController extends Controller
         /* initialize the context */
         $route = 'tixi_ovi_details_page';
         $housekeeper = $this->get('tixi_housekeeper');
-        $housekeeper->setTemplateParameters($route);
+        if ($housekeeper->setTemplateParameters($route) != 0) {
+            return $this->render('TixiHomeBundle:Default:error403.html.twig');
+        }
 
         /* get parent context */
         $parent = menutree::getCell($route, "PARENT");

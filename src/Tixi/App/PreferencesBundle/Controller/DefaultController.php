@@ -24,7 +24,7 @@ class DefaultController extends Controller
     {/* initialize the context */
         $route = 'tixi_preferences_page';
         $housekeeper = $this->get('tixi_housekeeper');
-        $housekeeper->setTemplateParameters($route);
+        $housekeeper->setTemplateParameters($route); // permission granted for all roles, no test
 
         /*  get username */
         $session = $this->container->get('session');

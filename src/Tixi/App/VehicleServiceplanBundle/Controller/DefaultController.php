@@ -22,7 +22,9 @@ class DefaultController extends Controller
         /* initialize the context */
         $route = 'tixi_fahrzeug_serviceplan_page';
         $housekeeper = $this->get('tixi_housekeeper');
-        $housekeeper->setTemplateParameters($route);
+        if ($housekeeper->setTemplateParameters($route) != 0) {
+            return $this->render('TixiHomeBundle:Default:error403.html.twig');
+        }
 
         /* get parent context */
         $session = $this->container->get('session');

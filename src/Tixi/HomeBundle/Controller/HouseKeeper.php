@@ -320,6 +320,14 @@ EOH;
     // reset error message
         $session->set('errormsg', $errormsg);
 
-    return;
+
+    // check page access permission
+        $permission = menutree::getCell($route,"PERMISSION");
+        $uroles = $session->get('userroles');
+        if ((!in_array($permission, $uroles)) and ($permission != 'ANONYM')) {
+            return 403; // permission denied
+        } else {
+            return 0; // permission granted
+        }
     }
 }

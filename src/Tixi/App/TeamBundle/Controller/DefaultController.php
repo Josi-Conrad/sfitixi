@@ -27,7 +27,9 @@ class DefaultController extends Controller
         /* initialize the context */
         $route = 'tixi_unterhalt_teamdaten_page';
         $housekeeper = $this->get('tixi_housekeeper');
-        $housekeeper->setTemplateParameters($route);
+        if ($housekeeper->setTemplateParameters($route) != 0) {
+            return $this->render('TixiHomeBundle:Default:error403.html.twig');
+        }
 
         /*  start service */
         $autoform = $this->get('tixi_autoform'); // service name
