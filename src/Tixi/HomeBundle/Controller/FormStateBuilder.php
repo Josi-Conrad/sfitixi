@@ -110,22 +110,29 @@ class FormStateBuilder extends Controller
         return $len;
     }
 
-    private function map2InputType($sqltype)
+    private function map2InputType($sqltype, $fieldname)
     {/*
-      * map  each MySQL type to the corresponding html input tag type
+      * map  each MySQL type to the corresponding html input tag type, or
+      * to a jQuery class (date / time elements rendered as text)
       * example: <input type="text" name="Vorname">
       */
-        if       ($sqltype == 'int')        { $mapped = 'number';
-        } elseif ($sqltype == 'varchar')    { $mapped = 'text';
-        } elseif ($sqltype == 'tinyint')    { $mapped = 'checkbox';
-        } elseif ($sqltype == 'mediumtext') { $mapped = 'textarea';
-        } elseif ($sqltype == 'text')       { $mapped = 'textarea';
-        } elseif ($sqltype == 'date')       { $mapped = 'date';
-        } elseif ($sqltype == 'datetime')   { $mapped = 'datetime';
-        } elseif ($sqltype == 'time')       { $mapped = 'time';
-        } else {                              $mapped = 'undefined';
+        switch ($sqltype)
+        {
+            case 'int':         return 'number';
+            case 'varchar':     return 'text';
+            case 'tinyint':     return 'checkbox';
+            case 'text':        return 'textarea';
+            case 'mediumtext':  return 'textarea';
+            case 'time':        return 'jq_timepicker';
+            case 'datetime':    return 'jq_datetimepicker';
+            case 'date':
+                if (($fieldname == 'von') or ($fieldname == 'bis'))
+                              { return 'jq_daterangepicker'; }
+                elseif (strpos($fieldname, '_geburtstag')!==false)
+                              { return 'jq_birthdaypicker'; }
+                else          { return 'jq_datepicker'; }
+            default:            return 'undefined';
         }
-        return $mapped;
     }
 
     private function setMetaData($route)
@@ -163,7 +170,7 @@ class FormStateBuilder extends Controller
                 $paranthesis = strpos($value["Type"], "(");
                 $basetype = ($paranthesis !== false) ? substr($value["Type"], 0, $paranthesis ) : $value["Type"];
                 $this->myform[$key]["Basetype"] = $basetype; // sql type
-                $this->myform[$key]["Rendered"] = $this->map2InputType($basetype); // html type
+                $this->myform[$key]["Rendered"] = $this->map2InputType($basetype, $value["Field"]); // html type, name
 
                 // error message, previous value
                 $this->myform[$key]["Error"] = ""; // empty
@@ -488,45 +495,40 @@ class FormStateBuilder extends Controller
     }
 
     private function validDate($value)
-    {/* input jjjj-mm-dd
+    {/* input dd.mm.yyyy (de-CH locale)
       * validate the date (without using UNIX datetime)
       * output: true is a valide date
       *         false is invalid
       */
-        $arr = explode("-", $value);
+        $arr = explode(".", $value);
         if (count($arr) == 3) {
-            if (ctype_digit($arr[0]) and ctype_digit($arr[1]) and ctype_digit($arr[2])) {
-                return checkdate($arr[1], $arr[2], $arr[0]);
+            if (ctype_digit($arr[0]) and
+                ctype_digit($arr[1]) and
+                ctype_digit($arr[2]) and
+                ($arr[2]>1000))
+            {
+                return checkdate($arr[1], $arr[0], $arr[2]);
             }
         }
         return false;
     }
 
     private function validTime($value)
-    {/* input hh:mm:ss
+    {/* input hh:mm
       * validate the time format
       */
         $valid = false;
         $tim = explode(":", $value);
-        switch (count($tim))
+        if (count($tim) == 2)
         {
-            case 1: // hh
-                $valid = (($tim[0] >= 0 && $tim[0] <= 23));
-                break;
-            case 2: // hh:mm
-                $valid = (($tim[0] >= 0 && $tim[0] <= 23) and
-                    ($tim[1] >= 0 && $tim[1] <= 59));
-                break;
-            case 3: // hh:mm:ss
-                $valid = (($tim[0] >= 0 && $tim[0] <= 23) and
-                    ($tim[1] >= 0 && $tim[1] <= 59) and
-                    ($tim[2] >= 0 && $tim[2] <= 59));
+            $valid = (($tim[0] >= 0 && $tim[0] <= 23) and
+                      ($tim[1] >= 0 && $tim[1] <= 59));
         }
         return $valid;
     }
 
     private function validDateTime($value)
-    {/* input jjjj-mm-dd hh:mm:ss
+    {/* input dd.mm.yyyy hh:mm (de-CH locale)
       * validate the datetime (without using UNIX datetime)
       * output: true is a valide date time
       *         false is invalid
@@ -539,17 +541,163 @@ class FormStateBuilder extends Controller
         return false;
     }
 
+    private function localizeDate($value)
+    {/*
+      * convert the MySQL compliant date strings into de-CH localized date strings
+      * like: convert the date string from yyyy-mm-dd to dd.mm.yyyy
+      * input empty (null) outputs dd.mm.yyy (today)
+      * input error outputs 00.00.0000
+      */
+        if (is_null($value)) {
+            $dd = date('d');
+            $mm = date('m');
+            $yy = date('Y');
+        } else {
+            $dt = explode('-', $value);
+            if (count($dt) == 3){
+                $dd = trim($dt[2]);
+                $mm = trim($dt[1]);
+                $yy = trim($dt[0]);
+            } else {
+                $dd = '00';
+                $mm = '00';
+                $yy = '0000';
+            }
+        }
+        $swiss = "$dd.$mm.$yy";
+        return $swiss;
+    }
+
+    private function delocalizeDate($value)
+    {/*
+      * convert the de-CH localized date strings into MySQL compliant date strings
+      * like: convert the date string from dd.mm.yyyy to yyyy-mm-dd
+      * input empty (null) outputs yyyy-mm-dd (today)
+      * input error outputs 0000-00-00
+      */
+        if (is_null($value)) {
+            $dd = date('d');
+            $mm = date('m');
+            $yy = date('Y');
+        } else {
+            $dt = explode('.', $value);
+            if (count($dt) == 3){
+                $dd = trim($dt[0]);
+                $mm = trim($dt[1]);
+                $yy = trim($dt[2]);
+            } else {
+                $dd = '00';
+                $mm = '00';
+                $yy = '0000';
+            }
+        }
+        $mysql = "$yy-$mm-$dd";
+        return $mysql;
+    }
+
+    private function localizeTime($value)
+    {/*
+      * convert the MySQL compliant time strings into de-CH localized time strings
+      * like: convert the time string from hh:mm:ss to hh:mm
+      * input empty (null) outputs hh:mm (now)
+      * input error outputs 00:00
+      */
+        if (is_null($value)) {
+            $hh = date('H');
+            $mm = date('i');
+        } else {
+            $dt = explode(':', $value);
+            if (count($dt) == 3){
+                $hh = trim($dt[0]);
+                $mm = trim($dt[1]);
+            } else {
+                $hh = '00';
+                $mm = '00';
+            }
+        }
+        $swiss = "$hh:$mm";
+        return $swiss;
+    }
+
+    private function delocalizeTime($value)
+    {/*
+      * convert the de-CH localized time strings into MySQL time strings
+      * like: convert the time string from hh:mm to hh:mm:00
+      * input empty (null) outputs hh:mm (now)
+      * input error outputs 00:00:00
+      */
+        if (is_null($value)) {
+            $hh = date('H');
+            $mm = date('i');
+        } else {
+            $dt = explode(':', $value);
+            if (count($dt) == 2){
+                $hh = trim($dt[0]);
+                $mm = trim($dt[1]);
+            } else {
+                $hh = '00';
+                $mm = '00';
+            }
+        }
+        $mysql = "$hh:$mm:00";
+        return $mysql;
+    }
+
+    private function localizeDateTime($value)
+    {/*
+      * convert the MySQL compliant date strings into de-CH localized date strings
+      * like: convert the datetime string from yyyy-mm-dd hh:mm:ss to dd.mm.yyyy hh:mm
+      * input empty (null) outputs dd.mm.yyyy hh:mm (today)
+      * input error outputs 00.00.0000 00:00
+      */
+        if (is_null($value)) {
+            $swiss = date('d.m.Y H:i');
+        } else {
+            $dt = explode(' ', $value);
+            if (count($dt) == 2){
+                $da = $this->localizeDate($dt[0]);
+                $ti = $this->localizeTime($dt[1]);
+                $swiss = "$da $ti";
+            } else {
+                $swiss = '00.00.0000 00:00';
+            }
+        }
+        return $swiss;
+    }
+
+    private function delocalizeDateTime($value)
+    {/*
+      * convert the de-CH localized datetime strings into MySQL compliant datetime strings
+      * like: convert the local datetime string from dd.mm.yyyy hh:mm to yyyy-mm-dd hh:mm:00
+      * input empty (null) outputs yyyy-mm-dd hh:mm:ss (today)
+      * input error outputs 0000-00-00 00:00:00
+      */
+        if (is_null($value)) {
+            $mysql = date('Y-m-d H:i:s');
+        } else {
+            $dt = explode(' ', $value);
+            if (count($dt) == 2){
+                $da = $this->delocalizeDate($dt[0]);
+                $ti = $this->delocalizeTime($dt[1]);
+                $mysql = "$da $ti";
+            } else {
+                $mysql = '0000-00-00 00:00:00';
+            }
+        }
+        return $mysql;
+    }
+
     private function validate($value, $idx)
     {/*
-      * Standard Validation for AutoForms, not to be confused callback validation
+      * Standard Validation for AutoForms, not to be confused with callback validation
       * validate the request value for $this->myform[$idx]
       * $value is written to $this->myform[$idx]["Value"]
       * error message is written to $this->myform[$idx]["Error"]
       * return = true if no error encountered
       */
         $err = "";
-        switch ($this->myform[$idx]['Basetype']) {
-            case 'int':
+        switch ($this->myform[$idx]['Rendered']) {
+            case 'number':
                 if (($this->myform[$idx]["Null"] == "NO") and ($value == "")) {
                     $err = "Validierungs Fehler: ein leeren Eintrag ist hier nicht erlaubt.";
                 } elseif (($value != "") and (is_numeric($value) != true)) {
@@ -557,7 +705,7 @@ class FormStateBuilder extends Controller
                 }
                 break;
 
-            case 'tinyint':
+            case 'checkbox':
                 if (($this->myform[$idx]["Null"] == "NO") and ($value == "")) {
                     $err = "Validierungs Fehler: ein leeren Eintrag ist hier nicht erlaubt.";
                 } elseif (($value != "0") and ($value != "1")) {
@@ -565,33 +713,40 @@ class FormStateBuilder extends Controller
                 }
                 break;
 
-            case 'date':
+            case 'jq_datepicker':
+            case 'jq_birthdaypicker':
+            case 'jq_daterangepicker':
                 if (($this->myform[$idx]["Null"] == "NO") and ($value == "")) {
                     $err = "Validierungs Fehler: ein leeren Eintrag ist hier nicht erlaubt.";
                 } elseif (($value != "") and ($this->validDate($value) == false)) {
-                    $err = "Validierungs Fehler, ungültiges Datum oder Format (jjjj-mm-tt).";
+                    $err = "Validierungs Fehler, ungültiges Datum oder Format (tt.mm.jjjj).";
+                } else {
+                    // convert de-CH format (dd.mm.yyyy) to MySQL format (yyyy-mm-dd)
+                    $value = $this->delocalizeDate($value);
                 }
                 break;
 
-            case 'datetime':
+            case 'jq_datetimepicker':
                 if (($this->myform[$idx]["Null"] == "NO") and ($value == "")) {
                     $err = "Validierungs Fehler: ein leeren Eintrag ist hier nicht erlaubt.";
                 } elseif (($value != "") and ($this->validDateTime($value) == false)) {
-                    $err = "Validierungs Fehler, ungültiges Datum/Zeit oder Format (jjjj-mm-tt hh:mm:ss).";
+                    $err = "Validierungs Fehler, ungültiges Datum/Zeit oder Format (tt.mm.jjjj hh:mm).";
+                } else {
+                    // convert de-CH format (dd.mm.yyyy) to MySQL format (yyyy-mm-dd)
+                    $value = $this->delocalizeDateTime($value);
                 }
                 break;
 
-            case 'time':
+            case 'jq_timepicker':
                 if (($this->myform[$idx]["Null"] == "NO") and ($value == "")) {
                     $err = "Validierungs Fehler: ein leeren Eintrag ist hier nicht erlaubt.";
                 } elseif (($value != "") and ($this->validTime($value) == false)) {
-                    $err = "Validierungs Fehler, ungültiges Zeitformat (hh:mm:ss).";
+                    $err = "Validierungs Fehler, ungültiges Zeitformat (hh:mm).";
                 }
                 break;
 
             case 'text':
-            case 'varchar':
-            case 'mediumtext':
+            case 'textarea':
                 if (($this->myform[$idx]["Null"] == "NO") and ($value == "")) {
                     $err = "Validierungs Fehler: ein leeren Eintrag ist hier nicht erlaubt.";
                 } else {
@@ -627,7 +782,19 @@ class FormStateBuilder extends Controller
         $record = $this->getFormData($cursor); // database record
         $idx = 0;
         foreach ($record as $name => $value) {
-            $this->myform[$idx]["Value"] = $value; // copy column value to form object
+            switch ($this->myform[$idx]["Rendered"])
+            {
+                case 'jq_daterangepicker':
+                case 'jq_birthdaypicker':
+                case 'jq_datepicker':
+                $this->myform[$idx]["Value"] = $this->localizeDate($value);
+                    break;
+                case 'jq_datetimepicker':
+                    $this->myform[$idx]["Value"] = $this->localizeDateTime($value);
+                    break;
+                default:
+                    $this->myform[$idx]["Value"] = $value; // copy column value to form object
+            }
             $idx += 1;
         }
     }

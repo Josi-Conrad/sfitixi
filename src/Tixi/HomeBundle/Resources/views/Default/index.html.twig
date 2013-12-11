@@ -6,6 +6,8 @@
 {# 25.10.2013 martin jonasse added modal dialog (overlay) #}
 {# 26.11.2013 martin jonasse fixed ticket#3 added breadcrumb ID #}
 {# 27.11.2013 martin jonasse fixed ticket#5 replaced alert #}
+{# 09.12.2013 martin jonasse added jquery-ui.css #}
+{# 10.12.2013 martin jonasse moved everything jquery to base.html.twig #}
 
 {% extends '::base.html.twig' %}
 
@@ -131,6 +133,7 @@
                 </div>
             </div>
         </div>
+    </div>
     {% endblock %}
 
     <!--Content: with lists and forms -->
@@ -163,21 +166,6 @@
                 elx.style.visibility = (elx.style.visibility == "visible") ? "hidden" : "visible";
             </script>
         {% endif %}
-    {% endblock %}
-
-    <!--Javascripts: with lists and forms -->
-    {% block javascripts %}
-        <script>
-            function overlay() {
-                el = document.getElementById("overlay");
-                el.style.visibility = (el.style.visibility == "visible") ? "hidden" : "visible";
-            }
-
-            function errbox() {
-                elx = document.getElementById("errbox");
-                elx.style.visibility = (elx.style.visibility == "visible") ? "hidden" : "visible";
-            }
-        </script>
     {% endblock %}
 
 {% endblock %}

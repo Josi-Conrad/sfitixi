@@ -43,7 +43,9 @@
                               {% if record.Readonly %} disabled{% endif %}
                               >{{ record.Value }}</textarea>
                     <i id="fpr_{{ record.Field }}_error" style="color:red">{{ record.Error }}</i><br />
+
                 {% else %}
+
                     <label for="fpw_{{ record.Field }}">{{ record.Field }}</label>
                     <textarea name="{{ record.Field }}"
                               id="fpw_{{ record.Field }}"
@@ -68,47 +70,75 @@
                     {% endif %}
                     <i id="fpr_{{ record.Field }}_error" style="color:red">{{ record.Error }}</i><br />
 
-                {% elseif ((record.Rendered == 'date') and (record.Hidden == '0')) %}
-                    <label for="fpw_{{ record.Field }}">{{ record.Field }}</label>
-                    <input name="{{ record.Field }}"
-                           id="fpw_{{ record.Field }}"
-                           type="date"
-                           value="{{ record.Value }}"
-                           title="{{ record.Comment }}{% if record.Null == 'NO' %}(obligatorisch){% endif %}"
-                           {% if record.Length != '0' %} maxlength={{ record.Length }}{% endif %}
-                           {% if record.Null == 'NO' %} required{% endif %}
-                           {% if record.Readonly %} disabled{% endif %} />
-                    <i id="fpr_{{ record.Field }}_error" style="color:red">{{ record.Error }}</i><br />
-
-                {% elseif ((record.Rendered == 'datetime') and (record.Hidden == '0')) %}
-                    <label for="fpw_{{ record.Field }}">{{ record.Field }}</label>
-                    <input name="{{ record.Field }}"
-                           id="fpw_{{ record.Field }}"
-                           type="datetime"
-                           value="{{ record.Value }}"
-                           title="{{ record.Comment }}{% if record.Null == 'NO' %}(obligatorisch){% endif %}"
-                           {% if record.Length != '0' %} maxlength={{ record.Length }}{% endif %}
-                           {% if record.Null == 'NO' %} required{% endif %}
-                           {% if record.Readonly %} disabled{% endif %} />
-                    <i id="fpr_{{ record.Field }}_error" style="color:red">{{ record.Error }}</i><br />
-
-                {% elseif ((record.Rendered == 'time') and (record.Hidden == '0')) %}
-                    <label for="fpw_{{ record.Field }}">{{ record.Field }}</label>
-                    <input name="{{ record.Field }}"
-                           id="fpw_{{ record.Field }}"
-                           type="time"
-                           value="{{ record.Value }}"
-                           title="{{ record.Comment }}{% if record.Null == 'NO' %}(obligatorisch){% endif %}"
-                           {% if record.Length != '0' %} maxlength={{ record.Length }}{% endif %}
-                           {% if record.Null == 'NO' %} required{% endif %}
-                           {% if record.Readonly %} disabled{% endif %} />
-                    <i id="fpr_{{ record.Field }}_error" style="color:red">{{ record.Error }}</i><br />
-
                 {% elseif ((record.Rendered == 'number') and (record.Hidden == '0')) %}
                     <label for="fpw_{{ record.Field }}">{{ record.Field }}</label>
                     <input name="{{ record.Field }}"
                            id="fpw_{{ record.Field }}"
                            type="number"
+                           value="{{ record.Value }}"
+                           title="{{ record.Comment }}{% if record.Null == 'NO' %}(obligatorisch){% endif %}"
+                            {% if record.Length != '0' %} maxlength={{ record.Length }}{% endif %}
+                           {% if record.Null == 'NO' %} required{% endif %}
+                            {% if record.Readonly %} disabled{% endif %} />
+                    <i id="fpr_{{ record.Field }}_error" style="color:red">{{ record.Error }}</i><br />
+
+                {% elseif ((record.Rendered == 'jq_daterangepicker') and (record.Hidden == '0')) %}
+                    <label for="fpw_{{ record.Field }}">{{ record.Field }}</label>
+                    <input name="{{ record.Field }}"
+                           id="fpw_{{ record.Field }}"
+                           type="text"
+                           value="{{ record.Value }}"
+                           title="{{ record.Comment }}{% if record.Null == 'NO' %}(obligatorisch){% endif %}"
+                           {% if record.Length != '0' %} maxlength={{ record.Length }}{% endif %}
+                           {% if record.Null == 'NO' %} required{% endif %}
+                           {% if record.Readonly %} disabled{% endif %} />
+                    <i id="fpr_{{ record.Field }}_error" style="color:red">{{ record.Error }}</i><br />
+
+                {% elseif ((record.Rendered == 'jq_birthdaypicker') and (record.Hidden == '0')) %}
+                    <label for="fpw_{{ record.Field }}">{{ record.Field }}</label>
+                    <input name="{{ record.Field }}"
+                           id="fpw_{{ record.Field }}"
+                           type="text"
+                           class="jq_birthdaypicker"
+                           value="{{ record.Value }}"
+                           title="{{ record.Comment }}{% if record.Null == 'NO' %}(obligatorisch){% endif %}"
+                            {% if record.Length != '0' %} maxlength={{ record.Length }}{% endif %}
+                           {% if record.Null == 'NO' %} required{% endif %}
+                            {% if record.Readonly %} disabled{% endif %} />
+                    <i id="fpr_{{ record.Field }}_error" style="color:red">{{ record.Error }}</i><br />
+
+                {% elseif ((record.Rendered == 'jq_datepicker') and (record.Hidden == '0')) %}
+                    <label for="fpw_{{ record.Field }}">{{ record.Field }}</label>
+                    <input name="{{ record.Field }}"
+                           id="fpw_{{ record.Field }}"
+                           type="text"
+                           class="jq_datepicker"
+                           value="{{ record.Value }}"
+                           title="{{ record.Comment }}{% if record.Null == 'NO' %}(obligatorisch){% endif %}"
+                            {% if record.Length != '0' %} maxlength={{ record.Length }}{% endif %}
+                           {% if record.Null == 'NO' %} required{% endif %}
+                            {% if record.Readonly %} disabled{% endif %} />
+                    <i id="fpr_{{ record.Field }}_error" style="color:red">{{ record.Error }}</i><br />
+
+                {% elseif ((record.Rendered == 'jq_datetimepicker') and (record.Hidden == '0')) %}
+                    <label for="fpw_{{ record.Field }}">{{ record.Field }}</label>
+                    <input name="{{ record.Field }}"
+                           id="fpw_{{ record.Field }}"
+                           type="text"
+                           class="jq_datetimepicker"
+                           value="{{ record.Value }}"
+                           title="{{ record.Comment }}{% if record.Null == 'NO' %}(obligatorisch){% endif %}"
+                           {% if record.Length != '0' %} maxlength={{ record.Length }}{% endif %}
+                           {% if record.Null == 'NO' %} required{% endif %}
+                           {% if record.Readonly %} disabled{% endif %} />
+                    <i id="fpr_{{ record.Field }}_error" style="color:red">{{ record.Error }}</i><br />
+
+                {% elseif ((record.Rendered == 'jq_timepicker') and (record.Hidden == '0')) %}
+                    <label for="fpw_{{ record.Field }}">{{ record.Field }}</label>
+                    <input name="{{ record.Field }}"
+                           id="fpw_{{ record.Field }}"
+                           type="text"
+                           class="jq_timepicker"
                            value="{{ record.Value }}"
                            title="{{ record.Comment }}{% if record.Null == 'NO' %}(obligatorisch){% endif %}"
                            {% if record.Length != '0' %} maxlength={{ record.Length }}{% endif %}
@@ -128,6 +158,10 @@
 
                 {% endif %}
             </p>
+
+            {% if ((record.Rendered == "jq_daterangepicker") and (record.Field == "bis")) %}
+                <div class="jq_daterangepicker"></div>
+            {% endif %}
 
             {% if (record.Field == "geocode") %}
                 <div id="map-canvas" style="width: 600px; height: 400px"></div>
