@@ -107,6 +107,7 @@ class AutoForm extends Controller
         {/* it's safe to continue, initialize formstatebuilder service */
             $state = $this->get('tixi_formstatebuilder'); // start service
             $state->setFormView($this->formview);
+            $state->setListView($this->listview);
             $state->setPkey($this->pkey);
             $state->setCallback($this->callback);
             $state->setCollection($this->collection);

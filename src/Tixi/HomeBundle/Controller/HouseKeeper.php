@@ -227,7 +227,6 @@ EOH;
         $session->set("breadcrumb", TIXI_UNDEFINED);
         $session->set("subject",TIXI_UNDEFINED);
         $session->set("action", TIXI_UNDEFINED);
-        $session->set("filter",'');
         $session->set("mode",TIXI_UNDEFINED);
         $session->set("errormsg",TIXI_UNDEFINED);
         $session->set("tainted", TIXI_UNDEFINED);
@@ -312,16 +311,24 @@ EOH;
         }
         $session->set('route', $route); // set current route
 
-    // set filters
+    // set filters and offset ...
+        if ($session->has("filter/$route")==false)
+        {/* first occurance of this page in the current session,
+          * set namespace paramaters:
+          */
+            $session->set("filter/$route", "");
+            $session->set("offset/$route", 0);
+            $session->set("hasNext/$route", false);
+        }
         if (isset($_REQUEST['filter'])) {
-            $session->set("filter", $_REQUEST['filter']);
+            $session->set("filter/$route", $_REQUEST['filter']);
         }
 
     // reset error message
         $session->set('errormsg', $errormsg);
 
 
-    // check page access permission
+    // check page access permission and return
         $permission = menutree::getCell($route,"PERMISSION");
         $uroles = $session->get('userroles');
         if ((!in_array($permission, $uroles)) and ($permission != 'ANONYM')) {

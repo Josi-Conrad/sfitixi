@@ -11,6 +11,7 @@
 // 04.11.2013 martin jonasse upgrade cursor to structured namespace
 // 96.11.2013 martin jonasse added $this->session
 // 19.11.2013 martin jonasse rolled back filter methode, MATCH ... AGAINST is instable
+// 22.12.2013 martin jonasse added pagination in getTable
 
 namespace Tixi\HomeBundle\Controller;
 
@@ -61,7 +62,7 @@ class ListBuilder extends Controller
         $this->constraint = $value;
     }
 
-    private function getTable()
+    private function getTable($route)
     {/*
       * retrieve headers for the view from the customer database
       * return: array of headers (success) empty array and error message (failure)
@@ -69,7 +70,7 @@ class ListBuilder extends Controller
         $customer = $this->session->get('customer');
         $sql = "select * from $customer.$this->listview ";
         $constraint = $this->constraint;
-        $filter = $this->session->get('filter');
+        $filter = $this->session->get("filter/$route");
         if (($constraint != "") or ($filter != ""))
         {
             $sql .= "where "; // append where
@@ -86,7 +87,9 @@ class ListBuilder extends Controller
             $connection = $this->container->get('database_connection');
 
             if ($filter != "")
-            {/* get fields that shall be filtered */
+            {/*
+              * get all varchar and text fieldnames that need to be filtered
+              */
                 $match ="";
                 $textfields = $connection->fetchAll(
                     "show fields from $customer.$this->listview where type like 'varchar%' or type like 'text%'");
@@ -101,13 +104,40 @@ class ListBuilder extends Controller
                     $match .= ")";
                 }
                 $sql .= $match;
+
+                $mylist = $connection->fetchAll( $sql );
+
+                if ((count($mylist) == 0) and ($this->session->get("errormsg") == "")) {
+                    $this->session->set("errormsg",
+                        "Leere Tabelle, keine Werte zum anzeigen (Filter?). [1]");
+                }
+                return $mylist; // header information
             }
-            $mylist = $connection->fetchAll( $sql );
-            if ((count($mylist) == 0) and ($this->session->get("errormsg") == "")) {
-                $this->session->set("errormsg",
-                    "Leere Tabelle (3) ".$this->listview." keine Werte zum anzeigen (Filter?).");
-            }
-            return $mylist; // header information
+            else
+            {/* limit the unfiltered table length to 20 records */
+                $rowcount = $this->container->getParameter('tixi')['rowcount'];
+                $sql .= "LIMIT ".$this->session->get("offset/$route").", ".($rowcount+1);
+
+                $mylist = $connection->fetchAll( $sql );
+                $count = count($mylist);
+
+                if (($count == $rowcount+1) or ($this->session->get("offset/$route")>0))
+                {/* criteria for displaying the buttons << < [] > >> */
+                    $this->session->set("hasNext/$route", true);
+                } else {
+                    $this->session->set("hasNext/$route", false);
+                }
+
+                if ($count == 0)
+                {
+                    $this->session->set("errormsg", "Leere Tabelle, keine Werte zum anzeigen (Filter?). [2]");
+                }
+                elseif ($count = $rowcount+1)
+                {
+                    return array_slice($mylist, 0, $rowcount);
+                }
+                return $mylist;
+           }
 
         } catch (PDOException $e) {
             $this->session->set("errormsg","Cannot access database : ".$e);
@@ -134,7 +164,7 @@ class ListBuilder extends Controller
             $mylist = $connection->fetchAll( $sql );
             if (count($mylist) == 0) {
                 $this->session->set("errormsg",
-                    "Leere Tabelle (4) ".$this->listview." keine Werte zum anzeigen (Hinzufügen?).");
+                    "Leere Tabelle, keine Werte zum anzeigen (Hinzufügen?). [1]");
                 return 0;
             } else {
                 return $mylist[0][$this->pkey];
@@ -167,7 +197,7 @@ class ListBuilder extends Controller
             if (count($mylist) == 0)
             {/* empty list, no match for $cursor possible */
                 $this->session->set("errormsg",
-                    "Leere Tabelle (5) ".$this->listview." keine Werte zum anzeigen (Hinzufügen?).");
+                    "Leere Tabelle, keine Werte zum anzeigen (Hinzufügen?). [2]");
                 return false;
             } else
             {/* test values in the array */
@@ -197,7 +227,7 @@ class ListBuilder extends Controller
         /* add names to subject */
         foreach ($this->list as $key => $values) {
             if ($cursor == $values[$this->pkey])
-            {/* forund the selected row */
+            {/* found the selected row */
                 foreach ($values as $col => $cell){
                     if ((strpos($col, "name")!==false) or (strpos($col, "betreff")!==false)){
                         $subject .= $cell." ";
@@ -237,7 +267,7 @@ class ListBuilder extends Controller
             $this->checkChildID($route);
         }
 
-        $this->list = $this->getTable(); /* get list data (table) */
+        $this->list = $this->getTable($route); /* get list data (table) */
         $this->setSubject($route);       /* set subject in the session */
     }
 

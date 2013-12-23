@@ -25,7 +25,8 @@ class FormStateBuilder extends Controller
     protected $conn;            // database connection
 
     protected $callback;        // input: callback function for validating the data in $myform
-    protected $formview;        // input (name of the MySQL view)
+    protected $formview;        // input (name of the MySQL form view)
+    protected $listview;        // input (name of the MySQL list view)
     protected $pkey;            // input (name of the primary key)
     protected $collection;      // true: collection of objects (many), false: one object
     protected $constraint = ""; // input: where foo = 'bar' (resolves to one record)
@@ -59,6 +60,16 @@ class FormStateBuilder extends Controller
         $this->conn = $this->get('database_connection');
         $this->mytabs = array();
     }
+
+    public function setListView($value)
+    {/*
+      * define the name of the view
+      * the mysql database defines the data structure and constraints
+      * please observe MySQL chapter 18.4.3 Updateable amd Insertable Views
+      */
+        $this->listview = $value;
+    }
+
 
     public function setPkey($value)
     {/*
@@ -453,11 +464,11 @@ class FormStateBuilder extends Controller
 
     private function getDefaultID()
     {/*
-      * retrieve the default (first) id in the view from the customer database
+      * retrieve the default (first) id in the list view from the customer database
       * return: id 1..10E11 (success) 0 and error message (failure)
       */
         $customer = $this->session->get('customer');
-        $sql = "select $this->pkey from $customer.$this->formview limit 0, 2";
+        $sql = "select $this->pkey from $customer.$this->listview limit 0, 2";
         $mylist = array(); // initialize array
 
         try {
@@ -846,6 +857,62 @@ class FormStateBuilder extends Controller
         }
     }
 
+    private function getViewSize()
+    {/*
+      * retrieve the size of the view from the customer database
+      * return: id 1..10E11 (success) 0 and error message (failure)
+      */
+        $customer = $this->session->get('customer');
+        $constraint = "";
+        if ($this->constraint != "") {
+            $constraint = "where ".$this->constraint." ";
+        }
+        $sql = "select count(*) from $customer.$this->formview $constraint";
+        try
+        {/* make a database call to get the meta data */
+            $connection = $this->container->get('database_connection');
+            $mylist = $connection->fetchAll( $sql );
+            return $mylist[0]["count(*)"];
+        }
+        catch (PDOException $e)
+        {
+            $this->session->set("errormsg","Cannot access database : ".$e);
+            return 0;
+        }
+    }
+
+    private function getCursorOffset($route)
+    {/*
+      * calculate the offset of the record [cursor] in the list view in the customer database
+      * using the @rownum methode with MySQL Innodb doesn't work properly (instable sort mechanism)
+      * return: id 1..10E11 (success) 0 and error message (failure)
+      */
+        $cursor = $this->session->get("cursor/$route");
+        $customer = $this->session->get('customer');
+        $constraint = "";
+        if ($this->constraint != "") {
+            $constraint = "where ".$this->constraint." ";
+        }
+        $sql = "select $this->pkey from $customer.$this->listview $constraint";
+        try
+        {/* make a database call to get the meta data */
+            $connection = $this->container->get('database_connection');
+            $mylist = $connection->fetchAll( $sql );
+            foreach ($mylist as $key => $value) {
+                if ($value[$this->pkey] == $cursor) {
+                    return $key; // success offset for $cursor
+                }
+            }
+            $this->session->set("errormsg","Cannot find offset for cursor ".$cursor);
+            return 0;
+        }
+        catch (PDOException $e)
+        {
+            $this->session->set("errormsg","Cannot access database : ".$e);
+            return 0;
+        }
+    }
+
     public function makeCollectionObjectStates($route)
     {/*
       * state machine for one list object (collection = true)
@@ -886,33 +953,60 @@ class FormStateBuilder extends Controller
                 /* set new state */
                 $this->session->set('mode', $tixi['mode_edit_in_list']); // set new state
             }
+            elseif ($action == 'delete')
+            {/* action code for delete list object ---------------------------------- */
+                $cursor = $this->session->get("cursor/$route");
+                $this->deleteFormData($cursor); // delete the database record
+                $cursor = $this->getDefaultID();
+                $this->session->set("cursor/$route", $cursor); // set new cursor (default)
+            }
+            elseif ($action == 'select')
+            {/* action code for select (changed cursor) ----------------------------- */
+                /* this is managed in the ListBuilder service */
+            }
+            elseif ($action == 'begin')
+            {/* action code for begin (first page) ---------------------------------- */
+                $this->session->set("offset/$route", 0);
+            }
+            elseif ($action == 'previous')
+            {/* action code for previous page --------------------------------------- */
+                $offset = $this->session->get("offset/$route") - $tixi["rowcount"];
+                $offset = ($offset > 0) ? $offset : 0;
+                $this->session->set("offset/$route", $offset );
+            }
+            elseif ($action == 'selected')
+            {/* action code for selected page --------------------------------------- */
+                $offset = $this->getCursorOffset($route);
+                if ($offset > 0) {
+                    $this->session->set("offset/$route", $offset);
+                }
+            }
+            elseif ($action == 'next')
+            {/* action code for next page ------------------------------------------- */
+                $offset = $this->session->get("offset/$route") + $tixi["rowcount"];
+                $size = $this->getViewSize();
+                if ($offset < $size) {
+                    $this->session->set("offset/$route", $offset);
+                }
+            }
+            elseif ($action == 'end')
+            {/* action code for end (last page) ------------------------------------- */
+                $offset = $this->getViewSize() - $tixi["rowcount"];
+                $offset = ($offset > 0) ? $offset : 0;
+                $this->session->set("offset/$route", $offset);
+            }
+            elseif ($action == 'filter')
+            {/* action code for filter (changed filter criteria) -------------------- */
+                $dummy = 'stop'; // don't do anything special: overrides << < [] > >>
+            }
+            elseif ($action == 'print')
+            {/* action code for printing -------------------------------------------- */
+                $this->session->set('errormsg', 'Die Druckfunktion ist noch nicht implementiert.');
+            }
             else
-            { /* state mode_select_list remains the same */
-                if ($action == 'delete')
-                {/* action code for delete list object ---------------------------------- */
-                    $cursor = $this->session->get("cursor/$route");
-                    $this->deleteFormData($cursor); // delete the database record
-                    $cursor = $this->getDefaultID();
-                    $this->session->set("cursor/$route", $cursor); // set new cursor (default)
-                }
-                elseif ($action == 'select')
-                {/* action code for select (changed cursor) ----------------------------- */
-                    /* this is managed in the ListBuilder service */
-                }
-                elseif ($action == 'filter')
-                {/* action code for filter (changed filter criteria) -------------------- */
-                    /* this is managed in the ListBuilder service */
-                }
-                elseif ($action == 'print')
-                {/* action code for printing -------------------------------------------- */
-                    $this->session->set('errormsg', 'Die Druckfunktion ist noch nicht implementiert.');
-                }
-                else
-                {// unexpected action in this state
-                    $this->session->set('errormsg',
-                        'Fehler(1): illegaler action '.$this->session->get('action').' in state '.$this->session->get('mode'));
-                }
-                /* action code for displaying list, see ListBuilder service */
+            {// unexpected action in this state
+                $this->session->set('errormsg',
+                    'Fehler(1): illegaler action '.$this->session->get('action').' in state '.$this->session->get('mode'));
             }
         }
         elseif ($this->session->get('mode') == $tixi['mode_edit_in_list'])
