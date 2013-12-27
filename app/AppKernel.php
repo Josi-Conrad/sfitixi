@@ -40,6 +40,7 @@ class AppKernel extends Kernel
             new Tixi\App\HolidayBundle\TixiAppHolidayBundle(),
             new Tixi\App\ShiftBundle\TixiAppShiftBundle(),
             new Tixi\UserBundle\TixiUserBundle(),
+            new Tixi\App\VehicleDetailsBundle\TixiAppVehicleDetailsBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

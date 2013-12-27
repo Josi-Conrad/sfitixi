@@ -406,7 +406,7 @@ class FormStateBuilder extends Controller
             case 1: /* insert one table */
                 foreach ($this->mytabs as $table => $valuepairs) {
                     if (strpos($this->pkey, "_fk") !== false)
-                    {/* key is a foreign key, 1:c relationship */
+                    {/* @@remove@@ key is a foreign key, 1:c relationship */
                         $route = $this->session->get('route');
                         $parent = menutree::getCell($route, "PARENT");
                         $cursor = $this->session->get("cursor/$parent");
@@ -559,7 +559,7 @@ class FormStateBuilder extends Controller
       * input empty (null) outputs dd.mm.yyy (today)
       * input error outputs 00.00.0000
       */
-        if (is_null($value)) {
+        if ((is_null($value)) or ($value == "0000-00-00")) {
             $dd = date('d');
             $mm = date('m');
             $yy = date('Y');
@@ -1102,7 +1102,7 @@ class FormStateBuilder extends Controller
             {/* action code for the first call (read only) -------------------------- */
                 $cursor = $this->getIndividualID();
                 if ($cursor == 0)
-                {/* not found, insert an empty record */
+                {/* @@remove@@ not found, insert an empty record */
                     $cursor = $this->insertFormData();
                     if ($cursor > 0)
                     {/* set cursor to match the inserted object(s) */

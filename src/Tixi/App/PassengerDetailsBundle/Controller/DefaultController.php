@@ -36,9 +36,9 @@ class DefaultController extends Controller
         /* set attributes */
         $autoform->setCallback(array($this, "validateFahrgastDetails")); // callback
         $autoform->setCollection(false);
-        $autoform->setPkey("fahrgast_details_fahrgast_fk"); // name of primary key
+        $autoform->setPkey("fahrgast_id"); // name of primary key
         $autoform->setFormview("form_fahrgast_details");
-        $autoform->setConstraint("fahrgast_details_fahrgast_fk = $parent_id");
+        $autoform->setConstraint("fahrgast_id = $parent_id");
 
         /*  render form */
         return $autoform->makeAutoForm($route);

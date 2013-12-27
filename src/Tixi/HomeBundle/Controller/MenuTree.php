@@ -358,8 +358,18 @@ final class MenuTree
             'BREADCRUMB' => 'Fahrzeug', 
             'DESCRIPTION' => 'Daten des Fahrzeuges', 
             'PERMISSION' => 'ROLE_USER'),
-        'tixi_fahrzeug_serviceplan_page' => array(
+        'tixi_fahrzeug_details_page' => array(
             'ORDER' => '36', 
+            'LOCATION' => 'menu-bar', 
+            'PARENT' => 'tixi_fahrzeug_page', 
+            'ENABLED' => '1', 
+            'URL' => '/app/fahrzeug/details', 
+            'CAPTION' => 'Details', 
+            'BREADCRUMB' => 'Fahrzeug - Details', 
+            'DESCRIPTION' => 'Vertrauliche Daten zur Fahrzeug', 
+            'PERMISSION' => 'ROLE_ADMIN'),
+        'tixi_fahrzeug_serviceplan_page' => array(
+            'ORDER' => '37', 
             'LOCATION' => 'menu-bar', 
             'PARENT' => 'tixi_fahrzeug_page', 
             'ENABLED' => '1', 
@@ -369,7 +379,7 @@ final class MenuTree
             'DESCRIPTION' => 'Nicht-Verfuegbarkeitsdaten eines Fahrzeuges', 
             'PERMISSION' => 'ROLE_USER'),
         'tixi_unterhalt_page' => array(
-            'ORDER' => '37', 
+            'ORDER' => '38', 
             'LOCATION' => 'menu-bar', 
             'PARENT' => '', 
             'ENABLED' => '0', 
@@ -379,7 +389,7 @@ final class MenuTree
             'DESCRIPTION' => 'Splash Page Unterhalt', 
             'PERMISSION' => 'ROLE_USER'),
         'tixi_unterhalt_organisationsdaten_page' => array(
-            'ORDER' => '38', 
+            'ORDER' => '39', 
             'LOCATION' => 'menu-bar', 
             'PARENT' => '', 
             'ENABLED' => '0', 
@@ -389,7 +399,7 @@ final class MenuTree
             'DESCRIPTION' => 'Email Adresse der Organisation, z.B. info@tixizug.ch, Postadresse etc.', 
             'PERMISSION' => 'ROLE_ADMIN'),
         'tixi_unterhalt_teamdaten_page' => array(
-            'ORDER' => '39', 
+            'ORDER' => '40', 
             'LOCATION' => 'menu-bar', 
             'PARENT' => '', 
             'ENABLED' => '1', 
@@ -399,7 +409,7 @@ final class MenuTree
             'DESCRIPTION' => 'Benutzerdaten definieren; Anmeldename, Passwort, Rolle', 
             'PERMISSION' => 'ROLE_ADMIN'),
         'tixi_unterhalt_logs_page' => array(
-            'ORDER' => '40', 
+            'ORDER' => '41', 
             'LOCATION' => 'menu-bar', 
             'PARENT' => '', 
             'ENABLED' => '0', 
@@ -409,7 +419,7 @@ final class MenuTree
             'DESCRIPTION' => 'Kontrolle der Logdateien fuer kritsiche Fehlern', 
             'PERMISSION' => 'ROLE_ADMIN'),
         'tixi_unterhalt_datenbank_page' => array(
-            'ORDER' => '41', 
+            'ORDER' => '42', 
             'LOCATION' => 'menu-bar', 
             'PARENT' => '', 
             'ENABLED' => '0', 
@@ -419,7 +429,7 @@ final class MenuTree
             'DESCRIPTION' => 'Splash Page Datenbank', 
             'PERMISSION' => 'ROLE_ADMIN'),
         'tixi_unterhalt_datenbank_backup_page' => array(
-            'ORDER' => '42', 
+            'ORDER' => '43', 
             'LOCATION' => 'menu-bar', 
             'PARENT' => '', 
             'ENABLED' => '1', 
@@ -429,7 +439,7 @@ final class MenuTree
             'DESCRIPTION' => 'Lokale Datensicherung fuer den Disaster Recovery Fall', 
             'PERMISSION' => 'ROLE_ADMIN'),
         'tixi_unterhalt_datenbank_putzen_page' => array(
-            'ORDER' => '43', 
+            'ORDER' => '44', 
             'LOCATION' => 'menu-bar', 
             'PARENT' => '', 
             'ENABLED' => '0', 
@@ -439,7 +449,7 @@ final class MenuTree
             'DESCRIPTION' => 'Daten aufraeumen mittels eingebaute Funktionen', 
             'PERMISSION' => 'ROLE_ADMIN'),
         'tixi_unterhalt_feiertage_page' => array(
-            'ORDER' => '44', 
+            'ORDER' => '45', 
             'LOCATION' => 'menu-bar', 
             'PARENT' => '', 
             'ENABLED' => '1', 
@@ -449,7 +459,7 @@ final class MenuTree
             'DESCRIPTION' => 'Nationale und Kantonale Feiertage eintragen', 
             'PERMISSION' => 'ROLE_ADMIN'),
         'tixi_unterhalt_dienste_page' => array(
-            'ORDER' => '45', 
+            'ORDER' => '46', 
             'LOCATION' => 'menu-bar', 
             'PARENT' => '', 
             'ENABLED' => '1', 
@@ -459,7 +469,7 @@ final class MenuTree
             'DESCRIPTION' => 'Dienst Zeiten (Anfang - Ende) einrichten', 
             'PERMISSION' => 'ROLE_ADMIN'),
         'tixi_unterhalt_zonenplan_page' => array(
-            'ORDER' => '46', 
+            'ORDER' => '47', 
             'LOCATION' => 'menu-bar', 
             'PARENT' => '', 
             'ENABLED' => '1', 

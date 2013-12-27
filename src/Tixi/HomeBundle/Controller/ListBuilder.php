@@ -223,7 +223,7 @@ class ListBuilder extends Controller
       * based on data in $this->list
       */
         $cursor = $this->session->get("cursor/$route");
-        $subject = MenuTree::getCell($route, "CAPTION").": ";
+        $subject = "";
         /* add names to subject */
         foreach ($this->list as $key => $values) {
             if ($cursor == $values[$this->pkey])
@@ -236,18 +236,26 @@ class ListBuilder extends Controller
                 break;
             }
         }
-        /* if applicable, prefix subject with context info */
-        $parent = menutree::getCell($route, "PARENT");
-        if ($parent != "") {
-            $subject = $this->session->get("context/$parent")." - ".$subject;
+        if ($subject =="")
+        {/* cannot fimd the cursor in the list, not in focus due to pagination */
+            $subject = $this->session->get("context/$route");
+            $this->session->set("subject", $subject);
         }
-        /* restrict length */
-        if (strlen($subject) > 80) {
-            $subject = substr($subject, 0, 77)."...";
+        else  {
+            $subject = MenuTree::getCell($route, "CAPTION").": ".$subject;
+            /* if applicable, prefix subject with context info */
+            $parent = menutree::getCell($route, "PARENT");
+            if ($parent != "") {
+                $subject = $this->session->get("context/$parent")." - ".$subject;
+            }
+            /* restrict length */
+            if (strlen($subject) > 80) {
+                $subject = substr($subject, 0, 77)."...";
+            }
+            /* return (persist) data */
+            $this->session->set("subject", $subject);
+            $this->session->set("context/$route", $subject);
         }
-        /* return (persist) data */
-        $this->session->set("subject", $subject);
-        $this->session->set("context/$route", $subject);
     }
 
     public function makeList($route)

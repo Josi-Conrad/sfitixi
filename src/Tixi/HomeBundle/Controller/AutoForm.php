@@ -118,7 +118,8 @@ class AutoForm extends Controller
 
                 $state->makeCollectionObjectStates($route);
 
-                if ($this->session->get('mode') == $tixi["mode_select_list"])
+                $mode = $this->session->get('mode');
+                if ($mode == $tixi["mode_select_list"])
                 {/* display a list of objects */
                     $list = $this->get('tixi_listbuilder'); // start service
                     $list->setListView($this->listview);
@@ -129,7 +130,7 @@ class AutoForm extends Controller
                                          array('myheader' => $list->getHeader(),
                                                'myrows' => $list->getRows() ));
 
-                } elseif ($this->session->get('mode') == $tixi["mode_edit_in_list"])
+                } elseif ($mode == $tixi["mode_edit_in_list"])
                 {/* display a form for the selected object */
                     return $this->render($this->formtwig,
                                          array('myform' => $state->getFormMetaData() ));
@@ -137,7 +138,7 @@ class AutoForm extends Controller
                 } else
                 {/* unexpected state encountered */
                     $this->session->set('errormsg',
-                        "Unerwartete Zustand $this->session->get('mode') in Seite $route.");
+                        "Unerwartete Zustand $mode in Seite $route.");
                     return $this->render($this->formtwig,
                                          array('myform' => array()));
                 }

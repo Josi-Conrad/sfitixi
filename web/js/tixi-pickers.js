@@ -6,11 +6,16 @@
  */
     $(function() {
         $( ".jq_datepicker" )
-            .datepicker( {changeMonth: true, changeYear: true }
-        );
+            .datepicker({
+                changeMonth: true,
+                changeYear: true
+        });
         $( ".jq_birthdaypicker")
-            .datepicker( {changeMonth: true, changeYear: true, yearRange: '-125:+0'}
-        );
+            .datepicker({
+                changeMonth: true,
+                changeYear: true,
+                yearRange: '-125:+0'
+        });
         $('.jq_datetimepicker')
             .datetimepicker({
                 timeText: 'Zeit',
@@ -33,7 +38,7 @@
         $(".jq_daterangepicker")
             .datepicker({
 				minDate: 0,
-				numberOfMonths: [3,4],
+				numberOfMonths: [2,4],
 				beforeShowDay: function(date) {
 					var date1 = $.datepicker.parseDate($.datepicker._defaults.dateFormat, $("#fpw_von").val());
 					var date2 = $.datepicker.parseDate($.datepicker._defaults.dateFormat, $("#fpw_bis").val());

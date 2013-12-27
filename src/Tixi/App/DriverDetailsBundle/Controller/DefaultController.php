@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class DefaultController extends Controller
 {
-    public function indexAction($name='')
+    public function indexAction()
     {/*
       * controller for confidential details for drivers
       */
@@ -36,9 +36,9 @@ class DefaultController extends Controller
         /* set attributes */
         $autoform->setCallback(array($this, "validateFahrerDetails")); // callback
         $autoform->setCollection(false);
-        $autoform->setPkey("fahrer_details_fahrer_fk"); // name of primary key
+        $autoform->setPkey("fahrer_id"); // name of primary key
         $autoform->setFormview("form_fahrer_details");
-        $autoform->setConstraint("fahrer_details_fahrer_fk = $parent_id");
+        $autoform->setConstraint("fahrer_id = $parent_id");
 
         /*  render form */
         return $autoform->makeAutoForm($route);
