@@ -111,7 +111,7 @@ class ListBuilder extends Controller
                     $this->session->set("errormsg",
                         "Leere Tabelle, keine Werte zum anzeigen (Filter?). [1]");
                 }
-                return $mylist; // header information
+                return $mylist; // header information and list data
             }
             else
             {/* limit the unfiltered table length to 20 records */

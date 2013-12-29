@@ -21,9 +21,7 @@
                 {% if loop.first %}
                     <th class="heading">{{ mycell }}</th>
                 {% else %}
-                    {% if mycell|slice(-3)!="_FK" %}
-                        <th>{{ mycell }}</th>
-                    {% endif %}
+                    <th>{{ mycell }}</th>
                 {% endif %}
             {% endfor %}
         </tr>
@@ -44,9 +42,7 @@
                             <a>
                         </td>
                     {% else %}
-                        {% if mykey|slice(-3)!="_fk" %}
-                            <td>{{ mycell }}</td>
-                        {% endif %}
+                        <td>{{ mycell }}</td>
                     {% endif %}
                 {% endfor %}
             </tr>

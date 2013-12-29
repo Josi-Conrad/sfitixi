@@ -167,11 +167,12 @@ class FormStateBuilder extends Controller
 
                 // readonly?
                 $postfix = substr($value["Field"], -3 ); // last three characters
-                $readonly = (($postfix == '_id') or ($value == 'MID')); // primary key and migration id
+                $readonly = (($postfix == '_id') or ($value == 'pin')); // primary key and migration id
                 $this->myform[$key]["Readonly"] = $readonly;
 
-                // hidden?
-                $hidden = ($postfix == '_fk');
+                // hidden? = all foreign keys and all ids except the primary key
+                $hidden = (($postfix == '_fk') or
+                          (($postfix == '_id') and ($value["Field"] != $this->pkey))); // exception = pkey
                 $this->myform[$key]["Hidden"] = $hidden;
 
                 // maxlength?
@@ -222,6 +223,7 @@ class FormStateBuilder extends Controller
     private function getFormData($cursor)
     {/*
       * return an array containing the persistent data values for the form
+      * todo: consider postfixing LOCK IN SHARE MODE to SELECT statement
       */
         $customer = $this->session->get('customer');
 
@@ -247,8 +249,9 @@ class FormStateBuilder extends Controller
       * update the data, changed by the user, in the customer database
       */
         $customer = $this->session->get('customer');
-
-        try {
+        $this->conn->beginTransaction();
+        try
+        {
             $count = 0;
             foreach ($this->myform as $value) {
                 if ($value["Change"]) {
@@ -258,10 +261,14 @@ class FormStateBuilder extends Controller
                 }
             }
             // return an array with persistent data (query has only one record)
+            $this->conn->commit();
             return $count;
 
-        } catch (PDOException $e) {
+        }
+        catch (PDOException $e)
+        {
             $this->session->set("errormsg","Error updating the database: ".$e);
+            $this->conn->rollback();
             return 0;
         }
     }
@@ -272,16 +279,18 @@ class FormStateBuilder extends Controller
       */
         $customer = $this->session->get('customer');
 
-        /* get database record for the view, containg the table indices */
+        /* get database record for the view, containing the table indices */
         $record = $this->getFormData($cursor);
         $idx = 0;
         foreach ($record as $name => $value) {
             $this->myform[$idx]["Value"] = $value; // copy column value to form object
             $idx += 1;
         }
+        $this->conn->beginTransaction();
 
         /* now try to delete all the table records in the view */
-        try {
+        try
+        {
             foreach($this->myform as $key => $values) {
                 if (strpos($values["Field"], "_id") !== false) {
                     // this is a primary index
@@ -292,10 +301,13 @@ class FormStateBuilder extends Controller
                     $this->conn->exec($sql);
                 }
             }
+            $this->conn->commit();
             return true; // success
-
-        } catch (PDOException $e) {
+        }
+        catch (PDOException $e)
+        {
             $this->session->set("errormsg","Error deleting record from database: ".$e);
+            $this->conn->rollback();
             return false; // error
         }
     }
@@ -351,14 +363,17 @@ class FormStateBuilder extends Controller
       * input myarray: fieldname => value pairs, one for each column of $mytable
       * return: record id or 0 (error)
       */
+        $this->conn->beginTransaction();
         try {
             $sql = $this->getInsertStatement($mycustomer, $mytable, $myarray);
             $this->conn->exec($sql); // insert empty record
             $id = $this->conn->lastInsertId(); // get record id
+            $this->conn->commit();
             return $id;
         }
         catch (PDOException $e) {
             $this->session->set("errormsg","Error(1) inserting record into database: ".$e);
+            $this->conn->rollback();
             return 0; // error
         }
     }
@@ -368,8 +383,9 @@ class FormStateBuilder extends Controller
       * insert an empty view record into the database, where a view can contain one or more linked tables.
       * result: the id of the view or 0 (error)
       */
-        $customer = $this->session->get('customer');
         $id = 0;
+        $customer = $this->session->get('customer');
+        $this->conn->beginTransaction();
 
         try
         {/* initialize 1: get tables used in the query */
@@ -402,23 +418,16 @@ class FormStateBuilder extends Controller
             switch (count($this->mytabs)) {
             case 0: /* nothing to insert */
                 $this->session->set("errormsg","Error(1) cannot insert record in database.");
-                return 0;
+                $this->conn->rollback();
+                return 0; // error
+
             case 1: /* insert one table */
-                foreach ($this->mytabs as $table => $valuepairs) {
-                    if (strpos($this->pkey, "_fk") !== false)
-                    {/* @@remove@@ key is a foreign key, 1:c relationship */
-                        $route = $this->session->get('route');
-                        $parent = menutree::getCell($route, "PARENT");
-                        $cursor = $this->session->get("cursor/$parent");
-                        $valuepairs[$this->pkey] = $cursor; // set key pointing to parent object
-                        $id = $this->insertEmptyRecord($customer, $table, $valuepairs);
-                        $this->session->set('errormsg', ""); // delete error message
-                        $id = $cursor; // set same as parent object (1:c)
-                    } else {
-                        $id = $this->insertEmptyRecord($customer, $table, $valuepairs);
-                    }
+                foreach ($this->mytabs as $table => $valuepairs)
+                {
+                    $id = $this->insertEmptyRecord($customer, $table, $valuepairs);
                 }
-                return $id;
+                $this->conn->commit();
+                return $id; // success
 
             default: /* insert more than one table */
                 while (count($this->mytabs) > 0) {
@@ -444,20 +453,24 @@ class FormStateBuilder extends Controller
                                 /* success, drop through or loop again */
                             } else {
                                 $this->session->set("errormsg","Error(2) inserting record into database (record id=0).");
-                                return 0;
+                                $this->conn->rollback();
+                                return 0; // error
                             }
                         }
                     }
                 if ($acntr == 0) {
                     $this->session->set("errormsg","Error(4) Fehler in view, nicht alle Tabellen sind vorhanden!");
-                    return 0;
+                    $this->conn->rollback();
+                    return 0; // error
                 }
                 }
+                $this->conn->commit();
                 return $id; // success, the id is the views key (first parent id)
             }
 
         } catch (PDOException $e) {
             $this->session->set("errormsg","Error(3) inserting record into database: ".$e);
+            $this->conn->rollback();
             return 0; // error
         }
     }
@@ -883,9 +896,9 @@ class FormStateBuilder extends Controller
 
     private function getCursorOffset($route)
     {/*
-      * calculate the offset of the record [cursor] in the list view in the customer database
-      * using the @rownum methode with MySQL Innodb doesn't work properly (instable sort mechanism)
-      * return: id 1..10E11 (success) 0 and error message (failure)
+      * Calculate the offset of the record [cursor] in the list view in the customer database
+      * Note: using the @rownum methode with MySQL Innodb doesn't work properly (instable sort mechanism)
+      * Return: id 1..10E11 (success) 0 and error message (failure)
       */
         $cursor = $this->session->get("cursor/$route");
         $customer = $this->session->get('customer');
@@ -1102,14 +1115,9 @@ class FormStateBuilder extends Controller
             {/* action code for the first call (read only) -------------------------- */
                 $cursor = $this->getIndividualID();
                 if ($cursor == 0)
-                {/* @@remove@@ not found, insert an empty record */
-                    $cursor = $this->insertFormData();
-                    if ($cursor > 0)
-                    {/* set cursor to match the inserted object(s) */
-                        $this->session->set("cursor/$route", $cursor);
-                        $this->session->set("context/$route", MenuTree::getCell($route, "CAPTION")."[$cursor]");
-                        $this->copyFormData2Myform($cursor);
-                    }
+                {/* cursor not found, set error message */
+                    $this->session->set('errormsg',
+                        'Kein Datensatz gefunden. Leere Tabelle?');
                 } else
                 {/* cursor found, get record from database */
                     $this->session->set("cursor/$route", $cursor);
