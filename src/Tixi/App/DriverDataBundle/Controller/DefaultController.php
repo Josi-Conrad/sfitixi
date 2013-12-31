@@ -1,4 +1,7 @@
 <?php
+/*
+ * 30.12.2013 martin jonasse upgrade for check_vehicle_type
+*/
 
 namespace Tixi\App\DriverDataBundle\Controller;
 
@@ -7,10 +10,12 @@ use Symfony\Component\HttpFoundation\Session\Session;
 use Tixi\HomeBundle\Controller\Housekeeper;
 use Tixi\HomeBundle\Controller\FormBuilder;
 use Tixi\HomeBundle\Controller\ListBuilder;
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Types\Type;
 
 class DefaultController extends Controller
 {
-    public function indexAction($name='')
+    public function indexAction()
     {/*
       * controller for the driver data page
       */
@@ -37,10 +42,36 @@ class DefaultController extends Controller
     private function check_vehicle_type($value)
     {/*
       * check and see if the fahrzeug_type field matches a fahrzeugname in table fahrzeug
+      * wildcard (*) returns true, filter (xyz%) true if match(es) found in database
+      * NOTE: basically the same function in PassengerDataBundle controller
       * return true: success, false: failed
       */
-        // todo continue here (20.11.2013)
-        return false;
+        if ($value == "*")
+        {
+            return true; // * is the wildcard
+        }
+        else
+        {
+            $connection = $this->container->get('database_connection');
+            $session = new Session;
+            $customer = $session->get('customer');
+            $sql = "select fahrzeugname from $customer.fahrzeug where fahrzeugname like '".$value."'";
+            try
+            {
+                $mylist = $connection->fetchAll( $sql );
+                if (count($mylist)==0) {
+                    return false; // $value not found in vehicle list
+                }
+                else {
+                    return true; // $value found in vehicle list (count times)
+                }
+            }
+            catch (PDOException $e)
+            {
+                $this->session->set("errormsg","Cannot access database : ".$e);
+                return false;
+            }
+        }
     }
 
     public function validateDriverData($myform=array())
@@ -69,7 +100,7 @@ class DefaultController extends Controller
                 }
             }
 
-            if (($values["Field"] == "fahrzeug_type") and ($values["Value"] != "*"))
+            if ($values["Field"] == "fahrzeug_type")
             {/* the asterik designates "all", meaning no restrictions */
                 $cartype = $values["Value"];
                 if ($this->check_vehicle_type($cartype) == false){

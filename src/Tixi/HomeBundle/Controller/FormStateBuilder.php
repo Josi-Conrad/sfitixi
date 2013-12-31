@@ -9,6 +9,7 @@
 // 28.10.2013 martin jonasse fixed some features
 // 04.11.2013 martin jonasse upgrade cursor to structured namespace, split off $mydata from $myform
 // 02.12.2013 martin jonasse added time format
+// 30.12.2013 martin jonasse added localizeMyform
 
 namespace Tixi\HomeBundle\Controller;
 
@@ -799,9 +800,33 @@ class FormStateBuilder extends Controller
         return 0;
     }
 
+    private function localizeMyform()
+    {/*
+      * macro code for localizing dates in the form object
+      * called if validation has failed for some reason
+      */
+        foreach ($this->myform as $key => $values)
+        {
+            switch ($values["Rendered"])
+            {
+                case 'jq_daterangepicker':
+                case 'jq_birthdaypicker':
+                case 'jq_datepicker':
+                    $this->myform[$key]["Value"] = $this->localizeDate($values["Value"]);
+                    break;
+                case 'jq_datetimepicker':
+                    $this->myform[$key]["Value"] = $this->localizeDateTime($values["Value"]);
+                    break;
+                default:
+                    // do nothing, not a date format
+            }
+        }
+    }
+
     private function copyFormData2Myform($cursor)
     {/*
       * macro code for appending record data to the form object
+      * NOTE: this is partialy redundant to function localizeMyform
       */
         $record = $this->getFormData($cursor); // database record
         $idx = 0;
@@ -1053,6 +1078,7 @@ class FormStateBuilder extends Controller
                 }
                 if ($this->hasErrorsMyform() > 0) {
                     $this->session->set('errormsg', 'Validierungsfehler in ein oder mehrer Felder, bitte korrigieren.');
+                    $this->localizeMyform();
                 } else
                 {/* update database */
                     $this->setFormData($cursor);

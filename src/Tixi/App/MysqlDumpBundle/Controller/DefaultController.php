@@ -11,6 +11,23 @@ class DefaultController extends Controller
 {/*
   * backup the customer database to a file on the host
   */
+    private function backupDatebase($dir, $db)
+    {/* dump the database to the windows file system */
+        $mysqldump = $this->container->getParameter('database_dump');
+        $dbhost = $this->container->getParameter('database_host');
+        $dbuser = $this->container->getParameter('database_user');
+        $dbpass = $this->container->getParameter('database_password');
+        if ($dbpass != ""){
+            $dbpass = "-p ".$dbpass;
+        }
+        $dboptions = "--opt --single-transaction";
+        $dbnames = "--databases $db";
+        $bkpfile = $dir."\\".$db."_backup_".date("Ymd_His").".sql";
+        $bkpcmd = "$mysqldump -h $dbhost -u $dbuser $dbpass $dboptions $dbnames > $bkpfile";
+        exec($bkpcmd);
+
+    }
+
     public function indexAction($name='')
     {/*
       * controller for making backups of the customer database
@@ -28,17 +45,9 @@ class DefaultController extends Controller
 
         $bkpdir = $this->container->getParameter("tixi")["backup_path"].$customer;
         if ($session->get('action') == 'backup')
-        {/* dump the database to the file system */
-            $dbhost = $this->container->getParameter('database_host');
-            $dbuser = $this->container->getParameter('database_user');
-            $dbpass = $this->container->getParameter('database_password');
-            if ($dbpass != ""){
-                $dbpass = "-p ".$dbpass;
-            }
-            $bkpfile = $bkpdir."\\".$customer."_backup_".date("Ymd_His").".sql";
-            $mysqldump = $this->container->getParameter('database_dump');
-            $bkpcmd = "$mysqldump --opt -h $dbhost -u $dbuser $dbpass $customer > $bkpfile 2>&1";
-            exec($bkpcmd);
+        {/* dump the database to the windows file system */
+            $this->backupDatebase($this->container->getParameter("tixi")["backup_path"]."itixi", "itixi");
+            $this->backupDatebase($bkpdir, $customer);
         }
         /* display existing backups, the last one on top */
         $myfiles = array();
