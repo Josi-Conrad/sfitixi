@@ -21,7 +21,9 @@
                 {% if loop.first %}
                     <th class="heading">{{ mycell }}</th>
                 {% else %}
-                    <th>{{ mycell }}</th>
+                    {% if (mycell|slice(-3)!="_FK") %}
+                        <th>{{ mycell }}</th>
+                    {% endif %}
                 {% endif %}
             {% endfor %}
         </tr>
@@ -39,10 +41,12 @@
                         <a href="{{ path( app.request.attributes.get('_route'),
                         {'action':'select', 'cursor': ''} ) }}{{ mycell }}"
                            id="fpm_select_{{ mycell }}">{{ mycell }}
-                            <a>
+                            </a>
                         </td>
                     {% else %}
-                        <td>{{ mycell }}</td>
+                        {% if (mykey|slice(-3)!="_fk") %}
+                            <td>{{ mycell }}</td>
+                        {% endif %}
                     {% endif %}
                 {% endfor %}
             </tr>

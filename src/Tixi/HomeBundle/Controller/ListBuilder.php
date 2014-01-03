@@ -237,8 +237,14 @@ class ListBuilder extends Controller
             }
         }
         if ($subject =="")
-        {/* cannot fimd the cursor in the list, not in focus due to pagination */
+        {/* cannot fimd the cursor in the list, probably not in focus due to pagination */
             $subject = $this->session->get("context/$route");
+            if ($subject =="")
+            {
+                $subject = "Software-Fehler";
+                $this->session->set("errormsg",
+                                    "Kein Betreff in Datensatz und kein Kontext gesetzt (Software-Fehler).");
+            }
             $this->session->set("subject", $subject);
         }
         else  {
