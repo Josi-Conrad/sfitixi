@@ -1,0 +1,86 @@
+{# src/Tixi/App/DriverScheduleBundle/Resources/views/Default/index.html.twig #}
+{# 07.01.2014 martin jonasse copied from HomeBundle ans adapted to schedule #}
+
+{% extends 'TixiHomeBundle:Default:index.html.twig' %}
+
+{% block title %}{{ app.session.get('title') }}{% endblock %}
+
+{% block content %}
+{# render a form for the variable myform ............ #}
+<div class="content-wrapper">
+    <form name="tixi_form"
+          action="{{ path( app.request.attributes.get('_route'), {'action':'save'} ) }}"
+          method="POST">
+
+        <table class="VierQuadForm" summary="Auswahlformular mit 4 Quadranten">
+            <tbody>
+                <tr>
+                    <td>
+                        <p class="control-standard">
+                            {# einsatzplan_id ............ #}
+                            {% set record = myform.0 %}
+                            <label for="fpw_{{ record.Field }}">{{ record.Field }}</label>
+                            <input name="{{ record.Field }}"
+                               id="fpw_{{ record.Field }}"
+                               type="number"
+                               value="{{ record.Value }}"
+                               title="{{ record.Comment }}"
+                               disabled
+                            />
+                        </p>
+
+                        <p class="control-standard">
+                            {# einsatzplan_betreff ............ #}
+                            {% set record = myform.2 %}
+                            <label for="fpw_{{ record.Field }}">{{ record.Field }}</label>
+                            <input required
+                               name="{{ record.Field }}"
+                               id="fpw_{{ record.Field }}"
+                               type="text"
+                               value="{{ record.Value }}"
+                               title="{{ record.Comment }}"
+                            />
+                        </p>
+                    </td>
+                    <td>
+                        <p class="control-standard">
+                            {# memo ............ #}
+                            {% set record = myform.3 %}
+                            <label for="fpw_{{ record.Field }}">{{ record.Field }}</label>
+                            <textarea style="width: 480px; height: 50px;"
+                                  name="{{ record.Field }}"
+                                  id="fpw_{{ record.Field }}"
+                                  title="{{ record.Comment }}"
+                            >{{ record.Value }}</textarea>
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <p>
+                            Klicken Sie bitte auf die Daten, an denen Sie fahren wollen:
+                        </p>
+                        <div class="jq_taskdatepicker"></div>
+                        <p>Die gewählte Daten erscheinen rechts, abwählen durch erneutes klicken.</p>
+                    </td>
+                    <td>
+                    <p>
+                        Klicken Sie bitte auf die Schicht, die Sie fahren wollen:
+                    </p>
+                    {# jq_taskdatepicker - list of shifts ............ #}
+                    <div id="shifts" hidden>
+                        {{ include( 'TixiAppDriverScheduleBundle:Default:shifts.html.twig' ) }}
+                    </div>
+                    <div id="trash" hidden>
+                        <img src="{{ asset('images/trash.gif') }}" alt="Zeile löschen" onclick="deleteElement('task?')"/>
+                    </div>
+                    {#  jq_taskdatepicker - placeholder for tasks ............ #}
+                    <div id="tasks">
+                    </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,3 @@
+tixi_fahrer_einsatzplan_page:
+    pattern:  /app/fahrer/einsatzplan
+    defaults: { _controller: TixiAppDriverScheduleBundle:Default:index }

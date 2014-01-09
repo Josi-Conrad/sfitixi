@@ -41,6 +41,7 @@ class AppKernel extends Kernel
             new Tixi\App\ShiftBundle\TixiAppShiftBundle(),
             new Tixi\UserBundle\TixiUserBundle(),
             new Tixi\App\VehicleDetailsBundle\TixiAppVehicleDetailsBundle(),
+            new Tixi\App\DriverScheduleBundle\TixiAppDriverScheduleBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

@@ -107,6 +107,27 @@ p.control-standard span {
 }
 
 /*
+ * planning FORM styles (four quadrants)
+ * martin jonasse 07.01.2014 initial file section
+ */
+
+.VierQuadForm {
+    font-size: 13px;
+    font-family: Helvetica, Arial, Sans-Serif;
+    border-spacing: 0px;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.VierQuadForm td {
+    border: 1px solid #d3d3d3;
+    background-color: white;
+    padding: 8px;
+    text-align: left;
+    vertical-align: top;
+}
+
+/*
  * Modal Dialogs
  * martin jonasse 25.10.2013, 27.11.2013
  */

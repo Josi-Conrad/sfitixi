@@ -219,49 +219,57 @@ class ListBuilder extends Controller
 
     private function setSubject($route)
     {/*
-      * set the session variable "subject" and "context",
-      * based on data in $this->list
+      * set the session variable "subject" and "context", based on data in $this->list, else from context
       */
-        $cursor = $this->session->get("cursor/$route");
-        $subject = "";
-        /* add names to subject */
-        foreach ($this->list as $key => $values) {
-            if ($cursor == $values[$this->pkey])
-            {/* found the selected row */
-                foreach ($values as $col => $cell){
-                    if ((strpos($col, "name")!==false) or (strpos($col, "betreff")!==false)){
-                        $subject .= $cell." ";
+        $caption = strtoupper(MenuTree::getCell($route, "CAPTION")).": "; // lead-in with caption and colon
+        if (count($this->list) > 0)
+        {/* add indexed names to child subject */
+            $subject = "";
+            $cursor = $this->session->get("cursor/$route");
+            foreach ($this->list as $key => $values) {
+                if ($cursor == $values[$this->pkey])
+                {/* found the selected row */
+                    foreach ($values as $col => $cell){
+                        if ((strpos($col, "name")!==false) or (strpos($col, "betreff")!==false)){
+                            $subject .= $cell." ";
+                        }
                     }
+                    break;
                 }
-                break;
+            }
+            if ($subject != "")
+            {/* found indexed names in $this->list */
+                $subject = $caption.$subject;
+            }
+            else
+            {/* cannot fimd the cursor in the list, probably not in focus due to pagination */
+                $subject = $this->session->get("context/$route"); // use context
+                if ($subject == "")
+                {/* ignore error ... */
+                    $subject = $caption;
+                }
             }
         }
-        if ($subject =="")
-        {/* cannot fimd the cursor in the list, probably not in focus due to pagination */
-            $subject = $this->session->get("context/$route");
-            if ($subject =="")
-            {
-                $subject = "Software-Fehler";
-                $this->session->set("errormsg",
-                                    "Kein Betreff in Datensatz und kein Kontext gesetzt (Software-Fehler).");
-            }
-            $this->session->set("subject", $subject);
+        else
+        {/* empty list */
+            $subject  = $caption;
         }
-        else  {
-            $subject = MenuTree::getCell($route, "CAPTION").": ".$subject;
-            /* if applicable, prefix subject with context info */
-            $parent = menutree::getCell($route, "PARENT");
-            if ($parent != "") {
-                $subject = $this->session->get("context/$parent")." - ".$subject;
-            }
-            /* restrict length */
-            if (strlen($subject) > 80) {
-                $subject = substr($subject, 0, 77)."...";
-            }
-            /* return (persist) data */
-            $this->session->set("subject", $subject);
-            $this->session->set("context/$route", $subject);
+
+        /* if applicable, prefix subject with the parents context info */
+        $parent = menutree::getCell($route, "PARENT");
+        if ($parent != "") {
+            $subject = $this->session->get("context/$parent")." - ".$subject;
         }
+
+        /* restrict length */
+        if (strlen($subject) > 80) {
+            $subject = substr($subject, 0, 77)."...";
+        }
+
+        /* persist data in session variables */
+        $this->session->set("subject", $subject);
+        $this->session->set("context/$route", $subject);
+
     }
 
     public function makeList($route)
@@ -282,7 +290,7 @@ class ListBuilder extends Controller
         }
 
         $this->list = $this->getTable($route); /* get list data (table) */
-        $this->setSubject($route);       /* set subject in the session */
+        $this->setSubject($route);       /* set subject */
     }
 
     public function getRows()

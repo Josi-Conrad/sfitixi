@@ -42,9 +42,9 @@ class DefaultController extends Controller
       *
       * return: the modified myform array: Value and or Error or ...
       */
-        foreach ($myform as $key => $values) {
+        /* foreach ($myform as $key => $values) {
 
-        }
+        } */
         return $myform; // return the changed local copy of the myform array
     }
 

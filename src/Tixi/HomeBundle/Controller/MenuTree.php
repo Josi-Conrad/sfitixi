@@ -332,7 +332,7 @@ final class MenuTree
             'ORDER' => '33', 
             'LOCATION' => 'menu-bar', 
             'PARENT' => 'tixi_fahrer_page', 
-            'ENABLED' => '0', 
+            'ENABLED' => '1', 
             'URL' => '/app/fahrer/einsatzplan', 
             'CAPTION' => 'Einsatzplan', 
             'BREADCRUMB' => 'Fahrer - Einsatzplan', 

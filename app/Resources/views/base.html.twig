@@ -5,49 +5,28 @@
         <meta charset="UTF-8" />
         <title>{% block title %}Welcome!{% endblock %}</title>
         {% block stylesheets %}{% endblock %}
+
         <!--google maps stuff -->
         <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
         <script type="text/javascript" src="/sfitixi/web/js/tixi-geocoding.js"></script>
+
         <!--jquery datapicker and timepicker stuff -->
         <link rel="stylesheet" href="/sfitixi/web/css/smoothness/jquery-ui.css">
-        <style type="text/css">
-            /* timepicker plugin stuff http://trentrichardson.com */
-            .ui-timepicker-div .ui-widget-header { margin-bottom: 8px; }
-            .ui-timepicker-div dl { text-align: left; }
-            .ui-timepicker-div dl dt { float: left; clear:left; padding: 0 0 0 5px; }
-            .ui-timepicker-div dl dd { margin: 0 10px 10px 40%; }
-            .ui-timepicker-div td { font-size: 90%; }
-            .ui-tpicker-grid-label { background: none; border: none; margin: 0; padding: 0; }
-            .ui-timepicker-rtl{ direction: rtl; }
-            .ui-timepicker-rtl dl { text-align: right; padding: 0 5px 0 0; }
-            .ui-timepicker-rtl dl dt{ float: right; clear: right; }
-            .ui-timepicker-rtl dl dd { margin: 0 40% 10px 10px; }
-             /* daterangepicker stuff style sheet stackoverflow */
-            .dp-highlight .ui-state-default { background: orange; color: #FFF; }
-        </style>
+        <link rel="stylesheet" href="/sfitixi/web/css/datetimepicker.css">
+
         <script type="text/javascript" src="/sfitixi/web/js/jquery-1.9.1.js"></script>
         <script type="text/javascript" src="/sfitixi/web/js/jquery-ui.js"></script>
         <script type="text/javascript" src="/sfitixi/web/js/jquery.ui.datepicker-de.js"></script>
         <script type="text/javascript" src="/sfitixi/web/js/jquery-ui-timepicker-addon.js"></script>
         <script type="text/javascript" src="/sfitixi/web/js/tixi-pickers.js"></script>
+        <script type="text/javascript" src="/sfitixi/web/js/tixi-functions.js"></script>
+
         <!--favicon stuff -->
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
     </head>
+
     <body>
         {% block body %}{% endblock %}
-        {% block javascripts %}
-            <script type="text/javascript">
-                function overlay()
-                {
-                    el = document.getElementById("overlay");
-                    el.style.visibility = (el.style.visibility == "visible") ? "hidden" : "visible";
-                }
-                function errbox()
-                {
-                    elx = document.getElementById("errbox");
-                    elx.style.visibility = (elx.style.visibility == "visible") ? "hidden" : "visible";
-                }
-            </script>
-        {% endblock %}
+        {% block javascripts %}{% endblock %}
     </body>
 </html>

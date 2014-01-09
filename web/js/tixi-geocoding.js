@@ -6,7 +6,8 @@
  * To change this template use File | Settings | File Templates.
  */
 /* Derived from Google Maps, Geocoding service */
-/* 21.11.2013 martin jonasse initial file for displaying addresse information and retrieving geocode */
+/* 21.11.2013 martin jonasse initial file for displaying addresse information and retrieving geocode ------ */
+/* 09.01.2014 martin jonasse if applicable, write error text (!= ROOFTOP) to database --------------------- */
 
 var geocoder;
 var map;
@@ -44,9 +45,13 @@ function codeAddress() {
                 /* write geocode to form element */
                 var gc = document.getElementById('fpw_geocode');
                 gc.value = results[0].geometry.location.lat() + ',' + results[0].geometry.location.lng();
-                /* test the precision of the result */
-                if (results[0].geometry.location_type != "ROOFTOP") {
+                if (results[0].geometry.location_type != "ROOFTOP")
+                {
                     alert("Adresse nicht präzise sondern eine Annäherung, bitte überprüfen und ändern!");
+					gc.value = results[0].geometry.location_type;
+                } else
+                {
+                    gc.value = results[0].geometry.location.lat() + ',' + results[0].geometry.location.lng();
                 }
             }
             else
