@@ -64,18 +64,20 @@
                         <p>Die gewählte Daten erscheinen rechts, abwählen durch erneutes klicken.</p>
                     </td>
                     <td>
-                    <p>
-                        Klicken Sie bitte auf die Schicht, die Sie fahren wollen:
-                    </p>
-                    {# jq_taskdatepicker - list of shifts ............ #}
+                    <p>Klicken Sie bitte auf die Schicht, die Sie fahren wollen:</p>
+                    {# template for a list of shifts ............ #}
                     <div id="shifts" hidden>
                         {{ include( 'TixiAppDriverScheduleBundle:Default:shifts.html.twig' ) }}
                     </div>
-                    <div id="trash" hidden>
-                        <img src="{{ asset('images/trash.gif') }}" alt="Zeile löschen" onclick="deleteElement('task?')"/>
+                    {# template for the trashcan image object ............ #}
+                    <div id="trashcan" hidden>
+                        <img src="{{ asset('images/trashcan.gif') }}" alt="Zeile löschen" onclick="deleteElement('task?')"/>
                     </div>
                     {#  jq_taskdatepicker - placeholder for tasks ............ #}
                     <div id="tasks">
+                        {% for taskobject in mysubform %}
+                            {{  taskobject | raw }}
+                        {% endfor %}
                     </div>
                     </td>
                 </tr>

@@ -21,33 +21,40 @@ use Doctrine\DBAL\Types\Type;
 
 class FormStateBuilder extends Controller
 {
-    protected $container;       // container
-    protected $session;         // session
-    protected $conn;            // database connection
+    protected $container;             // container
+    protected $session;               // session
+    protected $conn;                  // database connection
 
-    protected $callback;        // input: callback function for validating the data in $myform
-    protected $formview;        // input (name of the MySQL form view)
-    protected $listview;        // input (name of the MySQL list view)
-    protected $pkey;            // input (name of the primary key)
-    protected $collection;      // true: collection of objects (many), false: one object
-    protected $constraint = ""; // input: where foo = 'bar' (resolves to one record)
+    protected $callvalidate;          // callback function for validating the data in $myform
+    protected $callsubform = array(); // callback for getting a subform data collection (optional)
+    protected $formview;              // name of the MySQL form view)
+    protected $listview;              // name of the MySQL list view)
+    protected $pkey;                  // input (name of the primary key)
+    protected $collection;            // true: collection of objects (many), false: one object
+    protected $constraint = "";       // constraint expression foo = 'bar' (resolves to one record)
 
-    protected $constraint_key;  // input: derived from $constraint
-    protected $constraint_id;   // input: derived from $constraint
+    protected $constraint_key;        // derived from $constraint
+    protected $constraint_id;         // derived from $constraint
 
-    protected $myform;          // meta plus values for rendering and validating a form
-    protected $mytabs;          // meta data of the tables used in the formview
+    protected $myform;                // meta plus values for rendering and validating a form
+    protected $mytabs;                // meta data of the tables used in the formview
+    protected $mysubform = array();   // data plus values for rendering custom subforms
 
     public function __construct (ContainerInterface $container)
     {
         $this->container = $container;
     }
 
-    public function setCallback($value)
+    public function setCallvalidate($value)
     {/*
       * define the name of the callback function, default = empty
       */
-        $this->callback = $value;
+        $this->callvalidate = $value;
+    }
+
+    public function setCallsubform( $value )
+    {/* optional : the object name of the subform function */
+        $this->callsubform = $value;
     }
 
     public function setFormView($value)
@@ -205,6 +212,13 @@ class FormStateBuilder extends Controller
       * the submitted user data will be persisted to the database
       */
         return $this->myform;
+    }
+
+    public function getSubform()
+    {/*
+      * get the subform data (depends on the above)
+      */
+        return $this->mysubform;
     }
 
     private function setSubject()
@@ -988,11 +1002,19 @@ class FormStateBuilder extends Controller
             {/* action code for modify list object ------------------------------------- */
                 $cursor = $this->session->get("cursor/$route");
                 $this->copyFormData2Myform($cursor);
+                if (is_callable($this->callsubform))
+                {/* if applicable, get children from database */
+                    $this->mysubform = call_user_func($this->callsubform, $this->mysubform);
+                }
                 /* set new state */
                 $this->session->set('mode', $tixi['mode_edit_in_list']); // set new state
             }
             elseif ($action == 'delete')
             {/* action code for delete list object ---------------------------------- */
+                if (is_callable($this->callsubform))
+                {/* if applicable, delete children first (referential integrity) */
+                    $this->mysubform = call_user_func($this->callsubform, $this->mysubform);
+                }
                 $cursor = $this->session->get("cursor/$route");
                 $this->deleteFormData($cursor); // delete the database record
                 $cursor = $this->getDefaultID();
@@ -1073,8 +1095,8 @@ class FormStateBuilder extends Controller
                     }
                     $idx += 1;
                 }
-                if (is_callable($this->callback)) {
-                    $this->myform = call_user_func($this->callback, $this->myform);
+                if (is_callable($this->callvalidate)) {
+                    $this->myform = call_user_func($this->callvalidate, $this->myform);
                 }
                 if ($this->hasErrorsMyform() > 0) {
                     $this->session->set('errormsg', 'Validierungsfehler in ein oder mehrer Felder, bitte korrigieren.');
@@ -1082,6 +1104,10 @@ class FormStateBuilder extends Controller
                 } else
                 {/* update database */
                     $this->setFormData($cursor);
+                    if (is_callable($this->callsubform))
+                    {/* if applicable, update children */
+                        $this->mysubform = call_user_func($this->callsubform, $this->mysubform);
+                    }
                     $this->session->set('tainted', $tixi['undefined']); // reset tainted
                     $this->session->set('mode', $tixi['mode_select_list']); // set new state
                 }
@@ -1156,7 +1182,10 @@ class FormStateBuilder extends Controller
             {/* action code for modify --------------------------------------------- */
                 $cursor = $this->session->get("cursor/$route");
                 $this->copyFormData2Myform($cursor);
-                /* set new state */
+                if (is_callable($this->callsubform))
+                {/* if applicable, get children from database */
+                    $this->mysubform = call_user_func($this->callsubform, $this->mysubform);
+                }
                 $this->session->set('mode', $tixi['mode_edit_record']); // set new state
             }
             elseif ($action == 'print')
@@ -1199,8 +1228,8 @@ class FormStateBuilder extends Controller
                     }
                     $idx += 1;
                 }
-                if (is_callable($this->callback)) {
-                    $this->myform = call_user_func($this->callback, $this->myform);
+                if (is_callable($this->callvalidate)) {
+                    $this->myform = call_user_func($this->callvalidate, $this->myform);
                 }
                 if ($this->hasErrorsMyform() > 0) {
                     $this->session->set('errormsg',
@@ -1208,8 +1237,11 @@ class FormStateBuilder extends Controller
                 } else
                 {/* update database */
                     $this->setFormData($cursor);
+                    if (is_callable($this->callsubform))
+                    {/* if applicable, update children */
+                        $this->mysubform = call_user_func($this->callsubform, $this->mysubform);
+                    }
                     $this->copyReadonly2Myform();
-                    /* set new mode */
                     $this->session->set('mode', $tixi['mode_read_record']); // set new state
                 }
             }

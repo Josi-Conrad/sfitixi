@@ -25,12 +25,12 @@ $(function()
                     var taskid = document.getElementById("task" + shortd);
                     if (taskid == null)
                     { /* object doesn't exist: make an object */
-                        var trash = $("#trash").html().replace(/\?/g, shortd );
+                        var trash = $("#trashcan").html().replace(/\?/g, shortd );
                         var prefix =
                             "<p id=\"task" + shortd + "\">" + trash +
                             "<input name= \"date" + shortd + "\" type=\"text\" value=\"";
                         var shifts = $("#shifts").html().replace(/\?/g, shortd );
-                        var postfix = "\" />" + shifts + "</p>";
+                        var postfix = "\" disabled/>" + shifts + "</p>";
                         $("#tasks").append(prefix + date + postfix);
                     }
                     else

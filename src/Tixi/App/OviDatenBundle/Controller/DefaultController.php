@@ -24,7 +24,7 @@ class DefaultController extends Controller
         /*  start service */
         $autoform = $this->get('tixi_autoform'); // service name
         /* set attributes */
-        $autoform->setCallback(array($this, "validateOvidata")); // callback
+        $autoform->setCallValidate(array($this, "validateOvidata")); // callback
         $autoform->setCollection(true);
         $autoform->setPkey("ovi_id"); // name of primary key
         $autoform->setFormview("form_ovi");

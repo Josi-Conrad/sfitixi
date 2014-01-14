@@ -26,13 +26,15 @@ class AutoForm extends Controller
     protected $container;
     protected $session;
 
-    protected $callback;          // callback function for validating the formdata
-    protected $collection;        // true: collection of objects (many), false: one object
-    protected $pkey;              // name of the primary key in both views
-    protected $formview;          // the name of the MySQL view for the form
-    protected $listview = "";     // the name of the MySQL view for the list
-    protected $constraint = "";   // restriction(s) for subqueries
-                                  // empty or a sql expression: foo = 'bar'
+    protected $callvalidate;          // callback function for validating the formdata
+    protected $callsubform = array(); // callback for getting a subform data collection (optional)
+    protected $collection;            // true: collection of objects (many), false: one object
+    protected $pkey;                  // name of the primary key in both views
+    protected $formview;              // the name of the MySQL view for the form
+    protected $listview = "";         // the name of the MySQL view for the list
+    protected $constraint = "";       // restriction(s) for subqueries
+                                      // empty or a sql expression: foo = 'bar'
+
     protected $formtwig = TIXI_FORMTWIGFILE; // renders form
     protected $listtwig = TIXI_LISTTWIGFILE; // renders list
 
@@ -42,9 +44,14 @@ class AutoForm extends Controller
         $this->session = new session;
     }
 
-    public function setCallback( $callback )
+    public function setCallValidate( $value )
     {/* mandatory : the object name of the validation function */
-        $this->callback = $callback;
+        $this->callvalidate = $value;
+    }
+
+    public function setCallSubform( $value )
+    {/* optional : the object name of the subform function */
+        $this->callsubform = $value;
     }
 
     public function setCollection( $collection )
@@ -85,7 +92,7 @@ class AutoForm extends Controller
     private function checkAttributes()
     {/* test that all attributes have been set properly
       */
-        if (isset($this->callback) and isset($this->formview) and isset($this->listview) and
+        if (isset($this->callvalidate) and isset($this->formview) and isset($this->listview) and
             isset($this->pkey) and isset($this->collection) and isset ($this->constraint) and
             isset($this->formtwig) and isset($this->listtwig))
         {
@@ -109,9 +116,10 @@ class AutoForm extends Controller
             $state->setFormView($this->formview);
             $state->setListView($this->listview);
             $state->setPkey($this->pkey);
-            $state->setCallback($this->callback);
+            $state->setCallValidate($this->callvalidate);
             $state->setCollection($this->collection);
             $state->setConstraint($this->constraint);
+            $state->setCallSubform($this->callsubform);
 
             if ($this->collection == true)
             {/* code for managing a collection of objects */
@@ -133,26 +141,29 @@ class AutoForm extends Controller
                 } elseif ($mode == $tixi["mode_edit_in_list"])
                 {/* display a form for the selected object */
                     return $this->render($this->formtwig,
-                                         array('myform' => $state->getFormMetaData() ));
+                                         array('myform' => $state->getFormMetaData(),
+                                               'mysubform' => $state->getSubform() ));
 
                 } else
                 {/* unexpected state encountered */
                     $this->session->set('errormsg',
                         "Unerwartete Zustand $mode in Seite $route.");
                     return $this->render($this->formtwig,
-                                         array('myform' => array()));
+                                         array('myform' => array(),
+                                               'mysubform' => array() ));
                 }
             }
             else
             {/* code for managing a single object */
                 $state->makeIndividualObjectStates($route);
                 return $this->render($this->formtwig,
-                                     array('myform' => $state->getFormMetaData() ));
+                                     array('myform' => $state->getFormMetaData(),
+                                           'mysubform' => $state->getSubform() ));
             }
         }
         else
         {/* render error page */
-            return $this->render($this->formtwig, array('myform' => array()));
+            return $this->render($this->formtwig, array('myform' => array(), 'mysubform' => array() ));
         }
     }
 }

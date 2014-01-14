@@ -25,7 +25,7 @@ class DefaultController extends Controller
         /*  start service */
         $autoform = $this->get('tixi_autoform'); // service name
         /* set attributes */
-        $autoform->setCallback(array($this, "validateHoliday")); // callback
+        $autoform->setCallValidate(array($this, "validateHoliday")); // callback
         $autoform->setCollection(true);
         $autoform->setPkey("feiertag_id"); // name of primary key
         $autoform->setFormview("form_feiertag");

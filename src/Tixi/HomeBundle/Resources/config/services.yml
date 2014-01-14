@@ -19,6 +19,9 @@ services:
     tixi_autoform:
         class: Tixi\HomeBundle\Controller\AutoForm
         arguments: [@service_container]
+    tixi_dataminer:
+        class: Tixi\HomeBundle\Controller\DataMiner
+        arguments: [@service_container]
 #
 #   stackoverflow "How to use Namespaced Sessions in Symfony2"
 #    session:

@@ -35,7 +35,7 @@ class DefaultController extends Controller
         /*  start service */
         $autoform = $this->get('tixi_autoform'); // service name
         /* set attributes */
-        $autoform->setCallback(array($this, "validatePassengerAbsence"));
+        $autoform->setCallValidate(array($this, "validatePassengerAbsence"));
         $autoform->setCollection(true);
         $autoform->setPkey("abwesend_id"); // name of primary key
         $autoform->setFormview("form_abwesend");

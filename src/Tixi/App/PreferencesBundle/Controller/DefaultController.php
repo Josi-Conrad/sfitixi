@@ -36,7 +36,7 @@ class DefaultController extends Controller
         $autoform->setFormview("form_benutzer"); // name of view
         $autoform->setPkey("benutzer_id"); // name of primary key
         $autoform->setCollection(false); // this is an individual object
-        $autoform->setCallback(array($this, "validatePreferences")); // callback
+        $autoform->setCallValidate(array($this, "validatePreferences")); // callback
         $autoform->setConstraint("benutzername = '".$username."'"); // sql expression
 
         /*  render form */
