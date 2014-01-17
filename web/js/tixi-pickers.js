@@ -4,7 +4,18 @@
  * 09.12.2013 martin jonasse initial file 
  * 10.12.2013 martin jonasse integrate with symfony/sfitixi
  * 09.01.2014 martin jonasse added upgraded dateplanner (one year into future)
+ * 17.01.2014 martin jonasse moved function deleteElement, upgraded taskdatepicker
  */
+
+function deleteElement(MyElementId)
+{/*
+ * used for deleting elements (rows) in taskdatepicker
+ */
+    var taskid = document.getElementById(MyElementId);
+    taskid.parentNode.removeChild(taskid);
+    $(".jq_taskdatepicker").datepicker("refresh");
+}
+
 $(function()
 {
     /* general purpose datepicker ..................... */
@@ -19,6 +30,27 @@ $(function()
     $( ".jq_taskdatepicker" )
         .datepicker(
             {
+                beforeShowDay: function(date)
+                {/* before show day event, called for each day displayed on the screen */
+                    function padNumber(number)
+                    {/* add leading zeros if needed */
+                        var ret = new String(number);
+                        if (ret.length == 1)
+                            ret = "0" + ret;
+                        return ret;
+                    }
+                    var tasknodes = document.getElementsByClassName("taskdate");
+                    var swissdate = padNumber(date.getDate()) + "." +
+                                    padNumber(date.getMonth()+1) + "." + date.getFullYear();
+                    for (var i = 0; i < tasknodes.length; ++i)
+                    {
+                        if (tasknodes[ i ].value == swissdate)
+                        {
+                            return [true, 'dp-highlight'];
+                        }
+                    }
+                    return [true, ""];
+                },
                 onSelect: function(date)
                 {/* date selected event */
                     var shortd = date.replace(/\./g, ''); // use this as the id
@@ -28,7 +60,7 @@ $(function()
                         var trash = $("#trashcan").html().replace(/\?/g, shortd );
                         var prefix =
                             "<p id=\"task" + shortd + "\">" + trash +
-                            "<input name= \"date" + shortd + "\" type=\"text\" value=\"";
+                            "<input class=\"taskdate\" name= \"date" + shortd + "\" type=\"text\" value=\"";
                         var shifts = $("#shifts").html().replace(/\?/g, shortd );
                         var postfix = "\" disabled/>" + shifts + "</p>";
                         $("#tasks").append(prefix + date + postfix);

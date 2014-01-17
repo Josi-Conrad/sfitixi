@@ -230,13 +230,13 @@ class DefaultController extends Controller
                 "\n<p id=\"task$shortd\">".
                 "\n  <img src=\"/sfitixi/web/images/trashcan.gif\" ".
                   "alt=\"Löschen\" onclick=\"deleteElement('task$shortd')\"/> ".
-                "\n  <input name=\"date$shortd\" type=\"text\" value=\"".$values['task_date']."\" disabled>";
+                "\n  <input class=\"taskdate\" name=\"date$shortd\" type=\"text\" value=\"".$values['task_date']."\" disabled>";
             $shifts = "";
             foreach ($this->shifts as $shift)
             {/* <input type="radio" name ="dienst?" value="Schicht 1" title="09:00 - 13:00" checked >Schicht 1 */
                 $check = ($shift['dienst_name'] == $values['task_shift']) ? "checked" : "";
                 $shifts .= "\n  <input type=\"radio\" name =\"dienst$shortd\" value =\"".$shift['dienst_name']."\" ".
-                    "title =\"".substr($shift['dienst_anfang'], 0, -2)." - ".substr($shift['dienst_ende'], 0, -2)."\" ".
+                    "title =\"".substr($shift['dienst_anfang'], 0, -3)." - ".substr($shift['dienst_ende'], 0, -3)."\" ".
                     $check.">".$shift['dienst_name'];
             }
             $mysubform[$key] .= $shifts."\n</p>";

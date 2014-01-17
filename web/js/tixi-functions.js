@@ -18,10 +18,3 @@ function errbox()
     elx.style.visibility = (elx.style.visibility == "visible") ? "hidden" : "visible";
 }
 
-function deleteElement(MyElementId)
-{/*
-  * used for deleting elements (rows) in taskdatepicker
-  */
-    var taskid = document.getElementById(MyElementId);
-    taskid.parentNode.removeChild(taskid);
-}
