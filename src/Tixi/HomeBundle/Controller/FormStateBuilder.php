@@ -10,6 +10,7 @@
 // 04.11.2013 martin jonasse upgrade cursor to structured namespace, split off $mydata from $myform
 // 02.12.2013 martin jonasse added time format
 // 30.12.2013 martin jonasse added localizeMyform
+// 17.01.2014 martin jonasse fixed deletion of tainted objects
 
 namespace Tixi\HomeBundle\Controller;
 
@@ -1120,13 +1121,11 @@ class FormStateBuilder extends Controller
                 {/* the inserted object has not been properly validated */
                     $a = explode(":", $tainted);
                     if (count($a)==2) {
-                        if ($a[0] == $route) {
+                        if (($a[0] == $route) and ($a[1] == $cursor)) {
                             $this->deleteFormData($cursor); // delete the database record
                             $cursor = $this->getDefaultID(); // get new cursor (default)
                             $this->session->set("cursor/$route", $cursor);
                             $this->session->set('errormsg', "Objekt Nr. $a[1] gelöscht, nicht validiert.");
-                        } else {
-                            $this->session->set('errormsg', "Fehler in Seite $route, Objekt Nr.. $a[1] nicht validiert.");
                         }
                     }
                 }
