@@ -27,10 +27,23 @@
                                title="{{ record.Comment }}"
                                disabled
                             />
+                            {# einsatzplan.istAktive  ............ #}
+                            {% set record = myform.4 %}
+                            <input name="{{ record.Field }}"
+                                   type="hidden"
+                                   value="0">
+                            <input name="{{ record.Field }}"
+                                   id="fpw_{{ record.Field }}"
+                                   type="checkbox"
+                                   value="1"
+                                   title="{{ record.Comment }}"
+                                    {% if record.Value == "1" %} checked{% endif %}
+                                   style="width: 20px">
+                            istAktive
                         </p>
 
                         <p class="control-standard">
-                            {# einsatzplan_betreff ............ #}
+                            {# einsatzplan_betreff  ............ #}
                             {% set record = myform.2 %}
                             <label for="fpw_{{ record.Field }}">{{ record.Field }}</label>
                             <input required

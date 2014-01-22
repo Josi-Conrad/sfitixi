@@ -1,0 +1,3 @@
+tixi_fahrer_dauereinsatz_page:
+    pattern:  /app/fahrer/dauereinsatz
+    defaults: { _controller: TixiAppDriverRecurringTaskBundle:Default:index }

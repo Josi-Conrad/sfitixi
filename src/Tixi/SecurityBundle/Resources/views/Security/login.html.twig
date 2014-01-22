@@ -21,10 +21,19 @@
                     <input type="text" id="fpw_username" autocomplete="on" name="_username" required autofocus />
                 </p>
                 <p>
-                    <label for="fpw_password">Passwort:</label>
-                    <input type="password" id="fpw_password" autocomplete="on" name="_password" required />
+                <label for="fpw_password">Passwort:</label>
+                <input type="password"
+                           id="fpw_password"
+                           autocomplete="on"
+                           name="_password"
+                           onkeypress="capslock(event)"
+                           required />
                 <p>
                     <button type="submit" class="loginbutton" id="fpm_login">Anmelden</button>
+                    <span id="divCapslock" style="visibility:hidden; color:red;" >
+                        <img src="{{ asset('images/warning.png') }}" alt="Warnung" />
+                        Feststelltaste ist aktiviert!
+                    </span>
                 </p>
                 <p>
                     <small>Benutzernamen und Passwörter werden durch die Geschäftsleitungen der Tixi Betriebe (Mandant)
@@ -37,4 +46,16 @@
             </form>
         </section>
     </div>
+
+    <script language="Javascript">
+        function capslock(e){
+            kc = e.keyCode?e.keyCode:e.which;
+            sk = e.shiftKey?e.shiftKey:((kc == 16)?true:false);
+            if(((kc >= 65 && kc <= 90) && !sk)||((kc >= 97 && kc <= 122) && sk))
+                document.getElementById('divCapslock').style.visibility = 'visible';
+            else
+                document.getElementById('divCapslock').style.visibility = 'hidden';
+        }
+    </script>
 {% endblock %}
+

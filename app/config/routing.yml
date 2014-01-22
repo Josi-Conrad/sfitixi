@@ -1,3 +1,11 @@
+tixi_app_driver_agenda:
+    resource: "@TixiAppDriverAgendaBundle/Resources/config/routing.yml"
+    prefix:   /
+
+tixi_app_driver_recurring_task:
+    resource: "@TixiAppDriverRecurringTaskBundle/Resources/config/routing.yml"
+    prefix:   /
+
 tixi_app_driver_schedule:
     resource: "@TixiAppDriverScheduleBundle/Resources/config/routing.yml"
     prefix:   /

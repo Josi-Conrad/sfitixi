@@ -8,6 +8,7 @@
 {# 27.11.2013 martin jonasse fixed ticket#5 replaced alert #}
 {# 09.12.2013 martin jonasse added jquery-ui.css #}
 {# 10.12.2013 martin jonasse moved everything jquery to base.html.twig #}
+{# 22.01.2014 martin jonasse changed print action to local call to window.print() #}
 
 {% extends '::base.html.twig' %}
 
@@ -88,9 +89,10 @@
                     <div id="fpr_subject">{{ app.session.get('subject') }}</div>
                 </div>
                 <div class="subject-right">
-                    <a href="{{ path( currentpath, {'action':'print'} ) }}" id="fpm_print">
-                        <img src="{{ asset('images/printer-blue.png') }}" alt="printer" />
-                    </a>
+                    <img src="{{ asset('images/printer-blue.png') }}"
+                         alt="printer"
+                         onclick="printpage()"
+                    />
                 </div>
             </div>
         </div>
