@@ -226,6 +226,63 @@ class DataMiner extends Controller
         return $mysql;
     }
 
+    /* --------------- common functions for managing shifts ----------------- */
+
+    public function getShiftName($id)
+    {/* convert shift id to shift name */
+        $session = $this->container->get('session');
+        $shifts = $session->get('shifts');
+        foreach ($shifts as $values)
+        {
+            if ($values['dienst_id'] == $id)
+            {
+                return $values['dienst_name'];
+            }
+        }
+        $session->set('errormsg', "Validierungsfehler: ungültige Dienst ID ($id).");
+        return $shifts[0]['dienst_name']; // return the first valid name
+    }
+
+    public function getShiftId($name)
+    {/* convert shift name to shift id */
+        $session = $this->container->get('session');
+        $shifts = $session->get('shifts');
+        foreach ($shifts as $values)
+        {
+            if ($values['dienst_name'] == $name)
+            {
+                return $values['dienst_id'];
+            }
+        }
+        $session->set('errormsg', "Validierungsfehler: ungültige Dienst Name ($name).");
+        return $shifts[0]['dienst_id']; // return the first valid id
+    }
+
+    public function makeShifts()
+    {/*
+      * add shifts array and html to session
+      */
+        $session = $this->container->get('session');
+        $customer = $session->get('customer');
+        $shifts = $this->readData("select * from $customer.list_dienst");
+        if (count($shifts) >0)
+        {   $session->set('shifts', $shifts); // shifts as an array
+            $str = "\n";
+            foreach ($shifts as $key => $values)
+            {
+                $str .= "<input type=\"radio\" name =\"dienst?\" value=\"".$values['dienst_name']."\" ";
+                $str .= "title=\"".substr($values['dienst_anfang'],0,5)." - ".substr($values['dienst_ende'],0,5)."\"";
+                if ($key == 0){
+                    $str .= " checked";
+                }
+                $str .= " >".$values['dienst_name']."\n";
+            }
+            $session->set('shiftsHTML', $str); // shifts as HTML (template)
+            return true; // success
+        }
+        return false; // failure
+    }
+
     /* --------------- generic MySQL database access functions --------------- */
 
     public function readData($sql)
@@ -271,7 +328,7 @@ class DataMiner extends Controller
         }
     }
 
-    private function insertData($myarray, $mytable)
+    public function insertData($myarray, $mytable)
     {/*
       * insert the data contained in $myarray in to table $mytable
       *   the $myarray keys have the same names as the table columns

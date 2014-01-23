@@ -15,10 +15,6 @@ use Tixi\HomeBundle\Controller\FormBuilder;
 use Tixi\HomeBundle\Controller\ListBuilder;
 use Tixi\HomeBundle\Controller\DataMiner;
 use Tixi\HomeBundle\Controller\MenuTree;
-use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Filesystem\Exception\IOException;
-
-define("TWIG_SHIFTS", "/src/Tixi/App/DriverScheduleBundle/Resources/views/Default/shifts.html.twig");
 
 class DefaultController extends Controller
 {
@@ -26,140 +22,6 @@ class DefaultController extends Controller
     protected $session;
     protected $shifts;
     protected $dataminer;
-
-    private function readData($sql)
-    {/*
-      * read data from the table or views defined in the $sql statement
-      * if applicable, errors are stored in session->errormsq
-      * return an array of data
-      */
-        try
-        {
-            $connection = $this->container->get('database_connection');
-            return $connection->fetchAll( $sql );
-        }
-        catch (PDOException $e)
-        {
-            $this->session->set("errormsg","Cannot access database : ".$e);
-            return false; // empty
-        }
-    }
-
-    public function execData($sql)
-    {/*
-      * delete / update data in the table or views defined in the $sql statement
-      * if applicable, errors are stored in session->errormsq
-      * return success (true) failure (false)
-      */
-        try
-        {
-            $connection = $this->container->get('database_connection');
-            $connection->beginTransaction();
-            $connection->exec($sql);
-            $connection->commit();
-            return true; // success
-        }
-        catch (PDOException $e)
-        {
-            $this->session->set("errormsg","Cannot access database : ".$e);
-            $connection->rollback();
-            return false; // failure
-        }
-    }
-
-    private function insertData($myarray, $mytable)
-    {/*
-      * insert the data contained in $myarray in to table $mytable
-      * if applicable, errors are stored in session->errormsq
-      * return success (true) failure (false)
-      * syntax: "INSERT IGNORE INTO $mytable (fields) VALUES (values)";
-      */
-        $prefix = "INSERT IGNORE INTO $mytable (";
-        try
-        {
-            $connection = $this->container->get('database_connection');
-            $connection->beginTransaction();
-            foreach ($myarray as $values)
-            {
-                $f = "";
-                $v = "";
-                foreach ($values as $key => $value) {
-                    $f .= $key.", ";
-                    $v .= $value.", ";
-                }
-                $sql = $prefix.substr($f, 0, -2).") VALUES (".substr($v, 0, -2).")";
-                $connection->exec($sql);
-            }
-            $connection->commit();
-            return true; // success
-        }
-        catch (PDOException $e)
-        {
-            $this->session->set("errormsg","Cannot access database : ".$e);
-            $connection->rollback();
-            return false; // failure
-        }
-
-    }
-
-    private function getShiftName($id)
-    {/* convert shift id to shift name */
-        foreach ($this->shifts as $values)
-        {
-            if ($values['dienst_id'] == $id)
-            {
-                return $values['dienst_name'];
-            }
-        }
-        $this->session->set('errormsg', "Validierungsfehler: ungültige Dienst ID ($id).");
-        return $this->shifts[0]['dienst_name']; // return the first valid name
-    }
-
-    private function getShiftId($name)
-    {/* convert shift name to shift id */
-        foreach ($this->shifts as $values)
-        {
-            if ($values['dienst_name'] == $name)
-            {
-                return $values['dienst_id'];
-            }
-        }
-        $this->session->set('errormsg', "Validierungsfehler: ungültige Dienst Name ($name).");
-        return $this->shifts[0]['dienst_id']; // return the first valid id
-    }
-
-    private function makeShifts()
-    {/* add shift array to session and shift.html.twig to filesystem */
-        $customer = $this->session->get('customer');
-        $this->shifts = $this->readData("select * from $customer.list_dienst");
-        if (count($this->shifts) >0)
-        {   $this->session->set('shifts', $this->shifts);
-            /* now create shifts.html.twig */
-            $str = "{# automatically built by TixiAppDriverScheduleBundle.Controller.DefaultController.php #}\n\n";
-            foreach ($this->shifts as $key => $values)
-            {
-                $str .= "<input type=\"radio\" name =\"dienst?\" value=\"".$values['dienst_name']."\" ";
-                $str .= "title=\"".substr($values['dienst_anfang'],0,5)." - ".substr($values['dienst_ende'],0,5)."\"";
-                if ($key == 0){
-                    $str .= " checked";
-                }
-                $str .= " >".$values['dienst_name']."\n";
-            }
-            /* now write this to the filesystem as shifts.html.twig */
-            $fs = new Filesystem();
-            try
-            {
-                $fs->dumpFile( '..'.TWIG_SHIFTS, $str );
-                return true; // success
-            }
-            catch (IOException $e)
-            {
-                $session->set("errormsg","IO filesystem error: shifts.html.twig ".$e);
-                return false; // failure
-            }
-        }
-        return false; // failure
-    }
 
     private function getChildren()
     {/*
@@ -169,11 +31,11 @@ class DefaultController extends Controller
         $route = $this->session->get('route');
         $cursor = $this->session->get("cursor/$route"); // cursor in einsatzplan (parent)
         $sql = "select * from ".$customer.".einsatz where einsatz_einsatzplan_fk = ".$cursor;
-        $in = $this->readData($sql);
+        $in = $this->dataminer->readData($sql);
         $out = array();
         foreach ($in as $key => $values){
             $out[$key]['task_date'] = $this->dataminer->localizeDate($values['einsatz_datum']);
-            $out[$key]['task_shift'] = $this->getShiftName($values['einsatz_dienst_fk']);
+            $out[$key]['task_shift'] = $this->dataminer->getShiftName($values['einsatz_dienst_fk']);
         }
         return $out;
     }
@@ -196,12 +58,12 @@ class DefaultController extends Controller
                 $dspairs[] = array("einsatz_id" => "DEFAULT",
                                    "einsatz_einsatzplan_fk" => $cursor,
                                    "einsatz_datum" => "'".($yy.'-'.$mm.'-'.$dd)."'",
-                                   "einsatz_dienst_fk" => $this->getShiftId($value));
+                                   "einsatz_dienst_fk" => $this->dataminer->getShiftId($value));
             }
         }
 
         $customer = $this->session->get("customer");
-        return $this->insertData($dspairs, "$customer.einsatz");
+        return $this->dataminer->insertData($dspairs, "$customer.einsatz");
     }
 
     private function deleteChildren()
@@ -212,7 +74,7 @@ class DefaultController extends Controller
         $route = $this->session->get('route');
         $cursor = $this->session->get("cursor/$route"); // cursor in einsatzplan (parent)
         $sql = "delete from ".$customer.".einsatz where einsatz_einsatzplan_fk = ".$cursor;
-        return $this->execData($sql);
+        return $this->dataminer->execData($sql);
     }
 
     private function convertRecordToHtml($myrecords)
@@ -244,7 +106,7 @@ class DefaultController extends Controller
         return $mysubform;
     }
 
-    public function indexAction($name='')
+    public function indexAction()
     {/*
       * controller for the driver schedule page
       */
@@ -267,7 +129,7 @@ class DefaultController extends Controller
         {   $this->shifts = $this->session->get('shifts');
         }
         else
-        {   $this->makeShifts(); // add shifts to session and filesystem
+        {   $this->dataminer->makeShifts(); // add shifts to session
         }
         /*  start services */
         $autoform = $this->get('tixi_autoform'); // service name

@@ -1,9 +1,8 @@
-{# src/Tixi/App/DriverScheduleBundle/Resources/views/Default/index.html.twig #}
-{# 07.01.2014 martin jonasse copied from HomeBundle ans adapted to schedule #}
+{# src/Tixi/App/DriverScheduleBundle/Resources/views/Default/index.html.twig        #}
+{# 07.01.2014 martin jonasse copied from HomeBundle ans adapted to schedule         #}
+{# 22.01.2014 martin jonasse replaced shifts.html.twig by session.get('shiftsHTML') #}
 
 {% extends 'TixiHomeBundle:Default:index.html.twig' %}
-
-{% block title %}{{ app.session.get('title') }}{% endblock %}
 
 {% block content %}
 {# render a form for the variable myform ............ #}
@@ -53,6 +52,9 @@
                                value="{{ record.Value }}"
                                title="{{ record.Comment }}"
                             />
+                            {% if record.Error != "" %}
+                                <br><i id="fpr_{{ record.Field }}_error" style="color:red">{{ record.Error }}</i>
+                            {% endif %}
                         </p>
                     </td>
                     <td>
@@ -80,11 +82,13 @@
                     <p>Klicken Sie bitte auf die Schicht, während dessen gefahren werden soll:</p>
                     {# template for a list of shifts ............ #}
                     <div id="shifts" hidden>
-                        {{ include( 'TixiAppDriverScheduleBundle:Default:shifts.html.twig' ) }}
+                        {{ app.session.get('shiftsHTML') | raw }}
                     </div>
                     {# template for the trashcan image object ............ #}
                     <div id="trashcan" hidden>
-                        <img src="{{ asset('images/trashcan.gif') }}" alt="Zeile löschen" onclick="deleteElement('task?')"/>
+                        <img src="{{ asset('images/trashcan.gif') }}"
+                             alt="Zeile löschen"
+                             onclick="deleteElement('task?')"/>
                     </div>
                     {#  jq_taskdatepicker - placeholder for tasks ............ #}
                     <div id="tasks">

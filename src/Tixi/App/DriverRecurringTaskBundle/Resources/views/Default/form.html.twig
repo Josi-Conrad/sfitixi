@@ -1,0 +1,174 @@
+{# src/Tixi/App/DriverRecurringTaskBundle/Resources/views/Default/index.html.twig #}
+{# 22.01.2014 martin jonasse initial file #}
+
+{% extends 'TixiHomeBundle:Default:index.html.twig' %}
+
+{% block content %}
+    {# render a form for the variable myform ............ form_dauereinsatzplan #}
+    <div class="content-wrapper">
+        <form name="tixi_form"
+              action="{{ path( app.request.attributes.get('_route'), {'action':'save'} ) }}"
+              method="POST">
+
+            <table class="VierQuadForm" summary="Auswahlformular mit 4 Quadranten">
+                <tbody>
+                <tr>
+                    <td>
+                        <p class="control-standard">
+                            {# dauereinsatzplan_id ............ #}
+                            {% set record = myform.0 %}
+                            <label for="fpw_{{ record.Field }}">{{ record.Field }}</label>
+                            <input name="{{ record.Field }}"
+                                   id="fpw_{{ record.Field }}"
+                                   type="number"
+                                   value="{{ record.Value }}"
+                                   title="{{ record.Comment }}"
+                                   disabled
+                                    />
+                            {# dauereinsatzplan.istAktive  ............ #}
+                            {% set record = myform.4 %}
+                            <input name="{{ record.Field }}"
+                                   type="hidden"
+                                   value="0">
+                            <input name="{{ record.Field }}"
+                                   id="fpw_{{ record.Field }}"
+                                   type="checkbox"
+                                   value="1"
+                                   title="{{ record.Comment }}"
+                                    {% if record.Value == "1" %} checked{% endif %}
+                                   style="width: 20px">
+                            istAktive
+                        </p>
+
+                        <p class="control-standard">
+                            {# dauereinsatzplan_betreff  ............ #}
+                            {% set record = myform.2 %}
+                            <label for="fpw_{{ record.Field }}">{{ record.Field }}</label>
+                            <input required
+                                   name="{{ record.Field }}"
+                                   id="fpw_{{ record.Field }}"
+                                   type="text"
+                                   value="{{ record.Value }}"
+                                   title="{{ record.Comment }}"
+                                    />
+                            {% if record.Error != "" %}
+                                <br><i id="fpr_{{ record.Field }}_error" style="color:red">{{ record.Error }}</i>
+                            {% endif %}
+                        </p>
+                    </td>
+                    <td>
+                        <p class="control-standard">
+                            {# memo ............ #}
+                            {% set record = myform.3 %}
+                            <label for="fpw_{{ record.Field }}">{{ record.Field }}</label>
+                            <textarea style="width: 480px; height: 50px;"
+                                      name="{{ record.Field }}"
+                                      id="fpw_{{ record.Field }}"
+                                      title="{{ record.Comment }}"
+                                    >{{ record.Value }}</textarea>
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <p>
+                            Klicken Sie bitte auf die Wochentage, an denen gefahren werden soll:
+                        </p>
+                        <div class="recurring_weekday_picker">
+                            <!--
+                                This is where a new weekday picker is in the process of being born
+                            -->
+                            <table class="ui-datepicker-calender">
+                                <thead></thead>
+                                <tbody>
+                                    <tr class="weekly">
+                                        <td class=""><a class="ui-state-default" href="#">jeden</a></td>
+                                        <td class=""><a class="ui-state-default" href="#">Mo</a></td>
+                                        <td class=""><a class="ui-state-default" href="#">Di</a></td>
+                                        <td class=""><a class="ui-state-default" href="#">Mi</a></td>
+                                        <td class=""><a class="ui-state-default" href="#">Do</a></td>
+                                        <td class=""><a class="ui-state-default" href="#">Fr</a></td>
+                                        <td class=""><a class="ui-state-default" href="#">Sa</a></td>
+                                        <td class=""><a class="ui-state-default" href="#">So</a></td>
+                                    </tr>
+                                    <tr class="monthly">
+                                        <td class=""><a class="ui-state-default" href="#">1. Woche</a></td>
+                                        <td class=""><a class="ui-state-default" href="#">Mo</a></td>
+                                        <td class=""><a class="ui-state-default" href="#">Di</a></td>
+                                        <td class=""><a class="ui-state-default" href="#">Mi</a></td>
+                                        <td class=""><a class="ui-state-default" href="#">Do</a></td>
+                                        <td class=""><a class="ui-state-default" href="#">Fr</a></td>
+                                        <td class=""><a class="ui-state-default" href="#">Sa</a></td>
+                                        <td class=""><a class="ui-state-default" href="#">So</a></td>
+                                    </tr>
+                                    <tr class="monthly">
+                                        <td class=""><a class="ui-state-default" href="#">2. Woche</a></td>
+                                        <td class=""><a class="ui-state-default" href="#">Mo</a></td>
+                                        <td class=""><a class="ui-state-default" href="#">Di</a></td>
+                                        <td class=""><a class="ui-state-default" href="#">Mi</a></td>
+                                        <td class=""><a class="ui-state-default" href="#">Do</a></td>
+                                        <td class=""><a class="ui-state-default" href="#">Fr</a></td>
+                                        <td class=""><a class="ui-state-default" href="#">Sa</a></td>
+                                        <td class=""><a class="ui-state-default" href="#">So</a></td>
+                                    </tr>
+                                    <tr class="monthly">
+                                        <td class=""><a class="ui-state-default" href="#">3. Woche</a></td>
+                                        <td class=""><a class="ui-state-default" href="#">Mo</a></td>
+                                        <td class=""><a class="ui-state-default" href="#">Di</a></td>
+                                        <td class=""><a class="ui-state-default" href="#">Mi</a></td>
+                                        <td class=""><a class="ui-state-default" href="#">Do</a></td>
+                                        <td class=""><a class="ui-state-default" href="#">Fr</a></td>
+                                        <td class=""><a class="ui-state-default" href="#">Sa</a></td>
+                                        <td class=""><a class="ui-state-default" href="#">So</a></td>
+                                    </tr>
+                                    <tr class="monthly">
+                                        <td class=""><a class="ui-state-default" href="#">4. Woche</a></td>
+                                        <td class=""><a class="ui-state-default" href="#">Mo</a></td>
+                                        <td class=""><a class="ui-state-default" href="#">Di</a></td>
+                                        <td class=""><a class="ui-state-default" href="#">Mi</a></td>
+                                        <td class=""><a class="ui-state-default" href="#">Do</a></td>
+                                        <td class=""><a class="ui-state-default" href="#">Fr</a></td>
+                                        <td class=""><a class="ui-state-default" href="#">Sa</a></td>
+                                        <td class=""><a class="ui-state-default" href="#">So</a></td>
+                                    </tr>
+                                    <tr class="monthly">
+                                        <td class=""><a class="ui-state-default" href="#">5. Woche</a></td>
+                                        <td class=""><a class="ui-state-default" href="#">Mo</a></td>
+                                        <td class=""><a class="ui-state-default" href="#">Di</a></td>
+                                        <td class=""><a class="ui-state-default" href="#">Mi</a></td>
+                                        <td class=""><a class="ui-state-default" href="#">Do</a></td>
+                                        <td class=""><a class="ui-state-default" href="#">Fr</a></td>
+                                        <td class=""><a class="ui-state-default" href="#">Sa</a></td>
+                                        <td class=""><a class="ui-state-default" href="#">So</a></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p>Die gewählte Wochentage erscheinen rechts, abwählen durch erneutes klicken.</p>
+                    </td>
+                    <td>
+                        <p>Klicken Sie bitte auf die Schicht, während dessen gefahren werden soll:</p>
+                        {# template for a list of shifts ............ #}
+                        <div id="shifts" hidden>
+                            {{ app.session.get('shiftsHTML') | raw }}
+                        </div>
+                        {# template for the trashcan image object ............ #}
+                        <div id="trashcan" hidden>
+                            <img src="{{ asset('images/trashcan.gif') }}"
+                                 alt="Zeile löschen"
+                                 onclick="deleteElement('task?')"/>
+                        </div>
+                        {#  jq_taskdatepicker - placeholder for tasks ............ #}
+                        <div id="tasks">
+                            {% for taskobject in mysubform %}
+                                {{  taskobject | raw }}
+                            {% endfor %}
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </form>
+    </div>
+{% endblock %}
+
