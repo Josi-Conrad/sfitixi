@@ -1,4 +1,5 @@
-/* martin jonasse 10.10.2013 initial file, migrated from base.html.twig ----------- */
+/* 10.10.2013 martin jonasse initial file, migrated from base.html.twig ----------- */
+/* 24.01.2014 martin jonasse added td.dp-highlight                                  */
 
 /* timepicker plugin stuff http://trentrichardson.com ----------------------------- */
 .ui-timepicker-div .ui-widget-header { margin-bottom: 8px; }
@@ -14,3 +15,9 @@
 
 /* daterangepicker stuff style sheet stackoverflow --------------------------------- */
 .dp-highlight .ui-state-default { background: orange; color: #FFF; }
+
+/* weekday picker */
+td.dp-highlight {
+    background: orange;
+    color: #FFF;
+}

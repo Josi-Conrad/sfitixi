@@ -87,17 +87,17 @@ class DefaultController extends Controller
         $mysubform = array();
         foreach ($myrecords as $key => $values)
         {
-            $shortd = str_replace(".", "", $values['task_date']); // remove dots
+            $shortid = str_replace(".", "", $values['task_date']); // remove dots
             $mysubform[$key] =
-                "\n<p id=\"task$shortd\">".
+                "\n<p id=\"task$shortid\">".
                 "\n  <img src=\"/sfitixi/web/images/trashcan.gif\" ".
-                  "alt=\"Löschen\" onclick=\"deleteElement('task$shortd')\"/> ".
-                "\n  <input class=\"taskdate\" name=\"date$shortd\" type=\"text\" value=\"".$values['task_date']."\" disabled>";
+                  "alt=\"Löschen\" onclick=\"deleteElement('task$shortid')\"/> ".
+                "\n  <input class=\"taskdate\" name=\"date$shortid\" type=\"text\" value=\"".$values['task_date']."\" disabled>";
             $shifts = "";
             foreach ($this->shifts as $shift)
             {/* <input type="radio" name ="dienst?" value="Schicht 1" title="09:00 - 13:00" checked >Schicht 1 */
                 $check = ($shift['dienst_name'] == $values['task_shift']) ? "checked" : "";
-                $shifts .= "\n  <input type=\"radio\" name =\"dienst$shortd\" value =\"".$shift['dienst_name']."\" ".
+                $shifts .= "\n  <input type=\"radio\" name =\"dienst$shortid\" value =\"".$shift['dienst_name']."\" ".
                     "title =\"".substr($shift['dienst_anfang'], 0, -3)." - ".substr($shift['dienst_ende'], 0, -3)."\" ".
                     $check.">".$shift['dienst_name'];
             }

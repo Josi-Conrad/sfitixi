@@ -260,7 +260,8 @@ class DataMiner extends Controller
 
     public function makeShifts()
     {/*
-      * add shifts array and html to session
+      * add shifts array and html (for each shift in the database) to session
+      * <input type="radio" name ="dienst?" value="Schicht 1" title="09:00 - 13:00" checked >Schicht 1
       */
         $session = $this->container->get('session');
         $customer = $session->get('customer');

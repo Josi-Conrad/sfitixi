@@ -40,8 +40,8 @@ class DefaultController extends Controller
     {/*
       * add day - period -shift triplets for driver-id = parent_id to the database
       * request data format: key => data
-      * key = recurring#-#
-      *       recurring  9 characters
+      * key = recur#-#
+      *       dienst  6 characters
       *       #     number 0 .. 5 (period)
       *       -     minus sign
       *       #     number 0 (Mo), 1 (Di) .. 6 (So)
@@ -53,13 +53,13 @@ class DefaultController extends Controller
 
         foreach ($_REQUEST as $key => $value)
         {/* prepare records using request data */
-            if ((strpos($key, "recurring")!==false) and (strlen($key)==7))
+            if ((strpos($key, "dienst")!==false) and (strlen($key)==9))
             {/* validate request values
               */
-                $period = substr($key, 9, 1); // 0 .. 5
+                $period = substr($key, 6, 1); // 0 .. 5
                 $vper = (($period >= 0) and ($period <= 5)) ? $period : 0;
 
-                $daynumb = substr($key, 11, 1); // 0 (Mo) .. 6 (So)
+                $daynumb = substr($key, 8, 1); // 0 (Mo) .. 6 (So)
                 $vday = (array_key_exists($daynumb, $this->myweek)) ? $this->myweek[$daynumb] : 'Error';
 
                 $triplets[] = array(
@@ -107,7 +107,7 @@ class DefaultController extends Controller
             $shortid = $values['task_period']."-".$daynum;
             if ($values['task_period'] == 0)
             {
-                $period = 'jeden';
+                $period = 'jede Woche';
             } else
             {
                 $period = $values['task_period'].". Woche";
@@ -115,13 +115,14 @@ class DefaultController extends Controller
             $mysubform[$key] =
                 "\n<p id=\"task$shortid\">".
                 "\n<img src=\"/sfitixi/web/images/trashcan.gif\" ".
-                       "alt=\"Löschen\" onclick=\"deleteElement('task$shortid')\"/> ".
-                "\n<input type=\"text\" value=\"".$values['task_day']." (".$period.")\" disabled>";
+                        "alt=\"Löschen\" onclick=\"deleteElement('task$shortid'); refreshWDP();\"/> ".
+                "\n<input type=\"text\" class=\"taskdate\" name=\"dienst".$shortid.
+                        "\" value=\"".$values['task_day']." (".$period.")\" disabled>";
             $shifts = "";
             foreach ($this->shifts as $shift)
             {/* <input type="radio" name ="dienst?" value="Schicht 1" title="09:00 - 13:00" checked >Schicht 1 */
                 $check = ($shift['dienst_name'] == $values['task_shift']) ? "checked" : "";
-                $shifts .= "\n<input type=\"radio\" name =\"recurring$shortid\" value =\"".$shift['dienst_name']."\" ".
+                $shifts .= "\n<input type=\"radio\" name =\"dienst$shortid\" value =\"".$shift['dienst_name']."\" ".
                     "title =\"".substr($shift['dienst_anfang'], 0, -3)." - ".substr($shift['dienst_ende'], 0, -3)."\" ".
                     $check.">".$shift['dienst_name'];
             }
