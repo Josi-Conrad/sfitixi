@@ -164,7 +164,9 @@
             {% endif %}
 
             {% if (record.Field == "geocode") %}
-                <div id="map-canvas" style="width: 600px; height: 400px"></div>
+            <div id="mymodal" title="Google Maps Karte">
+                <div id="mymap" style="width: 640px; height: 640px"></div>
+            </div>
             {% endif %}
 
         {% endfor %}

@@ -7,13 +7,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="62e5c67d-7d26-4ab6-9002-e15bdd08ef22" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Tixi/HomeBundle/Controller/DataMiner.php" afterPath="$PROJECT_DIR$/src/Tixi/HomeBundle/Controller/DataMiner.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Tixi/App/DriverRecurringTaskBundle/Controller/DefaultController.php" afterPath="$PROJECT_DIR$/src/Tixi/App/DriverRecurringTaskBundle/Controller/DefaultController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Tixi/App/DriverScheduleBundle/Controller/DefaultController.php" afterPath="$PROJECT_DIR$/src/Tixi/App/DriverScheduleBundle/Controller/DefaultController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/css/datetimepicker.css" afterPath="$PROJECT_DIR$/web/css/datetimepicker.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Tixi/App/DriverRecurringTaskBundle/Resources/views/Default/form.html.twig" afterPath="$PROJECT_DIR$/src/Tixi/App/DriverRecurringTaskBundle/Resources/views/Default/form.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Tixi/App/DriverScheduleBundle/Resources/views/Default/form.html.twig" afterPath="$PROJECT_DIR$/src/Tixi/App/DriverScheduleBundle/Resources/views/Default/form.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/js/tixi-functions.js" afterPath="$PROJECT_DIR$/web/js/tixi-functions.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Tixi/HomeBundle/Resources/views/Default/form.html.twig" afterPath="$PROJECT_DIR$/src/Tixi/HomeBundle/Resources/views/Default/form.html.twig" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/js/tixi-geocoding.js" afterPath="$PROJECT_DIR$/web/js/tixi-geocoding.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="sfitixi.iws" />
@@ -38,54 +33,18 @@
   <component name="FileEditorManager">
     <leaf>
       <file leaf-file-name="form.html.twig" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/Tixi/App/DriverRecurringTaskBundle/Resources/views/Default/form.html.twig">
+        <entry file="file://$PROJECT_DIR$/src/Tixi/HomeBundle/Resources/views/Default/form.html.twig">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="163" column="47" selection-start="12111" selection-end="12111" vertical-scroll-proportion="-16.346153" vertical-offset="2346" max-vertical-offset="4335">
+            <state line="167" column="64" selection-start="10341" selection-end="10341" vertical-scroll-proportion="-6.509804" vertical-offset="2507" max-vertical-offset="3094">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="form.html.twig" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/Tixi/App/DriverScheduleBundle/Resources/views/Default/form.html.twig">
+      <file leaf-file-name="tixi-geocoding.js" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/web/js/tixi-geocoding.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="80" column="48" selection-start="4170" selection-end="4170" vertical-scroll-proportion="0.8787879" vertical-offset="867" max-vertical-offset="1921">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="tixi-pickers.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/web/js/tixi-pickers.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="40" column="21" selection-start="1514" selection-end="1514" vertical-scroll-proportion="0.0" vertical-offset="1874" max-vertical-offset="2448">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="tixi-functions.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/web/js/tixi-functions.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="11" column="1" selection-start="310" selection-end="310" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="578">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="datetimepicker.css" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/web/css/datetimepicker.css">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="19" column="17" selection-start="1029" selection-end="1029" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="476">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="DefaultController.php" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/Tixi/App/DriverRecurringTaskBundle/Controller/DefaultController.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="117" column="18" selection-start="4805" selection-end="4805" vertical-scroll-proportion="-2.9615386" vertical-offset="1810" max-vertical-offset="4114">
+            <state line="29" column="19" selection-start="938" selection-end="938" vertical-scroll-proportion="0.5177305" vertical-offset="99" max-vertical-offset="1207">
               <folding />
             </state>
           </provider>
@@ -150,7 +109,6 @@
         <option value="$PROJECT_DIR$/src/Tixi/HomeBundle/Controller/ListBuilder.php" />
         <option value="$PROJECT_DIR$/web/css/table_style.css" />
         <option value="$PROJECT_DIR$/app/Resources/views/base.html.twig" />
-        <option value="$PROJECT_DIR$/web/js/tixi-geocoding.js" />
         <option value="$PROJECT_DIR$/src/Tixi/HomeBundle/Controller/DateMiner.php" />
         <option value="$PROJECT_DIR$/src/Tixi/App/DriverScheduleBundle/Resources/views/Default/shifts.html.twig" />
         <option value="$PROJECT_DIR$/src/Tixi/HomeBundle/Resources/config/services.yml" />
@@ -188,6 +146,8 @@
         <option value="$PROJECT_DIR$/web/css/datetimepicker.css" />
         <option value="$PROJECT_DIR$/src/Tixi/App/DriverRecurringTaskBundle/Resources/views/Default/form.html.twig" />
         <option value="$PROJECT_DIR$/src/Tixi/App/DriverScheduleBundle/Resources/views/Default/form.html.twig" />
+        <option value="$PROJECT_DIR$/src/Tixi/HomeBundle/Resources/views/Default/form.html.twig" />
+        <option value="$PROJECT_DIR$/web/js/tixi-geocoding.js" />
       </list>
     </option>
   </component>
@@ -415,7 +375,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="App" />
+              <option name="myItemId" value="HomeBundle" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -437,37 +397,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="App" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="DriverScheduleBundle" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="sfitixi" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="sfitixi" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Tixi" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="App" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="DriverScheduleBundle" />
+              <option name="myItemId" value="HomeBundle" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -501,11 +431,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="App" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="DriverScheduleBundle" />
+              <option name="myItemId" value="HomeBundle" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -532,108 +458,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="App" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="DriverRecurringTaskBundle" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="sfitixi" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="sfitixi" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Tixi" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="App" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="DriverRecurringTaskBundle" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Resources" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="views" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Default" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="sfitixi" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="sfitixi" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Tixi" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="App" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="DriverRecurringTaskBundle" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Resources" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="sfitixi" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="sfitixi" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Tixi" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="App" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="DriverRecurringTaskBundle" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Controller" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -833,7 +657,7 @@
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.49744463" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Framework" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32954547" sideWeight="0.49914822" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.30664653" sideWeight="0.70017034" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.31117824" sideWeight="0.70017034" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.51549757" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2901515" sideWeight="0.21294719" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.43100512" sideWeight="0.5" order="10" side_tool="true" content_ui="tabs" />
@@ -867,9 +691,9 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.49744463" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.26435044" sideWeight="0.70017034" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39863715" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39863715" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Command Line Tools Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.36422765" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
     </layout-to-restore>
   </component>
@@ -1045,11 +869,6 @@
         <state line="165" column="40" selection-start="6636" selection-end="6636" vertical-scroll-proportion="-50.0" vertical-offset="102" max-vertical-offset="2805" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/web/js/tixi-geocoding.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="8" column="107" selection-start="316" selection-end="316" vertical-scroll-proportion="-0.17317487" vertical-offset="136" max-vertical-offset="1088" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/Tixi/SecurityBundle/Resources/views/Security/login.html.twig">
       <provider selected="true" editor-type-id="text-editor">
         <state line="36" column="0" selection-start="1638" selection-end="1638" vertical-scroll-proportion="0.9396092" vertical-offset="83" max-vertical-offset="1139" />
@@ -1080,11 +899,6 @@
         <state line="22" column="0" selection-start="663" selection-end="663" vertical-scroll-proportion="0.6642984" vertical-offset="0" max-vertical-offset="563" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Tixi/HomeBundle/Resources/views/Default/form.html.twig">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="44" column="103" selection-start="2303" selection-end="2406" vertical-scroll-proportion="-18.961538" vertical-offset="255" max-vertical-offset="3060" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/Tixi/HomeBundle/Resources/views/Default/index.html.twig">
       <provider selected="true" editor-type-id="text-editor">
         <state line="22" column="16" selection-start="1125" selection-end="1125" vertical-scroll-proportion="0.58363634" vertical-offset="53" max-vertical-offset="4250" />
@@ -1107,37 +921,29 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Tixi/App/DriverScheduleBundle/Controller/DefaultController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="93" column="64" selection-start="3672" selection-end="3676" vertical-scroll-proportion="0.33333334" vertical-offset="1219" max-vertical-offset="3587">
-          <folding />
-        </state>
+        <state line="93" column="64" selection-start="3672" selection-end="3676" vertical-scroll-proportion="0.33333334" vertical-offset="1219" max-vertical-offset="3587" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Tixi/HomeBundle/Controller/DataMiner.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="264" column="8" selection-start="8414" selection-end="8414" vertical-scroll-proportion="-3.6153846" vertical-offset="4241" max-vertical-offset="6171">
-          <folding>
-            <marker date="1390540296291" expanded="true" signature="-1:-1" placeholder="select * fro..." />
-          </folding>
-        </state>
+        <state line="264" column="8" selection-start="8414" selection-end="8414" vertical-scroll-proportion="-3.6153846" vertical-offset="4241" max-vertical-offset="6171" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Tixi/App/DriverRecurringTaskBundle/Controller/DefaultController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="117" column="18" selection-start="4805" selection-end="4805" vertical-scroll-proportion="-2.9615386" vertical-offset="1810" max-vertical-offset="4114">
+        <state line="117" column="18" selection-start="4805" selection-end="4805" vertical-scroll-proportion="0.0" vertical-offset="1989" max-vertical-offset="4216">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/web/css/table_style.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="100" column="18" selection-start="2168" selection-end="2200" vertical-scroll-proportion="0.55025554" vertical-offset="1377" max-vertical-offset="3434">
-          <folding />
-        </state>
+        <state line="100" column="18" selection-start="2168" selection-end="2200" vertical-scroll-proportion="0.55025554" vertical-offset="1377" max-vertical-offset="3434" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/web/css/datetimepicker.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="19" column="17" selection-start="1029" selection-end="1029" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="476">
+        <state line="19" column="17" selection-start="1029" selection-end="1029" vertical-scroll-proportion="0.5483871" vertical-offset="0" max-vertical-offset="589">
           <folding />
         </state>
       </provider>
@@ -1151,21 +957,35 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/web/js/tixi-functions.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="1" selection-start="310" selection-end="310" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="578">
+        <state line="11" column="1" selection-start="310" selection-end="310" vertical-scroll-proportion="0.31748727" vertical-offset="0" max-vertical-offset="589">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Tixi/App/DriverRecurringTaskBundle/Resources/views/Default/form.html.twig">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="163" column="47" selection-start="12111" selection-end="12111" vertical-scroll-proportion="-16.346153" vertical-offset="2346" max-vertical-offset="4335">
+        <state line="163" column="47" selection-start="12111" selection-end="12111" vertical-scroll-proportion="0.0" vertical-offset="2346" max-vertical-offset="4335">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Tixi/App/DriverScheduleBundle/Resources/views/Default/form.html.twig">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="80" column="48" selection-start="4170" selection-end="4170" vertical-scroll-proportion="0.8787879" vertical-offset="867" max-vertical-offset="1921">
+        <state line="80" column="48" selection-start="4170" selection-end="4170" vertical-scroll-proportion="0.8756661" vertical-offset="867" max-vertical-offset="1921">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Tixi/HomeBundle/Resources/views/Default/form.html.twig">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="167" column="64" selection-start="10341" selection-end="10341" vertical-scroll-proportion="-6.509804" vertical-offset="2507" max-vertical-offset="3094">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/js/tixi-geocoding.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="29" column="19" selection-start="938" selection-end="938" vertical-scroll-proportion="0.5177305" vertical-offset="99" max-vertical-offset="1207">
           <folding />
         </state>
       </provider>
