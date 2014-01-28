@@ -13,6 +13,7 @@ class DefaultController extends Controller
     protected $session;
     protected $state;     // state of this bundle
     protected $parent_id; // id in the fahrer table
+    protected $dataminer; // interface to database service
     protected $mydates;   // array which holds the query data
 
     const tixi_agenda_preview3 = 3;
@@ -24,9 +25,35 @@ class DefaultController extends Controller
     private function getAgendaData()
     {/*
       * get a few months worth of data from the database, depending on $this->state
+      * TRANSACTIONS are needed to ensure the correct results (after setting @fahrer_id)
       * output: $this->mydates
       */
-        $this->mydates = array(0 => array( "a", "b", "c", "d", "e", "f", "g"));
+        $customer = $this->session->get('customer');
+        $interval = ($this->state == self::tixi_agenda_preview3) ? 91 : 182;
+
+        // set the parent_id
+        $sql = "START TRANSACTION;\n SET @fahrer_id := $this->parent_id;";
+        $this->mydates = $this->dataminer->execData($sql);
+
+        // now get the data
+        $sql = <<<EOM
+            select
+                datum,
+                tag,
+                feiertag,
+                "" as ferien,
+                dienst as einsatzplan,
+                "" as dauereinsatz,
+                bemerkung
+            from $customer.agenda
+            where (date >= now() and (date <= DATE_ADD(now(), INTERVAL $interval DAY)))
+            order by date asc, dienst;
+EOM;
+        $this->mydates = $this->dataminer->readData($sql);
+
+        // now close the transaction
+        $sql = "COMMIT;\n";
+        $this->dataminer->execData($sql);
     }
 
     private function doActions($action)
@@ -102,6 +129,7 @@ class DefaultController extends Controller
         }
 
         // get driver agenda action
+        $this->dataminer = $this->container->get('tixi_dataminer');
         $action = $this->session->get('action');
         $this->doActions($action);
 
