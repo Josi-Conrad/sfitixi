@@ -1,11 +1,51 @@
 {# src/Tixi/App/DriverAgendaBundle/ Resources/views/Default/index.html.twig #}
 {# 22.01.2014 martin jonasse initial file #}
+{# 28.01.2014 martin jonasse update supporting the code #}
 
 {% extends 'TixiHomeBundle:Default:index.html.twig' %}
 
-{% block content %}
-    <div>
-        This is the default driver agenda page!
+{% block taskbar %}
+    <div class="taskbar">
+        <div class="taskbar-row">
+            <div class="taskbar-right">
+                <input id="fpm_sendpreview"
+                       type="button"
+                       value="Vorschau (emailen)"
+                       onclick="location.href='{{ path( app.request.attributes.get('_route'), {'action':'sendpreview'} ) }}'; overlay();"/>
+                <input id="fpm_preview1q"
+                       type="button"
+                       value="Vorschau (3 Monate)"
+                       onclick="location.href='{{ path( app.request.attributes.get('_route'), {'action':'preview1q'} ) }}'; overlay();"/>
+                <input id="fpm_preview2q"
+                       type="button"
+                       value="Vorschau (6 Monate)"
+                       onclick="location.href='{{ path( app.request.attributes.get('_route'), {'action':'preview2q'} ) }}'; overlay();"/>
+            </div>
+        </div>
     </div>
 {% endblock %}
 
+{% block content %}
+    <div class="content-wrapper">
+        <table class="ExcelTable2003" summary="Auswahlliste">
+            <thead>
+                <th>DATUM</th>
+                <th>TAG</th>
+                <th>FEIERTAG</th>
+                <th>FERIEN</th>
+                <th>EINSATZPLAN</th>
+                <th>DAUEREINSATZ</th>
+                <th>BEMERKUNG</th>
+            </thead>
+            <tbody>
+            {% for myrow in mydates %}
+                <tr>
+                    {% for mycell in myrow %}
+                        <td>{{ mycell }}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+            <tbody>
+        </table>
+    </div>
+{% endblock %}

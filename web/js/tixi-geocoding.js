@@ -44,7 +44,7 @@ function codeAddress()
 
     geocoder.geocode( { 'address': myaddress},
         function(results, status)
-        {
+        {/* runs as soon as google answers the address request */
             if (status == google.maps.GeocoderStatus.OK)
             {/* write geocode to form element */
                 var gc = document.getElementById('fpw_geocode');
@@ -54,6 +54,7 @@ function codeAddress()
                     alert("Adresse nicht präzise sondern eine Annäherung, bitte überprüfen und ändern!");
 					gc.value = results[0].geometry.location_type;
                 }
+                /* display address in a modal popup window */
                 showGoogleMap(results[0].geometry.location.lat(), results[0].geometry.location.lng());
             }
             else
