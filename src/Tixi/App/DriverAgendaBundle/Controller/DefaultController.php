@@ -41,13 +41,13 @@ class DefaultController extends Controller
                 datum,
                 tag,
                 feiertag,
-                "" as ferien,
-                dienst as einsatzplan,
-                "" as dauereinsatz,
+                ferien,
+                einsatz,
+                dauereinsatz,
                 bemerkung
             from $customer.agenda
             where (date >= now() and (date <= DATE_ADD(now(), INTERVAL $interval DAY)))
-            order by date asc, dienst;
+            order by date asc;
 EOM;
         $this->mydates = $this->dataminer->readData($sql);
 
@@ -56,24 +56,45 @@ EOM;
         $this->dataminer->execData($sql);
     }
 
+    private function checkForConflicts()
+    {/*
+      * check $this->mydates for conflicting plans
+      */
+        $keyword = 'KONFLIKT';
+        foreach ($this->mydates as $rows)
+        {
+            foreach ($rows as $cols)
+            {
+                if (is_null($cols) == false){
+                    if (substr($cols, 0, strlen($keyword)) == $keyword)
+                    {
+                        $this->session->set('errormsg',
+                            'KONFLIKT(E) zwischen Pläne gefunden, bitte sofort bereinigen.');
+                        return true; // found one conflict
+                    }
+                }
+            }
+        }
+        return false; // no conflicts
+    }
+
     private function doActions($action)
     {/*
       * perform the actions associated with $myaction
       */
         switch ($action){
             case "":
-                /* no action definied, default: display 3 Months */
-                $this->getAgendaData();
-                break;
             case self::tixi_agenda_action_preview3:
                 $this->state = self::tixi_agenda_preview3;
                 $this->session->set('agendastate', $this->state);
                 $this->getAgendaData();
+                $this->checkForConflicts();
                 break;
             case self::tixi_agenda_action_preview6:
                 $this->state = self::tixi_agenda_preview6;
                 $this->session->set('agendastate', $this->state);
                 $this->getAgendaData();
+                $this->checkForConflicts();
                 break;
             case self::tixi_agenda_action_sendmail:
                 $this->getAgendaData();

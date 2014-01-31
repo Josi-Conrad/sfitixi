@@ -136,7 +136,7 @@ class DefaultController extends Controller
       * controller for the driver schedule page
       */
         /* initialize the context */
-        $route = 'tixi_fahrer_dauereinsatz_page';
+        $route = 'tixi_fahrer_dauereinsatzplan_page';
         $housekeeper = $this->get('tixi_housekeeper');
         if ($housekeeper->setTemplateParameters($route) != 0)
         {   return $this->render('TixiHomeBundle:Default:error403.html.twig');

@@ -238,8 +238,18 @@ final class MenuTree
             'BREADCRUMB' => 'Fahrgast - Details', 
             'DESCRIPTION' => 'Vertrauliche Daten zu Fahrgast', 
             'PERMISSION' => 'ROLE_ADMIN'),
-        'tixi_fahrgast_dauerauftrag_page' => array(
+        'tixi_fahrgast_einzelauftrag_page' => array(
             'ORDER' => '24', 
+            'LOCATION' => 'menu-bar', 
+            'PARENT' => 'tixi_fahrgast_page', 
+            'ENABLED' => '0', 
+            'URL' => '/app/fahrgast/einzelauftrag', 
+            'CAPTION' => 'Einzelauftrag', 
+            'BREADCRUMB' => 'Fahrgast - Einzelauftrag', 
+            'DESCRIPTION' => 'Ein einzelne Fahrauftrag (einmalig, wiederholt nicht).', 
+            'PERMISSION' => 'ROLE_USER'),
+        'tixi_fahrgast_dauerauftrag_page' => array(
+            'ORDER' => '25', 
             'LOCATION' => 'menu-bar', 
             'PARENT' => 'tixi_fahrgast_page', 
             'ENABLED' => '0', 
@@ -249,7 +259,7 @@ final class MenuTree
             'DESCRIPTION' => 'Wiederholende Fahrauftraege.', 
             'PERMISSION' => 'ROLE_USER'),
         'tixi_fahrgast_abwesenheit_page' => array(
-            'ORDER' => '25', 
+            'ORDER' => '26', 
             'LOCATION' => 'menu-bar', 
             'PARENT' => 'tixi_fahrgast_page', 
             'ENABLED' => '1', 
@@ -259,7 +269,7 @@ final class MenuTree
             'DESCRIPTION' => 'Abwesend, annuliert Dauerauftraege waehrend ein oder mehrere Tagen.', 
             'PERMISSION' => 'ROLE_USER'),
         'tixi_fahrgast_anrufmaske_page' => array(
-            'ORDER' => '26', 
+            'ORDER' => '27', 
             'LOCATION' => 'menu-bar', 
             'PARENT' => 'tixi_fahrgast_page', 
             'ENABLED' => '0', 
@@ -269,7 +279,7 @@ final class MenuTree
             'DESCRIPTION' => 'Angestossen wenn Fahrgast die Zentrale anruft (Anruf Kennung)', 
             'PERMISSION' => 'ROLE_USER'),
         'tixi_ovi_page' => array(
-            'ORDER' => '27', 
+            'ORDER' => '28', 
             'LOCATION' => 'menu-bar', 
             'PARENT' => '', 
             'ENABLED' => '1', 
@@ -279,7 +289,7 @@ final class MenuTree
             'DESCRIPTION' => 'Orte von Interesse (OVI) Daten', 
             'PERMISSION' => 'ROLE_USER'),
         'tixi_ovi_details_page' => array(
-            'ORDER' => '28', 
+            'ORDER' => '29', 
             'LOCATION' => 'menu-bar', 
             'PARENT' => 'tixi_ovi_page', 
             'ENABLED' => '1', 
@@ -289,7 +299,7 @@ final class MenuTree
             'DESCRIPTION' => 'Vertrauliche Daten zu OVI', 
             'PERMISSION' => 'ROLE_ADMIN'),
         'tixi_fahrer_page' => array(
-            'ORDER' => '29', 
+            'ORDER' => '30', 
             'LOCATION' => 'menu-bar', 
             'PARENT' => '', 
             'ENABLED' => '1', 
@@ -299,7 +309,7 @@ final class MenuTree
             'DESCRIPTION' => 'Fahrer Daten', 
             'PERMISSION' => 'ROLE_USER'),
         'tixi_fahrer_details_page' => array(
-            'ORDER' => '30', 
+            'ORDER' => '31', 
             'LOCATION' => 'menu-bar', 
             'PARENT' => 'tixi_fahrer_page', 
             'ENABLED' => '1', 
@@ -308,18 +318,18 @@ final class MenuTree
             'BREADCRUMB' => 'Fahrer - Details', 
             'DESCRIPTION' => 'Vertrauliche Daten zu Fahrer ', 
             'PERMISSION' => 'ROLE_ADMIN'),
-        'tixi_fahrer_dauereinsatz_page' => array(
-            'ORDER' => '31', 
+        'tixi_fahrer_dauereinsatzplan_page' => array(
+            'ORDER' => '32', 
             'LOCATION' => 'menu-bar', 
             'PARENT' => 'tixi_fahrer_page', 
             'ENABLED' => '1', 
-            'URL' => '/app/fahrer/dauereinsatz', 
-            'CAPTION' => 'Dauereinsatz', 
-            'BREADCRUMB' => 'Fahrer - Dauereinsatz', 
+            'URL' => '/app/fahrer/dauereinsatzplan', 
+            'CAPTION' => 'Dauereinsatzplan', 
+            'BREADCRUMB' => 'Fahrer - Dauereinsatzplan', 
             'DESCRIPTION' => 'Geplante Einsaetze vom Fahrer, wiederholend wöchetlich, monatlich', 
             'PERMISSION' => 'ROLE_USER'),
         'tixi_fahrer_ferienplan_page' => array(
-            'ORDER' => '32', 
+            'ORDER' => '33', 
             'LOCATION' => 'menu-bar', 
             'PARENT' => 'tixi_fahrer_page', 
             'ENABLED' => '1', 
@@ -329,7 +339,7 @@ final class MenuTree
             'DESCRIPTION' => 'Abwesend und Ferien annuliert Wochenplaene waehrend >= 1 Tagen', 
             'PERMISSION' => 'ROLE_USER'),
         'tixi_fahrer_einsatzplan_page' => array(
-            'ORDER' => '33', 
+            'ORDER' => '34', 
             'LOCATION' => 'menu-bar', 
             'PARENT' => 'tixi_fahrer_page', 
             'ENABLED' => '1', 
@@ -339,7 +349,7 @@ final class MenuTree
             'DESCRIPTION' => 'Geplante Einsaetze vom Fahrer in ein Monat', 
             'PERMISSION' => 'ROLE_USER'),
         'tixi_fahrer_agenda_page' => array(
-            'ORDER' => '34', 
+            'ORDER' => '35', 
             'LOCATION' => 'menu-bar', 
             'PARENT' => 'tixi_fahrer_page', 
             'ENABLED' => '1', 
@@ -349,7 +359,7 @@ final class MenuTree
             'DESCRIPTION' => 'Uebersicht aller Einsätze, Dauereinsätze, Ferien und Feiertage', 
             'PERMISSION' => 'ROLE_USER'),
         'tixi_fahrer_anrufmaske_page' => array(
-            'ORDER' => '35', 
+            'ORDER' => '36', 
             'LOCATION' => 'menu-bar', 
             'PARENT' => 'tixi_fahrer_page', 
             'ENABLED' => '0', 
@@ -359,7 +369,7 @@ final class MenuTree
             'DESCRIPTION' => 'Angestossen wenn Fahrer die Zentrale anruft (Anruf Kennung)', 
             'PERMISSION' => 'ROLE_USER'),
         'tixi_fahrzeug_page' => array(
-            'ORDER' => '36', 
+            'ORDER' => '37', 
             'LOCATION' => 'menu-bar', 
             'PARENT' => '', 
             'ENABLED' => '1', 
@@ -369,7 +379,7 @@ final class MenuTree
             'DESCRIPTION' => 'Daten des Fahrzeuges', 
             'PERMISSION' => 'ROLE_USER'),
         'tixi_fahrzeug_details_page' => array(
-            'ORDER' => '37', 
+            'ORDER' => '38', 
             'LOCATION' => 'menu-bar', 
             'PARENT' => 'tixi_fahrzeug_page', 
             'ENABLED' => '1', 
@@ -379,7 +389,7 @@ final class MenuTree
             'DESCRIPTION' => 'Vertrauliche Daten zur Fahrzeug', 
             'PERMISSION' => 'ROLE_ADMIN'),
         'tixi_fahrzeug_serviceplan_page' => array(
-            'ORDER' => '38', 
+            'ORDER' => '39', 
             'LOCATION' => 'menu-bar', 
             'PARENT' => 'tixi_fahrzeug_page', 
             'ENABLED' => '1', 
@@ -389,7 +399,7 @@ final class MenuTree
             'DESCRIPTION' => 'Nicht-Verfuegbarkeitsdaten eines Fahrzeuges', 
             'PERMISSION' => 'ROLE_USER'),
         'tixi_unterhalt_page' => array(
-            'ORDER' => '39', 
+            'ORDER' => '40', 
             'LOCATION' => 'menu-bar', 
             'PARENT' => '', 
             'ENABLED' => '0', 
@@ -399,7 +409,7 @@ final class MenuTree
             'DESCRIPTION' => 'Splash Page Unterhalt', 
             'PERMISSION' => 'ROLE_USER'),
         'tixi_unterhalt_organisationsdaten_page' => array(
-            'ORDER' => '40', 
+            'ORDER' => '41', 
             'LOCATION' => 'menu-bar', 
             'PARENT' => '', 
             'ENABLED' => '0', 
@@ -409,7 +419,7 @@ final class MenuTree
             'DESCRIPTION' => 'Email Adresse der Organisation, z.B. info@tixizug.ch, Postadresse etc.', 
             'PERMISSION' => 'ROLE_ADMIN'),
         'tixi_unterhalt_teamdaten_page' => array(
-            'ORDER' => '41', 
+            'ORDER' => '42', 
             'LOCATION' => 'menu-bar', 
             'PARENT' => '', 
             'ENABLED' => '1', 
@@ -419,7 +429,7 @@ final class MenuTree
             'DESCRIPTION' => 'Benutzerdaten definieren; Anmeldename, Passwort, Rolle', 
             'PERMISSION' => 'ROLE_ADMIN'),
         'tixi_unterhalt_logs_page' => array(
-            'ORDER' => '42', 
+            'ORDER' => '43', 
             'LOCATION' => 'menu-bar', 
             'PARENT' => '', 
             'ENABLED' => '0', 
@@ -429,7 +439,7 @@ final class MenuTree
             'DESCRIPTION' => 'Kontrolle der Logdateien fuer kritsiche Fehlern', 
             'PERMISSION' => 'ROLE_ADMIN'),
         'tixi_unterhalt_datenbank_page' => array(
-            'ORDER' => '43', 
+            'ORDER' => '44', 
             'LOCATION' => 'menu-bar', 
             'PARENT' => '', 
             'ENABLED' => '0', 
@@ -439,7 +449,7 @@ final class MenuTree
             'DESCRIPTION' => 'Splash Page Datenbank', 
             'PERMISSION' => 'ROLE_ADMIN'),
         'tixi_unterhalt_datenbank_backup_page' => array(
-            'ORDER' => '44', 
+            'ORDER' => '45', 
             'LOCATION' => 'menu-bar', 
             'PARENT' => '', 
             'ENABLED' => '1', 
@@ -449,7 +459,7 @@ final class MenuTree
             'DESCRIPTION' => 'Lokale Datensicherung fuer den Disaster Recovery Fall', 
             'PERMISSION' => 'ROLE_ADMIN'),
         'tixi_unterhalt_datenbank_putzen_page' => array(
-            'ORDER' => '45', 
+            'ORDER' => '46', 
             'LOCATION' => 'menu-bar', 
             'PARENT' => '', 
             'ENABLED' => '0', 
@@ -459,7 +469,7 @@ final class MenuTree
             'DESCRIPTION' => 'Daten aufraeumen mittels eingebaute Funktionen', 
             'PERMISSION' => 'ROLE_ADMIN'),
         'tixi_unterhalt_feiertage_page' => array(
-            'ORDER' => '46', 
+            'ORDER' => '47', 
             'LOCATION' => 'menu-bar', 
             'PARENT' => '', 
             'ENABLED' => '1', 
@@ -469,7 +479,7 @@ final class MenuTree
             'DESCRIPTION' => 'Nationale und Kantonale Feiertage eintragen', 
             'PERMISSION' => 'ROLE_ADMIN'),
         'tixi_unterhalt_dienste_page' => array(
-            'ORDER' => '47', 
+            'ORDER' => '48', 
             'LOCATION' => 'menu-bar', 
             'PARENT' => '', 
             'ENABLED' => '1', 
@@ -479,7 +489,7 @@ final class MenuTree
             'DESCRIPTION' => 'Dienst Zeiten (Anfang - Ende) einrichten', 
             'PERMISSION' => 'ROLE_ADMIN'),
         'tixi_unterhalt_zonenplan_page' => array(
-            'ORDER' => '48', 
+            'ORDER' => '49', 
             'LOCATION' => 'menu-bar', 
             'PARENT' => '', 
             'ENABLED' => '1', 

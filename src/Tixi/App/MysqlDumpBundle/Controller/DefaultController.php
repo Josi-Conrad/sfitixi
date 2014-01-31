@@ -1,4 +1,6 @@
 <?php
+/* 15.11.2013 martin jonasse initial file */
+/* 31.01.2014 martin jonasse added --routines to the dump options, this backs up functions and procedures */
 
 namespace Tixi\App\MysqlDumpBundle\Controller;
 
@@ -20,12 +22,23 @@ class DefaultController extends Controller
         if ($dbpass != ""){
             $dbpass = "-p ".$dbpass;
         }
-        $dboptions = "--opt --single-transaction";
+        $dboptions = "--opt --single-transaction --routines";
         $dbnames = "--databases $db";
         $bkpfile = $dir."\\".$db."_backup_".date("Ymd_His").".sql";
         $bkpcmd = "$mysqldump -h $dbhost -u $dbuser $dbpass $dboptions $dbnames > $bkpfile";
         exec($bkpcmd);
 
+     /* copy the itixi and btb database to the git repository */
+        if (($db != 'btb') and ($db != 'itixi')) {
+          return false;
+        }
+        $bkpcopy = $this->container->getParameter("tixi")["git_databkp"]."\\".$db."_backup.sql";
+        if (!copy($bkpfile, $bkpcopy)){
+            $session = $this->container->get('session');
+            $session->set('errormsg', "Konnte Datei ($bkpfile) nicht kopieren.");
+            return false; // failure
+        }
+        return true; // success
     }
 
     public function indexAction($name='')

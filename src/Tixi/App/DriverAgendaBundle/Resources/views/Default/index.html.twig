@@ -41,7 +41,15 @@
             {% for myrow in mydates %}
                 <tr>
                     {% for mycell in myrow %}
-                        <td>{{ mycell }}</td>
+                        {% if mycell|slice(0,8) == 'KONFLIKT' %}
+                            <td style="color: red;
+                                       font-weight: bold;
+                                       background-color: yellow">
+                                {{ mycell }}
+                            </td>
+                        {% else %}
+                            <td>{{ mycell }}</td>
+                        {% endif %}
                     {% endfor %}
                 </tr>
             {% endfor %}

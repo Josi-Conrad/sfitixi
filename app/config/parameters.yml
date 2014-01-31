@@ -28,4 +28,6 @@ parameters:
       mode_select_list: 3
       mode_edit_in_list: 4
       backup_path: C:\myprojects\backup\
+      # for developement systems only
+      git_databkp: C:\myprojects\sfitixi\src\Tixi\Data
 
