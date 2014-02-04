@@ -5,6 +5,7 @@
  * Date: 07.01.2014
  * Time: 09:35
  */
+/* 03.02.2014 martin jonasse changed shifts from radio button to checkbox */
 
 namespace Tixi\App\DriverScheduleBundle\Controller;
 
@@ -30,40 +31,54 @@ class DefaultController extends Controller
         $customer = $this->session->get("customer");
         $route = $this->session->get('route');
         $cursor = $this->session->get("cursor/$route"); // cursor in einsatzplan (parent)
-        $sql = "select * from ".$customer.".einsatz where einsatz_einsatzplan_fk = ".$cursor;
+        $sql = "select * from ".$customer.".einsatz, ".$customer.".bereitschaft ";
+        $sql .= "where einsatz_id = bereitschaft.bereitschaft_einsatz_fk ";
+        $sql .= "and einsatz_einsatzplan_fk = ".$cursor;
         $in = $this->dataminer->readData($sql);
         $out = array();
         foreach ($in as $key => $values){
             $out[$key]['task_date'] = $this->dataminer->localizeDate($values['einsatz_datum']);
-            $out[$key]['task_shift'] = $this->dataminer->getShiftName($values['einsatz_dienst_fk']);
+            $out[$key]['task_shift'] = $this->dataminer->getShiftName($values['bereitschaft_dienst_fk']);
         }
         return $out;
     }
 
     private function storeChildren()
     {/*
-      * add date-shift pair children for driver-id = parent_id to the database
+      * add date-children and shift-grandchildren for driver-id = parent_id to the database
       */
         $route = $this->session->get('route');
         $cursor = $this->session->get("cursor/$route"); // cursor in einsatzplan (parent)
-        $dspairs = array();
+        $customer = $this->session->get("customer");
+        $isodate = '';
 
         foreach ($_REQUEST as $key => $value)
         {/* prepare records using request data */
-            if ((strpos($key, "dienst")!==false) and (strlen($key)==14))
+            if ((strpos($key, "dienst")!==false) and (strlen($key)>14))
             {
                 $dd = substr($key, 6, 2); // day
                 $mm = substr($key, 8, 2); // month
                 $yy = substr($key, 10, 4); // year
-                $dspairs[] = array("einsatz_id" => "DEFAULT",
-                                   "einsatz_einsatzplan_fk" => $cursor,
-                                   "einsatz_datum" => "'".($yy.'-'.$mm.'-'.$dd)."'",
-                                   "einsatz_dienst_fk" => $this->dataminer->getShiftId($value));
+                $mydate = $yy.'-'.$mm.'-'.$dd;
+                if ($mydate != $isodate)
+                {/* insert task date into database */
+                    $isodate = $mydate;
+                    $myeinsatz = array(
+                        "einsatz_id" => "DEFAULT",
+                        "einsatz_einsatzplan_fk" => $cursor,
+                        "einsatz_datum" => $isodate);
+                    $id = $this->dataminer->insertData($myeinsatz, "$customer.einsatz" );
+                }
+                if ($id != 0)
+                {/* insert task shift(s) into database */
+                    $mybereitschaft = array(
+                        "bereitschaft_id" => "DEFAULT",
+                        "bereitschaft_einsatz_fk" => $id,
+                        "bereitschaft_dienst_fk" => $this->dataminer->getShiftId($value) );
+                    $this->dataminer->insertData($mybereitschaft, "$customer.bereitschaft" );
+                }
             }
         }
-
-        $customer = $this->session->get("customer");
-        return $this->dataminer->insertData($dspairs, "$customer.einsatz");
     }
 
     private function deleteChildren()
@@ -73,35 +88,49 @@ class DefaultController extends Controller
         $customer = $this->session->get("customer");
         $route = $this->session->get('route');
         $cursor = $this->session->get("cursor/$route"); // cursor in einsatzplan (parent)
+
+        /* first delete grandchildren (shifts) */
+        $sql = "delete from ".$customer.".bereitschaft where bereitschaft_einsatz_fk in ".
+               "(select einsatz_id from ".$customer.".einsatz where einsatz.einsatz_einsatzplan_fk =".$cursor.")";
+        $this->dataminer->execData($sql);
+
+        /* then delete children (task dates) */
         $sql = "delete from ".$customer.".einsatz where einsatz_einsatzplan_fk = ".$cursor;
-        return $this->dataminer->execData($sql);
+        $this->dataminer->execData($sql);
+
+        return true;
     }
 
     private function convertRecordToHtml($myrecords)
     {/*
-      * convert child record to html: garbagecan icon, input text field with date and radio buttons
+      * convert child record to html: garbagecan icon, input text field with date and checkboxes
       * input: array with zero, one or many records
       *        task_date = "07.02.2014"
       *        task_shift = "Schicht 1"
       */
         $mysubform = array();
-        foreach ($myrecords as $key => $values)
+        $mykey = -1;
+        $mydate = '';
+        foreach ($myrecords as $values)
         {
-            $shortid = str_replace(".", "", $values['task_date']); // remove dots
-            $mysubform[$key] =
-                "\n<p id=\"task$shortid\">".
-                "\n  <img src=\"/sfitixi/web/images/trashcan.gif\" ".
-                  "alt=\"Löschen\" onclick=\"deleteElement('task$shortid')\"/> ".
-                "\n  <input class=\"taskdate\" name=\"date$shortid\" type=\"text\" value=\"".$values['task_date']."\" disabled>";
-            $shifts = "";
-            foreach ($this->shifts as $shift)
-            {/* <input type="radio" name ="dienst?" value="Schicht 1" title="09:00 - 13:00" checked >Schicht 1 */
-                $check = ($shift['dienst_name'] == $values['task_shift']) ? "checked" : "";
-                $shifts .= "\n  <input type=\"radio\" name =\"dienst$shortid\" value =\"".$shift['dienst_name']."\" ".
-                    "title =\"".substr($shift['dienst_anfang'], 0, -3)." - ".substr($shift['dienst_ende'], 0, -3)."\" ".
-                    $check.">".$shift['dienst_name'];
+            if ($mydate != $values['task_date'])
+            {/* new date, init string */
+                $mydate = $values['task_date'];
+                $mykey += 1;
+                $shortid = str_replace(".", "", $mydate); // remove dots
+                $mysubform[$mykey] =
+                    "\n<p id=\"task$shortid\">".
+                    "\n  <img src=\"/sfitixi/web/images/trashcan.gif\" ".
+                    "         alt=\"Löschen\" onclick=\"deleteElement('task$shortid')\"/> ".
+                    "\n  <input class=\"taskdate\" name=\"date$shortid\" type=\"text\" ".
+                    "           value=\"".$values['task_date']."\" disabled>".
+                    $this->session->get('shiftsHTML')."\n</p>";
+                $mysubform[$mykey] = str_replace('?', $shortid, $mysubform[$mykey]);
             }
-            $mysubform[$key] .= $shifts."\n</p>";
+            /* set checked for each shift in $myrecords */
+            $mysubform[$mykey] = str_replace('>'.$values['task_shift'],
+                                             'checked>'.$values['task_shift'],
+                                             $mysubform[$mykey]);
         }
         return $mysubform;
     }

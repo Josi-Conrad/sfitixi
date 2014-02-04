@@ -5,6 +5,7 @@
  * Date: 10.01.14
  * Time: 08:58
  */
+/* 03.02.2014 martin jonasse changed shifts from radio button to checkbox */
 
 namespace Tixi\HomeBundle\Controller;
 
@@ -261,7 +262,7 @@ class DataMiner extends Controller
     public function makeShifts()
     {/*
       * add shifts array and html (for each shift in the database) to session
-      * <input type="radio" name ="dienst?" value="Schicht 1" title="09:00 - 13:00" checked >Schicht 1
+      * <input type="checkbox" name ="dienst1" value="Schicht 1" title="09:00 - 13:00" >Schicht 1
       */
         $session = $this->container->get('session');
         $customer = $session->get('customer');
@@ -271,12 +272,10 @@ class DataMiner extends Controller
             $str = "\n";
             foreach ($shifts as $key => $values)
             {
-                $str .= "<input type=\"radio\" name =\"dienst?\" value=\"".$values['dienst_name']."\" ";
-                $str .= "title=\"".substr($values['dienst_anfang'],0,5)." - ".substr($values['dienst_ende'],0,5)."\"";
-                if ($key == 0){
-                    $str .= " checked";
-                }
-                $str .= " >".$values['dienst_name']."\n";
+                $str .= "<input type=\"checkbox\" name =\"dienst?".$values['dienst_id'];
+                $str .= "\" value=\"".$values['dienst_name'];
+                $str .= "\" title=\"".substr($values['dienst_anfang'],0,5)." - ".substr($values['dienst_ende'],0,5);
+                $str .= "\" >".$values['dienst_name']."\n";
             }
             $session->set('shiftsHTML', $str); // shifts as HTML (template)
             return true; // success
@@ -331,37 +330,26 @@ class DataMiner extends Controller
 
     public function insertData($myarray, $mytable)
     {/*
-      * insert the data contained in $myarray in to table $mytable
+      * insert the data contained in $myarray into table $mytable
       *   the $myarray keys have the same names as the table columns
       *   if applicable, errors are stored in session->errormsq
-      *   return success (true) failure (false)
-      * syntax: "INSERT IGNORE INTO $mytable (fields) VALUES (values)";
+      *   return success (id of the record) failure (0)
       */
-        $prefix = "INSERT IGNORE INTO $mytable (";
         try
         {
             $connection = $this->container->get('database_connection');
             $connection->beginTransaction();
-            foreach ($myarray as $values)
-            {
-                $f = "";
-                $v = "";
-                foreach ($values as $key => $value) {
-                    $f .= $key.", ";
-                    $v .= $value.", ";
-                }
-                $sql = $prefix.substr($f, 0, -2).") VALUES (".substr($v, 0, -2).")";
-                $connection->exec($sql);
-            }
+            $connection->insert($mytable, $myarray);
+            $id = $connection->lastInsertId();
             $connection->commit();
-            return true; // success
+            return $id; // success
         }
         catch (PDOException $e)
         {
             $session = new Session;
             $session->set("errormsg","Cannot access database : ".$e);
             $connection->rollback();
-            return false; // failure
+            return 0; // failure
         }
     }
 }

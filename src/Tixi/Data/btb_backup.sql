@@ -212,6 +212,35 @@ INSERT INTO `benutzer` VALUES (1,'martin@btb.ch','e2252c49be11d826ced98f2713b2dd
 UNLOCK TABLES;
 
 --
+-- Table structure for table `bereitschaft`
+--
+
+DROP TABLE IF EXISTS `bereitschaft`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `bereitschaft` (
+  `bereitschaft_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'Primärschlüssel',
+  `bereitschaft_einsatz_fk` bigint(20) NOT NULL COMMENT 'Fremdschlüssel in Tabelle "einsatz"',
+  `bereitschaft_dienst_fk` int(11) NOT NULL COMMENT 'Fremdschlüssel in Tabelle "dienst"',
+  PRIMARY KEY (`bereitschaft_id`),
+  KEY `bereitschft_einsatz_fk_idx` (`bereitschaft_einsatz_fk`),
+  KEY `bereitschaft_dienst_fk_idx` (`bereitschaft_dienst_fk`),
+  CONSTRAINT `bereitschaft_einsatz_fk` FOREIGN KEY (`bereitschaft_einsatz_fk`) REFERENCES `einsatz` (`einsatz_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `bereitschaft_dienst_fk` FOREIGN KEY (`bereitschaft_dienst_fk`) REFERENCES `dienst` (`dienst_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=85 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `bereitschaft`
+--
+
+LOCK TABLES `bereitschaft` WRITE;
+/*!40000 ALTER TABLE `bereitschaft` DISABLE KEYS */;
+INSERT INTO `bereitschaft` VALUES (70,276,1),(71,277,1),(72,277,3),(73,278,1),(74,278,3),(75,278,4),(81,284,3),(82,285,3),(83,286,3),(84,287,3);
+/*!40000 ALTER TABLE `bereitschaft` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `dauereinsatz`
 --
 
@@ -238,7 +267,6 @@ CREATE TABLE `dauereinsatz` (
 
 LOCK TABLES `dauereinsatz` WRITE;
 /*!40000 ALTER TABLE `dauereinsatz` DISABLE KEYS */;
-INSERT INTO `dauereinsatz` VALUES (1,1,'Montag',0,1),(32,2,'Mittwoch',2,4),(33,2,'Donnerstag',3,1),(34,2,'Freitag',5,6);
 /*!40000 ALTER TABLE `dauereinsatz` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -298,7 +326,7 @@ CREATE TABLE `dienst` (
 
 LOCK TABLES `dienst` WRITE;
 /*!40000 ALTER TABLE `dienst` DISABLE KEYS */;
-INSERT INTO `dienst` VALUES (1,'Schicht 1','09:00:00','13:00:00','Morgendienst'),(3,'Schicht 2','13:00:00','18:00:00','Nachmittagsdienst'),(4,'Schicht 3','18:00:00','23:00:00','Abenddienst'),(5,'Schicht 4','09:00:00','18:00:00','Schicht 1 + 2'),(6,'Schicht 6','13:00:00','23:00:00','Schicht 2 + 3'),(7,'Schicht 7','09:00:00','23:00:00','Schicht 1 + 2 + 3');
+INSERT INTO `dienst` VALUES (1,'Schicht 1','09:00:00','13:00:00','Morgendienst'),(3,'Schicht 2','13:00:00','18:00:00','Nachmittagsdienst'),(4,'Schicht 3','18:00:00','23:59:59','Abenddienst');
 /*!40000 ALTER TABLE `dienst` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -313,13 +341,10 @@ CREATE TABLE `einsatz` (
   `einsatz_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'Primärschlüssel.',
   `einsatz_einsatzplan_fk` int(11) NOT NULL COMMENT 'Fremdschlüssel in Tabelle Einsatzplan.',
   `einsatz_datum` date NOT NULL COMMENT 'Datum des geplanten Einsatzes.',
-  `einsatz_dienst_fk` int(11) NOT NULL COMMENT 'Dienst (Fremdschüssel) des geplanten Einsatzes.',
   PRIMARY KEY (`einsatz_id`),
   KEY `einsatz_einsatzplan_fk_idx` (`einsatz_einsatzplan_fk`),
-  KEY `einsatz_dienst_fk_idx` (`einsatz_dienst_fk`),
-  CONSTRAINT `einsatz_dienst_fk` FOREIGN KEY (`einsatz_dienst_fk`) REFERENCES `dienst` (`dienst_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `einsatz_einsatzplan_fk` FOREIGN KEY (`einsatz_einsatzplan_fk`) REFERENCES `einsatzplan` (`einsatzplan_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=217 DEFAULT CHARSET=latin1 COMMENT='Einsatz eines Fahrers: ein bestimmten Tag (Datum) und ein bestimmten Dienst (id).';
+) ENGINE=InnoDB AUTO_INCREMENT=288 DEFAULT CHARSET=latin1 COMMENT='Einsatz eines Fahrers: ein bestimmten Tag (Datum) und ein bestimmten Dienst (id).';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -328,7 +353,7 @@ CREATE TABLE `einsatz` (
 
 LOCK TABLES `einsatz` WRITE;
 /*!40000 ALTER TABLE `einsatz` DISABLE KEYS */;
-INSERT INTO `einsatz` VALUES (58,6,'2014-03-04',1),(59,6,'2014-03-12',3),(60,6,'2014-03-20',3),(61,6,'2014-03-29',1),(196,9,'2014-02-03',1),(197,9,'2014-02-10',3),(198,9,'2014-02-17',4),(199,9,'2014-02-24',5),(200,9,'2014-02-25',1),(201,9,'2014-02-26',1),(202,8,'2014-02-04',1),(203,8,'2014-02-11',1),(204,8,'2014-02-22',1),(205,1,'2014-02-08',1),(206,1,'2014-02-15',1),(213,3,'2014-03-08',1),(214,3,'2014-03-09',1),(215,3,'2014-02-18',1),(216,3,'2014-02-02',1);
+INSERT INTO `einsatz` VALUES (276,10,'2014-02-12'),(277,10,'2014-02-19'),(278,10,'2014-02-26'),(284,11,'2014-03-03'),(285,11,'2014-03-11'),(286,11,'2014-03-19'),(287,11,'2014-03-27');
 /*!40000 ALTER TABLE `einsatz` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -348,7 +373,7 @@ CREATE TABLE `einsatzplan` (
   PRIMARY KEY (`einsatzplan_id`),
   KEY `einsatzplan_fahrer_fk_idx` (`einsatzplan_fahrer_fk`),
   CONSTRAINT `einsatzplan_fahrer_fk` FOREIGN KEY (`einsatzplan_fahrer_fk`) REFERENCES `fahrer` (`fahrer_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1 COMMENT='Einsatzplan für ein Fahrer. Ein Fahrer kann keine, eine oder mehrere Einsatzpläne haben.';
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1 COMMENT='Einsatzplan für ein Fahrer. Ein Fahrer kann keine, eine oder mehrere Einsatzpläne haben.';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -357,7 +382,7 @@ CREATE TABLE `einsatzplan` (
 
 LOCK TABLES `einsatzplan` WRITE;
 /*!40000 ALTER TABLE `einsatzplan` DISABLE KEYS */;
-INSERT INTO `einsatzplan` VALUES (1,100,'Einsatzplan Februar 2014','Liebe Yeldez\r\n\r\nIch wünsche dir ein gutes neue Jahr. Kannst Du mich bitte eintragen für den 20. und 21.ste Februar, Schicht 2. Danke\r\nMartin',1),(3,100,'Plan März','test...',1),(6,104,'März',NULL,1),(8,100,'test orange','enhancement: display selected dates as orange ...',1),(9,100,'test mit josi',NULL,0);
+INSERT INTO `einsatzplan` VALUES (10,100,'februar 2014','test',1),(11,100,'märz  2014','test',1);
 /*!40000 ALTER TABLE `einsatzplan` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1415,7 +1440,7 @@ USE `btb`;
 /*!50001 SET collation_connection      = utf8_general_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
-/*!50001 VIEW `agenda_einsatzplan` AS select `f`.`fahrer_id` AS `fahrer_id`,'Einsatzplan' AS `quelle`,`ep`.`einsatzplan_betreff` AS `betreff`,`e`.`einsatz_datum` AS `datum`,if((count(`ep`.`einsatzplan_betreff`) = 1),`d`.`dienst_name`,'KONFLIKT') AS `dienst`,if((count(`ep`.`einsatzplan_betreff`) = 1),NULL,group_concat(`ep`.`einsatzplan_betreff` separator ',')) AS `bemerkung` from (((`fahrer` `f` join `einsatzplan` `ep` on((`f`.`fahrer_id` = `ep`.`einsatzplan_fahrer_fk`))) join `einsatz` `e` on((`ep`.`einsatzplan_id` = `e`.`einsatz_einsatzplan_fk`))) join `dienst` `d` on((`d`.`dienst_id` = `e`.`einsatz_dienst_fk`))) where ((`f`.`fahrer_id` = `func_fahrer_id`()) and `ep`.`istAktive`) group by `f`.`fahrer_id`,`datum` */;
+/*!50001 VIEW `agenda_einsatzplan` AS select `f`.`fahrer_id` AS `fahrer_id`,'Einsatzplan' AS `quelle`,`ep`.`einsatzplan_betreff` AS `betreff`,`e`.`einsatz_datum` AS `datum`,if((count(distinct `ep`.`einsatzplan_betreff`) = 1),convert(group_concat(`d`.`dienst_name` separator ', ') using latin1),convert('KONFLIKT' using latin1)) AS `dienst`,if((count(distinct `ep`.`einsatzplan_betreff`) = 1),NULL,convert(group_concat(distinct `ep`.`einsatzplan_betreff` separator ', ') using latin1)) AS `bemerkung` from ((((`fahrer` `f` join `einsatzplan` `ep` on((`f`.`fahrer_id` = `ep`.`einsatzplan_fahrer_fk`))) join `einsatz` `e` on((`ep`.`einsatzplan_id` = `e`.`einsatz_einsatzplan_fk`))) join `bereitschaft` `b` on((`e`.`einsatz_id` = `b`.`bereitschaft_einsatz_fk`))) join `dienst` `d` on((`d`.`dienst_id` = `b`.`bereitschaft_dienst_fk`))) where ((`f`.`fahrer_id` = `func_fahrer_id`()) and `ep`.`istAktive`) group by `f`.`fahrer_id`,`datum` order by `d`.`dienst_name` */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
 /*!50001 SET collation_connection      = @saved_col_connection */;
@@ -2037,4 +2062,4 @@ USE `btb`;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-01-31 14:04:37
+-- Dump completed on 2014-02-03 18:40:42
