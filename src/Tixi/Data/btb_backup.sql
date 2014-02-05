@@ -225,9 +225,9 @@ CREATE TABLE `bereitschaft` (
   PRIMARY KEY (`bereitschaft_id`),
   KEY `bereitschft_einsatz_fk_idx` (`bereitschaft_einsatz_fk`),
   KEY `bereitschaft_dienst_fk_idx` (`bereitschaft_dienst_fk`),
-  CONSTRAINT `bereitschaft_einsatz_fk` FOREIGN KEY (`bereitschaft_einsatz_fk`) REFERENCES `einsatz` (`einsatz_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `bereitschaft_dienst_fk` FOREIGN KEY (`bereitschaft_dienst_fk`) REFERENCES `dienst` (`dienst_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=85 DEFAULT CHARSET=latin1;
+  CONSTRAINT `bereitschaft_dienst_fk` FOREIGN KEY (`bereitschaft_dienst_fk`) REFERENCES `dienst` (`dienst_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `bereitschaft_einsatz_fk` FOREIGN KEY (`bereitschaft_einsatz_fk`) REFERENCES `einsatz` (`einsatz_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=112 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -236,8 +236,37 @@ CREATE TABLE `bereitschaft` (
 
 LOCK TABLES `bereitschaft` WRITE;
 /*!40000 ALTER TABLE `bereitschaft` DISABLE KEYS */;
-INSERT INTO `bereitschaft` VALUES (70,276,1),(71,277,1),(72,277,3),(73,278,1),(74,278,3),(75,278,4),(81,284,3),(82,285,3),(83,286,3),(84,287,3);
+INSERT INTO `bereitschaft` VALUES (109,306,3),(110,307,3),(111,308,3);
 /*!40000 ALTER TABLE `bereitschaft` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `dauerbereitschaft`
+--
+
+DROP TABLE IF EXISTS `dauerbereitschaft`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `dauerbereitschaft` (
+  `dauerbereitschaft_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'Promärschlüssel in diese Tabelle.',
+  `dauerbereitschaft_dauereinsatz_fk` bigint(20) NOT NULL COMMENT 'Fremdschlüssel in Tabelle dauereinsatz.',
+  `dauerbereitschaft_dienst_fk` int(11) NOT NULL COMMENT 'Fremdschlüssel in Tabelle dienst.',
+  PRIMARY KEY (`dauerbereitschaft_id`),
+  KEY `dauerbereitschaft_dauereinsatz_fk_idx` (`dauerbereitschaft_dauereinsatz_fk`),
+  KEY `dauerbereitschaft_dienst_fk_idx` (`dauerbereitschaft_dienst_fk`),
+  CONSTRAINT `dauerbereitschaft_dauereinsatz_fk` FOREIGN KEY (`dauerbereitschaft_dauereinsatz_fk`) REFERENCES `dauereinsatz` (`dauereinsatz_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `dauerbereitschaft_dienst_fk` FOREIGN KEY (`dauerbereitschaft_dienst_fk`) REFERENCES `dienst` (`dienst_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=83 DEFAULT CHARSET=latin1 COMMENT='Schicht / Dienste für den Dauereinsatzplan.';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `dauerbereitschaft`
+--
+
+LOCK TABLES `dauerbereitschaft` WRITE;
+/*!40000 ALTER TABLE `dauerbereitschaft` DISABLE KEYS */;
+INSERT INTO `dauerbereitschaft` VALUES (73,48,3),(74,49,4),(75,50,3),(76,50,4),(77,51,1),(78,51,3),(79,52,1),(80,52,3),(81,52,4),(82,53,1);
+/*!40000 ALTER TABLE `dauerbereitschaft` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -252,13 +281,10 @@ CREATE TABLE `dauereinsatz` (
   `dauereinsatz_dauereinsatzplan_fk` int(11) NOT NULL COMMENT 'Fremdschüssel in Tabelle dauereinsatzplan',
   `dauereinsatz_tag` varchar(16) NOT NULL COMMENT 'Anwelchen Tage erfolgt der EDauereinsatz, z.B. Montag.',
   `dauereinsatz_periode` int(11) NOT NULL COMMENT 'Dauereinsatz Periode: 0 = jede woche, 1 = jede erste Woche im Monat, 2 = jeder zweite Woche im Monat, 3 etc.',
-  `dauereinsatz_dienst_fk` int(11) NOT NULL COMMENT 'Fremdschlüssel in Tabelle dienst.',
   PRIMARY KEY (`dauereinsatz_id`),
   KEY `dauereinsatz_dauereinsatzplan_fk_idx` (`dauereinsatz_dauereinsatzplan_fk`),
-  KEY `dauereinsatz_dienst_fk_idx` (`dauereinsatz_dienst_fk`),
-  CONSTRAINT `dauereinsatz_dauereinsatzplan_fk` FOREIGN KEY (`dauereinsatz_dauereinsatzplan_fk`) REFERENCES `dauereinsatzplan` (`dauereinsatzplan_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `dauereinsatz_dienst_fk` FOREIGN KEY (`dauereinsatz_dienst_fk`) REFERENCES `dienst` (`dienst_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=latin1 COMMENT='Dauereinsatz für ein Fahrer, ein Tag und ein Dienst und \neine Wiederholungsperiode.';
+  CONSTRAINT `dauereinsatz_dauereinsatzplan_fk` FOREIGN KEY (`dauereinsatz_dauereinsatzplan_fk`) REFERENCES `dauereinsatzplan` (`dauereinsatzplan_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=54 DEFAULT CHARSET=latin1 COMMENT='Dauereinsatz für ein Fahrer, ein Tag und ein Dienst und \neine Wiederholungsperiode.';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -267,6 +293,7 @@ CREATE TABLE `dauereinsatz` (
 
 LOCK TABLES `dauereinsatz` WRITE;
 /*!40000 ALTER TABLE `dauereinsatz` DISABLE KEYS */;
+INSERT INTO `dauereinsatz` VALUES (48,2,'Dienstag',1),(49,2,'Mittwoch',2),(50,2,'Donnerstag',3),(51,2,'Freitag',4),(52,2,'Samstag',5),(53,1,'Montag',0);
 /*!40000 ALTER TABLE `dauereinsatz` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -283,8 +310,6 @@ CREATE TABLE `dauereinsatzplan` (
   `dauereinsatzplan_betreff` varchar(45) NOT NULL COMMENT 'Dauereinsatzplan betreff. Beispiel Einsatz März - Dezember.',
   `memo` text COMMENT 'Einsatzplan memo. Beispiel: Kopie vom email ...',
   `istAktive` tinyint(4) NOT NULL DEFAULT '1' COMMENT 'Chekbox, gesetzt (1) wenn der Dauerauftrag aktiviert ist. Das zurücksetzen ist das equivalent mit löschen, d.h. der Dauereinsatz ist sofort beendet.',
-  `inklusivFeiertage` tinyint(4) NOT NULL DEFAULT '1' COMMENT 'Der Dauerauftrag ist gültig auch für Feiertage (1) oder nicht (0).',
-  `periode` varchar(16) NOT NULL DEFAULT 'wöchentlich' COMMENT 'Radio button: wöchentlich, monatlich. Steuert das GUI. Eine Aenderung hier löscht alle Daueraufträge im Plan.',
   `zeitstempel` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Datum / zeit der letzte Aenderung in diese Datensatz. Wird automatisch durch MySQL gesetzt.',
   PRIMARY KEY (`dauereinsatzplan_id`),
   KEY `dauereinsatzplan_fahrer_fk_idx` (`dauereinsatzplan_fahrer_fk`),
@@ -298,7 +323,7 @@ CREATE TABLE `dauereinsatzplan` (
 
 LOCK TABLES `dauereinsatzplan` WRITE;
 /*!40000 ALTER TABLE `dauereinsatzplan` DISABLE KEYS */;
-INSERT INTO `dauereinsatzplan` VALUES (1,100,'test montag wöchentlich','test datensatz 1',1,1,'wöchentlich','2014-01-21 15:24:30'),(2,100,'test divers monatlich','test datensatz 2',1,1,'monatlich','2014-01-31 09:04:18');
+INSERT INTO `dauereinsatzplan` VALUES (1,100,'test montag wöchentlich','test datensatz 1',1,'2014-01-21 15:24:30'),(2,100,'test divers monatlich','test datensatz 2',1,'2014-01-31 09:04:18');
 /*!40000 ALTER TABLE `dauereinsatzplan` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -317,7 +342,7 @@ CREATE TABLE `dienst` (
   `memo` text COMMENT 'Freitext',
   PRIMARY KEY (`dienst_id`),
   UNIQUE KEY `dienst_name_UNIQUE` (`dienst_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1 COMMENT='Tabelle mit Dienste / Arbeitszeiten für die Tixi Fahrer.';
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1 COMMENT='Tabelle mit Dienste / Arbeitszeiten für die Tixi Fahrer.';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -326,7 +351,7 @@ CREATE TABLE `dienst` (
 
 LOCK TABLES `dienst` WRITE;
 /*!40000 ALTER TABLE `dienst` DISABLE KEYS */;
-INSERT INTO `dienst` VALUES (1,'Schicht 1','09:00:00','13:00:00','Morgendienst'),(3,'Schicht 2','13:00:00','18:00:00','Nachmittagsdienst'),(4,'Schicht 3','18:00:00','23:59:59','Abenddienst');
+INSERT INTO `dienst` VALUES (1,'Schicht 1','09:00:00','12:59:00','Morgendienst'),(3,'Schicht 2','13:00:00','17:59:00','Nachmittagsdienst'),(4,'Schicht 3','18:00:00','23:59:00','Abenddienst');
 /*!40000 ALTER TABLE `dienst` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -344,7 +369,7 @@ CREATE TABLE `einsatz` (
   PRIMARY KEY (`einsatz_id`),
   KEY `einsatz_einsatzplan_fk_idx` (`einsatz_einsatzplan_fk`),
   CONSTRAINT `einsatz_einsatzplan_fk` FOREIGN KEY (`einsatz_einsatzplan_fk`) REFERENCES `einsatzplan` (`einsatzplan_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=288 DEFAULT CHARSET=latin1 COMMENT='Einsatz eines Fahrers: ein bestimmten Tag (Datum) und ein bestimmten Dienst (id).';
+) ENGINE=InnoDB AUTO_INCREMENT=309 DEFAULT CHARSET=latin1 COMMENT='Einsatz eines Fahrers: ein bestimmten Tag (Datum) und ein bestimmten Dienst (id).';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -353,7 +378,7 @@ CREATE TABLE `einsatz` (
 
 LOCK TABLES `einsatz` WRITE;
 /*!40000 ALTER TABLE `einsatz` DISABLE KEYS */;
-INSERT INTO `einsatz` VALUES (276,10,'2014-02-12'),(277,10,'2014-02-19'),(278,10,'2014-02-26'),(284,11,'2014-03-03'),(285,11,'2014-03-11'),(286,11,'2014-03-19'),(287,11,'2014-03-27');
+INSERT INTO `einsatz` VALUES (306,11,'2014-03-11'),(307,11,'2014-03-19'),(308,11,'2014-03-02');
 /*!40000 ALTER TABLE `einsatz` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -373,7 +398,7 @@ CREATE TABLE `einsatzplan` (
   PRIMARY KEY (`einsatzplan_id`),
   KEY `einsatzplan_fahrer_fk_idx` (`einsatzplan_fahrer_fk`),
   CONSTRAINT `einsatzplan_fahrer_fk` FOREIGN KEY (`einsatzplan_fahrer_fk`) REFERENCES `fahrer` (`fahrer_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1 COMMENT='Einsatzplan für ein Fahrer. Ein Fahrer kann keine, eine oder mehrere Einsatzpläne haben.';
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1 COMMENT='Einsatzplan für ein Fahrer. Ein Fahrer kann keine, eine oder mehrere Einsatzpläne haben.';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -382,7 +407,7 @@ CREATE TABLE `einsatzplan` (
 
 LOCK TABLES `einsatzplan` WRITE;
 /*!40000 ALTER TABLE `einsatzplan` DISABLE KEYS */;
-INSERT INTO `einsatzplan` VALUES (10,100,'februar 2014','test',1),(11,100,'märz  2014','test',1);
+INSERT INTO `einsatzplan` VALUES (10,100,'februar 2014','test',1),(11,100,'märz  2014','test',1),(12,100,'',NULL,1);
 /*!40000 ALTER TABLE `einsatzplan` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1421,7 +1446,7 @@ USE `btb`;
 /*!50001 SET collation_connection      = utf8_general_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
-/*!50001 VIEW `agenda_dauereinsatzplan` AS select `f`.`fahrer_id` AS `fahrer_id`,'Dauereinsatzplan' AS `quelle`,`dep`.`dauereinsatzplan_betreff` AS `betreff`,`k`.`date` AS `datum`,if((count(`dep`.`dauereinsatzplan_betreff`) = 1),convert(`d`.`dienst_name` using latin1),convert('KONFLIKT' using latin1)) AS `dienst`,if((count(`dep`.`dauereinsatzplan_betreff`) = 1),NULL,convert(group_concat(`dep`.`dauereinsatzplan_betreff` separator ', ') using latin1)) AS `bemerkung` from ((((`fahrer` `f` join `dauereinsatzplan` `dep` on((`f`.`fahrer_id` = `dep`.`dauereinsatzplan_fahrer_fk`))) join `dauereinsatz` `de` on((`dep`.`dauereinsatzplan_id` = `de`.`dauereinsatz_dauereinsatzplan_fk`))) join `dienst` `d` on((`d`.`dienst_id` = `de`.`dauereinsatz_dienst_fk`))) join `kalender` `k` on((`k`.`dayname` = `de`.`dauereinsatz_tag`))) where ((`f`.`fahrer_id` = `func_fahrer_id`()) and (`dep`.`istAktive` = 1) and ((`de`.`dauereinsatz_periode` = 0) or (`de`.`dauereinsatz_periode` = `k`.`dayoffset`))) group by `f`.`fahrer_id`,`k`.`date` */;
+/*!50001 VIEW `agenda_dauereinsatzplan` AS select `f`.`fahrer_id` AS `fahrer_id`,'Dauereinsatzplan' AS `quelle`,`dep`.`dauereinsatzplan_betreff` AS `betreff`,`k`.`date` AS `datum`,if((count(distinct `dep`.`dauereinsatzplan_betreff`) = 1),convert(group_concat(`d`.`dienst_name` separator ', ') using latin1),convert('KONFLIKT' using latin1)) AS `dienst`,if((count(distinct `dep`.`dauereinsatzplan_betreff`) = 1),NULL,convert(group_concat(`dep`.`dauereinsatzplan_betreff` separator ', ') using latin1)) AS `bemerkung` from (((((`fahrer` `f` join `dauereinsatzplan` `dep` on((`f`.`fahrer_id` = `dep`.`dauereinsatzplan_fahrer_fk`))) join `dauereinsatz` `de` on((`dep`.`dauereinsatzplan_id` = `de`.`dauereinsatz_dauereinsatzplan_fk`))) join `dauerbereitschaft` `db` on((`de`.`dauereinsatz_id` = `db`.`dauerbereitschaft_dauereinsatz_fk`))) join `dienst` `d` on((`d`.`dienst_id` = `db`.`dauerbereitschaft_dienst_fk`))) join `kalender` `k` on((`k`.`dayname` = `de`.`dauereinsatz_tag`))) where ((`f`.`fahrer_id` = `func_fahrer_id`()) and (`dep`.`istAktive` = 1) and ((`de`.`dauereinsatz_periode` = 0) or (`de`.`dauereinsatz_periode` = `k`.`dayoffset`))) group by `f`.`fahrer_id`,`k`.`date` order by `d`.`dienst_name` */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
 /*!50001 SET collation_connection      = @saved_col_connection */;
@@ -2062,4 +2087,4 @@ USE `btb`;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-02-03 18:40:42
+-- Dump completed on 2014-02-05 15:29:22

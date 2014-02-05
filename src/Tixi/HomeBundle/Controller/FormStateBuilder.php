@@ -564,6 +564,12 @@ class FormStateBuilder extends Controller
             $valid = (($tim[0] >= 0 && $tim[0] <= 23) and
                       ($tim[1] >= 0 && $tim[1] <= 59));
         }
+        elseif (count($tim) == 3)
+        {
+            $valid = (($tim[0] >= 0 && $tim[0] <= 23) and
+                ($tim[1] >= 0 && $tim[1] <= 59) and
+                ($tim[2] == 0));
+        }
         return $valid;
     }
 
