@@ -11,6 +11,7 @@
 // 02.12.2013 martin jonasse added time format
 // 30.12.2013 martin jonasse added localizeMyform
 // 17.01.2014 martin jonasse fixed deletion of tainted objects
+// 08.02.2014 martin jonasse fixed readonly for pin in setMetaData
 
 namespace Tixi\HomeBundle\Controller;
 
@@ -172,26 +173,29 @@ class FormStateBuilder extends Controller
             $this->myform = $this->conn->fetchAll( $sql );
 
             // upgrade the meta data with some derived fields
-            foreach ($this->myform as $key => $value) {
+            foreach ($this->myform as $key => $values)
+            {
+                $myfield = $values["Field"];
+                $mytype = $values["Type"];
 
                 // readonly?
-                $postfix = substr($value["Field"], -3 ); // last three characters
-                $readonly = (($postfix == '_id') or ($value == 'pin')); // primary key and migration id
+                $postfix = substr($myfield, -3 ); // last three characters
+                $readonly = (($postfix == '_id') or ($myfield == 'pin')); // primary key and migration id
                 $this->myform[$key]["Readonly"] = $readonly;
 
                 // hidden? = all foreign keys and all ids except the primary key
                 $hidden = (($postfix == '_fk') or
-                          (($postfix == '_id') and ($value["Field"] != $this->pkey))); // exception = pkey
+                          (($postfix == '_id') and ($myfield != $this->pkey))); // exception = pkey
                 $this->myform[$key]["Hidden"] = $hidden;
 
                 // maxlength?
-                $this->myform[$key]["Length"] = $this->getLen($value["Type"]);
+                $this->myform[$key]["Length"] = $this->getLen($mytype);
 
                 // types?
-                $paranthesis = strpos($value["Type"], "(");
-                $basetype = ($paranthesis !== false) ? substr($value["Type"], 0, $paranthesis ) : $value["Type"];
+                $paranthesis = strpos($mytype, "(");
+                $basetype = ($paranthesis !== false) ? substr($mytype, 0, $paranthesis ) : $mytype;
                 $this->myform[$key]["Basetype"] = $basetype; // sql type
-                $this->myform[$key]["Rendered"] = $this->map2InputType($basetype, $value["Field"]); // html type, name
+                $this->myform[$key]["Rendered"] = $this->map2InputType($basetype, $myfield); // html type, name
 
                 // error message, previous value
                 $this->myform[$key]["Error"] = ""; // empty

@@ -256,7 +256,7 @@ CREATE TABLE `dauerbereitschaft` (
   KEY `dauerbereitschaft_dienst_fk_idx` (`dauerbereitschaft_dienst_fk`),
   CONSTRAINT `dauerbereitschaft_dauereinsatz_fk` FOREIGN KEY (`dauerbereitschaft_dauereinsatz_fk`) REFERENCES `dauereinsatz` (`dauereinsatz_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `dauerbereitschaft_dienst_fk` FOREIGN KEY (`dauerbereitschaft_dienst_fk`) REFERENCES `dienst` (`dienst_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=83 DEFAULT CHARSET=latin1 COMMENT='Schicht / Dienste für den Dauereinsatzplan.';
+) ENGINE=InnoDB AUTO_INCREMENT=103 DEFAULT CHARSET=latin1 COMMENT='Schicht / Dienste für den Dauereinsatzplan.';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -265,7 +265,7 @@ CREATE TABLE `dauerbereitschaft` (
 
 LOCK TABLES `dauerbereitschaft` WRITE;
 /*!40000 ALTER TABLE `dauerbereitschaft` DISABLE KEYS */;
-INSERT INTO `dauerbereitschaft` VALUES (73,48,3),(74,49,4),(75,50,3),(76,50,4),(77,51,1),(78,51,3),(79,52,1),(80,52,3),(81,52,4),(82,53,1);
+INSERT INTO `dauerbereitschaft` VALUES (82,53,1),(94,60,3),(95,61,4),(96,62,3),(97,62,4),(98,63,1),(99,63,3),(100,64,1),(101,64,3),(102,64,4);
 /*!40000 ALTER TABLE `dauerbereitschaft` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -284,7 +284,7 @@ CREATE TABLE `dauereinsatz` (
   PRIMARY KEY (`dauereinsatz_id`),
   KEY `dauereinsatz_dauereinsatzplan_fk_idx` (`dauereinsatz_dauereinsatzplan_fk`),
   CONSTRAINT `dauereinsatz_dauereinsatzplan_fk` FOREIGN KEY (`dauereinsatz_dauereinsatzplan_fk`) REFERENCES `dauereinsatzplan` (`dauereinsatzplan_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=54 DEFAULT CHARSET=latin1 COMMENT='Dauereinsatz für ein Fahrer, ein Tag und ein Dienst und \neine Wiederholungsperiode.';
+) ENGINE=InnoDB AUTO_INCREMENT=65 DEFAULT CHARSET=latin1 COMMENT='Dauereinsatz für ein Fahrer, ein Tag und ein Dienst und \neine Wiederholungsperiode.';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -293,7 +293,7 @@ CREATE TABLE `dauereinsatz` (
 
 LOCK TABLES `dauereinsatz` WRITE;
 /*!40000 ALTER TABLE `dauereinsatz` DISABLE KEYS */;
-INSERT INTO `dauereinsatz` VALUES (48,2,'Dienstag',1),(49,2,'Mittwoch',2),(50,2,'Donnerstag',3),(51,2,'Freitag',4),(52,2,'Samstag',5),(53,1,'Montag',0);
+INSERT INTO `dauereinsatz` VALUES (53,1,'Montag',0),(60,2,'Dienstag',1),(61,2,'Mittwoch',2),(62,2,'Donnerstag',3),(63,2,'Freitag',4),(64,2,'Samstag',5);
 /*!40000 ALTER TABLE `dauereinsatz` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -342,7 +342,7 @@ CREATE TABLE `dienst` (
   `memo` text COMMENT 'Freitext',
   PRIMARY KEY (`dienst_id`),
   UNIQUE KEY `dienst_name_UNIQUE` (`dienst_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1 COMMENT='Tabelle mit Dienste / Arbeitszeiten für die Tixi Fahrer.';
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1 COMMENT='Tabelle mit Dienste / Arbeitszeiten für die Tixi Fahrer.';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -407,7 +407,7 @@ CREATE TABLE `einsatzplan` (
 
 LOCK TABLES `einsatzplan` WRITE;
 /*!40000 ALTER TABLE `einsatzplan` DISABLE KEYS */;
-INSERT INTO `einsatzplan` VALUES (10,100,'februar 2014','test',1),(11,100,'märz  2014','test',1),(12,100,'',NULL,1);
+INSERT INTO `einsatzplan` VALUES (10,100,'februar 2014','test',1),(11,100,'märz  2014','test',1);
 /*!40000 ALTER TABLE `einsatzplan` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -445,7 +445,7 @@ CREATE TABLE `fahrer` (
 
 LOCK TABLES `fahrer` WRITE;
 /*!40000 ALTER TABLE `fahrer` DISABLE KEYS */;
-INSERT INTO `fahrer` VALUES (100,100,100,1,'2004-10-26','1965-05-17','31309','remzi.abdula@bluewin.ch','Ferarri%',1,0,'freiwillig','will nur hübsche junge frauen fahren.','Hier werden die vertrauliche Daten zu Fahrer Remzi Abdula Basel gespeichert. \r\n...'),(101,101,101,1,'2004-08-23','1976-04-10','34591','salvatore.adornetto@bluewin.ch','*',1,0,'freiwillig',NULL,NULL),(102,102,102,1,'2004-11-22','1983-01-29','63203','ibrahim.akdas@bluewin.ch','*',1,0,'freiwillig',NULL,NULL),(103,103,103,1,'2004-05-11','1981-07-07','95744','urs.altermatt@bluewin.ch','*',1,0,'freiwillig',NULL,NULL),(104,104,104,1,'2006-01-19','1967-01-08','9716','charles.amsler@bluewin.ch','*',0,1,'freiwillig, testperson',NULL,NULL),(105,105,105,1,'2004-06-25','1978-08-31','23922','walter.amstutz@bluewin.ch','*',1,0,'freiwillig',NULL,NULL),(106,106,106,1,'2005-03-09','1962-06-08','95382','franco.anania@bluewin.ch','*',1,0,'freiwillig',NULL,NULL),(107,107,107,1,'2006-05-29','1964-01-16','14301','osman.atay@bluewin.ch','*',1,0,'freiwillig',NULL,NULL),(108,108,108,1,'2005-06-28','1978-03-03','33640','max.bächtold@bluewin.ch','*',1,0,'freiwillig',NULL,NULL),(109,109,109,1,'2004-09-13','1962-04-28','4701','rené.baumann@bluewin.ch','*',1,0,'freiwillig',NULL,'Dies sind die vertrauliche Daten zum Fahrer René Baumann ...'),(110,110,110,1,'2004-12-19','1981-12-31','25407','alexander.belinovich@bluewin.ch','*',1,0,'freiwillig',NULL,NULL),(111,111,111,1,'2006-09-04','1968-03-29','8406','ernst.beyeler@bluewin.ch','*',1,0,'freiwillig',NULL,NULL),(112,112,112,1,'2006-06-29','1980-03-01','76813','slavko.bosnjak@bluewin.ch','*',1,0,'freiwillig',NULL,NULL),(113,113,113,1,'2005-08-10','1985-05-19','29426','otto.boxler@bluewin.ch','*',1,0,'freiwillig',NULL,NULL),(114,114,114,1,'2005-11-08','1985-09-21','39419','robert.brechbühler@bluewin.ch','*',1,0,'freiwillig',NULL,NULL),(115,115,115,1,'2004-12-16','1977-04-11','96405','heinz.bühler@bluewin.ch','*',1,0,'freiwillig',NULL,NULL),(116,116,116,1,'2006-09-06','1964-12-06','80768','paul.bürgisser@bluewin.ch','*',1,0,'freiwillig',NULL,NULL),(117,117,117,1,'2005-02-12','1986-02-19','18521','fernando.burkhard@gmail.com','*',1,0,'freiwillig',NULL,NULL),(118,118,118,1,'2004-09-13','1964-06-18','47157','vitor.da costa branco@bluewin.ch','*',1,0,'freiwillig',NULL,NULL),(119,119,119,1,'2004-05-12','1977-02-01','94049','giuseppe.dantino@bluewin.ch','*',1,0,'freiwillig',NULL,NULL),(120,120,120,1,'2004-06-14','1974-09-30','55610','peter.delaquis@bluewin.ch','*',1,0,'freiwillig',NULL,NULL),(121,121,121,1,'2005-12-02','1962-02-11','213','giuseppe.del vaglio@bluewin.ch','*',1,0,'freiwillig',NULL,NULL),(122,122,122,1,'2006-05-09','1976-08-31','31539','josef.dorigo@bluewin.ch','*',1,0,'freiwillig',NULL,NULL),(123,123,123,1,'2006-04-15','1977-01-02','81165','rené.ehrismann@bluewin.ch','*',1,0,'freiwillig',NULL,NULL),(124,124,124,1,'2004-04-22','1983-11-12','64619','roland.etter@gmail.com','*',1,0,'freiwillig',NULL,NULL),(125,125,125,1,'2005-08-04','1972-11-25','77306','walter.felber@bluewin.ch','*',1,0,'freiwillig',NULL,NULL),(126,126,126,1,'2006-04-23','1984-01-23','60819','santo.felice@bluewin.ch','*',1,0,'freiwillig',NULL,NULL);
+INSERT INTO `fahrer` VALUES (100,100,100,1,'2004-10-26','1965-05-17','31309','remzi.abdula@bluewin.ch','Ferarri%',1,0,'freiwillig','meldet sich auf ?. Kann angefragt werden ausser MI+DO!','Dies sind vertrauliche Daten von Remzi Abdula Basel ...'),(101,101,101,1,'2004-08-23','1976-04-10','34591','salvatore.adornetto@bluewin.ch','*',1,0,'freiwillig',NULL,NULL),(102,102,102,1,'2004-11-22','1983-01-29','63203','ibrahim.akdas@bluewin.ch','*',1,0,'freiwillig',NULL,NULL),(103,103,103,1,'2004-05-11','1981-07-07','95744','urs.altermatt@bluewin.ch','*',1,0,'freiwillig',NULL,NULL),(104,104,104,1,'2006-01-19','1967-01-08','9716','charles.amsler@bluewin.ch','*',0,1,'freiwillig, testperson',NULL,NULL),(105,105,105,1,'2004-06-25','1978-08-31','23922','walter.amstutz@bluewin.ch','*',1,0,'freiwillig',NULL,NULL),(106,106,106,1,'2005-03-09','1962-06-08','95382','franco.anania@bluewin.ch','*',1,0,'freiwillig',NULL,NULL),(107,107,107,1,'2006-05-29','1964-01-16','14301','osman.atay@bluewin.ch','*',1,0,'freiwillig',NULL,NULL),(108,108,108,1,'2005-06-28','1978-03-03','33640','max.bächtold@bluewin.ch','*',1,0,'freiwillig',NULL,NULL),(109,109,109,1,'2004-09-13','1962-04-28','4701','rené.baumann@bluewin.ch','*',1,0,'freiwillig',NULL,'Dies sind die vertrauliche Daten zum Fahrer René Baumann ...'),(110,110,110,1,'2004-12-19','1981-12-31','25407','alexander.belinovich@bluewin.ch','*',1,0,'freiwillig',NULL,NULL),(111,111,111,1,'2006-09-04','1968-03-29','8406','ernst.beyeler@bluewin.ch','*',1,0,'freiwillig',NULL,NULL),(112,112,112,1,'2006-06-29','1980-03-01','76813','slavko.bosnjak@bluewin.ch','*',1,0,'freiwillig',NULL,NULL),(113,113,113,1,'2005-08-10','1985-05-19','29426','otto.boxler@bluewin.ch','*',1,0,'freiwillig',NULL,NULL),(114,114,114,1,'2005-11-08','1985-09-21','39419','robert.brechbühler@bluewin.ch','*',1,0,'freiwillig',NULL,NULL),(115,115,115,1,'2004-12-16','1977-04-11','96405','heinz.bühler@bluewin.ch','*',1,0,'freiwillig',NULL,NULL),(116,116,116,1,'2006-09-06','1964-12-06','80768','paul.bürgisser@bluewin.ch','*',1,0,'freiwillig',NULL,NULL),(117,117,117,1,'2005-02-12','1986-02-19','18521','fernando.burkhard@gmail.com','*',1,0,'freiwillig',NULL,NULL),(118,118,118,1,'2004-09-13','1964-06-18','47157','vitor.da costa branco@bluewin.ch','*',1,0,'freiwillig',NULL,NULL),(119,119,119,1,'2004-05-12','1977-02-01','94049','giuseppe.dantino@bluewin.ch','*',1,0,'freiwillig',NULL,NULL),(120,120,120,1,'2004-06-14','1974-09-30','55610','peter.delaquis@bluewin.ch','*',1,0,'freiwillig',NULL,NULL),(121,121,121,1,'2005-12-02','1962-02-11','213','giuseppe.del vaglio@bluewin.ch','*',1,0,'freiwillig',NULL,NULL),(122,122,122,1,'2006-05-09','1976-08-31','31539','josef.dorigo@bluewin.ch','*',1,0,'freiwillig',NULL,NULL),(123,123,123,1,'2006-04-15','1977-01-02','81165','rené.ehrismann@bluewin.ch','*',1,0,'freiwillig',NULL,NULL),(124,124,124,1,'2004-04-22','1983-11-12','64619','roland.etter@gmail.com','*',1,0,'freiwillig',NULL,NULL),(125,125,125,1,'2005-08-04','1972-11-25','77306','walter.felber@bluewin.ch','*',1,0,'freiwillig',NULL,NULL),(126,126,126,1,'2006-04-23','1984-01-23','60819','santo.felice@bluewin.ch','*',1,0,'freiwillig',NULL,NULL);
 /*!40000 ALTER TABLE `fahrer` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2087,4 +2087,4 @@ USE `btb`;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-02-05 15:29:22
+-- Dump completed on 2014-02-08 15:53:21
