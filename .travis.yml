@@ -11,11 +11,14 @@ env:
   - SYMFONY_VERSION="dev-master" DB=mysql
 
 before_script:
+  - yes | cp app/config/parameters.yml app/config/parameters.yml.bak
   - composer install -n
   - composer require symfony/http-foundation:${SYMFONY_VERSION}
 
-script: phpunit --coverage-text
-
+script: 
+  - phpunit --coverage-text
+  - yes | cp app/config/parameters.yml.bak app/config/parameters.yml
+  
 notifications:
   email:
     - hertus@gmail.com
