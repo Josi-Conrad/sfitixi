@@ -3,16 +3,10 @@ language: php
 php:
   - 5.5
 
-env:
-  - SYMFONY_VERSION="2.3.*" DB=mysql
-
-services: mysql
-
 before_script:
   - echo 'date.timezone = "Europe/Paris"' >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - composer self-update
   - composer install
-  - composer require symfony/http-foundation:${SYMFONY_VERSION}
   - cp app/config/parameters.yml.dist app/config/parameters.yml
 
 script: phpunit -c app
