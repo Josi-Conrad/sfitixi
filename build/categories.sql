@@ -1,6 +1,6 @@
 LOCK TABLES `driver_category` WRITE;
 /*!40000 ALTER TABLE `driver_category` DISABLE KEYS */;
-INSERT INTO `driver_category` VALUES ('Freiwillig'),('Mitglied'),('Zivildienst');
+INSERT INTO `driver_category` VALUES (1, 'Freiwillig'),(2, 'Mitglied'),(3, 'Zivildienst');
 /*!40000 ALTER TABLE `driver_category` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -20,7 +20,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `handicap` WRITE;
 /*!40000 ALTER TABLE `handicap` DISABLE KEYS */;
-INSERT INTO `handicap` VALUES ('AHV'),('IV');
+INSERT INTO `handicap` VALUES (1, 'AHV'),(2, 'IV');
 /*!40000 ALTER TABLE `handicap` ENABLE KEYS */;
 UNLOCK TABLES;
 

@@ -1,5 +1,5 @@
 <?php
-// MySQL host
+// MySQL host and Port
 $mysql_host = 'localhost';
 // MySQL username
 $mysql_username = 'root';

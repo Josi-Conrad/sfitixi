@@ -8,10 +8,9 @@ env:
 
 before_script:
   - echo 'date.timezone = "Europe/Paris"' >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-  - composer self-update
-  - composer install
+  - php composer.phar install
   - cp app/config/parameters.yml.dist app/config/parameters.yml
   - php app/console doctrine:database:create
   - php app/console doctrine:schema:update --force
 
-script: phpunit -c app
+script: phpunit -c app/phpunit.xml
