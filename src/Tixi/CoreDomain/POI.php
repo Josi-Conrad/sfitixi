@@ -33,7 +33,7 @@ class POI {
 
     /**
      * @ORM\ManyToMany(targetEntity="POIKeyword", inversedBy="pois")
-     * @ORM\JoinTable(name="poi_poikeywords")
+     * @ORM\JoinTable(name="poi_to_keywords")
      **/
     protected $keywords;
 

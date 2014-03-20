@@ -19,6 +19,12 @@ use Doctrine\ORM\Mapping as ORM;
 class DriverCategory {
     /**
      * @ORM\Id
+     * @ORM\Column(type="integer", name="id")
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    protected $id;
+
+    /**
      * @ORM\Column(type="string", length=50, unique=true)
      */
     protected $name;
@@ -38,6 +44,21 @@ class DriverCategory {
     public static function registerDriverCategory($name){
         return new DriverCategory($name);
     }
+
+    /**
+     * @param mixed $id
+     */
+    public function setId($id) {
+        $this->id = $id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getId() {
+        return $this->id;
+    }
+
     /**
      * @param mixed $name
      */

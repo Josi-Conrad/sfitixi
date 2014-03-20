@@ -11,12 +11,12 @@ namespace Tixi\CoreDomain;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Tixi\CoreDomain\Handicap
+ * Tixi\CoreDomain\City
  *
- * @ORM\Entity(repositoryClass="Tixi\CoreDomainBundle\Repository\HandicapRepositoryDoctrine")
- * @ORM\Table(name="handicap")
+ * @ORM\Entity
+ * @ORM\Table(name="city")
  */
-class Handicap {
+class City {
     /**
      * @ORM\Id
      * @ORM\Column(type="integer", name="id")
@@ -27,22 +27,21 @@ class Handicap {
     /**
      * @ORM\Column(type="string", length=50, unique=true)
      */
-    protected $name;
+    protected $city;
 
     /**
-     * @param $name
-     * @return Handicap
+     * @param $city
      */
-    private function __construct($name) {
-        $this->setName($name);
+    private function __construct($city) {
+        $this->city($city);
     }
 
     /**
-     * @param $name
-     * @return Handicap
+     * @param $city
+     * @return City
      */
-    public static function registerHandicap($name){
-        return new Handicap($name);
+    public static function registerCity($city) {
+        return new City($city);
     }
 
     /**
@@ -60,17 +59,17 @@ class Handicap {
     }
 
     /**
-     * @param mixed $name
+     * @param mixed $city
      */
-    public function setName($name) {
-        $this->name = $name;
+    public function setCity($city) {
+        $this->city = $city;
     }
 
     /**
      * @return mixed
      */
-    public function getName() {
-        return $this->name;
+    public function getCity() {
+        return $this->city;
     }
 
 }
