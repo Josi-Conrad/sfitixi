@@ -12,6 +12,7 @@ done
 
 echo .
 echo "Starting Composer dependencies"
+php composer.phar install
 php composer.phar update
 
 echo .
