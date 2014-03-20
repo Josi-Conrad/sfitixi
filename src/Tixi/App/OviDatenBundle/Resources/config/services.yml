@@ -1,7 +1,0 @@
-parameters:
-#    tixi_app_ovi_daten.example.class: Tixi\App\OviDatenBundle\Example
-
-services:
-#    tixi_app_ovi_daten.example:
-#        class: %tixi_app_ovi_daten.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]

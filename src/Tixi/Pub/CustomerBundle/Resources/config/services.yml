@@ -1,7 +1,0 @@
-parameters:
-#    tixi_pub_customer.example.class: Tixi\Pub\CustomerBundle\Example
-
-services:
-#    tixi_pub_customer.example:
-#        class: %tixi_pub_customer.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]

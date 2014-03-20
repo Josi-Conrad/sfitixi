@@ -1,3 +1,0 @@
-tixi_fahrgast_page:
-    pattern:  /app/fahrgast
-    defaults: { _controller: TixiAppPassengerDataBundle:Default:index }

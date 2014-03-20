@@ -1,5 +1,0 @@
-# 27.08.2013 martin jonasse initial file
-
-tixi_preferences_page:
-    pattern:  /app/preferences
-    defaults: { _controller: TixiAppPreferencesBundle:Default:index }

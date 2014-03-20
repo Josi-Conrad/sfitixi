@@ -1,3 +1,0 @@
-tixi_unterhalt_zonenplan_page:
-    pattern:  /app/unterhalt/zonenplan
-    defaults: { _controller: TixiAppZoneplanBundle:Default:index }

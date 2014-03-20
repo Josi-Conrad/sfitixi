@@ -1,5 +1,0 @@
-# 23.08.2013 martin jonasse initial file
-
-tixi_help_page:
-    pattern:  /public/help
-    defaults: { _controller: TixiPubHelpBundle:Default:index }

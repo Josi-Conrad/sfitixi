@@ -1,3 +1,0 @@
-tixi_fahrzeug_serviceplan_page:
-    pattern:  /app/fahrzeug/serviceplan
-    defaults: { _controller: TixiAppVehicleServiceplanBundle:Default:index }

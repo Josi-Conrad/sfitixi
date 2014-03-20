@@ -1,17 +1,20 @@
-# Bootstrap
+# Symfony
+web/bundles/
 app/bootstrap*
+app/cache/*
+app/logs/*
+vendor/
 
-# Symfony directories
-vendor/*
-*/logs/*
-*/cache/*
-web/uploads/*
-web/bundles/*
+# PHPDocs
+docs/*
 
-# Configuration files
-app/config/parameters.ini
+# Single config files
 app/config/parameters.yml
+build/mysql_connection.php
+composer.lock
 
-# IDE files, @@ 19.08.2013 martin jonasse add igores for phpstorm ide
-.idea/workspace.xml
-.idea/tasks.xml
+# Temp files
+*.php~
+
+# IDE files
+.idea/

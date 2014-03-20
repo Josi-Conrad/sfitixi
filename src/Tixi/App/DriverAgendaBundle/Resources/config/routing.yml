@@ -1,3 +1,0 @@
-tixi_fahrer_agenda_page:
-    pattern:  /app/fahrer/agenda
-    defaults: { _controller: TixiAppDriverAgendaBundle:Default:index }

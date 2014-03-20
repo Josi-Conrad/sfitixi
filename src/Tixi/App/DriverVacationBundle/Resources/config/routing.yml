@@ -1,3 +1,0 @@
-tixi_fahrer_ferienplan_page:
-    pattern:  /app/fahrer/ferienplan
-    defaults: { _controller: TixiAppDriverVacationBundle:Default:index }

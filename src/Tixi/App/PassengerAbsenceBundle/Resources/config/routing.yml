@@ -1,3 +1,0 @@
-tixi_fahrgast_abwesenheit_page:
-    pattern:  /app/fahrgast/abwesenheit
-    defaults: { _controller: TixiAppPassengerAbsenceBundle:Default:index }

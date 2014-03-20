@@ -1,4 +1,0 @@
-# 25.08.2013 martin jonasse initial file
-tixi_customer_page:
-    pattern:  /public/customer
-    defaults: { _controller: TixiPubCustomerBundle:Default:index }

@@ -1,7 +1,0 @@
-parameters:
-#    tixi_pub_help.example.class: Tixi\Pub\HelpBundle\Example
-
-services:
-#    tixi_pub_help.example:
-#        class: %tixi_pub_help.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]

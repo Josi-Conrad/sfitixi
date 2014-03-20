@@ -1,7 +1,0 @@
-parameters:
-#    tixi_app_mysql_dump.example.class: Tixi\App\MysqlDumpBundle\Example
-
-services:
-#    tixi_app_mysql_dump.example:
-#        class: %tixi_app_mysql_dump.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]
