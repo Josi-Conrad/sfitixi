@@ -1,0 +1,9 @@
+<tbody data-totalamountofrows="{{ totalAmountOfRows }}">
+{% for row in tableRows %}
+<tr id="{{ row.rowId }}">
+    {% for fieldValue in row.fieldValues %}
+        <td>{{ fieldValue }}</td>
+    {% endfor %}
+</tr>
+{% endfor %}
+</tbody>

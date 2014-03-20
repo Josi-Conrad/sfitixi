@@ -1,0 +1,8 @@
+vehicle:
+  resource: Tixi\ApiBundle\Controller\VehicleController
+  type:     rest
+
+serviceplan:
+  resource: Tixi\ApiBundle\Controller\ServicePlanController
+  type:     rest
+  parent:   vehicle

@@ -1,0 +1,3 @@
+vehicle.name.not_blank: Bitte einen Namen für das Fahrzeug eingeben.
+vehicle.nr.not_blank: Bitte eine Nummer für das Fahrzeug eingeben.
+vehicle.nr.not_nr: Bitte eine gültige Fahrzeugnummer eingeben.

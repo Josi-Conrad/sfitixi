@@ -1,0 +1,6 @@
+/*disable bootstrap responsiveness*/
+.container{
+    max-width: none !important;
+    width: 1024px;
+}
+

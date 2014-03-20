@@ -1,0 +1,47 @@
+security:
+    encoders:
+        Tixi\SecurityBundle\Entity\User:
+            algorithm:  bcrypt
+            cost: 12
+
+    role_hierarchy:
+        ROLE_ADMIN:       ROLE_USER
+        ROLE_SUPER_ADMIN: [ROLE_USER, ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
+
+    providers:
+        main:
+          id: tixi_user_provider
+
+    firewalls:
+        dev:
+            pattern:  ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        login_firewall:
+            pattern:    ^/login$
+            anonymous:  ~
+        secured_area:
+            pattern:    ^/secure
+            form_login:
+                  provider: main
+                  login_path: tixi_login
+                  check_path: tixi_login_check
+                  csrf_provider: form.csrf_provider
+                  failure_path: tixi_login
+                  default_target_path: get_vehicles
+            logout:
+                path:   tixi_logout
+                target: tixi_login
+        oauth_token:
+            pattern:    ^/oauth/v2/token
+            security:   false
+        oauth_authorize:
+            pattern:    ^/oauth/v2/auth
+            form_login:
+                provider: main
+                check_path: tixi_oauth_server_auth_login
+                login_path: tixi_oauth_server_auth_login_check
+            anonymous: true
+
+    access_control:
+    - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: ^/, roles: [ROLE_USER, ROLE_ADMIN] }

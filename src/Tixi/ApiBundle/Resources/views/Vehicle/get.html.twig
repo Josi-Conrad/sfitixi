@@ -1,0 +1,40 @@
+{% extends '::base.html.twig' %}
+{% set topNavigationActivePage = 'get_vehicles' %}
+{% block body %}
+    <div class="entityDetailView">
+        <div class="leftColumn">
+            <table>
+                <tr>
+                    <td>Name:</td>
+                    <td>{{ vehicle.name }}</td>
+                </tr>
+                <tr>
+                    <td>Lizenznummer:</td>
+                    <td>{{ vehicle.licenceNumber }}</td>
+                </tr>
+            </table>
+        </div>
+        <div class="rightColumn">
+            <div class="dataGrid" data-gridId="serviceplans"></div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascriptscustom %}
+    <script>
+        jQuery(function($) {
+            var vehiclesDataGrid = new DataGrid();
+            vehiclesDataGrid.init({
+                gridId : 'serviceplans',
+                dataURL: '{{ vehicle.id }}/serviceplans',
+                dataIdentifier: 'serviceplans',
+                dataFieldId : 'id',
+                fields : [
+                    {'fieldId':'startDate', 'fieldDisplayName':'Anfang'},
+                    {'fieldId':'endDate', 'fieldDisplayName':'Ende'},
+                    {'fieldId':'cost', 'fieldDisplayName':'Kosten'}
+                ]
+            });
+        });
+    </script>
+{% endblock %}

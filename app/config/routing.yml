@@ -1,0 +1,24 @@
+tixi_api:
+    resource: "@TixiApiBundle/Resources/config/routing.yml"
+    type:     rest
+    prefix:   /
+
+#tixi_app_impl_vehicle_management:
+#    resource: "@TixiAppImplVehicleManagementBundle/Controller/"
+#    type:     annotation
+#    prefix:   /
+
+tixi_core_domain:
+    resource: "@TixiCoreDomainBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+fos_oauth_server_token:
+    resource: "@FOSOAuthServerBundle/Resources/config/routing/token.xml"
+
+fos_oauth_server_authorize:
+    resource: "@FOSOAuthServerBundle/Resources/config/routing/authorize.xml"
+
+tixi_security:
+    resource: "@TixiSecurityBundle/Resources/config/routing.yml"
+    prefix:   /

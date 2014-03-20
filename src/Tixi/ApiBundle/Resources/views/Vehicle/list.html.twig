@@ -1,0 +1,46 @@
+{% extends '::base.html.twig' %}
+{% set topNavigationActivePage = 'get_vehicles' %}
+{% block body %}
+    <div class="dataGrid" data-gridid="vehicles" data-clickSrc="{{ path('get_vehicle', {'vehicleId':'--selectionid--'}) }}">
+        {% embed 'TixiApiBundle:Shared:datagrid.table.html.twig'%}
+            {% block customListActionControl %}
+                <div class="btn-group">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                        Mit Auswahl <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu selectedAction" role="menu">
+                        <li><a href="{{ path('edit_vehicle',{'vehicleId':'--selectionid--'}) }}">Action</a></li>
+                        <li><a href="#">Another action</a></li>
+                        <li><a href="#">Something else here</a></li>
+                        <li class="divider"></li>
+                        <li><a href="#">Separated link</a></li>
+                    </ul>
+                </div>
+                <button type="button" class="btn btn-primary new" data-targetSrc="{{ path('new_vehicle') }}">Neues Fahrzeug</button>
+            {% endblock %}
+        {%  endembed %}
+    </div>
+{% endblock %}
+{% block javascriptscustom %}
+    <script type="text/javascript">
+        jQuery(function($) {
+            var dataGridManager = new DataGridManager();
+            dataGridManager.initDataGrids();
+        });
+    </script>
+    {#<script>#}
+        {#jQuery(function($) {#}
+            {#var vehiclesDataGrid = new DataGrid();#}
+            {#vehiclesDataGrid.init({#}
+                {#gridId : 'vehicles',#}
+                {#dataURL: 'vehicles',#}
+                {#dataIdentifier: 'vehicles',#}
+                {#dataFieldId : 'id',#}
+                {#fields : [#}
+                    {#{'fieldId':'name', 'fieldDisplayName':'Name'},#}
+                    {#{'fieldId':'licenceNumber', 'fieldDisplayName':'Lizenznummer'}#}
+                {#]#}
+            {#});#}
+        {#});#}
+    {#</script>#}
+{% endblock %}
