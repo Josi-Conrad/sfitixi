@@ -1,10 +1,3 @@
-CREATE DATABASE  IF NOT EXISTS `itixitest` /*!40100 DEFAULT CHARACTER SET latin1 */;
-USE `itixitest`;
-
---
--- Dumping data for table `driver_category`
---
-
 LOCK TABLES `driver_category` WRITE;
 /*!40000 ALTER TABLE `driver_category` DISABLE KEYS */;
 INSERT INTO `driver_category` VALUES ('Freiwillig'),('Mitglied'),('Zivildienst');

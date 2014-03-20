@@ -1,10 +1,3 @@
-CREATE DATABASE  IF NOT EXISTS `itixitest` /*!40100 DEFAULT CHARACTER SET latin1 */;
-USE `itixitest`;
-
---
--- Dumping data for table `role`
---
-
 LOCK TABLES `role` WRITE;
 /*!40000 ALTER TABLE `role` DISABLE KEYS */;
 INSERT INTO `role` VALUES (1,'Benutzer','ROLE_USER'),(2,'Manager','ROLE_ADMIN'),(3,'Admin','ROLE_SUPER_ADMIN');
