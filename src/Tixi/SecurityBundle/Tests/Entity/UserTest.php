@@ -104,7 +104,7 @@ class UserTest extends WebTestCase {
             $encoder = $this->encFactory->getEncoder($user);
             $encPassword = $encoder->encodePassword($password, $user->getSalt());
             if (!$encoder->isPasswordValid($encPassword, $password, $user->getSalt())) {
-                assert('Password not valid');
+                $this->assert('Password not valid');
             } else {
                 $user->setPassword($encPassword);
             }
