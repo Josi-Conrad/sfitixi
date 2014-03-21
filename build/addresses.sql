@@ -1,5 +1,3 @@
-//some Addresses
-
 INSERT INTO `city` (`id`,`name`) VALUES (4,'Baar');
 INSERT INTO `city` (`id`,`name`) VALUES (3,'Cham');
 INSERT INTO `city` (`id`,`name`) VALUES (2,'Hühneberg');
