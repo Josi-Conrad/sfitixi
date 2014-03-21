@@ -26,12 +26,12 @@ class Driver extends Person {
 
     /**
      * @ORM\ManyToOne(targetEntity="DriverCategory")
-     * @ORM\JoinColumn(name="driver_category", referencedColumnName="name")
+     * @ORM\JoinColumn(name="driver_category", referencedColumnName="id")
      */
     protected $driverCategory;
 
     /**
-     * @ORM\OneToMany(targetEntity="Vehicle", mappedBy="driver")
+     * @ORM\OneToMany(targetEntity="Vehicle", mappedBy="supervisor")
      * @ORM\JoinColumn(name="supervised_vehicle_id", referencedColumnName="id")
      */
     protected $supervisedVehicles;

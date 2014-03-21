@@ -17,9 +17,12 @@ class AddressManagementImpl extends Controller implements AddressManagement {
      * @return AddressHandleDTO[]
      */
     public function getAddressSuggestionsByString($addressString) {
+
+        //TODO: only test impl, we need full text search
+
         $repository = $this->get('address_repository');
         $query = $repository->createQueryBuilder('a')
-            ->where('a.name LIKE :word')
+            ->where('a.name')
             ->orWhere('a.street LIKE :word')
             ->setParameter('word', '%'.$addressString.'%')
             ->getQuery();

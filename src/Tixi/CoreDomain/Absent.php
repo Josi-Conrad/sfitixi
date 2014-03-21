@@ -40,7 +40,7 @@ class Absent {
     protected $endDate;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Person", inversedBy="absent")
+     * @ORM\ManyToOne(targetEntity="Person", inversedBy="absents")
      * @ORM\JoinColumn(name="person_id", referencedColumnName="id")
      */
     protected $person;
