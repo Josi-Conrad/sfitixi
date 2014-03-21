@@ -14,17 +14,4 @@ class CityRepositoryDoctrine extends CommonBaseRepositoryDoctrine implements Cit
     public function remove(City $city) {
         $this->getEntityManager()->remove($city);
     }
-
-    /**
-     * @param City $city
-     * @return City
-     */
-    public function storeAndGetCity(City $city) {
-        $current = $this->findOneBy(array('name' => $city->getName()));
-        if (empty($current)) {
-            $this->getEntityManager()->persist($city);
-            return $city;
-        }
-        return $current;
-    }
 }

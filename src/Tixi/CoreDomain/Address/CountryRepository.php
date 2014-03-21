@@ -10,10 +10,4 @@ interface CountryRepository extends CommonBaseRepository{
 
     public function remove(Country $country);
 
-    /**
-     * @param Country $country
-     * @return Country
-     */
-    public function storeAndGetCountry(Country $country);
-    
 }

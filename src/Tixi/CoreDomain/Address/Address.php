@@ -15,7 +15,9 @@ use Doctrine\ORM\Mapping as ORM;
  * Tixi\CoreDomain\Address
  *
  * @ORM\Entity(repositoryClass="Tixi\CoreDomainBundle\Repository\AddressRepositoryDoctrine")
- * @ORM\Table(name="address")
+ * @ORM\Table(name="address", indexes={
+ *  @ORM\index(name="address_idx", columns={"name", "street", "type"})
+ * })
  */
 class Address {
     /**
@@ -106,11 +108,46 @@ class Address {
     }
 
     /**
+     * @param null $name
+     * @param null $street
+     * @param PostalCode $postalCode
+     * @param City $city
+     * @param Country $country
+     * @param null $lat
+     * @param null $lng
+     * @param null $type
+     */
+    public function updateAddressBasicData($name = null, $street = null, PostalCode $postalCode = null,
+                                           City $city = null, Country $country = null,
+                                           $lat = null, $lng = null, $type = null) {
+
+        if(!empty($name)) {$this->setName($name);}
+        if(!empty($street)) {$this->setStreet($street);}
+
+        if(!empty($postalCode)) {$this->setPostalCode($postalCode);}
+        if(!empty($city)) {$this->setCity($city);}
+        if(!empty($country)) {$this->setCountry($country);}
+
+        if(!empty($lat)) {$this->setLat($lat);}
+        if(!empty($lng)) {$this->setLng($lng);}
+        if(!empty($type)) {$this->setType($type);}
+    }
+
+
+    /**
      * @param POI $poi
      */
     public function assignPoi(POI $poi) {
         $poi->setAddress($this);
         $this->pois->add($poi);
+    }
+
+    public function toString(){
+        return ($this->getName() + ' ' +
+            $this->getStreet() + ' ' +
+            $this->getPostalCode()->getCode() + ' ' +
+            $this->getCity()->getName() + ' ' +
+            $this->getCountry()->getName());
     }
 
     /**
@@ -135,7 +172,7 @@ class Address {
     }
 
     /**
-     * @return mixed
+     * @return City
      */
     public function getCity() {
         return $this->city;
@@ -149,7 +186,7 @@ class Address {
     }
 
     /**
-     * @return mixed
+     * @return Country
      */
     public function getCountry() {
         return $this->country;
@@ -233,7 +270,7 @@ class Address {
     }
 
     /**
-     * @return mixed
+     * @return PostalCode
      */
     public function getPostalCode() {
         return $this->postalCode;

@@ -14,17 +14,4 @@ class CountryRepositoryDoctrine extends CommonBaseRepositoryDoctrine implements 
     public function remove(Country $country) {
         $this->getEntityManager()->remove($country);
     }
-
-    /**
-     * @param Country $country
-     * @return Country
-     */
-    public function storeAndGetCountry(Country $country) {
-        $current = $this->findOneBy(array('name' => $country->getName()));
-        if (empty($current)) {
-            $this->getEntityManager()->persist($country);
-            return $country;
-        }
-        return $current;
-    }
 }

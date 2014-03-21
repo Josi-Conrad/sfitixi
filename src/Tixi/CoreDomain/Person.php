@@ -130,11 +130,11 @@ class Person {
         $person->setLastname($lastname);
         $person->setTelephone($telephone);
 
-        if(!is_null($email)) {$person->setEmail($email);}
-        if(!is_null($entryDate)) {$person->setEntryDate($entryDate);}
-        if(!is_null($birthday)) {$person->setBirthday($birthday);}
-        if(!is_null($extraMinutes)) {$person->setExtraMinutes($extraMinutes);}
-        if(!is_null($details)) {$person->setDetails($details);}
+        if(!empty($email)) {$person->setEmail($email);}
+        if(!empty($entryDate)) {$person->setEntryDate($entryDate);}
+        if(!empty($birthday)) {$person->setBirthday($birthday);}
+        if(!empty($extraMinutes)) {$person->setExtraMinutes($extraMinutes);}
+        if(!empty($details)) {$person->setDetails($details);}
 
         $person->activate();
 
@@ -155,15 +155,15 @@ class Person {
     public function updateBasicData($title = null, $firstname = null, $lastname = null, $telephone = null,
                                     $email = null, $entryDate = null, $birthday = null,
                                     $extraMinutes = null, $details = null) {
-        if(!is_null($title)) {$this->setTitle($title);}
-        if(!is_null($firstname)) {$this->setFirstname($firstname);}
-        if(!is_null($lastname)) {$this->setLastname($lastname);}
-        if(!is_null($telephone)) {$this->setTelephone($telephone);}
-        if(!is_null($email)) {$this->setEmail($email);}
-        if(!is_null($entryDate)) {$this->setEntryDate($entryDate);}
-        if(!is_null($birthday)) {$this->setBirthday($birthday);}
-        if(!is_null($extraMinutes)) {$this->setExtraMinutes($extraMinutes);}
-        if(!is_null($details)) {$this->setDetails($details);}
+        if(!empty($title)) {$this->setTitle($title);}
+        if(!empty($firstname)) {$this->setFirstname($firstname);}
+        if(!empty($lastname)) {$this->setLastname($lastname);}
+        if(!empty($telephone)) {$this->setTelephone($telephone);}
+        if(!empty($email)) {$this->setEmail($email);}
+        if(!empty($entryDate)) {$this->setEntryDate($entryDate);}
+        if(!empty($birthday)) {$this->setBirthday($birthday);}
+        if(!empty($extraMinutes)) {$this->setExtraMinutes($extraMinutes);}
+        if(!empty($details)) {$this->setDetails($details);}
     }
 
     public function activate() {

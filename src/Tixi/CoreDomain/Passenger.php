@@ -86,12 +86,12 @@ class Passenger extends Person {
         $passenger->setGotMonthlyBilling($gotMonthlyBilling);
         $passenger->setIsOverweight($isOverWeight);
 
-        if(!is_null($notice)) {$passenger->setNotice($notice);}
-        if(!is_null($email)) {$passenger->setEmail($email);}
-        if(!is_null($entryDate)) {$passenger->setEntryDate($entryDate);}
-        if(!is_null($birthday)) {$passenger->setBirthday($birthday);}
-        if(!is_null($extraMinutes)) {$passenger->setExtraMinutes($extraMinutes);}
-        if(!is_null($details)) {$passenger->setDetails($details);}
+        if(!empty($notice)) {$passenger->setNotice($notice);}
+        if(!empty($email)) {$passenger->setEmail($email);}
+        if(!empty($entryDate)) {$passenger->setEntryDate($entryDate);}
+        if(!empty($birthday)) {$passenger->setBirthday($birthday);}
+        if(!empty($extraMinutes)) {$passenger->setExtraMinutes($extraMinutes);}
+        if(!empty($details)) {$passenger->setDetails($details);}
 
         $passenger->activate();
 
@@ -119,21 +119,21 @@ class Passenger extends Person {
                                     Address $address, Handicap $handicap = null, $isInWheelChair = null, $gotMonthlyBilling = null,
                                     $isOverWeight = null, $email = null, $entryDate = null, $birthday = null,
                                     $extraMinutes = null, $details = null, $notice = null) {
-        if(!is_null($title)) {$this->setTitle($title);}
-        if(!is_null($firstname)) {$this->setFirstname($firstname);}
-        if(!is_null($lastname)) {$this->setLastname($lastname);}
-        if(!is_null($telephone)) {$this->setTelephone($telephone);}
-        if(!is_null($address)) {$this->setAddress($address);}
-        if(!is_null($handicap)) {$this->setHandicap($handicap);}
-        if(!is_null($isInWheelChair)) {$this->setIsInWheelChair($isInWheelChair);}
-        if(!is_null($gotMonthlyBilling)) {$this->setGotMonthlyBilling($gotMonthlyBilling);}
-        if(!is_null($isOverWeight)) {$this->setIsOverweight($isOverWeight);}
-        if(!is_null($email)) {$this->setEmail($email);}
-        if(!is_null($entryDate)) {$this->setEntryDate($entryDate);}
-        if(!is_null($birthday)) {$this->setBirthday($birthday);}
-        if(!is_null($extraMinutes)) {$this->setExtraMinutes($extraMinutes);}
-        if(!is_null($details)) {$this->setDetails($details);}
-        if(!is_null($notice)) {$this->setNotice($notice);}
+        if(!empty($title)) {$this->setTitle($title);}
+        if(!empty($firstname)) {$this->setFirstname($firstname);}
+        if(!empty($lastname)) {$this->setLastname($lastname);}
+        if(!empty($telephone)) {$this->setTelephone($telephone);}
+        if(!empty($address)) {$this->setAddress($address);}
+        if(!empty($handicap)) {$this->setHandicap($handicap);}
+        if(!empty($isInWheelChair)) {$this->setIsInWheelChair($isInWheelChair);}
+        if(!empty($gotMonthlyBilling)) {$this->setGotMonthlyBilling($gotMonthlyBilling);}
+        if(!empty($isOverWeight)) {$this->setIsOverweight($isOverWeight);}
+        if(!empty($email)) {$this->setEmail($email);}
+        if(!empty($entryDate)) {$this->setEntryDate($entryDate);}
+        if(!empty($birthday)) {$this->setBirthday($birthday);}
+        if(!empty($extraMinutes)) {$this->setExtraMinutes($extraMinutes);}
+        if(!empty($details)) {$this->setDetails($details);}
+        if(!empty($notice)) {$this->setNotice($notice);}
     }
 
     public function activate() {

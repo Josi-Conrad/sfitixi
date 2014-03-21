@@ -82,11 +82,11 @@ class Driver extends Person {
         $driver->setDriverCategory($driverCategory);
         $driver->setWheelChairAttendance($wheelChairAttendance);
 
-        if(!is_null($email)) {$driver->setEmail($email);}
-        if(!is_null($entryDate)) {$driver->setEntryDate($entryDate);}
-        if(!is_null($birthday)) {$driver->setBirthday($birthday);}
-        if(!is_null($extraMinutes)) {$driver->setExtraMinutes($extraMinutes);}
-        if(!is_null($details)) {$driver->setDetails($details);}
+        if(!empty($email)) {$driver->setEmail($email);}
+        if(!empty($entryDate)) {$driver->setEntryDate($entryDate);}
+        if(!empty($birthday)) {$driver->setBirthday($birthday);}
+        if(!empty($extraMinutes)) {$driver->setExtraMinutes($extraMinutes);}
+        if(!empty($details)) {$driver->setDetails($details);}
 
         $driver->activate();
 
@@ -112,18 +112,18 @@ class Driver extends Person {
                                     Address $address = null, $licenceNumber = null, DriverCategory $driverCategory = null,
                                     $wheelChairAttendance = null, $email = null, $entryDate = null, $birthday = null,
                                     $extraMinutes = null, $details = null) {
-        if(!is_null($title)) {$this->setTitle($title);}
-        if(!is_null($firstname)) {$this->setFirstname($firstname);}
-        if(!is_null($lastname)) {$this->setLastname($lastname);}
-        if(!is_null($telephone)) {$this->setTelephone($telephone);}
-        if(!is_null($licenceNumber)) {$this->setLicenceNumber($licenceNumber);}
-        if(!is_null($driverCategory)) {$this->setDriverCategory($driverCategory);}
-        if(!is_null($wheelChairAttendance)) {$this->setWheelChairAttendance($wheelChairAttendance);}
-        if(!is_null($email)) {$this->setEmail($email);}
-        if(!is_null($entryDate)) {$this->setEntryDate($entryDate);}
-        if(!is_null($birthday)) {$this->setBirthday($birthday);}
-        if(!is_null($extraMinutes)) {$this->setExtraMinutes($extraMinutes);}
-        if(!is_null($details)) {$this->setDetails($details);}
+        if(!empty($title)) {$this->setTitle($title);}
+        if(!empty($firstname)) {$this->setFirstname($firstname);}
+        if(!empty($lastname)) {$this->setLastname($lastname);}
+        if(!empty($telephone)) {$this->setTelephone($telephone);}
+        if(!empty($licenceNumber)) {$this->setLicenceNumber($licenceNumber);}
+        if(!empty($driverCategory)) {$this->setDriverCategory($driverCategory);}
+        if(!empty($wheelChairAttendance)) {$this->setWheelChairAttendance($wheelChairAttendance);}
+        if(!empty($email)) {$this->setEmail($email);}
+        if(!empty($entryDate)) {$this->setEntryDate($entryDate);}
+        if(!empty($birthday)) {$this->setBirthday($birthday);}
+        if(!empty($extraMinutes)) {$this->setExtraMinutes($extraMinutes);}
+        if(!empty($details)) {$this->setDetails($details);}
     }
 
     public function activate() {

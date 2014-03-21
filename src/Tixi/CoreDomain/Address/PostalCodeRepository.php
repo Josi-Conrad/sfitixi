@@ -10,9 +10,4 @@ interface PostalCodeRepository extends CommonBaseRepository{
 
     public function remove(PostalCode $postalCode);
 
-    /**
-     * @param PostalCode $postalCode
-     * @return PostalCode
-     */
-    public function storeAndGetPostalCode(PostalCode $postalCode);
 }

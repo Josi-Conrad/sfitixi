@@ -35,7 +35,7 @@ class CityTest extends WebTestCase {
 
         $this->cityRepo = $kernel
             ->getContainer()
-            ->get('address_city_repository');
+            ->get('address_repository');
 
         //$this->em->beginTransaction();
     }

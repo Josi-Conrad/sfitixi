@@ -14,17 +14,4 @@ class PostalCodeRepositoryDoctrine extends CommonBaseRepositoryDoctrine implemen
     public function remove(PostalCode $postalCode) {
         $this->getEntityManager()->remove($postalCode);
     }
-
-    /**
-     * @param PostalCode $postalCode
-     * @return PostalCode
-     */
-    public function storeAndGetPostalCode(PostalCode $postalCode) {
-        $current = $this->findOneBy(array('code' => $postalCode->getCode()));
-        if (empty($current)) {
-            $this->getEntityManager()->persist($postalCode);
-            return $postalCode;
-        }
-        return $current;
-    }
 }

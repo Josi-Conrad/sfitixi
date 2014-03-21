@@ -10,9 +10,4 @@ interface CityRepository extends CommonBaseRepository{
 
     public function remove(City $city);
 
-    /**
-     * @param City $city
-     * @return City
-     */
-    public function storeAndGetCity(City $city);
 }
