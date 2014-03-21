@@ -28,6 +28,4 @@ class VehicleListDTO implements DataGridSourceClass{
      * @DataGridField(headerName="Lizenznummer", order=2)
      */
     public $licenceNumber;
-
-
 } 
