@@ -60,12 +60,12 @@ class Address {
     protected $street;
 
     /**
-     * @ORM\Column(type="decimal", scale=6, precision=10)
+     * @ORM\Column(type="decimal", scale=6, precision=10, nullable=true)
      */
     protected $lat;
 
     /**
-     * @ORM\Column(type="decimal", scale=6, precision=10)
+     * @ORM\Column(type="decimal", scale=6, precision=10, nullable=true)
      */
     protected $lng;
 
@@ -79,23 +79,28 @@ class Address {
     }
 
     /**
-     * @param $streetName
-     * @param $streetNr
-     * @param $city
-     * @param $postCode
-     * @param $country
-     * @param null $geocode
+     * @param $name
+     * @param $street
+     * @param PostalCode $postalCode
+     * @param City $city
+     * @param Country $country
+     * @param null $lat
+     * @param null $lng
+     * @param null $type
      * @return Address
      */
-    public static function registerAddress($streetName, $streetNr, $city, $postCode, $country, $geocode = null) {
+    public static function registerAddress($name, $street, PostalCode $postalCode, City $city, Country $country,
+                                           $lat = null, $lng = null, $type = null) {
         $address = new Address();
 
-        $address->setStreetName($streetName);
-        $address->setStreetNr($streetNr);
+        $address->setName($name);
+        $address->setStreet($street);
+        $address->setPostalCode($postalCode);
         $address->setCity($city);
-        $address->setPostCode($postCode);
         $address->setCountry($country);
-        if(!is_null($geocode)){$address->setGeocode($geocode);}
+        if(!is_null($lat)){$address->setLat($lat);}
+        if(!is_null($lng)){$address->setLng($lng);}
+        if(!is_null($type)){$address->setType($type);}
 
         return $address;
     }
@@ -104,8 +109,150 @@ class Address {
      * @param POI $poi
      */
     public function assignPoi(POI $poi) {
+        $poi->setAddress($this);
         $this->pois->add($poi);
     }
+
+    /**
+     * @param mixed $type
+     */
+    public function setType($type) {
+        $this->type = $type;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getType() {
+        return $this->type;
+    }
+
+    /**
+     * @param mixed $city
+     */
+    public function setCity($city) {
+        $this->city = $city;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCity() {
+        return $this->city;
+    }
+
+    /**
+     * @param mixed $country
+     */
+    public function setCountry($country) {
+        $this->country = $country;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCountry() {
+        return $this->country;
+    }
+
+    /**
+     * @param mixed $id
+     */
+    public function setId($id) {
+        $this->id = $id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getId() {
+        return $this->id;
+    }
+
+    /**
+     * @param mixed $lat
+     */
+    public function setLat($lat) {
+        $this->lat = $lat;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLat() {
+        return $this->lat;
+    }
+
+    /**
+     * @param mixed $lng
+     */
+    public function setLng($lng) {
+        $this->lng = $lng;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLng() {
+        return $this->lng;
+    }
+
+    /**
+     * @param mixed $name
+     */
+    public function setName($name) {
+        $this->name = $name;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getName() {
+        return $this->name;
+    }
+
+    /**
+     * @param mixed $pois
+     */
+    public function setPois($pois) {
+        $this->pois = $pois;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPois() {
+        return $this->pois;
+    }
+
+    /**
+     * @param mixed $postalCode
+     */
+    public function setPostalCode($postalCode) {
+        $this->postalCode = $postalCode;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPostalCode() {
+        return $this->postalCode;
+    }
+
+    /**
+     * @param mixed $street
+     */
+    public function setStreet($street) {
+        $this->street = $street;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getStreet() {
+        return $this->street;
+    }
+
 
 
 

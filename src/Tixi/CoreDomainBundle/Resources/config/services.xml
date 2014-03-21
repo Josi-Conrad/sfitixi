@@ -7,41 +7,47 @@
 
     <parameters>
 
-        <parameter key="absent.doctrine.entity">Tixi\CoreDomain\Absent</parameter>
-        <parameter key="absent_repository.doctrine.class">Tixi\CoreDomainBundle\Repository\AbsentRepositoryDoctrine</parameter>
+        <parameter key="absent.doctrine.entity">tixi\Coredomain\Absent</parameter>
+        <parameter key="absent_repository.doctrine.class">tixi\Coredomainbundle\Repository\Absentrepositorydoctrine</parameter>
 
-        <parameter key="address.doctrine.entity">Tixi\CoreDomain\Address</parameter>
-        <parameter key="address_repository.doctrine.class">Tixi\CoreDomainBundle\Repository\AddressRepositoryDoctrine</parameter>
+        <parameter key="address.doctrine.entity">tixi\Coredomain\Address</parameter>
+        <parameter key="address_repository.doctrine.class">tixi\Coredomainbundle\Repository\Addressrepositorydoctrine</parameter>
+        <parameter key="city.doctrine.entity">tixi\Coredomain\City</parameter>
+        <parameter key="city_repository.doctrine.class">tixi\Coredomainbundle\Repository\Cityrepositorydoctrine</parameter>
+        <parameter key="country.doctrine.entity">tixi\Coredomain\Country</parameter>
+        <parameter key="country_repository.doctrine.class">tixi\Coredomainbundle\Repository\Countryrepositorydoctrine</parameter>
+        <parameter key="postal_code.doctrine.entity">tixi\Coredomain\Postalcode</parameter>
+        <parameter key="postal_code_repository.doctrine.class">tixi\Coredomainbundle\Repository\Postalcoderepositorydoctrine</parameter>
 
-        <parameter key="driver.doctrine.entity">Tixi\CoreDomain\Driver</parameter>
-        <parameter key="driver_repository.doctrine.class">Tixi\CoreDomainBundle\Repository\DriverRepositoryDoctrine</parameter>
+        <parameter key="driver.doctrine.entity">tixi\Coredomain\Driver</parameter>
+        <parameter key="driver_repository.doctrine.class">tixi\Coredomainbundle\Repository\Driverrepositorydoctrine</parameter>
 
-        <parameter key="drivercategory.doctrine.entity">Tixi\CoreDomain\DriverCategory</parameter>
-        <parameter key="drivercategory_repository.doctrine.class">Tixi\CoreDomainBundle\Repository\DiverCategoryRepositoryDoctrine</parameter>
+        <parameter key="drivercategory.doctrine.entity">tixi\Coredomain\Drivercategory</parameter>
+        <parameter key="drivercategory_repository.doctrine.class">tixi\Coredomainbundle\Repository\Divercategoryrepositorydoctrine</parameter>
 
-        <parameter key="handicap.doctrine.entity">Tixi\CoreDomain\Handicap</parameter>
-        <parameter key="handicap_repository.doctrine.class">Tixi\CoreDomainBundle\Repository\HandicapRepositoryDoctrine</parameter>
+        <parameter key="handicap.doctrine.entity">tixi\Coredomain\Handicap</parameter>
+        <parameter key="handicap_repository.doctrine.class">tixi\Coredomainbundle\Repository\Handicaprepositorydoctrine</parameter>
 
-        <parameter key="passenger.doctrine.entity">Tixi\CoreDomain\Passenger</parameter>
-        <parameter key="passenger_repository.doctrine.class">Tixi\CoreDomainBundle\Repository\PassengerRepositoryDoctrine</parameter>
+        <parameter key="passenger.doctrine.entity">tixi\Coredomain\Passenger</parameter>
+        <parameter key="passenger_repository.doctrine.class">tixi\Coredomainbundle\Repository\Passengerrepositorydoctrine</parameter>
 
-        <parameter key="person.doctrine.entity">Tixi\CoreDomain\Person</parameter>
-        <parameter key="person_repository.doctrine.class">Tixi\CoreDomainBundle\Repository\PersonRepositoryDoctrine</parameter>
+        <parameter key="person.doctrine.entity">tixi\Coredomain\Person</parameter>
+        <parameter key="person_repository.doctrine.class">tixi\Coredomainbundle\Repository\Personrepositorydoctrine</parameter>
 
-        <parameter key="poi.doctrine.entity">Tixi\CoreDomain\POI</parameter>
-        <parameter key="poi_repository.doctrine.class">Tixi\CoreDomainBundle\Repository\POIRepositoryDoctrine</parameter>
+        <parameter key="poi.doctrine.entity">tixi\Coredomain\Poi</parameter>
+        <parameter key="poi_repository.doctrine.class">tixi\Coredomainbundle\Repository\Poirepositorydoctrine</parameter>
 
-        <parameter key="poikeyword.doctrine.entity">Tixi\CoreDomain\POIKeyword</parameter>
-        <parameter key="poikeyword_repository.doctrine.class">Tixi\CoreDomainBundle\Repository\POIKeywordRepositoryDoctrine</parameter>
+        <parameter key="poikeyword.doctrine.entity">tixi\Coredomain\Poikeyword</parameter>
+        <parameter key="poikeyword_repository.doctrine.class">tixi\Coredomainbundle\Repository\Poikeywordrepositorydoctrine</parameter>
 
-        <parameter key="serviceplan.doctrine.entity">Tixi\CoreDomain\ServicePlan</parameter>
-        <parameter key="serviceplan_repository.doctrine.class">Tixi\CoreDomainBundle\Repository\ServicePlanRepositoryDoctrine</parameter>
+        <parameter key="serviceplan.doctrine.entity">tixi\Coredomain\Serviceplan</parameter>
+        <parameter key="serviceplan_repository.doctrine.class">tixi\Coredomainbundle\Repository\Serviceplanrepositorydoctrine</parameter>
 
-        <parameter key="vehicle.doctrine.entity">Tixi\CoreDomain\Vehicle</parameter>
-        <parameter key="vehicle_repository.doctrine.class">Tixi\CoreDomainBundle\Repository\VehicleRepositoryDoctrine</parameter>
+        <parameter key="vehicle.doctrine.entity">tixi\Coredomain\Vehicle</parameter>
+        <parameter key="vehicle_repository.doctrine.class">tixi\Coredomainbundle\Repository\Vehiclerepositorydoctrine</parameter>
 
-        <parameter key="vehiclecategory.doctrine.entity">Tixi\CoreDomain\VehicleCategory</parameter>
-        <parameter key="vehiclecategory_repository.doctrine.class">Tixi\CoreDomainBundle\Repository\VehicleCategoryRepositoryDoctrine</parameter>
+        <parameter key="vehiclecategory.doctrine.entity">tixi\Coredomain\Vehiclecategory</parameter>
+        <parameter key="vehiclecategory_repository.doctrine.class">tixi\Coredomainbundle\Repository\Vehiclecategoryrepositorydoctrine</parameter>
 
     </parameters>
 
@@ -49,62 +55,74 @@
         <service id="entity_manager" alias="doctrine.orm.entity_manager"></service>
 
         <service id="absent_repository" alias="absent_repository.doctrine"></service>
-        <service id="absent_repository.doctrine" class="%absent_repository.doctrine.class%" factory-service="doctrine" factory-method="getRepository">
+        <service id="absent_repository.doctrine" class="%absent_repository.doctrine.class%" factory-service="doctrine" factory-method="getrepository">
             <argument type="string">%absent.doctrine.entity%</argument>
         </service>
 
         <service id="address_repository" alias="address_repository.doctrine"></service>
-        <service id="address_repository.doctrine" class="%address_repository.doctrine.class%" factory-service="doctrine" factory-method="getRepository">
+        <service id="address_repository.doctrine" class="%address_repository.doctrine.class%" factory-service="doctrine" factory-method="getrepository">
             <argument type="string">%address.doctrine.entity%</argument>
+        </service>
+        <service id="country_repository" alias="country_repository.doctrine"></service>
+        <service id="country_repository.doctrine" class="%country_repository.doctrine.class%" factory-service="doctrine" factory-method="getrepository">
+            <argument type="string">%country.doctrine.entity%</argument>
+        </service>
+        <service id="city_repository" alias="city_repository.doctrine"></service>
+        <service id="city_repository.doctrine" class="%city_repository.doctrine.class%" factory-service="doctrine" factory-method="getrepository">
+            <argument type="string">%city.doctrine.entity%</argument>
+        </service>
+        <service id="postal_code_repository" alias="postal_code_repository.doctrine"></service>
+        <service id="postal_code_repository.doctrine" class="%postal_code_repository.doctrine.class%" factory-service="doctrine" factory-method="getrepository">
+            <argument type="string">%postal_code.doctrine.entity%</argument>
         </service>
 
         <service id="driver_repository" alias="driver_repository.doctrine"></service>
-        <service id="driver_repository.doctrine" class="%driver_repository.doctrine.class%" factory-service="doctrine" factory-method="getRepository">
+        <service id="driver_repository.doctrine" class="%driver_repository.doctrine.class%" factory-service="doctrine" factory-method="getrepository">
             <argument type="string">%driver.doctrine.entity%</argument>
         </service>
 
         <service id="drivercategory_repository" alias="drivercategory_repository.doctrine"></service>
-        <service id="drivercategory_repository.doctrine" class="%drivercategory_repository.doctrine.class%" factory-service="doctrine" factory-method="getRepository">
+        <service id="drivercategory_repository.doctrine" class="%drivercategory_repository.doctrine.class%" factory-service="doctrine" factory-method="getrepository">
             <argument type="string">%drivercategory.doctrine.entity%</argument>
         </service>
 
         <service id="handicap_repository" alias="handicap_repository.doctrine"></service>
-        <service id="handicap_repository.doctrine" class="%handicap_repository.doctrine.class%" factory-service="doctrine" factory-method="getRepository">
+        <service id="handicap_repository.doctrine" class="%handicap_repository.doctrine.class%" factory-service="doctrine" factory-method="getrepository">
             <argument type="string">%handicap.doctrine.entity%</argument>
         </service>
 
         <service id="passenger_repository" alias="passenger_repository.doctrine"></service>
-        <service id="passenger_repository.doctrine" class="%passenger_repository.doctrine.class%" factory-service="doctrine" factory-method="getRepository">
+        <service id="passenger_repository.doctrine" class="%passenger_repository.doctrine.class%" factory-service="doctrine" factory-method="getrepository">
             <argument type="string">%passenger.doctrine.entity%</argument>
         </service>
 
         <service id="person_repository" alias="person_repository.doctrine"></service>
-        <service id="person_repository.doctrine" class="%person_repository.doctrine.class%" factory-service="doctrine" factory-method="getRepository">
+        <service id="person_repository.doctrine" class="%person_repository.doctrine.class%" factory-service="doctrine" factory-method="getrepository">
             <argument type="string">%person.doctrine.entity%</argument>
         </service>
 
         <service id="poi_repository" alias="poi_repository.doctrine"></service>
-        <service id="poi_repository.doctrine" class="%poi_repository.doctrine.class%" factory-service="doctrine" factory-method="getRepository">
+        <service id="poi_repository.doctrine" class="%poi_repository.doctrine.class%" factory-service="doctrine" factory-method="getrepository">
             <argument type="string">%poi.doctrine.entity%</argument>
         </service>
 
         <service id="poikeyword_repository" alias="poikeyword_repository.doctrine"></service>
-        <service id="poikeyword_repository.doctrine" class="%poikeyword_repository.doctrine.class%" factory-service="doctrine" factory-method="getRepository">
+        <service id="poikeyword_repository.doctrine" class="%poikeyword_repository.doctrine.class%" factory-service="doctrine" factory-method="getrepository">
             <argument type="string">%poikeyword.doctrine.entity%</argument>
         </service>
 
         <service id="serviceplan_repository" alias="serviceplan_repository.doctrine"></service>
-        <service id="serviceplan_repository.doctrine" class="%serviceplan_repository.doctrine.class%" factory-service="doctrine" factory-method="getRepository">
+        <service id="serviceplan_repository.doctrine" class="%serviceplan_repository.doctrine.class%" factory-service="doctrine" factory-method="getrepository">
             <argument type="string">%serviceplan.doctrine.entity%</argument>
         </service>
 
         <service id="vehicle_repository" alias="vehicle_repository.doctrine"></service>
-        <service id="vehicle_repository.doctrine" class="%vehicle_repository.doctrine.class%" factory-service="doctrine" factory-method="getRepository">
+        <service id="vehicle_repository.doctrine" class="%vehicle_repository.doctrine.class%" factory-service="doctrine" factory-method="getrepository">
             <argument type="string">%vehicle.doctrine.entity%</argument>
         </service>
 
         <service id="vehiclecategory_repository" alias="vehiclecategory_repository.doctrine"></service>
-        <service id="vehiclecategory_repository.doctrine" class="%vehiclecategory_repository.doctrine.class%" factory-service="doctrine" factory-method="getRepository">
+        <service id="vehiclecategory_repository.doctrine" class="%vehiclecategory_repository.doctrine.class%" factory-service="doctrine" factory-method="getrepository">
             <argument type="string">%vehiclecategory.doctrine.entity%</argument>
         </service>
 

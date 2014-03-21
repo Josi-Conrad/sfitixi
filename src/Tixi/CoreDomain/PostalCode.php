@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Tixi\CoreDomain\PostalCode
  *
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Tixi\CoreDomainBundle\Repository\PostalCodeRepositoryDoctrine")
  * @ORM\Table(name="postal_code")
  */
 class PostalCode {
@@ -27,21 +27,21 @@ class PostalCode {
     /**
      * @ORM\Column(type="string", length=10, unique=true)
      */
-    protected $postalCode;
+    protected $code;
 
     /**
      * @param $postalCode
      */
-    private function __construct($postalCode) {
-        $this->postalCode($postalCode);
+    private function __construct($code) {
+        $this->code = $code;
     }
 
     /**
      * @param $postalCode
      * @return PostalCode
      */
-    public static function registerPostalCode($postalCode) {
-        return new PostalCode($postalCode);
+    public static function registerPostalCode($code) {
+        return new PostalCode($code);
     }
 
     /**
@@ -61,14 +61,14 @@ class PostalCode {
     /**
      * @param mixed $postalCode
      */
-    public function setPostalCode($postalCode) {
-        $this->postalCode = $postalCode;
+    public function setCode($code) {
+        $this->code = $code;
     }
 
     /**
      * @return mixed
      */
-    public function getPostalCode() {
-        return $this->postalCode;
+    public function getCode() {
+        return $this->code;
     }
 }
