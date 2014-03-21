@@ -77,7 +77,7 @@ class VehicleController extends Controller{
      */
     public function getVehicleAction(Request $request, $vehicleId) {
         $vehicle = $this->get('vehicle_repository')->find($vehicleId);
-        $vehicleDTO = VehicleAssembler::toVehicleRegisterDTO($vehicle);
+        $vehicleDTO = $this->get('tixi_api.assemblervehicle')->toVehicleRegisterDTO($vehicle);
         $data = array('vehicle' => $vehicleDTO);
 
         $viewHandler = $this->get('fos_rest.view_handler');
@@ -101,7 +101,7 @@ class VehicleController extends Controller{
         if(is_null($vehicle)) {
             throw new NotFoundHttpException();
         }
-        $vehicleDTO = VehicleAssembler::toVehicleRegisterDTO($vehicle);
+        $vehicleDTO = $this->get('tixi_api.assemblervehicle')->toVehicleRegisterDTO($vehicle);
         $data = $this->getForm('post_vehicles',$vehicleDTO);
         $view = View::create($data);
         $view->setTemplate('TixiApiBundle:Vehicle:new.html.twig');
@@ -125,13 +125,11 @@ class VehicleController extends Controller{
 
     protected function registerOrUpdateVehicle(VehicleRegisterDTO $vehicleDTO) {
         if(is_null($vehicleDTO->id)) {
-            $vehicle = Vehicle::registerVehicle($vehicleDTO->name, $vehicleDTO->licenceNumber,
-                $vehicleDTO->dateOfFirstRegistration, $vehicleDTO->parkingLotNumber, $vehicleDTO->vehicleCategory);
+            $vehicle = $this->get('tixi_api.assemblervehicle')->registerDTOtoNewVehicle($vehicleDTO);
             $this->get('vehicle_repository')->store($vehicle);
         }else {
             $vehicle = $this->get('vehicle_repository')->find($vehicleDTO->id);
-            $vehicle->updateBasicData($vehicleDTO->name, $vehicleDTO->licenceNumber,
-                $vehicleDTO->dateOfFirstRegistration, $vehicleDTO->parkingLotNumber, $vehicleDTO->vehicleCategory);
+            $this->get('tixi_api.assemblervehicle')->registerDTOToVehicle($vehicle, $vehicleDTO);
         }
     }
 
