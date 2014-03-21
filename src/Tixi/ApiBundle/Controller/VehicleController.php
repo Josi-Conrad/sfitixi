@@ -45,11 +45,10 @@ class VehicleController extends Controller{
      */
     public function getVehiclesAction(Request $request, ParamFetcherInterface $paramFetcher) {
         $viewHandler = $this->get('fos_rest.view_handler');
-
         $dataGridHandler = DataGridHandler::create(DataGridHandler::REPOSITORY_TYPE, $this->get('vehicle_repository'));
         $dataGridState = DataGridState::createByParamFetcher($paramFetcher, new VehicleListDTO());
         $vehicles = $dataGridHandler->findAllBy($dataGridState);
-        $vehiclesDTO = VehicleAssembler::vehiclesToVehicleListDTOs($vehicles);
+        $vehiclesDTO = $this->get('tixi_api.assemblervehicle')->vehiclesToVehicleListDTOs($vehicles);
         $totalAmount = $dataGridHandler->totalNumberOfRecords($dataGridState);
         $dataGrid = new DataGrid($this->get('annotation_reader'), new VehicleListDTO());
         $rows = $dataGrid->createRowsArray($vehiclesDTO);
@@ -85,7 +84,7 @@ class VehicleController extends Controller{
         $view = View::create($data);
 
         if($viewHandler->isFormatTemplating($request->get('_format'))) {
-            $view->setTemplate('TixiApiBundle:Vehicle:get.html.twig');
+            $view->setTemplate('TixiApiBundle:Vehicle:detail.html.twig');
         }
         return $viewHandler->handle($view);
     }
