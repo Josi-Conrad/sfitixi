@@ -8,11 +8,11 @@
 
 namespace Tixi\CoreDomainBundle\Tests\Entity;
 
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Tixi\CoreDomain\Driver;
 use Tixi\CoreDomain\Absent;
 use Tixi\CoreDomain\Address;
 use Tixi\CoreDomain\DriverCategory;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class DriverTest extends WebTestCase {
 

@@ -1,17 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Hert
- * Date: 19.03.14
- * Time: 21:15
- */
-
-/**
- * INSERTS base data for vehicleCategories, handicap etc.
- */
-
-// Name of the file
-$filename = 'categories.sql';
+//uses 1 Parameter for .sql file
+$sql_file = $argv[1];
 
 include 'mysql_connection.php';
 
@@ -23,7 +12,7 @@ mysql_select_db($mysql_database) or die('Error selecting MySQL database: ' . mys
 // Temporary variable, used to store current query
 $templine = '';
 // Read in entire file
-$lines = file($filename);
+$lines = file($sql_file);
 // Loop through each line
 foreach ($lines as $line)
 {

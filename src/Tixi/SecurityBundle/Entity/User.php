@@ -7,16 +7,22 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * @ORM\Table(name="users")
  * @ORM\Entity(repositoryClass="Tixi\SecurityBundle\Repository\UserRepositoryDoctrine")
+ * @ORM\Table(name="user")
  */
 class User implements UserInterface, \Serializable {
     /**
      * @ORM\Id
-     * @ORM\Column(type="integer")
+     * @ORM\Column(name="id", type="integer")
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="Role", inversedBy="users")
+     * @ORM\JoinTable(name="user_to_role")
+     */
+    private $roles;
 
     /**
      * @ORM\Column(name="is_active", type="boolean")
@@ -32,17 +38,6 @@ class User implements UserInterface, \Serializable {
      * @ORM\Column(type="string", length=255)
      */
     private $password;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $salt;
-
-    /**
-     * @ORM\ManyToMany(targetEntity="Role", inversedBy="users")
-     * @ORM\JoinTable(name="user_roles")
-     */
-    private $roles;
 
     public function __construct() {
         $this->roles = new ArrayCollection();
@@ -97,13 +92,10 @@ class User implements UserInterface, \Serializable {
 
     /**
      * @inheritDoc
+     * BCrypt uses its own salt, but for that we have to return null as salt
      */
     public function getSalt() {
-        return $this->salt;
-    }
-
-    public function setSalt($salt) {
-        $this->salt = $salt;
+        return null;
     }
 
     /**
@@ -125,8 +117,7 @@ class User implements UserInterface, \Serializable {
             array(
                 $this->id,
                 $this->username,
-                $this->password,
-                $this->salt
+                $this->password
             )
         );
     }
@@ -138,8 +129,7 @@ class User implements UserInterface, \Serializable {
         list (
             $this->id,
             $this->username,
-            $this->password,
-            $this->salt
+            $this->password
             ) = unserialize($serialized);
     }
 

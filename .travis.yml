@@ -3,6 +3,14 @@ language: php
 php:
   - 5.5
 
-before_script: composer install -n
+env:
+  - SYMFONY_VERSION="2.3.*" DB=mysql
 
-script: run_build.sh
+before_script:
+  - echo 'date.timezone = "Europe/Paris"' >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - php composer.phar install
+  - cp app/config/parameters.yml.dist app/config/parameters.yml
+  - php app/console doctrine:database:create
+  - php app/console doctrine:schema:update --force
+
+script: phpunit -c app/phpunit.xml

@@ -7,17 +7,22 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="role")
  * @ORM\Entity(repositoryClass="Tixi\SecurityBundle\Repository\RoleRepositoryDoctrine")
+ * @ORM\Table(name="role")
  */
 class Role implements RoleInterface, \Serializable
 {
     /**
-     * @ORM\Column(name="id", type="integer")
      * @ORM\Id()
+     * @ORM\Column(name="id", type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="User", mappedBy="roles")
+     */
+    private $users;
 
     /**
      * @ORM\Column(name="name", type="string", length=25)
@@ -28,11 +33,6 @@ class Role implements RoleInterface, \Serializable
      * @ORM\Column(name="role", type="string", length=25, unique=true)
      */
     private $role;
-
-    /**
-     * @ORM\ManyToMany(targetEntity="User", mappedBy="roles")
-     */
-    private $users;
 
     private function __construct()
     {
