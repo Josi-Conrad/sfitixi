@@ -54,7 +54,7 @@ class VehicleAssembler{
         $vehicleListDTO->id = $vehicle->getId();
         $vehicleListDTO->name = $vehicle->getName();
         $vehicleListDTO->licenceNumber = $vehicle->getLicenceNumber();
-        $vehicleListDTO->parkingLot = $vehicle->getParkingLotNumber();
+        $vehicleListDTO->parkingLotNumber = $vehicle->getParkingLotNumber();
         $vehicleListDTO->dateOfFirstRegistration = $this->dateTimeService->convertUTCDateToLocalString($vehicle->getDateOfFirstRegistration());
         $vehicleListDTO->category = $vehicle->getCategory()->getName();
         return $vehicleListDTO;

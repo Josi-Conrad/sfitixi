@@ -35,7 +35,7 @@ class VehicleListDTO implements DataGridSourceClass{
     /**
      * @DataGridField(headerName="Parkplatz Nummer", order=3)
      */
-    public $parkingLot;
+    public $parkingLotNumber;
     /**
      * @DataGridField(headerName="Fahrzeugkategorie", order=4)
      */
