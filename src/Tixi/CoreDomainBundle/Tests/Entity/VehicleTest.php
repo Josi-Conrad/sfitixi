@@ -42,7 +42,7 @@ class VehicleTest extends WebTestCase {
         $this->em->beginTransaction();
     }
 
-    public function test() {
+    public function testCreateVehicleAndCategory() {
 
         $vehicleCat = $this->createVehicleCategory('Movano', 5, 1);
         $servicePlan = $this->createServicePlan(new \DateTime('now'), new \DateTime('now'));
