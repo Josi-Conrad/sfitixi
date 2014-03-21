@@ -45,11 +45,10 @@ class VehicleController extends Controller{
      */
     public function getVehiclesAction(Request $request, ParamFetcherInterface $paramFetcher) {
         $viewHandler = $this->get('fos_rest.view_handler');
-
         $dataGridHandler = DataGridHandler::create(DataGridHandler::REPOSITORY_TYPE, $this->get('vehicle_repository'));
         $dataGridState = DataGridState::createByParamFetcher($paramFetcher, new VehicleListDTO());
         $vehicles = $dataGridHandler->findAllBy($dataGridState);
-        $vehiclesDTO = VehicleAssembler::vehiclesToVehicleListDTOs($vehicles);
+        $vehiclesDTO = $this->get('tixi_api.assemblervehicle')->vehiclesToVehicleListDTOs($vehicles);
         $totalAmount = $dataGridHandler->totalNumberOfRecords($dataGridState);
         $dataGrid = new DataGrid($this->get('annotation_reader'), new VehicleListDTO());
         $rows = $dataGrid->createRowsArray($vehiclesDTO);
@@ -78,14 +77,14 @@ class VehicleController extends Controller{
      */
     public function getVehicleAction(Request $request, $vehicleId) {
         $vehicle = $this->get('vehicle_repository')->find($vehicleId);
-        $vehicleDTO = VehicleAssembler::toVehicleRegisterDTO($vehicle);
+        $vehicleDTO = $this->get('tixi_api.assemblervehicle')->toVehicleRegisterDTO($vehicle);
         $data = array('vehicle' => $vehicleDTO);
 
         $viewHandler = $this->get('fos_rest.view_handler');
         $view = View::create($data);
 
         if($viewHandler->isFormatTemplating($request->get('_format'))) {
-            $view->setTemplate('TixiApiBundle:Vehicle:get.html.twig');
+            $view->setTemplate('TixiApiBundle:Vehicle:detail.html.twig');
         }
         return $viewHandler->handle($view);
     }
@@ -102,7 +101,7 @@ class VehicleController extends Controller{
         if(is_null($vehicle)) {
             throw new NotFoundHttpException();
         }
-        $vehicleDTO = VehicleAssembler::toVehicleRegisterDTO($vehicle);
+        $vehicleDTO = $this->get('tixi_api.assemblervehicle')->toVehicleRegisterDTO($vehicle);
         $data = $this->getForm('post_vehicles',$vehicleDTO);
         $view = View::create($data);
         $view->setTemplate('TixiApiBundle:Vehicle:new.html.twig');
@@ -126,13 +125,11 @@ class VehicleController extends Controller{
 
     protected function registerOrUpdateVehicle(VehicleRegisterDTO $vehicleDTO) {
         if(is_null($vehicleDTO->id)) {
-            $vehicle = Vehicle::registerVehicle($vehicleDTO->name, $vehicleDTO->licenceNumber,
-                $vehicleDTO->dateOfFirstRegistration, $vehicleDTO->parkingLotNumber, $vehicleDTO->vehicleCategory);
+            $vehicle = $this->get('tixi_api.assemblervehicle')->registerDTOtoNewVehicle($vehicleDTO);
             $this->get('vehicle_repository')->store($vehicle);
         }else {
             $vehicle = $this->get('vehicle_repository')->find($vehicleDTO->id);
-            $vehicle->updateBasicData($vehicleDTO->name, $vehicleDTO->licenceNumber,
-                $vehicleDTO->dateOfFirstRegistration, $vehicleDTO->parkingLotNumber, $vehicleDTO->vehicleCategory);
+            $this->get('tixi_api.assemblervehicle')->registerDTOToVehicle($vehicle, $vehicleDTO);
         }
     }
 

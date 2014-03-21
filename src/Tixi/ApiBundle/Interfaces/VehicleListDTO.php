@@ -28,4 +28,16 @@ class VehicleListDTO implements DataGridSourceClass{
      * @DataGridField(headerName="Lizenznummer", order=2)
      */
     public $licenceNumber;
+    /**
+     * @DataGridField(headerName="Inverkehrssetzung", order=5)
+     */
+    public $dateOfFirstRegistration;
+    /**
+     * @DataGridField(headerName="Parkplatz Nummer", order=3)
+     */
+    public $parkingLot;
+    /**
+     * @DataGridField(headerName="Fahrzeugkategorie", order=4)
+     */
+    public $category;
 } 
