@@ -4,3 +4,10 @@
     width: 1024px;
 }
 
+/*##### Data Grid #####*/
+.dataGrid table .selected td {
+    color: #ffffff;
+    background-color: #e67e22!important;
+}
+
+

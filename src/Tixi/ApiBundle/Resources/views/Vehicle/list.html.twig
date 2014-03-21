@@ -1,22 +1,18 @@
 {% extends '::base.html.twig' %}
 {% set topNavigationActivePage = 'get_vehicles' %}
 {% block body %}
-    <div class="dataGrid" data-gridid="vehicles" data-clickSrc="{{ path('get_vehicle', {'vehicleId':'--selectionid--'}) }}">
+    <div class="dataGrid" data-gridid="{{ rowIdPrefix }}">
         {% embed 'TixiApiBundle:Shared:datagrid.table.html.twig'%}
             {% block customListActionControl %}
-                <div class="btn-group">
-                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                        Mit Auswahl <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu selectedAction" role="menu">
-                        <li><a href="{{ path('edit_vehicle',{'vehicleId':'--selectionid--'}) }}">Action</a></li>
-                        <li><a href="#">Another action</a></li>
-                        <li><a href="#">Something else here</a></li>
+                {% embed 'TixiApiBundle:Shared:datagrid.list.selectedAction.html.twig' %}
+                    {% block selectedactions %}
+                        <li><a data-targetSrc="{{ path('edit_vehicle',{'vehicleId':'--selectionid--'}) }}" class="customActionWithSelection" href="#">Editieren</a></li>
+                        <li><a data-targetSrc="{{ path('new_vehicle_serviceplan',{'vehicleId':'--selectionid--'}) }}" class="customActionWithSelection" href="#">Neuer Serviceplan</a></li>
                         <li class="divider"></li>
-                        <li><a href="#">Separated link</a></li>
-                    </ul>
-                </div>
-                <button type="button" class="btn btn-primary new" data-targetSrc="{{ path('new_vehicle') }}">Neues Fahrzeug</button>
+                        <li><a data-targetSrc="{{ path('edit_vehicle',{'vehicleId':'--selectionid--'}) }}" class="customActionWithSelection" href="#">Löschen</a></li>
+                    {% endblock %}
+                {% endembed %}
+                <button type="button" class="btn btn-primary customAction" data-targetSrc="{{ path('new_vehicle') }}">Neues Fahrzeug</button>
             {% endblock %}
         {%  endembed %}
     </div>
@@ -24,23 +20,17 @@
 {% block javascriptscustom %}
     <script type="text/javascript">
         jQuery(function($) {
-            var dataGridManager = new DataGridManager();
-            dataGridManager.initDataGrids();
+            var dataGridManager = new DataGridManager(),
+                    conf = {
+                        'vehicles' : {
+                            'dblClickCallback' : function(rowId) {
+                                var _url = '{{ path('get_vehicle',{'vehicleId':'--vehicleId--'}) }}';
+                                _url = _url.replace('--vehicleId--',rowId);
+                                window.location = _url;
+                            }
+                        }
+                    };
+            dataGridManager.initDataGrids(conf);
         });
     </script>
-    {#<script>#}
-        {#jQuery(function($) {#}
-            {#var vehiclesDataGrid = new DataGrid();#}
-            {#vehiclesDataGrid.init({#}
-                {#gridId : 'vehicles',#}
-                {#dataURL: 'vehicles',#}
-                {#dataIdentifier: 'vehicles',#}
-                {#dataFieldId : 'id',#}
-                {#fields : [#}
-                    {#{'fieldId':'name', 'fieldDisplayName':'Name'},#}
-                    {#{'fieldId':'licenceNumber', 'fieldDisplayName':'Lizenznummer'}#}
-                {#]#}
-            {#});#}
-        {#});#}
-    {#</script>#}
 {% endblock %}

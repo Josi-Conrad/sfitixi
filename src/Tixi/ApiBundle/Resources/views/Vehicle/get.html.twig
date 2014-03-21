@@ -22,19 +22,19 @@
 
 {% block javascriptscustom %}
     <script>
-        jQuery(function($) {
-            var vehiclesDataGrid = new DataGrid();
-            vehiclesDataGrid.init({
-                gridId : 'serviceplans',
-                dataURL: '{{ vehicle.id }}/serviceplans',
-                dataIdentifier: 'serviceplans',
-                dataFieldId : 'id',
-                fields : [
-                    {'fieldId':'startDate', 'fieldDisplayName':'Anfang'},
-                    {'fieldId':'endDate', 'fieldDisplayName':'Ende'},
-                    {'fieldId':'cost', 'fieldDisplayName':'Kosten'}
-                ]
-            });
-        });
+        {#jQuery(function($) {#}
+            {#var vehiclesDataGrid = new DataGrid();#}
+            {#vehiclesDataGrid.init({#}
+                {#gridId : 'serviceplans',#}
+                {#dataURL: '{{ vehicle.id }}/serviceplans',#}
+                {#dataIdentifier: 'serviceplans',#}
+                {#dataFieldId : 'id',#}
+                {#fields : [#}
+                    {#{'fieldId':'startDate', 'fieldDisplayName':'Anfang'},#}
+                    {#{'fieldId':'endDate', 'fieldDisplayName':'Ende'},#}
+                    {#{'fieldId':'cost', 'fieldDisplayName':'Kosten'}#}
+                {#]#}
+            {#});#}
+        {#});#}
     </script>
 {% endblock %}
