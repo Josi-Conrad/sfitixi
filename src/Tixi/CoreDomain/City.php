@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Tixi\CoreDomain\City
  *
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Tixi\CoreDomainBundle\Repository\CityRepositoryDoctrine")
  * @ORM\Table(name="city")
  */
 class City {
@@ -27,21 +27,22 @@ class City {
     /**
      * @ORM\Column(type="string", length=50, unique=true)
      */
-    protected $city;
+    protected $name;
 
     /**
      * @param $city
      */
-    private function __construct($city) {
-        $this->city($city);
+    private function __construct($name) {
+        $this->name = $name;
     }
 
     /**
      * @param $city
      * @return City
      */
-    public static function registerCity($city) {
-        return new City($city);
+    public static function registerCity($name) {
+        $city = new City($name);
+        return $city;
     }
 
     /**
@@ -61,15 +62,15 @@ class City {
     /**
      * @param mixed $city
      */
-    public function setCity($city) {
-        $this->city = $city;
+    public function setName($city) {
+        $this->name = $city;
     }
 
     /**
      * @return mixed
      */
-    public function getCity() {
-        return $this->city;
+    public function getName() {
+        return $this->name;
     }
 
 }

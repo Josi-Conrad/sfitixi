@@ -20,6 +20,11 @@ class CommonBaseRepositoryDoctrine extends EntityRepository{
         return parent::find($id);
     }
 
+    public function findOneBy(array $criteria, array $orderBy = null)
+    {
+        return parent::findOneBy($criteria, $orderBy);
+    }
+
     public function findAll()
     {
         return parent::findAll();

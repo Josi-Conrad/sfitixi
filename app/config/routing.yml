@@ -3,11 +3,6 @@ tixi_api:
     type:     rest
     prefix:   /
 
-#tixi_app_impl_vehicle_management:
-#    resource: "@TixiAppImplVehicleManagementBundle/Controller/"
-#    type:     annotation
-#    prefix:   /
-
 tixi_core_domain:
     resource: "@TixiCoreDomainBundle/Controller/"
     type:     annotation

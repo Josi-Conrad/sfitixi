@@ -9,4 +9,5 @@ interface DriverCategoryRepository extends CommonBaseRepository{
     public function store(DriverCategory $driverCategory);
 
     public function remove(DriverCategory $driverCategory);
-} 
+
+}

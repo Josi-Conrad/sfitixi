@@ -19,17 +19,14 @@ class VehicleTest extends WebTestCase {
      * @var \Doctrine\ORM\EntityManager
      */
     private $em;
-
     /**
      * @var \Tixi\CoreDomainBundle\Repository\VehicleRepositoryDoctrine
      */
     private $vehicleRepo;
-
     /**
      * @var \Tixi\CoreDomainBundle\Repository\VehicleCategoryRepositoryDoctrine
      */
     private $vehicleCategoryRepo;
-
     /**
      * @var \Tixi\CoreDomainBundle\Repository\ServicePlanRepositoryDoctrine
      */
@@ -38,43 +35,23 @@ class VehicleTest extends WebTestCase {
     public function setUp() {
         $kernel = static::createKernel();
         $kernel->boot();
-        $this->em = $kernel
-            ->getContainer()
-            ->get('entity_manager');
-
-        $this->vehicleRepo = $kernel
-            ->getContainer()
-            ->get('vehicle_repository');
-
-        $this->vehicleCategoryRepo = $kernel
-            ->getContainer()
-            ->get('vehiclecategory_repository');
-
-        $this->servicePlanRepo = $kernel
-            ->getContainer()
-            ->get('serviceplan_repository');
-
+        $this->em = $kernel->getContainer()->get('entity_manager');
+        $this->vehicleRepo = $kernel->getContainer()->get('vehicle_repository');
+        $this->vehicleCategoryRepo = $kernel->getContainer()->get('vehiclecategory_repository');
+        $this->servicePlanRepo = $kernel->getContainer()->get('serviceplan_repository');
         $this->em->beginTransaction();
     }
 
-    public function test() {
+    public function testCreateVehicleAndCategory() {
 
-        $vehicleCat1 = $this->createVehicleCategory('Movano', 5, 1);
-        $vehicleCat2 = $this->createVehicleCategory('VM Maxi', 4, 1);
-        $vehicleCat3 = $this->createVehicleCategory('VM Caddy', 4, 2);
-
-        $servicePlan = ServicePlan::registerServicePlan(new \DateTime('now'),
-            new \DateTime('now'));
-        $this->servicePlanRepo->store($servicePlan);
-
+        $vehicleCat = $this->createVehicleCategory('Movano', 5, 1);
+        $servicePlan = $this->createServicePlan(new \DateTime('now'), new \DateTime('now'));
         $vehicle = Vehicle::registerVehicle(
-            'VM', 'CH002002', new \DateTime('2012-01-01'), 2, $vehicleCat1
+            'VM', 'CH002002', new \DateTime('2012-01-01'), 2, $vehicleCat
         );
-
         $vehicle->assignServicePlan($servicePlan);
         $this->vehicleRepo->store($vehicle);
         $this->em->flush();
-
         $vehicle_find = $this->vehicleRepo->find($vehicle->getId());
         $this->assertEquals($vehicle, $vehicle_find);
         $this->assertEquals($vehicle->getCategory()->getName(), $vehicle_find->getCategory()->getName());
@@ -102,6 +79,17 @@ class VehicleTest extends WebTestCase {
     protected function tearDown() {
         parent::tearDown();
         $this->em->rollback();
+    }
+
+    /**
+     * @param $from
+     * @param $to
+     * @return ServicePlan
+     */
+    private function createServicePlan($from, $to) {
+        $servicePlan = ServicePlan::registerServicePlan($from, $to);
+        $this->servicePlanRepo->store($servicePlan);
+        return $servicePlan;
     }
 
 }

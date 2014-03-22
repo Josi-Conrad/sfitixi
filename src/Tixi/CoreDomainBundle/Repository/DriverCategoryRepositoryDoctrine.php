@@ -14,4 +14,17 @@ class DriverCategoryRepositoryDoctrine extends CommonBaseRepositoryDoctrine impl
     public function remove(DriverCategory $driverCategory) {
         $this->getEntityManager()->remove($driverCategory);
     }
+
+    /**
+     * @param DriverCategory $driverCategory
+     * @return DriverCategory
+     */
+    public function storeAndGetDriverCategory(DriverCategory $driverCategory) {
+        $current = $this->findOneBy(array('name' => $driverCategory->getName()));
+        if (empty($current)) {
+            $this->getEntityManager()->persist($driverCategory);
+            return $driverCategory;
+        }
+        return $current;
+    }
 }

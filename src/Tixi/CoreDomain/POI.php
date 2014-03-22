@@ -96,10 +96,10 @@ class POI {
         $poi->setDepartment($department);
         $poi->setAddress($address);
 
-        if(!is_null($telephone)) {$poi->setTelephone($telephone);}
-        if(!is_null($comment)) {$poi->setComment($comment);}
-        if(!is_null($memo)) {$poi->setMemo($memo);}
-        if(!is_null($details)) {$poi->setDetails($details);}
+        if(!empty($telephone)) {$poi->setTelephone($telephone);}
+        if(!empty($comment)) {$poi->setComment($comment);}
+        if(!empty($memo)) {$poi->setMemo($memo);}
+        if(!empty($details)) {$poi->setDetails($details);}
 
         $poi->activate();
 
@@ -117,13 +117,13 @@ class POI {
      */
     public function updateBasicData($name = null, $department = null, Address $address = null,
                                     $telephone = null, $comment = null, $memo = null, $details = null) {
-        if(!is_null($name)) {$this->setName($name);}
-        if(!is_null($department)) {$this->setDepartment($department);}
-        if(!is_null($address)) {$this->setAddress($address);}
-        if(!is_null($telephone)) {$this->setTelephone($telephone);}
-        if(!is_null($comment)) {$this->setComment($comment);}
-        if(!is_null($memo)) {$this->setMemo($memo);}
-        if(!is_null($details)) {$this->setDetails($details);}
+        if(!empty($name)) {$this->setName($name);}
+        if(!empty($department)) {$this->setDepartment($department);}
+        if(!empty($address)) {$this->setAddress($address);}
+        if(!empty($telephone)) {$this->setTelephone($telephone);}
+        if(!empty($comment)) {$this->setComment($comment);}
+        if(!empty($memo)) {$this->setMemo($memo);}
+        if(!empty($details)) {$this->setDetails($details);}
     }
 
     public function activate() {

@@ -19,14 +19,14 @@ use Doctrine\ORM\Mapping as ORM;
 class Contradict {
     /**
      * @ORM\Id
-     * @ORM\ManyToOne(targetEntity="Driver", inversedBy="contradictPassengers")
+     * @ORM\ManyToOne(targetEntity="Driver", inversedBy="contradicts")
      * @ORM\JoinColumn(name="driver_id", referencedColumnName="id")
      */
     protected $driver;
 
     /**
      * @ORM\Id
-     * @ORM\ManyToOne(targetEntity="Passenger", inversedBy="contradictDrivers")
+     * @ORM\ManyToOne(targetEntity="Passenger", inversedBy="contradicts")
      * @ORM\JoinColumn(name="passenger_id", referencedColumnName="id")
      */
     protected $passenger;

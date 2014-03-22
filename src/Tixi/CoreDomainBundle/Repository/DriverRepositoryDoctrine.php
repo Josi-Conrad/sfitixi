@@ -14,4 +14,5 @@ class DriverRepositoryDoctrine extends CommonBaseRepositoryDoctrine implements D
     public function remove(Driver $driver) {
         $this->getEntityManager()->remove($driver);
     }
+
 }

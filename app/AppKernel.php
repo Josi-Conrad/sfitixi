@@ -17,13 +17,13 @@ class AppKernel extends Kernel
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new Tixi\CoreDomainBundle\TixiCoreDomainBundle(),
-//            new Tixi\App\Impl\VehicleManagementBundle\TixiAppImplVehicleManagementBundle(),
             new Tixi\ApiBundle\TixiApiBundle(),
             new FOS\RestBundle\FOSRestBundle(),
             new FOS\OAuthServerBundle\FOSOAuthServerBundle(),
             new JMS\SerializerBundle\JMSSerializerBundle(),
             new APY\BreadcrumbTrailBundle\APYBreadcrumbTrailBundle(),
-            new Tixi\SecurityBundle\TixiSecurityBundle()
+            new Tixi\SecurityBundle\TixiSecurityBundle(),
+            new Tixi\App\AppBundle\TixiAppBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
