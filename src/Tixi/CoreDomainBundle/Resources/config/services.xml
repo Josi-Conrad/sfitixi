@@ -7,6 +7,8 @@
 
     <parameters>
 
+        <parameter key="tixi_coredomain.fgea_repository.doctrine.class">Tixi\CoreDomainBundle\Repository\Shared\FastGenericEntityAccessorRepositoryDoctrine</parameter>
+
         <parameter key="absent.doctrine.entity">Tixi\CoreDomain\Absent</parameter>
         <parameter key="absent_repository.doctrine.class">Tixi\CoreDomainBundle\Repository\AbsentRepositoryDoctrine</parameter>
 
@@ -47,6 +49,12 @@
 
     <services>
         <service id="entity_manager" alias="doctrine.orm.entity_manager"></service>
+
+        <service id="tixi_coredomain.fgea_repository" class="%tixi_coredomain.fgea_repository.doctrine.class%">
+            <call method="setEntityManager">
+                <argument type="service" id="entity_manager" />
+            </call>
+        </service>
 
         <service id="absent_repository" alias="absent_repository.doctrine"></service>
         <service id="absent_repository.doctrine" class="%absent_repository.doctrine.class%" factory-service="doctrine" factory-method="getRepository">

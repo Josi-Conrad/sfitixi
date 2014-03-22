@@ -10,35 +10,34 @@ namespace Tixi\ApiBundle\Shared\DataGrid\RESTHandler;
 
 
 use FOS\RestBundle\Request\ParamFetcherInterface;
+use Tixi\ApiBundle\Shared\DataGrid\DataGridSourceClass;
 use Tixi\ApiBundle\Shared\Paginator;
 
 class DataGridState {
-    private $orderBy = null;
-    private $page = null;
-    private $limit = null;
-    private $filterStr = null;
-    private $sourceDTO = null;
+    protected $orderByField = null;
+    protected $orderByDirection = null;
+    protected $page = null;
+    protected $limit = null;
+    protected $filterStr = null;
+    protected $sourceDTO = null;
 
-    private function __construct($orderBy=null, $page=null, $limit=null, $filterStr=null, $sourceDTO=null) {
-        $this->orderBy = (!is_null($orderBy)) ? $orderBy : array();
+    protected function __construct($sourceDTO, $orderByField=null, $orderByDirection, $page=null, $limit=null, $filterStr=null) {
+        $this->sourceDTO = $sourceDTO;
+        $this->orderByField = $orderByField;
+        $this->orderByDirection = $orderByDirection;
         $this->page = (!is_null($page)) ? $page : 1;
         $this->limit = (!is_null($limit)) ? $limit : 15;
         $this->filterStr = $filterStr;
-        $this->sourceDTO = $sourceDTO;
     }
 
-    public static function createByParamFetcher(ParamFetcherInterface $paramFetcher, $sourceDTO) {
+    public static function createByParamFetcher(ParamFetcherInterface $paramFetcher, DataGridSourceClass $sourceDTO) {
         $page = $paramFetcher->get('page');
         $limit = $paramFetcher->get('limit');
         $orderByField = $paramFetcher->get('orderbyfield');
         $orderByDirection = $paramFetcher->get('orderbydirection');
         $filterstr = $paramFetcher->get('filterstr');
-        $orderBy = array();
-        if(!empty($orderByField) && !empty($orderByDirection)) {
-            $orderBy = array($orderByField=>$orderByDirection);
-        }
         $correctedPage = Paginator::adjustPageForPagination($page);
-        return new DataGridState($orderBy, $correctedPage, $limit, $filterstr, $sourceDTO);
+        return new DataGridState($sourceDTO, $orderByField, $orderByDirection, $correctedPage, $limit, $filterstr);
     }
 
     public function hasFilter() {
@@ -62,12 +61,22 @@ class DataGridState {
     }
 
     /**
-     * @return array|null
+     * @return null
      */
-    public function getOrderBy()
+    public function getOrderByDirection()
     {
-        return $this->orderBy;
+        return $this->orderByDirection;
     }
+
+    /**
+     * @return null
+     */
+    public function getOrderByField()
+    {
+        return $this->orderByField;
+    }
+
+
 
     /**
      * @return int|null
@@ -78,7 +87,7 @@ class DataGridState {
     }
 
     /**
-     * @return null
+     * @return DataGridSourceClass
      */
     public function getSourceDTO()
     {

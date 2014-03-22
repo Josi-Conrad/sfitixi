@@ -11,6 +11,7 @@ namespace Tixi\CoreDomain;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Tixi\ApiBundle\Form\VehicleType;
+use Tixi\CoreDomain\Shared\Entity;
 
 /**
  * Tixi\CoreDomain\Vehicle
@@ -18,7 +19,7 @@ use Tixi\ApiBundle\Form\VehicleType;
  * @ORM\Entity(repositoryClass="Tixi\CoreDomainBundle\Repository\VehicleRepositoryDoctrine")
  * @ORM\Table(name="vehicle")
  */
-class Vehicle {
+class Vehicle implements Entity{
 
     /**
      * @ORM\Id

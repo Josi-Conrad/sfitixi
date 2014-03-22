@@ -34,6 +34,4 @@ class VehicleRepositoryDoctrine extends CommonBaseRepositoryDoctrine implements 
                 $this->getEntityManager()->flush();
             }
 
-    }
-
-}
+    }}

@@ -9,35 +9,41 @@
 namespace Tixi\ApiBundle\Interfaces;
 
 use JMS\Serializer\Annotation\SerializedName;
-use Tixi\ApiBundle\Shared\DataGrid\Annotations\DataGridField;
-use Tixi\ApiBundle\Shared\DataGrid\Annotations\DataGridRowId;
+use Tixi\ApiBundle\Shared\DataGrid\Annotations\GridField;
 use Tixi\ApiBundle\Shared\DataGrid\DataGridSourceClass;
+use Tixi\CoreDomain\Shared\GenericEntityFilter\GenericAccessQuery;
 
 
 class VehicleListDTO implements DataGridSourceClass{
     /**
-     * @DataGridRowId()
+     * @GridField(rowIdentifier=true, propertyId="Vehicle.id")
      */
     public $id;
     /**
-     * @DataGridField(headerName="Name", order=1)
+     * @GridField(propertyId="Vehicle.name", headerName="Name", order=1)
      */
     public $name;
     /**
      * @SerializedName("licenceNumber")
-     * @DataGridField(headerName="Lizenznummer", order=2)
+     * @GridField(propertyId="Vehicle.licenceNumber", headerName="Lizenznummer", order=2)
      */
     public $licenceNumber;
     /**
-     * @DataGridField(headerName="Inverkehrssetzung", order=5)
+     * @GridField(propertyId="Vehicle.licenceNumber", headerName="Inverkehrssetzung", order=5)
      */
     public $dateOfFirstRegistration;
     /**
-     * @DataGridField(headerName="Parkplatz Nummer", order=3)
+     * @GridField(propertyId="Vehicle.parkingLotNumber", headerName="Parkplatz Nummer", order=3)
      */
     public $parkingLotNumber;
     /**
-     * @DataGridField(headerName="Fahrzeugkategorie", order=4)
+     * @GridField(propertyId="VehicleCategory.name", headerName="Fahrzeugkategorie", order=4)
      */
     public $category;
-} 
+
+
+    public function getAccessQuery()
+    {
+        return new GenericAccessQuery('Vehicle', 'Tixi\CoreDomain\Vehicle Vehicle JOIN Vehicle.category VehicleCategory', 'Vehicle.id');
+    }
+}

@@ -11,4 +11,6 @@ namespace Tixi\ApiBundle\Shared\DataGrid;
 
 interface DataGridSourceClass {
 
+    public function getAccessQuery();
+
 } 

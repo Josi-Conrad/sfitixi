@@ -45,16 +45,14 @@ class VehicleController extends Controller{
      */
     public function getVehiclesAction(Request $request, ParamFetcherInterface $paramFetcher) {
         $viewHandler = $this->get('fos_rest.view_handler');
-        $dataGridHandler = DataGridHandler::create(DataGridHandler::REPOSITORY_TYPE, $this->get('vehicle_repository'));
         $dataGridState = DataGridState::createByParamFetcher($paramFetcher, new VehicleListDTO());
-        $vehicles = $dataGridHandler->findAllBy($dataGridState);
+        $vehicles = $this->get('tixi_coredomain.fgea_repository')->findByFilter($this->get('tixi_api.datagrid')->createGenericEntityFilterByState($dataGridState));
         $vehiclesDTO = $this->get('tixi_api.assemblervehicle')->vehiclesToVehicleListDTOs($vehicles);
-        $totalAmount = $dataGridHandler->totalNumberOfRecords($dataGridState);
-        $dataGrid = new DataGrid($this->get('annotation_reader'), new VehicleListDTO());
-        $rows = $dataGrid->createRowsArray($vehiclesDTO);
+        $totalAmount = $this->get('tixi_coredomain.fgea_repository')->findTotalAmountByFilter($this->get('tixi_api.datagrid')->createGenericEntityFilterByState($dataGridState));
+        $rows = $this->get('tixi_api.datagrid')->createRowsArray($vehiclesDTO);
         $view = View::create();
         if($viewHandler->isFormatTemplating($request->get('_format'))) {
-            $headers = $dataGrid->createHeaderArray(new VehicleListDTO());
+            $headers = $this->get('tixi_api.datagrid')->createHeaderArray(new VehicleListDTO());
             $partial = $paramFetcher->get('partial');
             if(empty($partial) && !$partial) {
                 $view->setTemplate('TixiApiBundle:Vehicle:list.html.twig');
