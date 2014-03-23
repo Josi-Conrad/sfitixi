@@ -3,7 +3,7 @@
 namespace Tixi\CoreDomainBundle\Repository;
 
 use Tixi\CoreDomain\POIKeyword;
-use Tixi\Coredomain\POIKeywordRepository;
+use Tixi\CoreDomain\POIKeywordRepository;
 
 class POIKeywordRepositoryDoctrine extends CommonBaseRepositoryDoctrine implements POIKeywordRepository {
 
