@@ -116,6 +116,7 @@ class Driver extends Person {
         if(!empty($firstname)) {$this->setFirstname($firstname);}
         if(!empty($lastname)) {$this->setLastname($lastname);}
         if(!empty($telephone)) {$this->setTelephone($telephone);}
+        if(!empty($address)) {$this->setAddress($address);}
         if(!empty($licenceNumber)) {$this->setLicenceNumber($licenceNumber);}
         if(!empty($driverCategory)) {$this->setDriverCategory($driverCategory);}
         if(!empty($wheelChairAttendance)) {$this->setWheelChairAttendance($wheelChairAttendance);}
@@ -221,7 +222,7 @@ class Driver extends Person {
     }
 
     /**
-     * @return mixed
+     * @return DriverCategory
      */
     public function getDriverCategory() {
         return $this->driverCategory;

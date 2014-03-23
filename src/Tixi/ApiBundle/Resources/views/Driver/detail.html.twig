@@ -1,0 +1,22 @@
+{% extends '::base.html.twig' %}
+{% set topNavigationActivePage = 'get_drivers' %}
+{% block body %}
+    <div class="entityDetailView">
+        <div class="leftColumn">
+            <table>
+                <tr>
+                    <td>Anrede:</td>
+                    <td>{{ driver.title }}</td>
+                </tr>
+                <tr>
+                    <td>Vorname:</td>
+                    <td>{{ driver.firstname }}</td>
+                </tr>
+                <tr>
+                    <td>Nachname:</td>
+                    <td>{{ driver.lastname }}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+{% endblock %}

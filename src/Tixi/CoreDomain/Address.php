@@ -52,12 +52,12 @@ class Address {
     /**
      * @ORM\Column(type="string", length=50)
      */
-    protected $name;
+    protected $street;
 
     /**
-     * @ORM\Column(type="string", length=50)
+     * @ORM\Column(type="string", length=50, nullable=true)
      */
-    protected $street;
+    protected $name;
 
     /**
      * @ORM\Column(type="decimal", scale=6, precision=10, nullable=true)
@@ -89,18 +89,19 @@ class Address {
      * @param null $type
      * @return Address
      */
-    public static function registerAddress($name, $street, PostalCode $postalCode, City $city, Country $country,
-                                           $lat = null, $lng = null, $type = null) {
+    public static function registerAddress($street, PostalCode $postalCode, City $city, Country $country,
+                                           $name = null, $lat = null, $lng = null, $type = null) {
         $address = new Address();
 
-        $address->setName($name);
         $address->setStreet($street);
         $address->setPostalCode($postalCode);
         $address->setCity($city);
         $address->setCountry($country);
-        if(!is_null($lat)){$address->setLat($lat);}
-        if(!is_null($lng)){$address->setLng($lng);}
-        if(!is_null($type)){$address->setType($type);}
+
+        if(!empty($name)){$address->setName($name);}
+        if(!empty($lat)){$address->setLat($lat);}
+        if(!empty($lng)){$address->setLng($lng);}
+        if(!empty($type)){$address->setType($type);}
 
         return $address;
     }
@@ -115,17 +116,16 @@ class Address {
      * @param null $lng
      * @param null $type
      */
-    public function updateAddressBasicData($name = null, $street = null, PostalCode $postalCode = null,
+    public function updateAddressBasicData($street = null, PostalCode $postalCode = null,
                                            City $city = null, Country $country = null,
-                                           $lat = null, $lng = null, $type = null) {
+                                           $name = null, $lat = null, $lng = null, $type = null) {
 
-        if(!empty($name)) {$this->setName($name);}
+
         if(!empty($street)) {$this->setStreet($street);}
-
         if(!empty($postalCode)) {$this->setPostalCode($postalCode);}
         if(!empty($city)) {$this->setCity($city);}
         if(!empty($country)) {$this->setCountry($country);}
-
+        if(!empty($name)) {$this->setName($name);}
         if(!empty($lat)) {$this->setLat($lat);}
         if(!empty($lng)) {$this->setLng($lng);}
         if(!empty($type)) {$this->setType($type);}

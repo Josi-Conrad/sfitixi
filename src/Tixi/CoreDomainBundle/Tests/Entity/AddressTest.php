@@ -12,6 +12,8 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Tixi\CoreDomain\Address;
 use Tixi\CoreDomain\City;
 use Tixi\CoreDomain\Country;
+use Tixi\CoreDomain\Driver;
+use Tixi\CoreDomain\DriverCategory;
 use Tixi\CoreDomain\PostalCode;
 
 class AddressTest extends WebTestCase {
@@ -89,16 +91,36 @@ class AddressTest extends WebTestCase {
         $city = $this->createCity('Zug');
         $country = $this->createCountry('Schweiz');
         $address = Address::registerAddress(
-            'Heimadresse', 'Seeweg 22b',
-            $postalCode, $city, $country,
-            47.175460, 8.517752, 'Wohnung'
+            'Seeweg 22b', $postalCode, $city, $country,
+            'Wohnadresse', 47.175460, 8.517752, 'Wohnung'
         );
         $this->addressRepo->store($address);
         $this->em->flush();
-        $address_find = $this->addressRepo->find($address->getId());
-        $this->assertEquals($address, $address_find);
+        $addressFind = $this->addressRepo->find($address->getId());
+        $this->assertEquals($address, $addressFind);
     }
 
+    public function testCreateDriver(){
+        $driverCategory = $this->createDriverCategory('Zivildienst');
+        $address = Address::registerAddress(
+            'Burstrasse 22c',
+            $this->createPostalCode('6333'),
+            $this->createCity('Baar'),
+            $this->createCountry('Schweiz')
+        );
+        $this->addressRepo->store($address);
+
+        $driver = Driver::registerDriver(
+            'Herr', 'Max', 'Mühlemann', '041 222 32 32', '3234141',
+            $address, $driverCategory
+        );
+        $this->driverRepo->store($driver);
+
+        $this->em->flush();
+
+        $driverFind = $this->driverRepo->find($driver->getId());
+        $this->assertEquals($driverFind, $driver);
+    }
     /**
      * @param $name
      * @return null|object|Country
@@ -138,6 +160,16 @@ class AddressTest extends WebTestCase {
         if (empty($current)) {
             $this->postalCodeRepo->store($postalCode);
             return $postalCode;
+        }
+        return $current;
+    }
+
+    private function createDriverCategory($name) {
+        $driverCategory = DriverCategory::registerDriverCategory($name);
+        $current = $this->driverCategoryRepo->findOneBy(array('name' => $name));
+        if (empty($current)) {
+            $this->driverCategoryRepo->store($driverCategory);
+            return $driverCategory;
         }
         return $current;
     }
