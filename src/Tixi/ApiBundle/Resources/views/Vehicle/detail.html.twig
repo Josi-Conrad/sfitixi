@@ -15,21 +15,8 @@
             </table>
         </div>
         <div class="rightColumn">
-            <div class="dataGrid" data-gridid="serviceplans">
-                {% embed 'TixiApiBundle:Shared:datagrid.table.html.twig'%}
-                    {% block customListActionControl %}
-                        {% embed 'TixiApiBundle:Shared:datagrid.list.selectedAction.html.twig' %}
-                            {% block selectedactions %}
-                                <li><a data-targetSrc="{{ path('edit_vehicle',{'vehicleId':'--selectionid--'}) }}" class="customActionWithSelection" href="#">Editieren</a></li>
-                                <li><a data-targetSrc="{{ path('new_vehicle_serviceplan',{'vehicleId':'--selectionid--'}) }}" class="customActionWithSelection" href="#">Neuer Serviceplan</a></li>
-                                <li class="divider"></li>
-                                <li><a data-targetSrc="{{ path('edit_vehicle',{'vehicleId':'--selectionid--'}) }}" class="customActionWithSelection" href="#">Löschen</a></li>
-                            {% endblock %}
-                        {% endembed %}
-                        <button type="button" class="btn btn-primary customAction" data-targetSrc="{{ path('new_vehicle') }}">Neues Fahrzeug</button>
-                    {% endblock %}
-                {%  endembed %}
-            </div>
+            {% set vehicleid = vehicle.id %}
+            {{ render(controller('TixiApiBundle:ServicePlan:getServiceplans', { 'vehicleId':vehicleid, 'embedded':true })) }}
         </div>
     </div>
 {% endblock %}

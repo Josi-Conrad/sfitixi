@@ -103,7 +103,7 @@ class FastGenericEntityAccessorRepositoryDoctrine implements FastGenericEntityAc
         if('' !== $dqlRestrictive || '' !== $dqlSearch) {
             $sqlWhere = 'WHERE ';
             if('' !== $dqlRestrictive && '' !== $dqlSearch) {
-                substr_replace($dqlRestrictive ,"",-1);
+                $dqlRestrictive = substr_replace($dqlRestrictive ,"",-1);
                 $dqlRestrictive .= ' AND ';
                 $dqlSearch .= ')';
             }

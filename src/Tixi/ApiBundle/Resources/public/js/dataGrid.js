@@ -10,7 +10,8 @@ function DataGridManager() {
         _dataGridClass = '.dataGrid',
         _dataGridIdDataAttribut = 'data-gridid',
         _gridId,
-        _callback;
+        _callback,
+        _isEmbedded;
 
     this._dataGrids = [];
 
@@ -20,13 +21,15 @@ function DataGridManager() {
             _gridId = $(outline).attr(_dataGridIdDataAttribut);
             if(conf && conf[_gridId] && conf[_gridId].dblClickCallback) {
                 _callback = conf[_gridId].dblClickCallback;
+                _isEmbedded = (typeof conf[_gridId].isEmbedded !== 'undefined') ? conf[_gridId].isEmbedded : false;
+                _this._dataGrids.push(new DataGrid(outline,_gridId,_callback,_isEmbedded));
             }
-            _this._dataGrids.push(new DataGrid(outline,_gridId,_callback));
+
         });
     }
 }
 
-function DataGrid(outline, gridId, dblClickCallback) {
+function DataGrid(outline, gridId, dblClickCallback, isEmbedded) {
     if(this == global) {return new DataGrid(arguments);}
 
     var _this = this,
@@ -39,15 +42,18 @@ function DataGrid(outline, gridId, dblClickCallback) {
 
     this._dblClickCallback = null;
     this._customActionWithSelectionButton = null;
+    this._dataSrcUrl = null;
+    this._isEmbedded = null;
 
     this._activeRow = null;
     this._filterstr = null;
     this._orderedByHeader = null;
 
-    this._init = function(outline, gridId, dblClickCallback) {
+    this._init = function(outline, gridId, dblClickCallback, isEmbedded) {
         _this._outline = $(outline);
         _this._dblClickCallback = dblClickCallback;
         _this._gridId = gridId;
+        _this._isEmbedded = isEmbedded;
         _this._initHeaders();
         _this._initDataSrcUrl();
         _this._initControls();
@@ -158,6 +164,7 @@ function DataGrid(outline, gridId, dblClickCallback) {
     this._constructDataParams = function() {
         var _jsonToReturn = {};
         _jsonToReturn['partial'] = true;
+        _jsonToReturn['embedded'] = _this._isEmbedded;
         if(_this._orderedByHeader && _this._orderedByHeader.isOrdered()) {
             _jsonToReturn['orderbyfield'] = _this._orderedByHeader._getFieldId();
             _jsonToReturn['orderbydirection'] = _this._orderedByHeader.getOrderingState();
@@ -228,7 +235,7 @@ function DataGrid(outline, gridId, dblClickCallback) {
         return prefixedId.substr(_prefixLength, prefixedId.length);
     }
 
-    _this._init(outline, gridId, dblClickCallback);
+    _this._init(outline, gridId, dblClickCallback, isEmbedded);
 }
 
 function DataGridHeader(uiElement, fieldId, callback) {

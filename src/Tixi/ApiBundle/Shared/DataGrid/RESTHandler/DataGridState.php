@@ -21,7 +21,7 @@ class DataGridState {
     protected $filterStr = null;
     protected $sourceDTO = null;
 
-    protected function __construct($sourceDTO, $orderByField=null, $orderByDirection, $page=null, $limit=null, $filterStr=null) {
+    protected function __construct($sourceDTO, $orderByField=null, $orderByDirection=null, $page=null, $limit=null, $filterStr=null) {
         $this->sourceDTO = $sourceDTO;
         $this->orderByField = $orderByField;
         $this->orderByDirection = $orderByDirection;

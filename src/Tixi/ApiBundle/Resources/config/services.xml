@@ -8,6 +8,7 @@
     <parameters>
         <parameter key="tixi_api.datetimeservice.class">Tixi\ApiBundle\Helper\DateTimeService</parameter>
         <parameter key="tixi_api.vehicleassembler.class">Tixi\ApiBundle\Interfaces\VehicleAssembler</parameter>
+        <parameter key="tixi_api.serviceplanassembler.class">Tixi\ApiBundle\Interfaces\ServicePlanAssembler</parameter>
         <parameter key="tixi_api.datagrid.class">Tixi\ApiBundle\Shared\DataGrid\DataGrid</parameter>
     </parameters>
 
@@ -18,6 +19,11 @@
             </call>
         </service>
         <service id="tixi_api.assemblerVehicle" class="%tixi_api.vehicleassembler.class%">
+            <call method="setDateTimeService">
+                <argument type="service" id="tixi_api.datetimeservice" />
+            </call>
+        </service>
+        <service id="tixi_api.assemblerServicePlan" class="%tixi_api.serviceplanassembler.class%">
             <call method="setDateTimeService">
                 <argument type="service" id="tixi_api.datetimeservice" />
             </call>

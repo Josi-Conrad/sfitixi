@@ -150,7 +150,7 @@ class ServicePlan implements Entity{
     }
 
     /**
-     * @return mixed
+     * @return Vehicle
      */
     public function getVehicle() {
         return $this->vehicle;

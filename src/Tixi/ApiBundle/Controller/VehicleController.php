@@ -42,6 +42,7 @@ class VehicleController extends Controller{
      * @QueryParam(name="orderbydirection")
      * @QueryParam(name="filterstr")
      * @QueryParam(name="partial")
+     * @QueryParam(name="embedded")
      */
     public function getVehiclesAction(Request $request, ParamFetcherInterface $paramFetcher) {
         $viewHandler = $this->get('fos_rest.view_handler');
@@ -56,11 +57,12 @@ class VehicleController extends Controller{
             $partial = $paramFetcher->get('partial');
             if(empty($partial) && !$partial) {
                 $view->setTemplate('TixiApiBundle:Vehicle:list.html.twig');
+                $view->setData(array('datagrids'=>array(array('rowIdPrefix'=>'vehicles', 'tableHeaders'=>$headers,'tableRows'=>$rows, 'totalAmountOfRows'=>$totalAmount))));
             }else {
                 $view->setTemplate('TixiApiBundle:Shared:datagrid.tablebody.html.twig');
+                $view->setData(array('rowIdPrefix'=>'vehicles', 'tableHeaders'=>$headers,'tableRows'=>$rows, 'totalAmountOfRows'=>$totalAmount));
             }
-        $view->setData(array('datagrids'=>array(array('rowIdPrefix'=>'vehicles', 'tableHeaders'=>$headers,'tableRows'=>$rows, 'totalAmountOfRows'=>$totalAmount))));
-//            $view->setData(array('rowIdPrefix'=>'vehicles', 'tableHeaders'=>$headers,'tableRows'=>$rows, 'totalAmountOfRows'=>$totalAmount));
+
         }else {
 
         }
@@ -77,12 +79,15 @@ class VehicleController extends Controller{
         $vehicle = $this->get('vehicle_repository')->find($vehicleId);
         $vehicleDTO = $this->get('tixi_api.assemblervehicle')->toVehicleRegisterDTO($vehicle);
         $data = array('vehicle' => $vehicleDTO);
-
+        $this->getRequest()->request->set('embedded', true);
+        $servicePlansEmbeddedView = $this->forward('TixiApiBundle:ServicePlan:getServiceplans',array('vehicleId'=>$vehicleId,'request'=>$request));
+        $this->getRequest()->request->set('embedded', false);
         $viewHandler = $this->get('fos_rest.view_handler');
-        $view = View::create($data);
-
+        $view = View::create();
+        $view->setData(array('vehicle'=>$vehicleDTO, 'serviceplansembedded'=>$servicePlansEmbeddedView));
         if($viewHandler->isFormatTemplating($request->get('_format'))) {
             $view->setTemplate('TixiApiBundle:Vehicle:detail.html.twig');
+
         }
         return $viewHandler->handle($view);
     }
