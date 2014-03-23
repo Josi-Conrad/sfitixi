@@ -1,20 +1,22 @@
-INSERT INTO `city` (`id`,`name`) VALUES (4,'Baar');
-INSERT INTO `city` (`id`,`name`) VALUES (3,'Cham');
-INSERT INTO `city` (`id`,`name`) VALUES (2,'Hühneberg');
-INSERT INTO `city` (`id`,`name`) VALUES (1,'Zug');
+/*
+-- Query: SELECT * FROM tixi.address
+LIMIT 0, 1000
 
-INSERT INTO `country` (`id`,`name`) VALUES (2,'Deutschland');
-INSERT INTO `country` (`id`,`name`) VALUES (4,'Frankreich');
-INSERT INTO `country` (`id`,`name`) VALUES (3,'Italien');
-INSERT INTO `country` (`id`,`name`) VALUES (6,'Lichtenstein');
-INSERT INTO `country` (`id`,`name`) VALUES (5,'Österreich');
-INSERT INTO `country` (`id`,`name`) VALUES (1,'Schweiz');
-
-INSERT INTO `postal_code` (`id`,`code`) VALUES (2,'6310');
-INSERT INTO `postal_code` (`id`,`code`) VALUES (1,'6330');
-INSERT INTO `postal_code` (`id`,`code`) VALUES (4,'6331');
-INSERT INTO `postal_code` (`id`,`code`) VALUES (3,'6430');
-
-INSERT INTO `address` (`id`,`postal_code_id`,`city_id`,`country_id`,`name`,`street`,`lat`,`lng`,`type`) VALUES (1,1,1,1,'','Zugerstrasse 23',48.867456,8.456340,'Haus');
-INSERT INTO `address` (`id`,`postal_code_id`,`city_id`,`country_id`,`name`,`street`,`lat`,`lng`,`type`) VALUES (2,2,2,2,'Zuger Kantonsspital','Landhausstrasse 11',48.867456,8.456340,'Spital');
-INSERT INTO `address` (`id`,`postal_code_id`,`city_id`,`country_id`,`name`,`street`,`lat`,`lng`,`type`) VALUES (3,3,3,3,'Brauerei Baar','Baarerstrasse 5',48.576360,8.512345,'Bar');
+-- Date: 2014-03-23 18:48
+*/
+INSERT INTO `address` (`id`,`name`,`street`,`postalCode`,`city`,`country`,`lat`,`lng`,`type`) VALUES (1,'Wohnadresse','Seeweg 22b','6333','Baar','Schweiz',47.175460,8.517752,'Wohnung');
+INSERT INTO `address` (`id`,`name`,`street`,`postalCode`,`city`,`country`,`lat`,`lng`,`type`) VALUES (2,NULL,'Burstrasse 22c','6333','Baar','Schweiz',NULL,NULL,NULL);
+INSERT INTO `address` (`id`,`name`,`street`,`postalCode`,`city`,`country`,`lat`,`lng`,`type`) VALUES (3,'Wohnadresse','Seeweg 22b','6310','Zug','Schweiz',47.175460,8.517752,'Wohnung');
+INSERT INTO `address` (`id`,`name`,`street`,`postalCode`,`city`,`country`,`lat`,`lng`,`type`) VALUES (4,NULL,'Burstrasse 22c','6310','Zug','Schweiz',NULL,NULL,NULL);
+INSERT INTO `address` (`id`,`name`,`street`,`postalCode`,`city`,`country`,`lat`,`lng`,`type`) VALUES (5,'Wohnadresse','Seeweg 22b','6333','Baar','Schweiz',47.175460,8.517752,'Wohnung');
+INSERT INTO `address` (`id`,`name`,`street`,`postalCode`,`city`,`country`,`lat`,`lng`,`type`) VALUES (6,NULL,'Burstrasse 22c','6333','Baar','Schweiz',NULL,NULL,NULL);
+INSERT INTO `address` (`id`,`name`,`street`,`postalCode`,`city`,`country`,`lat`,`lng`,`type`) VALUES (7,'Wohnadresse','Seeweg 22b','6333','Baar','Schweiz',47.175460,8.517752,'Wohnung');
+INSERT INTO `address` (`id`,`name`,`street`,`postalCode`,`city`,`country`,`lat`,`lng`,`type`) VALUES (8,NULL,'Burstrasse 22c','6333','Baar','Schweiz',NULL,NULL,NULL);
+INSERT INTO `address` (`id`,`name`,`street`,`postalCode`,`city`,`country`,`lat`,`lng`,`type`) VALUES (9,'Wohnadresse','Seeweg 22b','6333','Baar','Schweiz',47.175460,8.517752,'Wohnung');
+INSERT INTO `address` (`id`,`name`,`street`,`postalCode`,`city`,`country`,`lat`,`lng`,`type`) VALUES (10,NULL,'Burstrasse 22c','6333','Baar','Schweiz',NULL,NULL,NULL);
+INSERT INTO `address` (`id`,`name`,`street`,`postalCode`,`city`,`country`,`lat`,`lng`,`type`) VALUES (11,'Wohnadresse','Seeweg 22b','6333','Baar','Schweiz',47.175460,8.517752,'Wohnung');
+INSERT INTO `address` (`id`,`name`,`street`,`postalCode`,`city`,`country`,`lat`,`lng`,`type`) VALUES (12,NULL,'Burstrasse 22c','6310','Zug','Schweiz',NULL,NULL,NULL);
+INSERT INTO `address` (`id`,`name`,`street`,`postalCode`,`city`,`country`,`lat`,`lng`,`type`) VALUES (13,'Wohnadresse','Seeweg 22b','6310','Zug','Schweiz',47.175460,8.517752,'Wohnung');
+INSERT INTO `address` (`id`,`name`,`street`,`postalCode`,`city`,`country`,`lat`,`lng`,`type`) VALUES (14,NULL,'Burstrasse 22c','6330','Cham','Schweiz',NULL,NULL,NULL);
+INSERT INTO `address` (`id`,`name`,`street`,`postalCode`,`city`,`country`,`lat`,`lng`,`type`) VALUES (15,'Wohnadresse','Seeweg 22b','6330','Cham','Schweiz',47.175460,8.517752,'Wohnung');
+INSERT INTO `address` (`id`,`name`,`street`,`postalCode`,`city`,`country`,`lat`,`lng`,`type`) VALUES (16,NULL,'Burstrasse 22c','6330','Cham','Schweiz',NULL,NULL,NULL);
