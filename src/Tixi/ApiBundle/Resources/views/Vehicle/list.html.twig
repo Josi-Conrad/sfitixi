@@ -1,21 +1,29 @@
 {% extends '::base.html.twig' %}
 {% set topNavigationActivePage = 'get_vehicles' %}
 {% block body %}
-    <div class="dataGrid" data-gridid="{{ rowIdPrefix }}">
-        {% embed 'TixiApiBundle:Shared:datagrid.table.html.twig'%}
-            {% block customListActionControl %}
-                {% embed 'TixiApiBundle:Shared:datagrid.list.selectedAction.html.twig' %}
-                    {% block selectedactions %}
-                        <li><a data-targetSrc="{{ path('edit_vehicle',{'vehicleId':'--selectionid--'}) }}" class="customActionWithSelection" href="#">Editieren</a></li>
-                        <li><a data-targetSrc="{{ path('new_vehicle_serviceplan',{'vehicleId':'--selectionid--'}) }}" class="customActionWithSelection" href="#">Neuer Serviceplan</a></li>
-                        <li class="divider"></li>
-                        <li><a data-targetSrc="{{ path('edit_vehicle',{'vehicleId':'--selectionid--'}) }}" class="customActionWithSelection" href="#">Löschen</a></li>
+    {%  for datagrid in data %}
+        {% set rowIdPrefix = datagrid.rowIdPrefix %}
+        {% if rowIdPrefix == "vehicles" %}
+            {% set tableHeaders = datagrid.tableHeaders %}
+            {% set tableRows = datagrid.tableRows %}
+            {% set totalAmountOfRows = datagrid.totalAmountOfRows %}
+            <div class="dataGrid" data-gridid="{{ datagrid.rowIdPrefix }}">
+                {% embed 'TixiApiBundle:Shared:datagrid.table.html.twig'%}
+                    {% block customListActionControl %}
+                        {% embed 'TixiApiBundle:Shared:datagrid.list.selectedAction.html.twig' %}
+                            {% block selectedactions %}
+                                <li><a data-targetSrc="{{ path('edit_vehicle',{'vehicleId':'--selectionid--'}) }}" class="customActionWithSelection" href="#">Editieren</a></li>
+                                <li><a data-targetSrc="{{ path('new_vehicle_serviceplan',{'vehicleId':'--selectionid--'}) }}" class="customActionWithSelection" href="#">Neuer Serviceplan</a></li>
+                                <li class="divider"></li>
+                                <li><a data-targetSrc="{{ path('edit_vehicle',{'vehicleId':'--selectionid--'}) }}" class="customActionWithSelection" href="#">Löschen</a></li>
+                            {% endblock %}
+                        {% endembed %}
+                        <button type="button" class="btn btn-primary customAction" data-targetSrc="{{ path('new_vehicle') }}">Neues Fahrzeug</button>
                     {% endblock %}
-                {% endembed %}
-                <button type="button" class="btn btn-primary customAction" data-targetSrc="{{ path('new_vehicle') }}">Neues Fahrzeug</button>
-            {% endblock %}
-        {%  endembed %}
-    </div>
+                {%  endembed %}
+            </div>
+        {%  endif %}
+    {% endfor %}
 {% endblock %}
 {% block javascriptscustom %}
     <script type="text/javascript">
