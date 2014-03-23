@@ -1,7 +1,7 @@
 {% extends '::base.html.twig' %}
 {% set topNavigationActivePage = 'get_vehicles' %}
 {% block body %}
-    {%  for datagrid in data %}
+    {%  for datagrid in datagrids %}
         {% set rowIdPrefix = datagrid.rowIdPrefix %}
         {% if rowIdPrefix == "vehicles" %}
             {% set tableHeaders = datagrid.tableHeaders %}

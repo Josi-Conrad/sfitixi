@@ -59,7 +59,7 @@ class VehicleController extends Controller{
             }else {
                 $view->setTemplate('TixiApiBundle:Shared:datagrid.tablebody.html.twig');
             }
-        $view->setData(array(array('rowIdPrefix'=>'vehicles', 'tableHeaders'=>$headers,'tableRows'=>$rows, 'totalAmountOfRows'=>$totalAmount)));
+        $view->setData(array('datagrids'=>array(array('rowIdPrefix'=>'vehicles', 'tableHeaders'=>$headers,'tableRows'=>$rows, 'totalAmountOfRows'=>$totalAmount))));
 //            $view->setData(array('rowIdPrefix'=>'vehicles', 'tableHeaders'=>$headers,'tableRows'=>$rows, 'totalAmountOfRows'=>$totalAmount));
         }else {
 
