@@ -19,38 +19,70 @@ class DriverType extends AbstractType {
         $builder->add('id', 'hidden');
         $builder->add('isActive', 'checkbox', array(
             'required'  => false,
+            'label' => 'Ist aktiv'
         ));
 
-        $builder->add('title', 'text');
-        $builder->add('firstname', 'text');
-        $builder->add('lastname', 'text');
-        $builder->add('telephone', 'text');
-        $builder->add('email', 'text');
-        $builder->add('entryDate', 'date');
-        $builder->add('birthday', 'date');
+        $builder->add('title', 'text', array(
+            'label' => 'Anrede'
+        ));
+        $builder->add('firstname', 'text', array(
+            'label' => 'Vorname'
+        ));
+        $builder->add('lastname', 'text', array(
+            'label' => 'Nachname'
+        ));
+        $builder->add('telephone', 'text', array(
+            'label' => 'Telefon-Nr'
+        ));
+        $builder->add('email', 'text', array(
+            'required'  => false,
+            'label' => 'E-Mail'
+        ));
+        $builder->add('entryDate', 'date', array(
+            'label' => 'Eintrittsdatum'
+        ));
+        $builder->add('birthday', 'date', array(
+            'label' => 'Geburtsdatum'
+        ));
         $builder->add('extraMinutes', 'integer', array(
             'required'  => false,
+            'label' => 'Extra Minuten'
         ));
         $builder->add('details', 'textarea', array(
             'required'  => false,
+            'label' => 'Details'
         ));
 
-        $builder->add('licenseNumber', 'text');
+        $builder->add('licenseNumber', 'text', array(
+            'label' => 'Fahrausweis-Nummer'
+        ));
         $builder->add('wheelChairAttendance', 'checkbox', array(
             'required'  => false,
+            'label' => 'Möchte für Rollstuhlfahrten tätigen'
         ));
 
         $builder->add('driverCategory', 'entity', array(
             'class' => 'Tixi\CoreDomain\DriverCategory',
-            'property' => 'name'
+            'property' => 'name',
+            'label' => 'Fahrer-Kategorie'
         ));
 
-        $builder->add('street', 'text');
-        $builder->add('postalCode', 'text');
-        $builder->add('city', 'text');
-        $builder->add('country', 'text');
+        $builder->add('street', 'text', array(
+            'label' => 'Strasse / Nummer'
+        ));
+        $builder->add('postalCode', 'text', array(
+            'label' => 'PLZ'
+        ));
+        $builder->add('city', 'text', array(
+            'label' => 'Ort'
+        ));
+        $builder->add('country', 'text', array(
+            'label' => 'Land'
+        ));
 
-        $builder->add('save', 'submit');
+        $builder->add('save', 'submit', array(
+            'label' => 'Speichern'
+        ));
     }
 
     /**
