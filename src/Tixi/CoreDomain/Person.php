@@ -212,7 +212,7 @@ class Person {
     }
 
     /**
-     * @return mixed
+     * @return Address
      */
     public function getAddress() {
         return $this->address;
@@ -310,7 +310,7 @@ class Person {
     }
 
     /**
-     * @return mixed
+     * @return \Date
      */
     public function getEntryDate() {
         return $this->entryDate;
@@ -366,7 +366,7 @@ class Person {
     }
 
     /**
-     * @return mixed
+     * @return Boolean
      */
     public function getIsActive() {
         return $this->isActive;

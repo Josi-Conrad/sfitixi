@@ -6,3 +6,7 @@ serviceplan:
   resource: Tixi\ApiBundle\Controller\ServicePlanController
   type:     rest
   parent:   vehicle
+
+driver:
+  resource: Tixi\ApiBundle\Controller\DriverController
+  type:     rest

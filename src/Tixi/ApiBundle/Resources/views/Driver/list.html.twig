@@ -1,0 +1,35 @@
+{% extends '::base.html.twig' %}
+{% set topNavigationActivePage = 'get_drivers' %}
+{% block body %}
+    <div class="dataGrid" data-gridid="{{ rowIdPrefix }}">
+        {% embed 'TixiApiBundle:Shared:datagrid.table.html.twig'%}
+            {% block customListActionControl %}
+                {% embed 'TixiApiBundle:Shared:datagrid.list.selectedAction.html.twig' %}
+                    {% block selectedactions %}
+                        <li><a data-targetSrc="{{ path('edit_driver',{'driverId':'--selectionid--'}) }}" class="customActionWithSelection" href="#">Editieren</a></li>
+                        <li class="divider"></li>
+                        <li><a data-targetSrc="{{ path('edit_driver',{'driverId':'--selectionid--'}) }}" class="customActionWithSelection" href="#">Löschen</a></li>
+                    {% endblock %}
+                {% endembed %}
+                <button type="button" class="btn btn-primary customAction" data-targetSrc="{{ path('new_driver') }}">Neuer Fahrer</button>
+            {% endblock %}
+        {%  endembed %}
+    </div>
+{% endblock %}
+{% block javascriptscustom %}
+    <script type="text/javascript">
+        jQuery(function($) {
+            var dataGridManager = new DataGridManager(),
+                    conf = {
+                        'drivers' : {
+                            'dblClickCallback' : function(rowId) {
+                                var _url = '{{ path('get_driver',{'driverId':'--driverId--'}) }}';
+                                _url = _url.replace('--driverId--',rowId);
+                                window.location = _url;
+                            }
+                        }
+                    };
+            dataGridManager.initDataGrids(conf);
+        });
+    </script>
+{% endblock %}

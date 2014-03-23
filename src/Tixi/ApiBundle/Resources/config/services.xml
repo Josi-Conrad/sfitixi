@@ -9,6 +9,7 @@
         <parameter key="tixi_api.datetimeservice.class">Tixi\ApiBundle\Helper\DateTimeService</parameter>
         <parameter key="tixi_api.vehicleassembler.class">Tixi\ApiBundle\Interfaces\VehicleAssembler</parameter>
         <parameter key="tixi_api.datagrid.class">Tixi\ApiBundle\Shared\DataGrid\DataGrid</parameter>
+        <parameter key="tixi_api.driverassembler.class">Tixi\ApiBundle\Interfaces\DriverAssembler</parameter>
     </parameters>
 
     <services>
@@ -25,6 +26,11 @@
         <service id="tixi_api.datagrid" class="%tixi_api.datagrid.class%">
             <call method="setReader">
                 <argument type="service" id="annotation_reader" />
+            </call>
+        </service>
+        <service id="tixi_api.assemblerDriver" class="%tixi_api.driverassembler.class%">
+            <call method="setDateTimeService">
+                <argument type="service" id="tixi_api.datetimeservice" />
             </call>
         </service>
     </services>
