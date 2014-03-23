@@ -44,7 +44,7 @@ class DriverListDTO implements DataGridSourceClass {
      */
     public $street;
     /**
-     * @GridField(propertyId="City.name", headerName="Ort", order=8)
+     * @GridField(propertyId="Address.city", headerName="Ort", order=8)
      */
     public $city;
     /**
@@ -54,6 +54,6 @@ class DriverListDTO implements DataGridSourceClass {
 
     public function getAccessQuery() {
         return new GenericAccessQuery('Driver', 'Tixi\CoreDomain\Driver Driver JOIN Driver.driverCategory DrCat
-        JOIN Driver.address Address JOIN Address.city City', 'Driver.id');
+        JOIN Driver.address Address', 'Driver.id');
     }
 }

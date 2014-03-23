@@ -27,16 +27,21 @@ class DriverAssembler {
      */
     private $dateTimeService;
 
+
     /**
      * @param DriverRegisterDTO $driverDTO
      * @return Driver
      */
     public function registerDTOtoNewDriver(DriverRegisterDTO $driverDTO) {
-        return Driver::registerDriver(
-            $driverDTO->title, $driverDTO->firstname, $driverDTO->lastname, null
+        return Driver::registerDriver($driverDTO->title, $driverDTO->firstname,
+            $driverDTO->lastname, $driverDTO->telephone, $driverDTO->licenseNumber,
+            Address::registerAddress(
+                $driverDTO->street, $driverDTO->postalCode,
+                $driverDTO->city, $driverDTO->country),
+            $driverDTO->driverCategory, $driverDTO->wheelChairAttendance,
+            $driverDTO->email, $driverDTO->entryDate, $driverDTO->birthday,
+            $driverDTO->extraMinutes, $driverDTO->details
         );
-
-        //TODO: How to test for duplicate entries?
     }
 
     /**
@@ -45,15 +50,12 @@ class DriverAssembler {
      * @return Driver
      */
     public function registerDTOToDriver(Driver $driver, DriverRegisterDTO $driverDTO) {
-
         $driver->updateDriverBasicData($driverDTO->title, $driverDTO->firstname,
-            $driverDTO->lastname, $driverDTO->telephone,
+            $driverDTO->lastname, $driverDTO->telephone, $driverDTO->licenseNumber,
             $driver->getAddress()->updateAddressBasicData(
-                $driverDTO->street,
-                $driver->getAddress()->getPostalCode()->setCode($driverDTO->postalCode),
-                $driver->getAddress()->getCity()->setName($driverDTO->city),
-                $driver->getAddress()->getCountry()->setName($driverDTO->country)),
-            $driverDTO->licenseNumber, $driverDTO->driverCategory,
+                $driverDTO->street, $driverDTO->postalCode,
+                $driverDTO->city, $driverDTO->country),
+            $driverDTO->driverCategory,
             $driverDTO->wheelChairAttendance, $driverDTO->email,
             $driverDTO->entryDate, $driverDTO->birthday,
             $driverDTO->extraMinutes, $driverDTO->details);
@@ -86,9 +88,9 @@ class DriverAssembler {
 
         $driverDTO->addressName = $driver->getAddress()->getName();
         $driverDTO->street = $driver->getAddress()->getStreet();
-        $driverDTO->postalCode = $driver->getAddress()->getPostalCode()->getCode();
-        $driverDTO->city = $driver->getAddress()->getCity()->getName();
-        $driverDTO->country = $driver->getAddress()->getCountry()->getName();
+        $driverDTO->postalCode = $driver->getAddress()->getPostalCode();
+        $driverDTO->city = $driver->getAddress()->getCity();
+        $driverDTO->country = $driver->getAddress()->getCountry();
 
         return $driverDTO;
     }
@@ -119,7 +121,7 @@ class DriverAssembler {
         $driverListDTO->telephone = $driver->getTelephone();
         $driverListDTO->lastname = $driver->getLastname();
         $driverListDTO->street = $driver->getAddress()->getStreet();
-        $driverListDTO->city = $driver->getAddress()->getCity()->getName();
+        $driverListDTO->city = $driver->getAddress()->getCity();
         $driverListDTO->driverCategory = $driver->getDriverCategory()->getName();
         return $driverListDTO;
     }

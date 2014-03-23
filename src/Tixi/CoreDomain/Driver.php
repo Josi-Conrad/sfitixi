@@ -69,24 +69,34 @@ class Driver extends Person {
      * @return Driver
      */
     public static function registerDriver($title, $firstname, $lastname, $telephone, $licenceNumber, Address $address,
-                                   DriverCategory $driverCategory, $wheelChairAttendance = true, $email = null,
-                                   $entryDate = null, $birthday = null, $extraMinutes = null, $details = null) {
+                                          DriverCategory $driverCategory, $wheelChairAttendance = true, $email = null,
+                                          $entryDate = null, $birthday = null, $extraMinutes = null, $details = null) {
         $driver = new Driver();
 
         $driver->setTitle($title);
         $driver->setFirstname($firstname);
         $driver->setLastname($lastname);
         $driver->setTelephone($telephone);
-        $driver->setAddress($address);
         $driver->setLicenceNumber($licenceNumber);
+        $driver->setAddress($address);
         $driver->setDriverCategory($driverCategory);
         $driver->setWheelChairAttendance($wheelChairAttendance);
 
-        if(!empty($email)) {$driver->setEmail($email);}
-        if(!empty($entryDate)) {$driver->setEntryDate($entryDate);}
-        if(!empty($birthday)) {$driver->setBirthday($birthday);}
-        if(!empty($extraMinutes)) {$driver->setExtraMinutes($extraMinutes);}
-        if(!empty($details)) {$driver->setDetails($details);}
+        if (!empty($email)) {
+            $driver->setEmail($email);
+        }
+        if (!empty($entryDate)) {
+            $driver->setEntryDate($entryDate);
+        }
+        if (!empty($birthday)) {
+            $driver->setBirthday($birthday);
+        }
+        if (!empty($extraMinutes)) {
+            $driver->setExtraMinutes($extraMinutes);
+        }
+        if (!empty($details)) {
+            $driver->setDetails($details);
+        }
 
         $driver->activate();
 
@@ -109,22 +119,48 @@ class Driver extends Person {
      * @param null $details
      */
     public function updateDriverBasicData($title = null, $firstname = null, $lastname = null, $telephone = null,
-                                    Address $address = null, $licenceNumber = null, DriverCategory $driverCategory = null,
-                                    $wheelChairAttendance = null, $email = null, $entryDate = null, $birthday = null,
-                                    $extraMinutes = null, $details = null) {
-        if(!empty($title)) {$this->setTitle($title);}
-        if(!empty($firstname)) {$this->setFirstname($firstname);}
-        if(!empty($lastname)) {$this->setLastname($lastname);}
-        if(!empty($telephone)) {$this->setTelephone($telephone);}
-        if(!empty($address)) {$this->setAddress($address);}
-        if(!empty($licenceNumber)) {$this->setLicenceNumber($licenceNumber);}
-        if(!empty($driverCategory)) {$this->setDriverCategory($driverCategory);}
-        if(!empty($wheelChairAttendance)) {$this->setWheelChairAttendance($wheelChairAttendance);}
-        if(!empty($email)) {$this->setEmail($email);}
-        if(!empty($entryDate)) {$this->setEntryDate($entryDate);}
-        if(!empty($birthday)) {$this->setBirthday($birthday);}
-        if(!empty($extraMinutes)) {$this->setExtraMinutes($extraMinutes);}
-        if(!empty($details)) {$this->setDetails($details);}
+                                          $licenceNumber = null, Address $address = null, DriverCategory $driverCategory = null,
+                                          $wheelChairAttendance = null, $email = null, $entryDate = null, $birthday = null,
+                                          $extraMinutes = null, $details = null) {
+        if (!empty($title)) {
+            $this->setTitle($title);
+        }
+        if (!empty($firstname)) {
+            $this->setFirstname($firstname);
+        }
+        if (!empty($lastname)) {
+            $this->setLastname($lastname);
+        }
+        if (!empty($telephone)) {
+            $this->setTelephone($telephone);
+        }
+        if (!empty($licenceNumber)) {
+            $this->setLicenceNumber($licenceNumber);
+        }
+        if (!empty($address)) {
+            $this->setAddress($address);
+        }
+        if (!empty($driverCategory)) {
+            $this->setDriverCategory($driverCategory);
+        }
+        if (!empty($wheelChairAttendance)) {
+            $this->setWheelChairAttendance($wheelChairAttendance);
+        }
+        if (!empty($email)) {
+            $this->setEmail($email);
+        }
+        if (!empty($entryDate)) {
+            $this->setEntryDate($entryDate);
+        }
+        if (!empty($birthday)) {
+            $this->setBirthday($birthday);
+        }
+        if (!empty($extraMinutes)) {
+            $this->setExtraMinutes($extraMinutes);
+        }
+        if (!empty($details)) {
+            $this->setDetails($details);
+        }
     }
 
     public function activate() {
@@ -182,10 +218,11 @@ class Driver extends Person {
     /**
      * @param Vehicle $vehicle
      */
-    public function removeSupervisedVehicle(Vehicle $vehicle){
+    public function removeSupervisedVehicle(Vehicle $vehicle) {
         $this->supervisedVehicles->removeElement($vehicle);
         $vehicle->assignSupervisor(null);
     }
+
     /**
      * @param mixed $advisedVehicles
      */

@@ -8,6 +8,9 @@
                     {% block selectedactions %}
                         <li><a data-targetSrc="{{ path('edit_driver',{'driverId':'--selectionid--'}) }}" class="customActionWithSelection" href="#">Editieren</a></li>
                         <li class="divider"></li>
+                        <li><a data-targetSrc="{{ path('edit_driver',{'driverId':'--selectionid--'}) }}" class="customActionWithSelection" href="#">Ferienplan</a></li>
+                        <li><a data-targetSrc="{{ path('edit_driver',{'driverId':'--selectionid--'}) }}" class="customActionWithSelection" href="#">Einsatzplan</a></li>
+                        <li class="divider"></li>
                         <li><a data-targetSrc="{{ path('edit_driver',{'driverId':'--selectionid--'}) }}" class="customActionWithSelection" href="#">Löschen</a></li>
                     {% endblock %}
                 {% endembed %}
