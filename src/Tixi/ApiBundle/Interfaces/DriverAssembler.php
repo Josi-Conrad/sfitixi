@@ -1,24 +1,18 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: faustos
- * Date: 02.03.14
- * Time: 16:53
+ * User: hert
+ * Date: 23.03.14
+ * Time: 20:31
  */
-
 namespace Tixi\ApiBundle\Interfaces;
 
 
-use Proxies\__CG__\Tixi\CoreDomain\Address;
-use Proxies\__CG__\Tixi\CoreDomain\DriverCategory;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Tixi\ApiBundle\Helper\DateTimeService;
-use Tixi\CoreDomain\City;
-use Tixi\CoreDomain\Country;
 use Tixi\CoreDomain\Driver;
-use Tixi\CoreDomain\PostalCode;
-use Tixi\CoreDomain\Vehicle;
+use Tixi\CoreDomain\Address;
 
 class DriverAssembler {
     /**
@@ -86,7 +80,6 @@ class DriverAssembler {
 
         $driverDTO->driverCategory = $driver->getDriverCategory()->getName();
 
-        $driverDTO->addressName = $driver->getAddress()->getName();
         $driverDTO->street = $driver->getAddress()->getStreet();
         $driverDTO->postalCode = $driver->getAddress()->getPostalCode();
         $driverDTO->city = $driver->getAddress()->getCity();

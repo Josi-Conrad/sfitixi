@@ -159,9 +159,9 @@ class Address {
     public function toString() {
         return ($this->getName() + ' ' +
             $this->getStreet() + ' ' +
-            $this->getPostalCode()->getCode() + ' ' +
-            $this->getCity()->getName() + ' ' +
-            $this->getCountry()->getName());
+            $this->getPostalCode() + ' ' +
+            $this->getCity() + ' ' +
+            $this->getCountry());
     }
 
     /**

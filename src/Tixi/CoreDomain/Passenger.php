@@ -26,7 +26,7 @@ class Passenger extends Person {
 
     /**
      * @ORM\ManyToOne(targetEntity="Handicap")
-     * @ORM\JoinColumn(name="handicap", referencedColumnName="name")
+     * @ORM\JoinColumn(name="handicap", referencedColumnName="id")
      */
     protected $handicap;
 
@@ -34,7 +34,6 @@ class Passenger extends Person {
      * @ORM\Column(type="boolean")
      */
     protected $isInWheelChair;
-
 
     /**
      * @ORM\Column(type="boolean")
@@ -45,6 +44,11 @@ class Passenger extends Person {
      * @ORM\Column(type="boolean")
      */
     protected $gotMonthlyBilling;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $notice;
 
     protected function __construct() {
         parent::__construct();

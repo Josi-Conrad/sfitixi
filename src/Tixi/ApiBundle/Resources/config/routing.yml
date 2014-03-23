@@ -10,3 +10,7 @@ serviceplan:
 driver:
   resource: Tixi\ApiBundle\Controller\DriverController
   type:     rest
+
+passenger:
+  resource: Tixi\ApiBundle\Controller\PassengerController
+  type:     rest

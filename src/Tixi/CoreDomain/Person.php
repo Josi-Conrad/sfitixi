@@ -104,7 +104,6 @@ class Person {
 
     protected function __construct() {
         $this->absents = new ArrayCollection();
-        $this->vehicleTypes = new ArrayCollection();
     }
 
     /**

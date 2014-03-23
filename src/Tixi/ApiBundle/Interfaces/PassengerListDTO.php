@@ -14,29 +14,29 @@ use Tixi\ApiBundle\Shared\DataGrid\DataGridSourceClass;
 use Tixi\CoreDomain\Shared\GenericEntityFilter\GenericAccessQuery;
 
 
-class DriverListDTO implements DataGridSourceClass {
+class PassengerListDTO implements DataGridSourceClass {
     /**
-     * @GridField(rowIdentifier=true, propertyId="Driver.id")
+     * @GridField(rowIdentifier=true, propertyId="Passenger.id")
      */
     public $id;
     /**
-     * @GridField(propertyId="Driver.isActive")
+     * @GridField(propertyId="Passenger.isActive")
      */
     public $isActive;
     /**
-     * @GridField(propertyId="Driver.title", headerName="Anrede", order=1)
+     * @GridField(propertyId="Passenger.title", headerName="Anrede", order=1)
      */
     public $title;
     /**
-     * @GridField(propertyId="Driver.firstname", headerName="Vorname", order=3)
+     * @GridField(propertyId="Passenger.firstname", headerName="Vorname", order=3)
      */
     public $firstname;
     /**
-     * @GridField(propertyId="Driver.lastname", headerName="Nachname", order=4)
+     * @GridField(propertyId="Passenger.lastname", headerName="Nachname", order=4)
      */
     public $lastname;
     /**
-     * @GridField(propertyId="Driver.telephone", headerName="Telefon-Nr", order=5)
+     * @GridField(propertyId="Passenger.telephone", headerName="Telefon-Nr", order=5)
      */
     public $telephone;
     /**
@@ -48,12 +48,12 @@ class DriverListDTO implements DataGridSourceClass {
      */
     public $city;
     /**
-     * @GridField(propertyId="DriverCategory.name", headerName="Kategorie", order=9)
+     * @GridField(propertyId="Handicap.name", headerName="Behinderung", order=9)
      */
-    public $driverCategory;
+    public $handicap;
 
     public function getAccessQuery() {
-        return new GenericAccessQuery('Driver', 'Tixi\CoreDomain\Driver Driver JOIN Driver.driverCategory DriverCategory
-        JOIN Driver.address Address', 'Driver.id');
+        return new GenericAccessQuery('Passenger', 'Tixi\CoreDomain\Passenger Passenger JOIN Passenger.handicap Handicap
+        JOIN Passenger.address Address', 'Passenger.id');
     }
 }
