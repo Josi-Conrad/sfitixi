@@ -8,12 +8,12 @@
 
 namespace Tixi\CoreDomainBundle\Tests\Entity;
 
-use Proxies\__CG__\Tixi\CoreDomain\Handicap;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Tixi\CoreDomain\Address;
 use Tixi\CoreDomain\Driver;
 use Tixi\CoreDomain\DriverCategory;
 use Tixi\CoreDomain\Passenger;
+use Tixi\CoreDomain\Handicap;
 
 class AddressTest extends WebTestCase {
     /**
@@ -67,7 +67,7 @@ class AddressTest extends WebTestCase {
         $this->poiRepo = $kernel->getContainer()->get('poi_repository');
         $this->poiKeywordRepo = $kernel->getContainer()->get('poikeyword_repository');
 
-        //$this->em->beginTransaction();
+        $this->em->beginTransaction();
     }
 
     public function testCreateAddress() {
@@ -107,17 +107,17 @@ class AddressTest extends WebTestCase {
     }
 
     public function testCreatePassenger(){
-        $handicap = $this->createHandicap('AHV');
+        $handicap = $this->createHandicap('IV');
         $address = Address::registerAddress(
-            'Hauptstrasse 142',
+            'Teststrasse 142',
             '6360',
-            'Zug',
+            'Cham',
             'Schweiz'
         );
         $this->addressRepo->store($address);
 
         $passenger = Passenger::registerPassenger(
-            'Herr', 'Albert', 'Schweizer', '041 324 11 22',
+            'Frau', 'Toranto', 'Testinger', '041 324 33 22',
             $address, $handicap, true
         );
         $this->passangerRepo->store($passenger);
@@ -153,6 +153,6 @@ class AddressTest extends WebTestCase {
      */
     protected function tearDown() {
         parent::tearDown();
-        //$this->em->rollback();
+        $this->em->rollback();
     }
 }

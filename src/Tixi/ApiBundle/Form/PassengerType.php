@@ -13,7 +13,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class DriverType extends AbstractType {
+class PassengerType extends AbstractType {
 
     public function buildForm(FormBuilderInterface $builder, array $options) {
         $builder->add('id', 'hidden');
@@ -35,14 +35,18 @@ class DriverType extends AbstractType {
             'required'  => false,
         ));
 
-        $builder->add('licenseNumber', 'text');
-        $builder->add('wheelChairAttendance', 'checkbox', array(
+        $builder->add('handicap', 'entity', array(
+            'class' => 'Tixi\CoreDomain\Handicap',
+            'property' => 'name'
+        ));
+        $builder->add('isOverweight', 'checkbox', array(
             'required'  => false,
         ));
-
-        $builder->add('driverCategory', 'entity', array(
-            'class' => 'Tixi\CoreDomain\DriverCategory',
-            'property' => 'name'
+        $builder->add('gotMonthlyBilling', 'checkbox', array(
+            'required'  => false,
+        ));
+        $builder->add('notice', 'textarea', array(
+            'required'  => false,
         ));
 
         $builder->add('street', 'text');
@@ -59,12 +63,12 @@ class DriverType extends AbstractType {
      * @return string The name of this type
      */
     public function getName() {
-        return 'driver';
+        return 'passenger';
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver) {
         $resolver->setDefaults(array(
-            'data_class' => 'Tixi\ApiBundle\Interfaces\DriverRegisterDTO'
+            'data_class' => 'Tixi\ApiBundle\Interfaces\PassengerRegisterDTO'
         ));
     }
 }

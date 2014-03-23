@@ -1,0 +1,36 @@
+{% extends '::base.html.twig' %}
+{% set topNavigationActivePage = 'get_passengers' %}
+{% block body %}
+    <div class="dataGrid" data-gridid="{{ rowIdPrefix }}">
+        {% embed 'TixiApiBundle:Shared:datagrid.table.html.twig'%}
+            {% block customListActionControl %}
+                {% embed 'TixiApiBundle:Shared:datagrid.list.selectedAction.html.twig' %}
+                    {% block selectedactions %}
+                        <li><a data-targetSrc="{{ path('edit_passenger',{'passengerId':'--selectionid--'}) }}" class="customActionWithSelection" href="#">Editieren</a></li>
+                        <li><a data-targetSrc="{{ path('edit_passenger',{'passengerId':'--selectionid--'}) }}" class="customActionWithSelection" href="#">Neuer Fahrauftrag</a></li>
+                        <li class="divider"></li>
+                        <li><a data-targetSrc="{{ path('edit_passenger',{'passengerId':'--selectionid--'}) }}" class="customActionWithSelection" href="#">Löschen</a></li>
+                    {% endblock %}
+                {% endembed %}
+                <button type="button" class="btn btn-primary customAction" data-targetSrc="{{ path('new_passenger') }}">Neuer Fahrgast</button>
+            {% endblock %}
+        {%  endembed %}
+    </div>
+{% endblock %}
+{% block javascriptscustom %}
+    <script type="text/javascript">
+        jQuery(function($) {
+            var dataGridManager = new DataGridManager(),
+                    conf = {
+                        'passengers' : {
+                            'dblClickCallback' : function(rowId) {
+                                var _url = '{{ path('get_passenger',{'passengerId':'--passengerId--'}) }}';
+                                _url = _url.replace('--passengerId--',rowId);
+                                window.location = _url;
+                            }
+                        }
+                    };
+            dataGridManager.initDataGrids(conf);
+        });
+    </script>
+{% endblock %}

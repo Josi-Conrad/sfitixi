@@ -1,21 +1,18 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: faustos
- * Date: 27.02.14
- * Time: 23:04
+ * User: hert
+ * Date: 23.03.14
+ * Time: 20:31
  */
-
 namespace Tixi\ApiBundle\Controller;
 
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Request\ParamFetcherInterface;
-use FOS\RestBundle\View\RouteRedirectView;
 use FOS\RestBundle\View\View;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Tixi\ApiBundle\Form\DriverType;
 use Tixi\ApiBundle\Interfaces\DriverListDTO;
@@ -23,7 +20,6 @@ use Tixi\ApiBundle\Interfaces\DriverRegisterDTO;
 use Tixi\ApiBundle\Shared\DataGrid\DataGrid;
 use Tixi\ApiBundle\Shared\DataGrid\RESTHandler\DataGridHandler;
 use Tixi\ApiBundle\Shared\DataGrid\RESTHandler\DataGridState;
-use Tixi\CoreDomain\Vehicle;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 
 /**
@@ -123,7 +119,7 @@ class DriverController extends Controller {
             $view = View::createRouteRedirect('get_drivers');
         } else { //not valid, show errors
             $view = View::create($form);
-            $view->setTemplate('TixiApiBundle:Vehicle:new.html.twig');
+            $view->setTemplate('TixiApiBundle:Driver:new.html.twig');
         }
         return $this->get('fos_rest.view_handler')->handle($view);
     }
