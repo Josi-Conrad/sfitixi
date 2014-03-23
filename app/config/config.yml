@@ -32,7 +32,7 @@ twig:
     exception_controller: 'FOS\RestBundle\Controller\ExceptionController::showAction'
     form:
         resources:
-            - 'TixiApiBundle:Form:fields.html.twig'
+            - 'TixiApiBundle:Form:fieldsBootstrap.html.twig'
 
 # Assetic Configuration
 assetic:

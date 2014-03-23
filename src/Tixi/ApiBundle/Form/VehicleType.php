@@ -12,21 +12,33 @@ namespace Tixi\ApiBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Tixi\ApiBundle\Form\Shared\DatePickerType;
 
 class VehicleType extends AbstractType{
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('id', 'hidden');
-        $builder->add('name', 'text');
-        $builder->add('licenceNumber', 'text');
-        $builder->add('dateOfFirstRegistration', 'date');
-        $builder->add('parkingLotNumber', 'integer');
+        $builder->add('name', 'text', array(
+            'label' => 'Fahrzeugname'
+        ));
+        $builder->add('licenceNumber', 'text', array(
+            'label' => 'Kennzeichen'
+        ));
+        $builder->add('dateOfFirstRegistration', new DatePickerType(), array(
+            'label' => 'Datum der Inverkehrssetzung'
+        ));
+        $builder->add('parkingLotNumber', 'integer', array(
+            'label' => 'Parkplatzbezeichnung'
+        ));
         $builder->add('vehicleCategory', 'entity', array(
             'class' => 'Tixi\CoreDomain\VehicleCategory',
-            'property' => 'name'
+            'property' => 'name',
+            'label' => 'Fahrzeugkategorie'
         ));
-        $builder->add('save', 'submit');
+        $builder->add('save', 'submit', array(
+            'label' => 'Speichern'
+        ));
     }
 
     /**
