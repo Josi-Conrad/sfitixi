@@ -35,6 +35,8 @@ class DriverAssembler {
         return Driver::registerDriver(
             $driverDTO->title, $driverDTO->firstname, $driverDTO->lastname, null
         );
+
+        //TODO: How to test for duplicate entries?
     }
 
     /**
