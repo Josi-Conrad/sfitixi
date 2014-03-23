@@ -15,7 +15,9 @@ use Doctrine\ORM\Mapping as ORM;
  * Tixi\CoreDomain\Address
  *
  * @ORM\Entity(repositoryClass="Tixi\CoreDomainBundle\Repository\AddressRepositoryDoctrine")
- * @ORM\Table(name="address")
+ * @ORM\Table(name="address", indexes={
+ * @ORM\index(name="search_idx",
+ * columns={"name", "street", "postalCode", "city", "country"})})
  */
 class Address {
     /**
@@ -30,29 +32,22 @@ class Address {
      * @ORM\JoinColumn(name="poi_id", referencedColumnName="id")
      */
     protected $pois;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="PostalCode")
-     * @ORM\JoinColumn(name="postal_code_id", referencedColumnName="id")
-     */
-    protected $postalCode;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="City")
-     * @ORM\JoinColumn(name="city_id", referencedColumnName="id")
-     */
-    protected $city;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Country")
-     * @ORM\JoinColumn(name="country_id", referencedColumnName="id")
-     */
-    protected $country;
-
     /**
      * @ORM\Column(type="string", length=50)
      */
     protected $street;
+    /**
+     * @ORM\Column(type="string", length=5)
+     */
+    protected $postalCode;
+    /**
+     * @ORM\Column(type="string", length=30)
+     */
+    protected $city;
+    /**
+     * @ORM\Column(type="string", length=30)
+     */
+    protected $country;
 
     /**
      * @ORM\Column(type="string", length=50, nullable=true)
@@ -79,17 +74,17 @@ class Address {
     }
 
     /**
-     * @param $name
      * @param $street
-     * @param PostalCode $postalCode
-     * @param City $city
-     * @param Country $country
+     * @param $postalCode
+     * @param $city
+     * @param $country
+     * @param $name
      * @param null $lat
      * @param null $lng
      * @param null $type
      * @return Address
      */
-    public static function registerAddress($street, PostalCode $postalCode, City $city, Country $country,
+    public static function registerAddress($street, $postalCode, $city, $country,
                                            $name = null, $lat = null, $lng = null, $type = null) {
         $address = new Address();
 
@@ -98,39 +93,61 @@ class Address {
         $address->setCity($city);
         $address->setCountry($country);
 
-        if(!empty($name)){$address->setName($name);}
-        if(!empty($lat)){$address->setLat($lat);}
-        if(!empty($lng)){$address->setLng($lng);}
-        if(!empty($type)){$address->setType($type);}
+        if (!empty($name)) {
+            $address->setName($name);
+        }
+        if (!empty($lat)) {
+            $address->setLat($lat);
+        }
+        if (!empty($lng)) {
+            $address->setLng($lng);
+        }
+        if (!empty($type)) {
+            $address->setType($type);
+        }
 
         return $address;
     }
 
     /**
-     * @param null $name
      * @param null $street
-     * @param PostalCode $postalCode
-     * @param City $city
-     * @param Country $country
+     * @param null $postalCode
+     * @param null $city
+     * @param null $country
+     * @param null $name
      * @param null $lat
      * @param null $lng
      * @param null $type
      */
-    public function updateAddressBasicData($street = null, PostalCode $postalCode = null,
-                                           City $city = null, Country $country = null,
+    public function updateAddressBasicData($street = null, $postalCode = null,
+                                           $city = null, $country = null,
                                            $name = null, $lat = null, $lng = null, $type = null) {
 
-
-        if(!empty($street)) {$this->setStreet($street);}
-        if(!empty($postalCode)) {$this->setPostalCode($postalCode);}
-        if(!empty($city)) {$this->setCity($city);}
-        if(!empty($country)) {$this->setCountry($country);}
-        if(!empty($name)) {$this->setName($name);}
-        if(!empty($lat)) {$this->setLat($lat);}
-        if(!empty($lng)) {$this->setLng($lng);}
-        if(!empty($type)) {$this->setType($type);}
+        if (!empty($street)) {
+            $this->setStreet($street);
+        }
+        if (!empty($postalCode)) {
+            $this->setPostalCode($postalCode);
+        }
+        if (!empty($city)) {
+            $this->setCity($city);
+        }
+        if (!empty($country)) {
+            $this->setCountry($country);
+        }
+        if (!empty($name)) {
+            $this->setName($name);
+        }
+        if (!empty($lat)) {
+            $this->setLat($lat);
+        }
+        if (!empty($lng)) {
+            $this->setLng($lng);
+        }
+        if (!empty($type)) {
+            $this->setType($type);
+        }
     }
-
 
     /**
      * @param POI $poi
@@ -140,7 +157,7 @@ class Address {
         $this->pois->add($poi);
     }
 
-    public function toString(){
+    public function toString() {
         return ($this->getName() + ' ' +
             $this->getStreet() + ' ' +
             $this->getPostalCode()->getCode() + ' ' +
@@ -170,7 +187,7 @@ class Address {
     }
 
     /**
-     * @return City
+     * @return mixed
      */
     public function getCity() {
         return $this->city;
@@ -184,7 +201,7 @@ class Address {
     }
 
     /**
-     * @return Country
+     * @return mixed
      */
     public function getCountry() {
         return $this->country;
@@ -268,7 +285,7 @@ class Address {
     }
 
     /**
-     * @return PostalCode
+     * @return mixed
      */
     public function getPostalCode() {
         return $this->postalCode;
@@ -287,8 +304,4 @@ class Address {
     public function getStreet() {
         return $this->street;
     }
-
-
-
-
 }

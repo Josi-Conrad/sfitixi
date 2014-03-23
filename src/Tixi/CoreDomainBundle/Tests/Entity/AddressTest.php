@@ -8,13 +8,12 @@
 
 namespace Tixi\CoreDomainBundle\Tests\Entity;
 
+use Proxies\__CG__\Tixi\CoreDomain\Handicap;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Tixi\CoreDomain\Address;
-use Tixi\CoreDomain\City;
-use Tixi\CoreDomain\Country;
 use Tixi\CoreDomain\Driver;
 use Tixi\CoreDomain\DriverCategory;
-use Tixi\CoreDomain\PostalCode;
+use Tixi\CoreDomain\Passenger;
 
 class AddressTest extends WebTestCase {
     /**
@@ -25,18 +24,6 @@ class AddressTest extends WebTestCase {
      * @var \Tixi\CoreDomainBundle\Repository\AddressRepositoryDoctrine
      */
     private $addressRepo;
-    /**
-     * @var \Tixi\CoreDomainBundle\Repository\CityRepositoryDoctrine
-     */
-    private $cityRepo;
-    /**
-     * @var \Tixi\CoreDomainBundle\Repository\CountryRepositoryDoctrine
-     */
-    private $countryRepo;
-    /**
-     * @var \Tixi\CoreDomainBundle\Repository\PostalCodeRepositoryDoctrine
-     */
-    private $postalCodeRepo;
     /**
      * @var \Tixi\CoreDomainBundle\Repository\DriverRepositoryDoctrine
      */
@@ -72,9 +59,6 @@ class AddressTest extends WebTestCase {
 
         $this->em = $kernel->getContainer()->get('entity_manager');
         $this->addressRepo = $kernel->getContainer()->get('address_repository');
-        $this->cityRepo = $kernel->getContainer()->get('city_repository');
-        $this->countryRepo = $kernel->getContainer()->get('country_repository');
-        $this->postalCodeRepo = $kernel->getContainer()->get('postal_code_repository');
         $this->driverRepo = $kernel->getContainer()->get('driver_repository');
         $this->driverCategoryRepo = $kernel->getContainer()->get('drivercategory_repository');
         $this->absentRepo = $kernel->getContainer()->get('absent_repository');
@@ -83,15 +67,15 @@ class AddressTest extends WebTestCase {
         $this->poiRepo = $kernel->getContainer()->get('poi_repository');
         $this->poiKeywordRepo = $kernel->getContainer()->get('poikeyword_repository');
 
-        $this->em->beginTransaction();
+        //$this->em->beginTransaction();
     }
 
     public function testCreateAddress() {
-        $postalCode = $this->createPostalCode('6310');
-        $city = $this->createCity('Zug');
-        $country = $this->createCountry('Schweiz');
         $address = Address::registerAddress(
-            'Seeweg 22b', $postalCode, $city, $country,
+            'Seeweg 22b',
+            '6333',
+            'Baar',
+            'Schweiz',
             'Wohnadresse', 47.175460, 8.517752, 'Wohnung'
         );
         $this->addressRepo->store($address);
@@ -104,9 +88,9 @@ class AddressTest extends WebTestCase {
         $driverCategory = $this->createDriverCategory('Zivildienst');
         $address = Address::registerAddress(
             'Burstrasse 22c',
-            $this->createPostalCode('6333'),
-            $this->createCity('Baar'),
-            $this->createCountry('Schweiz')
+            '6333',
+            'Baar',
+            'Schweiz'
         );
         $this->addressRepo->store($address);
 
@@ -121,47 +105,27 @@ class AddressTest extends WebTestCase {
         $driverFind = $this->driverRepo->find($driver->getId());
         $this->assertEquals($driverFind, $driver);
     }
-    /**
-     * @param $name
-     * @return null|object|Country
-     */
-    private function createCountry($name) {
-        $country = Country::registerCountry($name);
-        $current = $this->countryRepo->findOneBy(array('name' => $country->getName()));
-        if (empty($current)) {
-            $this->countryRepo->store($country);
-            return $country;
-        }
-        return $current;
-    }
 
-    /**
-     * @param $name
-     * @internal param $code
-     * @return PostalCode
-     */
-    private function createCity($name) {
-        $city = City::registerCity($name);
-        $current = $this->cityRepo->findOneBy(array('name' => $city->getName()));
-        if (empty($current)) {
-            $this->cityRepo->store($city);
-            return $city;
-        }
-        return $current;
-    }
+    public function testCreatePassenger(){
+        $handicap = $this->createHandicap('AHV');
+        $address = Address::registerAddress(
+            'Hauptstrasse 142',
+            '6360',
+            'Zug',
+            'Schweiz'
+        );
+        $this->addressRepo->store($address);
 
-    /**
-     * @param $code
-     * @return PostalCode
-     */
-    private function createPostalCode($code) {
-        $postalCode = PostalCode::registerPostalCode($code);
-        $current = $this->postalCodeRepo->findOneBy(array('code' => $postalCode->getCode()));
-        if (empty($current)) {
-            $this->postalCodeRepo->store($postalCode);
-            return $postalCode;
-        }
-        return $current;
+        $passenger = Passenger::registerPassenger(
+            'Herr', 'Albert', 'Schweizer', '041 324 11 22',
+            $address, $handicap, true
+        );
+        $this->passangerRepo->store($passenger);
+
+        $this->em->flush();
+
+        $driverFind = $this->passangerRepo->find($passenger->getId());
+        $this->assertEquals($driverFind, $passenger);
     }
 
     private function createDriverCategory($name) {
@@ -174,11 +138,21 @@ class AddressTest extends WebTestCase {
         return $current;
     }
 
+    private function createHandicap($name) {
+        $handicap = Handicap::registerHandicap($name);
+        $current = $this->handicapRepo->findOneBy(array('name' => $name));
+        if (empty($current)) {
+            $this->handicapRepo->store($handicap);
+            return $handicap;
+        }
+        return $current;
+    }
+
     /**
      * {@inheritDoc}
      */
     protected function tearDown() {
         parent::tearDown();
-        $this->em->rollback();
+        //$this->em->rollback();
     }
 }

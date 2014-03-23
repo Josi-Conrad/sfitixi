@@ -14,11 +14,9 @@ class AddressHandleDTO {
     public $id;
     public $name;
     public $street;
-
     public $postalCode;
     public $city;
     public $country;
-
     public $lat;
     public $lng;
     public $type;

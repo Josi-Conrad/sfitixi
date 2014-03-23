@@ -11,12 +11,6 @@
         <parameter key="absent_repository.doctrine.class">Tixi\CoreDomainBundle\Repository\AbsentRepositoryDoctrine</parameter>
         <parameter key="address.doctrine.entity">Tixi\CoreDomain\Address</parameter>
         <parameter key="address_repository.doctrine.class">Tixi\CoreDomainBundle\Repository\AddressRepositoryDoctrine</parameter>
-        <parameter key="city.doctrine.entity">Tixi\CoreDomain\City</parameter>
-        <parameter key="city_repository.doctrine.class">Tixi\CoreDomainBundle\Repository\CityRepositoryDoctrine</parameter>
-        <parameter key="country.doctrine.entity">Tixi\CoreDomain\Country</parameter>
-        <parameter key="country_repository.doctrine.class">Tixi\CoreDomainBundle\Repository\CountryRepositoryDoctrine</parameter>
-        <parameter key="postal_code.doctrine.entity">Tixi\CoreDomain\PostalCode</parameter>
-        <parameter key="postal_code_repository.doctrine.class">Tixi\CoreDomainBundle\Repository\PostalCodeRepositoryDoctrine</parameter>
         <parameter key="driver.doctrine.entity">Tixi\CoreDomain\Driver</parameter>
         <parameter key="driver_repository.doctrine.class">Tixi\CoreDomainBundle\Repository\DriverRepositoryDoctrine</parameter>
         <parameter key="drivercategory.doctrine.entity">Tixi\CoreDomain\DriverCategory</parameter>
@@ -53,21 +47,10 @@
         <service id="absent_repository.doctrine" class="%absent_repository.doctrine.class%" factory-service="doctrine" factory-method="getrepository">
             <argument type="string">%absent.doctrine.entity%</argument>
         </service>
+
         <service id="address_repository" alias="address_repository.doctrine"></service>
         <service id="address_repository.doctrine" class="%address_repository.doctrine.class%" factory-service="doctrine" factory-method="getrepository">
             <argument type="string">%address.doctrine.entity%</argument>
-        </service>
-        <service id="country_repository" alias="country_repository.doctrine"></service>
-        <service id="country_repository.doctrine" class="%country_repository.doctrine.class%" factory-service="doctrine" factory-method="getrepository">
-            <argument type="string">%country.doctrine.entity%</argument>
-        </service>
-        <service id="city_repository" alias="city_repository.doctrine"></service>
-        <service id="city_repository.doctrine" class="%city_repository.doctrine.class%" factory-service="doctrine" factory-method="getrepository">
-            <argument type="string">%city.doctrine.entity%</argument>
-        </service>
-        <service id="postal_code_repository" alias="postal_code_repository.doctrine"></service>
-        <service id="postal_code_repository.doctrine" class="%postal_code_repository.doctrine.class%" factory-service="doctrine" factory-method="getrepository">
-            <argument type="string">%postal_code.doctrine.entity%</argument>
         </service>
 
         <service id="driver_repository" alias="driver_repository.doctrine"></service>
