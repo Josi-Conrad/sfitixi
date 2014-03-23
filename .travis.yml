@@ -7,7 +7,7 @@ env:
   - SYMFONY_VERSION="2.3.*" DB=mysql
 
 before_script:
-  - echo 'date.timezone = "Europe/Paris"' >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - echo 'date.timezone = "Europe/Zurich"' >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - php composer.phar install
   - cp app/config/parameters.yml.dist app/config/parameters.yml
   - php app/console doctrine:database:create
