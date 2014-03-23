@@ -57,12 +57,10 @@ class VehicleController extends Controller{
             $partial = $paramFetcher->get('partial');
             if(empty($partial) && !$partial) {
                 $view->setTemplate('TixiApiBundle:Vehicle:list.html.twig');
-                $view->setData(array('datagrids'=>array(array('rowIdPrefix'=>'vehicles', 'tableHeaders'=>$headers,'tableRows'=>$rows, 'totalAmountOfRows'=>$totalAmount))));
             }else {
                 $view->setTemplate('TixiApiBundle:Shared:datagrid.tablebody.html.twig');
-                $view->setData(array('rowIdPrefix'=>'vehicles', 'tableHeaders'=>$headers,'tableRows'=>$rows, 'totalAmountOfRows'=>$totalAmount));
             }
-
+            $view->setData(array('rowIdPrefix'=>'vehicles', 'tableHeaders'=>$headers,'tableRows'=>$rows, 'totalAmountOfRows'=>$totalAmount));
         }else {
 
         }

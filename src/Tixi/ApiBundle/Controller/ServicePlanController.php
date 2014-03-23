@@ -43,34 +43,37 @@ class ServicePlanController extends Controller {
         $viewHandler = $this->get('fos_rest.view_handler');
         $dataGridState = DataGridState::createByParamFetcher($paramFetcher, ServicePlanEmbeddedListDTO::createReferenceDTOByVehicleId($vehicleId));
         $servicePlans = $this->get('tixi_coredomain.fgea_repository')->findByFilter($this->get('tixi_api.datagrid')->createGenericEntityFilterByState($dataGridState));
-        $servicePlansDTO = null;
-        $partial = $paramFetcher->get('partial');
+
         $isEmbedded = $embedded || ($paramFetcher->get('embedded') !== null && $paramFetcher->get('embedded'));
+        $isPartial = (null !== $paramFetcher->get('partial'));
+
+        $servicePlansDTO = array();
         if($isEmbedded) {
             $servicePlansDTO = $this->get('tixi_api.assemblerserviceplan')->servicePlansToServicePlanEmbeddedListDTOs($servicePlans);
         }else {
             //there is no full list at the moment
         }
-        $servicePlansDTO = null === $servicePlansDTO ? array() : $servicePlansDTO;
+
         $totalAmount = $this->get('tixi_coredomain.fgea_repository')->findTotalAmountByFilter($this->get('tixi_api.datagrid')->createGenericEntityFilterByState($dataGridState));
         $rows = $this->get('tixi_api.datagrid')->createRowsArray($servicePlansDTO);
-        $routeParameters = array($vehicleId);
         $view = View::create();
+
         if($viewHandler->isFormatTemplating($request->get('_format'))) {
+            $routeParameters = array($vehicleId);
             $headers = null;
-            if($isEmbedded && !$partial) {
+            $srcUrl = '';
+            if($isEmbedded && !$isPartial) {
                 $headers = $this->get('tixi_api.datagrid')->createHeaderArray(ServicePlanEmbeddedListDTO::createReferenceDTOByVehicleId($vehicleId));
                 $view->setTemplate('TixiApiBundle:ServicePlan:embeddedlist.html.twig');
                 $srcUrl = $this->get('router')->generate('get_vehicle_serviceplans', array('vehicleId' => $vehicleId));
-                $view->setData(array('routeParameters'=>$routeParameters, 'datagrids'=>array(array('rowIdPrefix'=>'serviceplans','dataSrcUrl'=>$srcUrl,'tableHeaders'=>$headers,'tableRows'=>$rows, 'totalAmountOfRows'=>$totalAmount))));
             }else {
-                if(empty($partial) && !$partial) {
+                if(empty($partial) && !$isPartial) {
                     //there is no full list at the moment
                 }else {
                     $view->setTemplate('TixiApiBundle:Shared:datagrid.tablebody.html.twig');
-                    $view->setData(array('rowIdPrefix'=>'serviceplans','tableHeaders'=>$headers,'tableRows'=>$rows, 'totalAmountOfRows'=>$totalAmount));
                 }
             }
+            $view->setData(array('rowIdPrefix'=>'serviceplans','dataSrcUrl'=>$srcUrl, 'routeParameters'=>$routeParameters, 'tableHeaders'=>$headers,'tableRows'=>$rows, 'totalAmountOfRows'=>$totalAmount));
         }else {
             //no json/xml at the moment
         }
