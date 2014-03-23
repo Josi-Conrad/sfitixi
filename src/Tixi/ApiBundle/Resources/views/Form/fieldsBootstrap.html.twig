@@ -1,21 +1,25 @@
 {% block form_row %}
     {% spaceless %}
         <div class="row">
-        <div class="form-group col-lg-6">
-            {{ form_label(form, null, {'label_attr': {'class':'control-label '}}) }}
-            {{ form_errors(form) }}
-            {{ form_widget(form, { 'attr': {'class': 'form-control'} }) }}
-        </div>
+            <div class="form-group">
+                {{ form_label(form, null, {'label_attr': {'class':'col-md-4 control-label'}}) }}
+                {{ form_errors(form) }}
+                <div class="col-md-8">
+                    {{ form_widget(form, { 'attr': {'class': 'form-control'} }) }}
+                </div>
+            </div>
         </div>
     {% endspaceless %}
 {% endblock form_row %}
 
 {% block submit_widget %}
+    <div class="row">
     {% spaceless %}
         {% set type = type|default('submit') %}
-        {% set attr = {'class':'btn btn-primary'} %}
+        {% set attr = {'class':'btn btn-primary col-md-2 col-md-offset-10'} %}
         {{ block('button_widget') }}
     {% endspaceless %}
+    </div>
 {% endblock submit_widget %}
 
 {% block datepicker_widget %}

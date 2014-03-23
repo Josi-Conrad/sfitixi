@@ -1,0 +1,80 @@
+{% extends '::base.html.twig' %}
+{% set topNavigationActivePage = 'get_vehicles' %}
+{% block body %}
+
+        <div class="row">
+        <div class="col-md-6">
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <label class="control-label col-md-4">Fahrzeugname</label>
+                    <div class="col-md-8">
+                        <p class="form-control-static">{{ vehicle.name }}</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-4">Kennzeichen</label>
+                    <div class="col-md-8">
+                        <p class="form-control-static">{{ vehicle.licenceNumber }}</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-4">Inverkehrssetzung</label>
+                    <div class="col-md-8">
+                        <p class="form-control-static">{{ vehicle.dateOfFirstRegistration }}</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-4">Parkplatzbezeichnung</label>
+                    <div class="col-md-8">
+                        <p class="form-control-static">{{ vehicle.parkingLotNumber }}</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-4">Fahrzeugkategorie</label>
+                    <div class="col-md-8">
+                        <p class="form-control-static">{{ vehicle.category }}</p>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-6">
+            {% set vehicleid = vehicle.id %}
+            {{ render(controller('TixiApiBundle:ServicePlan:getServiceplans', { 'vehicleId':vehicleid, 'embedded':true })) }}
+        </div>
+        </div>
+    {#<div class="entityDetailView">#}
+        {#<div class="leftColumn">#}
+            {#<table>#}
+                {#<tr>#}
+                    {#<td>Name:</td>#}
+                    {#<td></td>#}
+                {#</tr>#}
+                {#<tr>#}
+                    {#<td>Lizenznummer:</td>#}
+                    {#<td>{{ vehicle.licenceNumber }}</td>#}
+                {#</tr>#}
+            {#</table>#}
+        {#</div>#}
+        {#<div class="rightColumn">#}
+
+        {#</div>#}
+{% endblock %}
+
+{% block javascriptscustom %}
+    <script>
+        {#jQuery(function($) {#}
+            {#var vehiclesDataGrid = new DataGrid();#}
+            {#vehiclesDataGrid.init({#}
+                {#gridId : 'serviceplans',#}
+                {#dataURL: '{{ vehicle.id }}/serviceplans',#}
+                {#dataIdentifier: 'serviceplans',#}
+                {#dataFieldId : 'id',#}
+                {#fields : [#}
+                    {#{'fieldId':'startDate', 'fieldDisplayName':'Anfang'},#}
+                    {#{'fieldId':'endDate', 'fieldDisplayName':'Ende'},#}
+                    {#{'fieldId':'cost', 'fieldDisplayName':'Kosten'}#}
+                {#]#}
+            {#});#}
+        {#});#}
+    </script>
+{% endblock %}

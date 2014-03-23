@@ -59,6 +59,11 @@ body {
     border-radius: 0 0 5px 5px;
 }
 
+.form-horizontal .control-label{
+    /* text-align:right; */
+    text-align:left;
+}
+
 @media (min-width: 768px) {
     .nav-justified {
         max-height: 52px;

@@ -26,7 +26,7 @@ class VehicleType extends AbstractType{
             'label' => 'Kennzeichen'
         ));
         $builder->add('dateOfFirstRegistration', new DatePickerType(), array(
-            'label' => 'Datum der Inverkehrssetzung'
+            'label' => 'Inverkehrssetzung'
         ));
         $builder->add('parkingLotNumber', 'integer', array(
             'label' => 'Parkplatzbezeichnung'

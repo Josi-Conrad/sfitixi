@@ -2,7 +2,9 @@
 {% set topNavigationActivePage = 'get_vehicles' %}
 {% set breadcrumb = ['Fahrzeuge','Neues Fahrzeug'] %}
 {% block body %}
-    {{ form_start(form) }}
+    <div class="row">
+    {{ form_start(form, {'attr':{'class':'form-horizontal col-md-6'}}) }}
     {{ form_end(form) }}
+    </div>
 {%  endblock %}
 

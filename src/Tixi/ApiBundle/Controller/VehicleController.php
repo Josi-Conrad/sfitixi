@@ -75,7 +75,7 @@ class VehicleController extends Controller{
      */
     public function getVehicleAction(Request $request, $vehicleId) {
         $vehicle = $this->get('vehicle_repository')->find($vehicleId);
-        $vehicleDTO = $this->get('tixi_api.assemblervehicle')->toVehicleRegisterDTO($vehicle);
+        $vehicleDTO = $this->get('tixi_api.assemblervehicle')->toVehicleListDTO($vehicle);
         $data = array('vehicle' => $vehicleDTO);
         $this->getRequest()->request->set('embedded', true);
         $servicePlansEmbeddedView = $this->forward('TixiApiBundle:ServicePlan:getServiceplans',array('vehicleId'=>$vehicleId,'request'=>$request));
@@ -84,12 +84,16 @@ class VehicleController extends Controller{
         $view = View::create();
         $view->setData(array('vehicle'=>$vehicleDTO, 'serviceplansembedded'=>$servicePlansEmbeddedView));
         if($viewHandler->isFormatTemplating($request->get('_format'))) {
-            $view->setTemplate('TixiApiBundle:Vehicle:detail.html.twig');
+            $view->setTemplate('TixiApiBundle:Vehicle:get.html.twig');
 
         }
         return $viewHandler->handle($view);
     }
 
+    /**
+     * @return mixed
+     * @Breadcrumb("Neues Fahrzeug", route="new_vehicle")
+     */
     public function newVehicleAction() {
         $data = $this->getForm('post_vehicles');
         $view = View::create($data);
