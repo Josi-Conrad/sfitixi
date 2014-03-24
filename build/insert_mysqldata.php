@@ -1,35 +1,20 @@
 <?php
+include 'mysql_connection.php';
+
 //uses 1 Parameter for .sql file
 $sql_file = $argv[1];
 
-include 'mysql_connection.php';
-
-// Connect to MySQL server
-mysql_connect($mysql_host, $mysql_username, $mysql_password) or die('Error connecting to MySQL server: ' . mysql_error());
-// Select database
-mysql_select_db($mysql_database) or die('Error selecting MySQL database: ' . mysql_error());
-
-// Temporary variable, used to store current query
-$templine = '';
-// Read in entire file
-$lines = file($sql_file);
-// Loop through each line
-foreach ($lines as $line)
-{
-// Skip it if it's a comment
-    if (substr($line, 0, 2) == '--' || $line == '')
-        continue;
-
-// Add this line to the current segment
-    $templine .= $line;
-// If it has a semicolon at the end, it's the end of the query
-    if (substr(trim($line), -1, 1) == ';')
-    {
-        // Perform the query
-        mysql_query($templine) or print('Error performing query \'<strong>' . $templine . '\': ' . mysql_error() . '<br /><br />');
-        // Reset temp variable to empty
-        $templine = '';
-    }
+// connect
+$mysqli = new mysqli($mysql_host, $mysql_username, $mysql_password, $mysql_database);
+// check connection
+if ($mysqli->connect_error) {
+    trigger_error('Database connection failed: ' . $mysqli->connect_error, E_USER_ERROR);
 }
- echo "Tables imported successfully";
+$sql = file_get_contents($sql_file);
+if (!$sql) {
+    die ("Error opening file: " . $sql_file . "\n");
+}
+mysqli_multi_query($mysqli, $sql);
+echo "Tables from " . $sql_file . " imported successfully!" .  "\n";
+$mysqli->close();
 ?>

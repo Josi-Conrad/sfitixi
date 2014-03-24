@@ -15,6 +15,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * Tixi\CoreDomain\Person
  *
  * @ORM\Entity(repositoryClass="Tixi\CoreDomainBundle\Repository\PersonRepositoryDoctrine")
+ * @ORM\Table(name="person")
  * @ORM\InheritanceType("SINGLE_TABLE")
  * @ORM\DiscriminatorColumn(name="discr", type="string")
  * @ORM\DiscriminatorMap({"person" = "Person", "driver" = "Driver", "passenger" = "Passenger"})

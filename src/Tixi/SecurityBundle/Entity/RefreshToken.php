@@ -16,6 +16,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity
+ * @ORM\Table(name="refresh_token")
  */
 class RefreshToken extends BaseRefreshToken {
     /**
