@@ -15,7 +15,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Tixi\CoreDomain\POI
  *
  * @ORM\Entity(repositoryClass="Tixi\CoreDomainBundle\Repository\POIRepositoryDoctrine")
- * @ORM\Table(name="POI")
+ * @ORM\Table(name="poi")
  */
 class POI {
     /**

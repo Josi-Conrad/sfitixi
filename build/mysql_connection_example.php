@@ -1,9 +1,9 @@
 <?php
-// MySQL host and Port
+// MySQL host:port
 $mysql_host = 'localhost';
 // MySQL username
 $mysql_username = 'root';
 // MySQL password
 $mysql_password = '';
 // Database name
-$mysql_database = 'test';
+$mysql_database = 'tixi';
