@@ -28,8 +28,8 @@ body {
     border-radius: 5px;
 }
 .nav-justified > li > a {
-    padding-top: 15px;
-    padding-bottom: 15px;
+    /*padding-top: 15px;*/
+    /*padding-bottom: 15px;*/
     margin-bottom: 0;
     font-weight: bold;
     color: #777;
@@ -64,6 +64,25 @@ body {
     text-align:left;
 }
 
+
+.breadcrumb {
+    background-color: white;
+    /*margin-bottom: 0px!important;*/
+}
+
+.panel-heading h2 {
+    margin-top: 5px;
+}
+
+.detailViewForm {
+    margin-top: 6px;
+}
+
+.nopadding {
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
 @media (min-width: 768px) {
     .nav-justified {
         max-height: 52px;
@@ -94,6 +113,4 @@ body {
 }
 
 
-.breadcrumb {
-    background-color: white;
-}
+
