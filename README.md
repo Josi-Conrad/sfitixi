@@ -20,6 +20,7 @@ Change parameters.yml to specify your database connection
 
 Execute `run_build.sh` to run composer install for dependencies and
 doctrines database mapping, asset installation and test_data import.
+For test_data import set the mysql_connection parameters in `build\mysql_connection.php`
 
 
 [1]:  http://symfony.com/doc/2.3/book/installation.html
