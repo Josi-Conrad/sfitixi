@@ -101,6 +101,12 @@ class VehicleController extends Controller{
         return $this->get('fos_rest.view_handler')->handle($view);
     }
 
+    /**
+     * @param $vehicleId
+     * @return mixed
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     * @Breadcrumb("Fahrzeug {vehicleId}", route={"name"="get_vehicle", "parameters"={"vehicleId"}})
+     */
     public function editVehicleAction($vehicleId) {
         $vehicle = $this->get('vehicle_repository')->find($vehicleId);
         if(is_null($vehicle)) {
