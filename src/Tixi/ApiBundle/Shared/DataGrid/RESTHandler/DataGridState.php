@@ -10,6 +10,7 @@ namespace Tixi\ApiBundle\Shared\DataGrid\RESTHandler;
 
 
 use FOS\RestBundle\Request\ParamFetcherInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Tixi\ApiBundle\Shared\DataGrid\DataGridSourceClass;
 use Tixi\ApiBundle\Shared\Paginator;
 
@@ -28,6 +29,16 @@ class DataGridState {
         $this->page = (!is_null($page)) ? $page : 1;
         $this->limit = (!is_null($limit)) ? $limit : 15;
         $this->filterStr = $filterStr;
+    }
+
+    public static function createByRequest(Request $request, DataGridSourceClass $sourceDTO) {
+        $page = $request->get('page');
+        $limit = $request->get('limit');
+        $orderByField = $request->get('orderbyfield');
+        $orderByDirection = $request->get('orderbydirection');
+        $filterstr = $request->get('filterstr');
+        $correctedPage = Paginator::adjustPageForPagination($page);
+        return new DataGridState($sourceDTO, $orderByField, $orderByDirection, $correctedPage, $limit, $filterstr);
     }
 
     public static function createByParamFetcher(ParamFetcherInterface $paramFetcher, DataGridSourceClass $sourceDTO) {

@@ -10,22 +10,14 @@ namespace Tixi\ApiBundle\Controller;
 
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 
-use FOS\RestBundle\Request\ParamFetcherInterface;
-use FOS\RestBundle\View\RouteRedirectView;
-use FOS\RestBundle\View\View;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\HttpException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Tixi\ApiBundle\Form\VehicleType;
-use Tixi\ApiBundle\Interfaces\VehicleAssembler;
 use Tixi\ApiBundle\Interfaces\VehicleRegisterDTO;
 use Tixi\ApiBundle\Interfaces\VehicleListDTO;
-use Tixi\ApiBundle\Shared\DataGrid\DataGrid;
 use Tixi\ApiBundle\Shared\DataGrid\RESTHandler\DataGridHandler;
 use Tixi\ApiBundle\Shared\DataGrid\RESTHandler\DataGridState;
-use Tixi\CoreDomain\Vehicle;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -42,25 +34,21 @@ class VehicleController extends Controller{
     /**
      * @Route("",name="tixiapi_vehicles_get")
      * @Method({"GET","POST"})
-     *
-     * @QueryParam(name="page")
-     * @QueryParam(name="limit")
-     * @QueryParam(name="orderbyfield")
-     * @QueryParam(name="orderbydirection")
-     * @QueryParam(name="filterstr")
-     * @QueryParam(name="partial")
-     * @QueryParam(name="embedded")
-     *
+     * GetParameters:
+     * page,limit,orderbyfield,orderbydirection
+     * filterstr,partial,embedded
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function getVehiclesAction(Request $request, ParamFetcherInterface $paramFetcher) {
-        $viewHandler = $this->get('fos_rest.view_handler');
-        $dataGridState = DataGridState::createByParamFetcher($paramFetcher, new VehicleListDTO());
+    public function getVehiclesAction(Request $request) {
+        $dataGridState = DataGridState::createByRequest($request, new VehicleListDTO());
+//        $dataGridState = DataGridState::createByParamFetcher($paramFetcher, new VehicleListDTO());
         $vehicles = $this->get('tixi_coredomain.fgea_repository')->findByFilter($this->get('tixi_api.datagrid')->createGenericEntityFilterByState($dataGridState));
         $vehiclesDTO = $this->get('tixi_api.assemblervehicle')->vehiclesToVehicleListDTOs($vehicles);
         $totalAmount = $this->get('tixi_coredomain.fgea_repository')->findTotalAmountByFilter($this->get('tixi_api.datagrid')->createGenericEntityFilterByState($dataGridState));
         $rows = $this->get('tixi_api.datagrid')->createRowsArray($vehiclesDTO);
         $headers = $this->get('tixi_api.datagrid')->createHeaderArray(new VehicleListDTO());
-        $partial = $paramFetcher->get('partial');
+        $partial = $request->get('partial');
         if(empty($partial) && !$partial) {
             $template = 'TixiApiBundle:Vehicle:list.html.twig';
         }else {
@@ -81,9 +69,6 @@ class VehicleController extends Controller{
         $vehicle = $this->get('vehicle_repository')->find($vehicleId);
         $vehicleDTO = $this->get('tixi_api.assemblervehicle')->toVehicleListDTO($vehicle);
         $data = array('vehicle' => $vehicleDTO);
-        $this->getRequest()->request->set('embedded', true);
-//        $servicePlansEmbeddedView = $this->forward('TixiApiBundle:ServicePlan:getServiceplans',array('vehicleId'=>$vehicleId,'request'=>$request));
-        $this->getRequest()->request->set('embedded', false);
         return $this->render('TixiApiBundle:Vehicle:get.html.twig',array('vehicle'=>$vehicleDTO, 'serviceplansembedded'=>''));
     }
 
