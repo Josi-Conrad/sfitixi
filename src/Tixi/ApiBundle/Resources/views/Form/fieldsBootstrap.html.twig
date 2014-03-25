@@ -23,5 +23,7 @@
 {% endblock submit_widget %}
 
 {% block datepicker_widget %}
-    <input type="date" class="jqueryDatePicker form-control" {% if value is not empty %}value="{{ value }}" {% endif %}/>
+    {%  set attr = attr|merge({'class': ((attr.class|default('') ~ ' jqueryDatePicker')|trim)}) %}
+    <input type="text" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
+    {#<input type="text" class="jqueryDatePicker form-control" {% if value is not empty %}value="{{ value }}" {% endif %}/>#}
 {% endblock datepicker_widget %}

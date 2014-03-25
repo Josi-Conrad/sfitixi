@@ -10,19 +10,24 @@ namespace Tixi\ApiBundle\Form\Shared;
 
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class DatePickerType extends AbstractType{
 
-    /**
-     * {@inheritdoc}
-     */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'compound' => false,
+            'widget' => 'single_text',
+            'format' => 'dd.MM.yyyy'
         ));
     }
+
+    public function getParent()
+    {
+        return 'date';
+    }
+
     /**
      * Returns the name of this type.
      *
