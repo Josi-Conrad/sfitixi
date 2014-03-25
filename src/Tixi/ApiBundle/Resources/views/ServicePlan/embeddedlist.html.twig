@@ -4,12 +4,12 @@
     {% block customListActionControl %}
         {% embed 'TixiApiBundle:Shared:datagrid.list.selectedAction.html.twig' %}
             {% block selectedactions %}
-                <li><a data-targetSrc="{{ path('edit_vehicle_serviceplan',{'vehicleId':routeParameters[0], 'servicePlanId':'--selectionid--'}) }}" class="customActionWithSelection" href="#">Editieren</a></li>
+                <li><a data-targetSrc="{{ path('tixiapi_serviceplan_editbasic',{'vehicleId':routeParameters[0], 'servicePlanId':'--selectionid--'}) }}" class="customActionWithSelection" href="#">Editieren</a></li>
                 <li class="divider"></li>
-                <li><a data-targetSrc="{{ path('edit_vehicle_serviceplan',{'vehicleId':routeParameters[0], 'servicePlanId':'--selectionid--'}) }}" class="customActionWithSelection" href="#">Löschen</a></li>
+                <li><a data-targetSrc="{{ path('tixiapi_serviceplan_editbasic',{'vehicleId':routeParameters[0], 'servicePlanId':'--selectionid--'}) }}" class="customActionWithSelection" href="#">Löschen</a></li>
             {% endblock %}
         {% endembed %}
-        <button type="button" class="btn btn-primary customAction btn-sm" data-targetSrc="{{ path('new_vehicle_serviceplan', {'vehicleId':routeParameters[0]}) }}">Neuer Serviceplan</button>
+        <button type="button" class="btn btn-primary customAction btn-sm" data-targetSrc="{{ path('tixiapi_serviceplan_new', {'vehicleId':routeParameters[0]}) }}">Neuer Serviceplan</button>
     {% endblock %}
 {%  endembed %}
 </div>
@@ -21,7 +21,7 @@
                     conf = {
                         'serviceplans' : {
                             'dblClickCallback' : function(rowId) {
-                                var _url = '{{ path('get_vehicle_serviceplan',{'vehicleId':routeParameters[0], 'servicePlanId':'--servicePlanId--'}) }}';
+                                var _url = '{{ path('tixiapi_serviceplan_get',{'vehicleId':routeParameters[0], 'servicePlanId':'--servicePlanId--'}) }}';
                                 _url = _url.replace('--servicePlanId--',rowId);
                                 window.location = _url;
                             },

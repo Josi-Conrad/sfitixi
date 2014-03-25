@@ -1,6 +1,6 @@
-{% set topNavigationBar = [['new_vehicle', 'Home'], ['new_vehicle', 'Disposition'], ['new_vehicle', 'Bereitstellen'],
-['get_passengers', 'Fahrgast'], ['new_vehicle', 'OVI'], ['get_drivers', 'Fahrer'],
-['get_vehicles', 'Fahrzeug']] %}
+{% set topNavigationBar = [['tixiapi_vehicle_new', 'Home'], ['tixiapi_vehicle_new', 'Disposition'], ['tixiapi_vehicle_new', 'Bereitstellen'],
+['get_passengers', 'Fahrgast'], ['tixiapi_vehicle_new', 'OVI'], ['get_drivers', 'Fahrer'],
+['tixiapi_vehicles_get', 'Fahrzeug']] %}
 {% set topNavigationActivePage = topNavigationActivePage|default('ajd') %}
 <ul class="nav nav-justified">
     {% for item in topNavigationBar %}

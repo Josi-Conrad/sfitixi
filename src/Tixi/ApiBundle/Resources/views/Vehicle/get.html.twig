@@ -1,5 +1,5 @@
 {% extends '::base.html.twig' %}
-{% set topNavigationActivePage = 'get_vehicles' %}
+{% set topNavigationActivePage = 'tixiapi_vehicles_get' %}
 {% block body %}
     <div class="panel panel-default">
         <div class="panel-heading">
@@ -14,7 +14,7 @@
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-md-12 text-right">
-                                <button type="button" class="btn btn-primary btn-sm" onclick="window.location='{{ path('edit_vehicle',{'vehicleId':vehicle.id}) }}'">
+                                <button type="button" class="btn btn-primary btn-sm" onclick="window.location='{{ path('tixiapi_vehicle_editbasic',{'vehicleId':vehicle.id}) }}'">
                                     Editieren
                                 </button>
                             </div>
@@ -81,7 +81,7 @@
             </div>
         </div>
         <div class="panel-footer text-right">
-                    <button type="button" class="btn btn-danger btn-sm" data-targetSrc="{{ path('new_vehicle') }}">
+                    <button type="button" class="btn btn-danger btn-sm" data-targetSrc="{{ path('tixiapi_vehicle_new') }}">
                         Fahrzeug Löschen
                     </button>
         </div>

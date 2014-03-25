@@ -25,12 +25,22 @@ use Tixi\ApiBundle\Interfaces\VehicleRegisterDTO;
 use Tixi\ApiBundle\Shared\DataGrid\RESTHandler\DataGridState;
 use Tixi\CoreDomain\ServicePlan;
 use Tixi\CoreDomain\Vehicle;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
 
+/**
+ * Class ServicePlanController
+ * @package Tixi\ApiBundle\Controller
+ * @Route("/vehicles/{vehicleId}/serviceplans")
+ */
 class ServicePlanController extends Controller {
 
 
     /**
+     * @Route("",name="tixiapi_serviceplans_get")
+     * @Method({"GET","POST"})
+     *
      * @QueryParam(name="embedded")
      * @QueryParam(name="partial")
      * @QueryParam(name="page")
@@ -40,7 +50,7 @@ class ServicePlanController extends Controller {
      * @QueryParam(name="filterstr")
      */
     public function getServiceplansAction($vehicleId, Request $request, ParamFetcherInterface $paramFetcher, $embedded=false) {
-        $viewHandler = $this->get('fos_rest.view_handler');
+//        $viewHandler = $this->get('fos_rest.view_handler');
         $dataGridState = DataGridState::createByParamFetcher($paramFetcher, ServicePlanEmbeddedListDTO::createReferenceDTOByVehicleId($vehicleId));
         $servicePlans = $this->get('tixi_coredomain.fgea_repository')->findByFilter($this->get('tixi_api.datagrid')->createGenericEntityFilterByState($dataGridState));
 
@@ -56,30 +66,34 @@ class ServicePlanController extends Controller {
 
         $totalAmount = $this->get('tixi_coredomain.fgea_repository')->findTotalAmountByFilter($this->get('tixi_api.datagrid')->createGenericEntityFilterByState($dataGridState));
         $rows = $this->get('tixi_api.datagrid')->createRowsArray($servicePlansDTO);
-        $view = View::create();
 
-        if($viewHandler->isFormatTemplating($request->get('_format'))) {
-            $routeParameters = array($vehicleId);
-            $headers = null;
-            $srcUrl = '';
-            if($isEmbedded && !$isPartial) {
-                $headers = $this->get('tixi_api.datagrid')->createHeaderArray(ServicePlanEmbeddedListDTO::createReferenceDTOByVehicleId($vehicleId));
-                $view->setTemplate('TixiApiBundle:ServicePlan:embeddedlist.html.twig');
-                $srcUrl = $this->get('router')->generate('get_vehicle_serviceplans', array('vehicleId' => $vehicleId));
-            }else {
-                if(empty($partial) && !$isPartial) {
-                    //there is no full list at the moment
-                }else {
-                    $view->setTemplate('TixiApiBundle:Shared:datagrid.tablebody.html.twig');
-                }
-            }
-            $view->setData(array('rowIdPrefix'=>'serviceplans','dataSrcUrl'=>$srcUrl, 'routeParameters'=>$routeParameters, 'tableHeaders'=>$headers,'tableRows'=>$rows, 'totalAmountOfRows'=>$totalAmount));
+        $routeParameters = array($vehicleId);
+        $headers = null;
+        $srcUrl = '';
+        $template = '';
+        if($isEmbedded && !$isPartial) {
+            $headers = $this->get('tixi_api.datagrid')->createHeaderArray(ServicePlanEmbeddedListDTO::createReferenceDTOByVehicleId($vehicleId));
+            $template = 'TixiApiBundle:ServicePlan:embeddedlist.html.twig';
+            $srcUrl = $this->get('router')->generate('tixiapi_serviceplans_get', array('vehicleId' => $vehicleId));
         }else {
-            //no json/xml at the moment
+            if(empty($partial) && !$isPartial) {
+                //there is no full list at the moment
+            }else {
+                $template='TixiApiBundle:Shared:datagrid.tablebody.html.twig';
+            }
         }
-        return $viewHandler->handle($view);
+
+        return $this->render($template,array('rowIdPrefix'=>'serviceplans','dataSrcUrl'=>$srcUrl, 'routeParameters'=>$routeParameters, 'tableHeaders'=>$headers,'tableRows'=>$rows, 'totalAmountOfRows'=>$totalAmount));
     }
 
+    /**
+     * @Route("/{servicePlanId}",requirements={"servicePlanId" = "^(?!new)[^/]+$"},name="tixiapi_serviceplan_get")
+     * @Method({"GET","POST"})
+     * @param Request $request
+     * @param $vehicleId
+     * @param $servicePlanId
+     * @return mixed
+     */
     public function getServiceplanAction(Request $request, $vehicleId, $servicePlanId) {
         $viewHandler = $this->get('fos_rest.view_handler');
         if($viewHandler->isFormatTemplating($request->get('_format'))) {
@@ -90,44 +104,55 @@ class ServicePlanController extends Controller {
         return $viewHandler->handle($view);
     }
 
-
+    /**
+     * @Route("/new", name="tixiapi_serviceplan_new")
+     * @Method({"GET","POST"})
+     * @param $vehicleId
+     * @return mixed
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     */
     public function newServiceplanAction($vehicleId) {
-        if(!$this->vehicleExists($vehicleId)){throw new NotFoundHttpException();}
-        $form = $this->getForm('post_vehicle_serviceplans');
-        $form->get('vehicleId')->setData($vehicleId);
-        $view = View::create($form);
-        $view->setTemplate('TixiApiBundle:ServicePlan:new.html.twig');
-        return $this->get('fos_rest.view_handler')->handle($view);
-    }
-
-    public function editServiceplanAction($vehicleId, $servicePlanId) {
-        if(!$this->vehicleExists($vehicleId)){throw new NotFoundHttpException();}
-        $servicePlan = $this->get('serviceplan_repository')->find($servicePlanId);
-        if(is_null($servicePlan)) {
-            throw new NotFoundHttpException();
-        }
-        $servicePlanDTO = $this->get('tixi_api.assemblerserviceplan')->toServicePlanAssignDTO($servicePlan);
-        $data = $this->getForm('post_vehicle_serviceplans', $servicePlanDTO);
-        $view = View::create($data);
-        $view->setTemplate('TixiApiBundle:ServicePlan:new.html.twig');
-        return $this->get('fos_rest.view_handler')->handle($view);
-
-    }
-
-    public function postServiceplansAction(Request $request) {
+        $vehicle = $this->getVehicle($vehicleId);
+        if(null === $vehicle){throw $this->createNotFoundException('The vehicle does not exist');}
         $form = $this->getForm();
+        if($form->isValid()) {
+            $servicePlanAssignDTO = $form->getData();
+            $this->registerOrUpdateServicePlanToVehicle($servicePlanAssignDTO, $vehicle);
+            $this->getDoctrine()->getManager()->flush();
+            return $this->redirect($this->generateUrl('tixiapi_vehicle_get',array('vehicleId'=>$vehicleId)));
+        }
+        return $this->render('TixiApiBundle:ServicePlan:new.html.twig', array(
+            'form' => $form->createView()
+        ));
+    }
+
+    /**
+     * @Route("/{servicePlanId}/editbasic", name="tixiapi_serviceplan_editbasic")
+     * @Method({"GET","POST"})
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param $vehicleId
+     * @param $servicePlanId
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     * @return mixed
+     */
+    public function editServiceplanAction(Request $request, $vehicleId, $servicePlanId) {
+        $vehicle = $this->getVehicle($vehicleId);
+        $servicePlanAssignDTO = null;
+        if(null === $vehicle){throw $this->createNotFoundException('The vehicle does not exist');}
+        if($request->getMethod()==='GET') {
+            $servicePlan = $this->get('serviceplan_repository')->find($servicePlanId);
+            if(null === $servicePlan) {throw $this->createNotFoundException('The serviceplan does not exist');}
+            $servicePlanAssignDTO = $this->get('tixi_api.assemblerserviceplan')->toServicePlanAssignDTO($servicePlan);
+        }
+        $form = $this->getForm(null,$servicePlanAssignDTO);
         $form->handleRequest($request);
         if($form->isValid()) {
             $servicePlanAssignDTO = $form->getData();
-            $vehicle = $this->get('vehicle_repository')->find($servicePlanAssignDTO->vehicleId);
             $this->registerOrUpdateServicePlanToVehicle($servicePlanAssignDTO, $vehicle);
             $this->getDoctrine()->getManager()->flush();
-            $view = View::createRouteRedirect('get_vehicle',array('vehicleId'=>$servicePlanAssignDTO->vehicleId));
-        }else {
-            $view = View::create($form);
-            $view->setTemplate('TixiApiBundle:ServicePlan:new.html.twig');
+            return $this->redirect($this->generateUrl('tixiapi_vehicle_get',array('vehicleId'=>$vehicleId)));
         }
-        return $this->get('fos_rest.view_handler')->handle($view);
+        return $this->render('TixiApiBundle:ServicePlan:new.html.twig');
     }
 
     protected function registerOrUpdateServicePlanToVehicle(ServicePlanAssignDTO $servicePlanAssignDTO, Vehicle $vehicle) {
@@ -150,8 +175,8 @@ class ServicePlanController extends Controller {
         return $this->createForm(new ServicePlanType(), $servicePlanDTO, $options);
     }
 
-    protected function vehicleExists($vehicleId) {
-        return !is_null($this->get('vehicle_repository')->find($vehicleId));
+    protected function getVehicle($vehicleId) {
+        return $this->get('vehicle_repository')->find($vehicleId);
     }
 
 

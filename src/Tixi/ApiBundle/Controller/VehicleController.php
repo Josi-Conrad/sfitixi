@@ -27,15 +27,22 @@ use Tixi\ApiBundle\Shared\DataGrid\RESTHandler\DataGridHandler;
 use Tixi\ApiBundle\Shared\DataGrid\RESTHandler\DataGridState;
 use Tixi\CoreDomain\Vehicle;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+
 
 /**
  * Class VehicleController
  * @package Tixi\ApiBundle\Controller
- * @Breadcrumb("Fahrzeuge", route="get_vehicles")
+ * @Breadcrumb("Fahrzeuge", route="tixiapi_vehicles_get")
+ * @Route("/vehicles")
  */
 class VehicleController extends Controller{
 
     /**
+     * @Route("",name="tixiapi_vehicles_get")
+     * @Method({"GET","POST"})
+     *
      * @QueryParam(name="page")
      * @QueryParam(name="limit")
      * @QueryParam(name="orderbyfield")
@@ -43,6 +50,7 @@ class VehicleController extends Controller{
      * @QueryParam(name="filterstr")
      * @QueryParam(name="partial")
      * @QueryParam(name="embedded")
+     *
      */
     public function getVehiclesAction(Request $request, ParamFetcherInterface $paramFetcher) {
         $viewHandler = $this->get('fos_rest.view_handler');
@@ -51,87 +59,78 @@ class VehicleController extends Controller{
         $vehiclesDTO = $this->get('tixi_api.assemblervehicle')->vehiclesToVehicleListDTOs($vehicles);
         $totalAmount = $this->get('tixi_coredomain.fgea_repository')->findTotalAmountByFilter($this->get('tixi_api.datagrid')->createGenericEntityFilterByState($dataGridState));
         $rows = $this->get('tixi_api.datagrid')->createRowsArray($vehiclesDTO);
-        $view = View::create();
-        if($viewHandler->isFormatTemplating($request->get('_format'))) {
-            $headers = $this->get('tixi_api.datagrid')->createHeaderArray(new VehicleListDTO());
-            $partial = $paramFetcher->get('partial');
-            if(empty($partial) && !$partial) {
-                $view->setTemplate('TixiApiBundle:Vehicle:list.html.twig');
-            }else {
-                $view->setTemplate('TixiApiBundle:Shared:datagrid.tablebody.html.twig');
-            }
-            $view->setData(array('rowIdPrefix'=>'vehicles', 'tableHeaders'=>$headers,'tableRows'=>$rows, 'totalAmountOfRows'=>$totalAmount));
+        $headers = $this->get('tixi_api.datagrid')->createHeaderArray(new VehicleListDTO());
+        $partial = $paramFetcher->get('partial');
+        if(empty($partial) && !$partial) {
+            $template = 'TixiApiBundle:Vehicle:list.html.twig';
         }else {
-
+            $template = 'TixiApiBundle:Shared:datagrid.tablebody.html.twig';
         }
-        return $viewHandler->handle($view);
+        return $this->render($template,array('rowIdPrefix'=>'vehicles', 'tableHeaders'=>$headers,'tableRows'=>$rows, 'totalAmountOfRows'=>$totalAmount));
     }
 
     /**
+     * @Route("/{vehicleId}",requirements={"vehicleId" = "^(?!new)[^/]+$"},name="tixiapi_vehicle_get")
+     * @Method({"GET","POST"})
      * @param Request $request
      * @param $vehicleId
      * @return mixed
-     * @Breadcrumb("Fahrzeug {vehicleId}", route={"name"="get_vehicle", "parameters"={"vehicleId"}})
+     * @Breadcrumb("Fahrzeug {vehicleId}", route={"name"="tixiapi_vehicle_get", "parameters"={"vehicleId"}})
      */
     public function getVehicleAction(Request $request, $vehicleId) {
         $vehicle = $this->get('vehicle_repository')->find($vehicleId);
         $vehicleDTO = $this->get('tixi_api.assemblervehicle')->toVehicleListDTO($vehicle);
         $data = array('vehicle' => $vehicleDTO);
         $this->getRequest()->request->set('embedded', true);
-        $servicePlansEmbeddedView = $this->forward('TixiApiBundle:ServicePlan:getServiceplans',array('vehicleId'=>$vehicleId,'request'=>$request));
+//        $servicePlansEmbeddedView = $this->forward('TixiApiBundle:ServicePlan:getServiceplans',array('vehicleId'=>$vehicleId,'request'=>$request));
         $this->getRequest()->request->set('embedded', false);
-        $viewHandler = $this->get('fos_rest.view_handler');
-        $view = View::create();
-        $view->setData(array('vehicle'=>$vehicleDTO, 'serviceplansembedded'=>$servicePlansEmbeddedView));
-        if($viewHandler->isFormatTemplating($request->get('_format'))) {
-            $view->setTemplate('TixiApiBundle:Vehicle:get.html.twig');
-
-        }
-        return $viewHandler->handle($view);
+        return $this->render('TixiApiBundle:Vehicle:get.html.twig',array('vehicle'=>$vehicleDTO, 'serviceplansembedded'=>''));
     }
 
     /**
-     * @return mixed
-     * @Breadcrumb("Neues Fahrzeug", route="new_vehicle")
+     * @Route("/new",name="tixiapi_vehicle_new")
+     * @Method({"GET","POST"})
+     *
+     * @Breadcrumb("Neues Fahrzeug", route="tixiapi_vehicle_new")
      */
-    public function newVehicleAction() {
-        $data = $this->getForm('post_vehicles');
-        $view = View::create($data);
-        $view->setTemplate('TixiApiBundle:Vehicle:new.html.twig');
-        return $this->get('fos_rest.view_handler')->handle($view);
-    }
-
-    /**
-     * @param $vehicleId
-     * @return mixed
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
-     * @Breadcrumb("Fahrzeug {vehicleId}", route={"name"="get_vehicle", "parameters"={"vehicleId"}})
-     */
-    public function editVehicleAction($vehicleId) {
-        $vehicle = $this->get('vehicle_repository')->find($vehicleId);
-        if(is_null($vehicle)) {
-            throw new NotFoundHttpException();
-        }
-        $vehicleDTO = $this->get('tixi_api.assemblervehicle')->toVehicleRegisterDTO($vehicle);
-        $form = $this->getForm('post_vehicles',$vehicleDTO);
-        $view = View::create(array('form'=>$form, 'vehicle'=>$vehicleDTO));
-        $view->setTemplate('TixiApiBundle:Vehicle:edit.html.twig');
-        return $this->get('fos_rest.view_handler')->handle($view);
-    }
-
-    public function postVehiclesAction(Request $request) {
+    public function newVehicleAction(Request $request) {
         $form = $this->getForm();
         $form->handleRequest($request);
         if($form->isValid()) {
             $vehicleDTO = $form->getData();
             $this->registerOrUpdateVehicle($vehicleDTO);
             $this->getDoctrine()->getManager()->flush();
-            $view = View::createRouteRedirect('get_vehicles');
-        }else {
-            $view = View::create($form);
-            $view->setTemplate('TixiApiBundle:Vehicle:new.html.twig');
+            return $this->redirect($this->generateUrl('tixiapi_vehicles_get'));
         }
-        return $this->get('fos_rest.view_handler')->handle($view);
+        return $this->render('TixiApiBundle:Vehicle:new.html.twig', array(
+            'form' => $form->createView()
+        ));
+    }
+
+    /**
+     * @Route("/{vehicleId}/editbasic",name="tixiapi_vehicle_editbasic")
+     * @Method({"GET","POST"})
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     * @Breadcrumb("Fahrzeug {vehicleId}", route={"name"="tixiapi_vehicle_editbasic", "parameters"={"vehicleId"}})
+     */
+    public function editVehicleAction(Request $request, $vehicleId) {
+        $vehicleDTO = null;
+        if($request->getMethod()==='GET') {
+            $vehicle = $this->get('vehicle_repository')->find($vehicleId);
+            if(null === $vehicle) {
+                throw $this->createNotFoundException('The vehicle does not exist');
+            }
+            $vehicleDTO = $this->get('tixi_api.assemblervehicle')->toVehicleRegisterDTO($vehicle);
+        }
+        $form = $this->getForm(null,$vehicleDTO);
+        $form->handleRequest($request);
+        if($form->isValid()) {
+            $vehicleDTO = $form->getData();
+            $this->registerOrUpdateVehicle($vehicleDTO);
+            $this->getDoctrine()->getManager()->flush();
+            return $this->redirect($this->generateUrl('tixiapi_vehicles_get',array('vehicleId'=>$vehicleId)));
+        }
+        return $this->render('TixiApiBundle:Vehicle:edit.html.twig', array('form'=>$form->createView(), 'vehicle'=>$vehicleDTO));
     }
 
     protected function registerOrUpdateVehicle(VehicleRegisterDTO $vehicleDTO) {

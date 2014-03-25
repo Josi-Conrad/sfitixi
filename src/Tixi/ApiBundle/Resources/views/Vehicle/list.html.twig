@@ -1,5 +1,5 @@
 {% extends '::base.html.twig' %}
-{% set topNavigationActivePage = 'get_vehicles' %}
+{% set topNavigationActivePage = 'tixiapi_vehicles_get' %}
 {% set embedded = embedded|default(false) %}
 {% block body %}
     <div class="panel panel-default">
@@ -14,19 +14,19 @@
                     {% block customListActionControl %}
                         {% embed 'TixiApiBundle:Shared:datagrid.list.selectedAction.html.twig' %}
                             {% block selectedactions %}
-                                <li><a data-targetSrc="{{ path('edit_vehicle',{'vehicleId':'--selectionid--'}) }}"
+                                <li><a data-targetSrc="{{ path('tixiapi_vehicle_editbasic',{'vehicleId':'--selectionid--'}) }}"
                                        class="customActionWithSelection" href="#">Editieren</a></li>
                                 <li>
-                                    <a data-targetSrc="{{ path('new_vehicle_serviceplan',{'vehicleId':'--selectionid--'}) }}"
+                                    <a data-targetSrc="{{ path('tixiapi_serviceplan_new',{'vehicleId':'--selectionid--'}) }}"
                                        class="customActionWithSelection" href="#">Neuer Serviceplan</a></li>
                                 <li class="divider"></li>
-                                <li><a data-targetSrc="{{ path('edit_vehicle',{'vehicleId':'--selectionid--'}) }}"
+                                <li><a data-targetSrc="{{ path('tixiapi_vehicle_editbasic',{'vehicleId':'--selectionid--'}) }}"
                                        class="customActionWithSelection" href="#">Löschen</a></li>
                             {% endblock %}
                         {% endembed %}
                         <button type="button"
                                 class="btn btn-primary customAction navbar-btn {% if embedded %}btn-sm{% endif %}"
-                                data-targetSrc="{{ path('new_vehicle') }}">Neues Fahrzeug
+                                data-targetSrc="{{ path('tixiapi_vehicle_new') }}">Neues Fahrzeug
                         </button>
                     {% endblock %}
                 {% endembed %}
@@ -42,8 +42,10 @@
                     conf = {
                         'vehicles': {
                             'dblClickCallback': function (rowId) {
-                                var _url = '{{ path('get_vehicle',{'vehicleId':'--vehicleId--'}) }}';
+                                var _url = '{{ path('tixiapi_vehicle_get',{'vehicleId':'--vehicleId--'}) }}';
+                                console.log(_url);
                                 _url = _url.replace('--vehicleId--', rowId);
+
                                 window.location = _url;
                             }
                         }

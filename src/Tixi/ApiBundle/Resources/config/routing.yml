@@ -1,11 +1,19 @@
+#vehicle:
+#  resource: Tixi\ApiBundle\Controller\VehicleController
+#  type:     rest
 vehicle:
   resource: Tixi\ApiBundle\Controller\VehicleController
-  type:     rest
+  type:     annotation
+  prefix:   /
 
+#serviceplan:
+#  resource: Tixi\ApiBundle\Controller\ServicePlanController
+#  type:     rest
+#  parent:   vehicle
 serviceplan:
   resource: Tixi\ApiBundle\Controller\ServicePlanController
-  type:     rest
-  parent:   vehicle
+  type:     annotation
+  prefix:   /
 
 driver:
   resource: Tixi\ApiBundle\Controller\DriverController
