@@ -46,8 +46,8 @@ class ServicePlanAssembler {
         $servicePlanEmbeddedListDTO = new ServicePlanEmbeddedListDTO();
         $servicePlanEmbeddedListDTO->id = $servicePlan->getId();
         $servicePlanEmbeddedListDTO->vehicleId = $servicePlan->getVehicle()->getId();
-        $servicePlanEmbeddedListDTO->startDate = $this->dateTimeService->convertUTCDateToLocalString($servicePlan->getStartDate());
-        $servicePlanEmbeddedListDTO->endDate = $this->dateTimeService->convertUTCDateToLocalString($servicePlan->getEndDate());
+        $servicePlanEmbeddedListDTO->startDate = $this->dateTimeService->convertUTCDateTimeToLocalString($servicePlan->getStartDate());
+        $servicePlanEmbeddedListDTO->endDate = $this->dateTimeService->convertUTCDateTimeToLocalString($servicePlan->getEndDate());
         $servicePlanEmbeddedListDTO->cost = $servicePlan->getCost();
         return $servicePlanEmbeddedListDTO;
     }

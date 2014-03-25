@@ -21,13 +21,21 @@ class VehicleAssembler{
     private $dateTimeService;
 
     public function registerDTOtoNewVehicle(VehicleRegisterDTO $vehicleDTO) {
+        $dateOfFirstRegistration = $this->dateTimeService->convertLocalDateTimeToUTCDateTime($vehicleDTO->dateOfFirstRegistration);
+        if(!$dateOfFirstRegistration) {
+            throw new \Exception('bade date format detected');
+        }
         return Vehicle::registerVehicle($vehicleDTO->name, $vehicleDTO->licenceNumber,
-            $this->dateTimeService->convertLocalDateTimeToUTCDateTime($vehicleDTO->dateOfFirstRegistration), $vehicleDTO->parkingLotNumber, $vehicleDTO->vehicleCategory);
+            $dateOfFirstRegistration, $vehicleDTO->parkingLotNumber, $vehicleDTO->vehicleCategory);
     }
 
     public function registerDTOToVehicle(Vehicle $vehicle, VehicleRegisterDTO $vehicleDTO) {
+        $dateOfFirstRegistration = $this->dateTimeService->convertLocalDateTimeToUTCDateTime($vehicleDTO->dateOfFirstRegistration);
+        if(!$dateOfFirstRegistration) {
+            throw new \Exception('bade date format detected');
+        }
         return $vehicle->updateBasicData($vehicleDTO->name, $vehicleDTO->licenceNumber,
-            $this->dateTimeService->convertLocalDateTimeToUTCDateTime($vehicleDTO->dateOfFirstRegistration), $vehicleDTO->parkingLotNumber, $vehicleDTO->vehicleCategory);
+            $dateOfFirstRegistration, $vehicleDTO->parkingLotNumber, $vehicleDTO->vehicleCategory);
     }
 
     public function toVehicleRegisterDTO(Vehicle $vehicle) {
@@ -55,7 +63,7 @@ class VehicleAssembler{
         $vehicleListDTO->name = $vehicle->getName();
         $vehicleListDTO->licenceNumber = $vehicle->getLicenceNumber();
         $vehicleListDTO->parkingLotNumber = $vehicle->getParkingLotNumber();
-        $vehicleListDTO->dateOfFirstRegistration = $this->dateTimeService->convertUTCDateToLocalString($vehicle->getDateOfFirstRegistration());
+        $vehicleListDTO->dateOfFirstRegistration = $this->dateTimeService->convertUTCDateTimeToLocalString($vehicle->getDateOfFirstRegistration());
         $vehicleListDTO->category = $vehicle->getCategory()->getName();
         return $vehicleListDTO;
     }

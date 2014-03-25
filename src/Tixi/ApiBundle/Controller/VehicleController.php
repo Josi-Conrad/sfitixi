@@ -107,9 +107,9 @@ class VehicleController extends Controller{
             throw new NotFoundHttpException();
         }
         $vehicleDTO = $this->get('tixi_api.assemblervehicle')->toVehicleRegisterDTO($vehicle);
-        $data = $this->getForm('post_vehicles',$vehicleDTO);
-        $view = View::create($data);
-        $view->setTemplate('TixiApiBundle:Vehicle:new.html.twig');
+        $form = $this->getForm('post_vehicles',$vehicleDTO);
+        $view = View::create(array('form'=>$form, 'vehicle'=>$vehicleDTO));
+        $view->setTemplate('TixiApiBundle:Vehicle:edit.html.twig');
         return $this->get('fos_rest.view_handler')->handle($view);
     }
 
