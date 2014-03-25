@@ -15,8 +15,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Tixi\CoreDomain\Address
  *
  * @ORM\Entity(repositoryClass="Tixi\CoreDomainBundle\Repository\AddressRepositoryDoctrine")
- * @ORM\Table(name="address", indexes={@ORM\Index(name="search_idx",
- * columns={"name", "street", "postalCode", "city", "country"})})
+ * @ORM\Table(name="address")
  */
 class Address {
     /**
