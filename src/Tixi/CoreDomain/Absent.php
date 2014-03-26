@@ -30,12 +30,12 @@ class Absent {
     protected $subject;
 
     /**
-     * @ORM\Column(type="date")
+     * @ORM\Column(type="datetime")
      */
     protected $startDate;
 
     /**
-     * @ORM\Column(type="date")
+     * @ORM\Column(type="datetime")
      */
     protected $endDate;
 
@@ -46,8 +46,6 @@ class Absent {
     protected $person;
 
     private function __construct() {
-        $this->startDate = new \DateTime();
-        $this->endDate = new \DateTime();
     }
 
     public static function registerAbsent($subject, $startDate, $endDate) {
@@ -66,20 +64,32 @@ class Absent {
         if(!is_null($endDate)) {$this->setendDate($endDate);}
     }
 
-    public function setStartDate($startDate) {
-        $this->startDate = new \DateTime($startDate);
-    }
-
-    public function getStartDate() {
-        return $this->startDate;
-    }
-
+    /**
+     * @param mixed $endDate
+     */
     public function setEndDate($endDate) {
-        $this->endDate = new \DateTime($endDate);
+        $this->endDate = $endDate;
     }
 
+    /**
+     * @return \DateTime
+     */
     public function getEndDate() {
         return $this->endDate;
+    }
+
+    /**
+     * @param mixed $startDate
+     */
+    public function setStartDate($startDate) {
+        $this->startDate = $startDate;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getStartDate() {
+        return $this->startDate;
     }
 
     /**

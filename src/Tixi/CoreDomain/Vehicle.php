@@ -44,7 +44,7 @@ class Vehicle implements Entity{
     protected $isActive;
 
     /**
-     * @ORM\Column(type="date")
+     * @ORM\Column(type="datetime")
      */
     protected $dateOfFirstRegistration;
 
@@ -176,7 +176,7 @@ class Vehicle implements Entity{
     }
 
     /**
-     * @return mixed
+     * @return \DateTime
      */
     public function getDateOfFirstRegistration()
     {
