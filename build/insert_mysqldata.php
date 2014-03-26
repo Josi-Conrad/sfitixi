@@ -15,6 +15,10 @@ if (!$sql) {
     die ("Error opening file: " . $sql_file . "\n");
 }
 mysqli_multi_query($mysqli, $sql);
-echo "Tables from " . $sql_file . " imported successfully!" .  "\n";
+if ($mysqli->error) {
+    trigger_error($mysqli->error, E_USER_ERROR);
+} else {
+    echo "Tables from " . $sql_file . " imported successfully!" . "\n";
+}
 $mysqli->close();
 ?>

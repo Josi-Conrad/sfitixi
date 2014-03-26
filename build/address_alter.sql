@@ -1,1 +1,1 @@
-ALTER TABLE address ADD FULLTEXT search_fts (street, postalcode, city, country);
+ALTER TABLE address ADD FULLTEXT address_fts_idx (name, street, postalCode, city, country, type);
