@@ -1,0 +1,78 @@
+{% extends '::base.html.twig' %}
+{% set topNavigationActivePage = 'tixiapi_drivers_get' %}
+{% block body %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="col-md-6">
+                <h2 class="text-muted">{{ driver.firstname }} {{ driver.lastname }}</h2>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading"><h3 class="panel-title">Fahrerdetails</h3></div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-12 text-right">
+                                    <button type="button" class="btn btn-primary btn-sm"
+                                            onclick="window.location='{{ path('tixiapi_driver_editbasic',{'driverId':driver.id}) }}'">
+                                        Editieren
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <form class="form-horizontal detailViewForm">
+                                        <div class="form-group">
+                                            <label class="control-label col-md-6">Anrede</label>
+
+                                            <div class="col-md-6">
+                                                <p class="form-control-static">{{ driver.title }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-6">Vorname</label>
+
+                                            <div class="col-md-6">
+                                                <p class="form-control-static">{{ driver.firstname }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-6">Nachname</label>
+
+                                            <div class="col-md-6">
+                                                <p class="form-control-static">{{ driver.lastname }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-6">Telefon</label>
+
+                                            <div class="col-md-6">
+                                                <p class="form-control-static">{{ driver.telephone }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-6">E-Mail</label>
+
+                                            <div class="col-md-6">
+                                                <p class="form-control-static">{{ driver.email }}</p>
+                                            </div>
+                                        </div>
+
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel-footer text-right">
+            <button type="button" class="btn btn-danger btn-sm" data-targetSrc="{{ path('tixiapi_driver_new') }}">
+                Fahrer Löschen
+            </button>
+        </div>
+    </div>
+{% endblock %}

@@ -12,13 +12,14 @@ namespace Tixi\ApiBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Tixi\ApiBundle\Form\Shared\DatePickerType;
 
 class DriverType extends AbstractType {
 
     public function buildForm(FormBuilderInterface $builder, array $options) {
         $builder->add('id', 'hidden');
         $builder->add('isActive', 'checkbox', array(
-            'required'  => false,
+            'required' => false,
             'label' => 'Ist aktiv'
         ));
 
@@ -35,21 +36,21 @@ class DriverType extends AbstractType {
             'label' => 'Telefon-Nr'
         ));
         $builder->add('email', 'text', array(
-            'required'  => false,
+            'required' => false,
             'label' => 'E-Mail'
         ));
-        $builder->add('entryDate', 'date', array(
+        $builder->add('entryDate', new DatePickerType(), array(
             'label' => 'Eintrittsdatum'
         ));
-        $builder->add('birthday', 'date', array(
+        $builder->add('birthday', new DatePickerType(), array(
             'label' => 'Geburtsdatum'
         ));
         $builder->add('extraMinutes', 'integer', array(
-            'required'  => false,
+            'required' => false,
             'label' => 'Extra Minuten'
         ));
         $builder->add('details', 'textarea', array(
-            'required'  => false,
+            'required' => false,
             'label' => 'Details'
         ));
 
@@ -57,8 +58,8 @@ class DriverType extends AbstractType {
             'label' => 'Fahrausweis-Nummer'
         ));
         $builder->add('wheelChairAttendance', 'checkbox', array(
-            'required'  => false,
-            'label' => 'Möchte für Rollstuhlfahrten tätigen'
+            'required' => false,
+            'label' => 'Rollstuhlfahrten'
         ));
 
         $builder->add('driverCategory', 'entity', array(

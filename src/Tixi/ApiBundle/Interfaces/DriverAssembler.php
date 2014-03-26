@@ -24,9 +24,18 @@ class DriverAssembler {
 
     /**
      * @param DriverRegisterDTO $driverDTO
+     * @throws \Exception
      * @return Driver
      */
     public function registerDTOtoNewDriver(DriverRegisterDTO $driverDTO) {
+        $entryDate = $this->dateTimeService->convertLocalDateTimeToUTCDateTime($driverDTO->entryDate);
+        if (!$entryDate) {
+            throw new \Exception('bad date format detected');
+        }
+        $birthday = $this->dateTimeService->convertLocalDateTimeToUTCDateTime($driverDTO->birthday);
+        if (!$birthday) {
+            throw new \Exception('bad date format detected');
+        }
         return Driver::registerDriver($driverDTO->title, $driverDTO->firstname,
             $driverDTO->lastname, $driverDTO->telephone, $driverDTO->licenseNumber,
             Address::registerAddress(
@@ -41,9 +50,18 @@ class DriverAssembler {
     /**
      * @param Driver $driver
      * @param DriverRegisterDTO $driverDTO
+     * @throws \Exception
      * @return Driver
      */
     public function registerDTOToDriver(Driver $driver, DriverRegisterDTO $driverDTO) {
+        $entryDate = $this->dateTimeService->convertLocalDateTimeToUTCDateTime($driverDTO->entryDate);
+        if (!$entryDate) {
+            throw new \Exception('bad date format detected');
+        }
+        $birthday = $this->dateTimeService->convertLocalDateTimeToUTCDateTime($driverDTO->birthday);
+        if (!$birthday) {
+            throw new \Exception('bad date format detected');
+        }
         $driver->updateDriverBasicData($driverDTO->title, $driverDTO->firstname,
             $driverDTO->lastname, $driverDTO->telephone, $driverDTO->licenseNumber,
             $driver->getAddress()->updateAddressBasicData(
@@ -70,8 +88,10 @@ class DriverAssembler {
         $driverDTO->lastname = $driver->getLastname();
         $driverDTO->telephone = $driver->getTelephone();
         $driverDTO->email = $driver->getEmail();
-        $driverDTO->entryDate = $driver->getEntryDate();
-        $driverDTO->birthday = $driver->getBirthday();
+
+        $driverDTO->entryDate = $this->dateTimeService->convertUTCDateTimeToLocalDateTime($driver->getEntryDate());
+
+        $driverDTO->birthday = $this->dateTimeService->convertUTCDateTimeToLocalDateTime($driver->getBirthday());
         $driverDTO->extraMinutes = $driver->getExtraMinutes();
         $driverDTO->details = $driver->getDetails();
 
