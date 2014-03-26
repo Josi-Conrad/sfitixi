@@ -22,5 +22,21 @@ Execute `run_build.sh` to run composer install for dependencies and
 doctrines database mapping, asset installation and test_data import.
 For test_data import set the mysql_connection parameters in `build\mysql_connection.php`
 
+1) Test Users
+-------------
+
+Users for login tests with different ROLES are
+
+### ROLE_ADMIN
+User:       admin
+Password:   pass
+
+### ROLE_MANAGER
+User:       manager
+Password:   pass
+
+### ROLE_USER
+User:       user
+Password:   pass
 
 [1]:  http://symfony.com/doc/2.3/book/installation.html

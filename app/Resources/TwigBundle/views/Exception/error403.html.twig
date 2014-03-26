@@ -1,0 +1,10 @@
+{% extends '::base.html.twig' %}
+{% block body %}
+    <div align="center">
+        <h1>Zugriff nicht gestattet!</h1>
+        <p>Diese Webseite benötigt eine Berechtigung (Rolle) die Sie leider nicht haben.</p>
+        <p>Rollen werden durch die Geschäftsleitung zugewiesen.</p>
+        <p>Das iTixi Team bittet um Verständnis.</p>
+        <img src="{{ asset('images/locked403.jpg') }}"/>
+    </div>
+{% endblock %}

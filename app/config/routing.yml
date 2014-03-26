@@ -1,3 +1,12 @@
+
+# redirecting the root
+root:
+    path: /
+    defaults:
+        _controller: TixiApiBundle:Home:getHome
+        path: /home
+        permanent: true
+
 tixi_api:
     resource: "@TixiApiBundle/Resources/config/routing.yml"
     type:     rest

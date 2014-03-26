@@ -5,8 +5,9 @@ security:
             cost: 12
 
     role_hierarchy:
-        ROLE_ADMIN:       ROLE_USER
-        ROLE_SUPER_ADMIN: [ROLE_USER, ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
+        ROLE_MANAGER:     ROLE_USER
+        ROLE_ADMIN:       ROLE_MANAGER
+        ROLE_SUPER_ADMIN: [ROLE_USER, ROLE_MANAGER, ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
 
     providers:
         main:
@@ -20,14 +21,14 @@ security:
             pattern:    ^/login$
             anonymous:  ~
         secured_area:
-            pattern:    ^/secure
+            pattern:    ^/
             form_login:
                   provider: main
                   login_path: tixi_login
                   check_path: tixi_login_check
                   csrf_provider: form.csrf_provider
                   failure_path: tixi_login
-                  default_target_path: get_vehicles
+                  default_target_path: tixiapi_home
             logout:
                 path:   tixi_logout
                 target: tixi_login
@@ -44,4 +45,4 @@ security:
 
     access_control:
     - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-    - { path: ^/, roles: [ROLE_USER, ROLE_ADMIN] }
+    - { path: ^/, roles: [ROLE_USER, ROLE_MANAGER, ROLE_ADMIN] }
