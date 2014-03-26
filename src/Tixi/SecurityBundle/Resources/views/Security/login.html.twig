@@ -2,32 +2,41 @@
 {% block body %}
     <div class="login">
         <section>
-            <h3 style="text-align:center">Anmeldung</h3>
+            <div class="panel-heading">
+                <h2 class="text-muted" style="text-align:center">Login</h2>
+            </div>
             <form name="loginForm" action="{{ path('tixi_login_check') }}"
                   method="post" enctype="application/x-www-form-urlencoded">
                 <p>
                     <label for="fpw_username">Benutzername:</label>
                     <input type="text" id="username" name="_username" value="{{ last_username }}"
-                           autocomplete="on" required autofocus />
+                           autocomplete="on" required autofocus/>
                 </p>
+
                 <p>
                     <label for="fpw_password">Passwort:</label>
                     <input type="password" id="password" name="_password"
-                           required />
+                           required/>
                 </p>
+
                 <p>
                     <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
                 </p>
+
                 <p>
-                    <button type="submit" id="login">Anmelden</button>
+                    <button type="submit" id="login" class="btn btn-primary">
+                        Anmelden
+                    </button>
                 </p>
                 <p>
                     <small>Benutzernamen und Passwörter werden durch die Geschäftsleitungen der Tixi Betriebe (Mandant)
-                        an berechtigte Mitarbeiter vergeben.</small>
+                        an berechtigte Mitarbeiter vergeben.
+                    </small>
                 </p>
                 <p>
                     <small>Alle personenbezogene Daten in der iTixi Applikation müssen als vertraulich behandelt werden
-                        (Bundesgesetz über den Datenschutz (DSG)).</small>
+                        (Bundesgesetz über den Datenschutz (DSG)).
+                    </small>
                 </p>
             </form>
         </section>

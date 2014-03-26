@@ -39,15 +39,15 @@ class UserTest extends WebTestCase {
         $this->userRepo = $kernel->getContainer()->get('tixi_user_repository');
         $this->roleRepo = $kernel->getContainer()->get('tixi_role_repository');
         $this->encFactory = $kernel->getContainer()->get('security.encoder_factory');
-        $this->em->beginTransaction();
+        //$this->em->beginTransaction();
     }
 
     public function testCreateUserAndRoles() {
         $role_user = $this->createRole('Benutzer', 'ROLE_USER');
-        $role_admin = $this->createRole('Manager', 'ROLE_ADMIN');
-        $role_sadmin = $this->createRole('Admin', 'ROLE_SUPER_ADMIN');
-        $user1 = $this->createUser('admin', 'pass', array($role_user, $role_admin, $role_sadmin));
-        $user2 = $this->createUser('manager', 'pass', array($role_user, $role_admin));
+        $role_manager = $this->createRole('Manager', 'ROLE_MANAGER');
+        $role_admin = $this->createRole('Admin', 'ROLE_ADMIN');
+        $user1 = $this->createUser('admin', 'pass', array($role_user, $role_manager, $role_admin));
+        $user2 = $this->createUser('manager', 'pass', array($role_user, $role_manager));
         $user3 = $this->createUser('user', 'pass', array($role_user));
         $this->em->flush();
         $user_find = $this->userRepo->find($user1->getId());
@@ -106,6 +106,6 @@ class UserTest extends WebTestCase {
      */
     protected function tearDown() {
         parent::tearDown();
-        $this->em->rollback();
+        //$this->em->rollback();
     }
 }
