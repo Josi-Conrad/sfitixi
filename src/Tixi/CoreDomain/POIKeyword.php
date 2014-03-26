@@ -32,7 +32,7 @@ class POIKeyword {
 
 
     /**
-     * @ORM\ManyToMany(targetEntity="POI", mappedBy="poi_keywords")
+     * @ORM\ManyToMany(targetEntity="POI", mappedBy="keywords")
      */
     protected $pois;
 
