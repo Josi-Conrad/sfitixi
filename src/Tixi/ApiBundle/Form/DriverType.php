@@ -40,9 +40,11 @@ class DriverType extends AbstractType {
             'label' => 'E-Mail'
         ));
         $builder->add('entryDate', new DatePickerType(), array(
+            'required' => false,
             'label' => 'Eintrittsdatum'
         ));
         $builder->add('birthday', new DatePickerType(), array(
+            'required' => false,
             'label' => 'Geburtsdatum'
         ));
         $builder->add('extraMinutes', 'integer', array(

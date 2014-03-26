@@ -146,21 +146,11 @@ class Driver extends Person {
         if (!empty($wheelChairAttendance)) {
             $this->setWheelChairAttendance($wheelChairAttendance);
         }
-        if (!empty($email)) {
-            $this->setEmail($email);
-        }
-        if (!empty($entryDate)) {
-            $this->setEntryDate($entryDate);
-        }
-        if (!empty($birthday)) {
-            $this->setBirthday($birthday);
-        }
-        if (!empty($extraMinutes)) {
-            $this->setExtraMinutes($extraMinutes);
-        }
-        if (!empty($details)) {
-            $this->setDetails($details);
-        }
+        $this->setEmail($email);
+        $this->setEntryDate($entryDate);
+        $this->setBirthday($birthday);
+        $this->setExtraMinutes($extraMinutes);
+        $this->setDetails($details);
     }
 
     public function activate() {

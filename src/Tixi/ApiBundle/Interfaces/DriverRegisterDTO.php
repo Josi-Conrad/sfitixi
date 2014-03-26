@@ -18,7 +18,7 @@ class DriverRegisterDTO {
     public $firstname;
     public $lastname;
     /**
-     * @Assert\Regex(pattern="/^[\+0-9 ]{5,15}$/", message="telephone.nr.invalid")
+     * @Assert\Regex(pattern="/^[\+0-9 ]{5,19}$/", message="telephone.nr.invalid")
      */
     public $telephone;
     /**

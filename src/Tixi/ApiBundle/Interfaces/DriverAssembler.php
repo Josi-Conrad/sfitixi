@@ -29,20 +29,14 @@ class DriverAssembler {
      */
     public function registerDTOtoNewDriver(DriverRegisterDTO $driverDTO) {
         $entryDate = $this->dateTimeService->convertLocalDateTimeToUTCDateTime($driverDTO->entryDate);
-        if (!$entryDate) {
-            throw new \Exception('bad date format detected');
-        }
         $birthday = $this->dateTimeService->convertLocalDateTimeToUTCDateTime($driverDTO->birthday);
-        if (!$birthday) {
-            throw new \Exception('bad date format detected');
-        }
         return Driver::registerDriver($driverDTO->title, $driverDTO->firstname,
             $driverDTO->lastname, $driverDTO->telephone, $driverDTO->licenseNumber,
             Address::registerAddress(
                 $driverDTO->street, $driverDTO->postalCode,
                 $driverDTO->city, $driverDTO->country),
             $driverDTO->driverCategory, $driverDTO->wheelChairAttendance,
-            $driverDTO->email, $driverDTO->entryDate, $driverDTO->birthday,
+            $driverDTO->email, $entryDate, $birthday,
             $driverDTO->extraMinutes, $driverDTO->details
         );
     }
@@ -55,13 +49,7 @@ class DriverAssembler {
      */
     public function registerDTOToDriver(Driver $driver, DriverRegisterDTO $driverDTO) {
         $entryDate = $this->dateTimeService->convertLocalDateTimeToUTCDateTime($driverDTO->entryDate);
-        if (!$entryDate) {
-            throw new \Exception('bad date format detected');
-        }
         $birthday = $this->dateTimeService->convertLocalDateTimeToUTCDateTime($driverDTO->birthday);
-        if (!$birthday) {
-            throw new \Exception('bad date format detected');
-        }
         $driver->updateDriverBasicData($driverDTO->title, $driverDTO->firstname,
             $driverDTO->lastname, $driverDTO->telephone, $driverDTO->licenseNumber,
             $driver->getAddress()->updateAddressBasicData(
@@ -69,7 +57,7 @@ class DriverAssembler {
                 $driverDTO->city, $driverDTO->country),
             $driverDTO->driverCategory,
             $driverDTO->wheelChairAttendance, $driverDTO->email,
-            $driverDTO->entryDate, $driverDTO->birthday,
+            $entryDate, $birthday,
             $driverDTO->extraMinutes, $driverDTO->details);
         $driver->setIsActive($driverDTO->isActive);
         return $driver;
