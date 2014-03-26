@@ -11,12 +11,13 @@ namespace Tixi\ApiBundle\Tile;
 
 class ResolvedTile {
 
-    protected $foo = 'foo';
-    protected $bar = 'bar';
+    public $viewIndentifiers;
 
+    public $rawData;
 
-    function test() {
-        return array($this->$foo=>$this->$bar);
+    public function __construct(array $viewIdentifiers, $rawData) {
+        $this->viewIndentifiers = $viewIdentifiers;
+        $this->rawData = $rawData;
     }
 
 } 

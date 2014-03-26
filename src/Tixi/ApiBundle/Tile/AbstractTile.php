@@ -43,12 +43,18 @@ abstract class AbstractTile {
         }
         $nextChildPosition = $this->vistor->getNextChildToVisit();
         if($nextChildPosition!==-1) {
-            $child = $this->children($nextChildPosition);
+            $child = $this->children[$nextChildPosition];
         }
         return $child;
     }
 
-    public abstract function getViewParameters();
+    public function getViewIdentifiers(){
+        return array();
+    }
+
+    public function getViewParameters() {
+        return array();
+    }
 
     public abstract function getTemplateName();
 

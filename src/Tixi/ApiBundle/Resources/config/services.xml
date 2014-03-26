@@ -12,6 +12,7 @@
         <parameter key="tixi_api.datagrid.class">Tixi\ApiBundle\Shared\DataGrid\DataGrid</parameter>
         <parameter key="tixi_api.driverassembler.class">Tixi\ApiBundle\Interfaces\DriverAssembler</parameter>
         <parameter key="tixi_api.passengerassembler.class">Tixi\ApiBundle\Interfaces\PassengerAssembler</parameter>
+        <parameter key="tixi_api.tilerenderer.class">Tixi\ApiBundle\Tile\TileRenderer</parameter>
     </parameters>
 
     <services>
@@ -43,6 +44,11 @@
         <service id="tixi_api.assemblerPassenger" class="%tixi_api.passengerassembler.class%">
             <call method="setDateTimeService">
                 <argument type="service" id="tixi_api.datetimeservice" />
+            </call>
+        </service>
+        <service id="tixi_api.tilerenderer" class="%tixi_api.tilerenderer.class%">
+            <call method="setTemplateEngine">
+                <argument type="service" id="templating" />
             </call>
         </service>
     </services>

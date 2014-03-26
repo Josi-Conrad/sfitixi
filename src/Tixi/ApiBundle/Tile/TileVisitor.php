@@ -11,7 +11,7 @@ namespace Tixi\ApiBundle\Tile;
 
 class TileVisitor {
 
-    protected $vists = 0;
+    protected $visits = 0;
     protected $expectedVisits;
     protected $tile;
 
@@ -21,10 +21,10 @@ class TileVisitor {
     }
 
     public function getNextChildToVisit() {
-        if($this->vists>=$this->expectedVisits) {
+        if($this->visits>=$this->expectedVisits) {
             return -1;
         }else {
-            return ++$this->visits;
+            return $this->visits++;
         }
     }
 } 

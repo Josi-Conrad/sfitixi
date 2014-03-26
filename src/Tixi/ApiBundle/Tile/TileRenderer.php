@@ -11,52 +11,68 @@ namespace Tixi\ApiBundle\Tile;
 
 use Symfony\Bridge\Twig\Form\TwigRenderer;
 use Zend\Stdlib\SplQueue;
+use Zend\Stdlib\SplStack;
 
 class TileRenderer {
 
     protected $engine;
 
     public function render(AbstractTile $tile) {
-        return $this->render($tile, new \SplStack(), array(), 0);
+        $renderedTile = $this->renderTile(new \SplStack(), array(), 0, $tile);
+        return $renderedTile->rawData;
     }
 
-    protected  function renderTile(AbstractTile $tile, \SplStack $renderedChildren, array $parameters, $depth) {
+    protected  function renderTile(\SplStack $renderedChildren, array $parameters, $depth, AbstractTile $tile=null) {
         if($tile === null) {
-            return $renderedChildren;
+            $toReturn = $renderedChildren->pop();
+            return $toReturn;
         }
+        $parameters[$depth]=$tile->getViewParameters();
         $child=$tile->getNextChildToVisit();
         if(null !== $child) {
-            $parameters[$depth]=$tile->getViewParameters();
             $depth++;
-            $this->renderTile($child, $renderedChildren, $parameters, $depth);
+            return $this->renderTile($renderedChildren, $parameters, $depth, $child);
         }
         $renderedChildrenForLevel = array();
         for($i=0; $i<$tile->getAmountOfChildren();$i++) {
             $renderedChildrenForLevel[] = $renderedChildren->pop();
         }
-        $renderedChildren->push($this->resolve($tile, $renderedChildrenForLevel, $parameters, $depth));
+        $renderedChildren->push($this->resolve($tile, $parameters, $renderedChildrenForLevel, $depth));
         $depth--;
-        $this->renderTile($tile->getParent(), $renderedChildren, $parameters, $depth);
+        return $this->renderTile($renderedChildren, $parameters, $depth, $tile->getParent());
 
     }
 
     protected function resolve(AbstractTile $tile, $parameters, $renderedChildren,$depth) {
-        return array($tile->getName()=>$this->engine->render($tile->getTemplateName(), $this->flattenParameters($parameters, $renderedChildren, $depth)));
+        return new ResolvedTile(
+            $this->constructViewIdentifiers($tile),
+            $this->engine->render($tile->getTemplateName(), $this->flattenParameters($parameters, $renderedChildren, $depth))
+        );
     }
 
     protected function flattenParameters($parameters, $renderedChildren, $depth) {
         $viewParameters = array();
-        for($i=0;$i<$depth;$i++)  {
-            array_merge($viewParameters, $parameters[$i]);
+        for($i=0;$i<=$depth;$i++)  {
+            foreach($parameters[$i] as $key=>$value) {
+                $viewParameters[$key]=$value;
+            }
         }
-        foreach($renderedChildren as $key=>$value) {
-            $viewParameters['children'][$key]=$value;
+        foreach($renderedChildren as $resolvedChild) {
+//            foreach($child as $key=>$value) {
+            if(!isset($viewParameters['children'])){$viewParameters['children']=array();}
+            $viewParameters['children'][]=$resolvedChild;
+//            }
         }
-        array_merge($viewParameters, $renderedChildren);
         return $viewParameters;
     }
 
-    public function setTemplateEngine(TwigRenderer $engine) {
+    protected function constructViewIdentifiers(AbstractTile $tile) {
+        $identifiers = $tile->getViewIdentifiers();
+        $identifiers[] = $tile->getName();
+        return $identifiers;
+    }
+
+    public function setTemplateEngine($engine) {
         $this->engine = $engine;
     }
 
