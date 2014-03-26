@@ -17,8 +17,15 @@ serviceplan:
 
 driver:
   resource: Tixi\ApiBundle\Controller\DriverController
-  type:     rest
+  type:     annotation
+  prefix:   /
 
 passenger:
   resource: Tixi\ApiBundle\Controller\PassengerController
   type:     rest
+
+home:
+  resource: Tixi\ApiBundle\Controller\HomeController
+  type:     annotation
+  prefix:   /
+

@@ -1,33 +1,55 @@
 {% extends '::base.html.twig' %}
-{% set topNavigationActivePage = 'get_drivers' %}
+{% set topNavigationActivePage = 'tixiapi_drivers_get' %}
+{% set embedded = embedded|default(false) %}
 {% block body %}
-    <div class="dataGrid" data-gridid="{{ rowIdPrefix }}">
-        {% embed 'TixiApiBundle:Shared:datagrid.table.html.twig'%}
-            {% block customListActionControl %}
-                {% embed 'TixiApiBundle:Shared:datagrid.list.selectedAction.html.twig' %}
-                    {% block selectedactions %}
-                        <li><a data-targetSrc="{{ path('edit_driver',{'driverId':'--selectionid--'}) }}" class="customActionWithSelection" href="#">Editieren</a></li>
-                        <li class="divider"></li>
-                        <li><a data-targetSrc="{{ path('edit_driver',{'driverId':'--selectionid--'}) }}" class="customActionWithSelection" href="#">Ferienplan</a></li>
-                        <li><a data-targetSrc="{{ path('edit_driver',{'driverId':'--selectionid--'}) }}" class="customActionWithSelection" href="#">Einsatzplan</a></li>
-                        <li class="divider"></li>
-                        <li><a data-targetSrc="{{ path('edit_driver',{'driverId':'--selectionid--'}) }}" class="customActionWithSelection" href="#">Löschen</a></li>
-                    {% endblock %}
-                {% endembed %}
-                <button type="button" class="btn btn-primary customAction" data-targetSrc="{{ path('new_driver') }}">Neuer Fahrer</button>
-            {% endblock %}
-        {%  endembed %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="col-md-6"><h2 class="text-muted">Fahrer</h2></div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="panel-body">
+            <div class="col-md-12">
+                <div class="dataGrid" data-gridid="{{ rowIdPrefix }}">
+                    {% embed 'TixiApiBundle:Shared:datagrid.table.html.twig' %}
+                        {% block customListActionControl %}
+                            {% embed 'TixiApiBundle:Shared:datagrid.list.selectedAction.html.twig' %}
+                                {% block selectedactions %}
+                                    <li>
+                                        <a data-targetSrc="{{ path('tixiapi_driver_editbasic',{'driverId':'--selectionid--'}) }}"
+                                           class="customActionWithSelection" href="#">Editieren</a></li>
+                                    <li class="divider"></li>
+                                    <li>
+                                        <a data-targetSrc="{{ path('tixiapi_driver_editbasic',{'driverId':'--selectionid--'}) }}"
+                                           class="customActionWithSelection" href="#">Ferienplan</a></li>
+                                    <li>
+                                        <a data-targetSrc="{{ path('tixiapi_driver_editbasic',{'driverId':'--selectionid--'}) }}"
+                                           class="customActionWithSelection" href="#">Einsatzplan</a></li>
+                                    <li class="divider"></li>
+                                    <li>
+                                        <a data-targetSrc="{{ path('tixiapi_driver_editbasic',{'driverId':'--selectionid--'}) }}"
+                                           class="customActionWithSelection" href="#">Löschen</a></li>
+                                {% endblock %}
+                            {% endembed %}
+                            <button type="button"
+                                    class="btn btn-primary customAction navbar-btn {% if embedded %}btn-sm{% endif %}"
+                                    data-targetSrc="{{ path('tixiapi_driver_new') }}">Neuer Fahrer
+                            </button>
+                        {% endblock %}
+                    {% endembed %}
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock %}
 {% block javascriptscustom %}
     <script type="text/javascript">
-        jQuery(function($) {
+        jQuery(function ($) {
             var dataGridManager = new DataGridManager(),
                     conf = {
-                        'drivers' : {
-                            'dblClickCallback' : function(rowId) {
-                                var _url = '{{ path('get_driver',{'driverId':'--driverId--'}) }}';
-                                _url = _url.replace('--driverId--',rowId);
+                        'drivers': {
+                            'dblClickCallback': function (rowId) {
+                                var _url = '{{ path('tixiapi_driver_get',{'driverId':'--driverId--'}) }}';
+                                _url = _url.replace('--driverId--', rowId);
                                 window.location = _url;
                             }
                         }

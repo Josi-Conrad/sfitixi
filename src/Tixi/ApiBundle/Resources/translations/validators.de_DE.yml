@@ -1,3 +1,8 @@
+telephone.nr.invalid: Dies ist keine gültige Telefon-Nummer
+email.invalid: Dies kann keine gültige E-Mailadresse sein
+postal.code.min: Postleitzahl mindestend {{ limit }} Zeichen
+postal.code.max: Postleitzahl maximal {{ limit }} Zeichen
+
 vehicle.name.not_blank: Bitte einen Namen für das Fahrzeug eingeben.
 vehicle.nr.not_blank: Bitte eine Nummer für das Fahrzeug eingeben.
 vehicle.nr.not_nr: Bitte eine gültige Fahrzeugnummer eingeben.

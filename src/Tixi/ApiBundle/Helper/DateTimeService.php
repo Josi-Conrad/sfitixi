@@ -12,31 +12,53 @@ namespace Tixi\ApiBundle\Helper;
 use Symfony\Component\DependencyInjection\ContainerAware;
 use Symfony\Component\Validator\Constraints\DateTime;
 
-class DateTimeService extends ContainerAware{
-
-
-    public function convertUTCDateTimeToLocalString(\DateTime $utcDate) {
-        return $this->convertUTCDateTimeToLocalDateTime($utcDate)->format('d.m.Y');
-    }
-
-    public function convertUTCDateTimeToLocalDateTime(\DateTime $utcDate) {
-        $localDate = clone $utcDate;
-        $localDate->setTimeZone(new \DateTimeZone($this->container->getParameter('time_zone')));
-        return $localDate;
-    }
-
-    public function convertLocalDateTimeStringToUTCDateTime($localDateStr) {
-        $localDate = \DateTime::createFromFormat('d.m.Y', $localDateStr);
-        if($localDate) {
-            $this->convertLocalDateTimeToUTCDateTime($localDate);
+class DateTimeService extends ContainerAware {
+    /**
+     * @param \DateTime $utcDate
+     * @return string
+     */
+    public function convertUTCDateTimeToLocalString($utcDate) {
+        if (!empty($utcDate)) {
+            return $this->convertUTCDateTimeToLocalDateTime($utcDate)->format('d.m.Y');
         }
-        return $localDate;
     }
 
-    public function convertLocalDateTimeToUTCDateTime(\DateTime $localDate) {
-        $utcDate = clone $localDate;
-        $utcDate->setTimezone(new \DateTimeZone('UTC'));
-        return $utcDate;
+    /**
+     * @param \DateTime $utcDate
+     * @return \DateTime
+     */
+    public function convertUTCDateTimeToLocalDateTime($utcDate) {
+        if (!empty($utcDate)) {
+            $localDate = clone $utcDate;
+            $localDate->setTimeZone(new \DateTimeZone($this->container->getParameter('time_zone')));
+            return $localDate;
+        }
+    }
+
+    /**
+     * @param $localDateStr
+     * @return \DateTime
+     */
+    public function convertLocalDateTimeStringToUTCDateTime($localDateStr) {
+        if (!empty($localDateStr)) {
+            $localDate = \DateTime::createFromFormat('d.m.Y', $localDateStr);
+            if ($localDate) {
+                $this->convertLocalDateTimeToUTCDateTime($localDate);
+            }
+            return $localDate;
+        }
+    }
+
+    /**
+     * @param \DateTime $localDate
+     * @return \DateTime
+     */
+    public function convertLocalDateTimeToUTCDateTime($localDate) {
+        if (!empty($localDate)) {
+            $utcDate = clone $localDate;
+            $utcDate->setTimezone(new \DateTimeZone('UTC'));
+            return $utcDate;
+        }
     }
 
 } 

@@ -15,8 +15,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Tixi\CoreDomain\Address
  *
  * @ORM\Entity(repositoryClass="Tixi\CoreDomainBundle\Repository\AddressRepositoryDoctrine")
- * @ORM\Table(name="address", indexes={@ORM\Index(name="search_idx",
- * columns={"name", "street", "postalCode", "city", "country"})})
+ * @ORM\Table(name="address")
  */
 class Address {
     /**
@@ -68,6 +67,11 @@ class Address {
      */
     protected $type;
 
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    protected $editFlag;
+
     private function __construct() {
         $this->pois = new ArrayCollection();
     }
@@ -81,10 +85,12 @@ class Address {
      * @param null $lat
      * @param null $lng
      * @param null $type
+     * @param bool $editFlag
      * @return Address
      */
     public static function registerAddress($street, $postalCode, $city, $country,
-                                           $name = null, $lat = null, $lng = null, $type = null) {
+                                           $name = null, $lat = null, $lng = null, $type = null,
+                                           $editFlag = false) {
         $address = new Address();
 
         $address->setStreet($street);
@@ -104,6 +110,7 @@ class Address {
         if (!empty($type)) {
             $address->setType($type);
         }
+        $address->setEditFlag($editFlag);
 
         return $address;
     }
@@ -117,10 +124,12 @@ class Address {
      * @param null $lat
      * @param null $lng
      * @param null $type
+     * @param bool $editFlag
      */
     public function updateAddressBasicData($street = null, $postalCode = null,
                                            $city = null, $country = null,
-                                           $name = null, $lat = null, $lng = null, $type = null) {
+                                           $name = null, $lat = null, $lng = null, $type = null,
+                                           $editFlag = false) {
 
         if (!empty($street)) {
             $this->setStreet($street);
@@ -146,6 +155,7 @@ class Address {
         if (!empty($type)) {
             $this->setType($type);
         }
+        $this->setEditFlag($editFlag);
     }
 
     /**
@@ -302,5 +312,19 @@ class Address {
      */
     public function getStreet() {
         return $this->street;
+    }
+
+    /**
+     * @param mixed $editFlag
+     */
+    public function setEditFlag($editFlag) {
+        $this->editFlag = $editFlag;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getEditFlag() {
+        return $this->editFlag;
     }
 }

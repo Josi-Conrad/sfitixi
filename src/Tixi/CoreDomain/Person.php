@@ -83,12 +83,12 @@ class Person {
     protected $email;
 
     /**
-     * @ORM\Column(type="date", nullable=true)
+     * @ORM\Column(type="datetime", nullable=true)
      */
     protected $entryDate;
 
     /**
-     * @ORM\Column(type="date", nullable=true)
+     * @ORM\Column(type="datetime", nullable=true)
      */
     protected $birthday;
 
@@ -233,20 +233,6 @@ class Person {
     }
 
     /**
-     * @param mixed $birthday
-     */
-    public function setBirthday($birthday) {
-        $this->birthday = $birthday;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getBirthday() {
-        return $this->birthday;
-    }
-
-    /**
      * @param mixed $compatibleVehicles
      */
     public function setCompatibleVehicles($compatibleVehicles) {
@@ -310,10 +296,25 @@ class Person {
     }
 
     /**
-     * @return \Date
+     * @return \DateTime
      */
     public function getEntryDate() {
         return $this->entryDate;
+    }
+
+
+    /**
+     * @param mixed $birthday
+     */
+    public function setBirthday($birthday) {
+        $this->birthday = $birthday;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getBirthday() {
+        return $this->birthday;
     }
 
     /**
