@@ -9,20 +9,7 @@ namespace Tixi\ApiBundle\Interfaces;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
-class PassengerRegisterDTO {
-    //Person
-    public $id;
-    public $isActive;
-    public $title;
-    public $firstname;
-    public $lastname;
-    public $telephone;
-    public $email;
-    public $entryDate;
-    public $birthday;
-    public $extraMinutes;
-    public $details;
-
+class PassengerRegisterDTO extends PersonRegisterDTO {
     //Passenger
     public $isInWheelChair;
     public $isOverweight;
@@ -31,10 +18,4 @@ class PassengerRegisterDTO {
 
     //Handicap
     public $handicap;
-
-    //Addresses
-    public $street;
-    public $postalCode;
-    public $city;
-    public $country;
 }

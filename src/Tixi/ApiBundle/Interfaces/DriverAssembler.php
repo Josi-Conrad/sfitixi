@@ -76,9 +76,7 @@ class DriverAssembler {
         $driverDTO->lastname = $driver->getLastname();
         $driverDTO->telephone = $driver->getTelephone();
         $driverDTO->email = $driver->getEmail();
-
         $driverDTO->entryDate = $this->dateTimeService->convertUTCDateTimeToLocalDateTime($driver->getEntryDate());
-
         $driverDTO->birthday = $this->dateTimeService->convertUTCDateTimeToLocalDateTime($driver->getBirthday());
         $driverDTO->extraMinutes = $driver->getExtraMinutes();
         $driverDTO->details = $driver->getDetails();

@@ -28,6 +28,8 @@ class PassengerAssembler {
      * @return Passenger
      */
     public function registerDTOtoNewPassenger(PassengerRegisterDTO $passengerDTO) {
+        $entryDate = $this->dateTimeService->convertLocalDateTimeToUTCDateTime($passengerDTO->entryDate);
+        $birthday = $this->dateTimeService->convertLocalDateTimeToUTCDateTime($passengerDTO->birthday);
         return Passenger::registerPassenger($passengerDTO->title, $passengerDTO->firstname,
             $passengerDTO->lastname, $passengerDTO->telephone,
             Address::registerAddress(
@@ -35,7 +37,7 @@ class PassengerAssembler {
                 $passengerDTO->city, $passengerDTO->country),
             $passengerDTO->handicap, $passengerDTO->isInWheelChair,
             $passengerDTO->gotMonthlyBilling, $passengerDTO->isOverweight,
-            $passengerDTO->email, $passengerDTO->entryDate, $passengerDTO->birthday,
+            $passengerDTO->email, $entryDate, $birthday,
             $passengerDTO->extraMinutes, $passengerDTO->details, $passengerDTO->notice
         );
     }
@@ -46,6 +48,8 @@ class PassengerAssembler {
      * @return Passenger
      */
     public function registerDTOToPassenger(Passenger $passenger, PassengerRegisterDTO $passengerDTO) {
+        $entryDate = $this->dateTimeService->convertLocalDateTimeToUTCDateTime($passengerDTO->entryDate);
+        $birthday = $this->dateTimeService->convertLocalDateTimeToUTCDateTime($passengerDTO->birthday);
         $passenger->updatePassengerBasicData($passengerDTO->title, $passengerDTO->firstname,
             $passengerDTO->lastname, $passengerDTO->telephone,
             $passenger->getAddress()->updateAddressBasicData(
@@ -53,9 +57,8 @@ class PassengerAssembler {
                 $passengerDTO->city, $passengerDTO->country),
             $passengerDTO->handicap, $passengerDTO->isInWheelChair,
             $passengerDTO->gotMonthlyBilling, $passengerDTO->isOverweight,
-            $passengerDTO->email, $passengerDTO->entryDate, $passengerDTO->birthday,
-            $passengerDTO->extraMinutes, $passengerDTO->details, $passengerDTO->notice
-        );
+            $passengerDTO->email, $entryDate, $birthday,
+            $passengerDTO->extraMinutes, $passengerDTO->details, $passengerDTO->notice);
         $passenger->setIsActive($passengerDTO->isActive);
         return $passenger;
     }
@@ -73,8 +76,8 @@ class PassengerAssembler {
         $passengerDTO->lastname = $passenger->getLastname();
         $passengerDTO->telephone = $passenger->getTelephone();
         $passengerDTO->email = $passenger->getEmail();
-        $passengerDTO->entryDate = $passenger->getEntryDate();
-        $passengerDTO->birthday = $passenger->getBirthday();
+        $passengerDTO->entryDate = $this->dateTimeService->convertUTCDateTimeToLocalDateTime($passenger->getEntryDate());
+        $passengerDTO->birthday = $this->dateTimeService->convertUTCDateTimeToLocalDateTime($passenger->getBirthday());
         $passengerDTO->extraMinutes = $passenger->getExtraMinutes();
         $passengerDTO->details = $passenger->getDetails();
 
