@@ -22,7 +22,8 @@ driver:
 
 passenger:
   resource: Tixi\ApiBundle\Controller\PassengerController
-  type:     rest
+  type:     annotation
+  prefix:   /
 
 home:
   resource: Tixi\ApiBundle\Controller\HomeController

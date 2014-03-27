@@ -13,45 +13,11 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class PassengerType extends AbstractType {
+class PassengerType extends PersonType {
 
     public function buildForm(FormBuilderInterface $builder, array $options) {
-        $builder->add('id', 'hidden');
-        $builder->add('isActive', 'checkbox', array(
-            'required'  => false,
-            'label' => 'Ist aktiv'
-        ));
 
-        $builder->add('title', 'text', array(
-            'label' => 'Anrede'
-        ));
-        $builder->add('firstname', 'text', array(
-            'label' => 'Vorname'
-        ));
-        $builder->add('lastname', 'text', array(
-            'label' => 'Nachname'
-        ));
-        $builder->add('telephone', 'text', array(
-            'label' => 'Telefon-Nr'
-        ));
-        $builder->add('email', 'text', array(
-            'required'  => false,
-            'label' => 'E-Mail'
-        ));
-        $builder->add('entryDate', 'date', array(
-            'label' => 'Eintrittsdatum'
-        ));
-        $builder->add('birthday', 'date', array(
-            'label' => 'Geburtsdatum'
-        ));
-        $builder->add('extraMinutes', 'integer', array(
-            'required'  => false,
-            'label' => 'Extra Minuten'
-        ));
-        $builder->add('details', 'textarea', array(
-            'required'  => false,
-            'label' => 'Details'
-        ));
+        parent::buildForm($builder,$options);
 
         $builder->add('handicap', 'entity', array(
             'class' => 'Tixi\CoreDomain\Handicap',
