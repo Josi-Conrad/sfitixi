@@ -65,7 +65,7 @@ class DriverController extends Controller {
      * @param Request $request
      * @param $driverId
      * @return mixed
-     * @Breadcrumb("Driver {driverId}", route={"name"="tixiapi_driver_get", "parameters"={"driverId"}})
+     * @Breadcrumb("Fahrer Details", route={"name"="tixiapi_driver_get", "parameters"={"driverId"}})
      */
     public function getDriverAction(Request $request, $driverId) {
         $driver = $this->get('driver_repository')->find($driverId);
@@ -77,10 +77,10 @@ class DriverController extends Controller {
     /**
      * @Route("/new",name="tixiapi_driver_new")
      * @Method({"GET","POST"})
-     * @Breadcrumb("Neuer Fahrer", route="tixiapi_driver_new")
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
      * @return \Symfony\Component\HttpFoundation\Response
+     * @Breadcrumb("Neuer Fahrer", route="tixiapi_driver_new")
      */
     public function newDriverAction(Request $request) {
         if (false === $this->get('security.context')->isGranted('ROLE_ADMIN')) {
@@ -94,16 +94,15 @@ class DriverController extends Controller {
             $this->getDoctrine()->getManager()->flush();
             return $this->redirect($this->generateUrl('tixiapi_drivers_get'));
         }
-        return $this->render('TixiApiBundle:Driver:new.html.twig', array(
-            'form' => $form->createView()
-        ));
+        return $this->render('TixiApiBundle:Driver:new.html.twig',
+            array('form' => $form->createView()));
     }
 
     /**
      * @Route("/{driverId}/editbasic",name="tixiapi_driver_editbasic")
      * @Method({"GET","POST"})
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
-     * @Breadcrumb("Fahrer {driverId}", route={"name"="tixiapi_driver_editbasic", "parameters"={"driverId"}})
+     * @Breadcrumb("Fahrer editieren", route={"name"="tixiapi_driver_editbasic", "parameters"={"driverId"}})
      */
     public function editDriverAction(Request $request, $driverId) {
         $driverDTO = null;
@@ -123,7 +122,7 @@ class DriverController extends Controller {
             return $this->redirect($this->generateUrl('tixiapi_drivers_get', array('driverId' => $driverId)));
         }
         return $this->render('TixiApiBundle:Driver:edit.html.twig',
-            array('form' => $form->createView(), 'driver' => $driverDTO));
+            array('form' => $form->createView(), 'driver' => $form->getData()));
     }
 
     /**

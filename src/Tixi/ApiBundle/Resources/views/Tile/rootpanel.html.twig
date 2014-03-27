@@ -1,0 +1,15 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <div class="col-md-6"><h2 class="text-muted">{{ headerDisplayText }}</h2></div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="panel-body">
+        <div class="col-md-12">
+            {% for resolvedElement in children %}
+            {% if 'panelcontent' in resolvedElement.viewIndentifiers %}
+                {{ resolvedElement.rawData | raw }}
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</div>

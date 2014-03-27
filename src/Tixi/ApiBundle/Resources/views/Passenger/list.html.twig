@@ -1,31 +1,55 @@
 {% extends '::base.html.twig' %}
-{% set topNavigationActivePage = 'get_passengers' %}
+{% set topNavigationActivePage = 'tixiapi_passengers_get' %}
+{% set embedded = embedded|default(false) %}
 {% block body %}
-    <div class="dataGrid" data-gridid="{{ rowIdPrefix }}">
-        {% embed 'TixiApiBundle:Shared:datagrid.table.html.twig'%}
-            {% block customListActionControl %}
-                {% embed 'TixiApiBundle:Shared:datagrid.list.selectedAction.html.twig' %}
-                    {% block selectedactions %}
-                        <li><a data-targetSrc="{{ path('edit_passenger',{'passengerId':'--selectionid--'}) }}" class="customActionWithSelection" href="#">Editieren</a></li>
-                        <li><a data-targetSrc="{{ path('edit_passenger',{'passengerId':'--selectionid--'}) }}" class="customActionWithSelection" href="#">Neuer Fahrauftrag</a></li>
-                        <li class="divider"></li>
-                        <li><a data-targetSrc="{{ path('edit_passenger',{'passengerId':'--selectionid--'}) }}" class="customActionWithSelection" href="#">Löschen</a></li>
-                    {% endblock %}
-                {% endembed %}
-                <button type="button" class="btn btn-primary customAction" data-targetSrc="{{ path('new_passenger') }}">Neuer Fahrgast</button>
-            {% endblock %}
-        {%  endembed %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="col-md-6"><h2 class="text-muted">Fahrgast</h2></div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="panel-body">
+            <div class="col-md-12">
+                <div class="dataGrid" data-gridid="{{ rowIdPrefix }}">
+                    {% embed 'TixiApiBundle:Shared:datagrid.table.html.twig' %}
+                        {% block customListActionControl %}
+                            {% embed 'TixiApiBundle:Shared:datagrid.list.selectedAction.html.twig' %}
+                                {% block selectedactions %}
+                                    <li>
+                                        <a data-targetSrc="{{ path('tixiapi_passenger_editbasic',{'passengerId':'--selectionid--'}) }}"
+                                           class="customActionWithSelection" href="#">Editieren</a></li>
+                                    <li class="divider"></li>
+                                    <li>
+                                        <a data-targetSrc="{{ path('tixiapi_passenger_editbasic',{'passengerId':'--selectionid--'}) }}"
+                                           class="customActionWithSelection" href="#">Abwesend</a></li>
+                                    <li>
+                                        <a data-targetSrc="{{ path('tixiapi_passenger_editbasic',{'passengerId':'--selectionid--'}) }}"
+                                           class="customActionWithSelection" href="#">Neuer Auftrag</a></li>
+                                    <li class="divider"></li>
+                                    <li>
+                                        <a data-targetSrc="{{ path('tixiapi_passenger_editbasic',{'passengerId':'--selectionid--'}) }}"
+                                           class="customActionWithSelection" href="#">Löschen</a></li>
+                                {% endblock %}
+                            {% endembed %}
+                            <button type="button"
+                                    class="btn btn-primary customAction navbar-btn {% if embedded %}btn-sm{% endif %}"
+                                    data-targetSrc="{{ path('tixiapi_passenger_new') }}">Neuer Fahrgast
+                            </button>
+                        {% endblock %}
+                    {% endembed %}
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock %}
 {% block javascriptscustom %}
     <script type="text/javascript">
-        jQuery(function($) {
+        jQuery(function ($) {
             var dataGridManager = new DataGridManager(),
                     conf = {
-                        'passengers' : {
-                            'dblClickCallback' : function(rowId) {
-                                var _url = '{{ path('get_passenger',{'passengerId':'--passengerId--'}) }}';
-                                _url = _url.replace('--passengerId--',rowId);
+                        'passengers': {
+                            'dblClickCallback': function (rowId) {
+                                var _url = '{{ path('tixiapi_passenger_get',{'passengerId':'--passengerId--'}) }}';
+                                _url = _url.replace('--passengerId--', rowId);
                                 window.location = _url;
                             }
                         }

@@ -16,13 +16,22 @@ Please view this project for more details. Thank you.
 See [**Symfony Install Book**][1] for detailed instructions
 
 ### Build iTixi
-Change parameters.yml to specify your database connection
-
 Execute `run_build.sh` to run composer install for dependencies and
 doctrines database mapping, asset installation and test_data import.
-For test_data import set the mysql_connection parameters in `build\mysql_connection.php`
+For test_data import set the mysql_connection parameters in `build\mysql_connection.php`.
+Composer install (executed in the run_build.sh) will ask on the first time run for the Database connection and TimeZone.
 
-1) Test Users
+If `run_build.sh` doesn't work properly, make shure you can run the following command manually:
+`php composer.phar install`
+
+`php app/console doctrine:database:create`
+
+`php app/console doctrine:schema:update --force`
+
+And run_dataimport.sh for Testdata, which imports the .SQL files in the /build folder.
+
+
+2) Test Users
 -------------
 
 Users for login tests with different ROLES are
