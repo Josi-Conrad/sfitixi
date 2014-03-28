@@ -9,7 +9,14 @@ This is the working repository for the iTixi project at
 Please view this project for more details. Thank you.
 
 
-1) Build and Deploy
+1) Minimal Requirements
+-----------------------
+
+PHP Version 5.5
+MySQL Version 5.6
+Doctrine 2.4
+
+2) Build and Deploy
 --------------------
 
 ### Symfony 2.3 Installation
@@ -31,7 +38,7 @@ If `run_build.sh` doesn't work properly, make shure you can run the following co
 And run_dataimport.sh for Testdata, which imports the .SQL files in the /build folder.
 
 
-2) Test Users
+3) Test Users
 -------------
 
 Users for login tests with different ROLES are
