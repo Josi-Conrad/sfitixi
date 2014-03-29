@@ -8,17 +8,34 @@
 
 namespace Tixi\CoreDomain\Dispo;
 
-
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping as ORM;
 use Tixi\CoreDomain\Driver;
 
+/**
+ * Tixi\CoreDomain\Dispo\WorkingDay
+ *
+ * @ORM\Entity(repositoryClass="Tixi\CoreDomainBundle\Repository\Dispo\WorkingDayRepositoryDoctrine")
+ * @ORM\Table(name="working_day")
+ */
 class WorkingDay {
-
-
     /**
-     * @var array
+     * @ORM\Id
+     * @ORM\Column(type="string", name="id")
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    protected $id;
+    /**
      * ShiftPerDay
+     * @ORM\OneToMany(targetEntity="Shift", mappedBy="workingDay")
+     * @ORM\JoinColumn(name="shift_id", referencedColumnName="id")
      */
     protected $shifts;
+    /**
+     * @ORM\OneToMany(targetEntity="DrivingPool", mappedBy="workingDay")
+     * @ORM\JoinColumn(name="driving_pool_id", referencedColumnName="id")
+     */
+    protected $drivingPools;
 
     /**
      * @var DateTime
@@ -30,6 +47,9 @@ class WorkingDay {
         foreach($shiftTypes as $shiftType) {
             $this->shifts[$shiftType] = new Shift($shiftType);
         }
+
+        $this->shifts = new ArrayCollection();
+        $this->drivingPools = new ArrayCollection();
     }
 
     protected function assignDriver(ShiftType $shiftTyp, Driver $driver) {
