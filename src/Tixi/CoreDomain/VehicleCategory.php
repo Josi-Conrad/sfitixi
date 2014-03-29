@@ -37,15 +37,17 @@ class VehicleCategory {
      */
     protected $amountOfWheelChairs;
 
-    /**
-     * @param $name
-     * @param $amountOfSeats
-     * @param int $amountOfWheelChairs
-     */
-    public function __construct($name, $amountOfSeats, $amountOfWheelChairs = 0) {
-        $this->name = $name;
-        $this->amountOfSeats = $amountOfSeats;
-        $this->amountOfWheelChairs = $amountOfWheelChairs;
+    private function __construct() {
+    }
+
+    public static function registerVehicleCategory($name, $amountOfSeats, $amountOfWheelChairs = 0) {
+        $vehicleCategory = new VehicleCategory();
+
+        $vehicleCategory->setName($name);
+        $vehicleCategory->setAmountOfSeats($amountOfSeats);
+        $vehicleCategory->setAmountOfWheelChairs($amountOfWheelChairs);
+
+        return $vehicleCategory;
     }
 
     /**

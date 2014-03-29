@@ -19,12 +19,6 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class Passenger extends Person {
     /**
-     * @ORM\OneToMany(targetEntity="Contradict", mappedBy="passenger")
-     * @ORM\JoinColumn(name="contradict_id", referencedColumnName="id")
-     **/
-    protected $contradicts;
-
-    /**
      * @ORM\ManyToOne(targetEntity="Handicap")
      * @ORM\JoinColumn(name="handicap", referencedColumnName="id")
      */
@@ -50,11 +44,16 @@ class Passenger extends Person {
      */
     protected $notice;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Tixi\CoreDomain\Dispo\DrivingOrder", mappedBy="passenger")
+     * @ORM\JoinColumn(name="driving_order_id", referencedColumnName="id")
+     */
+    protected $drivingOrders;
+
     protected function __construct() {
         parent::__construct();
-        $this->contradicts = new ArrayCollection();
+        $this->drivingOrders = new ArrayCollection();
     }
-
 
     /**
      * @param $title
@@ -63,9 +62,10 @@ class Passenger extends Person {
      * @param $telephone
      * @param Address $address
      * @param Handicap $handicap
-     * @param $isInWheelChair
+     * @param bool $isInWheelChair
      * @param bool $gotMonthlyBilling
      * @param bool $isOverWeight
+     * @param bool $isMale
      * @param null $email
      * @param null $entryDate
      * @param null $birthday
@@ -75,11 +75,10 @@ class Passenger extends Person {
      * @return Passenger
      */
     public static function registerPassenger($title, $firstname, $lastname, $telephone, Address $address, Handicap $handicap,
-                                             $isInWheelChair, $gotMonthlyBilling = false, $isOverWeight = false,
+                                             $isInWheelChair = false, $gotMonthlyBilling = false, $isOverWeight = false, $isMale = true,
                                              $email = null, $entryDate = null, $birthday = null,
                                              $extraMinutes = null, $details = null, $notice = null) {
         $passenger = new Passenger();
-
         $passenger->setTitle($title);
         $passenger->setFirstname($firstname);
         $passenger->setLastname($lastname);
@@ -89,13 +88,26 @@ class Passenger extends Person {
         $passenger->setIsInWheelChair($isInWheelChair);
         $passenger->setGotMonthlyBilling($gotMonthlyBilling);
         $passenger->setIsOverweight($isOverWeight);
+        $passenger->setIsMale($isMale);
 
-        if(!empty($notice)) {$passenger->setNotice($notice);}
-        if(!empty($email)) {$passenger->setEmail($email);}
-        if(!empty($entryDate)) {$passenger->setEntryDate($entryDate);}
-        if(!empty($birthday)) {$passenger->setBirthday($birthday);}
-        if(!empty($extraMinutes)) {$passenger->setExtraMinutes($extraMinutes);}
-        if(!empty($details)) {$passenger->setDetails($details);}
+        if (!empty($email)) {
+            $passenger->setEmail($email);
+        }
+        if (!empty($entryDate)) {
+            $passenger->setEntryDate($entryDate);
+        }
+        if (!empty($birthday)) {
+            $passenger->setBirthday($birthday);
+        }
+        if (!empty($extraMinutes)) {
+            $passenger->setExtraMinutes($extraMinutes);
+        }
+        if (!empty($details)) {
+            $passenger->setDetails($details);
+        }
+        if (!empty($notice)) {
+            $passenger->setNotice($notice);
+        }
 
         $passenger->activate();
 
@@ -112,6 +124,7 @@ class Passenger extends Person {
      * @param null $isInWheelChair
      * @param null $gotMonthlyBilling
      * @param null $isOverWeight
+     * @param null $isMale
      * @param null $email
      * @param null $entryDate
      * @param null $birthday
@@ -120,68 +133,62 @@ class Passenger extends Person {
      * @param null $notice
      */
     public function updatePassengerBasicData($title = null, $firstname = null, $lastname = null, $telephone = null,
-                                    Address $address, Handicap $handicap = null, $isInWheelChair = null, $gotMonthlyBilling = null,
-                                    $isOverWeight = null, $email = null, $entryDate = null, $birthday = null,
-                                    $extraMinutes = null, $details = null, $notice = null) {
-        if(!empty($title)) {$this->setTitle($title);}
-        if(!empty($firstname)) {$this->setFirstname($firstname);}
-        if(!empty($lastname)) {$this->setLastname($lastname);}
-        if(!empty($telephone)) {$this->setTelephone($telephone);}
-        if(!empty($address)) {$this->setAddress($address);}
-        if(!empty($handicap)) {$this->setHandicap($handicap);}
-        if(!empty($isInWheelChair)) {$this->setIsInWheelChair($isInWheelChair);}
-        if(!empty($gotMonthlyBilling)) {$this->setGotMonthlyBilling($gotMonthlyBilling);}
-        if(!empty($isOverWeight)) {$this->setIsOverweight($isOverWeight);}
-        if(!empty($email)) {$this->setEmail($email);}
-        if(!empty($entryDate)) {$this->setEntryDate($entryDate);}
-        if(!empty($birthday)) {$this->setBirthday($birthday);}
-        if(!empty($extraMinutes)) {$this->setExtraMinutes($extraMinutes);}
-        if(!empty($details)) {$this->setDetails($details);}
-        if(!empty($notice)) {$this->setNotice($notice);}
+                                             Address $address, Handicap $handicap = null, $isInWheelChair = null, $gotMonthlyBilling = null,
+                                             $isOverWeight = null, $isMale = null, $email = null, $entryDate = null, $birthday = null,
+                                             $extraMinutes = null, $details = null, $notice = null) {
+        if (!empty($title)) {
+            $this->setTitle($title);
+        }
+        if (!empty($firstname)) {
+            $this->setFirstname($firstname);
+        }
+        if (!empty($lastname)) {
+            $this->setLastname($lastname);
+        }
+        if (!empty($telephone)) {
+            $this->setTelephone($telephone);
+        }
+        if (!empty($address)) {
+            $this->setAddress($address);
+        }
+        if (!empty($handicap)) {
+            $this->setHandicap($handicap);
+        }
+        if (!empty($isInWheelChair)) {
+            $this->setIsInWheelChair($isInWheelChair);
+        }
+        if (!empty($gotMonthlyBilling)) {
+            $this->setGotMonthlyBilling($gotMonthlyBilling);
+        }
+        if (!empty($isOverWeight)) {
+            $this->setIsOverweight($isOverWeight);
+        }
+        if (!empty($isMale)) {
+            $this->setIsMale($isMale);
+        }
+        if (!empty($email)) {
+            $this->setEmail($email);
+        }
+        if (!empty($entryDate)) {
+            $this->setEntryDate($entryDate);
+        }
+        if (!empty($birthday)) {
+            $this->setBirthday($birthday);
+        }
+        if (!empty($extraMinutes)) {
+            $this->setExtraMinutes($extraMinutes);
+        }
+        if (!empty($details)) {
+            $this->setDetails($details);
+        }
+        if (!empty($notice)) {
+            $this->setNotice($notice);
+        }
     }
 
-    public function activate() {
-        $this->isActive = true;
+    public static function removePassenger(Passenger $passenger){
+        $passenger->removePerson();
     }
-
-    public function inactivate() {
-        $this->isActive = false;
-    }
-
-    /**
-     * @param Driver $driver
-     * @param null $comment
-     * @return Contradict
-     */
-    public function assignNewContradictWithDriver(Driver $driver, $comment = null) {
-        $contradict = new Contradict($this, $driver, $comment);
-        $this->assignContradict($contradict);
-        $driver->assignContradict($contradict);
-        return $contradict;
-    }
-
-    /**
-     * @param Contradict $contradict
-     */
-    public function assignContradict(Contradict $contradict) {
-        $this->contradicts->add($contradict);
-    }
-
-    /**
-     * call $em->flush() after this operation
-     * @param Contradict $contradict
-     */
-    public function removeContradict(Contradict $contradict) {
-        $contradict->unlinkAssociations();
-    }
-
-    /**
-     * @return ArrayCollection
-     */
-    public function getContradicts() {
-        return $this->contradicts;
-    }
-
     /**
      * @param mixed $gotMonthlyBilling
      */

@@ -19,8 +19,7 @@ use Tixi\CoreDomain\Shared\Entity;
  * @ORM\Entity(repositoryClass="Tixi\CoreDomainBundle\Repository\VehicleRepositoryDoctrine")
  * @ORM\Table(name="vehicle")
  */
-class Vehicle implements Entity{
-
+class Vehicle implements Entity {
     /**
      * @ORM\Id
      * @ORM\Column(type="bigint", name="id")
@@ -70,6 +69,7 @@ class Vehicle implements Entity{
     protected $servicePlans;
 
     /**
+     * @var $supervisor Driver
      * @ORM\ManyToOne(targetEntity="Driver", inversedBy="supervisedVehicles")
      * @ORM\JoinColumn(name="supervisor_id", referencedColumnName="id")
      */
@@ -111,12 +111,30 @@ class Vehicle implements Entity{
      * @param null $parkingLotNumber
      * @param VehicleCategory $category
      */
-    public function updateBasicData($name=null, $licenceNumber=null, $dateOfFirstRegistration=null, $parkingLotNumber=null, VehicleCategory $category=null) {
-        if(!is_null($name)) {$this->name=$name;}
-        if(!is_null($licenceNumber)) {$this->licenceNumber=$licenceNumber;}
-        if(!is_null($dateOfFirstRegistration)) {$this->dateOfFirstRegistration=$dateOfFirstRegistration;}
-        if(!is_null($parkingLotNumber)) {$this->parkingLotNumber=$parkingLotNumber;}
-        if(!is_null($category)) {$this->category=$category;}
+    public function updateBasicData($name = null, $licenceNumber = null, $dateOfFirstRegistration = null, $parkingLotNumber = null, VehicleCategory $category = null) {
+        if (!empty($name)) {
+            $this->name = $name;
+        }
+        if (!empty($licenceNumber)) {
+            $this->licenceNumber = $licenceNumber;
+        }
+        if (!empty($dateOfFirstRegistration)) {
+            $this->dateOfFirstRegistration = $dateOfFirstRegistration;
+        }
+        if (!empty($parkingLotNumber)) {
+            $this->parkingLotNumber = $parkingLotNumber;
+        }
+        if (!empty($category)) {
+            $this->category = $category;
+        }
+    }
+
+    public static function removeVehicle(Vehicle $vehicle) {
+        foreach ($vehicle->getServicePlans() as $s) {
+            /**@var $s ServicePlan*/
+            $s->removeVehicle();
+        }
+        $vehicle->removeSupervisor();
     }
 
     public function activate() {
@@ -127,29 +145,36 @@ class Vehicle implements Entity{
         $this->isActive = false;
     }
 
+    /**
+     * @param Driver $driver
+     */
     public function assignSupervisor(Driver $driver) {
         $this->supervisor = $driver;
     }
 
+    public function removeSupervisor() {
+        $this->supervisor = null;
+    }
+
     /**
-     * @param Driver $driver
+     * @return Driver
      */
-    public function removeSupervisor(Driver $driver) {
-        $driver->removeSupervisedVehicle($this);
+    public function getSupervisor() {
+        return $this->supervisor;
     }
 
     /**
      * @param ServicePlan $servicePlan
      */
-    public function assignServicePlan(ServicePlan $servicePlan){
+    public function assignServicePlan(ServicePlan $servicePlan) {
         $this->servicePlans->add($servicePlan);
-        $servicePlan->setVehicle($this);
+        $servicePlan->assignVehicle($this);
     }
 
     /**
      * @param ServicePlan $servicePlan
      */
-    public function removeServicePlan(ServicePlan $servicePlan){
+    public function removeServicePlan(ServicePlan $servicePlan) {
         $this->servicePlans->removeElement($servicePlan);
     }
 
@@ -170,35 +195,30 @@ class Vehicle implements Entity{
     /**
      * @param mixed $dateOfFirstRegistration
      */
-    public function setDateOfFirstRegistration($dateOfFirstRegistration)
-    {
+    public function setDateOfFirstRegistration($dateOfFirstRegistration) {
         $this->dateOfFirstRegistration = $dateOfFirstRegistration;
     }
 
     /**
      * @return \DateTime
      */
-    public function getDateOfFirstRegistration()
-    {
+    public function getDateOfFirstRegistration() {
         return $this->dateOfFirstRegistration;
     }
 
     /**
      * @param mixed $managementDetails
      */
-    public function setManagementDetails($managementDetails)
-    {
+    public function setManagementDetails($managementDetails) {
         $this->managementDetails = $managementDetails;
     }
 
     /**
      * @return mixed
      */
-    public function getManagementDetails()
-    {
+    public function getManagementDetails() {
         return $this->managementDetails;
     }
-
 
     /**
      * @param mixed $id
@@ -285,16 +305,9 @@ class Vehicle implements Entity{
     }
 
     /**
-     * @param mixed $servicePlans
-     */
-    public function setServicePlans($servicePlans) {
-        $this->servicePlans = $servicePlans;
-    }
-
-    /**
      * @return mixed
      */
-    public function getAssociatedServicePlansAsArrayCollection() {
+    public function getServicePlans() {
         return $this->servicePlans;
     }
 

@@ -73,6 +73,17 @@ class ServicePlan implements Entity{
     }
 
     /**
+     * @param mixed $vehicle
+     */
+    public function assignVehicle($vehicle) {
+        $this->vehicle = $vehicle;
+    }
+
+    public function removeVehicle(){
+        $this->assignVehicle(null);
+    }
+
+    /**
      * @param mixed $cost
      */
     public function setCost($cost) {
@@ -140,13 +151,6 @@ class ServicePlan implements Entity{
      */
     public function getStartDate() {
         return $this->startDate;
-    }
-
-    /**
-     * @param mixed $vehicle
-     */
-    public function setVehicle($vehicle) {
-        $this->vehicle = $vehicle;
     }
 
     /**

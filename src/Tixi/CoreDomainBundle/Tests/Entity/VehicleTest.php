@@ -42,21 +42,48 @@ class VehicleTest extends WebTestCase {
         $this->em->beginTransaction();
     }
 
-    public function testCreateVehicleAndCategory() {
+    public function testVehicleCRUD() {
 
-        $vehicleCat = $this->createVehicleCategory('Movano', 5, 1);
+        $vehicleCat = $this->createVehicleCategory('Movano 1', 5, 1);
+        $vehicle = Vehicle::registerVehicle('VM', 'CH002002', new \DateTime('2012-01-01'), 2, $vehicleCat);
+        $this->vehicleRepo->store($vehicle);
+        $this->em->flush();
+
+        $vehicle_find = $this->vehicleRepo->find($vehicle->getId());
+        $this->assertEquals($vehicle, $vehicle_find);
+
+        $vehicle->updateBasicData('VW Maxi 1', 'CH+212331', new \DateTime('2013-02-02'), 3, $vehicleCat);
+        $this->vehicleRepo->store($vehicle);
+        $this->em->flush();
+
+        $this->vehicleCreateServicePlan($vehicle);
+        $this->vehicleRemove($vehicle);
+    }
+
+    private function vehicleCreateServicePlan(Vehicle $vehicle) {
         $servicePlan = $this->createServicePlan(new \DateTime('now'), new \DateTime('now'));
-        $vehicle = Vehicle::registerVehicle(
-            'VM', 'CH002002', new \DateTime('2012-01-01'), 2, $vehicleCat
-        );
+        $this->servicePlanRepo->store($servicePlan);
         $vehicle->assignServicePlan($servicePlan);
         $this->vehicleRepo->store($vehicle);
         $this->em->flush();
-        $vehicle_find = $this->vehicleRepo->find($vehicle->getId());
-        $this->assertEquals($vehicle, $vehicle_find);
-        $this->assertEquals($vehicle->getCategory()->getName(), $vehicle_find->getCategory()->getName());
+
+        $found = false;
+        $servicePlanFind = $this->servicePlanRepo->find($servicePlan->getId());
+        foreach ($vehicle->getServicePlans() as $s) {
+            if ($s->getId() == $servicePlanFind->getId()) {
+                $found = true;
+            }
+        }
+        $this->assertTrue($found);
     }
 
+    private function vehicleRemove(Vehicle $vehicle) {
+        $id = $vehicle->getId();
+        Vehicle::removeVehicle($vehicle);
+        $this->vehicleRepo->remove($vehicle);
+        $this->em->flush();
+        $this->assertEquals(null, $this->vehicleRepo->find($id));
+    }
 
     /**
      * @param $name
@@ -67,7 +94,7 @@ class VehicleTest extends WebTestCase {
     private function createVehicleCategory($name, $seats, $wheelchairs) {
         $vehicleCat = $this->vehicleCategoryRepo->findOneBy(array('name' => $name));
         if (empty($vehicleCat)) {
-            $vehicleCat = new VehicleCategory($name, $seats, $wheelchairs);
+            $vehicleCat = VehicleCategory::registerVehicleCategory($name, $seats, $wheelchairs);
             $this->vehicleCategoryRepo->store($vehicleCat);
         }
         return $vehicleCat;

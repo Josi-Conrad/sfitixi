@@ -19,12 +19,6 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class Driver extends Person {
     /**
-     * @ORM\OneToMany(targetEntity="Contradict", mappedBy="driver")
-     * @ORM\JoinColumn(name="contradict_id", referencedColumnName="id")
-     **/
-    protected $contradicts;
-
-    /**
      * @ORM\ManyToOne(targetEntity="DriverCategory")
      * @ORM\JoinColumn(name="driver_category", referencedColumnName="id")
      */
@@ -49,7 +43,6 @@ class Driver extends Person {
     protected function __construct() {
         parent::__construct();
         $this->supervisedVehicles = new ArrayCollection();
-        $this->contradicts = new ArrayCollection();
     }
 
     /**
@@ -57,10 +50,11 @@ class Driver extends Person {
      * @param $firstname
      * @param $lastname
      * @param $telephone
-     * @param Address $address
      * @param $licenceNumber
+     * @param Address $address
      * @param DriverCategory $driverCategory
-     * @param $wheelChairAttendance
+     * @param bool $wheelChairAttendance
+     * @param bool $isMale
      * @param null $email
      * @param null $entryDate
      * @param null $birthday
@@ -69,7 +63,7 @@ class Driver extends Person {
      * @return Driver
      */
     public static function registerDriver($title, $firstname, $lastname, $telephone, $licenceNumber, Address $address,
-                                          DriverCategory $driverCategory, $wheelChairAttendance = true, $email = null,
+                                          DriverCategory $driverCategory, $wheelChairAttendance = true, $isMale = true, $email = null,
                                           $entryDate = null, $birthday = null, $extraMinutes = null, $details = null) {
         $driver = new Driver();
 
@@ -81,6 +75,7 @@ class Driver extends Person {
         $driver->setAddress($address);
         $driver->setDriverCategory($driverCategory);
         $driver->setWheelChairAttendance($wheelChairAttendance);
+        $driver->setIsMale($isMale);
 
         if (!empty($email)) {
             $driver->setEmail($email);
@@ -108,10 +103,11 @@ class Driver extends Person {
      * @param null $firstname
      * @param null $lastname
      * @param null $telephone
-     * @param Address $address
      * @param null $licenceNumber
+     * @param Address $address
      * @param DriverCategory $driverCategory
      * @param null $wheelChairAttendance
+     * @param null $isMale
      * @param null $email
      * @param null $entryDate
      * @param null $birthday
@@ -120,7 +116,7 @@ class Driver extends Person {
      */
     public function updateDriverBasicData($title = null, $firstname = null, $lastname = null, $telephone = null,
                                           $licenceNumber = null, Address $address = null, DriverCategory $driverCategory = null,
-                                          $wheelChairAttendance = null, $email = null, $entryDate = null, $birthday = null,
+                                          $wheelChairAttendance = null, $isMale = null, $email = null, $entryDate = null, $birthday = null,
                                           $extraMinutes = null, $details = null) {
         if (!empty($title)) {
             $this->setTitle($title);
@@ -146,56 +142,35 @@ class Driver extends Person {
         if (!empty($wheelChairAttendance)) {
             $this->setWheelChairAttendance($wheelChairAttendance);
         }
-        $this->setEmail($email);
-        $this->setEntryDate($entryDate);
-        $this->setBirthday($birthday);
-        $this->setExtraMinutes($extraMinutes);
-        $this->setDetails($details);
-    }
-
-    public function activate() {
-        $this->isActive = true;
-    }
-
-    public function inactivate() {
-        $this->isActive = false;
-    }
-
-    /**
-     * @param Passenger $passenger
-     * @param null $comment
-     * @return Contradict
-     */
-    public function assignNewContradictWithPassenger(Passenger $passenger, $comment = null) {
-        $contradict = new Contradict($this, $passenger, $comment);
-        $this->assignContradict($contradict);
-        $passenger->assignContradict($contradict);
-        return $contradict;
+        if (!empty($isMale)) {
+            $this->setIsMale($isMale);
+        }
+        if (!empty($email)) {
+            $this->setEmail($email);
+        }
+        if (!empty($entryDate)) {
+            $this->setEntryDate($entryDate);
+        }
+        if (!empty($birthday)) {
+            $this->setBirthday($birthday);
+        }
+        if (!empty($extraMinutes)) {
+            $this->setExtraMinutes($extraMinutes);
+        }
+        if (!empty($details)) {
+            $this->setDetails($details);
+        }
     }
 
     /**
-     * @param Contradict $contradict
+     * Remove Driver, delete all Associations
+     * @param Driver $driver
      */
-    public function assignContradict(Contradict $contradict) {
-        $this->contradicts->add($contradict);
-    }
-
-    /**
-     * call $em->flush() after this operation
-     * @param Contradict $contradict
-     */
-    public function removeContradict(Contradict $contradict) {
-        $contradict->getPassenger()->removeContradict($contradict);
-        $this->contradicts->removeElement($contradict);
-        $contradict->unlinkAssociations();
-    }
-
-    /**
-     * @param Vehicle $vehicle
-     */
-    public function superviseVehicle(Vehicle $vehicle) {
-        $this->assignSupervisedVehicle($vehicle);
-        $vehicle->assignSupervisor($this);
+    public static function removeDriver(Driver $driver) {
+        $driver->removePerson();
+        foreach($driver->getSupervisedVehicles() as $v){
+            $driver->removeSupervisedVehicle($v);
+        }
     }
 
     /**
@@ -203,6 +178,7 @@ class Driver extends Person {
      */
     public function assignSupervisedVehicle(Vehicle $vehicle) {
         $this->supervisedVehicles->add($vehicle);
+        $vehicle->assignSupervisor($this);
     }
 
     /**
@@ -210,35 +186,14 @@ class Driver extends Person {
      */
     public function removeSupervisedVehicle(Vehicle $vehicle) {
         $this->supervisedVehicles->removeElement($vehicle);
-        $vehicle->assignSupervisor(null);
+        $vehicle->removeSupervisor();
     }
 
     /**
-     * @param mixed $advisedVehicles
+     * @return Vehicle[]
      */
-    public function setAdvisedVehicles($advisedVehicles) {
-        $this->advisedVehicles = $advisedVehicles;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getAdvisedVehicles() {
-        return $this->advisedVehicles;
-    }
-
-    /**
-     * @param mixed $contradicts
-     */
-    public function setContradicts($contradicts) {
-        $this->contradicts = $contradicts;
-    }
-
-    /**
-     * @return ArrayCollection
-     */
-    public function getContradicts() {
-        return $this->contradicts;
+    public function getSupervisedVehicles() {
+        return $this->supervisedVehicles;
     }
 
     /**

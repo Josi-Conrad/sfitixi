@@ -89,17 +89,25 @@ class POI {
      * @return POI
      */
     public static function registerPoi($name, $department, Address $address,
-                                $telephone = null, $comment = null, $memo = null, $details = null) {
+                                       $telephone = null, $comment = null, $memo = null, $details = null) {
         $poi = new POI();
 
         $poi->setName($name);
         $poi->setDepartment($department);
-        $poi->setAddress($address);
+        $poi->assignAddress($address);
 
-        if(!empty($telephone)) {$poi->setTelephone($telephone);}
-        if(!empty($comment)) {$poi->setComment($comment);}
-        if(!empty($memo)) {$poi->setMemo($memo);}
-        if(!empty($details)) {$poi->setDetails($details);}
+        if (!empty($telephone)) {
+            $poi->setTelephone($telephone);
+        }
+        if (!empty($comment)) {
+            $poi->setComment($comment);
+        }
+        if (!empty($memo)) {
+            $poi->setMemo($memo);
+        }
+        if (!empty($details)) {
+            $poi->setDetails($details);
+        }
 
         $poi->activate();
 
@@ -117,13 +125,42 @@ class POI {
      */
     public function updateBasicData($name = null, $department = null, Address $address = null,
                                     $telephone = null, $comment = null, $memo = null, $details = null) {
-        if(!empty($name)) {$this->setName($name);}
-        if(!empty($department)) {$this->setDepartment($department);}
-        if(!empty($address)) {$this->setAddress($address);}
-        if(!empty($telephone)) {$this->setTelephone($telephone);}
-        if(!empty($comment)) {$this->setComment($comment);}
-        if(!empty($memo)) {$this->setMemo($memo);}
-        if(!empty($details)) {$this->setDetails($details);}
+        if (!empty($name)) {
+            $this->setName($name);
+        }
+        if (!empty($department)) {
+            $this->setDepartment($department);
+        }
+        if (!empty($address)) {
+            $this->setAddress($address);
+        }
+        if (!empty($telephone)) {
+            $this->setTelephone($telephone);
+        }
+        if (!empty($comment)) {
+            $this->setComment($comment);
+        }
+        if (!empty($memo)) {
+            $this->setMemo($memo);
+        }
+        if (!empty($details)) {
+            $this->setDetails($details);
+        }
+    }
+
+    /**
+     * @param POI $poi
+     */
+    public static function removePoi(POI $poi) {
+        $poi->getAddress()->removePoi($poi);
+    }
+
+    /**
+     * @param Address $address
+     */
+    public function assignAddress(Address $address) {
+        $this->address = $address;
+        $address->assignPoi($this);
     }
 
     public function activate() {
@@ -153,7 +190,7 @@ class POI {
     /**
      * @param POIKeyword $keyword
      */
-    public function removeKeyword(POIKeyword $keyword){
+    public function removeKeyword(POIKeyword $keyword) {
         $this->keywords->removeElement($keyword);
     }
 
@@ -165,7 +202,7 @@ class POI {
     }
 
     /**
-     * @return mixed
+     * @return Address
      */
     public function getAddress() {
         return $this->address;

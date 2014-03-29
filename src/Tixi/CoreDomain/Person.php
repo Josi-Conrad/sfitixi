@@ -83,6 +83,11 @@ class Person {
     protected $email;
 
     /**
+     * @ORM\Column(type="boolean")
+     */
+    protected $isMale;
+
+    /**
      * @ORM\Column(type="datetime", nullable=true)
      */
     protected $entryDate;
@@ -112,14 +117,16 @@ class Person {
      * @param $firstname
      * @param $lastname
      * @param $telephone
+     * @param bool $isMale
      * @param null $email
      * @param null $entryDate
      * @param null $birthday
      * @param null $extraMinutes
      * @param null $details
+     * @internal param string $gender
      * @return Person
      */
-    public function registerPerson($title, $firstname, $lastname, $telephone,
+    public function registerPerson($title, $firstname, $lastname, $telephone, $isMale = true,
                                    $email = null, $entryDate = null, $birthday = null,
                                    $extraMinutes = null, $details = null) {
 
@@ -129,12 +136,23 @@ class Person {
         $person->setFirstname($firstname);
         $person->setLastname($lastname);
         $person->setTelephone($telephone);
+        $person->setIsMale($isMale);
 
-        if(!empty($email)) {$person->setEmail($email);}
-        if(!empty($entryDate)) {$person->setEntryDate($entryDate);}
-        if(!empty($birthday)) {$person->setBirthday($birthday);}
-        if(!empty($extraMinutes)) {$person->setExtraMinutes($extraMinutes);}
-        if(!empty($details)) {$person->setDetails($details);}
+        if (!empty($email)) {
+            $person->setEmail($email);
+        }
+        if (!empty($entryDate)) {
+            $person->setEntryDate($entryDate);
+        }
+        if (!empty($birthday)) {
+            $person->setBirthday($birthday);
+        }
+        if (!empty($extraMinutes)) {
+            $person->setExtraMinutes($extraMinutes);
+        }
+        if (!empty($details)) {
+            $person->setDetails($details);
+        }
 
         $person->activate();
 
@@ -146,6 +164,7 @@ class Person {
      * @param null $firstname
      * @param null $lastname
      * @param null $telephone
+     * @param null $isMale
      * @param null $email
      * @param null $entryDate
      * @param null $birthday
@@ -153,17 +172,44 @@ class Person {
      * @param null $details
      */
     public function updateBasicData($title = null, $firstname = null, $lastname = null, $telephone = null,
-                                    $email = null, $entryDate = null, $birthday = null,
+                                    $isMale = null, $email = null, $entryDate = null, $birthday = null,
                                     $extraMinutes = null, $details = null) {
-        if(!empty($title)) {$this->setTitle($title);}
-        if(!empty($firstname)) {$this->setFirstname($firstname);}
-        if(!empty($lastname)) {$this->setLastname($lastname);}
-        if(!empty($telephone)) {$this->setTelephone($telephone);}
-        if(!empty($email)) {$this->setEmail($email);}
-        if(!empty($entryDate)) {$this->setEntryDate($entryDate);}
-        if(!empty($birthday)) {$this->setBirthday($birthday);}
-        if(!empty($extraMinutes)) {$this->setExtraMinutes($extraMinutes);}
-        if(!empty($details)) {$this->setDetails($details);}
+        if (!empty($title)) {
+            $this->setTitle($title);
+        }
+        if (!empty($firstname)) {
+            $this->setFirstname($firstname);
+        }
+        if (!empty($lastname)) {
+            $this->setLastname($lastname);
+        }
+        if (!empty($telephone)) {
+            $this->setTelephone($telephone);
+        }
+        if (!empty($isMale)) {
+            $this->setIsMale($isMale);
+        }
+        if (!empty($email)) {
+            $this->setEmail($email);
+        }
+        if (!empty($entryDate)) {
+            $this->setEntryDate($entryDate);
+        }
+        if (!empty($birthday)) {
+            $this->setBirthday($birthday);
+        }
+        if (!empty($extraMinutes)) {
+            $this->setExtraMinutes($extraMinutes);
+        }
+        if (!empty($details)) {
+            $this->setDetails($details);
+        }
+    }
+
+    public function removePerson(){
+        foreach($this->getAbsents() as $a){
+            $this->removeAbsent($a);
+        }
     }
 
     public function activate() {
@@ -193,8 +239,13 @@ class Person {
      * @param Absent $absent
      */
     public function assignAbsent(Absent $absent) {
-        $absent->setPerson($this);
+        $absent->assignPerson($this);
         $this->absents->add($absent);
+    }
+
+    public function removeAbsent(Absent $absent) {
+        $this->absents->removeElement($absent);
+        $absent->removePerson();
     }
 
     /**
@@ -272,6 +323,20 @@ class Person {
      */
     public function getDetails() {
         return $this->details;
+    }
+
+    /**
+     * @param mixed $isMale
+     */
+    public function setIsMale($isMale) {
+        $this->isMale = $isMale;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getIsMale() {
+        return $this->isMale;
     }
 
     /**

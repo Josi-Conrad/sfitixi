@@ -158,12 +158,26 @@ class Address {
         $this->setEditFlag($editFlag);
     }
 
+    public static function removeAddress(Address $address) {
+        foreach ($address->getPois() as $p) {
+            /** @var $p POI */
+            POI::removePoi($p);
+        }
+    }
+
     /**
      * @param POI $poi
      */
     public function assignPoi(POI $poi) {
         $poi->setAddress($this);
         $this->pois->add($poi);
+    }
+
+    /**
+     * @param POI $poi
+     */
+    public function removePoi(POI $poi) {
+        $this->pois->removeElement($poi);
     }
 
     public function toString() {
@@ -270,13 +284,6 @@ class Address {
      */
     public function getName() {
         return $this->name;
-    }
-
-    /**
-     * @param mixed $pois
-     */
-    public function setPois($pois) {
-        $this->pois = $pois;
     }
 
     /**

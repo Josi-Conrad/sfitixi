@@ -48,6 +48,12 @@ class Absent {
     private function __construct() {
     }
 
+    /**
+     * @param $subject
+     * @param $startDate
+     * @param $endDate
+     * @return Absent
+     */
     public static function registerAbsent($subject, $startDate, $endDate) {
         $absent = new Absent();
 
@@ -58,10 +64,32 @@ class Absent {
         return $absent;
     }
 
-    public function updateBasicData($subject=null, $startDate=null, $endDate=null) {
-        if(!is_null($subject)) {$this->setSubject($subject);}
-        if(!is_null($startDate)) {$this->setstartDate($startDate);}
-        if(!is_null($endDate)) {$this->setendDate($endDate);}
+    /**
+     * @param null $subject
+     * @param null $startDate
+     * @param null $endDate
+     */
+    public function updateBasicData($subject = null, $startDate = null, $endDate = null) {
+        if (!empty($subject)) {
+            $this->setSubject($subject);
+        }
+        if (!empty($startDate)) {
+            $this->setstartDate($startDate);
+        }
+        if (!empty($endDate)) {
+            $this->setendDate($endDate);
+        }
+    }
+
+    /**
+     * @param Person $person
+     */
+    public function assignPerson(Person $person){
+        $this->person = $person;
+    }
+
+    public function removePerson(){
+        $this->person = null;
     }
 
     /**
@@ -104,20 +132,6 @@ class Absent {
      */
     public function getId() {
         return $this->id;
-    }
-
-    /**
-     * @param mixed $person
-     */
-    public function setPerson($person) {
-        $this->person = $person;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getPerson() {
-        return $this->person;
     }
 
     /**
