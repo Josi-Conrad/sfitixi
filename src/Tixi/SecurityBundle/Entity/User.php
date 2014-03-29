@@ -45,7 +45,6 @@ class User implements UserInterface, \Serializable {
         $this->activate();
     }
 
-
     public function activate() {
         $this->isActive = true;
     }
@@ -87,7 +86,6 @@ class User implements UserInterface, \Serializable {
      */
     public function setUsername($username) {
         $this->username = $username;
-        $this->email = $username;
     }
 
     /**

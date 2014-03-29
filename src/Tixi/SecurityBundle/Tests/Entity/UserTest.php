@@ -39,10 +39,10 @@ class UserTest extends WebTestCase {
         $this->userRepo = $kernel->getContainer()->get('tixi_user_repository');
         $this->roleRepo = $kernel->getContainer()->get('tixi_role_repository');
         $this->encFactory = $kernel->getContainer()->get('security.encoder_factory');
-        //$this->em->beginTransaction();
+        $this->em->beginTransaction();
     }
 
-    public function testCreateUserAndRoles() {
+    public function testUserCRUD() {
         $role_user = $this->createRole('Benutzer', 'ROLE_USER');
         $role_manager = $this->createRole('Manager', 'ROLE_MANAGER');
         $role_admin = $this->createRole('Admin', 'ROLE_ADMIN');
@@ -56,6 +56,10 @@ class UserTest extends WebTestCase {
         $this->assertEquals($user2, $user_find);
         $user_find = $this->userRepo->find($user3->getId());
         $this->assertEquals($user3, $user_find);
+
+        $user1->setUsername('travis');
+        $this->userRepo->store($user1);
+
     }
 
     /**
@@ -106,6 +110,6 @@ class UserTest extends WebTestCase {
      */
     protected function tearDown() {
         parent::tearDown();
-        //$this->em->rollback();
+        $this->em->rollback();
     }
 }
