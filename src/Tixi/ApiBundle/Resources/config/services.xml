@@ -9,10 +9,12 @@
         <parameter key="tixi_api.datetimeservice.class">Tixi\ApiBundle\Helper\DateTimeService</parameter>
         <parameter key="tixi_api.vehicleassembler.class">Tixi\ApiBundle\Interfaces\VehicleAssembler</parameter>
         <parameter key="tixi_api.serviceplanassembler.class">Tixi\ApiBundle\Interfaces\ServicePlanAssembler</parameter>
-        <parameter key="tixi_api.datagrid.class">Tixi\ApiBundle\Shared\DataGrid\DataGrid</parameter>
+        <!--<parameter key="tixi_api.datagrid.class">Tixi\ApiBundle\Shared\DataGrid\DataGrid</parameter>-->
         <parameter key="tixi_api.driverassembler.class">Tixi\ApiBundle\Interfaces\DriverAssembler</parameter>
         <parameter key="tixi_api.passengerassembler.class">Tixi\ApiBundle\Interfaces\PassengerAssembler</parameter>
         <parameter key="tixi_api.tilerenderer.class">Tixi\ApiBundle\Tile\TileRenderer</parameter>
+        <parameter key="tixi_api.datagridhandler.class">Tixi\ApiBundle\Shared\DataGrid\DataGridHandler</parameter>
+        <parameter key="tixi_api.datagridcontrollerfactory.class">Tixi\ApiBundle\Shared\DataGrid\DataGridControllerFactory</parameter>
     </parameters>
 
     <services>
@@ -31,11 +33,11 @@
                 <argument type="service" id="tixi_api.datetimeservice" />
             </call>
         </service>
-        <service id="tixi_api.datagrid" class="%tixi_api.datagrid.class%">
-            <call method="setReader">
-                <argument type="service" id="annotation_reader" />
-            </call>
-        </service>
+        <!--<service id="tixi_api.datagrid" class="%tixi_api.datagrid.class%">-->
+            <!--<call method="setReader">-->
+                <!--<argument type="service" id="annotation_reader" />-->
+            <!--</call>-->
+        <!--</service>-->
         <service id="tixi_api.assemblerDriver" class="%tixi_api.driverassembler.class%">
             <call method="setDateTimeService">
                 <argument type="service" id="tixi_api.datetimeservice" />
@@ -49,6 +51,19 @@
         <service id="tixi_api.tilerenderer" class="%tixi_api.tilerenderer.class%">
             <call method="setTemplateEngine">
                 <argument type="service" id="templating" />
+            </call>
+        </service>
+        <service id="tixi_api.datagridhandler" class="%tixi_api.datagridhandler.class%">
+            <call method="setReader">
+                <argument type="service" id="annotation_reader" />
+            </call>
+            <call method="setRouter">
+                <argument type="service" id="router" />
+            </call>
+        </service>
+        <service id="tixi_api.datagridcontrollerfactory" class="%tixi_api.datagridcontrollerfactory.class%">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
             </call>
         </service>
     </services>

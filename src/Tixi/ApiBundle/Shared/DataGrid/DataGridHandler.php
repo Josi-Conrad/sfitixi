@@ -2,29 +2,95 @@
 /**
  * Created by PhpStorm.
  * User: faustos
- * Date: 17.03.14
- * Time: 21:43
+ * Date: 27.03.14
+ * Time: 00:53
  */
 
 namespace Tixi\ApiBundle\Shared\DataGrid;
 
+
 use Doctrine\Common\Annotations\FileCacheReader;
-use Tixi\ApiBundle\Shared\DataGrid\DataGridSourceClass;
-use Tixi\ApiBundle\Shared\DataGrid\RESTHandler\DataGridInputState;
+use Symfony\Bundle\FrameworkBundle\Routing\Router;
+use Symfony\Component\DependencyInjection\ContainerAware;
+use Symfony\Component\HttpFoundation\Request;
+use Tixi\ApiBundle\Interfaces\AssemblerInterface;
+use Tixi\ApiBundle\Shared\DataGrid\DataGridInputState;
+use Tixi\ApiBundle\Shared\DataGrid\Tile\DataGridEmbeddedTile;
+use Tixi\ApiBundle\Shared\DataGrid\Tile\DataGridRowTableTile;
+use Tixi\ApiBundle\Shared\DataGrid\Tile\DataGridTile;
+use Tixi\ApiBundle\Shared\Paginator;
+use Tixi\ApiBundle\Tile\Core\PanelTile;
+use Tixi\ApiBundle\Tile\Core\RootPanel;
+use Tixi\CoreDomain\Shared\FastGenericEntityAccessorRepository;
 use Tixi\CoreDomain\Shared\GenericEntityFilter\FilterProperties\OrderBy;
 use Tixi\CoreDomain\Shared\GenericEntityFilter\FilterProperties\Search;
 use Tixi\CoreDomain\Shared\GenericEntityFilter\GenericEntityFilter;
 use Tixi\CoreDomain\Shared\GenericEntityFilter\GenericEntityProperty;
 
-class DataGrid {
+class DataGridHandler {
 
-    protected $reader;
+    public static $dataGirdReplaceIdentifier = '__replaceId__';
+
     protected $rowIdAnnotationClass = 'Tixi\ApiBundle\Shared\DataGrid\Annotations\GridRowId';
     protected $fieldAnnotationClass = 'Tixi\ApiBundle\Shared\DataGrid\Annotations\GridField';
     protected $headerClass = 'Tixi\ApiBundle\Shared\DataGrid\DataGridHeader';
     protected $fieldClass = 'Tixi\ApiBundle\Shared\DataGrid\DataGridField';
 
-    public function createGenericEntityFilterByState(DataGridInputState $state) {
+    protected $annotationReader;
+    protected $router;
+
+    public function createDataGridTileByRequest(Request $request, DataGridAbstractController $gridControl) {
+        $dataGridInputState = $this->initStateByRequest($request, $gridControl->getReferenceDTO());
+        $fgeaFilter = $this->createFgeaFilter($dataGridInputState);
+        $sourceDTOs = $gridControl->constructDtosFromFgeaFilter($fgeaFilter);
+        $totalAmountOfRows = $gridControl->getTotalAmountOfRowsByFgeaFilter($fgeaFilter);
+        return $this->createDataGridTile($dataGridInputState, $sourceDTOs, $totalAmountOfRows, $gridControl);
+    }
+
+    public function createEmbeddedDataGridTile(DataGridAbstractController $gridController) {
+        $headers = $this->createHeaderArray($gridController->getReferenceDTO());
+        $outputState = DataGridOutputState::createEmbeddedOutputState($gridController->getGridIdentifier(), $headers, $gridController->getDataSrcUrl());
+        $embeddedTile = new DataGridEmbeddedTile($outputState, $gridController->createDataGridJsConf());
+        $embeddedTile->add($gridController->createCustomControlTile());
+        return $embeddedTile;
+    }
+
+    protected function initStateByRequest(Request $request, DataGridSourceClass $referenceDTO) {
+        $page = $request->get('page');
+        $limit = $request->get('limit');
+        $orderByField = $request->get('orderbyfield');
+        $orderByDirection = $request->get('orderbydirection');
+        $filterstr = $request->get('filterstr');
+        $correctedPage = Paginator::adjustPageForPagination($page);
+        $partial = $request->get('partial');
+        return new DataGridInputState($referenceDTO, $orderByField, $orderByDirection, $correctedPage, $limit, $filterstr, $partial);
+    }
+
+    protected function createDataGridTile(
+        DataGridInputState $state, array $sourceDtos, $totalAmountOfRows, DataGridAbstractController $gridController) {
+        $rows = $this->createRowsArray($sourceDtos);
+        $returnTile = null;
+        if(!$state->isPartial()) {
+            $headers = $this->createHeaderArray($gridController->getReferenceDTO());
+            $outputState = DataGridOutputState::createOutputState($gridController->getGridIdentifier(), $headers, $rows, $totalAmountOfRows);
+            $dataGridTile = null;
+            if(!$gridController->isInEmbeddedState()) {
+                $returnTile = new RootPanel($gridController->getGridDisplayTitel());
+                $dataGridTile = $returnTile->add(new DataGridTile($outputState, $gridController->createDataGridJsConf()));
+            }else {
+                $returnTile = new PanelTile($gridController->getGridDisplayTitel());
+                $dataGridTile = $returnTile->add(new DataGridEmbeddedTile($outputState, $gridController->createDataGridJsConf()));
+            }
+            $dataGridTile->add($gridController->createCustomControlTile());
+            $dataGridTile->add(new DataGridRowTableTile($outputState));
+        }else {
+            $outputState = DataGridOutputState::createPartialOutputState($gridController->getGridIdentifier(), $rows, $totalAmountOfRows);
+            $returnTile = new DataGridRowTableTile($outputState);
+        }
+        return $returnTile;
+    }
+
+    public function createFgeaFilter(DataGridInputState $state) {
         $filter = new GenericEntityFilter($state->getSourceDTO()->getAccessQuery());
         $properties = $this->createEntityPropertiesArray($state->getSourceDTO());
         $restrictiveProperties = DataGridEntityProperty::getRestrictiveProperties($properties);
@@ -54,7 +120,7 @@ class DataGrid {
         $properties = array();
 
         foreach($sourceReflectionObject->getProperties() as $reflProperty) {
-            $dataGridFieldAnnotation = $this->reader->getPropertyAnnotation($reflProperty, $this->fieldAnnotationClass);
+            $dataGridFieldAnnotation = $this->annotationReader->getPropertyAnnotation($reflProperty, $this->fieldAnnotationClass);
             if(!empty($dataGridFieldAnnotation->propertyId)) {
                 $explodedPropertyId = explode('.', $dataGridFieldAnnotation->propertyId);
                 if(count($explodedPropertyId)<2) {throw new \Exception('misformatted propertyId found on field '.$reflProperty->getName());}
@@ -69,14 +135,12 @@ class DataGrid {
         return $properties;
     }
 
-
-
-    public function createHeaderArray(DataGridSourceClass $sourceClassInstance) {
+    protected function createHeaderArray(DataGridSourceClass $sourceClassInstance) {
         $sourceReflectionObject = new \ReflectionClass($sourceClassInstance);
         $headers = array();
 
         foreach($sourceReflectionObject->getProperties() as $reflProperty) {
-            $dataGridFieldAnnotation = $this->reader->getPropertyAnnotation($reflProperty, $this->fieldAnnotationClass);
+            $dataGridFieldAnnotation = $this->annotationReader->getPropertyAnnotation($reflProperty, $this->fieldAnnotationClass);
             if(null !== $dataGridFieldAnnotation) {
                 if(!empty($dataGridFieldAnnotation->headerName)) {
                     $rowId = $dataGridFieldAnnotation->propertyId;
@@ -89,7 +153,7 @@ class DataGrid {
         return $headers;
     }
 
-    public function createRowsArray(array $sourceArray) {
+    protected function createRowsArray(array $sourceArray) {
         $rowsArray = array();
         foreach($sourceArray as $rowSource) {
             $row = $this->createRow($rowSource);
@@ -103,7 +167,7 @@ class DataGrid {
         $rowId = null;
         $fields = array();
         foreach($sourceReflectionObject->getProperties() as $reflProperty) {
-            $dataGridFieldAnnotation = $this->reader->getPropertyAnnotation($reflProperty, $this->fieldAnnotationClass);
+            $dataGridFieldAnnotation = $this->annotationReader->getPropertyAnnotation($reflProperty, $this->fieldAnnotationClass);
             if(null !== $dataGridFieldAnnotation) {
                 if($dataGridFieldAnnotation->rowIdentifier) {
                     if(null !== $rowId) {throw new \Exception('found duplicated row id');}
@@ -121,9 +185,11 @@ class DataGrid {
     }
 
     public function setReader(FileCacheReader $reader) {
-        $this->reader = $reader;
+        $this->annotationReader = $reader;
     }
 
-
+    public function setRouter(Router $router) {
+        $this->router = $router;
+    }
 
 } 

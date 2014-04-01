@@ -59,7 +59,11 @@ function DataGrid(outline, gridId, dblClickCallback, isEmbedded) {
         _this._initControls();
         _this._initCustomControlsWithSelection();
         _this._initRowListener();
-        _this._paginator.refresh(_this._getTotalAmountOfRows());
+        if(isEmbedded) {
+            _this._updateData(true);
+        }else {
+            _this._paginator.refresh(_this._getTotalAmountOfRows());
+        }
     }
 
     this._initHeaders = function() {
@@ -95,13 +99,13 @@ function DataGrid(outline, gridId, dblClickCallback, isEmbedded) {
 
     this._initCustomControlsWithSelection = function() {
         var _url;
-        _this._customActionWithSelectionButton = $('.actionControl .customActionWithSelectionButton');
+        _this._customActionWithSelectionButton = $('.actionControl .selectionButton');
         $(_this._customActionWithSelectionButton).prop("disabled",true);
-        $('.actionControl .customActionWithSelection').each(function() {
+        $('.actionControl .textLink').each(function() {
             $(this).on('click', function(event) {
                 event.preventDefault();
                 if(_this._activeRow) {
-                    _url = $(this).attr('data-targetSrc').replace('--selectionid--', _this._getIdFromRow(_this._activeRow));
+                    _url = $(this).attr('data-targetSrc').replace('__replaceId__', _this._getIdFromRow(_this._activeRow));
                     window.location = _url;
                 }
             });

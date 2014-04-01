@@ -13,6 +13,7 @@ use FOS\RestBundle\Request\ParamFetcherInterface;
 use FOS\RestBundle\View\View;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Tixi\ApiBundle\Form\ServicePlanType;
 use Tixi\ApiBundle\Form\VehicleType;
@@ -22,7 +23,7 @@ use Tixi\ApiBundle\Interfaces\ServicePlanEmbeddedListDTO;
 use Tixi\ApiBundle\Interfaces\ServicePlanListDTO;
 use Tixi\ApiBundle\Interfaces\VehicleAssembler;
 use Tixi\ApiBundle\Interfaces\VehicleRegisterDTO;
-use Tixi\ApiBundle\Shared\DataGrid\RESTHandler\DataGridState;
+use Tixi\ApiBundle\Shared\DataGrid\RESTHandler\DataGridInputState;
 use Tixi\CoreDomain\ServicePlan;
 use Tixi\CoreDomain\Vehicle;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -49,41 +50,16 @@ class ServicePlanController extends Controller {
      * @QueryParam(name="orderbydirection")
      * @QueryParam(name="filterstr")
      */
-    public function getServiceplansAction($vehicleId, Request $request, ParamFetcherInterface $paramFetcher, $embedded=false) {
-//        $viewHandler = $this->get('fos_rest.view_handler');
-        $dataGridState = DataGridState::createByParamFetcher($paramFetcher, ServicePlanEmbeddedListDTO::createReferenceDTOByVehicleId($vehicleId));
-        $servicePlans = $this->get('tixi_coredomain.fgea_repository')->findByFilter($this->get('tixi_api.datagrid')->createGenericEntityFilterByState($dataGridState));
+    public function getServiceplansAction($vehicleId, Request $request, $embeddedState=false) {
+        $embeddedState = $embeddedState || ($request->get('embedded') !== null && $request->get('embedded'));
 
-        $isEmbedded = $embedded || ($paramFetcher->get('embedded') !== null && $paramFetcher->get('embedded'));
-        $isPartial = (null !== $paramFetcher->get('partial'));
+        $dataGridHandler = $this->get('tixi_api.datagridhandler');
+        $dataGridControllerFactory = $this->get('tixi_api.datagridcontrollerfactory');
+        $tileRenderer = $this->get('tixi_api.tilerenderer');
 
-        $servicePlansDTO = array();
-        if($isEmbedded) {
-            $servicePlansDTO = $this->get('tixi_api.assemblerserviceplan')->servicePlansToServicePlanEmbeddedListDTOs($servicePlans);
-        }else {
-            //there is no full list at the moment
-        }
-
-        $totalAmount = $this->get('tixi_coredomain.fgea_repository')->findTotalAmountByFilter($this->get('tixi_api.datagrid')->createGenericEntityFilterByState($dataGridState));
-        $rows = $this->get('tixi_api.datagrid')->createRowsArray($servicePlansDTO);
-
-        $routeParameters = array($vehicleId);
-        $headers = null;
-        $srcUrl = '';
-        $template = '';
-        if($isEmbedded && !$isPartial) {
-            $headers = $this->get('tixi_api.datagrid')->createHeaderArray(ServicePlanEmbeddedListDTO::createReferenceDTOByVehicleId($vehicleId));
-            $template = 'TixiApiBundle:ServicePlan:embeddedlist.html.twig';
-            $srcUrl = $this->get('router')->generate('tixiapi_serviceplans_get', array('vehicleId' => $vehicleId));
-        }else {
-            if(empty($partial) && !$isPartial) {
-                //there is no full list at the moment
-            }else {
-                $template='TixiApiBundle:Shared:datagrid.tablebody.html.twig';
-            }
-        }
-
-        return $this->render($template,array('rowIdPrefix'=>'serviceplans','dataSrcUrl'=>$srcUrl, 'routeParameters'=>$routeParameters, 'tableHeaders'=>$headers,'tableRows'=>$rows, 'totalAmountOfRows'=>$totalAmount));
+        $gridController = $dataGridControllerFactory->createServicePlanController($embeddedState, array('vehicleId'=>$vehicleId));
+        $dataGridTile = $dataGridHandler->createDataGridTileByRequest($request, $gridController);
+        return new Response($tileRenderer->render($dataGridTile));
     }
 
     /**
