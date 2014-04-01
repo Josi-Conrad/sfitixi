@@ -1,9 +1,3 @@
-/*disable bootstrap responsiveness*/
-.container{
-    max-width: none !important;
-    width: 1024px;
-}
-
 /*##### Data Grid #####*/
 .dataGrid table .selected td {
     color: #ffffff;

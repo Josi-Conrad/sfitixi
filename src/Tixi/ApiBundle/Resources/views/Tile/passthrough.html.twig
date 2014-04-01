@@ -1,0 +1,5 @@
+{% if children is defined %}
+    {% for resolvedElement in children %}
+        {{ resolvedElement.rawData | raw }}
+    {% endfor %}
+{% endif %}

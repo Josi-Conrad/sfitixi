@@ -1,0 +1,4 @@
+{% set embedded = embedded|default(false) %}
+<button type="button"
+        class="customLink backButton btn {% if type == 'primary' %}btn-primary{% else %}btn-default{% endif %} {% if embedded %}btn-sm{% endif %}">{{ displayText }}
+</button>
