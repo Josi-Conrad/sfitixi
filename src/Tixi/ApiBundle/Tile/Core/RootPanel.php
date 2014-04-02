@@ -14,14 +14,16 @@ use Tixi\ApiBundle\Tile\AbstractTile;
 class RootPanel extends AbstractTile{
 
     protected $headerDisplayText;
+    protected $headerDisplaySubtitleText;
 
-    public function __construct($headerDisplayText) {
+    public function __construct($headerDisplayText, $headerDisplaySubtitleText='') {
         $this->headerDisplayText = $headerDisplayText;
+        $this->headerDisplaySubtitleText = $headerDisplaySubtitleText;
     }
 
     public function getViewParameters()
     {
-        return array('headerDisplayText'=>$this->headerDisplayText);
+        return array('headerDisplayText'=>$this->headerDisplayText, 'headerDisplaySubtitleText'=>$this->headerDisplaySubtitleText);
     }
 
     public function getTemplateName()
