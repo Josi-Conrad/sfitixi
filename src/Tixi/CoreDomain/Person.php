@@ -83,9 +83,9 @@ class Person {
     protected $email;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="string", length=25)
      */
-    protected $isMale;
+    protected $gender;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
@@ -117,7 +117,7 @@ class Person {
      * @param $firstname
      * @param $lastname
      * @param $telephone
-     * @param bool $isMale
+     * @param $gender
      * @param null $email
      * @param null $entryDate
      * @param null $birthday
@@ -126,7 +126,7 @@ class Person {
      * @internal param string $gender
      * @return Person
      */
-    public function registerPerson($title, $firstname, $lastname, $telephone, $isMale = true,
+    public function registerPerson($title, $firstname, $lastname, $telephone, $gender,
                                    $email = null, $entryDate = null, $birthday = null,
                                    $extraMinutes = null, $details = null) {
 
@@ -136,7 +136,7 @@ class Person {
         $person->setFirstname($firstname);
         $person->setLastname($lastname);
         $person->setTelephone($telephone);
-        $person->setIsMale($isMale);
+        $person->setGender($gender);
 
         if (!empty($email)) {
             $person->setEmail($email);
@@ -164,15 +164,15 @@ class Person {
      * @param null $firstname
      * @param null $lastname
      * @param null $telephone
-     * @param null $isMale
+     * @param null $gender
      * @param null $email
      * @param null $entryDate
      * @param null $birthday
      * @param null $extraMinutes
      * @param null $details
      */
-    public function updateBasicData($title = null, $firstname = null, $lastname = null, $telephone = null,
-                                    $isMale = null, $email = null, $entryDate = null, $birthday = null,
+    public function updatePersonBasicData($title = null, $firstname = null, $lastname = null, $telephone = null,
+                                    $gender = null, $email = null, $entryDate = null, $birthday = null,
                                     $extraMinutes = null, $details = null) {
         if (!empty($title)) {
             $this->setTitle($title);
@@ -186,8 +186,8 @@ class Person {
         if (!empty($telephone)) {
             $this->setTelephone($telephone);
         }
-        if (!empty($isMale)) {
-            $this->setIsMale($isMale);
+        if (!empty($gender)) {
+            $this->setGender($gender);
         }
         if (!empty($email)) {
             $this->setEmail($email);
@@ -328,15 +328,15 @@ class Person {
     /**
      * @param mixed $isMale
      */
-    public function setIsMale($isMale) {
-        $this->isMale = $isMale;
+    public function setGender($isMale) {
+        $this->gender = $isMale;
     }
 
     /**
      * @return mixed
      */
-    public function getIsMale() {
-        return $this->isMale;
+    public function getGender() {
+        return $this->gender;
     }
 
     /**

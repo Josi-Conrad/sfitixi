@@ -8,23 +8,32 @@
 
 namespace Tixi\CoreDomain\Dispo;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Tixi\CoreDomain\Dispo\Route
  *
+ * Route Entity, with start and target Address as a unique combination
+ *
  * @ORM\Entity(repositoryClass="Tixi\CoreDomainBundle\Repository\Dispo\RouteRepositoryDoctrine")
- * @ORM\Table(name="route")
+ * @ORM\Table(name="route",
+ * uniqueConstraints={@ORM\UniqueConstraint(name="search_idx", columns={"address_start_id", "address_target_id"})}
+ * )
  */
 class Route {
     /**
      * @ORM\Id
+     * @ORM\Column(type="bigint", name="id")
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    protected $id;
+    /**
      * @ORM\ManyToOne(targetEntity="Tixi\CoreDomain\Address")
      * @ORM\JoinColumn(name="address_start_id", referencedColumnName="id")
      */
     protected $startAddress;
     /**
-     * @ORM\Id
      * @ORM\ManyToOne(targetEntity="Tixi\CoreDomain\Address")
      * @ORM\JoinColumn(name="address_target_id", referencedColumnName="id")
      */
@@ -46,7 +55,80 @@ class Route {
      */
     protected $distance;
 
-    public function __construct(){
-        $this->drivingOrders = new ArrayCollection();
+    private function __construct() {
     }
+
+    public static function registerRoute($startAddress, $targetAddress, $duration = null, $distance = null) {
+        $route = new Route();
+        $route->startAddress = $startAddress;
+        $route->targetAddress = $targetAddress;
+        $route->duration = $duration;
+        $route->distance = $distance;
+        return $route;
+    }
+
+    /**
+     * @param mixed $distance
+     */
+    public function setDistance($distance) {
+        $this->distance = $distance;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDistance() {
+        return $this->distance;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDuration() {
+        return $this->duration;
+    }
+
+    /**
+     * @param mixed $id
+     */
+    public function setId($id) {
+        $this->id = $id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getId() {
+        return $this->id;
+    }
+
+    /**
+     * @param mixed $startAddress
+     */
+    public function setStartAddress($startAddress) {
+        $this->startAddress = $startAddress;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getStartAddress() {
+        return $this->startAddress;
+    }
+
+    /**
+     * @param mixed $targetAddress
+     */
+    public function setTargetAddress($targetAddress) {
+        $this->targetAddress = $targetAddress;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTargetAddress() {
+        return $this->targetAddress;
+    }
+
+
 }

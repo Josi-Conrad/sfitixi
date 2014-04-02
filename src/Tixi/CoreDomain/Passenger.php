@@ -60,12 +60,12 @@ class Passenger extends Person {
      * @param $firstname
      * @param $lastname
      * @param $telephone
+     * @param $gender
      * @param Address $address
      * @param Handicap $handicap
      * @param bool $isInWheelChair
      * @param bool $gotMonthlyBilling
      * @param bool $isOverWeight
-     * @param bool $isMale
      * @param null $email
      * @param null $entryDate
      * @param null $birthday
@@ -74,8 +74,8 @@ class Passenger extends Person {
      * @param null $notice
      * @return Passenger
      */
-    public static function registerPassenger($title, $firstname, $lastname, $telephone, Address $address, Handicap $handicap,
-                                             $isInWheelChair = false, $gotMonthlyBilling = false, $isOverWeight = false, $isMale = true,
+    public static function registerPassenger($title, $firstname, $lastname, $telephone, $gender, Address $address, Handicap $handicap,
+                                             $isInWheelChair = false, $gotMonthlyBilling = false, $isOverWeight = false,
                                              $email = null, $entryDate = null, $birthday = null,
                                              $extraMinutes = null, $details = null, $notice = null) {
         $passenger = new Passenger();
@@ -83,12 +83,12 @@ class Passenger extends Person {
         $passenger->setFirstname($firstname);
         $passenger->setLastname($lastname);
         $passenger->setTelephone($telephone);
+        $passenger->setGender($gender);
         $passenger->setAddress($address);
         $passenger->setHandicap($handicap);
         $passenger->setIsInWheelChair($isInWheelChair);
         $passenger->setGotMonthlyBilling($gotMonthlyBilling);
         $passenger->setIsOverweight($isOverWeight);
-        $passenger->setIsMale($isMale);
 
         if (!empty($email)) {
             $passenger->setEmail($email);
@@ -119,12 +119,12 @@ class Passenger extends Person {
      * @param null $firstname
      * @param null $lastname
      * @param null $telephone
+     * @param null $gender
      * @param Address $address
      * @param Handicap $handicap
      * @param null $isInWheelChair
      * @param null $gotMonthlyBilling
      * @param null $isOverWeight
-     * @param null $isMale
      * @param null $email
      * @param null $entryDate
      * @param null $birthday
@@ -132,9 +132,9 @@ class Passenger extends Person {
      * @param null $details
      * @param null $notice
      */
-    public function updatePassengerBasicData($title = null, $firstname = null, $lastname = null, $telephone = null,
+    public function updatePassengerBasicData($title = null, $firstname = null, $lastname = null, $telephone = null, $gender = null,
                                              Address $address, Handicap $handicap = null, $isInWheelChair = null, $gotMonthlyBilling = null,
-                                             $isOverWeight = null, $isMale = null, $email = null, $entryDate = null, $birthday = null,
+                                             $isOverWeight = null, $email = null, $entryDate = null, $birthday = null,
                                              $extraMinutes = null, $details = null, $notice = null) {
         if (!empty($title)) {
             $this->setTitle($title);
@@ -147,6 +147,9 @@ class Passenger extends Person {
         }
         if (!empty($telephone)) {
             $this->setTelephone($telephone);
+        }
+        if (!empty($gender)) {
+            $this->setGender($gender);
         }
         if (!empty($address)) {
             $this->setAddress($address);
@@ -162,9 +165,6 @@ class Passenger extends Person {
         }
         if (!empty($isOverWeight)) {
             $this->setIsOverweight($isOverWeight);
-        }
-        if (!empty($isMale)) {
-            $this->setIsMale($isMale);
         }
         if (!empty($email)) {
             $this->setEmail($email);

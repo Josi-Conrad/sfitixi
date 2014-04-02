@@ -34,7 +34,7 @@ class DrivingOrder {
      */
     protected $drivingMission;
     /**
-     * @ORM\ManyToOne(targetEntity="Route", inversedBy="drivingOrders")
+     * @ORM\ManyToOne(targetEntity="Route")
      * @ORM\JoinColumn(name="route_id", referencedColumnName="id")
      */
     protected $route;

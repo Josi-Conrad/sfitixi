@@ -32,6 +32,9 @@
         <parameter key="vehiclecategory.doctrine.entity">Tixi\CoreDomain\VehicleCategory</parameter>
         <parameter key="vehiclecategory_repository.doctrine.class">Tixi\CoreDomainBundle\Repository\VehicleCategoryRepositoryDoctrine</parameter>
 
+        <parameter key="route.doctrine.entity">Tixi\CoreDomain\Dispo\Route</parameter>
+        <parameter key="route_repository.doctrine.class">Tixi\CoreDomainBundle\Repository\Dispo\RouteRepositoryDoctrine</parameter>
+
     </parameters>
 
     <services>
@@ -101,6 +104,11 @@
         <service id="vehiclecategory_repository" alias="vehiclecategory_repository.doctrine"></service>
         <service id="vehiclecategory_repository.doctrine" class="%vehiclecategory_repository.doctrine.class%" factory-service="doctrine" factory-method="getrepository">
             <argument type="string">%vehiclecategory.doctrine.entity%</argument>
+        </service>
+
+        <service id="route_repository" alias="route_repository.doctrine"></service>
+        <service id="route_repository.doctrine" class="%route_repository.doctrine.class%" factory-service="doctrine" factory-method="getrepository">
+            <argument type="string">%route.doctrine.entity%</argument>
         </service>
 
     </services>

@@ -50,11 +50,11 @@ class Driver extends Person {
      * @param $firstname
      * @param $lastname
      * @param $telephone
+     * @param $gender
      * @param $licenceNumber
      * @param Address $address
      * @param DriverCategory $driverCategory
      * @param bool $wheelChairAttendance
-     * @param bool $isMale
      * @param null $email
      * @param null $entryDate
      * @param null $birthday
@@ -62,8 +62,8 @@ class Driver extends Person {
      * @param null $details
      * @return Driver
      */
-    public static function registerDriver($title, $firstname, $lastname, $telephone, $licenceNumber, Address $address,
-                                          DriverCategory $driverCategory, $wheelChairAttendance = true, $isMale = true, $email = null,
+    public static function registerDriver($title, $firstname, $lastname, $telephone, $gender, $licenceNumber, Address $address,
+                                          DriverCategory $driverCategory, $wheelChairAttendance = true, $email = null,
                                           $entryDate = null, $birthday = null, $extraMinutes = null, $details = null) {
         $driver = new Driver();
 
@@ -75,7 +75,7 @@ class Driver extends Person {
         $driver->setAddress($address);
         $driver->setDriverCategory($driverCategory);
         $driver->setWheelChairAttendance($wheelChairAttendance);
-        $driver->setIsMale($isMale);
+        $driver->setGender($gender);
 
         if (!empty($email)) {
             $driver->setEmail($email);
@@ -103,20 +103,20 @@ class Driver extends Person {
      * @param null $firstname
      * @param null $lastname
      * @param null $telephone
+     * @param null $gender
      * @param null $licenceNumber
      * @param Address $address
      * @param DriverCategory $driverCategory
      * @param null $wheelChairAttendance
-     * @param null $isMale
      * @param null $email
      * @param null $entryDate
      * @param null $birthday
      * @param null $extraMinutes
      * @param null $details
      */
-    public function updateDriverBasicData($title = null, $firstname = null, $lastname = null, $telephone = null,
+    public function updateDriverBasicData($title = null, $firstname = null, $lastname = null, $telephone = null, $gender = null,
                                           $licenceNumber = null, Address $address = null, DriverCategory $driverCategory = null,
-                                          $wheelChairAttendance = null, $isMale = null, $email = null, $entryDate = null, $birthday = null,
+                                          $wheelChairAttendance = null, $email = null, $entryDate = null, $birthday = null,
                                           $extraMinutes = null, $details = null) {
         if (!empty($title)) {
             $this->setTitle($title);
@@ -142,8 +142,8 @@ class Driver extends Person {
         if (!empty($wheelChairAttendance)) {
             $this->setWheelChairAttendance($wheelChairAttendance);
         }
-        if (!empty($isMale)) {
-            $this->setIsMale($isMale);
+        if (!empty($gender)) {
+            $this->setGender($gender);
         }
         if (!empty($email)) {
             $this->setEmail($email);
@@ -168,7 +168,7 @@ class Driver extends Person {
      */
     public static function removeDriver(Driver $driver) {
         $driver->removePerson();
-        foreach($driver->getSupervisedVehicles() as $v){
+        foreach ($driver->getSupervisedVehicles() as $v) {
             $driver->removeSupervisedVehicle($v);
         }
     }

@@ -84,8 +84,8 @@ class PersonTest extends WebTestCase {
         $this->addressRepo->store($address);
 
         $driver = Driver::registerDriver(
-            'Herr', 'Max', 'Mühlemann', '041 222 32 32', 'F3234141',
-            $address, $driverCategory, true, true, 'test@test.de', new \DateTime(), new \DateTime(),
+            'Herr', 'Max', 'Mühlemann', '041 222 32 32', 'männlich', 'F3234141',
+            $address, $driverCategory, true, 'test@test.de', new \DateTime(), new \DateTime(),
             5, 'alles nur ein Test'
         );
 
@@ -100,8 +100,8 @@ class PersonTest extends WebTestCase {
         $this->addressRepo->store($address);
         $driverCategory = $this->createDriverCategory('Freiwillig');
         $driver->updateDriverBasicData(
-            'Herr', 'Muni', 'Meier', '041 333 32 32', 'FEA12345',
-            $address, $driverCategory, false, false, 'test@test.de', $date, $date,
+            'Herr', 'Muni', 'Meier', '041 333 32 32', 'männlich', 'FEA12345',
+            $address, $driverCategory, false, 'test@test.de', $date, $date,
             5, 'alles nur ein Test');
         $driver->assignBillingAddress($address);
         $driver->assignCorrespondenceAddress($address);
@@ -122,19 +122,23 @@ class PersonTest extends WebTestCase {
 
     private function driverCreateAbsent(Driver $driver) {
         $absent = Absent::registerAbsent('Ferien', new \DateTime('2014-11-12'), new \DateTime('2014-12-12'));
+        $absent2 = Absent::registerAbsent('Ferien da', new \DateTime('2015-11-12'), new \DateTime('2015-12-12'));
         $this->absentRepo->store($absent);
+        $this->absentRepo->store($absent2);
         $driver->assignAbsent($absent);
+        $driver->assignAbsent($absent2);
         $this->driverRepo->store($driver);
         $this->em->flush();
 
         $found = false;
         $absents = $driver->getAbsents();
         foreach ($absents as $a) {
-            if ($a->getId() == $absent->getId()) {
+            if ($a->getId() == $absent2->getId()) {
                 $found = true;
             }
         }
         $this->assertTrue($found);
+        $this->assertCount(2, $absents);
     }
 
     private function driverSuperviseVehicle(Driver $driver) {
@@ -171,8 +175,8 @@ class PersonTest extends WebTestCase {
         $this->addressRepo->store($address);
 
         $passenger = Passenger::registerPassenger(
-            'Frau', 'Toranto', 'Testinger', '041 324 33 22',
-            $address, $handicap, true, true, true, false, 'test@test.de', new \DateTime(), new \DateTime(),
+            'Frau', 'Toranto', 'Testinger', '041 324 33 22', 'weiblich',
+            $address, $handicap, true, true, false, 'test@test.de', new \DateTime(), new \DateTime(),
             5, 'alles nur ein Test', 'und auch Notizen'
         );
         $this->passengerRepo->store($passenger);
@@ -181,8 +185,10 @@ class PersonTest extends WebTestCase {
         $passengerFind = $this->passengerRepo->find($passenger->getId());
         $this->assertEquals($passenger, $passengerFind);
 
-        $passenger->updateBasicData('Frau', 'Mila', 'Tolina', '0293292323', false, 'der@test.de',
-            new \DateTime(), new \DateTime(), 2, 'goodies');
+        $passenger->updatePassengerBasicData(
+            'Frau', 'Mila', 'Tolina', '0293292323', 'weiblich',
+            $address, $handicap, true, true, false, 'der@test.de', new \DateTime(), new \DateTime(),
+            2, 'goodies', 'notices');
         $passenger->assignBillingAddress($address);
         $passenger->assignCorrespondenceAddress($address);
 
