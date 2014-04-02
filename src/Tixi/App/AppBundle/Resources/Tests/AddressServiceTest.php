@@ -11,6 +11,7 @@ namespace Tixi\App\AppBundle\Tests;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Tixi\App\AppBundle\Controller\AddressManagementImplDoctrine;
+use Tixi\CoreDomain\Address;
 
 class AddressServiceTest extends WebTestCase {
     /**
@@ -23,17 +24,29 @@ class AddressServiceTest extends WebTestCase {
      */
     private $aService;
 
+    /**
+     * @var \Tixi\CoreDomainBundle\Repository\AddressRepositoryDoctrine
+     */
+    private $addressRepo;
+
     public function setUp() {
         $kernel = static::createKernel();
         $kernel->boot();
 
         $this->em = $kernel->getContainer()->get('entity_manager');
         $this->aService = $kernel->getContainer()->get('tixi_app.address_management');
+        $this->addressRepo = $kernel->getContainer()->get('address_repository');
     }
 
     public function testSearchAddress() {
-        $results = $this->aService->getAddressSuggestionsByString('Seeweg Zug');
-        $this->assertNotEmpty($results);
+        $address = Address::registerAddress('Jasldkjasdijsd 12', '6331', 'Zug', 'Schweiz');
+        $this->addressRepo->store($address);
+        $address = Address::registerAddress('Jasldkjasdijsd 12', '6330', 'Baar', 'Schweiz');
+        $this->addressRepo->store($address);
+        $this->em->flush();
+
+        $results = $this->aService->getAddressSuggestionsByString('Jasldkjasd Zug');
+        $this->assertNotCount(0, $results);
     }
 
     public function tearDown() {

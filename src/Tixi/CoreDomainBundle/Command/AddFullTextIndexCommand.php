@@ -25,5 +25,7 @@ class AddFullTextIndexCommand extends ContainerAwareCommand {
         $connection->query("
         ALTER TABLE `address` ADD FULLTEXT `address_fts_idx` (`name`, `street`, `postalCode`, `city`, `country`, `type`);
         ");
+
+        $output->writeln('Alter address table for fulltext search executed');
     }
 }
