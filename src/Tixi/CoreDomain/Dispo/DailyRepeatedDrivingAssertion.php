@@ -8,11 +8,24 @@
 
 namespace Tixi\CoreDomain\Dispo;
 
+use Doctrine\ORM\Mapping as ORM;
 
-class DailyRepeatedDrivingAssertion extends RepeatedDrivingAssertion{
+/**
+ * Tixi\CoreDomain\Dispo\DailyRepeatedDrivingAssertion
+ *
+ * @ORM\Entity
+ * @ORM\Table(name="daily")
+ */
+class DailyRepeatedDrivingAssertion extends RepeatedDrivingAssertion {
 
-    public function matching(Shift $shift)
-    {
+    /**
+     * @ORM\Column(type="integer")
+     */
+    protected $weekday;
+
+    protected $shifts;
+
+    public function matching(Shift $shift) {
         // TODO: Implement matching() method.
     }
 }

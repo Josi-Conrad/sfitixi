@@ -38,12 +38,6 @@ class Route {
      * @ORM\JoinColumn(name="address_target_id", referencedColumnName="id")
      */
     protected $targetAddress;
-
-    /**
-     * @ORM\OneToMany(targetEntity="DrivingOrder", mappedBy="route")
-     * @ORM\JoinColumn(name="driving_order_id", referencedColumnName="id")
-     */
-    protected $drivingOrders;
     /**
      * route duration in minutes
      * @ORM\Column(type="integer")
@@ -54,17 +48,31 @@ class Route {
      * @ORM\Column(type="integer")
      */
     protected $distance;
+    /**
+     * route information updates on
+     * @ORM\Column(type="datetime")
+     */
+    protected $changeDate;
 
     private function __construct() {
+        $this->changeDate = new \DateTime();
     }
 
     public static function registerRoute($startAddress, $targetAddress, $duration = null, $distance = null) {
         $route = new Route();
-        $route->startAddress = $startAddress;
-        $route->targetAddress = $targetAddress;
-        $route->duration = $duration;
-        $route->distance = $distance;
+        $route->setStartAddress($startAddress);
+        $route->setTargetAddress($targetAddress);
+        $route->setDuration($duration);
+        $route->setDistance($distance);
         return $route;
+    }
+
+    public function updateRouteBasicData($startAddress = null, $targetAddress = null, $duration = null, $distance = null) {
+        $this->setChangeDate(new \DateTime('now'));
+        $this->setStartAddress($startAddress);
+        $this->setTargetAddress($targetAddress);
+        $this->setDuration($duration);
+        $this->setDistance($distance);
     }
 
     /**
@@ -79,6 +87,13 @@ class Route {
      */
     public function getDistance() {
         return $this->distance;
+    }
+
+    /**
+     * @param mixed $duration
+     */
+    public function setDuration($duration) {
+        $this->duration = $duration;
     }
 
     /**
@@ -130,5 +145,18 @@ class Route {
         return $this->targetAddress;
     }
 
+    /**
+     * @param mixed $changeDate
+     */
+    public function setChangeDate($changeDate) {
+        $this->changeDate = $changeDate;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getChangeDate() {
+        return $this->changeDate;
+    }
 
 }
