@@ -20,7 +20,7 @@ use Tixi\ApiBundle\Interfaces\VehicleListDTO;
 
 use Tixi\ApiBundle\Shared\DataGrid\DataGridInputState;
 
-use Tixi\ApiBundle\Shared\DataGrid\Vehicle\VehicleDataGridControls;
+use Tixi\ApiBundle\Shared\DataGrid\GridControllers\VehicleDataGridControls;
 use Tixi\ApiBundle\Tile\Core\FormTile;
 use Tixi\ApiBundle\Tile\Core\PanelSplitterTile;
 use Tixi\ApiBundle\Tile\Core\PanelTile;
@@ -84,8 +84,8 @@ class VehicleController extends Controller{
         $gridController = $dataGridControllerFactory->createServicePlanController(true, array('vehicleId'=>$vehicleId));
         $gridTile = $dataGridHandler->createEmbeddedDataGridTile($gridController);
 
-        $rootPanel = new RootPanel('Fahrzeug ',$vehicle->getName());
-        $panelSplitter = $rootPanel->add(new PanelSplitterTile('5:7'));
+        $rootPanel = new RootPanel('tixiapi_vehicles_get', 'Fahrzeug ',$vehicle->getName());
+        $panelSplitter = $rootPanel->add(new PanelSplitterTile('7:5'));
         $formPanel = $panelSplitter->addLeft(new PanelTile('Fahrzeugdetails',PanelTile::$primaryType));
         $formPanel->add(new VehicleRegisterFormViewTile('vehicleRequest', $vehicleDTO, $this->generateUrl('tixiapi_vehicle_editbasic',array('vehicleId'=>$vehicleId))));
         $gridPanel = $panelSplitter->addRight(new PanelTile('Zugeordnete Servicepläne'));
@@ -111,7 +111,7 @@ class VehicleController extends Controller{
             return $this->redirect($this->generateUrl('tixiapi_vehicles_get'));
         }
 
-        $rootPanel = new RootPanel('Neues Fahrzeug');
+        $rootPanel = new RootPanel('tixiapi_vehicles_get', 'Neues Fahrzeug');
         $rootPanel->add(new FormTile('vehicleNewForm',$form,true));
 
         return new Response($tileRenderer->render($rootPanel));
@@ -153,8 +153,8 @@ class VehicleController extends Controller{
         $gridController = $dataGridControllerFactory->createServicePlanController(true, array('vehicleId'=>$vehicleId));
         $gridTile = $dataGridHandler->createEmbeddedDataGridTile($gridController);
 
-        $rootPanel = new RootPanel('Fahrzeug ',$vehicle->getName());
-        $panelSplitter = $rootPanel->add(new PanelSplitterTile('5:7'));
+        $rootPanel = new RootPanel('tixiapi_vehicles_get', 'Fahrzeug ',$vehicle->getName());
+        $panelSplitter = $rootPanel->add(new PanelSplitterTile('7:5'));
         $formPanel = $panelSplitter->addLeft(new PanelTile('Fahrzeugdetails',PanelTile::$primaryType));
         $formPanel->add(new FormTile('vehicleForm', $form));
         $gridPanel = $panelSplitter->addRight(new PanelTile('Zugeordnete Servicepläne'));

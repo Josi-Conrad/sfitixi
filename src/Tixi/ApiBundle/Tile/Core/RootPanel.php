@@ -13,17 +13,19 @@ use Tixi\ApiBundle\Tile\AbstractTile;
 
 class RootPanel extends AbstractTile{
 
+    protected $menuId;
     protected $headerDisplayText;
     protected $headerDisplaySubtitleText;
 
-    public function __construct($headerDisplayText, $headerDisplaySubtitleText='') {
+    public function __construct($menuId, $headerDisplayText, $headerDisplaySubtitleText='') {
+        $this->menuId = $menuId;
         $this->headerDisplayText = $headerDisplayText;
         $this->headerDisplaySubtitleText = $headerDisplaySubtitleText;
     }
 
     public function getViewParameters()
     {
-        return array('headerDisplayText'=>$this->headerDisplayText, 'headerDisplaySubtitleText'=>$this->headerDisplaySubtitleText);
+        return array('menuId'=>$this->menuId, 'headerDisplayText'=>$this->headerDisplayText, 'headerDisplaySubtitleText'=>$this->headerDisplaySubtitleText);
     }
 
     public function getTemplateName()

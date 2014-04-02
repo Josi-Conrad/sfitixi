@@ -76,4 +76,9 @@ class ServicePlanDataGridController extends DataGridAbstractController{
     {
         return $this->generateUrl('tixiapi_serviceplans_get',array('vehicleId'=>$this->routeProperties['vehicleId']));
     }
+
+    public function getMenuIdentifier()
+    {
+        return 'tixiapi_vehicles_get';
+    }
 }

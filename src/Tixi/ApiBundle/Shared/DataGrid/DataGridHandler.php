@@ -75,7 +75,7 @@ class DataGridHandler {
             $outputState = DataGridOutputState::createOutputState($gridController->getGridIdentifier(), $headers, $rows, $totalAmountOfRows);
             $dataGridTile = null;
             if(!$gridController->isInEmbeddedState()) {
-                $returnTile = new RootPanel($gridController->getGridDisplayTitel());
+                $returnTile = new RootPanel($gridController->getMenuIdentifier(), $gridController->getGridDisplayTitel());
                 $dataGridTile = $returnTile->add(new DataGridTile($outputState, $gridController->createDataGridJsConf()));
             }else {
                 $returnTile = new PanelTile($gridController->getGridDisplayTitel());

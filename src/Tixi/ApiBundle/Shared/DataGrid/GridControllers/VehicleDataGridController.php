@@ -73,4 +73,9 @@ class VehicleDataGridController extends DataGridAbstractController{
     {
         return null;
     }
+
+    public function getMenuIdentifier()
+    {
+        return 'tixiapi_vehicles_get';
+    }
 }
