@@ -1,3 +1,4 @@
+#!/bin/sh
 echo "Starting new project build"
 echo .
 while true; do

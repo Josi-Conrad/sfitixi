@@ -13,8 +13,11 @@ Please view this project for more details. Thank you.
 -----------------------
 
 PHP Version 5.5
+
 MySQL Version 5.6
+
 Doctrine 2.4
+
 
 2) Build and Deploy
 --------------------
@@ -29,11 +32,15 @@ For test_data import set the mysql_connection parameters in `build\mysql_connect
 Composer install (executed in the run_build.sh) will ask on the first time run for the Database connection and TimeZone.
 
 If `run_build.sh` doesn't work properly, make shure you can run the following command manually:
+
 `php composer.phar install`
 
 `php app/console doctrine:database:create`
 
 `php app/console doctrine:schema:update --force`
+
+`php app/console project:build-fulltext`
+
 
 And run_dataimport.sh for Testdata, which imports the .SQL files in the /build folder.
 

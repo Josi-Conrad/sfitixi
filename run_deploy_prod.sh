@@ -1,3 +1,4 @@
+#!/bin/sh
 echo "Deploy prod"
 rm app/cache/* app/logs/* -f -R
 chmod 777 -R app/cache app/logs
