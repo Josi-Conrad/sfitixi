@@ -42,3 +42,20 @@
 .login form p small {
     color: #888888;
 }
+
+.formcontrol {
+    margin-bottom: 24px;
+}
+
+.formViewBasic {
+    padding-bottom: 24px;
+}
+
+.formViewExpanded {
+    display: none;
+    padding-bottom: 24px;
+}
+
+/*input:required:invalid {*/
+    /*background-color: red!important;*/
+/*}*/

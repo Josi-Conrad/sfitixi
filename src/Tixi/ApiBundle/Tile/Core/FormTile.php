@@ -13,16 +13,20 @@ use Tixi\ApiBundle\Tile\AbstractTile;
 
 class FormTile extends AbstractTile{
 
-    protected $headerDisplayName;
+    protected $formId;
     protected $form;
+    protected $isStandalone;
 
-    public function __construct($headerDipslayName , $form) {
+    public function __construct($formId, $form, $isStandalone=false) {
+        $this->formId = $formId;
         $this->form = $form;
+        $this->isStandalone = $isStandalone;
+        $this->add(new FormControlTile($formId));
     }
 
     public function getViewParameters()
     {
-        return array('form'=>$this->form->createView());
+        return array('formId'=>$this->formId, 'isStandalone'=>$this->isStandalone, 'form'=>$this->form->createView());
     }
 
     public function getTemplateName()
@@ -32,6 +36,6 @@ class FormTile extends AbstractTile{
 
     public function getName()
     {
-        return 'formTile';
+        return 'form';
     }
 }

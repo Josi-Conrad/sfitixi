@@ -54,6 +54,8 @@ abstract class DataGridAbstractController extends ContainerAware{
         return $this->isEmbedded;
     }
 
+    public abstract function getMenuIdentifier();
+
     public abstract function getGridIdentifier();
 
     public abstract function getGridDisplayTitel();

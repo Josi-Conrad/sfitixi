@@ -1,2 +1,13 @@
-{{ form_start(form, {'attr':{'class':'form-horizontal'}}) }}
-{{ form_end(form) }}
+<div class="row text-right">
+        {% for resolvedElement in children %}
+            {% if 'formcontrol' in resolvedElement.viewIndentifiers %}
+                {{ resolvedElement.rawData | raw }}
+            {% endif %}
+        {% endfor %}
+</div>
+<div class="row">
+    <div class="col-md-{% if isStandalone %}6{% else %}12{% endif %} text-right">
+        {{ form_start(form, {'attr':{'id':formId, 'class':'form-horizontal customForm'} }) }}
+        {{ form_end(form) }}
+    </div>
+</div>

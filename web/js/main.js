@@ -11,6 +11,7 @@ $(document).ready(function() {
         }else if($(this).hasClass('submitButton')) {
             var _targetFormId = $(this).attr('data-targetFormId');
             $(this).on('click',function(event) {
+                console.log('#'+_targetFormId)
                 event.preventDefault();
                 $('#'+_targetFormId).submit();
             });
@@ -23,7 +24,6 @@ $(document).ready(function() {
             }
         }
     });
-
 //    $('.linkButton').each(function() {
 //        $(this).on('click',function(event) {
 //            event.preventDefault();
@@ -39,4 +39,31 @@ $(document).ready(function() {
 //        }
 //    });
 });
+
+function FormViewController(formViewId) {
+   console.log(formViewId)
+    var _this = this,
+        _formView = $(formViewId),
+        _expandedViewSection = _formView.find('.formViewExpanded'),
+        _expandViewButton = _formView.find('.expandFormButton');
+    this._isDisplayed = false;
+
+    $(_expandViewButton).on('click', function(event) {
+        event.preventDefault();
+        _this._toggleExpandedSection();
+    });
+
+    this._toggleExpandedSection = function() {
+        if(!_this._isDisplayed) {
+            $(_expandedViewSection).show();
+            $(_expandViewButton).html('Details verbergen');
+            _this._isDisplayed = true;
+        }else {
+            $(_expandedViewSection).hide();
+            $(_expandViewButton).html('Weitere Details');
+            _this._isDisplayed = false;
+        }
+    }
+
+}
 
