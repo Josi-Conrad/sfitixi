@@ -1,0 +1,16 @@
+<div class="row">
+    <div class="col-md-{{ leftRatio }}">
+        {% for resolvedElement in children %}
+            {% if 'leftpanelsplitter' in resolvedElement.viewIndentifiers %}
+                {{ resolvedElement.rawData | raw }}
+            {% endif %}
+        {% endfor %}
+    </div>
+    <div class="col-md-{{ rightRatio }}">
+        {% for resolvedElement in children %}
+            {% if 'rightpanelsplitter' in resolvedElement.viewIndentifiers %}
+                {{ resolvedElement.rawData | raw }}
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>

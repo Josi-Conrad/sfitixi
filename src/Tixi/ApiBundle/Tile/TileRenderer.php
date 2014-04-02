@@ -10,8 +10,6 @@ namespace Tixi\ApiBundle\Tile;
 
 
 use Symfony\Bridge\Twig\Form\TwigRenderer;
-use Zend\Stdlib\SplQueue;
-use Zend\Stdlib\SplStack;
 
 class TileRenderer {
 
@@ -37,10 +35,10 @@ class TileRenderer {
         for($i=0; $i<$tile->getAmountOfChildren();$i++) {
             $renderedChildrenForLevel[] = $renderedChildren->pop();
         }
+        $renderedChildrenForLevel = array_reverse($renderedChildrenForLevel);
         $renderedChildren->push($this->resolve($tile, $parameters, $renderedChildrenForLevel, $depth));
         $depth--;
         return $this->renderTile($renderedChildren, $parameters, $depth, $tile->getParent());
-
     }
 
     protected function resolve(AbstractTile $tile, $parameters, $renderedChildren,$depth) {

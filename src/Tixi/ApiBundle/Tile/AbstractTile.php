@@ -18,6 +18,7 @@ abstract class AbstractTile {
     public function add(AbstractTile $child) {
         $child->setParent($this);
         $this->children[] = $child;
+        return $child;
     }
 
     public function setParent(AbstractTile $parent) {
@@ -55,6 +56,7 @@ abstract class AbstractTile {
     public function getViewParameters() {
         return array();
     }
+
 
     public abstract function getTemplateName();
 

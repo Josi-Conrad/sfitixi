@@ -1,3 +1,9 @@
+/*disable bootstrap responsiveness*/
+.container{
+    max-width: 1400px!important;
+    /*width: 1024px;*/
+}
+
 
 body {
     padding-top: 20px;

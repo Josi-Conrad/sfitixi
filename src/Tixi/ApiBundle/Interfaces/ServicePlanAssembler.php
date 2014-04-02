@@ -12,7 +12,7 @@ namespace Tixi\ApiBundle\Interfaces;
 use Tixi\ApiBundle\Helper\DateTimeService;
 use Tixi\CoreDomain\ServicePlan;
 
-class ServicePlanAssembler {
+class ServicePlanAssembler{
 
     //injected by service container via setter method
     private $dateTimeService;

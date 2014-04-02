@@ -13,11 +13,22 @@ use FOS\RestBundle\Controller\Annotations\QueryParam;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Tixi\ApiBundle\Form\VehicleType;
 use Tixi\ApiBundle\Interfaces\VehicleRegisterDTO;
 use Tixi\ApiBundle\Interfaces\VehicleListDTO;
-use Tixi\ApiBundle\Shared\DataGrid\RESTHandler\DataGridHandler;
-use Tixi\ApiBundle\Shared\DataGrid\RESTHandler\DataGridState;
+
+use Tixi\ApiBundle\Shared\DataGrid\DataGridInputState;
+
+use Tixi\ApiBundle\Shared\DataGrid\Vehicle\VehicleDataGridControls;
+use Tixi\ApiBundle\Tile\Core\FormTile;
+use Tixi\ApiBundle\Tile\Core\PanelSplitterTile;
+use Tixi\ApiBundle\Tile\Core\PanelTile;
+use Tixi\ApiBundle\Tile\Core\RootPanel;
+use Tixi\ApiBundle\Tile\Core\SelectionButtonDividerTile;
+use Tixi\ApiBundle\Tile\Core\SelectionButtonTile;
+use Tixi\ApiBundle\Tile\Core\TextLinkListTile;
+
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -40,21 +51,17 @@ class VehicleController extends Controller{
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function getVehiclesAction(Request $request) {
-        $dataGridState = DataGridState::createByRequest($request, new VehicleListDTO());
-//        $dataGridState = DataGridState::createByParamFetcher($paramFetcher, new VehicleListDTO());
-        $vehicles = $this->get('tixi_coredomain.fgea_repository')->findByFilter($this->get('tixi_api.datagrid')->createGenericEntityFilterByState($dataGridState));
-        $vehiclesDTO = $this->get('tixi_api.assemblervehicle')->vehiclesToVehicleListDTOs($vehicles);
-        $totalAmount = $this->get('tixi_coredomain.fgea_repository')->findTotalAmountByFilter($this->get('tixi_api.datagrid')->createGenericEntityFilterByState($dataGridState));
-        $rows = $this->get('tixi_api.datagrid')->createRowsArray($vehiclesDTO);
-        $headers = $this->get('tixi_api.datagrid')->createHeaderArray(new VehicleListDTO());
-        $partial = $request->get('partial');
-        if(empty($partial) && !$partial) {
-            $template = 'TixiApiBundle:Vehicle:list.html.twig';
-        }else {
-            $template = 'TixiApiBundle:Shared:datagrid.tablebody.html.twig';
-        }
-        return $this->render($template,array('rowIdPrefix'=>'vehicles', 'tableHeaders'=>$headers,'tableRows'=>$rows, 'totalAmountOfRows'=>$totalAmount));
+    public function getVehiclesAction(Request $request, $embeddedState=false) {
+        $embeddedParameter = (null === $request->get('embedded') || $request->get('embedded') === 'false') ? false : true;
+        $isEmbedded = ($embeddedState || $embeddedParameter);
+
+        $dataGridHandler = $this->get('tixi_api.datagridhandler');
+        $dataGridControllerFactory = $this->get('tixi_api.datagridcontrollerfactory');
+        $tileRenderer = $this->get('tixi_api.tilerenderer');
+
+        $gridController = $dataGridControllerFactory->createVehicleController($isEmbedded);
+        $dataGridTile = $dataGridHandler->createDataGridTileByRequest($request, $gridController);
+        return new Response($tileRenderer->render($dataGridTile));
     }
 
     /**
@@ -66,10 +73,21 @@ class VehicleController extends Controller{
      * @Breadcrumb("Fahrzeug {vehicleId}", route={"name"="tixiapi_vehicle_get", "parameters"={"vehicleId"}})
      */
     public function getVehicleAction(Request $request, $vehicleId) {
+        $dataGridHandler = $this->get('tixi_api.datagridhandler');
+        $dataGridControllerFactory = $this->get('tixi_api.datagridcontrollerfactory');
+        $tileRenderer = $this->get('tixi_api.tilerenderer');
+
         $vehicle = $this->get('vehicle_repository')->find($vehicleId);
         $vehicleDTO = $this->get('tixi_api.assemblervehicle')->toVehicleListDTO($vehicle);
-        $data = array('vehicle' => $vehicleDTO);
-        return $this->render('TixiApiBundle:Vehicle:get.html.twig',array('vehicle'=>$vehicleDTO, 'serviceplansembedded'=>''));
+
+        $gridController = $dataGridControllerFactory->createServicePlanController(true, array('vehicleId'=>$vehicleId));
+        $gridTile = $dataGridHandler->createEmbeddedDataGridTile($gridController);
+
+        $rootPanel = new RootPanel('Fahrzeug '.$vehicle->getName());
+        $panelSplitter = $rootPanel->add(new PanelSplitterTile());
+        $gridPanel = $panelSplitter->addRight(new PanelTile('Zugeordnete Servicepläne'));
+        $gridPanel->add($gridTile);
+        return new Response($tileRenderer->render($rootPanel));
     }
 
     /**
@@ -87,9 +105,13 @@ class VehicleController extends Controller{
             $this->getDoctrine()->getManager()->flush();
             return $this->redirect($this->generateUrl('tixiapi_vehicles_get'));
         }
-        return $this->render('TixiApiBundle:Vehicle:new.html.twig', array(
-            'form' => $form->createView()
-        ));
+        $formTile = new FormTile('TixiApiBundle:Vehicle:new.html.twig',$form);
+        return new Response($this->get('tixi_api.tilerenderer')->render($formTile));
+
+//        $this->get('tixi_api.tilerenderer')->render();
+//        return $this->render('TixiApiBundle:Vehicle:new.html.twig', array(
+//            'form' => $form->createView()
+//        ));
     }
 
     /**
@@ -110,6 +132,7 @@ class VehicleController extends Controller{
         $form = $this->getForm(null,$vehicleDTO);
         $form->handleRequest($request);
         if($form->isValid()) {
+
             $vehicleDTO = $form->getData();
             $this->registerOrUpdateVehicle($vehicleDTO);
             $this->getDoctrine()->getManager()->flush();
