@@ -32,6 +32,7 @@ use Tixi\ApiBundle\Tile\Core\TextLinkListTile;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Tixi\ApiBundle\Tile\Vehicle\VehicleRegisterFormViewTile;
 
 
 /**
@@ -85,6 +86,8 @@ class VehicleController extends Controller{
 
         $rootPanel = new RootPanel('Fahrzeug '.$vehicle->getName());
         $panelSplitter = $rootPanel->add(new PanelSplitterTile());
+        $formPanel = $panelSplitter->addLeft(new PanelTile('Fahrzeugdetails',PanelTile::$primaryType));
+        $formPanel->add(new VehicleRegisterFormViewTile($vehicleDTO, $this->generateUrl('tixiapi_vehicle_editbasic',array('vehicleId'=>$vehicleId))));
         $gridPanel = $panelSplitter->addRight(new PanelTile('Zugeordnete Servicepläne'));
         $gridPanel->add($gridTile);
         return new Response($tileRenderer->render($rootPanel));
@@ -97,6 +100,8 @@ class VehicleController extends Controller{
      * @Breadcrumb("Neues Fahrzeug", route="tixiapi_vehicle_new")
      */
     public function newVehicleAction(Request $request) {
+        $tileRenderer = $this->get('tixi_api.tilerenderer');
+
         $form = $this->getForm();
         $form->handleRequest($request);
         if($form->isValid()) {
@@ -105,8 +110,13 @@ class VehicleController extends Controller{
             $this->getDoctrine()->getManager()->flush();
             return $this->redirect($this->generateUrl('tixiapi_vehicles_get'));
         }
-        $formTile = new FormTile('TixiApiBundle:Vehicle:new.html.twig',$form);
-        return new Response($this->get('tixi_api.tilerenderer')->render($formTile));
+
+        $rootPanel = new RootPanel('Neues Fahrzeug');
+        $rootPanel->add(new FormTile('vehicleNewForm',$form,true));
+
+        return new Response($tileRenderer->render($rootPanel));
+//        $formTile = new FormTile('TixiApiBundle:Vehicle:new.html.twig',$form);
+//        return new Response($this->get('tixi_api.tilerenderer')->render($formTile));
 
 //        $this->get('tixi_api.tilerenderer')->render();
 //        return $this->render('TixiApiBundle:Vehicle:new.html.twig', array(
@@ -121,24 +131,36 @@ class VehicleController extends Controller{
      * @Breadcrumb("Fahrzeug {vehicleId}", route={"name"="tixiapi_vehicle_editbasic", "parameters"={"vehicleId"}})
      */
     public function editVehicleAction(Request $request, $vehicleId) {
-        $vehicleDTO = null;
-        if($request->getMethod()==='GET') {
-            $vehicle = $this->get('vehicle_repository')->find($vehicleId);
-            if(null === $vehicle) {
-                throw $this->createNotFoundException('The vehicle does not exist');
-            }
-            $vehicleDTO = $this->get('tixi_api.assemblervehicle')->toVehicleRegisterDTO($vehicle);
-        }
+        $dataGridHandler = $this->get('tixi_api.datagridhandler');
+        $dataGridControllerFactory = $this->get('tixi_api.datagridcontrollerfactory');
+        $tileRenderer = $this->get('tixi_api.tilerenderer');
+        $vehicleRepository = $this->get('vehicle_repository');
+        $vehicleAssembler = $this->get('tixi_api.assemblervehicle');
+
+        $vehicle = $vehicleRepository->find($vehicleId);
+        if(null === $vehicle) { throw $this->createNotFoundException('The vehicle does not exist');}
+        $vehicleDTO = $vehicleAssembler->toVehicleRegisterDTO($vehicle);
+
         $form = $this->getForm(null,$vehicleDTO);
         $form->handleRequest($request);
         if($form->isValid()) {
-
             $vehicleDTO = $form->getData();
             $this->registerOrUpdateVehicle($vehicleDTO);
             $this->getDoctrine()->getManager()->flush();
             return $this->redirect($this->generateUrl('tixiapi_vehicles_get',array('vehicleId'=>$vehicleId)));
         }
-        return $this->render('TixiApiBundle:Vehicle:edit.html.twig', array('form'=>$form->createView(), 'vehicle'=>$vehicleDTO));
+
+        $gridController = $dataGridControllerFactory->createServicePlanController(true, array('vehicleId'=>$vehicleId));
+        $gridTile = $dataGridHandler->createEmbeddedDataGridTile($gridController);
+
+        $rootPanel = new RootPanel('Fahrzeug '.$vehicle->getName());
+        $panelSplitter = $rootPanel->add(new PanelSplitterTile());
+        $formPanel = $panelSplitter->addLeft(new PanelTile('Fahrzeugdetails',PanelTile::$primaryType));
+        $formPanel->add(new FormTile('vehicleForm', $form));
+        $gridPanel = $panelSplitter->addRight(new PanelTile('Zugeordnete Servicepläne'));
+        $gridPanel->add($gridTile);
+
+        return new Response($tileRenderer->render($rootPanel));
     }
 
     protected function registerOrUpdateVehicle(VehicleRegisterDTO $vehicleDTO) {

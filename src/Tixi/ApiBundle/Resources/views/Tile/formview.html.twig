@@ -1,0 +1,38 @@
+<div class="row text-right">
+        {% for resolvedElement in children %}
+            {% if 'formviewcontrol' in resolvedElement.viewIndentifiers %}
+                {{ resolvedElement.rawData | raw }}
+            {% endif %}
+        {% endfor %}
+</div>
+<div class="row">
+    <div class="col-md-{% if isStandalone %}6{% else %}12{% endif %}">
+        {% if basicFormRows is not empty %}
+            <form class="form-horizontal detailViewForm">
+                {% for row in basicFormRows %}
+                    <div class="form-group">
+                        <label class="control-label col-md-6">{{ row.getFieldLabelText() }}</label>
+
+                        <div class="col-md-6">
+                            <p class="form-control-static">{{ row.getFieldValue() }}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </form>
+        {% endif %}
+
+        {% if expandedFormRows is not empty %}
+            <form class="form-horizontal detailViewForm">
+                {% for row in expandedFormRows %}
+                    <div class="form-group">
+                        <label class="control-label col-md-6">{{ row.getFieldLabelText() }}</label>
+
+                        <div class="col-md-6">
+                            <p class="form-control-static">{{ row.getFieldValue() }}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </form>
+        {% endif %}
+    </div>
+</div>

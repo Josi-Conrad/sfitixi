@@ -36,9 +36,6 @@ class VehicleType extends AbstractType{
             'property' => 'name',
             'label' => 'Fahrzeugkategorie'
         ));
-        $builder->add('save', 'submit', array(
-            'label' => 'Speichern'
-        ));
     }
 
     /**
