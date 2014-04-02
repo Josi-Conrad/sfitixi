@@ -16,7 +16,7 @@ use Tixi\CoreDomain\Vehicle;
 
 /**
  * Tixi\CoreDomain\Dispo\DrivingPool
- *
+ * Assign driver to a vehicle, shift and mission
  * @ORM\Entity(repositoryClass="Tixi\CoreDomainBundle\Repository\Dispo\DrivingPoolRepositoryDoctrine")
  * @ORM\Table(name="driving_pool")
  */
@@ -42,14 +42,20 @@ class DrivingPool {
      * @ORM\JoinColumn(name="working_day_id", referencedColumnName="id")
      */
     protected $workingDay;
-
+    /**
+     * @ORM\ManyToOne(targetEntity="Tixi\CoreDomain\Driver")
+     * @ORM\JoinColumn(name="driver_id", referencedColumnName="id")
+     */
     protected $driver;
+    /**
+     * @ORM\ManyToOne(targetEntity="Tixi\CoreDomain\Vehicle")
+     * @ORM\JoinColumn(name="vehicle_id", referencedColumnName="id")
+     */
     protected $vehicle;
-    protected $correspondingShift;
 
     public function __construct(Driver $driver, Shift $shift) {
         $this->driver = $driver;
-        $this->correspondingShift = $shift;
+        $this->shift = $shift;
 
         $this->drivingMissions = new ArrayCollection();
     }

@@ -19,20 +19,34 @@ use Doctrine\ORM\Mapping as ORM;
 class Route {
     /**
      * @ORM\Id
-     * @ORM\Column(type="bigint", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\ManyToOne(targetEntity="Tixi\CoreDomain\Address")
+     * @ORM\JoinColumn(name="address_start_id", referencedColumnName="id")
      */
-    protected $id;
     protected $startAddress;
+    /**
+     * @ORM\Id
+     * @ORM\ManyToOne(targetEntity="Tixi\CoreDomain\Address")
+     * @ORM\JoinColumn(name="address_target_id", referencedColumnName="id")
+     */
     protected $targetAddress;
+
+    /**
+     * @ORM\OneToMany(targetEntity="DrivingOrder", mappedBy="route")
+     * @ORM\JoinColumn(name="driving_order_id", referencedColumnName="id")
+     */
+    protected $drivingOrders;
     /**
      * route duration in minutes
-     * @var
+     * @ORM\Column(type="integer")
      */
     protected $duration;
     /**
      * distance in m
-     * @var
+     * @ORM\Column(type="integer")
      */
     protected $distance;
+
+    public function __construct(){
+        $this->drivingOrders = new ArrayCollection();
+    }
 }

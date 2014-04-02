@@ -18,7 +18,6 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="driving_mission")
  */
 class DrivingMission {
-
     /**
      * @ORM\Id
      * @ORM\Column(type="bigint", name="id")
@@ -37,12 +36,15 @@ class DrivingMission {
      */
     protected $drivingPool;
 
+    public function __construct() {
+        $this->drivingOrders = new ArrayCollection();
+    }
+
     /**
      * returns earliest pickUpType of orders
      * @return \DateTime
      */
     protected function getAnchorTime() {
-        $this->drivingOrders = new ArrayCollection();
     }
 
     /**

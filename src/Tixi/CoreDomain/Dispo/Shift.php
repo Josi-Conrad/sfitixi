@@ -40,12 +40,14 @@ class Shift {
      * @ORM\JoinColumn(name="working_day_id", referencedColumnName="id")
      */
     protected $workingDay;
-
+    /**
+     * amount of drivers needed for day and shift (monthly planing)
+     * @ORM\Column(type="integer")
+     */
     protected $amountOfDrivers;
 
     public function __construct(ShiftType $shiftType) {
         $this->shiftType = $shiftType;
-
         $this->drivingPools = new ArrayCollection();
     }
 
@@ -53,14 +55,7 @@ class Shift {
         $this->drivingPools = new DrivingPool($driver, $this);
     }
 
-    protected function amountOfDriversNeede() {
+    protected function amountOfDriversNeeded() {
         return $this->amountOfDrivers - $this->count($this->drivingPools);
     }
-
-
 }
-
-//    public function getAmountOfDrivers() {
-//        return count($this->drivingPools);
-//    }
-

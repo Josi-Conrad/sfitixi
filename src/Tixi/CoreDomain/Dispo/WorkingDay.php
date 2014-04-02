@@ -36,15 +36,14 @@ class WorkingDay {
      * @ORM\JoinColumn(name="driving_pool_id", referencedColumnName="id")
      */
     protected $drivingPools;
-
     /**
-     * @var DateTime
+     * @ORM\Column(type="datetime")
      */
     protected $date;
 
     protected function __construct() {
         $shiftTypes = array();
-        foreach($shiftTypes as $shiftType) {
+        foreach ($shiftTypes as $shiftType) {
             $this->shifts[$shiftType] = new Shift($shiftType);
         }
 
@@ -58,8 +57,8 @@ class WorkingDay {
 
     protected function getPossibleDrivingPoolForMission(DrivingMission $mission) {
         $responsibleShift = null;
-        foreach($this->shifts as $shift) {
-            if($shift->isResponsibleForTime($shift)) {
+        foreach ($this->shifts as $shift) {
+            if ($shift->isResponsibleForTime($shift)) {
                 $responsibleShift = $shift;
             }
         }
@@ -67,8 +66,4 @@ class WorkingDay {
     }
 
 
-
-
-
-
-} 
+}

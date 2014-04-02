@@ -32,10 +32,15 @@ class DrivingOrder {
      * @ORM\ManyToOne(targetEntity="DrivingMission", inversedBy="drivingOrders")
      * @ORM\JoinColumn(name="driving_mission_id", referencedColumnName="id")
      */
-    protected $drivingOrder;
-
+    protected $drivingMission;
+    /**
+     * @ORM\ManyToOne(targetEntity="Route", inversedBy="drivingOrders")
+     * @ORM\JoinColumn(name="route_id", referencedColumnName="id")
+     */
+    protected $route;
+    /**
+     * @ORM\Column(type="datetime")
+     */
     protected $pickUpTime;
-    protected $startAddress;
-    protected $targetAddress;
 
 }

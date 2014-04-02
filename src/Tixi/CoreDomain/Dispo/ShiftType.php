@@ -10,6 +10,7 @@ namespace Tixi\CoreDomain\Dispo;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints\Time;
 
 /**
  * Tixi\CoreDomain\Dispo\ShiftType
@@ -33,10 +34,16 @@ class ShiftType {
      * @ORM\Column(type="string", length=25, unique=true)
      */
     protected $name;
+    /**
+     * @ORM\Column(type="datetime")
+     */
     protected $start;
+    /**
+     * @ORM\Column(type="datetime")
+     */
     protected $end;
 
-    public function __construct(){
+    public function __construct() {
         $this->shifts = new ArrayCollection();
     }
 
