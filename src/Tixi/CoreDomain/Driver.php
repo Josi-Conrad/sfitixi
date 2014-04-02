@@ -10,6 +10,7 @@ namespace Tixi\CoreDomain;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Tixi\CoreDomain\Dispo\Shift;
 
 /**
  * Tixi\CoreDomain\Driver
@@ -171,6 +172,10 @@ class Driver extends Person {
         foreach ($driver->getSupervisedVehicles() as $v) {
             $driver->removeSupervisedVehicle($v);
         }
+    }
+
+    public function isAvailableOn(Shift $shift) {
+
     }
 
     /**

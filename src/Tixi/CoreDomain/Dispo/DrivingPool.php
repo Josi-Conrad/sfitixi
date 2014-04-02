@@ -53,15 +53,21 @@ class DrivingPool {
      */
     protected $vehicle;
 
-    public function __construct(Driver $driver, Shift $shift) {
-        $this->driver = $driver;
+    public function __construct(Shift $shift) {
         $this->shift = $shift;
-
         $this->drivingMissions = new ArrayCollection();
     }
 
+    public function hasAssociatedDriver() {
+        return isset($this->driver);
+    }
+
     public function isCompleted() {
-        return (isset($this->vehicle));
+        return ($this->hasAssociatedDriver() && isset($this->vehicle));
+    }
+
+    public function assignDriver(Driver $driver) {
+        $this->driver = $driver;
     }
 
     public function assignVehicle(Vehicle $vehicle) {

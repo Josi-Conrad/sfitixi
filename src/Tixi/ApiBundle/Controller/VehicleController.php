@@ -115,13 +115,6 @@ class VehicleController extends Controller{
         $rootPanel->add(new FormTile('vehicleNewForm',$form,true));
 
         return new Response($tileRenderer->render($rootPanel));
-//        $formTile = new FormTile('TixiApiBundle:Vehicle:new.html.twig',$form);
-//        return new Response($this->get('tixi_api.tilerenderer')->render($formTile));
-
-//        $this->get('tixi_api.tilerenderer')->render();
-//        return $this->render('TixiApiBundle:Vehicle:new.html.twig', array(
-//            'form' => $form->createView()
-//        ));
     }
 
     /**
