@@ -34,8 +34,4 @@ class Search {
     {
         return $this->searchStr;
     }
-
-
-
-
 } 

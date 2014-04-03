@@ -12,17 +12,22 @@ namespace Tixi\ApiBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Tixi\ApiBundle\Form\Shared\DatePickerType;
 
 class ServicePlanType extends AbstractType{
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('id', 'hidden');
-        $builder->add('vehicleId', 'hidden');
-        $builder->add('startDate', 'date');
-        $builder->add('endDate', 'date');
-        $builder->add('cost', 'number');
-        $builder->add('save', 'submit');
+        $builder->add('startDate', new DatePickerType(), array(
+            'label' => 'Servicestart'
+        ));
+        $builder->add('endDate', new DatePickerType(), array(
+            'label' => 'Servicenede'
+        ));
+        $builder->add('cost', 'number', array(
+            'label' => 'Kosten'
+        ));
     }
 
     /**

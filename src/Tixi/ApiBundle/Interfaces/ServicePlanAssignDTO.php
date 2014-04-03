@@ -11,7 +11,6 @@ namespace Tixi\ApiBundle\Interfaces;
 
 class ServicePlanAssignDTO {
     public $id;
-    public $vehicleId;
     public $startDate;
     public $endDate;
     public $cost;

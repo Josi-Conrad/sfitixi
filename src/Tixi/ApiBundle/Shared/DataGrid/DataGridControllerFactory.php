@@ -10,6 +10,7 @@ namespace Tixi\ApiBundle\Shared\DataGrid;
 
 
 use Symfony\Component\DependencyInjection\ContainerAware;
+use Tixi\ApiBundle\Shared\DataGrid\GridControllers\DriverDataGridController;
 use Tixi\ApiBundle\Shared\DataGrid\GridControllers\ServicePlanDataGridController;
 use Tixi\ApiBundle\Shared\DataGrid\GridControllers\VehicleDataGridController;
 
@@ -21,6 +22,10 @@ class DataGridControllerFactory extends ContainerAware{
 
     public function createServicePlanController($embeddedState=false, array $routeProperties=array()) {
         return new ServicePlanDataGridController($this->container, $embeddedState, $routeProperties);
+    }
+
+    public function createDriverController($embeddedState=false, array $routeProperties=array()) {
+        return new DriverDataGridController($this->container, $embeddedState, $routeProperties);
     }
 
 } 

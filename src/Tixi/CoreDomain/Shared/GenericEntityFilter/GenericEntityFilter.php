@@ -120,11 +120,4 @@ class GenericEntityFilter {
     {
         return $this->search;
     }
-
-
-
-
-
-
-
 } 
