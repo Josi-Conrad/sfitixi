@@ -12,6 +12,8 @@ namespace Tixi\ApiBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Regex;
 use Tixi\ApiBundle\Form\Shared\DatePickerType;
 
 class VehicleType extends AbstractType{
@@ -20,13 +22,19 @@ class VehicleType extends AbstractType{
     {
         $builder->add('id', 'hidden');
         $builder->add('name', 'text', array(
-            'label' => 'Fahrzeugname'
+            'label' => 'Fahrzeugname',
+            'constraints' => new NotBlank(array('message'=>'vehicle.name.not_blank'))
         ));
         $builder->add('licenceNumber', 'text', array(
-            'label' => 'Kennzeichen'
+            'label' => 'Kennzeichen',
+            'constraints' => array(
+                new NotBlank(array('message'=>'vehicle.nr.not_blank')),
+                new Regex(array('message'=>'vehicle.nr.not_nr','pattern'=>'/\d+/'))),
+            'pattern' => '^\d+$'
         ));
         $builder->add('dateOfFirstRegistration', new DatePickerType(), array(
-            'label' => 'Inverkehrssetzung'
+            'label' => 'Inverkehrssetzung',
+            'pattern' => '^(0[1-9]|[1|2][0-9]|3[0|1]).(0[1-9]|1[0|1|2]).(19|20)\d\d$'
         ));
         $builder->add('parkingLotNumber', 'integer', array(
             'label' => 'Parkplatzbezeichnung'
