@@ -87,6 +87,7 @@ class VehicleController extends Controller{
         $rootPanel = new RootPanel('tixiapi_vehicles_get', 'vehicle',$vehicle->getName());
         $panelSplitter = $rootPanel->add(new PanelSplitterTile('7:5'));
         $formPanel = $panelSplitter->addLeft(new PanelTile('Fahrzeugdetails',PanelTile::$primaryType));
+
         $formPanel->add(new VehicleRegisterFormViewTile('vehicleRequest', $vehicleDTO, $this->generateUrl('tixiapi_vehicle_editbasic',array('vehicleId'=>$vehicleId))));
         $gridPanel = $panelSplitter->addRight(new PanelTile('Zugeordnete Servicepläne'));
         $gridPanel->add($gridTile);

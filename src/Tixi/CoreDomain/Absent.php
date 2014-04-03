@@ -148,4 +148,17 @@ class Absent {
         return $this->subject;
     }
 
+    /**
+     * @param mixed $person
+     */
+    public function setPerson($person) {
+        $this->person = $person;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPerson() {
+        return $this->person;
+    }
 }

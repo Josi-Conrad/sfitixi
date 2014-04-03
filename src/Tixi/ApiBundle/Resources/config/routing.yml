@@ -20,6 +20,11 @@ driver:
   type:     annotation
   prefix:   /
 
+driver_absent:
+  resource: Tixi\ApiBundle\Controller\DriverAbsentController
+  type:     annotation
+  prefix:   /
+
 passenger:
   resource: Tixi\ApiBundle\Controller\PassengerController
   type:     annotation

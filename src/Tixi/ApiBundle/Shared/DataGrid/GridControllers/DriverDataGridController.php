@@ -33,7 +33,8 @@ class DriverDataGridController extends DataGridAbstractController {
         $customControlTile = new DataGridCustomControlTile();
         $selectionButton = $customControlTile->add(new SelectionButtonTile('Mit Auswahl'));
         $selectionButton->add(new TextLinkListTile($this->generateUrl('tixiapi_driver_editbasic', array('driverId' => DataGridHandler::$dataGirdReplaceIdentifier)), 'Editieren', true));
-        $selectionButton->add(new TextLinkListTile($this->generateUrl('tixiapi_driver_editbasic', array('driverId' => DataGridHandler::$dataGirdReplaceIdentifier)), 'Neue Abwesenheit', true));
+        $selectionButton->add(new TextLinkListTile($this->generateUrl('tixiapi_driver_absent_new', array('driverId' => DataGridHandler::$dataGirdReplaceIdentifier)), 'Neue Abwesenheit', true));
+        $selectionButton->add(new TextLinkListTile($this->generateUrl('tixiapi_driver_editbasic', array('driverId' => DataGridHandler::$dataGirdReplaceIdentifier)), 'Neuer Dauereinsatz', true));
         $selectionButton->add(new SelectionButtonDividerTile());
         $selectionButton->add(new TextLinkListTile($this->generateUrl('tixiapi_driver_editbasic', array('driverId' => DataGridHandler::$dataGirdReplaceIdentifier)), 'Löschen', true));
         $customControlTile->add(new LinkButtonTile($this->generateUrl('tixiapi_driver_new'), 'Neuer Fahrer', LinkButtonTile::$primaryType));

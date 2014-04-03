@@ -17,6 +17,10 @@ driver.field.licence: Fahrausweis-Nr
 driver.field.wheelchair: Rollstuhlfahrten
 driver.field.category: Fahrerkategorie
 
+absent.field.subject: Beschreibung
+absent.field.startdate: Start Datum
+absent.field.enddate: End Datum
+
 address.field.street: Strasse / Nummer
 address.field.postal: PLZ
 address.field.city: Ort

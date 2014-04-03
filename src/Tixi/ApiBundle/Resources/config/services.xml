@@ -12,6 +12,7 @@
         <!--<parameter key="tixi_api.datagrid.class">Tixi\ApiBundle\Shared\DataGrid\DataGrid</parameter>-->
         <parameter key="tixi_api.driverassembler.class">Tixi\ApiBundle\Interfaces\DriverAssembler</parameter>
         <parameter key="tixi_api.passengerassembler.class">Tixi\ApiBundle\Interfaces\PassengerAssembler</parameter>
+        <parameter key="tixi_api.absentassembler.class">Tixi\ApiBundle\Interfaces\AbsentAssembler</parameter>
         <parameter key="tixi_api.tilerenderer.class">Tixi\ApiBundle\Tile\TileRenderer</parameter>
         <parameter key="tixi_api.datagridhandler.class">Tixi\ApiBundle\Shared\DataGrid\DataGridHandler</parameter>
         <parameter key="tixi_api.datagridcontrollerfactory.class">Tixi\ApiBundle\Shared\DataGrid\DataGridControllerFactory</parameter>
@@ -44,6 +45,11 @@
             </call>
         </service>
         <service id="tixi_api.assemblerPassenger" class="%tixi_api.passengerassembler.class%">
+            <call method="setDateTimeService">
+                <argument type="service" id="tixi_api.datetimeservice" />
+            </call>
+        </service>
+        <service id="tixi_api.assemblerAbsent" class="%tixi_api.absentassembler.class%">
             <call method="setDateTimeService">
                 <argument type="service" id="tixi_api.datetimeservice" />
             </call>

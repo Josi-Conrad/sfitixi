@@ -79,16 +79,15 @@ class DriverController extends Controller {
         $driver = $this->get('driver_repository')->find($driverId);
         $driverDTO = $this->get('tixi_api.assemblerdriver')->toDriverRegisterDTO($driver);
 
-        //$gridController = $dataGridControllerFactory->createAbsentController(true, array('driverId' => $driverId));
-        //$gridTile = $dataGridHandler->createEmbeddedDataGridTile($gridController);
+        $gridController = $dataGridControllerFactory->createDriverAbsentController(true, array('driverId' => $driverId));
+        $gridTile = $dataGridHandler->createEmbeddedDataGridTile($gridController);
 
-        $rootPanel = new RootPanel('tixiapi_drivers_get', 'driver', $driver->getFirstname());
-        $panelSplitter = $rootPanel->add(new PanelSplitterTile('7:5'));
+        $rootPanel = new RootPanel('tixiapi_drivers_get', '', $driver->getFirstname().' '.$driver->getLastname());
+        $panelSplitter = $rootPanel->add(new PanelSplitterTile('1:1'));
         $formPanel = $panelSplitter->addLeft(new PanelTile('Fahrerdetails', PanelTile::$primaryType));
-
         $formPanel->add(new DriverRegisterFormViewTile('driverRequest', $driverDTO, $this->generateUrl('tixiapi_driver_editbasic', array('driverId' => $driverId))));
-        //$gridPanel = $panelSplitter->addRight(new PanelTile('Zugeordnete Ferienpläne'));
-        //$gridPanel->add($gridTile);
+        $gridPanel = $panelSplitter->addRight(new PanelTile('Zugeordnete Abwesenheiten'));
+        $gridPanel->add($gridTile);
         return new Response($tileRenderer->render($rootPanel));
     }
 
@@ -112,7 +111,7 @@ class DriverController extends Controller {
             return $this->redirect($this->generateUrl('tixiapi_drivers_get'));
         }
 
-        $rootPanel = new RootPanel('tixiapi_vehicles_get', 'Neuer Fahrer');
+        $rootPanel = new RootPanel('tixiapi_drivers_get', 'Neuer Fahrer');
         $rootPanel->add(new FormTile('driverNewForm', $form, true));
 
         return new Response($tileRenderer->render($rootPanel));
@@ -144,18 +143,18 @@ class DriverController extends Controller {
             $driverDTO = $form->getData();
             $this->registerOrUpdateDriver($driverDTO);
             $this->get('entity_manager')->flush();
-            return $this->redirect($this->generateUrl('tixiapi_drivers_get', array('driverId' => $driverId)));
+            return $this->redirect($this->generateUrl('tixiapi_driver_get', array('driverId' => $driverId)));
         }
 
-        $gridController = $dataGridControllerFactory->createServicePlanController(true, array('driverId' => $driverId));
-        //$gridTile = $dataGridHandler->createEmbeddedDataGridTile($gridController);
+        $gridController = $dataGridControllerFactory->createDriverAbsentController(true, array('driverId' => $driverId));
+        $gridTile = $dataGridHandler->createEmbeddedDataGridTile($gridController);
 
-        $rootPanel = new RootPanel('tixiapi_drivers_get', 'Fahrer ', $driver->getFirstname() . ' ' . $driver->getLastname());
-        $panelSplitter = $rootPanel->add(new PanelSplitterTile('7:5'));
+        $rootPanel = new RootPanel('tixiapi_drivers_get', ' ', $driver->getFirstname().' '.$driver->getLastname());
+        $panelSplitter = $rootPanel->add(new PanelSplitterTile('1:1'));
         $formPanel = $panelSplitter->addLeft(new PanelTile('Fahrerdetails', PanelTile::$primaryType));
         $formPanel->add(new FormTile('driverForm', $form));
-        //$gridPanel = $panelSplitter->addRight(new PanelTile('Zugeordnete Ferien'));
-        //$gridPanel->add($gridTile);
+        $gridPanel = $panelSplitter->addRight(new PanelTile('Zugeordnete Abwesenheiten'));
+        $gridPanel->add($gridTile);
 
         return new Response($tileRenderer->render($rootPanel));
     }
