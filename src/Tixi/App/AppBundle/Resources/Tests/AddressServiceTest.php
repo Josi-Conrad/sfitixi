@@ -29,6 +29,10 @@ class AddressServiceTest extends WebTestCase {
      */
     private $addressRepo;
 
+    /**
+     * Fulltext index only creates on a committed flush on database.
+     * For testing purposes we can't use transactions with rollbacks.
+     */
     public function setUp() {
         $kernel = static::createKernel();
         $kernel->boot();

@@ -19,15 +19,9 @@ class AddressManagementImplDoctrine extends Controller implements AddressManagem
      */
     public function getAddressSuggestionsByString($addressString) {
 
-        //prepare search strings
-        $searchString = '';
-        $words = explode(' ', $addressString);
+        $searchString = $this->tokenizeFulltextSearchString($addressString);
 
-        foreach ($words as $word) {
-            $searchString .= '+' . $word . '* ';
-        }
-
-        //build native query
+        //native query, no FTS function in DBAL
         $em = $this->get('entity_manager');
         $rsm = new ResultSetMappingBuilder($em);
         $rsm->addRootEntityFromClassMetadata('Tixi\CoreDomain\Address', 'a');
@@ -96,5 +90,20 @@ class AddressManagementImplDoctrine extends Controller implements AddressManagem
             $this->get('address_repository')->store($address);
             return $address;
         }
+    }
+
+    /**
+     * @param $addressString
+     * @return string
+     */
+    private function tokenizeFulltextSearchString($addressString) {
+        $searchString = '';
+        $words = explode(' ', $addressString);
+
+        foreach ($words as $word) {
+            $searchString .= '+' . $word . '* ';
+        }
+
+        return $searchString;
     }
 }
