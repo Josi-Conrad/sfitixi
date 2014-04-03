@@ -24,6 +24,9 @@ use Tixi\ApiBundle\Interfaces\ServicePlanListDTO;
 use Tixi\ApiBundle\Interfaces\VehicleAssembler;
 use Tixi\ApiBundle\Interfaces\VehicleRegisterDTO;
 use Tixi\ApiBundle\Shared\DataGrid\RESTHandler\DataGridInputState;
+use Tixi\ApiBundle\Tile\Core\FormTile;
+use Tixi\ApiBundle\Tile\Core\RootPanel;
+use Tixi\ApiBundle\Tile\ServicePlan\ServicePlanRegisterFormViewTile;
 use Tixi\CoreDomain\ServicePlan;
 use Tixi\CoreDomain\Vehicle;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -41,14 +44,6 @@ class ServicePlanController extends Controller {
     /**
      * @Route("",name="tixiapi_serviceplans_get")
      * @Method({"GET","POST"})
-     *
-     * @QueryParam(name="embedded")
-     * @QueryParam(name="partial")
-     * @QueryParam(name="page")
-     * @QueryParam(name="limit")
-     * @QueryParam(name="orderbyfield")
-     * @QueryParam(name="orderbydirection")
-     * @QueryParam(name="filterstr")
      */
     public function getServiceplansAction($vehicleId, Request $request, $embeddedState=false) {
         $embeddedState = $embeddedState || ($request->get('embedded') !== null && $request->get('embedded'));
@@ -71,13 +66,18 @@ class ServicePlanController extends Controller {
      * @return mixed
      */
     public function getServiceplanAction(Request $request, $vehicleId, $servicePlanId) {
-        $viewHandler = $this->get('fos_rest.view_handler');
-        if($viewHandler->isFormatTemplating($request->get('_format'))) {
-            $view = View::createRouteRedirect('edit_vehicle_serviceplan',array('vehicleId'=>$vehicleId,'servicePlanId'=>$servicePlanId));
-        }else {
-            //ToDo define json resonse
-        }
-        return $viewHandler->handle($view);
+        $servicePlanRepository = $this->get('serviceplan_repository');
+        $assembler = $this->get('tixi_api.assemblerserviceplan');
+        $tileRenderer = $this->get('tixi_api.tilerenderer');
+
+        $vehicle = $this->getVehicle($vehicleId);
+        $servicePlan = $servicePlanRepository->find($servicePlanId);
+        if(null === $servicePlan) {throw $this->createNotFoundException('The serviceplan with id '.$servicePlanId.' does not exists');}
+        $servicePlanDTO = $assembler->toServicePlanAssignDTO($servicePlan);
+        $rootPanel = new RootPanel('Serviceplan für ',$vehicle->getName());
+        $rootPanel->add(new ServicePlanRegisterFormViewTile('servicePlanRequest', $servicePlanDTO, $this->generateUrl('tixiapi_serviceplan_editbasic', array('vehicleId'=>$vehicleId, 'servicePlanId'=>$servicePlanId))));
+
+        $tileRenderer->render($rootPanel);
     }
 
     /**
@@ -87,19 +87,24 @@ class ServicePlanController extends Controller {
      * @return mixed
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
-    public function newServiceplanAction($vehicleId) {
+    public function newServiceplanAction(Request $request, $vehicleId) {
+        $tileRenderer = $this->get('tixi_api.tilerenderer');
         $vehicle = $this->getVehicle($vehicleId);
-        if(null === $vehicle){throw $this->createNotFoundException('The vehicle does not exist');}
         $form = $this->getForm();
+        $form->handleRequest($request);
         if($form->isValid()) {
             $servicePlanAssignDTO = $form->getData();
             $this->registerOrUpdateServicePlanToVehicle($servicePlanAssignDTO, $vehicle);
             $this->getDoctrine()->getManager()->flush();
             return $this->redirect($this->generateUrl('tixiapi_vehicle_get',array('vehicleId'=>$vehicleId)));
         }
-        return $this->render('TixiApiBundle:ServicePlan:new.html.twig', array(
-            'form' => $form->createView()
-        ));
+        $rootPanel = new RootPanel('tixiapi_vehicles_get', 'Neuer Serviceplan', ' für '.$vehicle->getName());
+        $rootPanel->add(new FormTile('servicePlanNewForm',$form,true));
+        return new Response($tileRenderer->render($rootPanel));
+//
+//        return $this->render('TixiApiBundle:ServicePlan:new.html.twig', array(
+//            'form' => $form->createView()
+//        ));
     }
 
     /**
@@ -114,7 +119,6 @@ class ServicePlanController extends Controller {
     public function editServiceplanAction(Request $request, $vehicleId, $servicePlanId) {
         $vehicle = $this->getVehicle($vehicleId);
         $servicePlanAssignDTO = null;
-        if(null === $vehicle){throw $this->createNotFoundException('The vehicle does not exist');}
         if($request->getMethod()==='GET') {
             $servicePlan = $this->get('serviceplan_repository')->find($servicePlanId);
             if(null === $servicePlan) {throw $this->createNotFoundException('The serviceplan does not exist');}
@@ -152,7 +156,11 @@ class ServicePlanController extends Controller {
     }
 
     protected function getVehicle($vehicleId) {
-        return $this->get('vehicle_repository')->find($vehicleId);
+        $vehicle = $this->get('vehicle_repository')->find($vehicleId);
+        if(null === $vehicle) {
+            throw $this->createNotFoundException('The vehicle with id '.$vehicleId.' does not exists');
+        }
+        return $vehicle;
     }
 
 

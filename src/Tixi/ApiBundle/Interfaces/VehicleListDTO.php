@@ -29,7 +29,7 @@ class VehicleListDTO implements DataGridSourceClass{
      */
     public $licenceNumber;
     /**
-     * @GridField(propertyId="Vehicle.licenceNumber", headerName="Inverkehrssetzung", order=5)
+     * @GridField(propertyId="Vehicle.dateOfFirstRegistration", headerName="Inverkehrssetzung", order=5)
      */
     public $dateOfFirstRegistration;
     /**

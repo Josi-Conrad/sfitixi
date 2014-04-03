@@ -12,6 +12,7 @@ namespace Tixi\ApiBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Validator\Constraints\DateTime;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Regex;
 use Tixi\ApiBundle\Form\Shared\DatePickerType;
@@ -34,6 +35,7 @@ class VehicleType extends AbstractType{
         ));
         $builder->add('dateOfFirstRegistration', new DatePickerType(), array(
             'label' => 'Inverkehrssetzung',
+            'constraints' => new DateTime(),
             'pattern' => '^(0[1-9]|[1|2][0-9]|3[0|1]).(0[1-9]|1[0|1|2]).(19|20)\d\d$'
         ));
         $builder->add('parkingLotNumber', 'integer', array(

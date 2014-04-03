@@ -42,7 +42,18 @@ class DriverController extends Controller {
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function getDriversAction(Request $request) {
+    public function getDriversAction(Request $request, $embeddedState=false) {
+        $embeddedParameter = (null === $request->get('embedded') || $request->get('embedded') === 'false') ? false : true;
+        $isEmbedded = ($embeddedState || $embeddedParameter);
+
+        $dataGridHandler = $this->get('tixi_api.datagridhandler');
+        $dataGridControllerFactory = $this->get('tixi_api.datagridcontrollerfactory');
+        $tileRenderer = $this->get('tixi_api.tilerenderer');
+
+
+
+
+
         $dataGridState = DataGridState::createByRequest($request, new DriverListDTO());
         $drivers = $this->get('tixi_coredomain.fgea_repository')->findByFilter($this->get('tixi_api.datagrid')->createGenericEntityFilterByState($dataGridState));
         $driversDTO = $this->get('tixi_api.assemblerdriver')->driversToDriverListDTOs($drivers);

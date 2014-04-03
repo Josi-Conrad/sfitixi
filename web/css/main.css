@@ -56,6 +56,6 @@
     padding-bottom: 24px;
 }
 
-/*input:required:invalid {*/
-    /*background-color: red!important;*/
-/*}*/
+input:required:invalid {
+    background-color: #eb9a92!important;
+}
