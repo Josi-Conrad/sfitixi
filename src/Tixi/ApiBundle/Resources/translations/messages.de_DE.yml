@@ -1,1 +1,23 @@
 vehicle: Fahrzeug
+
+person.field.isactive: Ist Aktiv
+person.field.title: Anrede
+person.title.male: Herr
+person.title.female: Frau
+person.field.firstname: Vorname
+person.field.lastname: Nachname
+person.field.telephone: Telefon-Nr
+person.field.email: E-Mail
+person.field.entrydate: Eintrittsdatum
+person.field.birthday: Geburtsdatum
+person.field.extraminutes: Extra-Minuten
+person.field.details: Details
+
+driver.field.licence: Fahrausweis-Nr
+driver.field.wheelchair: Rollstuhlfahrten
+driver.field.category: Fahrerkategorie
+
+address.field.street: Strasse / Nummer
+address.field.postal: PLZ
+address.field.city: Ort
+address.field.country: Land

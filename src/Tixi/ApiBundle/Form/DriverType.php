@@ -12,6 +12,7 @@ namespace Tixi\ApiBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Validator\Constraints\NotBlank;
 use Tixi\ApiBundle\Form\Shared\DatePickerType;
 
 class DriverType extends PersonType {
@@ -20,35 +21,33 @@ class DriverType extends PersonType {
 
         parent::buildForm($builder,$options);
 
-        $builder->add('licenseNumber', 'text', array(
-            'label' => 'Fahrausweis-Nummer'
+        $builder->add('licenceNumber', 'text', array(
+            'label' => 'driver.field.licence',
+            'constraints' => array(
+                new NotBlank(array('message'=>'vehicle.nr.not_blank'))
+            )
         ));
         $builder->add('wheelChairAttendance', 'checkbox', array(
-            'required' => false,
-            'label' => 'Rollstuhlfahrten'
+            'label' => 'driver.field.wheelchair'
         ));
 
         $builder->add('driverCategory', 'entity', array(
             'class' => 'Tixi\CoreDomain\DriverCategory',
             'property' => 'name',
-            'label' => 'Fahrer-Kategorie'
+            'label' => 'driver.field.category'
         ));
 
         $builder->add('street', 'text', array(
-            'label' => 'Strasse / Nummer'
+            'label' => 'address.field.street'
         ));
         $builder->add('postalCode', 'text', array(
-            'label' => 'PLZ'
+            'label' => 'address.field.postal'
         ));
         $builder->add('city', 'text', array(
-            'label' => 'Ort'
+            'label' => 'address.field.city'
         ));
         $builder->add('country', 'text', array(
-            'label' => 'Land'
-        ));
-
-        $builder->add('save', 'submit', array(
-            'label' => 'Speichern'
+            'label' => 'address.field.country'
         ));
     }
 

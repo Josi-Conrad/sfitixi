@@ -12,6 +12,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class AddressRegisterDTO {
     //Address
+    public $address_id;
     public $name;
     public $street;
     /**

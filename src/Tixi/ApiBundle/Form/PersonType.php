@@ -13,48 +13,55 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Tixi\ApiBundle\Form\Shared\DatePickerType;
+use Tixi\ApiBundle\Form\Shared\TextOnlyType;
 
 class PersonType extends AbstractType {
 
     public function buildForm(FormBuilderInterface $builder, array $options) {
-        $builder->add('id', 'hidden');
+
         $builder->add('isActive', 'checkbox', [
             'data' => true,
             'required' => false,
-            'label' => 'Ist aktiv',
+            'label' => 'person.field.isactive',
         ]);
-
-        $builder->add('title', 'text', array(
-            'label' => 'Anrede'
+        $builder->add('title', 'choice', array(
+            'label' => 'person.field.title',
+            'choices' => array(
+                'm' => 'person.title.male',
+                'f' => 'person.title.female'),
+            'multiple' => false,
+            'expanded' => true,
         ));
-        $builder->add('firstname', 'text', array(
-            'label' => 'Vorname'
+        $builder->add('firstname', new TextOnlyType(), array(
+            'label' => 'person.field.firstname',
         ));
-        $builder->add('lastname', 'text', array(
-            'label' => 'Nachname'
+        $builder->add('lastname', new TextOnlyType(), array(
+            'label' => 'person.field.lastname',
         ));
         $builder->add('telephone', 'text', array(
-            'label' => 'Telefon-Nr'
+            'label' => 'person.field.telephone',
+            'pattern' => '^[\+0-9 ]{5,19}'
         ));
-        $builder->add('email', 'text', array(
+        $builder->add('email', 'email', array(
             'required' => false,
-            'label' => 'E-Mail'
+            'label' => 'person.field.email'
         ));
         $builder->add('entryDate', new DatePickerType(), array(
             'required' => false,
-            'label' => 'Eintrittsdatum'
+            'label' => 'person.field.entrydate'
         ));
         $builder->add('birthday', new DatePickerType(), array(
             'required' => false,
-            'label' => 'Geburtsdatum'
+            'label' => 'person.field.birthday'
         ));
         $builder->add('extraMinutes', 'integer', array(
             'required' => false,
-            'label' => 'Extra Minuten'
+            'label' => 'person.field.extraminutes',
+            'pattern' => '^\d+$'
         ));
         $builder->add('details', 'textarea', array(
             'required' => false,
-            'label' => 'Details'
+            'label' => 'person.field.details'
         ));
     }
 

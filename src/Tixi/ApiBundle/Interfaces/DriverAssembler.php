@@ -21,7 +21,6 @@ class DriverAssembler {
      */
     private $dateTimeService;
 
-
     /**
      * @param DriverRegisterDTO $driverDTO
      * @throws \Exception
@@ -31,11 +30,11 @@ class DriverAssembler {
         $entryDate = $this->dateTimeService->convertLocalDateTimeToUTCDateTime($driverDTO->entryDate);
         $birthday = $this->dateTimeService->convertLocalDateTimeToUTCDateTime($driverDTO->birthday);
         return Driver::registerDriver($driverDTO->title, $driverDTO->firstname,
-            $driverDTO->lastname, $driverDTO->telephone, $driverDTO->licenseNumber,
+            $driverDTO->lastname, $driverDTO->telephone,
             Address::registerAddress(
                 $driverDTO->street, $driverDTO->postalCode,
                 $driverDTO->city, $driverDTO->country),
-            $driverDTO->driverCategory, $driverDTO->wheelChairAttendance,
+            $driverDTO->licenceNumber, $driverDTO->driverCategory, $driverDTO->wheelChairAttendance,
             $driverDTO->email, $entryDate, $birthday,
             $driverDTO->extraMinutes, $driverDTO->details
         );
@@ -50,16 +49,15 @@ class DriverAssembler {
     public function registerDTOToDriver(Driver $driver, DriverRegisterDTO $driverDTO) {
         $entryDate = $this->dateTimeService->convertLocalDateTimeToUTCDateTime($driverDTO->entryDate);
         $birthday = $this->dateTimeService->convertLocalDateTimeToUTCDateTime($driverDTO->birthday);
+        $address = $driver->getAddress();
+        $address->updateAddressBasicData($driverDTO->street, $driverDTO->postalCode,
+                $driverDTO->city, $driverDTO->country);
         $driver->updateDriverBasicData($driverDTO->title, $driverDTO->firstname,
-            $driverDTO->lastname, $driverDTO->telephone, $driverDTO->licenseNumber,
-            $driver->getAddress()->updateAddressBasicData(
-                $driverDTO->street, $driverDTO->postalCode,
-                $driverDTO->city, $driverDTO->country),
-            $driverDTO->driverCategory,
-            $driverDTO->wheelChairAttendance, $driverDTO->email,
-            $entryDate, $birthday,
+            $driverDTO->lastname, $driverDTO->telephone,
+            $address, $driverDTO->licenceNumber, $driverDTO->driverCategory,
+            $driverDTO->wheelChairAttendance,
+            $driverDTO->email, $entryDate, $birthday,
             $driverDTO->extraMinutes, $driverDTO->details);
-        $driver->setIsActive($driverDTO->isActive);
         return $driver;
     }
 
@@ -69,7 +67,7 @@ class DriverAssembler {
      */
     public function toDriverRegisterDTO(Driver $driver) {
         $driverDTO = new DriverRegisterDTO();
-        $driverDTO->id = $driver->getId();
+        $driverDTO->person_id = $driver->getId();
         $driverDTO->isActive = $driver->getIsActive();
         $driverDTO->title = $driver->getTitle();
         $driverDTO->firstname = $driver->getFirstname();
@@ -81,11 +79,12 @@ class DriverAssembler {
         $driverDTO->extraMinutes = $driver->getExtraMinutes();
         $driverDTO->details = $driver->getDetails();
 
-        $driverDTO->licenseNumber = $driver->getLicenceNumber();
+        $driverDTO->licenceNumber = $driver->getLicenceNumber();
         $driverDTO->wheelChairAttendance = $driver->getWheelChairAttendance();
 
         $driverDTO->driverCategory = $driver->getDriverCategory()->getName();
 
+        $driverDTO->address_id = $driver->getAddress()->getId();
         $driverDTO->street = $driver->getAddress()->getStreet();
         $driverDTO->postalCode = $driver->getAddress()->getPostalCode();
         $driverDTO->city = $driver->getAddress()->getCity();
@@ -115,7 +114,6 @@ class DriverAssembler {
         $driverListDTO = new DriverListDTO();
         $driverListDTO->id = $driver->getId();
         $driverListDTO->isActive = $driver->getIsActive();
-        $driverListDTO->title = $driver->getTitle();
         $driverListDTO->firstname = $driver->getFirstname();
         $driverListDTO->telephone = $driver->getTelephone();
         $driverListDTO->lastname = $driver->getLastname();

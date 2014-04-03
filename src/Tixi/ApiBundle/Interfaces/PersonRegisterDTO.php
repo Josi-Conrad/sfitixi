@@ -12,18 +12,12 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class PersonRegisterDTO extends AddressRegisterDTO{
     //Person
-    public $id;
+    public $person_id;
     public $isActive;
     public $title;
     public $firstname;
     public $lastname;
-    /**
-     * @Assert\Regex(pattern="/^[\+0-9 ]{5,19}$/", message="telephone.nr.invalid")
-     */
     public $telephone;
-    /**
-     * @Assert\Email(message="email.invalid")
-     */
     public $email;
     public $entryDate;
     public $birthday;

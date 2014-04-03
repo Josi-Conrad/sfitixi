@@ -12,7 +12,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class DriverRegisterDTO extends PersonRegisterDTO {
     //Driver
-    public $licenseNumber;
+    public $licenceNumber;
     public $wheelChairAttendance;
 
     //DriverCategory

@@ -83,11 +83,6 @@ class Person {
     protected $email;
 
     /**
-     * @ORM\Column(type="string", length=25)
-     */
-    protected $gender;
-
-    /**
      * @ORM\Column(type="date", nullable=true)
      */
     protected $entryDate;
@@ -117,9 +112,24 @@ class Person {
      */
     protected $modifyDate;
 
-    protected function __construct($title, $firstname, $lastname, $telephone, $gender, $address,
+    /**
+     * @param $title
+     * @param $firstname
+     * @param $lastname
+     * @param $telephone
+     * @param $address
+     * @param null $email
+     * @param null $entryDate
+     * @param null $birthday
+     * @param null $extraMinutes
+     * @param null $details
+     * @param null $correspondenceAddress
+     * @param null $billingAddress
+     */
+    protected function __construct($title, $firstname, $lastname, $telephone, $address,
                                    $email = null, $entryDate = null, $birthday = null,
-                                   $extraMinutes = null, $details = null) {
+                                   $extraMinutes = null, $details = null, $correspondenceAddress = null,
+                                   $billingAddress = null) {
 
         $this->creationDate = new \DateTime("now");
         $this->absents = new ArrayCollection();
@@ -128,7 +138,6 @@ class Person {
         $this->setFirstname($firstname);
         $this->setLastname($lastname);
         $this->setTelephone($telephone);
-        $this->setGender($gender);
         $this->setAddress($address);
         if (!empty($email)) {
             $this->setEmail($email);
@@ -145,6 +154,12 @@ class Person {
         if (!empty($details)) {
             $this->setDetails($details);
         }
+        if (!empty($correspondenceAddress)) {
+            $this->setCorrespondenceAddress($correspondenceAddress);
+        }
+        if (!empty($billingAddress)) {
+            $this->setBillingAddress($billingAddress);
+        }
         $this->activate();
     }
 
@@ -153,22 +168,23 @@ class Person {
      * @param $firstname
      * @param $lastname
      * @param $telephone
-     * @param $gender
      * @param $address
      * @param null $email
      * @param null $entryDate
      * @param null $birthday
      * @param null $extraMinutes
      * @param null $details
-     * @internal param string $gender
+     * @param null $correspondenceAddress
+     * @param null $billingAddress
      * @return Person
      */
-    public static function registerPerson($title, $firstname, $lastname, $telephone, $gender, $address,
-                                   $email = null, $entryDate = null, $birthday = null,
-                                   $extraMinutes = null, $details = null) {
+    public static function registerPerson($title, $firstname, $lastname, $telephone, $address,
+                                          $email = null, $entryDate = null, $birthday = null,
+                                          $extraMinutes = null, $details = null, $correspondenceAddress = null,
+                                          $billingAddress = null) {
 
-        $person = new Person($title, $firstname, $lastname, $telephone, $gender, $address,
-            $email, $entryDate, $birthday, $extraMinutes, $details);
+        $person = new Person($title, $firstname, $lastname, $telephone, $address,
+            $email, $entryDate, $birthday, $extraMinutes, $details, $correspondenceAddress, $billingAddress);
 
         return $person;
     }
@@ -178,17 +194,18 @@ class Person {
      * @param null $firstname
      * @param null $lastname
      * @param null $telephone
-     * @param null $gender
      * @param null $address
      * @param null $email
      * @param null $entryDate
      * @param null $birthday
      * @param null $extraMinutes
      * @param null $details
+     * @param null $correspondenceAddress
+     * @param null $billingAddress
      */
     public function updatePersonBasicData($title = null, $firstname = null, $lastname = null, $telephone = null,
-                                          $gender = null, $address = null, $email = null, $entryDate = null, $birthday = null,
-                                          $extraMinutes = null, $details = null) {
+                                          $address = null, $email = null, $entryDate = null, $birthday = null,
+                                          $extraMinutes = null, $details = null, $correspondenceAddress = null, $billingAddress = null) {
 
         $this->modifyDate = new \DateTime("now");
 
@@ -203,9 +220,6 @@ class Person {
         }
         if (!empty($telephone)) {
             $this->setTelephone($telephone);
-        }
-        if (!empty($gender)) {
-            $this->setGender($gender);
         }
         if (!empty($address)) {
             $this->setAddress($address);
@@ -224,6 +238,12 @@ class Person {
         }
         if (!empty($details)) {
             $this->setDetails($details);
+        }
+        if (!empty($correspondenceAddress)) {
+            $this->setCorrespondenceAddress($correspondenceAddress);
+        }
+        if (!empty($billingAddress)) {
+            $this->setBillingAddress($billingAddress);
         }
     }
 
@@ -344,20 +364,6 @@ class Person {
      */
     public function getDetails() {
         return $this->details;
-    }
-
-    /**
-     * @param mixed $isMale
-     */
-    public function setGender($isMale) {
-        $this->gender = $isMale;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getGender() {
-        return $this->gender;
     }
 
     /**

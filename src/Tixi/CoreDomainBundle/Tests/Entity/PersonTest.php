@@ -84,7 +84,7 @@ class PersonTest extends WebTestCase {
         $this->addressRepo->store($address);
 
         $driver = Driver::registerDriver(
-            'Herr', 'Max', 'Mühlemann', '041 222 32 32', 'männlich',
+            'Herr', 'Max', 'Mühlemann', '041 222 32 32',
             $address, 'F3234141', $driverCategory, true, 'test@test.de', new \DateTime(), new \DateTime(),
             5, 'alles nur ein Test'
         );
@@ -100,7 +100,7 @@ class PersonTest extends WebTestCase {
         $this->addressRepo->store($address);
         $driverCategory = $this->createDriverCategory('Freiwillig');
         $driver->updateDriverBasicData(
-            'Herr', 'Muni', 'Meier', '041 333 32 32', 'männlich',
+            'm', 'Muni', 'Meier', '041 333 32 32',
             $address, 'FEA12345', $driverCategory, false, 'test@test.de', $date, $date,
             5, 'alles nur ein Test');
         $driver->assignBillingAddress($address);
@@ -175,7 +175,7 @@ class PersonTest extends WebTestCase {
         $this->addressRepo->store($address);
 
         $passenger = Passenger::registerPassenger(
-            'Frau', 'Toranto', 'Testinger', '041 324 33 22', 'weiblich',
+            'f', 'Toranto', 'Testinger', '041 324 33 22',
             $address, $handicap, true, true, false, 'test@test.de', new \DateTime(), new \DateTime(),
             5, 'alles nur ein Test', 'und auch Notizen'
         );
@@ -186,7 +186,7 @@ class PersonTest extends WebTestCase {
         $this->assertEquals($passenger, $passengerFind);
 
         $passenger->updatePassengerBasicData(
-            'Frau', 'Mila', 'Tolina', '0293292323', 'weiblich',
+            'f', 'Mila', 'Tolina', '0293292323',
             $address, $handicap, true, true, false, 'der@test.de', new \DateTime(), new \DateTime(),
             2, 'goodies', 'notices');
         $passenger->assignBillingAddress($address);

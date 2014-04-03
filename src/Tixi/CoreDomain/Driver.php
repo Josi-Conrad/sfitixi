@@ -41,11 +41,11 @@ class Driver extends Person {
      */
     protected $wheelChairAttendance;
 
-    protected function __construct($title, $firstname, $lastname, $telephone, $gender, $address,
+    protected function __construct($title, $firstname, $lastname, $telephone, $address,
                                    $email = null, $entryDate = null, $birthday = null,
                                    $extraMinutes = null, $details = null) {
 
-        parent::__construct($title, $firstname, $lastname, $telephone, $gender, $address,
+        parent::__construct($title, $firstname, $lastname, $telephone, $address,
             $email, $entryDate, $birthday, $extraMinutes, $details);
 
         $this->supervisedVehicles = new ArrayCollection();
@@ -56,7 +56,6 @@ class Driver extends Person {
      * @param $firstname
      * @param $lastname
      * @param $telephone
-     * @param $gender
      * @param $licenceNumber
      * @param Address $address
      * @param DriverCategory $driverCategory
@@ -68,11 +67,11 @@ class Driver extends Person {
      * @param null $details
      * @return Driver
      */
-    public static function registerDriver($title, $firstname, $lastname, $telephone, $gender, Address $address, $licenceNumber,
+    public static function registerDriver($title, $firstname, $lastname, $telephone, Address $address, $licenceNumber,
                                           DriverCategory $driverCategory, $wheelChairAttendance = true, $email = null,
                                           $entryDate = null, $birthday = null, $extraMinutes = null, $details = null) {
 
-        $driver = new Driver($title, $firstname, $lastname, $telephone, $gender, $address,
+        $driver = new Driver($title, $firstname, $lastname, $telephone, $address,
             $email, $entryDate, $birthday, $extraMinutes, $details);
 
         $driver->setLicenceNumber($licenceNumber);
@@ -87,7 +86,6 @@ class Driver extends Person {
      * @param null $firstname
      * @param null $lastname
      * @param null $telephone
-     * @param null $gender
      * @param null $licenceNumber
      * @param Address $address
      * @param DriverCategory $driverCategory
@@ -98,13 +96,13 @@ class Driver extends Person {
      * @param null $extraMinutes
      * @param null $details
      */
-    public function updateDriverBasicData($title = null, $firstname = null, $lastname = null, $telephone = null, $gender = null,
+    public function updateDriverBasicData($title = null, $firstname = null, $lastname = null, $telephone = null,
                                           Address $address = null, $licenceNumber = null, DriverCategory $driverCategory = null,
                                           $wheelChairAttendance = null, $email = null, $entryDate = null, $birthday = null,
                                           $extraMinutes = null, $details = null) {
 
         parent::updatePersonBasicData(
-            $title, $firstname, $lastname, $telephone, $gender, $address, $email, $entryDate, $birthday, $extraMinutes, $details
+            $title, $firstname, $lastname, $telephone, $address, $email, $entryDate, $birthday, $extraMinutes, $details
         );
 
         if (!empty($licenceNumber)) {

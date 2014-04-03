@@ -50,12 +50,13 @@ class Passenger extends Person {
      */
     protected $drivingOrders;
 
-    protected function __construct($title, $firstname, $lastname, $telephone, $gender, $address,
+    protected function __construct($title, $firstname, $lastname, $telephone, $address,
                                    $email = null, $entryDate = null, $birthday = null,
-                                   $extraMinutes = null, $details = null) {
+                                   $extraMinutes = null, $details = null, $correspondenceAddress = null,
+                                   $billingAddress = null) {
 
-        parent::__construct($title, $firstname, $lastname, $telephone, $gender, $address,
-            $email, $entryDate, $birthday, $extraMinutes, $details);
+        parent::__construct($title, $firstname, $lastname, $telephone, $address,
+            $email, $entryDate, $birthday, $extraMinutes, $details, $correspondenceAddress, $billingAddress);
 
         $this->drivingOrders = new ArrayCollection();
     }
@@ -65,7 +66,6 @@ class Passenger extends Person {
      * @param $firstname
      * @param $lastname
      * @param $telephone
-     * @param $gender
      * @param Address $address
      * @param Handicap $handicap
      * @param bool $isInWheelChair
@@ -77,15 +77,19 @@ class Passenger extends Person {
      * @param null $extraMinutes
      * @param null $details
      * @param null $notice
+     * @param null $correspondenceAddress
+     * @param null $billingAddress
      * @return Passenger
      */
-    public static function registerPassenger($title, $firstname, $lastname, $telephone, $gender, Address $address, Handicap $handicap,
+    public static function registerPassenger($title, $firstname, $lastname, $telephone, Address $address, Handicap $handicap,
                                              $isInWheelChair = false, $gotMonthlyBilling = false, $isOverWeight = false,
                                              $email = null, $entryDate = null, $birthday = null,
-                                             $extraMinutes = null, $details = null, $notice = null) {
+                                             $extraMinutes = null, $details = null, $notice = null, $correspondenceAddress = null,
+                                             $billingAddress = null) {
 
-        $passenger = new Passenger($title, $firstname, $lastname, $telephone, $gender, $address,
-            $email, $entryDate, $birthday, $extraMinutes, $details);
+        $passenger = new Passenger($title, $firstname, $lastname, $telephone, $address,
+            $email, $entryDate, $birthday, $extraMinutes, $details, $correspondenceAddress, $billingAddress
+        );
 
         $passenger->setHandicap($handicap);
         $passenger->setIsInWheelChair($isInWheelChair);
@@ -104,7 +108,6 @@ class Passenger extends Person {
      * @param null $firstname
      * @param null $lastname
      * @param null $telephone
-     * @param null $gender
      * @param Address $address
      * @param Handicap $handicap
      * @param null $isInWheelChair
@@ -116,14 +119,18 @@ class Passenger extends Person {
      * @param null $extraMinutes
      * @param null $details
      * @param null $notice
+     * @param null $correspondenceAddress
+     * @param null $billingAddress
      */
-    public function updatePassengerBasicData($title = null, $firstname = null, $lastname = null, $telephone = null, $gender = null,
+    public function updatePassengerBasicData($title = null, $firstname = null, $lastname = null, $telephone = null,
                                              Address $address, Handicap $handicap = null, $isInWheelChair = null, $gotMonthlyBilling = null,
                                              $isOverWeight = null, $email = null, $entryDate = null, $birthday = null,
-                                             $extraMinutes = null, $details = null, $notice = null) {
+                                             $extraMinutes = null, $details = null, $notice = null, $correspondenceAddress = null,
+                                             $billingAddress = null) {
 
         parent::updatePersonBasicData(
-            $title, $firstname, $lastname, $telephone, $gender, $address, $email, $entryDate, $birthday, $extraMinutes, $details
+            $title, $firstname, $lastname, $telephone, $address, $email, $entryDate, $birthday,
+            $extraMinutes, $details, $correspondenceAddress, $billingAddress
         );
 
         if (!empty($handicap)) {
