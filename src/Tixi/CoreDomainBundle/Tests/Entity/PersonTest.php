@@ -84,8 +84,8 @@ class PersonTest extends WebTestCase {
         $this->addressRepo->store($address);
 
         $driver = Driver::registerDriver(
-            'Herr', 'Max', 'Mühlemann', '041 222 32 32', 'männlich', 'F3234141',
-            $address, $driverCategory, true, 'test@test.de', new \DateTime(), new \DateTime(),
+            'Herr', 'Max', 'Mühlemann', '041 222 32 32', 'männlich',
+            $address, 'F3234141', $driverCategory, true, 'test@test.de', new \DateTime(), new \DateTime(),
             5, 'alles nur ein Test'
         );
 
@@ -100,8 +100,8 @@ class PersonTest extends WebTestCase {
         $this->addressRepo->store($address);
         $driverCategory = $this->createDriverCategory('Freiwillig');
         $driver->updateDriverBasicData(
-            'Herr', 'Muni', 'Meier', '041 333 32 32', 'männlich', 'FEA12345',
-            $address, $driverCategory, false, 'test@test.de', $date, $date,
+            'Herr', 'Muni', 'Meier', '041 333 32 32', 'männlich',
+            $address, 'FEA12345', $driverCategory, false, 'test@test.de', $date, $date,
             5, 'alles nur ein Test');
         $driver->assignBillingAddress($address);
         $driver->assignCorrespondenceAddress($address);
@@ -217,7 +217,7 @@ class PersonTest extends WebTestCase {
                 $found = true;
             }
         }
-        $this->assertEquals($found, true);
+        $this->assertTrue($found);
     }
 
     private function passengerRemove(Passenger $passenger) {

@@ -41,8 +41,13 @@ class Driver extends Person {
      */
     protected $wheelChairAttendance;
 
-    protected function __construct() {
-        parent::__construct();
+    protected function __construct($title, $firstname, $lastname, $telephone, $gender, $address,
+                                   $email = null, $entryDate = null, $birthday = null,
+                                   $extraMinutes = null, $details = null) {
+
+        parent::__construct($title, $firstname, $lastname, $telephone, $gender, $address,
+            $email, $entryDate, $birthday, $extraMinutes, $details);
+
         $this->supervisedVehicles = new ArrayCollection();
     }
 
@@ -63,38 +68,16 @@ class Driver extends Person {
      * @param null $details
      * @return Driver
      */
-    public static function registerDriver($title, $firstname, $lastname, $telephone, $gender, $licenceNumber, Address $address,
+    public static function registerDriver($title, $firstname, $lastname, $telephone, $gender, Address $address, $licenceNumber,
                                           DriverCategory $driverCategory, $wheelChairAttendance = true, $email = null,
                                           $entryDate = null, $birthday = null, $extraMinutes = null, $details = null) {
-        $driver = new Driver();
 
-        $driver->setTitle($title);
-        $driver->setFirstname($firstname);
-        $driver->setLastname($lastname);
-        $driver->setTelephone($telephone);
+        $driver = new Driver($title, $firstname, $lastname, $telephone, $gender, $address,
+            $email, $entryDate, $birthday, $extraMinutes, $details);
+
         $driver->setLicenceNumber($licenceNumber);
-        $driver->setAddress($address);
         $driver->setDriverCategory($driverCategory);
         $driver->setWheelChairAttendance($wheelChairAttendance);
-        $driver->setGender($gender);
-
-        if (!empty($email)) {
-            $driver->setEmail($email);
-        }
-        if (!empty($entryDate)) {
-            $driver->setEntryDate($entryDate);
-        }
-        if (!empty($birthday)) {
-            $driver->setBirthday($birthday);
-        }
-        if (!empty($extraMinutes)) {
-            $driver->setExtraMinutes($extraMinutes);
-        }
-        if (!empty($details)) {
-            $driver->setDetails($details);
-        }
-
-        $driver->activate();
 
         return $driver;
     }
@@ -116,50 +99,22 @@ class Driver extends Person {
      * @param null $details
      */
     public function updateDriverBasicData($title = null, $firstname = null, $lastname = null, $telephone = null, $gender = null,
-                                          $licenceNumber = null, Address $address = null, DriverCategory $driverCategory = null,
+                                          Address $address = null, $licenceNumber = null, DriverCategory $driverCategory = null,
                                           $wheelChairAttendance = null, $email = null, $entryDate = null, $birthday = null,
                                           $extraMinutes = null, $details = null) {
-        if (!empty($title)) {
-            $this->setTitle($title);
-        }
-        if (!empty($firstname)) {
-            $this->setFirstname($firstname);
-        }
-        if (!empty($lastname)) {
-            $this->setLastname($lastname);
-        }
-        if (!empty($telephone)) {
-            $this->setTelephone($telephone);
-        }
+
+        parent::updatePersonBasicData(
+            $title, $firstname, $lastname, $telephone, $gender, $address, $email, $entryDate, $birthday, $extraMinutes, $details
+        );
+
         if (!empty($licenceNumber)) {
             $this->setLicenceNumber($licenceNumber);
-        }
-        if (!empty($address)) {
-            $this->setAddress($address);
         }
         if (!empty($driverCategory)) {
             $this->setDriverCategory($driverCategory);
         }
         if (!empty($wheelChairAttendance)) {
             $this->setWheelChairAttendance($wheelChairAttendance);
-        }
-        if (!empty($gender)) {
-            $this->setGender($gender);
-        }
-        if (!empty($email)) {
-            $this->setEmail($email);
-        }
-        if (!empty($entryDate)) {
-            $this->setEntryDate($entryDate);
-        }
-        if (!empty($birthday)) {
-            $this->setBirthday($birthday);
-        }
-        if (!empty($extraMinutes)) {
-            $this->setExtraMinutes($extraMinutes);
-        }
-        if (!empty($details)) {
-            $this->setDetails($details);
         }
     }
 

@@ -50,8 +50,13 @@ class Passenger extends Person {
      */
     protected $drivingOrders;
 
-    protected function __construct() {
-        parent::__construct();
+    protected function __construct($title, $firstname, $lastname, $telephone, $gender, $address,
+                                   $email = null, $entryDate = null, $birthday = null,
+                                   $extraMinutes = null, $details = null) {
+
+        parent::__construct($title, $firstname, $lastname, $telephone, $gender, $address,
+            $email, $entryDate, $birthday, $extraMinutes, $details);
+
         $this->drivingOrders = new ArrayCollection();
     }
 
@@ -78,38 +83,18 @@ class Passenger extends Person {
                                              $isInWheelChair = false, $gotMonthlyBilling = false, $isOverWeight = false,
                                              $email = null, $entryDate = null, $birthday = null,
                                              $extraMinutes = null, $details = null, $notice = null) {
-        $passenger = new Passenger();
-        $passenger->setTitle($title);
-        $passenger->setFirstname($firstname);
-        $passenger->setLastname($lastname);
-        $passenger->setTelephone($telephone);
-        $passenger->setGender($gender);
-        $passenger->setAddress($address);
+
+        $passenger = new Passenger($title, $firstname, $lastname, $telephone, $gender, $address,
+            $email, $entryDate, $birthday, $extraMinutes, $details);
+
         $passenger->setHandicap($handicap);
         $passenger->setIsInWheelChair($isInWheelChair);
         $passenger->setGotMonthlyBilling($gotMonthlyBilling);
         $passenger->setIsOverweight($isOverWeight);
 
-        if (!empty($email)) {
-            $passenger->setEmail($email);
-        }
-        if (!empty($entryDate)) {
-            $passenger->setEntryDate($entryDate);
-        }
-        if (!empty($birthday)) {
-            $passenger->setBirthday($birthday);
-        }
-        if (!empty($extraMinutes)) {
-            $passenger->setExtraMinutes($extraMinutes);
-        }
-        if (!empty($details)) {
-            $passenger->setDetails($details);
-        }
         if (!empty($notice)) {
             $passenger->setNotice($notice);
         }
-
-        $passenger->activate();
 
         return $passenger;
     }
@@ -136,24 +121,11 @@ class Passenger extends Person {
                                              Address $address, Handicap $handicap = null, $isInWheelChair = null, $gotMonthlyBilling = null,
                                              $isOverWeight = null, $email = null, $entryDate = null, $birthday = null,
                                              $extraMinutes = null, $details = null, $notice = null) {
-        if (!empty($title)) {
-            $this->setTitle($title);
-        }
-        if (!empty($firstname)) {
-            $this->setFirstname($firstname);
-        }
-        if (!empty($lastname)) {
-            $this->setLastname($lastname);
-        }
-        if (!empty($telephone)) {
-            $this->setTelephone($telephone);
-        }
-        if (!empty($gender)) {
-            $this->setGender($gender);
-        }
-        if (!empty($address)) {
-            $this->setAddress($address);
-        }
+
+        parent::updatePersonBasicData(
+            $title, $firstname, $lastname, $telephone, $gender, $address, $email, $entryDate, $birthday, $extraMinutes, $details
+        );
+
         if (!empty($handicap)) {
             $this->setHandicap($handicap);
         }
@@ -166,29 +138,15 @@ class Passenger extends Person {
         if (!empty($isOverWeight)) {
             $this->setIsOverweight($isOverWeight);
         }
-        if (!empty($email)) {
-            $this->setEmail($email);
-        }
-        if (!empty($entryDate)) {
-            $this->setEntryDate($entryDate);
-        }
-        if (!empty($birthday)) {
-            $this->setBirthday($birthday);
-        }
-        if (!empty($extraMinutes)) {
-            $this->setExtraMinutes($extraMinutes);
-        }
-        if (!empty($details)) {
-            $this->setDetails($details);
-        }
         if (!empty($notice)) {
             $this->setNotice($notice);
         }
     }
 
-    public static function removePassenger(Passenger $passenger){
+    public static function removePassenger(Passenger $passenger) {
         $passenger->removePerson();
     }
+
     /**
      * @param mixed $gotMonthlyBilling
      */
@@ -258,6 +216,4 @@ class Passenger extends Person {
     public function getNotice() {
         return $this->notice;
     }
-
-
 }

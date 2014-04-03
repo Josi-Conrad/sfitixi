@@ -24,28 +24,19 @@ class ServicePlan implements Entity{
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     protected $id;
-
     /**
      * @ORM\ManyToOne(targetEntity="Vehicle", inversedBy="servicePlans")
      * @ORM\JoinColumn(name="vehicle_id", referencedColumnName="id")
      */
     protected $vehicle;
-
     /**
      * @ORM\Column(type="datetime")
      */
     protected $startDate;
-
     /**
      * @ORM\Column(type="datetime")
      */
     protected $endDate;
-
-    /**
-     * @ORM\Column(type="decimal", scale=2, nullable=true)
-     */
-    protected $cost;
-
     /**
      * @ORM\Column(type="text", nullable=true)
      */
