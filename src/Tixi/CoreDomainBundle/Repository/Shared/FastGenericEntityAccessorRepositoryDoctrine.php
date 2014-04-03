@@ -28,7 +28,7 @@ class FastGenericEntityAccessorRepositoryDoctrine implements FastGenericEntityAc
         if('' !== $dqlQueryString) {
             $query = $this->entityManager->createQuery($dqlQueryString);
             if(null !== $filter->getSearch()) {
-                $query->setParameter('searchStr', $filter->getSearch()->getSearchStr());
+                $query->setParameter('searchStr', $this->createLikedSerachString($filter->getSearch()->getSearchStr()));
             }
             if(null !== $filter->getLimit()) {
                 $query->setMaxResults($filter->getLimit());
@@ -47,7 +47,7 @@ class FastGenericEntityAccessorRepositoryDoctrine implements FastGenericEntityAc
         if('' !== $dqlQueryString) {
             $query = $this->entityManager->createQuery($dqlQueryString);
             if(null !== $filter->getSearch()) {
-                $query->setParameter('searchStr', $filter->getSearch()->getSearchStr());
+                $query->setParameter('searchStr', $this->createLikedSerachString($filter->getSearch()->getSearchStr()));
             }
             $totalAmount=$query->getSingleScalarResult();
         }
@@ -153,6 +153,11 @@ class FastGenericEntityAccessorRepositoryDoctrine implements FastGenericEntityAc
 
         }
         return $dqlOrderBy;
+    }
+
+    protected function createLikedSerachString($searchString) {
+        return '%'.$searchString.'%';
+
     }
 
 
