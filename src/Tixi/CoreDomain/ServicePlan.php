@@ -75,20 +75,6 @@ class ServicePlan implements Entity{
     }
 
     /**
-     * @param mixed $cost
-     */
-    public function setCost($cost) {
-        $this->cost = $cost;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getCost() {
-        return $this->cost;
-    }
-
-    /**
      * @param mixed $endDate
      */
     public function setEndDate($endDate) {

@@ -19,10 +19,19 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class Passenger extends Person {
     /**
-     * @ORM\ManyToOne(targetEntity="Handicap")
-     * @ORM\JoinColumn(name="handicap", referencedColumnName="id")
+     * @ORM\ManyToMany(targetEntity="Handicap")
+     * @ORM\JoinTable(name="passenger_to_handicap",
+     *      joinColumns={@ORM\JoinColumn(name="passenger_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="handicap_id", referencedColumnName="id")})
      */
-    protected $handicap;
+    protected $handicaps;
+    /**
+     * @ORM\ManyToMany(targetEntity="Insurance")
+     * @ORM\JoinTable(name="passenger_to_insurance",
+     *      joinColumns={@ORM\JoinColumn(name="passenger_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="insurance_id", referencedColumnName="id")})
+     */
+    protected $insurances;
 
     /**
      * @ORM\Column(type="boolean")
@@ -58,6 +67,8 @@ class Passenger extends Person {
         parent::__construct($title, $firstname, $lastname, $telephone, $address,
             $email, $entryDate, $birthday, $extraMinutes, $details, $correspondenceAddress, $billingAddress);
 
+        $this->handicaps = new ArrayCollection();
+        $this->insurances = new ArrayCollection();
         $this->drivingOrders = new ArrayCollection();
     }
 
@@ -67,7 +78,6 @@ class Passenger extends Person {
      * @param $lastname
      * @param $telephone
      * @param Address $address
-     * @param Handicap $handicap
      * @param bool $isInWheelChair
      * @param bool $gotMonthlyBilling
      * @param bool $isOverWeight
@@ -79,9 +89,10 @@ class Passenger extends Person {
      * @param null $notice
      * @param null $correspondenceAddress
      * @param null $billingAddress
+     * @internal param \Tixi\CoreDomain\Handicap $handicap
      * @return Passenger
      */
-    public static function registerPassenger($title, $firstname, $lastname, $telephone, Address $address, Handicap $handicap,
+    public static function registerPassenger($title, $firstname, $lastname, $telephone, Address $address,
                                              $isInWheelChair = false, $gotMonthlyBilling = false, $isOverWeight = false,
                                              $email = null, $entryDate = null, $birthday = null,
                                              $extraMinutes = null, $details = null, $notice = null, $correspondenceAddress = null,
@@ -91,7 +102,6 @@ class Passenger extends Person {
             $email, $entryDate, $birthday, $extraMinutes, $details, $correspondenceAddress, $billingAddress
         );
 
-        $passenger->setHandicap($handicap);
         $passenger->setIsInWheelChair($isInWheelChair);
         $passenger->setGotMonthlyBilling($gotMonthlyBilling);
         $passenger->setIsOverweight($isOverWeight);
@@ -109,7 +119,6 @@ class Passenger extends Person {
      * @param null $lastname
      * @param null $telephone
      * @param Address $address
-     * @param Handicap $handicap
      * @param null $isInWheelChair
      * @param null $gotMonthlyBilling
      * @param null $isOverWeight
@@ -121,9 +130,10 @@ class Passenger extends Person {
      * @param null $notice
      * @param null $correspondenceAddress
      * @param null $billingAddress
+     * @internal param \Tixi\CoreDomain\Handicap $handicap
      */
     public function updatePassengerBasicData($title = null, $firstname = null, $lastname = null, $telephone = null,
-                                             Address $address, Handicap $handicap = null, $isInWheelChair = null, $gotMonthlyBilling = null,
+                                             Address $address, $isInWheelChair = null, $gotMonthlyBilling = null,
                                              $isOverWeight = null, $email = null, $entryDate = null, $birthday = null,
                                              $extraMinutes = null, $details = null, $notice = null, $correspondenceAddress = null,
                                              $billingAddress = null) {
@@ -133,9 +143,6 @@ class Passenger extends Person {
             $extraMinutes, $details, $correspondenceAddress, $billingAddress
         );
 
-        if (!empty($handicap)) {
-            $this->setHandicap($handicap);
-        }
         if (!empty($isInWheelChair)) {
             $this->setIsInWheelChair($isInWheelChair);
         }
@@ -150,8 +157,39 @@ class Passenger extends Person {
         }
     }
 
+    /**
+     * @param Passenger $passenger
+     */
     public static function removePassenger(Passenger $passenger) {
         $passenger->removePerson();
+    }
+
+    /**
+     * @param Handicap $handicap
+     */
+    public function assignHandicap(Handicap $handicap){
+        $this->handicaps->add($handicap);
+    }
+
+    /**
+     * @param Handicap $handicap
+     */
+    public function removeHandicap(Handicap $handicap){
+        $this->handicaps->removeElement($handicap);
+    }
+
+    /**
+     * @param Insurance $insurance
+     */
+    public function assignInsurance(Insurance $insurance){
+        $this->insurances->add($insurance);
+    }
+
+    /**
+     * @param Insurance $insurance
+     */
+    public function removeInsurance(Insurance $insurance){
+        $this->insurances->removeElement($insurance);
     }
 
     /**
@@ -166,20 +204,6 @@ class Passenger extends Person {
      */
     public function getGotMonthlyBilling() {
         return $this->gotMonthlyBilling;
-    }
-
-    /**
-     * @param mixed $handicap
-     */
-    public function setHandicap($handicap) {
-        $this->handicap = $handicap;
-    }
-
-    /**
-     * @return Handicap
-     */
-    public function getHandicap() {
-        return $this->handicap;
     }
 
     /**

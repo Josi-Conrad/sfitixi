@@ -121,10 +121,10 @@ class Driver extends Person {
      * @param Driver $driver
      */
     public static function removeDriver(Driver $driver) {
-        $driver->removePerson();
         foreach ($driver->getSupervisedVehicles() as $v) {
             $driver->removeSupervisedVehicle($v);
         }
+        $driver->removePerson();
     }
 
     public function isAvailableOn(Shift $shift) {
@@ -143,8 +143,8 @@ class Driver extends Person {
      * @param Vehicle $vehicle
      */
     public function removeSupervisedVehicle(Vehicle $vehicle) {
-        $this->supervisedVehicles->removeElement($vehicle);
         $vehicle->removeSupervisor();
+        $this->supervisedVehicles->removeElement($vehicle);
     }
 
     /**

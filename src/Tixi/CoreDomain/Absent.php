@@ -82,17 +82,6 @@ class Absent {
     }
 
     /**
-     * @param Person $person
-     */
-    public function assignPerson(Person $person){
-        $this->person = $person;
-    }
-
-    public function removePerson(){
-        $this->person = null;
-    }
-
-    /**
      * @param mixed $endDate
      */
     public function setEndDate($endDate) {

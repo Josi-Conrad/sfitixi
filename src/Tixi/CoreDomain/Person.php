@@ -261,6 +261,21 @@ class Person {
         $this->isActive = false;
     }
 
+
+    /**
+     * Assigns Absent to Person and OneToMany $person in Absent
+     * @param Absent $absent
+     */
+    public function assignAbsent(Absent $absent) {
+        $this->absents->add($absent);
+        $absent->setPerson($this);
+    }
+
+    public function removeAbsent(Absent $absent) {
+        $this->absents->removeElement($absent);
+        $absent->setPerson(null);
+    }
+
     /**
      * @param Address $address
      */
@@ -273,20 +288,6 @@ class Person {
      */
     public function assignBillingAddress(Address $address) {
         $this->billingAddress = $address;
-    }
-
-    /**
-     * Assigns Absent to Person and OneToMany $person in Absent
-     * @param Absent $absent
-     */
-    public function assignAbsent(Absent $absent) {
-        $absent->assignPerson($this);
-        $this->absents->add($absent);
-    }
-
-    public function removeAbsent(Absent $absent) {
-        $this->absents->removeElement($absent);
-        $absent->removePerson();
     }
 
     /**
