@@ -8,8 +8,8 @@ root:
         permanent: true
 
 tixi_api:
-    resource: "@TixiApiBundle/Resources/config/routing.yml"
-    type:     rest
+    resource: "@TixiApiBundle/Controller/"
+    type:     annotation
     prefix:   /
 
 tixi_core_domain:
