@@ -6,7 +6,7 @@
  * Time: 17:31
  */
 
-namespace Tixi\CoreDomainBundle\Tests\Entity;
+namespace Tixi\SecurityBundle\Tests\Entity;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Security\Core\Encoder\EncoderFactory;
