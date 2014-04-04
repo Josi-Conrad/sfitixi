@@ -65,5 +65,39 @@ class WorkingDay {
 
     }
 
+    /**
+     * @return mixed
+     */
+    public function getDate()
+    {
+        return $this->date;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDrivingPools()
+    {
+        return $this->drivingPools;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getShifts()
+    {
+        return $this->shifts;
+    }
+
+
+
 
 }

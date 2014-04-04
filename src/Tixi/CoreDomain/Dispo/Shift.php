@@ -51,6 +51,52 @@ class Shift {
         $this->drivingPools = new ArrayCollection();
     }
 
+    /**
+     * @return mixed
+     */
+    public function getAmountOfDrivers()
+    {
+        return $this->amountOfDrivers;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDrivingPools()
+    {
+        return $this->drivingPools;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getShiftType()
+    {
+        return $this->shiftType;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getWorkingDay()
+    {
+        return $this->workingDay;
+    }
+
+    public function getDate() {
+        //mock date
+        return DateTime::createFromFormat('d.m.Y','06.05.2014');
+//        return $this->workingDay->getDate();
+    }
+
     protected function assignDriver(Driver $driver) {
         $this->drivingPools = new DrivingPool($driver, $this);
     }
