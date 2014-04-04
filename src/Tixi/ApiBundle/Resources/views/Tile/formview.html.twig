@@ -34,7 +34,8 @@
                         </div>
                     {% endfor %}
                 </form>
-                <a href="#" class="expandFormButton">Weitere Details</a>
+                <a href="#" class="expandFormButton">{% trans %} more.details {% endtrans %}</a>
+                <a href="#" class="dexpandFormButton" hidden="true">{% trans %} less.details {% endtrans %}</a>
                 <script type="text/javascript">
                     jQuery(function ($) {
                         new FormViewController({{ formViewId }});

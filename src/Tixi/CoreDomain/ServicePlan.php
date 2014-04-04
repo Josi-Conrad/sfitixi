@@ -16,7 +16,7 @@ use Tixi\CoreDomain\Shared\Entity;
  * @ORM\Entity(repositoryClass="Tixi\CoreDomainBundle\Repository\ServicePlanRepositoryDoctrine")
  * @ORM\Table(name="serviceplan")
  */
-class ServicePlan implements Entity{
+class ServicePlan implements Entity {
 
     /**
      * @ORM\Id
@@ -49,18 +49,29 @@ class ServicePlan implements Entity{
     /**
      * @param $startDate
      * @param $endDate
+     * @param null $memo
      * @return ServicePlan
      */
-    public static function registerServicePlan($startDate, $endDate) {
+    public static function registerServicePlan($startDate, $endDate, $memo = null) {
         $servicePlan = new ServicePlan();
         $servicePlan->setStartDate($startDate);
         $servicePlan->setEndDate($endDate);
+        if (!empty($memo)) {
+            $servicePlan->setMemo($memo);
+        }
         return $servicePlan;
     }
 
-    public function updateBasicData($startDate=null, $endDate=null) {
-        if(!is_null($startDate)) {$this->startDate=$startDate;}
-        if(!is_null($endDate)) {$this->endDate=$endDate;}
+    public function updateBasicData($startDate = null, $endDate = null, $memo = null) {
+        if (!empty($startDate)) {
+            $this->setStartDate($startDate);
+        }
+        if (!empty($endDate)) {
+            $this->setEndDate($endDate);
+        }
+        if (!empty($memo)) {
+            $this->setMemo($memo);
+        }
     }
 
     /**
@@ -70,7 +81,7 @@ class ServicePlan implements Entity{
         $this->vehicle = $vehicle;
     }
 
-    public function removeVehicle(){
+    public function removeVehicle() {
         $this->assignVehicle(null);
     }
 

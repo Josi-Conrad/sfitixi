@@ -17,7 +17,7 @@ class PassengerRegisterFormViewTile extends AbstractFormViewTile {
     public function createFormRows() {
         /**@var $dto \Tixi\ApiBundle\Interfaces\PassengerRegisterDTO */
         $dto = $this->dto;
-        $this->basicFormRows[] = new FormRowView('Fahgrast-Nr', $dto->person_id);
+        $this->basicFormRows[] = new FormRowView('Fahrgast-Nr', $dto->person_id);
         if (!empty($dto->birthday)) {
             $this->basicFormRows[] = new FormRowView('Alter', $this->getAge($dto->birthday));
         }

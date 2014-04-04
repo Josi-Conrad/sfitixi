@@ -18,7 +18,11 @@ class AbsentAssembler {
     /** @var $dateTimeService  DateTimeService */
     private $dateTimeService;
 
-    public function registerAbsent(AbsentRegisterDTO $absentDTO) {
+    /**
+     * @param AbsentRegisterDTO $absentDTO
+     * @return Absent
+     */
+    public function registerDTOtoNewAbsent(AbsentRegisterDTO $absentDTO) {
         $absent = Absent::registerAbsent(
             $absentDTO->subject,
             $this->dateTimeService->convertLocalDateTimeToUTCDateTime($absentDTO->startDate),
@@ -26,6 +30,23 @@ class AbsentAssembler {
         return $absent;
     }
 
+    /**
+     * @param AbsentRegisterDTO $absentDTO
+     * @param Absent $absent
+     * @return Absent
+     */
+    public function registerDTOtoAbsent(AbsentRegisterDTO $absentDTO, Absent $absent) {
+        $absent->updateBasicData(
+            $absentDTO->subject,
+            $this->dateTimeService->convertLocalDateTimeToUTCDateTime($absentDTO->startDate),
+            $this->dateTimeService->convertLocalDateTimeToUTCDateTime($absentDTO->endDate));
+        return $absent;
+    }
+
+    /**
+     * @param Absent $absent
+     * @return AbsentRegisterDTO
+     */
     public function absentToAbsentRegisterDTO(Absent $absent) {
         $absentDTO = new AbsentRegisterDTO();
         $absentDTO->id = $absent->getId();
@@ -36,6 +57,10 @@ class AbsentAssembler {
         return $absentDTO;
     }
 
+    /**
+     * @param $absents
+     * @return array
+     */
     public function absentsToAbsentEmbeddedListDTOs($absents) {
         $dtoArray = array();
         foreach ($absents as $absent) {
@@ -44,6 +69,10 @@ class AbsentAssembler {
         return $dtoArray;
     }
 
+    /**
+     * @param Absent $absent
+     * @return AbsentEmbeddedListDTO
+     */
     public function absentsToAbsentEmbeddedListDTO(Absent $absent) {
         $absentEmbeddedListDTO = new AbsentEmbeddedListDTO();
         $absentEmbeddedListDTO->id = $absent->getId();

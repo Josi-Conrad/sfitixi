@@ -19,14 +19,15 @@ class ServicePlanType extends AbstractType{
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('id', 'hidden');
+
         $builder->add('startDate', new DatePickerType(), array(
             'label' => 'Servicestart'
         ));
         $builder->add('endDate', new DatePickerType(), array(
             'label' => 'Servicenede'
         ));
-        $builder->add('cost', 'number', array(
-            'label' => 'Kosten'
+        $builder->add('memo', 'text', array(
+            'label' => 'Notiz'
         ));
     }
 

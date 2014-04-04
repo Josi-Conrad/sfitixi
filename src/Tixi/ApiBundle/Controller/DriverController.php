@@ -7,22 +7,15 @@
  */
 namespace Tixi\ApiBundle\Controller;
 
-use FOS\RestBundle\Controller\Annotations\QueryParam;
-use FOS\RestBundle\Request\ParamFetcherInterface;
-use FOS\RestBundle\View\View;
+use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Tixi\ApiBundle\Form\DriverType;
-use Tixi\ApiBundle\Interfaces\DriverListDTO;
 use Tixi\ApiBundle\Interfaces\DriverRegisterDTO;
-use Tixi\ApiBundle\Shared\DataGrid\DataGrid;
-use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Tixi\ApiBundle\Tile\Core\FormTile;
 use Tixi\ApiBundle\Tile\Core\PanelSplitterTile;
 use Tixi\ApiBundle\Tile\Core\PanelTile;
@@ -32,19 +25,13 @@ use Tixi\ApiBundle\Tile\Driver\DriverRegisterFormViewTile;
 /**
  * Class DriverController
  * @package Tixi\ApiBundle\Controller
- * @Breadcrumb("Fahrer", route="tixiapi_drivers_get")
  * @Route("/drivers")
+ * @Breadcrumb("Fahrer", route="tixiapi_drivers_get")
  */
 class DriverController extends Controller {
     /**
      * @Route("", name="tixiapi_drivers_get")
      * @Method({"GET","POST"})
-     * GetParameters:
-     * page,limit,orderbyfield,orderbydirection
-     * filterstr,partial,embedded
-     * @param Request $request
-     * @param bool $embeddedState
-     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function getDriversAction(Request $request, $embeddedState = false) {
         $embeddedParameter = (null === $request->get('embedded') || $request->get('embedded') === 'false') ? false : true;
@@ -60,13 +47,9 @@ class DriverController extends Controller {
     }
 
     /**
-     * @Route("/{driverId}", requirements={"driverId" = "^(?!new)[^/]+$"},
-     * name="tixiapi_driver_get")
+     * @Route("/{driverId}", requirements={"driverId" = "^(?!new)[^/]+$"}, name="tixiapi_driver_get")
      * @Method({"GET","POST"})
-     * @param Request $request
-     * @param $driverId
-     * @return mixed
-     * @Breadcrumb("Fahrer Details", route={"name"="tixiapi_driver_get", "parameters"={"driverId"}})
+     * @Breadcrumb("Fahrer {driverId}", route={"name"="tixiapi_driver_get", "parameters"={"driverId"}})
      */
     public function getDriverAction(Request $request, $driverId) {
 
@@ -94,9 +77,6 @@ class DriverController extends Controller {
     /**
      * @Route("/new", name="tixiapi_driver_new")
      * @Method({"GET","POST"})
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
-     * @return \Symfony\Component\HttpFoundation\Response
      * @Breadcrumb("Neuer Fahrer", route="tixiapi_driver_new")
      */
     public function newDriverAction(Request $request) {
@@ -121,7 +101,7 @@ class DriverController extends Controller {
      * @Route("/{driverId}/editbasic", name="tixiapi_driver_editbasic")
      * @Method({"GET","POST"})
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
-     * @Breadcrumb("Fahrer editieren", route={"name"="tixiapi_driver_editbasic", "parameters"={"driverId"}})
+     * @Breadcrumb("Fahrer {driverId}", route={"name"="tixiapi_driver_editbasic", "parameters"={"driverId"}})
      */
     public function editDriverAction(Request $request, $driverId) {
         $dataGridHandler = $this->get('tixi_api.datagridhandler');
@@ -169,9 +149,7 @@ class DriverController extends Controller {
             $this->get('driver_repository')->store($driver);
         } else {
             $driver = $this->get('driver_repository')->find($driverDTO->person_id);
-            $this->get('tixi_api.assemblerdriver')->registerDTOtoDriver($driver, $driverDTO);
-            $this->get('address_repository')->store($driver->getAddress());
-            $this->get('driver_repository')->store($driver);
+            $this->get('tixi_api.assemblerdriver')->registerDTOtoDriver($driverDTO, $driver);
         }
     }
 

@@ -21,4 +21,8 @@ class ServicePlanListDTO {
      * @SerializedName("endDate")
      */
     public $endDate;
+    /**
+     * @SerializedName("memo")
+     */
+    public $memo;
 }

@@ -1,4 +1,6 @@
-vehicle: Fahrzeug
+button.back: Abbrechen
+more.details: Weitere Details >>
+less.details: << Weniger Details
 
 person.field.isactive: Ist Aktiv
 person.field.title: Anrede
@@ -30,3 +32,5 @@ address.field.street: Strasse / Nummer
 address.field.postal: PLZ
 address.field.city: Ort
 address.field.country: Land
+
+vehicle.panel: Fahrzeug

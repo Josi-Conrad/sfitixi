@@ -45,22 +45,28 @@ function FormViewController(formViewId) {
     var _this = this,
         _formView = $(formViewId),
         _expandedViewSection = _formView.find('.formViewExpanded'),
-        _expandViewButton = _formView.find('.expandFormButton');
+        _expandViewButton = _formView.find('.expandFormButton'),
+        _dexpandViewButton = _formView.find('.dexpandFormButton');
     this._isDisplayed = false;
 
     $(_expandViewButton).on('click', function(event) {
         event.preventDefault();
         _this._toggleExpandedSection();
     });
-
+    $(_dexpandViewButton).on('click', function(event) {
+        event.preventDefault();
+        _this._toggleExpandedSection();
+    });
     this._toggleExpandedSection = function() {
         if(!_this._isDisplayed) {
             $(_expandedViewSection).show();
-            $(_expandViewButton).html('Details verbergen');
+            $(_expandViewButton).hide();
+            $(_dexpandViewButton).show();
             _this._isDisplayed = true;
         }else {
             $(_expandedViewSection).hide();
-            $(_expandViewButton).html('Weitere Details');
+            $(_expandViewButton).show();
+            $(_dexpandViewButton).hide();
             _this._isDisplayed = false;
         }
     }

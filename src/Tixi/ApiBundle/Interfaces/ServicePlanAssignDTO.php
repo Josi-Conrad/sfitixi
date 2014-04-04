@@ -13,5 +13,6 @@ class ServicePlanAssignDTO {
     public $id;
     public $startDate;
     public $endDate;
+    public $memo;
 }
 

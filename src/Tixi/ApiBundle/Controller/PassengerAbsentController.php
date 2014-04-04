@@ -7,25 +7,17 @@
  */
 namespace Tixi\ApiBundle\Controller;
 
-use FOS\RestBundle\Controller\Annotations\QueryParam;
-use FOS\RestBundle\Request\ParamFetcherInterface;
-use FOS\RestBundle\View\View;
+use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Tixi\ApiBundle\Form\AbsentType;
 use Tixi\ApiBundle\Interfaces\AbsentListDTO;
 use Tixi\ApiBundle\Interfaces\AbsentRegisterDTO;
-use Tixi\ApiBundle\Shared\DataGrid\DataGrid;
-use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Tixi\ApiBundle\Tile\Core\FormTile;
-use Tixi\ApiBundle\Tile\Core\PanelSplitterTile;
-use Tixi\ApiBundle\Tile\Core\PanelTile;
 use Tixi\ApiBundle\Tile\Core\RootPanel;
 use Tixi\ApiBundle\Tile\Absent\AbsentRegisterFormViewTile;
 use Tixi\CoreDomain\Absent;
@@ -34,8 +26,8 @@ use Tixi\CoreDomain\Passenger;
 /**
  * Class PassengerAbsentController
  * @package Tixi\ApiBundle\Controller
- * @Breadcrumb("Fahrgast", route="tixiapi_passengers_get")
  * @Route("/passengers/{passengerId}/absents")
+ * @Breadcrumb("Fahrgast", route="tixiapi_passengers_get")
  */
 class PassengerAbsentController extends Controller {
 
@@ -56,9 +48,7 @@ class PassengerAbsentController extends Controller {
     }
 
     /**
-     * @Route("/{absentId}", requirements={"absentId" = "^(?!new)[^/]+$"},
-     * name="tixiapi_passenger_absent_get")
-     * @Method({"GET","POST"})
+     * @Route("/{absentId}", requirements={"absentId" = "^(?!new)[^/]+$"}, name="tixiapi_passenger_absent_get")
      * @Breadcrumb("Fahrgast {passengerId}", route={"name"="tixiapi_passenger_get", "parameters"={"passengerId"}})
      * @Breadcrumb("Abwesenheit Details")
      */
@@ -73,7 +63,7 @@ class PassengerAbsentController extends Controller {
         }
         $absentDTO = $this->get('tixi_api.assemblerabsent')->absentToAbsentRegisterDTO($absent);
 
-        $rootPanel = new RootPanel('Abwesenheit für ', $passenger->getFirstname() . ' ' . $passenger->getLastname());
+        $rootPanel = new RootPanel('absentDetails', 'Abwesenheit Details');
         $rootPanel->add(new AbsentRegisterFormViewTile('absentRequest', $absentDTO,
             $this->generateUrl('tixiapi_passenger_absent_editbasic', array('passengerId' => $passengerId, 'absentId' => $absentId))));
 

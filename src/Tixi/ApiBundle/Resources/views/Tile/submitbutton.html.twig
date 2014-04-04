@@ -1,4 +1,4 @@
 {% set embedded = embedded|default(false) %}
 <input type="submit"
         class="customLink submitButton btn {% if type == 'primary' %}btn-primary{% else %}btn-default{% endif %} {% if embedded %}btn-sm{% endif %}"
-        data-targetFormId="{{ formId }}" value="{{ displayText }}"/>
+        data-targetFormId="{{ formId }}" value="{{ displayText|trans }}"/>

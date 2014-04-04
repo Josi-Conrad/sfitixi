@@ -7,24 +7,23 @@
  */
 namespace Tixi\ApiBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
+
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class HomeController
  * @package Tixi\ApiBundle\Controller
- * @Breadcrumb("Home", route="tixiapi_home")
  * @Route("/home")
+ * @Breadcrumb("Home", route="tixiapi_home")
  */
 class HomeController extends Controller {
     /**
      * @Route("",name="tixiapi_home")
      * @Method({"GET","POST"})
-     * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function getHomeAction(Request $request) {
         $template = 'TixiApiBundle:Home:get.html.twig';

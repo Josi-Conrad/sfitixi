@@ -7,35 +7,26 @@
  */
 namespace Tixi\ApiBundle\Controller;
 
-use FOS\RestBundle\Controller\Annotations\QueryParam;
-use FOS\RestBundle\Request\ParamFetcherInterface;
-use FOS\RestBundle\View\View;
+use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Tixi\ApiBundle\Form\AbsentType;
 use Tixi\ApiBundle\Interfaces\AbsentListDTO;
 use Tixi\ApiBundle\Interfaces\AbsentRegisterDTO;
-use Tixi\ApiBundle\Shared\DataGrid\DataGrid;
-use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Tixi\ApiBundle\Tile\Core\FormTile;
-use Tixi\ApiBundle\Tile\Core\PanelSplitterTile;
-use Tixi\ApiBundle\Tile\Core\PanelTile;
 use Tixi\ApiBundle\Tile\Core\RootPanel;
 use Tixi\ApiBundle\Tile\Absent\AbsentRegisterFormViewTile;
-use Tixi\CoreDomain\Absent;
 use Tixi\CoreDomain\Driver;
 
 /**
  * Class DriverAbsentController
  * @package Tixi\ApiBundle\Controller
- * @Breadcrumb("Fahrer", route="tixiapi_drivers_get")
  * @Route("/drivers/{driverId}/absents")
+ * @Breadcrumb("Fahrer", route="tixiapi_drivers_get")
  */
 class DriverAbsentController extends Controller {
 
@@ -56,8 +47,7 @@ class DriverAbsentController extends Controller {
     }
 
     /**
-     * @Route("/{absentId}", requirements={"absentId" = "^(?!new)[^/]+$"},
-     * name="tixiapi_driver_absent_get")
+     * @Route("/{absentId}", requirements={"absentId" = "^(?!new)[^/]+$"}, name="tixiapi_driver_absent_get")
      * @Method({"GET","POST"})
      * @Breadcrumb("Fahrer {driverId}", route={"name"="tixiapi_driver_get", "parameters"={"driverId"}})
      * @Breadcrumb("Abwesenheit Details")
@@ -73,7 +63,7 @@ class DriverAbsentController extends Controller {
         }
         $absentDTO = $this->get('tixi_api.assemblerabsent')->absentToAbsentRegisterDTO($absent);
 
-        $rootPanel = new RootPanel('Abwesenheit für ', $driver->getFirstname() . ' ' . $driver->getLastname());
+        $rootPanel = new RootPanel('absentDetail', 'Abwesenheit Details');
         $rootPanel->add(new AbsentRegisterFormViewTile('absentRequest', $absentDTO,
             $this->generateUrl('tixiapi_driver_absent_editbasic', array('driverId' => $driverId, 'absentId' => $absentId))));
 
@@ -146,13 +136,12 @@ class DriverAbsentController extends Controller {
      */
     protected function registerOrUpdateAbsentToDriver(AbsentRegisterDTO $absentDTO, Driver $driver) {
         if (empty($absentDTO->id)) {
-            $absent = Absent::registerAbsent($absentDTO->subject, $absentDTO->startDate, $absentDTO->endDate);
+            $absent = $this->get('tixi_api.assemblerabsent')->registerDTOtoNewAbsent($absentDTO);
             $driver->assignAbsent($absent);
             $this->get('absent_repository')->store($absent);
         } else {
-            /**@var $absent Absent */
             $absent = $this->get('absent_repository')->find($absentDTO->id);
-            $absent->updateBasicData($absentDTO->subject, $absentDTO->startDate, $absentDTO->endDate);
+            $this->get('tixi_api.assemblerabsent')->registerDTOtoAbsent($absentDTO, $absent);
         }
     }
 
@@ -175,6 +164,11 @@ class DriverAbsentController extends Controller {
         return $this->createForm(new AbsentType(), $absentDTO, $options);
     }
 
+    /**
+     * @param $driverId
+     * @return null|object
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     */
     protected function getDriver($driverId) {
         $driver = $this->get('driver_repository')->find($driverId);
         if (null === $driver) {

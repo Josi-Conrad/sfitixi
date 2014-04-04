@@ -47,7 +47,7 @@ class DriverAssembler {
      * @throws \Exception
      * @return Driver
      */
-    public function registerDTOToDriver(Driver $driver, DriverRegisterDTO $driverDTO) {
+    public function registerDTOToDriver(DriverRegisterDTO $driverDTO, Driver $driver) {
         $entryDate = $this->dateTimeService->convertLocalDateTimeToUTCDateTime($driverDTO->entryDate);
         $birthday = $this->dateTimeService->convertLocalDateTimeToUTCDateTime($driverDTO->birthday);
         $address = $driver->getAddress();

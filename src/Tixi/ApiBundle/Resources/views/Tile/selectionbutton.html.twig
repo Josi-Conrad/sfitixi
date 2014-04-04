@@ -3,7 +3,7 @@
     <button type="button"
             class="btn btn-default dropdown-toggle selectionButton {% if embedded %}btn-sm{% endif %}"
             data-toggle="dropdown">
-        {{ displayName }} <span class="caret"></span>
+        {{ displayName|trans }} <span class="caret"></span>
     </button>
     <ul class="dropdown-menu selectedAction" role="menu">
         {% for resolvedElement in children %}
