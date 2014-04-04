@@ -13,4 +13,4 @@ before_script:
   - php app/console doctrine:database:create
   - php app/console doctrine:schema:update --force
 
-script: phpunit -c app/phpunit.xml
+script: phpunit -c app/phpunit.travis.xml
