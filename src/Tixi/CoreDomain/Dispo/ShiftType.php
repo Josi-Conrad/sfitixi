@@ -26,11 +26,6 @@ class ShiftType {
      */
     protected $id;
     /**
-     * @ORM\OneToMany(targetEntity="Shift", mappedBy="shiftType")
-     * @ORM\JoinColumn(name="shift_id", referencedColumnName="id")
-     */
-    protected $shifts;
-    /**
      * @ORM\Column(type="string", length=25, unique=true)
      */
     protected $name;
