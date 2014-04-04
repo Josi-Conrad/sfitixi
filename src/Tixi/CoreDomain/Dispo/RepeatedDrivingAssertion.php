@@ -17,8 +17,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="repeated_driving_assertion")
  * @ORM\InheritanceType("SINGLE_TABLE")
  * @ORM\DiscriminatorColumn(name="discr", type="string")
- * @ORM\DiscriminatorMap({"daily" = "DailyRepeatedDrivingAssertion",
- * "weekly" = "WeeklyRepeatedDrivingAssertion", "monthly" = "MonthlyRepeatedDrivingAssertion"})
+ * @ORM\DiscriminatorMap({"daily" = "RepeatedDailyDrivingAssertion",
+ * "weekly" = "RepeatedWeeklyDrivingAssertion", "monthly" = "RepeatedMonthlyDrivingAssertion"})
  */
 abstract class RepeatedDrivingAssertion implements DrivingAssertionInterface {
     /**

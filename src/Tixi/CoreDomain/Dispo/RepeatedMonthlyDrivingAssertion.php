@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: faustos
  * Date: 02.04.14
- * Time: 16:33
+ * Time: 16:34
  */
 
 namespace Tixi\CoreDomain\Dispo;
@@ -11,12 +11,12 @@ namespace Tixi\CoreDomain\Dispo;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Tixi\CoreDomain\Dispo\WeeklyRepeatedDrivingAssertion
+ * Tixi\CoreDomain\Dispo\RepeatedMonthlyDrivingAssertion
  *
  * @ORM\Entity
- * @ORM\Table(name="weekly")
+ * @ORM\Table(name="monthly")
  */
-class WeeklyRepeatedDrivingAssertion extends RepeatedDrivingAssertion{
+class RepeatedMonthlyDrivingAssertion extends RepeatedDrivingAssertion{
     /**
      * @ORM\Column(type="integer")
      */
@@ -25,6 +25,10 @@ class WeeklyRepeatedDrivingAssertion extends RepeatedDrivingAssertion{
      * @ORM\Column(type="integer")
      */
     protected $week;
+    /**
+     * @ORM\Column(type="integer")
+     */
+    protected $month;
 
     public function matching(Shift $shift)
     {
