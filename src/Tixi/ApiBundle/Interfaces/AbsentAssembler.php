@@ -15,6 +15,7 @@ use Tixi\CoreDomain\Absent;
 class AbsentAssembler {
 
     //injected by service container via setter method
+    /** @var $dateTimeService  DateTimeService */
     private $dateTimeService;
 
     public function registerAbsent(AbsentRegisterDTO $absentDTO) {
@@ -25,7 +26,7 @@ class AbsentAssembler {
         return $absent;
     }
 
-    public function toAbsentRegisterDTO(Absent $absent) {
+    public function absentToAbsentRegisterDTO(Absent $absent) {
         $absentDTO = new AbsentRegisterDTO();
         $absentDTO->id = $absent->getId();
         $absentDTO->personId = $absent->getPerson()->getId();
@@ -38,12 +39,12 @@ class AbsentAssembler {
     public function absentsToAbsentEmbeddedListDTOs($absents) {
         $dtoArray = array();
         foreach ($absents as $absent) {
-            $dtoArray[] = $this->toAbsentEmbeddedListDTO($absent);
+            $dtoArray[] = $this->absentsToAbsentEmbeddedListDTO($absent);
         }
         return $dtoArray;
     }
 
-    public function toAbsentEmbeddedListDTO(Absent $absent) {
+    public function absentsToAbsentEmbeddedListDTO(Absent $absent) {
         $absentEmbeddedListDTO = new AbsentEmbeddedListDTO();
         $absentEmbeddedListDTO->id = $absent->getId();
         $absentEmbeddedListDTO->personId = $absent->getPerson()->getId();

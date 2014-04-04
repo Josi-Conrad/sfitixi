@@ -21,5 +21,4 @@ class ServicePlanListDTO {
      * @SerializedName("endDate")
      */
     public $endDate;
-    public $cost;
-} 
+}

@@ -19,39 +19,42 @@ class PassengerType extends PersonType {
 
         parent::buildForm($builder,$options);
 
-        $builder->add('handicap', 'entity', array(
-            'class' => 'Tixi\CoreDomain\Handicap',
-            'property' => 'name',
-            'label' => 'Behinderung'
+        $builder->add('handicaps', 'entity', array(
+            'class'     => 'Tixi\CoreDomain\Handicap',
+            'property'  =>  'name',
+            'expanded'  => true,
+            'multiple'  => true,
+            'label'     => 'passenger.field.handicap'
         ));
-        $builder->add('isOverweight', 'checkbox', array(
-            'required'  => false,
-            'label' => 'Ist Übergewichtig'
+
+        $builder->add('insurances', 'entity', array(
+            'class'     => 'Tixi\CoreDomain\Insurance',
+            'property'  =>  'name',
+            'expanded'  => true,
+            'multiple'  => true,
+            'label'     => 'passenger.field.insurance'
         ));
+
         $builder->add('gotMonthlyBilling', 'checkbox', array(
             'required'  => false,
-            'label' => 'Monatliche Rechnung?'
+            'label' => 'passenger.field.monthlybilling'
         ));
         $builder->add('notice', 'textarea', array(
             'required'  => false,
-            'label' => 'Notizen zum Fahrgast'
+            'label' => 'passenger.field.notice'
         ));
 
         $builder->add('street', 'text', array(
-            'label' => 'Strasse / Nummer'
+            'label' => 'address.field.street'
         ));
         $builder->add('postalCode', 'text', array(
-            'label' => 'PLZ'
+            'label' => 'address.field.postal'
         ));
         $builder->add('city', 'text', array(
-            'label' => 'Ort'
+            'label' => 'address.field.city'
         ));
         $builder->add('country', 'text', array(
-            'label' => 'Land'
-        ));
-
-        $builder->add('save', 'submit', array(
-            'label' => 'Speichern'
+            'label' => 'address.field.country'
         ));
     }
 

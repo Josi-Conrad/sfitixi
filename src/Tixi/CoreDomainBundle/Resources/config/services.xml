@@ -17,6 +17,8 @@
         <parameter key="drivercategory_repository.doctrine.class">Tixi\CoreDomainBundle\Repository\DriverCategoryRepositoryDoctrine</parameter>
         <parameter key="handicap.doctrine.entity">Tixi\CoreDomain\Handicap</parameter>
         <parameter key="handicap_repository.doctrine.class">Tixi\CoreDomainBundle\Repository\HandicapRepositoryDoctrine</parameter>
+        <parameter key="insurance.doctrine.entity">Tixi\CoreDomain\Insurance</parameter>
+        <parameter key="insurance_repository.doctrine.class">Tixi\CoreDomainBundle\Repository\InsuranceRepositoryDoctrine</parameter>
         <parameter key="passenger.doctrine.entity">Tixi\CoreDomain\Passenger</parameter>
         <parameter key="passenger_repository.doctrine.class">Tixi\CoreDomainBundle\Repository\PassengerRepositoryDoctrine</parameter>
         <parameter key="person.doctrine.entity">Tixi\CoreDomain\Person</parameter>
@@ -69,6 +71,11 @@
         <service id="handicap_repository" alias="handicap_repository.doctrine"></service>
         <service id="handicap_repository.doctrine" class="%handicap_repository.doctrine.class%" factory-service="doctrine" factory-method="getrepository">
             <argument type="string">%handicap.doctrine.entity%</argument>
+        </service>
+
+        <service id="insurance_repository" alias="insurance_repository.doctrine"></service>
+        <service id="insurance_repository.doctrine" class="%insurance_repository.doctrine.class%" factory-service="doctrine" factory-method="getrepository">
+            <argument type="string">%insurance.doctrine.entity%</argument>
         </service>
 
         <service id="passenger_repository" alias="passenger_repository.doctrine"></service>

@@ -29,7 +29,7 @@ class DriverAssembler {
     public function registerDTOtoNewDriver(DriverRegisterDTO $driverDTO) {
         $entryDate = $this->dateTimeService->convertLocalDateTimeToUTCDateTime($driverDTO->entryDate);
         $birthday = $this->dateTimeService->convertLocalDateTimeToUTCDateTime($driverDTO->birthday);
-        return Driver::registerDriver($driverDTO->title, $driverDTO->firstname,
+        $driver = Driver::registerDriver($driverDTO->title, $driverDTO->firstname,
             $driverDTO->lastname, $driverDTO->telephone,
             Address::registerAddress(
                 $driverDTO->street, $driverDTO->postalCode,
@@ -38,6 +38,7 @@ class DriverAssembler {
             $driverDTO->email, $entryDate, $birthday,
             $driverDTO->extraMinutes, $driverDTO->details
         );
+        return $driver;
     }
 
     /**
@@ -65,7 +66,7 @@ class DriverAssembler {
      * @param Driver $driver
      * @return DriverRegisterDTO
      */
-    public function toDriverRegisterDTO(Driver $driver) {
+    public function driverToDriverRegisterDTO(Driver $driver) {
         $driverDTO = new DriverRegisterDTO();
         $driverDTO->person_id = $driver->getId();
         $driverDTO->isActive = $driver->getIsActive();
@@ -101,7 +102,7 @@ class DriverAssembler {
     public function driversToDriverListDTOs($drivers) {
         $dtoArray = array();
         foreach ($drivers as $driver) {
-            $dtoArray[] = $this->toDriverListDTO($driver);
+            $dtoArray[] = $this->driverToDriverListDTO($driver);
         }
         return $dtoArray;
     }
@@ -110,7 +111,7 @@ class DriverAssembler {
      * @param Driver $driver
      * @return DriverListDTO
      */
-    public function toDriverListDTO(Driver $driver) {
+    public function driverToDriverListDTO(Driver $driver) {
         $driverListDTO = new DriverListDTO();
         $driverListDTO->id = $driver->getId();
         $driverListDTO->isActive = $driver->getIsActive();

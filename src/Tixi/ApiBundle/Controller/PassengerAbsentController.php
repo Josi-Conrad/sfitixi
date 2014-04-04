@@ -29,97 +29,97 @@ use Tixi\ApiBundle\Tile\Core\PanelTile;
 use Tixi\ApiBundle\Tile\Core\RootPanel;
 use Tixi\ApiBundle\Tile\Absent\AbsentRegisterFormViewTile;
 use Tixi\CoreDomain\Absent;
-use Tixi\CoreDomain\Driver;
+use Tixi\CoreDomain\Passenger;
 
 /**
- * Class DriverAbsentController
+ * Class PassengerAbsentController
  * @package Tixi\ApiBundle\Controller
- * @Breadcrumb("Fahrer", route="tixiapi_drivers_get")
- * @Route("/drivers/{driverId}/absents")
+ * @Breadcrumb("Fahrgast", route="tixiapi_passengers_get")
+ * @Route("/passengers/{passengerId}/absents")
  */
-class DriverAbsentController extends Controller {
+class PassengerAbsentController extends Controller {
 
     /**
-     * @Route("", name="tixiapi_driver_absents_get")
+     * @Route("", name="tixiapi_passenger_absents_get")
      * @Method({"GET","POST"})
      */
-    public function getAbsentsAction($driverId, Request $request, $embeddedState = false) {
+    public function getAbsentsAction($passengerId, Request $request, $embeddedState = false) {
         $embeddedState = $embeddedState || ($request->get('embedded') !== null && $request->get('embedded'));
 
         $dataGridHandler = $this->get('tixi_api.datagridhandler');
         $dataGridControllerFactory = $this->get('tixi_api.datagridcontrollerfactory');
         $tileRenderer = $this->get('tixi_api.tilerenderer');
 
-        $gridController = $dataGridControllerFactory->createDriverAbsentController($embeddedState, array('driverId' => $driverId));
+        $gridController = $dataGridControllerFactory->createPassengerAbsentController($embeddedState, array('passengerId' => $passengerId));
         $dataGridTile = $dataGridHandler->createDataGridTileByRequest($request, $gridController);
         return new Response($tileRenderer->render($dataGridTile));
     }
 
     /**
      * @Route("/{absentId}", requirements={"absentId" = "^(?!new)[^/]+$"},
-     * name="tixiapi_driver_absent_get")
+     * name="tixiapi_passenger_absent_get")
      * @Method({"GET","POST"})
-     * @Breadcrumb("Fahrer {driverId}", route={"name"="tixiapi_driver_get", "parameters"={"driverId"}})
+     * @Breadcrumb("Fahrgast {passengerId}", route={"name"="tixiapi_passenger_get", "parameters"={"passengerId"}})
      * @Breadcrumb("Abwesenheit Details")
      */
-    public function getAbsentAction(Request $request, $driverId, $absentId) {
+    public function getAbsentAction(Request $request, $passengerId, $absentId) {
         $absentRepository = $this->get('absent_repository');
         $tileRenderer = $this->get('tixi_api.tilerenderer');
 
-        $driver = $this->getDriver($driverId);
+        $passenger = $this->getPassenger($passengerId);
         $absent = $absentRepository->find($absentId);
         if (null === $absent) {
             throw $this->createNotFoundException('The absent with id ' . $absentId . ' does not exists');
         }
         $absentDTO = $this->get('tixi_api.assemblerabsent')->absentToAbsentRegisterDTO($absent);
 
-        $rootPanel = new RootPanel('Abwesenheit für ', $driver->getFirstname() . ' ' . $driver->getLastname());
+        $rootPanel = new RootPanel('Abwesenheit für ', $passenger->getFirstname() . ' ' . $passenger->getLastname());
         $rootPanel->add(new AbsentRegisterFormViewTile('absentRequest', $absentDTO,
-            $this->generateUrl('tixiapi_driver_absent_editbasic', array('driverId' => $driverId, 'absentId' => $absentId))));
+            $this->generateUrl('tixiapi_passenger_absent_editbasic', array('passengerId' => $passengerId, 'absentId' => $absentId))));
 
         return new Response($tileRenderer->render($rootPanel));
     }
 
     /**
-     * @Route("/new", name="tixiapi_driver_absent_new")
+     * @Route("/new", name="tixiapi_passenger_absent_new")
      * @Method({"GET","POST"})
-     * @Breadcrumb("Fahrer {driverId}", route={"name"="tixiapi_driver_get", "parameters"={"driverId"}})
+     * @Breadcrumb("Fahrgast {passengerId}", route={"name"="tixiapi_passenger_get", "parameters"={"passengerId"}})
      * @Breadcrumb("Neue Abwesenheit")
      */
-    public function newAbsentAction(Request $request, $driverId) {
+    public function newAbsentAction(Request $request, $passengerId) {
         $tileRenderer = $this->get('tixi_api.tilerenderer');
-        $driver = $this->getDriver($driverId);
+        $passenger = $this->getPassenger($passengerId);
 
         $form = $this->getForm();
         $form->handleRequest($request);
         if ($form->isValid()) {
             $absentDTO = $form->getData();
-            $this->registerOrUpdateAbsentToDriver($absentDTO, $driver);
+            $this->registerOrUpdateAbsentToPassenger($absentDTO, $passenger);
             $this->get('entity_manager')->flush();
-            return $this->redirect($this->generateUrl('tixiapi_driver_get', array('driverId' => $driverId)));
+            return $this->redirect($this->generateUrl('tixiapi_passenger_get', array('passengerId' => $passengerId)));
         }
 
-        $rootPanel = new RootPanel('tixiapi_drivers_get', 'Neue Abwesenheit');
+        $rootPanel = new RootPanel('tixiapi_passengers_get', 'Neue Abwesenheit');
         $rootPanel->add(new FormTile('absentNewForm', $form, true));
 
         return new Response($tileRenderer->render($rootPanel));
     }
 
     /**
-     * @Route("/{absentId}/editbasic", name="tixiapi_driver_absent_editbasic")
+     * @Route("/{absentId}/editbasic", name="tixiapi_passenger_absent_editbasic")
      * @Method({"GET","POST"})
-     * @Breadcrumb("Fahrer {driverId}", route={"name"="tixiapi_driver_get", "parameters"={"driverId"}})
+     * @Breadcrumb("Fahrgast {passengerId}", route={"name"="tixiapi_passenger_get", "parameters"={"passengerId"}})
      * @Breadcrumb("Abwesenheit editieren")
      */
-    public function editAbsentAction(Request $request, $driverId, $absentId) {
+    public function editAbsentAction(Request $request, $passengerId, $absentId) {
         $tileRenderer = $this->get('tixi_api.tilerenderer');
         $absentRepository = $this->get('absent_repository');
-        $driverRepository = $this->get('driver_repository');
+        $passengerRepository = $this->get('passenger_repository');
         $absentAssembler = $this->get('tixi_api.assemblerabsent');
 
-        /**@var $driver \Tixi\CoreDomain\Absent */
+        /**@var $passenger \Tixi\CoreDomain\Absent */
         $absent = $absentRepository->find($absentId);
-        $driver = $driverRepository->find($driverId);
+        $passenger = $passengerRepository->find($passengerId);
         if (null === $absent) {
             throw $this->createNotFoundException('This absent does not exist');
         }
@@ -129,12 +129,12 @@ class DriverAbsentController extends Controller {
         $form->handleRequest($request);
         if ($form->isValid()) {
             $absentDTO = $form->getData();
-            $this->registerOrUpdateAbsentToDriver($absentDTO, $driver);
+            $this->registerOrUpdateAbsentToPassenger($absentDTO, $passenger);
             $this->get('entity_manager')->flush();
-            return $this->redirect($this->generateUrl('tixiapi_driver_get', array('driverId' => $driverId)));
+            return $this->redirect($this->generateUrl('tixiapi_passenger_get', array('passengerId' => $passengerId)));
         }
 
-        $rootPanel = new RootPanel('tixiapi_drivers_get', 'Abwesenheit editieren');
+        $rootPanel = new RootPanel('tixiapi_passengers_get', 'Abwesenheit editieren');
         $rootPanel->add(new FormTile('absentNewForm', $form, true));
 
         return new Response($tileRenderer->render($rootPanel));
@@ -142,12 +142,12 @@ class DriverAbsentController extends Controller {
 
     /**
      * @param AbsentRegisterDTO $absentDTO
-     * @param Driver $driver
+     * @param Passenger $passenger
      */
-    protected function registerOrUpdateAbsentToDriver(AbsentRegisterDTO $absentDTO, Driver $driver) {
+    protected function registerOrUpdateAbsentToPassenger(AbsentRegisterDTO $absentDTO, Passenger $passenger) {
         if (empty($absentDTO->id)) {
             $absent = Absent::registerAbsent($absentDTO->subject, $absentDTO->startDate, $absentDTO->endDate);
-            $driver->assignAbsent($absent);
+            $passenger->assignAbsent($absent);
             $this->get('absent_repository')->store($absent);
         } else {
             /**@var $absent Absent */
@@ -175,11 +175,11 @@ class DriverAbsentController extends Controller {
         return $this->createForm(new AbsentType(), $absentDTO, $options);
     }
 
-    protected function getDriver($driverId) {
-        $driver = $this->get('driver_repository')->find($driverId);
-        if (null === $driver) {
-            throw $this->createNotFoundException('The driver with id ' . $driverId . ' does not exists');
+    protected function getPassenger($passengerId) {
+        $passenger = $this->get('passenger_repository')->find($passengerId);
+        if (null === $passenger) {
+            throw $this->createNotFoundException('The passenger with id ' . $passengerId . ' does not exists');
         }
-        return $driver;
+        return $passenger;
     }
 }

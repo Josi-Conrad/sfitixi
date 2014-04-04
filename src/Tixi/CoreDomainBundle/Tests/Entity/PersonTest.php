@@ -14,6 +14,7 @@ use Tixi\CoreDomain\Absent;
 use Tixi\CoreDomain\Address;
 use Tixi\CoreDomain\Driver;
 use Tixi\CoreDomain\DriverCategory;
+use Tixi\CoreDomain\Insurance;
 use Tixi\CoreDomain\Passenger;
 use Tixi\CoreDomain\Handicap;
 use Tixi\CoreDomain\Contradict;
@@ -54,6 +55,10 @@ class PersonTest extends WebTestCase {
      */
     private $handicapRepo;
     /**
+     * @var \Tixi\CoreDomainBundle\Repository\InsuranceRepositoryDoctrine
+     */
+    private $insuranceRepo;
+    /**
      * @var \Tixi\CoreDomainBundle\Repository\VehicleRepositoryDoctrine
      */
     private $vehicleRepo;
@@ -73,6 +78,7 @@ class PersonTest extends WebTestCase {
         $this->absentRepo = $kernel->getContainer()->get('absent_repository');
         $this->passengerRepo = $kernel->getContainer()->get('passenger_repository');
         $this->handicapRepo = $kernel->getContainer()->get('handicap_repository');
+        $this->insuranceRepo = $kernel->getContainer()->get('insurance_repository');
         $this->vehicleRepo = $kernel->getContainer()->get('vehicle_repository');
         $this->vehicleCategoryRepo = $kernel->getContainer()->get('vehiclecategory_repository');
         $this->em->beginTransaction();
@@ -170,15 +176,22 @@ class PersonTest extends WebTestCase {
     }
 
     public function testPassengerCRUD() {
-        $handicap = $this->createHandicap('IV');
+        $handicap = $this->createHandicap('sehbehindert');
+        $handicap = $this->createHandicap('gehbehindert');
+        $handicap = $this->createHandicap('hörbehindert');
+        $insurance = $this->createInsurance('IV');
+        $insurance = $this->createInsurance('AHV');
+
         $address = Address::registerAddress('Teststrasse 142', '6360', 'Cham', 'Schweiz');
         $this->addressRepo->store($address);
 
         $passenger = Passenger::registerPassenger(
             'f', 'Toranto', 'Testinger', '041 324 33 22',
-            $address, $handicap, true, true, false, 'test@test.de', new \DateTime(), new \DateTime(),
+            $address, true, true, false, 'test@test.de', new \DateTime(), new \DateTime(),
             5, 'alles nur ein Test', 'und auch Notizen'
         );
+        $passenger->assignHandicap($handicap);
+        $passenger->assignInsurance($insurance);
         $this->passengerRepo->store($passenger);
         $this->em->flush();
 
@@ -187,7 +200,7 @@ class PersonTest extends WebTestCase {
 
         $passenger->updatePassengerBasicData(
             'f', 'Mila', 'Tolina', '0293292323',
-            $address, $handicap, true, true, false, 'der@test.de', new \DateTime(), new \DateTime(),
+            $address, true, true, false, 'der@test.de', new \DateTime(), new \DateTime(),
             2, 'goodies', 'notices');
         $passenger->assignBillingAddress($address);
         $passenger->assignCorrespondenceAddress($address);
@@ -225,7 +238,7 @@ class PersonTest extends WebTestCase {
         Passenger::removePassenger($passenger);
         $this->em->remove($passenger);
         $this->em->flush();
-        $this->assertEquals(null, $this->driverRepo->find($id));
+        $this->assertEquals(null, $this->passengerRepo->find($id));
     }
 
     private function createDriverCategory($name) {
@@ -244,6 +257,16 @@ class PersonTest extends WebTestCase {
         if (empty($current)) {
             $this->handicapRepo->store($handicap);
             return $handicap;
+        }
+        return $current;
+    }
+
+    private function createInsurance($name) {
+        $insurance = Insurance::registerInsurance($name);
+        $current = $this->insuranceRepo->findOneBy(array('name' => $name));
+        if (empty($current)) {
+            $this->insuranceRepo->store($insurance);
+            return $insurance;
         }
         return $current;
     }

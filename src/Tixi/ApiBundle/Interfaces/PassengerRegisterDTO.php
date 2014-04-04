@@ -16,6 +16,9 @@ class PassengerRegisterDTO extends PersonRegisterDTO {
     public $gotMonthlyBilling;
     public $notice;
 
-    //Handicap
-    public $handicap;
+    //Passenger Handicaps
+    public $handicaps;
+
+    //Passenger Insurances
+    public $insurances;
 }

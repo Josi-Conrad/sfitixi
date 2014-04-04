@@ -247,4 +247,53 @@ class Passenger extends Person {
     public function getNotice() {
         return $this->notice;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getCreationDate() {
+        return $this->creationDate;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDrivingOrders() {
+        return $this->drivingOrders;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getHandicaps() {
+        return $this->handicaps;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getInsurances() {
+        return $this->insurances;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getModifyDate() {
+        return $this->modifyDate;
+    }
+
+    /**
+     * @param mixed $handicaps
+     */
+    public function setHandicaps($handicaps) {
+        $this->handicaps = $handicaps;
+    }
+
+    /**
+     * @param mixed $insurances
+     */
+    public function setInsurances($insurances) {
+        $this->insurances = $insurances;
+    }
 }

@@ -1,37 +1,24 @@
 LOCK TABLES `driver_category` WRITE;
-/*!40000 ALTER TABLE `driver_category` DISABLE KEYS */;
-INSERT INTO `driver_category` VALUES (1, 'Freiwillig'),(2, 'Mitglied'),(3, 'Zivildienst');
-/*!40000 ALTER TABLE `driver_category` ENABLE KEYS */;
+INSERT INTO `driver_category` VALUES
+(1, 'Freiwillig'),(2, 'Mitglied'),(3, 'Zivildienst');
 UNLOCK TABLES;
-
---
--- Dumping data for table `vehicle_category`
---
 
 LOCK TABLES `vehicle_category` WRITE;
-/*!40000 ALTER TABLE `vehicle_category` DISABLE KEYS */;
-INSERT INTO `vehicle_category` VALUES (1,'Movano',5,1),(2,'VM Maxi',4,1),(3,'VM Caddy',4,2);
-/*!40000 ALTER TABLE `vehicle_category` ENABLE KEYS */;
+INSERT INTO `vehicle_category` VALUES
+(1,'Movano',5,1),(2,'VM Maxi',4,1),(3,'VM Caddy',4,2);
 UNLOCK TABLES;
-
---
--- Dumping data for table `handicap`
---
 
 LOCK TABLES `handicap` WRITE;
-/*!40000 ALTER TABLE `handicap` DISABLE KEYS */;
-INSERT INTO `handicap` VALUES (1, 'AHV'),(2, 'IV');
-/*!40000 ALTER TABLE `handicap` ENABLE KEYS */;
+INSERT INTO `handicap` VALUES
+(1, 'sehbehindert'),(2, 'gehbehindert'),(3, 'hörbehindert'),(4, 'blind');
 UNLOCK TABLES;
 
---
--- Dumping data for table `poi_keyword`
---
+LOCK TABLES `insurance` WRITE;
+INSERT INTO `insurance` VALUES
+(1, 'AHV'),(2, 'IV');
+UNLOCK TABLES;
 
 LOCK TABLES `poi_keyword` WRITE;
-/*!40000 ALTER TABLE `poi_keyword` DISABLE KEYS */;
-INSERT INTO `poi_keyword` VALUES (1,'Therapie'),(2,'Arztpraxis'),(3,'Werkstatt'),(4,'Arbeitsplatz');
-/*!40000 ALTER TABLE `poi_keyword` ENABLE KEYS */;
+INSERT INTO `poi_keyword` VALUES
+(1,'Therapie'),(2,'Arztpraxis'),(3,'Werkstatt'),(4,'Arbeitsplatz');
 UNLOCK TABLES;
-
--- Dump completed on 2014-03-19 21:06:44

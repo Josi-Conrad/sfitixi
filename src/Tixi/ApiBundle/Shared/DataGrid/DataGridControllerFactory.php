@@ -12,6 +12,8 @@ namespace Tixi\ApiBundle\Shared\DataGrid;
 use Symfony\Component\DependencyInjection\ContainerAware;
 use Tixi\ApiBundle\Shared\DataGrid\GridControllers\DriverAbsentDataGridController;
 use Tixi\ApiBundle\Shared\DataGrid\GridControllers\DriverDataGridController;
+use Tixi\ApiBundle\Shared\DataGrid\GridControllers\PassengerAbsentDataGridController;
+use Tixi\ApiBundle\Shared\DataGrid\GridControllers\PassengerDataGridController;
 use Tixi\ApiBundle\Shared\DataGrid\GridControllers\ServicePlanDataGridController;
 use Tixi\ApiBundle\Shared\DataGrid\GridControllers\VehicleDataGridController;
 
@@ -33,4 +35,11 @@ class DataGridControllerFactory extends ContainerAware{
         return new DriverAbsentDataGridController($this->container, $embeddedState, $routeProperties);
     }
 
+    public function createPassengerController($embeddedState=false, array $routeProperties=array()) {
+        return new PassengerDataGridController($this->container, $embeddedState, $routeProperties);
+    }
+
+    public function createPassengerAbsentController($embeddedState=false, array $routeProperties=array()) {
+        return new PassengerAbsentDataGridController($this->container, $embeddedState, $routeProperties);
+    }
 } 

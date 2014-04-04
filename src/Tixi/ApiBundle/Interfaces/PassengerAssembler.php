@@ -22,7 +22,6 @@ class PassengerAssembler {
      */
     private $dateTimeService;
 
-
     /**
      * @param PassengerRegisterDTO $passengerDTO
      * @return Passenger
@@ -30,16 +29,23 @@ class PassengerAssembler {
     public function registerDTOtoNewPassenger(PassengerRegisterDTO $passengerDTO) {
         $entryDate = $this->dateTimeService->convertLocalDateTimeToUTCDateTime($passengerDTO->entryDate);
         $birthday = $this->dateTimeService->convertLocalDateTimeToUTCDateTime($passengerDTO->birthday);
-        return Passenger::registerPassenger($passengerDTO->title, $passengerDTO->firstname,
+        $passenger = Passenger::registerPassenger($passengerDTO->title, $passengerDTO->firstname,
             $passengerDTO->lastname, $passengerDTO->telephone,
             Address::registerAddress(
                 $passengerDTO->street, $passengerDTO->postalCode,
                 $passengerDTO->city, $passengerDTO->country),
-            $passengerDTO->handicap, $passengerDTO->isInWheelChair,
+            $passengerDTO->isInWheelChair,
             $passengerDTO->gotMonthlyBilling, $passengerDTO->isOverweight,
             $passengerDTO->email, $entryDate, $birthday,
             $passengerDTO->extraMinutes, $passengerDTO->details, $passengerDTO->notice
         );
+        foreach($passengerDTO->handicaps as $handicap){
+            $passenger->assignHandicap($handicap);
+        }
+        foreach($passengerDTO->insurances as $insurance){
+            $passenger->assignInsurance($insurance);
+        }
+        return $passenger;
     }
 
     /**
@@ -50,16 +56,20 @@ class PassengerAssembler {
     public function registerDTOToPassenger(Passenger $passenger, PassengerRegisterDTO $passengerDTO) {
         $entryDate = $this->dateTimeService->convertLocalDateTimeToUTCDateTime($passengerDTO->entryDate);
         $birthday = $this->dateTimeService->convertLocalDateTimeToUTCDateTime($passengerDTO->birthday);
+        $address = $passenger->getAddress();
+
+        $address->updateAddressBasicData($passengerDTO->street, $passengerDTO->postalCode,
+            $passengerDTO->city, $passengerDTO->country);
         $passenger->updatePassengerBasicData($passengerDTO->title, $passengerDTO->firstname,
             $passengerDTO->lastname, $passengerDTO->telephone,
-            $passenger->getAddress()->updateAddressBasicData(
-                $passengerDTO->street, $passengerDTO->postalCode,
-                $passengerDTO->city, $passengerDTO->country),
-            $passengerDTO->handicap, $passengerDTO->isInWheelChair,
+            $address, $passengerDTO->isInWheelChair,
             $passengerDTO->gotMonthlyBilling, $passengerDTO->isOverweight,
             $passengerDTO->email, $entryDate, $birthday,
             $passengerDTO->extraMinutes, $passengerDTO->details, $passengerDTO->notice);
-        $passenger->setIsActive($passengerDTO->isActive);
+
+        $passenger->setHandicaps($passengerDTO->handicaps);
+        $passenger->setInsurances($passengerDTO->insurances);
+
         return $passenger;
     }
 
@@ -67,9 +77,9 @@ class PassengerAssembler {
      * @param Passenger $passenger
      * @return PassengerRegisterDTO
      */
-    public function toPassengerRegisterDTO(Passenger $passenger) {
+    public function passengerToPassengerRegisterDTO(Passenger $passenger) {
         $passengerDTO = new PassengerRegisterDTO();
-        $passengerDTO->id = $passenger->getId();
+        $passengerDTO->person_id = $passenger->getId();
         $passengerDTO->isActive = $passenger->getIsActive();
         $passengerDTO->title = $passenger->getTitle();
         $passengerDTO->firstname = $passenger->getFirstname();
@@ -86,7 +96,8 @@ class PassengerAssembler {
         $passengerDTO->gotMonthlyBilling = $passenger->getGotMonthlyBilling();
         $passengerDTO->notice = $passenger->getNotice();
 
-        $passengerDTO->handicap = $passenger->getHandicap()->getName();
+        $passengerDTO->handicaps = $passenger->getHandicaps();
+        $passengerDTO->insurances = $passenger->getInsurances();
 
         $passengerDTO->street = $passenger->getAddress()->getStreet();
         $passengerDTO->postalCode = $passenger->getAddress()->getPostalCode();
@@ -104,7 +115,7 @@ class PassengerAssembler {
     public function passengersToPassengerListDTOs($passengers) {
         $dtoArray = array();
         foreach ($passengers as $passenger) {
-            $dtoArray[] = $this->toPassengerListDTO($passenger);
+            $dtoArray[] = $this->passengerToPassengerListDTO($passenger);
         }
         return $dtoArray;
     }
@@ -113,7 +124,7 @@ class PassengerAssembler {
      * @param Passenger $passenger
      * @return PassengerListDTO
      */
-    public function toPassengerListDTO(Passenger $passenger) {
+    public function passengerToPassengerListDTO(Passenger $passenger) {
         $passengerListDTO = new PassengerListDTO();
         $passengerListDTO->id = $passenger->getId();
         $passengerListDTO->isActive = $passenger->getIsActive();
@@ -123,7 +134,6 @@ class PassengerAssembler {
         $passengerListDTO->lastname = $passenger->getLastname();
         $passengerListDTO->street = $passenger->getAddress()->getStreet();
         $passengerListDTO->city = $passenger->getAddress()->getCity();
-        $passengerListDTO->handicap = $passenger->getHandicap()->getName();
         return $passengerListDTO;
     }
 

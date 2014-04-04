@@ -13,17 +13,21 @@ use FOS\RestBundle\View\View;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Tixi\ApiBundle\Form\PassengerType;
 use Tixi\ApiBundle\Interfaces\PassengerListDTO;
 use Tixi\ApiBundle\Interfaces\PassengerRegisterDTO;
 use Tixi\ApiBundle\Shared\DataGrid\DataGrid;
-use Tixi\ApiBundle\Shared\DataGrid\RESTHandler\DataGridHandler;
-use Tixi\ApiBundle\Shared\DataGrid\RESTHandler\DataGridState;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Tixi\ApiBundle\Tile\Core\FormTile;
+use Tixi\ApiBundle\Tile\Core\PanelSplitterTile;
+use Tixi\ApiBundle\Tile\Core\PanelTile;
+use Tixi\ApiBundle\Tile\Core\RootPanel;
+use Tixi\ApiBundle\Tile\Passenger\PassengerRegisterFormViewTile;
 
 /**
  * Class PassengerController
@@ -32,34 +36,31 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
  * @Route("/passengers")
  */
 class PassengerController extends Controller {
-
     /**
-     * @Route("",name="tixiapi_passengers_get")
+     * @Route("", name="tixiapi_passengers_get")
      * @Method({"GET","POST"})
      * GetParameters:
      * page,limit,orderbyfield,orderbydirection
      * filterstr,partial,embedded
      * @param Request $request
+     * @param bool $embeddedState
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function getPassengersAction(Request $request) {
-        $dataGridState = DataGridState::createByRequest($request, new PassengerListDTO());
-        $passengers = $this->get('tixi_coredomain.fgea_repository')->findByFilter($this->get('tixi_api.datagrid')->createGenericEntityFilterByState($dataGridState));
-        $passengersDTO = $this->get('tixi_api.assemblerpassenger')->passengersToPassengerListDTOs($passengers);
-        $totalAmount = $this->get('tixi_coredomain.fgea_repository')->findTotalAmountByFilter($this->get('tixi_api.datagrid')->createGenericEntityFilterByState($dataGridState));
-        $rows = $this->get('tixi_api.datagrid')->createRowsArray($passengersDTO);
-        $headers = $this->get('tixi_api.datagrid')->createHeaderArray(new PassengerListDTO());
-        $partial = $request->get('partial');
-        if (empty($partial)) {
-            $template = 'TixiApiBundle:Passenger:list.html.twig';
-        } else {
-            $template = 'TixiApiBundle:Shared:datagrid.tablebody.html.twig';
-        }
-        return $this->render($template, array('rowIdPrefix' => 'passengers', 'tableHeaders' => $headers, 'tableRows' => $rows, 'totalAmountOfRows' => $totalAmount));
+    public function getPassengersAction(Request $request, $embeddedState = false) {
+        $embeddedParameter = (null === $request->get('embedded') || $request->get('embedded') === 'false') ? false : true;
+        $isEmbedded = ($embeddedState || $embeddedParameter);
+
+        $dataGridHandler = $this->get('tixi_api.datagridhandler');
+        $dataGridControllerFactory = $this->get('tixi_api.datagridcontrollerfactory');
+        $tileRenderer = $this->get('tixi_api.tilerenderer');
+
+        $gridController = $dataGridControllerFactory->createPassengerController($isEmbedded);
+        $dataGridTile = $dataGridHandler->createDataGridTileByRequest($request, $gridController);
+        return new Response($tileRenderer->render($dataGridTile));
     }
 
     /**
-     * @Route("/{passengerId}",requirements={"passengerId" = "^(?!new)[^/]+$"},
+     * @Route("/{passengerId}", requirements={"passengerId" = "^(?!new)[^/]+$"},
      * name="tixiapi_passenger_get")
      * @Method({"GET","POST"})
      * @param Request $request
@@ -68,75 +69,109 @@ class PassengerController extends Controller {
      * @Breadcrumb("Fahrgast Details", route={"name"="tixiapi_passenger_get", "parameters"={"passengerId"}})
      */
     public function getPassengerAction(Request $request, $passengerId) {
+
+        $dataGridHandler = $this->get('tixi_api.datagridhandler');
+        $dataGridControllerFactory = $this->get('tixi_api.datagridcontrollerfactory');
+        $tileRenderer = $this->get('tixi_api.tilerenderer');
+
+        /**@var $passenger \Tixi\CoreDomain\Passenger */
         $passenger = $this->get('passenger_repository')->find($passengerId);
-        $passengerDTO = $this->get('tixi_api.assemblerpassenger')->toPassengerRegisterDTO($passenger);
-        return $this->render('TixiApiBundle:Passenger:get.html.twig',
-            array('passenger' => $passengerDTO));
+        $passengerDTO = $this->get('tixi_api.assemblerpassenger')->passengerToPassengerRegisterDTO($passenger);
+
+        $gridController = $dataGridControllerFactory->createPassengerAbsentController(true, array('passengerId' => $passengerId));
+        $gridTile = $dataGridHandler->createEmbeddedDataGridTile($gridController);
+
+        $rootPanel = new RootPanel('tixiapi_passengers_get', $passenger->getFirstname().' '.$passenger->getLastname());
+        $panelSplitter = $rootPanel->add(new PanelSplitterTile('1:1'));
+        $formPanel = $panelSplitter->addLeft(new PanelTile('Fahrgast Details', PanelTile::$primaryType));
+        $formPanel->add(new PassengerRegisterFormViewTile('passengerRequest', $passengerDTO, $this->generateUrl('tixiapi_passenger_editbasic', array('passengerId' => $passengerId))));
+        $gridPanel = $panelSplitter->addRight(new PanelTile('Zugeordnete Abwesenheiten'));
+        $gridPanel->add($gridTile);
+
+        return new Response($tileRenderer->render($rootPanel));
     }
 
     /**
-     * @Route("/new",name="tixiapi_passenger_new")
+     * @Route("/new", name="tixiapi_passenger_new")
      * @Method({"GET","POST"})
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
      * @return \Symfony\Component\HttpFoundation\Response
-     * @Breadcrumb("Neuer Fahgast", route="tixiapi_passenger_new")
+     * @Breadcrumb("Neuer Fahrgast", route="tixiapi_passenger_new")
      */
     public function newPassengerAction(Request $request) {
-        if (false === $this->get('security.context')->isGranted('ROLE_ADMIN')) {
-            throw new AccessDeniedException();
-        }
+        $tileRenderer = $this->get('tixi_api.tilerenderer');
+
         $form = $this->getForm();
         $form->handleRequest($request);
         if ($form->isValid()) {
             $passengerDTO = $form->getData();
             $this->registerOrUpdatePassenger($passengerDTO);
-            $this->getDoctrine()->getManager()->flush();
+            $this->get('entity_manager')->flush();
             return $this->redirect($this->generateUrl('tixiapi_passengers_get'));
         }
-        return $this->render('TixiApiBundle:Passenger:new.html.twig', array(
-            'form' => $form->createView()
-        ));
+
+        $rootPanel = new RootPanel('tixiapi_passengers_get', 'Neuer Fahrgast');
+        $rootPanel->add(new FormTile('passengerNewForm', $form, true));
+
+        return new Response($tileRenderer->render($rootPanel));
     }
 
     /**
-     * @Route("/{passengerId}/editbasic",name="tixiapi_passenger_editbasic")
+     * @Route("/{passengerId}/editbasic", name="tixiapi_passenger_editbasic")
      * @Method({"GET","POST"})
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      * @Breadcrumb("Fahrgast editieren", route={"name"="tixiapi_passenger_editbasic", "parameters"={"passengerId"}})
      */
     public function editPassengerAction(Request $request, $passengerId) {
-        $passengerDTO = null;
-        if ($request->getMethod() === 'GET') {
-            $passenger = $this->get('passenger_repository')->find($passengerId);
-            if (null === $passenger) {
-                throw $this->createNotFoundException('Passenger does not exist');
-            }
-            $passengerDTO = $this->get('tixi_api.assemblerpassenger')->toPassengerRegisterDTO($passenger);
+        $dataGridHandler = $this->get('tixi_api.datagridhandler');
+        $dataGridControllerFactory = $this->get('tixi_api.datagridcontrollerfactory');
+        $tileRenderer = $this->get('tixi_api.tilerenderer');
+        $passengerRepository = $this->get('passenger_repository');
+        $passengerAssembler = $this->get('tixi_api.assemblerpassenger');
+
+        /**@var $passenger \Tixi\CoreDomain\Passenger */
+        $passenger = $passengerRepository->find($passengerId);
+        if (null === $passenger) {
+            throw $this->createNotFoundException('This passenger does not exist');
         }
+        $passengerDTO = $passengerAssembler->passengerToPassengerRegisterDTO($passenger);
+
         $form = $this->getForm(null, $passengerDTO);
         $form->handleRequest($request);
         if ($form->isValid()) {
             $passengerDTO = $form->getData();
             $this->registerOrUpdatePassenger($passengerDTO);
             $this->get('entity_manager')->flush();
-            return $this->redirect($this->generateUrl('tixiapi_passengers_get', array('passengerId' => $passengerId)));
+            return $this->redirect($this->generateUrl('tixiapi_passenger_get', array('passengerId' => $passengerId)));
         }
-        return $this->render('TixiApiBundle:Passenger:edit.html.twig',
-            array('form' => $form->createView(), 'passenger' => $form->getData()));
+
+        $gridController = $dataGridControllerFactory->createPassengerAbsentController(true, array('passengerId' => $passengerId));
+        $gridTile = $dataGridHandler->createEmbeddedDataGridTile($gridController);
+
+        $rootPanel = new RootPanel('tixiapi_passengers_get', $passenger->getFirstname().' '.$passenger->getLastname());
+        $panelSplitter = $rootPanel->add(new PanelSplitterTile('1:1'));
+        $formPanel = $panelSplitter->addLeft(new PanelTile('Fahrgast editieren', PanelTile::$primaryType));
+        $formPanel->add(new FormTile('passengerForm', $form));
+        $gridPanel = $panelSplitter->addRight(new PanelTile('Zugeordnete Abwesenheiten'));
+        $gridPanel->add($gridTile);
+
+        return new Response($tileRenderer->render($rootPanel));
     }
 
     /**
      * @param PassengerRegisterDTO $passengerDTO
      */
     protected function registerOrUpdatePassenger(PassengerRegisterDTO $passengerDTO) {
-        if (empty($passengerDTO->id)) {
+        if (empty($passengerDTO->person_id)) {
             $passenger = $this->get('tixi_api.assemblerpassenger')->registerDTOtoNewPassenger($passengerDTO);
             $this->get('address_repository')->store($passenger->getAddress());
             $this->get('passenger_repository')->store($passenger);
         } else {
-            $passenger = $this->get('passenger_repository')->find($passengerDTO->id);
+            $passenger = $this->get('passenger_repository')->find($passengerDTO->person_id);
             $this->get('tixi_api.assemblerpassenger')->registerDTOtoPassenger($passenger, $passengerDTO);
+            $this->get('address_repository')->store($passenger->getAddress());
+            $this->get('passenger_repository')->store($passenger);
         }
     }
 

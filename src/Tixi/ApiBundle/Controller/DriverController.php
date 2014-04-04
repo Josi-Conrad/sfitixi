@@ -36,7 +36,6 @@ use Tixi\ApiBundle\Tile\Driver\DriverRegisterFormViewTile;
  * @Route("/drivers")
  */
 class DriverController extends Controller {
-
     /**
      * @Route("", name="tixiapi_drivers_get")
      * @Method({"GET","POST"})
@@ -77,17 +76,18 @@ class DriverController extends Controller {
 
         /**@var $driver \Tixi\CoreDomain\Driver */
         $driver = $this->get('driver_repository')->find($driverId);
-        $driverDTO = $this->get('tixi_api.assemblerdriver')->toDriverRegisterDTO($driver);
+        $driverDTO = $this->get('tixi_api.assemblerdriver')->driverToDriverRegisterDTO($driver);
 
         $gridController = $dataGridControllerFactory->createDriverAbsentController(true, array('driverId' => $driverId));
         $gridTile = $dataGridHandler->createEmbeddedDataGridTile($gridController);
 
-        $rootPanel = new RootPanel('tixiapi_drivers_get', '', $driver->getFirstname().' '.$driver->getLastname());
+        $rootPanel = new RootPanel('tixiapi_drivers_get', $driver->getFirstname().' '.$driver->getLastname());
         $panelSplitter = $rootPanel->add(new PanelSplitterTile('1:1'));
-        $formPanel = $panelSplitter->addLeft(new PanelTile('Fahrerdetails', PanelTile::$primaryType));
+        $formPanel = $panelSplitter->addLeft(new PanelTile('Fahrer Details', PanelTile::$primaryType));
         $formPanel->add(new DriverRegisterFormViewTile('driverRequest', $driverDTO, $this->generateUrl('tixiapi_driver_editbasic', array('driverId' => $driverId))));
         $gridPanel = $panelSplitter->addRight(new PanelTile('Zugeordnete Abwesenheiten'));
         $gridPanel->add($gridTile);
+
         return new Response($tileRenderer->render($rootPanel));
     }
 
@@ -135,7 +135,7 @@ class DriverController extends Controller {
         if (null === $driver) {
             throw $this->createNotFoundException('This driver does not exist');
         }
-        $driverDTO = $driverAssembler->toDriverRegisterDTO($driver);
+        $driverDTO = $driverAssembler->driverToDriverRegisterDTO($driver);
 
         $form = $this->getForm(null, $driverDTO);
         $form->handleRequest($request);
@@ -149,9 +149,9 @@ class DriverController extends Controller {
         $gridController = $dataGridControllerFactory->createDriverAbsentController(true, array('driverId' => $driverId));
         $gridTile = $dataGridHandler->createEmbeddedDataGridTile($gridController);
 
-        $rootPanel = new RootPanel('tixiapi_drivers_get', ' ', $driver->getFirstname().' '.$driver->getLastname());
+        $rootPanel = new RootPanel('tixiapi_drivers_get', $driver->getFirstname().' '.$driver->getLastname());
         $panelSplitter = $rootPanel->add(new PanelSplitterTile('1:1'));
-        $formPanel = $panelSplitter->addLeft(new PanelTile('Fahrerdetails', PanelTile::$primaryType));
+        $formPanel = $panelSplitter->addLeft(new PanelTile('Fahrer editieren', PanelTile::$primaryType));
         $formPanel->add(new FormTile('driverForm', $form));
         $gridPanel = $panelSplitter->addRight(new PanelTile('Zugeordnete Abwesenheiten'));
         $gridPanel->add($gridTile);

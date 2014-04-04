@@ -29,7 +29,6 @@ class ServicePlanAssembler{
         $servicePlanDTO->id = $servicePlan->getId();
         $servicePlanDTO->startDate= $this->dateTimeService->convertUTCDateTimeToLocalDateTime($servicePlan->getStartDate());
         $servicePlanDTO->endDate = $this->dateTimeService->convertUTCDateTimeToLocalDateTime($servicePlan->getEndDate());
-        $servicePlanDTO->cost = $servicePlan->getCost();
         $servicePlanDTO->vehicleId = $servicePlan->getVehicle()->getId();
         return $servicePlanDTO;
     }
@@ -48,7 +47,6 @@ class ServicePlanAssembler{
         $servicePlanEmbeddedListDTO->vehicleId = $servicePlan->getVehicle()->getId();
         $servicePlanEmbeddedListDTO->startDate = $this->dateTimeService->convertUTCDateTimeToLocalString($servicePlan->getStartDate());
         $servicePlanEmbeddedListDTO->endDate = $this->dateTimeService->convertUTCDateTimeToLocalString($servicePlan->getEndDate());
-        $servicePlanEmbeddedListDTO->cost = $servicePlan->getCost();
         return $servicePlanEmbeddedListDTO;
     }
 
@@ -65,7 +63,6 @@ class ServicePlanAssembler{
         $servicePlanListDTO->id = $servicePlan->getId();
         $servicePlanListDTO->startDate = $servicePlan->getStartDate();
         $servicePlanListDTO->endDate = $servicePlan->getEndDate();
-        $servicePlanListDTO->cost = $servicePlan->getCost();
         return $servicePlanListDTO;
     }
 

@@ -30,6 +30,11 @@ passenger:
   type:     annotation
   prefix:   /
 
+passenger_absent:
+  resource: Tixi\ApiBundle\Controller\PassengerAbsentController
+  type:     annotation
+  prefix:   /
+
 home:
   resource: Tixi\ApiBundle\Controller\HomeController
   type:     annotation

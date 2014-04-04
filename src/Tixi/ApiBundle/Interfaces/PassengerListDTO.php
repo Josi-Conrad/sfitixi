@@ -16,17 +16,13 @@ use Tixi\CoreDomain\Shared\GenericEntityFilter\GenericAccessQuery;
 
 class PassengerListDTO implements DataGridSourceClass {
     /**
-     * @GridField(rowIdentifier=true, propertyId="Passenger.id")
-     */
-    public $id;
-    /**
      * @GridField(propertyId="Passenger.isActive")
      */
     public $isActive;
     /**
-     * @GridField(propertyId="Passenger.title", headerName="Anrede", order=1)
+     * @GridField(rowIdentifier=true, propertyId="Passenger.id", headerName="Fahrgast-Nr", order=1)
      */
-    public $title;
+    public $id;
     /**
      * @GridField(propertyId="Passenger.firstname", headerName="Vorname", order=3)
      */
@@ -47,13 +43,8 @@ class PassengerListDTO implements DataGridSourceClass {
      * @GridField(propertyId="Address.city", headerName="Ort", order=8)
      */
     public $city;
-    /**
-     * @GridField(propertyId="Handicap.name", headerName="Behinderung", order=9)
-     */
-    public $handicap;
 
     public function getAccessQuery() {
-        return new GenericAccessQuery('Passenger', 'Tixi\CoreDomain\Passenger Passenger JOIN Passenger.handicap Handicap
-        JOIN Passenger.address Address', 'Passenger.id');
+        return new GenericAccessQuery('Passenger', 'Tixi\CoreDomain\Passenger Passenger JOIN Passenger.address Address', 'Passenger.id');
     }
 }

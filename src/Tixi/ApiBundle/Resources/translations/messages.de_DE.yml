@@ -17,6 +17,11 @@ driver.field.licence: Fahrausweis-Nr
 driver.field.wheelchair: Rollstuhlfahrten
 driver.field.category: Fahrerkategorie
 
+passenger.field.monthlybilling: Monatliche Rechnung
+passenger.field.notice: Notizen zum Fahrgast
+passenger.field.handicap: Behinderungen
+passenger.field.insurance: Versichert über
+
 absent.field.subject: Beschreibung
 absent.field.startdate: Start Datum
 absent.field.enddate: End Datum

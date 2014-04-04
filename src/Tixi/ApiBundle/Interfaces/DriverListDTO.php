@@ -15,14 +15,12 @@ use Tixi\CoreDomain\Shared\GenericEntityFilter\GenericAccessQuery;
 
 
 class DriverListDTO implements DataGridSourceClass {
-
     /**
      * @GridField(propertyId="Driver.isActive")
      */
     public $isActive;
-
     /**
-     * @GridField(rowIdentifier=true, propertyId="Driver.id", headerName="FahrerNr", order=1)
+     * @GridField(rowIdentifier=true, propertyId="Driver.id", headerName="Fahrer-Nr", order=1)
      */
     public $id;
     /**

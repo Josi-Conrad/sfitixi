@@ -29,6 +29,7 @@ use Tixi\ApiBundle\Tile\Core\RootPanel;
 use Tixi\ApiBundle\Tile\ServicePlan\ServicePlanRegisterFormViewTile;
 use Tixi\CoreDomain\ServicePlan;
 use Tixi\CoreDomain\Vehicle;
+use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
@@ -36,11 +37,10 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 /**
  * Class ServicePlanController
  * @package Tixi\ApiBundle\Controller
+ * @Breadcrumb("Fahrzeug", route="tixiapi_vehicles_get")
  * @Route("/vehicles/{vehicleId}/serviceplans")
  */
 class ServicePlanController extends Controller {
-
-
     /**
      * @Route("",name="tixiapi_serviceplans_get")
      * @Method({"GET","POST"})

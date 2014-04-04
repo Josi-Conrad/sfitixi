@@ -18,7 +18,7 @@ class AbsentEmbeddedListDTO implements DataGridSourceClass{
      */
     public $id;
     /**
-     * @GridField(propertyId="person.id", restrictive=true)
+     * @GridField(propertyId="Person.id", restrictive=true)
      */
     public $personId;
     /**

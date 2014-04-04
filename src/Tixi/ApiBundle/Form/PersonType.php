@@ -19,18 +19,13 @@ class PersonType extends AbstractType {
 
     public function buildForm(FormBuilderInterface $builder, array $options) {
 
-        $builder->add('isActive', 'checkbox', [
-            'data' => true,
-            'required' => false,
-            'label' => 'person.field.isactive',
-        ]);
         $builder->add('title', 'choice', array(
             'label' => 'person.field.title',
             'choices' => array(
                 'm' => 'person.title.male',
                 'f' => 'person.title.female'),
             'multiple' => false,
-            'expanded' => true,
+            'expanded' => true
         ));
         $builder->add('firstname', new TextOnlyType(), array(
             'label' => 'person.field.firstname',
