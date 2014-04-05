@@ -2,17 +2,16 @@
 
 namespace Tixi\CoreDomainBundle\Repository\Dispo;
 
-use Tixi\CoreDomain\Dispo\Route;
-use Tixi\CoreDomain\Dispo\RouteRepository;
+use Tixi\CoreDomain\Dispo\ShiftType;
 use Tixi\CoreDomainBundle\Repository\CommonBaseRepositoryDoctrine;
 
-class RouteRepositoryDoctrine  extends CommonBaseRepositoryDoctrine implements RouteRepository {
+class ShiftTypeRepositoryDoctrine extends CommonBaseRepositoryDoctrine {
 
-    public function store(Route $route) {
-        $this->getEntityManager()->persist($route);
+    public function store(ShiftType $shiftType) {
+        $this->getEntityManager()->persist($shiftType);
     }
 
-    public function remove(Route $route) {
-        $this->getEntityManager()->remove($route);
+    public function remove(ShiftType $shiftType) {
+        $this->getEntityManager()->remove($shiftType);
     }
 }
