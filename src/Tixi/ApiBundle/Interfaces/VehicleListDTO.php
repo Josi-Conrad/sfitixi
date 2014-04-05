@@ -20,24 +20,24 @@ class VehicleListDTO implements DataGridSourceClass{
      */
     public $id;
     /**
-     * @GridField(propertyId="Vehicle.name", headerName="Name", order=1)
+     * @GridField(propertyId="Vehicle.name", headerName="vehicle.field.name", order=1)
      */
     public $name;
     /**
      * @SerializedName("licenceNumber")
-     * @GridField(propertyId="Vehicle.licenceNumber", headerName="Lizenznummer", order=2)
+     * @GridField(propertyId="Vehicle.licenceNumber", headerName="vehicle.field.licencenumber", order=2)
      */
     public $licenceNumber;
     /**
-     * @GridField(propertyId="Vehicle.dateOfFirstRegistration", headerName="Inverkehrssetzung", order=5)
+     * @GridField(propertyId="Vehicle.dateOfFirstRegistration", headerName="vehicle.field.dateoffirstregistration", order=5)
      */
     public $dateOfFirstRegistration;
     /**
-     * @GridField(propertyId="Vehicle.parkingLotNumber", headerName="Parkplatz Nummer", order=3)
+     * @GridField(propertyId="Vehicle.parkingLotNumber", headerName="vehicle.field.parkinglotnumber", order=3)
      */
     public $parkingLotNumber;
     /**
-     * @GridField(propertyId="VehicleCategory.name", headerName="Fahrzeugkategorie", order=4)
+     * @GridField(propertyId="VehicleCategory.name", headerName="vehicle.field.category", order=4)
      */
     public $category;
 

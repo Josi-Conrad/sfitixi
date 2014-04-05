@@ -30,18 +30,18 @@ class VehicleDataGridController extends DataGridAbstractController{
 
     public function getGridDisplayTitel()
     {
-        return 'Fahrzeuge';
+        return 'vehicle.list.name';
     }
 
     public function createCustomControlTile()
     {
         $customControlTile = new DataGridCustomControlTile();
-        $selectionButton = $customControlTile->add(new SelectionButtonTile('Mit Auswahl'));
-        $selectionButton->add(new TextLinkListTile($this->generateUrl('tixiapi_vehicle_editbasic',array('vehicleId'=>DataGridHandler::$dataGirdReplaceIdentifier)),'Editieren',true));
-        $selectionButton->add(new TextLinkListTile($this->generateUrl('tixiapi_serviceplan_new',array('vehicleId'=>DataGridHandler::$dataGirdReplaceIdentifier)),'Neuer Serviceplan',true));
+        $selectionButton = $customControlTile->add(new SelectionButtonTile('button.with.selection'));
+        $selectionButton->add(new TextLinkListTile($this->generateUrl('tixiapi_vehicle_editbasic',array('vehicleId'=>DataGridHandler::$dataGirdReplaceIdentifier)),'button.edit',true));
+        $selectionButton->add(new TextLinkListTile($this->generateUrl('tixiapi_serviceplan_new',array('vehicleId'=>DataGridHandler::$dataGirdReplaceIdentifier)),'serviceplan.button.new',true));
         $selectionButton->add(new SelectionButtonDividerTile());
-        $selectionButton->add(new TextLinkListTile($this->generateUrl('tixiapi_vehicle_editbasic',array('vehicleId'=>DataGridHandler::$dataGirdReplaceIdentifier)),'Löschen',true));
-        $linkButton = $customControlTile->add(new LinkButtonTile($this->generateUrl('tixiapi_vehicle_new'),'Neues Fahrzeug', LinkButtonTile::$primaryType));
+        $selectionButton->add(new TextLinkListTile($this->generateUrl('tixiapi_vehicle_editbasic',array('vehicleId'=>DataGridHandler::$dataGirdReplaceIdentifier)),'button.delete',true));
+        $linkButton = $customControlTile->add(new LinkButtonTile($this->generateUrl('tixiapi_vehicle_new'),'vehicle.button.new', LinkButtonTile::$primaryType));
         return $customControlTile;
     }
 

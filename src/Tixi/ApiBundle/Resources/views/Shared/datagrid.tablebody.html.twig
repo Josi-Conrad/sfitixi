@@ -1,9 +1,0 @@
-<tbody data-totalamountofrows="{{ totalAmountOfRows }}">
-{% for row in tableRows %}
-<tr data-rowid="{{ rowIdPrefix ~ '_' ~ row.rowId }}">
-    {% for fieldValue in row.fieldValues %}
-        <td>{{ fieldValue }}</td>
-    {% endfor %}
-</tr>
-{% endfor %}
-</tbody>

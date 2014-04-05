@@ -21,13 +21,13 @@ class ServicePlanType extends AbstractType{
         $builder->add('id', 'hidden');
 
         $builder->add('startDate', new DatePickerType(), array(
-            'label' => 'Servicestart'
+            'label' => 'serviceplan.field.startdate'
         ));
         $builder->add('endDate', new DatePickerType(), array(
-            'label' => 'Servicenede'
+            'label' => 'serviceplan.field.enddate'
         ));
         $builder->add('memo', 'text', array(
-            'label' => 'Notiz'
+            'label' => 'serviceplan.field.memo'
         ));
     }
 

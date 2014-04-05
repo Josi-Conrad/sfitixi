@@ -26,7 +26,7 @@ use Tixi\ApiBundle\Tile\Passenger\PassengerRegisterFormViewTile;
  * Class PassengerController
  * @package Tixi\ApiBundle\Controller
  * @Route("/passengers")
- * @Breadcrumb("Fahrgast", route="tixiapi_passengers_get")
+ * @Breadcrumb("passenger.panel.name", route="tixiapi_passengers_get")
  */
 class PassengerController extends Controller {
     /**
@@ -48,7 +48,7 @@ class PassengerController extends Controller {
 
     /**
      * @Route("/{passengerId}", requirements={"passengerId" = "^(?!new)[^/]+$"}, name="tixiapi_passenger_get")
-     * @Breadcrumb("Fahrgast {passengerId}", route={"name"="tixiapi_passenger_get", "parameters"={"passengerId"}})
+     * @Breadcrumb("{passengerId}", route={"name"="tixiapi_passenger_get", "parameters"={"passengerId"}})
      */
     public function getPassengerAction(Request $request, $passengerId) {
 
@@ -65,7 +65,7 @@ class PassengerController extends Controller {
 
         $rootPanel = new RootPanel('tixiapi_passengers_get', $passenger->getFirstname().' '.$passenger->getLastname());
         $panelSplitter = $rootPanel->add(new PanelSplitterTile('1:1'));
-        $formPanel = $panelSplitter->addLeft(new PanelTile('Fahrgast Details', PanelTile::$primaryType));
+        $formPanel = $panelSplitter->addLeft(new PanelTile('passenger.panel.details', PanelTile::$primaryType));
         $formPanel->add(new PassengerRegisterFormViewTile('passengerRequest', $passengerDTO, $this->generateUrl('tixiapi_passenger_editbasic', array('passengerId' => $passengerId))));
         $gridPanel = $panelSplitter->addRight(new PanelTile('Zugeordnete Abwesenheiten'));
         $gridPanel->add($gridTile);
@@ -76,7 +76,7 @@ class PassengerController extends Controller {
     /**
      * @Route("/new", name="tixiapi_passenger_new")
      * @Method({"GET","POST"})
-     * @Breadcrumb("Neuer Fahrgast", route="tixiapi_passenger_new")
+     * @Breadcrumb("passenger.panel.new", route="tixiapi_passenger_new")
      */
     public function newPassengerAction(Request $request) {
         $tileRenderer = $this->get('tixi_api.tilerenderer');
@@ -90,7 +90,7 @@ class PassengerController extends Controller {
             return $this->redirect($this->generateUrl('tixiapi_passengers_get'));
         }
 
-        $rootPanel = new RootPanel('tixiapi_passengers_get', 'Neuer Fahrgast');
+        $rootPanel = new RootPanel('tixiapi_passengers_get', 'passenger.panel.new');
         $rootPanel->add(new FormTile('passengerNewForm', $form, true));
 
         return new Response($tileRenderer->render($rootPanel));
@@ -99,7 +99,7 @@ class PassengerController extends Controller {
     /**
      * @Route("/{passengerId}/editbasic", name="tixiapi_passenger_editbasic")
      * @Method({"GET","POST"})
-     * @Breadcrumb("Fahrgast {passengerId}", route={"name"="tixiapi_passenger_editbasic", "parameters"={"passengerId"}})
+     * @Breadcrumb("{passengerId}", route={"name"="tixiapi_passenger_editbasic", "parameters"={"passengerId"}})
      */
     public function editPassengerAction(Request $request, $passengerId) {
         $dataGridHandler = $this->get('tixi_api.datagridhandler');
@@ -128,9 +128,9 @@ class PassengerController extends Controller {
 
         $rootPanel = new RootPanel('tixiapi_passengers_get', $passenger->getFirstname().' '.$passenger->getLastname());
         $panelSplitter = $rootPanel->add(new PanelSplitterTile('1:1'));
-        $formPanel = $panelSplitter->addLeft(new PanelTile('Fahrgast editieren', PanelTile::$primaryType));
+        $formPanel = $panelSplitter->addLeft(new PanelTile('passenger.panel.edit', PanelTile::$primaryType));
         $formPanel->add(new FormTile('passengerForm', $form));
-        $gridPanel = $panelSplitter->addRight(new PanelTile('Zugeordnete Abwesenheiten'));
+        $gridPanel = $panelSplitter->addRight(new PanelTile('absent.panel.embedded'));
         $gridPanel->add($gridTile);
 
         return new Response($tileRenderer->render($rootPanel));

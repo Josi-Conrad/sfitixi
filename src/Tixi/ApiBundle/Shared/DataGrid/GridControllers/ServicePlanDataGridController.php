@@ -29,17 +29,17 @@ class ServicePlanDataGridController extends DataGridAbstractController{
 
     public function getGridDisplayTitel()
     {
-        return 'Servicepläne';
+        return 'serviceplan.list.name';
     }
 
     public function createCustomControlTile()
     {
         $customControlTile = new DataGridCustomControlTile();
-        $selectionButton = $customControlTile->add(new SelectionButtonTile('Mit Auswahl'));
-        $selectionButton->add(new TextLinkListTile($this->generateUrl('tixiapi_serviceplan_editbasic',array('vehicleId'=>$this->routeProperties['vehicleId'],'servicePlanId'=>DataGridHandler::$dataGirdReplaceIdentifier)),'Editieren',true));
+        $selectionButton = $customControlTile->add(new SelectionButtonTile('button.with.selection'));
+        $selectionButton->add(new TextLinkListTile($this->generateUrl('tixiapi_serviceplan_editbasic',array('vehicleId'=>$this->routeProperties['vehicleId'],'servicePlanId'=>DataGridHandler::$dataGirdReplaceIdentifier)),'button.edit',true));
         $selectionButton->add(new SelectionButtonDividerTile());
-        $selectionButton->add(new TextLinkListTile($this->generateUrl('tixiapi_serviceplan_editbasic',array('vehicleId'=>$this->routeProperties['vehicleId'],'servicePlanId'=>DataGridHandler::$dataGirdReplaceIdentifier)),'Löschen',true));
-        $customControlTile->add(new LinkButtonTile($this->generateUrl('tixiapi_serviceplan_new',array('vehicleId'=>$this->routeProperties['vehicleId'])), 'Neuer Serviceplan', LinkButtonTile::$primaryType));
+        $selectionButton->add(new TextLinkListTile($this->generateUrl('tixiapi_serviceplan_editbasic',array('vehicleId'=>$this->routeProperties['vehicleId'],'servicePlanId'=>DataGridHandler::$dataGirdReplaceIdentifier)),'button.delete',true));
+        $customControlTile->add(new LinkButtonTile($this->generateUrl('tixiapi_serviceplan_new',array('vehicleId'=>$this->routeProperties['vehicleId'])), 'serviceplan.button.new', LinkButtonTile::$primaryType));
         return $customControlTile;
     }
 

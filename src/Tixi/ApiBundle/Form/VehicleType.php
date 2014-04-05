@@ -23,28 +23,28 @@ class VehicleType extends AbstractType{
     {
         $builder->add('id', 'hidden');
         $builder->add('name', 'text', array(
-            'label' => 'Fahrzeugname',
+            'label' => 'vehicle.field.name',
             'constraints' => new NotBlank(array('message'=>'vehicle.name.not_blank'))
         ));
         $builder->add('licenceNumber', 'text', array(
-            'label' => 'Kennzeichen',
+            'label' => 'vehicle.field.licencenumber',
             'constraints' => array(
                 new NotBlank(array('message'=>'vehicle.nr.not_blank')),
                 new Regex(array('message'=>'vehicle.nr.not_nr','pattern'=>'/\d+/'))),
             'pattern' => '^\d+$'
         ));
         $builder->add('dateOfFirstRegistration', new DatePickerType(), array(
-            'label' => 'Inverkehrssetzung',
+            'label' => 'vehicle.field.dateoffirstregistration',
             'constraints' => new DateTime(),
             'pattern' => '^(0[1-9]|[1|2][0-9]|3[0|1]).(0[1-9]|1[0|1|2]).(19|20)\d\d$'
         ));
         $builder->add('parkingLotNumber', 'integer', array(
-            'label' => 'Parkplatzbezeichnung'
+            'label' => 'vehicle.field.parkinglotnumber'
         ));
         $builder->add('vehicleCategory', 'entity', array(
             'class' => 'Tixi\CoreDomain\VehicleCategory',
             'property' => 'name',
-            'label' => 'Fahrzeugkategorie'
+            'label' => 'vehicle.field.category'
         ));
     }
 

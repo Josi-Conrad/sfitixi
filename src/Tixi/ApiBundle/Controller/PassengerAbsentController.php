@@ -27,7 +27,7 @@ use Tixi\CoreDomain\Passenger;
  * Class PassengerAbsentController
  * @package Tixi\ApiBundle\Controller
  * @Route("/passengers/{passengerId}/absents")
- * @Breadcrumb("Fahrgast", route="tixiapi_passengers_get")
+ * @Breadcrumb("passenger.panel.name", route="tixiapi_passengers_get")
  */
 class PassengerAbsentController extends Controller {
 
@@ -49,8 +49,8 @@ class PassengerAbsentController extends Controller {
 
     /**
      * @Route("/{absentId}", requirements={"absentId" = "^(?!new)[^/]+$"}, name="tixiapi_passenger_absent_get")
-     * @Breadcrumb("Fahrgast {passengerId}", route={"name"="tixiapi_passenger_get", "parameters"={"passengerId"}})
-     * @Breadcrumb("Abwesenheit Details")
+     * @Breadcrumb("{passengerId}", route={"name"="tixiapi_passenger_get", "parameters"={"passengerId"}})
+     * @Breadcrumb("absent.panel.name")
      */
     public function getAbsentAction(Request $request, $passengerId, $absentId) {
         $absentRepository = $this->get('absent_repository');
@@ -63,7 +63,7 @@ class PassengerAbsentController extends Controller {
         }
         $absentDTO = $this->get('tixi_api.assemblerabsent')->absentToAbsentRegisterDTO($absent);
 
-        $rootPanel = new RootPanel('absentDetails', 'Abwesenheit Details');
+        $rootPanel = new RootPanel('absentDetails', 'absent.panel.details');
         $rootPanel->add(new AbsentRegisterFormViewTile('absentRequest', $absentDTO,
             $this->generateUrl('tixiapi_passenger_absent_editbasic', array('passengerId' => $passengerId, 'absentId' => $absentId))));
 
@@ -73,8 +73,8 @@ class PassengerAbsentController extends Controller {
     /**
      * @Route("/new", name="tixiapi_passenger_absent_new")
      * @Method({"GET","POST"})
-     * @Breadcrumb("Fahrgast {passengerId}", route={"name"="tixiapi_passenger_get", "parameters"={"passengerId"}})
-     * @Breadcrumb("Neue Abwesenheit")
+     * @Breadcrumb("{passengerId}", route={"name"="tixiapi_passenger_get", "parameters"={"passengerId"}})
+     * @Breadcrumb("absent.panel.new")
      */
     public function newAbsentAction(Request $request, $passengerId) {
         $tileRenderer = $this->get('tixi_api.tilerenderer');
@@ -89,7 +89,7 @@ class PassengerAbsentController extends Controller {
             return $this->redirect($this->generateUrl('tixiapi_passenger_get', array('passengerId' => $passengerId)));
         }
 
-        $rootPanel = new RootPanel('tixiapi_passengers_get', 'Neue Abwesenheit');
+        $rootPanel = new RootPanel('tixiapi_passengers_get', 'absent.panel.new');
         $rootPanel->add(new FormTile('absentNewForm', $form, true));
 
         return new Response($tileRenderer->render($rootPanel));
@@ -98,8 +98,8 @@ class PassengerAbsentController extends Controller {
     /**
      * @Route("/{absentId}/editbasic", name="tixiapi_passenger_absent_editbasic")
      * @Method({"GET","POST"})
-     * @Breadcrumb("Fahrgast {passengerId}", route={"name"="tixiapi_passenger_get", "parameters"={"passengerId"}})
-     * @Breadcrumb("Abwesenheit editieren")
+     * @Breadcrumb("{passengerId}", route={"name"="tixiapi_passenger_get", "parameters"={"passengerId"}})
+     * @Breadcrumb("absent.panel.edit")
      */
     public function editAbsentAction(Request $request, $passengerId, $absentId) {
         $tileRenderer = $this->get('tixi_api.tilerenderer');
@@ -124,7 +124,7 @@ class PassengerAbsentController extends Controller {
             return $this->redirect($this->generateUrl('tixiapi_passenger_get', array('passengerId' => $passengerId)));
         }
 
-        $rootPanel = new RootPanel('tixiapi_passengers_get', 'Abwesenheit editieren');
+        $rootPanel = new RootPanel('tixiapi_passengers_get', 'absent.panel.edit');
         $rootPanel->add(new FormTile('absentNewForm', $form, true));
 
         return new Response($tileRenderer->render($rootPanel));

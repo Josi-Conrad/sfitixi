@@ -25,7 +25,7 @@ use Tixi\CoreDomain\Vehicle;
 /**
  * Class ServicePlanController
  * @package Tixi\ApiBundle\Controller
- * @Breadcrumb("Fahrzeug", route="tixiapi_vehicles_get")
+ * @Breadcrumb("vehicle.panel.name", route="tixiapi_vehicles_get")
  * @Route("/vehicles/{vehicleId}/serviceplans")
  */
 class ServicePlanController extends Controller {
@@ -48,8 +48,8 @@ class ServicePlanController extends Controller {
     /**
      * @Route("/{servicePlanId}",requirements={"servicePlanId" = "^(?!new)[^/]+$"},name="tixiapi_serviceplan_get")
      * @Method({"GET","POST"})
-     * @Breadcrumb("Fahrzeug {vehicleId}", route={"name"="tixiapi_vehicle_get", "parameters"={"vehicleId"}})
-     * @Breadcrumb("Serviceplan Details")
+     * @Breadcrumb("{vehicleId}", route={"name"="tixiapi_vehicle_get", "parameters"={"vehicleId"}})
+     * @Breadcrumb("serviceplan.panel.details")
      */
     public function getServiceplanAction(Request $request, $vehicleId, $servicePlanId) {
         $servicePlanRepository = $this->get('serviceplan_repository');
@@ -62,7 +62,7 @@ class ServicePlanController extends Controller {
             throw $this->createNotFoundException('The serviceplan with id ' . $servicePlanId . ' does not exists');
         }
         $servicePlanDTO = $assembler->toServicePlanAssignDTO($servicePlan);
-        $rootPanel = new RootPanel('servicePlanDetail', 'Serviceplan Details');
+        $rootPanel = new RootPanel('servicePlanDetail', 'serviceplan.panel.details');
         $rootPanel->add(new ServicePlanRegisterFormViewTile('servicePlanRequest', $servicePlanDTO, $this->generateUrl('tixiapi_serviceplan_editbasic', array('vehicleId' => $vehicleId, 'servicePlanId' => $servicePlanId))));
 
         return new Response($tileRenderer->render($rootPanel));
@@ -71,8 +71,8 @@ class ServicePlanController extends Controller {
     /**
      * @Route("/new", name="tixiapi_serviceplan_new")
      * @Method({"GET","POST"})
-     * @Breadcrumb("Fahrzeug {vehicleId}", route={"name"="tixiapi_vehicle_get", "parameters"={"vehicleId"}})
-     * @Breadcrumb("Neuer Serviceplan")
+     * @Breadcrumb("{vehicleId}", route={"name"="tixiapi_vehicle_get", "parameters"={"vehicleId"}})
+     * @Breadcrumb("serviceplan.panel.new")
      */
     public function newServiceplanAction(Request $request, $vehicleId) {
         $tileRenderer = $this->get('tixi_api.tilerenderer');
@@ -85,7 +85,7 @@ class ServicePlanController extends Controller {
             $this->get('entity_manager')->flush();
             return $this->redirect($this->generateUrl('tixiapi_vehicle_get', array('vehicleId' => $vehicleId)));
         }
-        $rootPanel = new RootPanel('tixiapi_vehicles_get', 'Neuer Serviceplan');
+        $rootPanel = new RootPanel('tixiapi_vehicles_get', 'serviceplan.panel.new');
         $rootPanel->add(new FormTile('servicePlanNewForm', $form, true));
         return new Response($tileRenderer->render($rootPanel));
     }
@@ -93,8 +93,8 @@ class ServicePlanController extends Controller {
     /**
      * @Route("/{servicePlanId}/editbasic", name="tixiapi_serviceplan_editbasic")
      * @Method({"GET","POST"})
-     * @Breadcrumb("Fahrzeug {vehicleId}", route={"name"="tixiapi_vehicle_get", "parameters"={"vehicleId"}})
-     * @Breadcrumb("Serviceplan editieren")
+     * @Breadcrumb("{vehicleId}", route={"name"="tixiapi_vehicle_get", "parameters"={"vehicleId"}})
+     * @Breadcrumb("serviceplan.panel.edit")
      */
     public function editServiceplanAction(Request $request, $vehicleId, $servicePlanId) {
         $tileRenderer = $this->get('tixi_api.tilerenderer');
@@ -118,7 +118,7 @@ class ServicePlanController extends Controller {
             return $this->redirect($this->generateUrl('tixiapi_vehicle_get', array('vehicleId' => $vehicleId)));
         }
 
-        $rootPanel = new RootPanel('tixiapi_vehicles_get', 'ServicePlan editieren');
+        $rootPanel = new RootPanel('tixiapi_vehicles_get', 'serviceplan.panel.edit');
         $rootPanel->add(new FormTile('absentNewForm', $form, true));
 
         return new Response($tileRenderer->render($rootPanel));

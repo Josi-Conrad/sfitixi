@@ -26,7 +26,7 @@ use Tixi\CoreDomain\Driver;
  * Class DriverAbsentController
  * @package Tixi\ApiBundle\Controller
  * @Route("/drivers/{driverId}/absents")
- * @Breadcrumb("Fahrer", route="tixiapi_drivers_get")
+ * @Breadcrumb("driver.panel.name", route="tixiapi_drivers_get")
  */
 class DriverAbsentController extends Controller {
 
@@ -49,8 +49,8 @@ class DriverAbsentController extends Controller {
     /**
      * @Route("/{absentId}", requirements={"absentId" = "^(?!new)[^/]+$"}, name="tixiapi_driver_absent_get")
      * @Method({"GET","POST"})
-     * @Breadcrumb("Fahrer {driverId}", route={"name"="tixiapi_driver_get", "parameters"={"driverId"}})
-     * @Breadcrumb("Abwesenheit Details")
+     * @Breadcrumb("{driverId}", route={"name"="tixiapi_driver_get", "parameters"={"driverId"}})
+     * @Breadcrumb("absent.panel.details")
      */
     public function getAbsentAction(Request $request, $driverId, $absentId) {
         $absentRepository = $this->get('absent_repository');
@@ -63,7 +63,7 @@ class DriverAbsentController extends Controller {
         }
         $absentDTO = $this->get('tixi_api.assemblerabsent')->absentToAbsentRegisterDTO($absent);
 
-        $rootPanel = new RootPanel('absentDetail', 'Abwesenheit Details');
+        $rootPanel = new RootPanel('absentDetail', 'absent.panel.details');
         $rootPanel->add(new AbsentRegisterFormViewTile('absentRequest', $absentDTO,
             $this->generateUrl('tixiapi_driver_absent_editbasic', array('driverId' => $driverId, 'absentId' => $absentId))));
 
@@ -73,8 +73,8 @@ class DriverAbsentController extends Controller {
     /**
      * @Route("/new", name="tixiapi_driver_absent_new")
      * @Method({"GET","POST"})
-     * @Breadcrumb("Fahrer {driverId}", route={"name"="tixiapi_driver_get", "parameters"={"driverId"}})
-     * @Breadcrumb("Neue Abwesenheit")
+     * @Breadcrumb("{driverId}", route={"name"="tixiapi_driver_get", "parameters"={"driverId"}})
+     * @Breadcrumb("absent.panel.new")
      */
     public function newAbsentAction(Request $request, $driverId) {
         $tileRenderer = $this->get('tixi_api.tilerenderer');
@@ -89,7 +89,7 @@ class DriverAbsentController extends Controller {
             return $this->redirect($this->generateUrl('tixiapi_driver_get', array('driverId' => $driverId)));
         }
 
-        $rootPanel = new RootPanel('tixiapi_drivers_get', 'Neue Abwesenheit');
+        $rootPanel = new RootPanel('tixiapi_drivers_get', 'absent.panel.new');
         $rootPanel->add(new FormTile('absentNewForm', $form, true));
 
         return new Response($tileRenderer->render($rootPanel));
@@ -98,8 +98,8 @@ class DriverAbsentController extends Controller {
     /**
      * @Route("/{absentId}/editbasic", name="tixiapi_driver_absent_editbasic")
      * @Method({"GET","POST"})
-     * @Breadcrumb("Fahrer {driverId}", route={"name"="tixiapi_driver_get", "parameters"={"driverId"}})
-     * @Breadcrumb("Abwesenheit editieren")
+     * @Breadcrumb(" {driverId}", route={"name"="tixiapi_driver_get", "parameters"={"driverId"}})
+     * @Breadcrumb("absent.panel.edit")
      */
     public function editAbsentAction(Request $request, $driverId, $absentId) {
         $tileRenderer = $this->get('tixi_api.tilerenderer');
@@ -124,7 +124,7 @@ class DriverAbsentController extends Controller {
             return $this->redirect($this->generateUrl('tixiapi_driver_get', array('driverId' => $driverId)));
         }
 
-        $rootPanel = new RootPanel('tixiapi_drivers_get', 'Abwesenheit editieren');
+        $rootPanel = new RootPanel('tixiapi_drivers_get', 'absent.panel.edit');
         $rootPanel->add(new FormTile('absentNewForm', $form, true));
 
         return new Response($tileRenderer->render($rootPanel));

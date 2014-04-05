@@ -6,7 +6,7 @@
                     <div class="input-group">
                         <input type="text" class="form-control gridFilterInput input-sm" />
                             <span class="input-group-btn btn-group-sm">
-                                <button class="btn btn-default gridFilterCommit" type="button">Suchen</button>
+                                <button class="btn btn-default gridFilterCommit" type="button">{% trans %}button.search{% endtrans %}</button>
                             </span>
                     </div>
                 </div>
@@ -29,7 +29,7 @@
                     {% for header in gridState.getHeaders() %}
                         <th>
                             <div class="header"
-                                 data-fieldId="{{ header.getFieldPropertyName() }}">{{ header.getHeaderName() }}</div>
+                                 data-fieldId="{{ header.getFieldPropertyName() }}">{{ header.getHeaderName()|trans }}</div>
                         </th>
                     {% endfor %}
                 </tr>
