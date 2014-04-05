@@ -2,13 +2,23 @@
 button.back: Abbrechen
 button.search: Suchen
 button.edit: Editieren
-button.delete: Löschen
+button.login: Login
+button.logout: Logout
 button.with.selection: Mit Selektion
 more.details: Weitere Details >>
 less.details: << Weniger Details
 
 #Home
 home.panel.name: Home
+
+#Disposition
+disposition.panel.name: Disposition
+
+#Prepare
+prepare.panel.name: Bereitstellen
+
+#POI
+poi.panel.name: OVI
 
 #Person
 person.field.isactive: Ist Aktiv

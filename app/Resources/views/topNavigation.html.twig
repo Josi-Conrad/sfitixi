@@ -1,10 +1,10 @@
-{% set topNavigationBar = [['tixiapi_home', 'Home'], ['tixiapi_home', 'Disposition'], ['tixiapi_home', 'Bereitstellen'],
-['tixiapi_passengers_get', 'Fahrgast'], ['tixiapi_home', 'OVI'], ['tixiapi_drivers_get', 'Fahrer'],
-['tixiapi_vehicles_get', 'Fahrzeug']] %}
+{% set topNavigationBar = [['tixiapi_home', 'home.panel.name'], ['tixiapi_home', 'disposition.panel.name'],
+['tixiapi_home', 'prepare.panel.name'], ['tixiapi_passengers_get', 'passenger.panel.name'], ['tixiapi_home', 'poi.panel.name'],
+['tixiapi_drivers_get', 'driver.panel.name'], ['tixiapi_vehicles_get', 'vehicle.panel.name']] %}
 {% set topNavigationActivePage = topNavigationActivePage|default('ajd') %}
 <ul class="nav nav-justified">
     {% for item in topNavigationBar %}
         <li{% if item[0] == topNavigationActivePage %} class="active"{% endif %}>
-            <a href="{{ path(item[0]) }}">{{ item[1] }}</a></li>
+            <a href="{{ path(item[0]) }}">{{ item[1]|trans }}</a></li>
     {% endfor %}
 </ul>

@@ -1,33 +1,4 @@
-<div class="pull-right">
 
-    {% if is_granted('ROLE_MANAGER') %}
-
-        <div class="btn-group-main">
-            <button type="button" class="btn btn-primary btn-sm dropdown-toggle customActionWithSelectionButton"
-                    data-toggle="dropdown">{{ app.user.username }} | <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu selectedAction" role="menu">
-                <li><a class="customActionWithSelection" href="{{ path('tixiapi_home') }}">Profil</a></li>
-                <li><a class="customActionWithSelection" href="{{ path('tixiapi_home') }}">Support</a></li>
-                <li><a class="customActionWithSelection" href="{{ path('tixiapi_home') }}">Wartung</a></li>
-                <li class="divider"></li>
-                <li><a class="customActionWithSelection" href="{{ path('tixi_logout') }}">Abmelden</a></li>
-            </ul>
-        </div>
-
-    {% else %}
-
-        <div class="btn-group-main">
-            <button type="button" class="btn btn-primary btn-sm dropdown-toggle customActionWithSelectionButton"
-                    data-toggle="dropdown">{{ app.user.username }} | <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu selectedAction" role="menu">
-                <li><a class="customActionWithSelection" href="{{ path('tixiapi_home') }}">Profil</a></li>
-                <li class="divider"></li>
-                <li><a class="customActionWithSelection" href="{{ path('tixi_logout') }}">Abmelden</a></li>
-            </ul>
-        </div>
-
-    {% endif %}
-
-</div>
+    <div class="btn-group-main">
+        <a href="{{ path('tixi_logout') }}">{{ app.user.username }}: {% trans %}button.logout{% endtrans %}</a></li>
+    </div>

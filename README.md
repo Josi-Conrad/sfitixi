@@ -41,8 +41,7 @@ If `run_build.sh` doesn't work properly, make shure you can run the following co
 
 `php app/console project:build-fulltext`
 
-
-And run_dataimport.sh for Testdata, which imports the .SQL files in the /build folder.
+The last command updates a fulltext index, which is only possible in MySQL Version 5.6 and higher.
 
 
 3) Test Users
