@@ -1,0 +1,53 @@
+<div class="row text-right">
+    {% for resolvedElement in children %}
+        {% if 'formcontrol' in resolvedElement.viewIndentifiers %}
+            {{ resolvedElement.rawData | raw }}
+        {% endif %}
+    {% endfor %}
+</div>
+<div class="row">
+    {{ form_start(form, {'attr':{'id':formId, 'class':'form-horizontal customForm'} }) }}
+    <div class="col-md-6">
+        <div class="row">
+            <div class="col-md-12">
+                {{ form_row(form.firstWeeklySelector) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                {{ form_row(form.secondWeeklySelector) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                {{ form_row(form.thirdWeeklySelector) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                {{ form_row(form.fourthWeeklySelector) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                {{ form_row(form.lastWeeklySelector) }}
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <ul class="shiftSelections" data-prototype="{{ form_widget(form.shiftSelections.vars.prototype)|e }}">
+            {% for selection in form.shiftSelections %}
+                <li>  {{ form_errors(selection) }}
+                    {{ form_widget(selection) }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {{ form_end(form) }}
+</div>
+
+<script type="text/javascript">
+    jQuery(function ($) {
+        new FormMonthlyAssertionController();
+    });
+
+</script>
