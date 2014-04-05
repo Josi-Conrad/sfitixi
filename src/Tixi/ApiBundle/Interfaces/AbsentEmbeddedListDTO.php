@@ -22,15 +22,15 @@ class AbsentEmbeddedListDTO implements DataGridSourceClass{
      */
     public $personId;
     /**
-     * @GridField(propertyId="Absent.subject", headerName="Beschreibung", order=1)
+     * @GridField(propertyId="Absent.subject", headerName="absent.field.subject", order=1)
      */
     public $subject;
     /**
-     * @GridField(propertyId="Absent.startDate", headerName="Start Datum", order=2)
+     * @GridField(propertyId="Absent.startDate", headerName="absent.field.startdate", order=2)
      */
     public $startDate;
     /**
-     * @GridField(propertyId="Absent.endDate", headerName="End Datum", order=3)
+     * @GridField(propertyId="Absent.endDate", headerName="absent.field.enddate", order=3)
      */
     public $endDate;
 

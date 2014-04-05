@@ -20,6 +20,11 @@ class VehicleAssembler{
     //injected by service container via setter method
     private $dateTimeService;
 
+    /**
+     * @param VehicleRegisterDTO $vehicleDTO
+     * @return Vehicle
+     * @throws \Exception
+     */
     public function registerDTOtoNewVehicle(VehicleRegisterDTO $vehicleDTO) {
         $dateOfFirstRegistration = $this->dateTimeService->convertLocalDateTimeToUTCDateTime($vehicleDTO->dateOfFirstRegistration);
         if(!$dateOfFirstRegistration) {
@@ -29,6 +34,11 @@ class VehicleAssembler{
             $dateOfFirstRegistration, $vehicleDTO->parkingLotNumber, $vehicleDTO->vehicleCategory);
     }
 
+    /**
+     * @param Vehicle $vehicle
+     * @param VehicleRegisterDTO $vehicleDTO
+     * @throws \Exception
+     */
     public function registerDTOToVehicle(Vehicle $vehicle, VehicleRegisterDTO $vehicleDTO) {
         $dateOfFirstRegistration = $this->dateTimeService->convertLocalDateTimeToUTCDateTime($vehicleDTO->dateOfFirstRegistration);
         if(!$dateOfFirstRegistration) {
@@ -38,6 +48,10 @@ class VehicleAssembler{
             $dateOfFirstRegistration, $vehicleDTO->parkingLotNumber, $vehicleDTO->vehicleCategory);
     }
 
+    /**
+     * @param Vehicle $vehicle
+     * @return VehicleRegisterDTO
+     */
     public function toVehicleRegisterDTO(Vehicle $vehicle) {
         $vehicleDTO = new VehicleRegisterDTO();
         $vehicleDTO->id = $vehicle->getId();
@@ -49,6 +63,10 @@ class VehicleAssembler{
         return $vehicleDTO;
     }
 
+    /**
+     * @param $vehicles
+     * @return array
+     */
     public function vehiclesToVehicleListDTOs($vehicles) {        ;
         $dtoArray = array();
         foreach($vehicles as $vehicle) {
@@ -57,6 +75,10 @@ class VehicleAssembler{
         return $dtoArray;
     }
 
+    /**
+     * @param Vehicle $vehicle
+     * @return VehicleListDTO
+     */
     public function toVehicleListDTO(Vehicle $vehicle) {
         $vehicleListDTO = new VehicleListDTO();
         $vehicleListDTO->id = $vehicle->getId();

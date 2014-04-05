@@ -16,11 +16,11 @@ class VehicleRegisterFormViewTile extends AbstractFormViewTile{
 
     public function createFormRows()
     {
-        $this->basicFormRows[] = new FormRowView('Fahrzeugname',$this->dto->name);
-        $this->basicFormRows[] = new FormRowView('Kennzeichen',$this->dto->licenceNumber);
-        $this->basicFormRows[] = new FormRowView('Inverkehrssetzung',$this->dto->dateOfFirstRegistration);
-        $this->basicFormRows[] = new FormRowView('Parkplatz- bezeichnung',$this->dto->parkingLotNumber);
-        $this->basicFormRows[] = new FormRowView('Fahrzeugkategorie',$this->dto->category);
+        $this->basicFormRows[] = new FormRowView('vehicle.field.name',$this->dto->name);
+        $this->basicFormRows[] = new FormRowView('vehicle.field.licencenumber',$this->dto->licenceNumber);
+        $this->basicFormRows[] = new FormRowView('vehicle.field.dateoffirstregistration',$this->dto->dateOfFirstRegistration);
+        $this->basicFormRows[] = new FormRowView('vehicle.field.parkinglotnumber',$this->dto->parkingLotNumber);
+        $this->basicFormRows[] = new FormRowView('vehicle.field.category',$this->dto->category);
 
 //        $this->expandedFormRows[] = new FormRowView('Fahrzeugkategorie',$this->dto->category);
     }

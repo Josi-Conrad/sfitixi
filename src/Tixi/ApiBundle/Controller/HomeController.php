@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Request;
  * Class HomeController
  * @package Tixi\ApiBundle\Controller
  * @Route("/home")
- * @Breadcrumb("Home", route="tixiapi_home")
+ * @Breadcrumb("home.panel.name", route="tixiapi_home")
  */
 class HomeController extends Controller {
     /**

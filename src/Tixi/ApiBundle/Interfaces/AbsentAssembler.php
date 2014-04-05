@@ -25,8 +25,8 @@ class AbsentAssembler {
     public function registerDTOtoNewAbsent(AbsentRegisterDTO $absentDTO) {
         $absent = Absent::registerAbsent(
             $absentDTO->subject,
-            $this->dateTimeService->convertLocalDateTimeToUTCDateTime($absentDTO->startDate),
-            $this->dateTimeService->convertLocalDateTimeToUTCDateTime($absentDTO->endDate));
+            $absentDTO->startDate,
+            $absentDTO->endDate);
         return $absent;
     }
 
@@ -38,8 +38,8 @@ class AbsentAssembler {
     public function registerDTOtoAbsent(AbsentRegisterDTO $absentDTO, Absent $absent) {
         $absent->updateBasicData(
             $absentDTO->subject,
-            $this->dateTimeService->convertLocalDateTimeToUTCDateTime($absentDTO->startDate),
-            $this->dateTimeService->convertLocalDateTimeToUTCDateTime($absentDTO->endDate));
+            $absentDTO->startDate,
+            $absentDTO->endDate);
         return $absent;
     }
 
@@ -52,8 +52,8 @@ class AbsentAssembler {
         $absentDTO->id = $absent->getId();
         $absentDTO->personId = $absent->getPerson()->getId();
         $absentDTO->subject = $absent->getSubject();
-        $absentDTO->startDate = $this->dateTimeService->convertUTCDateTimeToLocalDateTime($absent->getStartDate());
-        $absentDTO->endDate = $this->dateTimeService->convertUTCDateTimeToLocalDateTime($absent->getEndDate());
+        $absent->getStartDate();
+        $absent->getEndDate();
         return $absentDTO;
     }
 
@@ -78,8 +78,8 @@ class AbsentAssembler {
         $absentEmbeddedListDTO->id = $absent->getId();
         $absentEmbeddedListDTO->personId = $absent->getPerson()->getId();
         $absentEmbeddedListDTO->subject = $absent->getSubject();
-        $absentEmbeddedListDTO->startDate = $this->dateTimeService->convertUTCDateTimeToLocalString($absent->getStartDate());
-        $absentEmbeddedListDTO->endDate = $this->dateTimeService->convertUTCDateTimeToLocalString($absent->getEndDate());
+        $absent->getStartDate();
+        $absent->getEndDate();
         return $absentEmbeddedListDTO;
     }
 

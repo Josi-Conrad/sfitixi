@@ -13,7 +13,7 @@
                 <form class="form-horizontal formViewBasic">
                     {% for row in basicFormRows %}
                         <div class="form-group">
-                            <label class="control-label col-md-4">{{ row.getFieldLabelText() }}</label>
+                            <label class="control-label col-md-4">{{ row.getFieldLabelText()|trans }}</label>
 
                             <div class="col-md-8">
                                 <p class="form-control-static">{{ row.getFieldValue() }}</p>
@@ -26,7 +26,7 @@
                 <form class="form-horizontal formViewExpanded">
                     {% for row in expandedFormRows %}
                         <div class="form-group">
-                            <label class="control-label col-md-4">{{ row.getFieldLabelText() }}</label>
+                            <label class="control-label col-md-4">{{ row.getFieldLabelText()|trans }}</label>
 
                             <div class="col-md-8">
                                 <p class="form-control-static">{{ row.getFieldValue() }}</p>

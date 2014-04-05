@@ -26,18 +26,18 @@ class PassengerDataGridController extends DataGridAbstractController {
     }
 
     public function getGridDisplayTitel() {
-        return 'Fahrgast';
+        return 'passenger.list.name';
     }
 
     public function createCustomControlTile() {
         $customControlTile = new DataGridCustomControlTile();
-        $selectionButton = $customControlTile->add(new SelectionButtonTile('Mit Auswahl'));
-        $selectionButton->add(new TextLinkListTile($this->generateUrl('tixiapi_passenger_editbasic', array('passengerId' => DataGridHandler::$dataGirdReplaceIdentifier)), 'Editieren', true));
-        $selectionButton->add(new TextLinkListTile($this->generateUrl('tixiapi_passenger_absent_new', array('passengerId' => DataGridHandler::$dataGirdReplaceIdentifier)), 'Neue Abwesenheit', true));
-        $selectionButton->add(new TextLinkListTile($this->generateUrl('tixiapi_passenger_editbasic', array('passengerId' => DataGridHandler::$dataGirdReplaceIdentifier)), 'Neuer Fahrauftrag', true));
+        $selectionButton = $customControlTile->add(new SelectionButtonTile('button.with.selection'));
+        $selectionButton->add(new TextLinkListTile($this->generateUrl('tixiapi_passenger_editbasic', array('passengerId' => DataGridHandler::$dataGirdReplaceIdentifier)), 'button.edit', true));
+        $selectionButton->add(new TextLinkListTile($this->generateUrl('tixiapi_passenger_absent_new', array('passengerId' => DataGridHandler::$dataGirdReplaceIdentifier)), 'absent.button.new', true));
+        $selectionButton->add(new TextLinkListTile($this->generateUrl('tixiapi_passenger_editbasic', array('passengerId' => DataGridHandler::$dataGirdReplaceIdentifier)), 'drivingorder.button.new', true));
         $selectionButton->add(new SelectionButtonDividerTile());
-        $selectionButton->add(new TextLinkListTile($this->generateUrl('tixiapi_passenger_editbasic', array('passengerId' => DataGridHandler::$dataGirdReplaceIdentifier)), 'Löschen', true));
-        $customControlTile->add(new LinkButtonTile($this->generateUrl('tixiapi_passenger_new'), 'Neuer Fahrgast', LinkButtonTile::$primaryType));
+        $selectionButton->add(new TextLinkListTile($this->generateUrl('tixiapi_passenger_editbasic', array('passengerId' => DataGridHandler::$dataGirdReplaceIdentifier)), 'button.delete', true));
+        $customControlTile->add(new LinkButtonTile($this->generateUrl('tixiapi_passenger_new'), 'passenger.button.new', LinkButtonTile::$primaryType));
         return $customControlTile;
     }
 

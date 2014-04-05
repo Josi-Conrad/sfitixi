@@ -20,27 +20,27 @@ class PassengerListDTO implements DataGridSourceClass {
      */
     public $isActive;
     /**
-     * @GridField(rowIdentifier=true, propertyId="Passenger.id", headerName="Fahrgast-Nr", order=1)
+     * @GridField(rowIdentifier=true, propertyId="Passenger.id", headerName="passenger.field.id", order=1)
      */
     public $id;
     /**
-     * @GridField(propertyId="Passenger.firstname", headerName="Vorname", order=3)
+     * @GridField(propertyId="Passenger.firstname", headerName="person.field.firstname", order=3)
      */
     public $firstname;
     /**
-     * @GridField(propertyId="Passenger.lastname", headerName="Nachname", order=4)
+     * @GridField(propertyId="Passenger.lastname", headerName="person.field.lastname", order=4)
      */
     public $lastname;
     /**
-     * @GridField(propertyId="Passenger.telephone", headerName="Telefon-Nr", order=5)
+     * @GridField(propertyId="Passenger.telephone", headerName="person.field.telephone", order=5)
      */
     public $telephone;
     /**
-     * @GridField(propertyId="Address.street", headerName="Strasse", order=7)
+     * @GridField(propertyId="Address.street", headerName="address.field.street", order=7)
      */
     public $street;
     /**
-     * @GridField(propertyId="Address.city", headerName="Ort", order=8)
+     * @GridField(propertyId="Address.city", headerName="address.field.city", order=8)
      */
     public $city;
 

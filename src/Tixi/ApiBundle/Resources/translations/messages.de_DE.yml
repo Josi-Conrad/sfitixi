@@ -1,7 +1,16 @@
+#Buttons
 button.back: Abbrechen
+button.search: Suchen
+button.edit: Editieren
+button.delete: Löschen
+button.with.selection: Mit Selektion
 more.details: Weitere Details >>
 less.details: << Weniger Details
 
+#Home
+home.panel.name: Home
+
+#Person
 person.field.isactive: Ist Aktiv
 person.field.title: Anrede
 person.title.male: Herr
@@ -15,22 +24,74 @@ person.field.birthday: Geburtsdatum
 person.field.extraminutes: Extra-Minuten
 person.field.details: Details
 
-driver.field.licence: Fahrausweis-Nr
-driver.field.wheelchair: Rollstuhlfahrten
-driver.field.category: Fahrerkategorie
-
-passenger.field.monthlybilling: Monatliche Rechnung
-passenger.field.notice: Notizen zum Fahrgast
-passenger.field.handicap: Behinderungen
-passenger.field.insurance: Versichert über
-
-absent.field.subject: Beschreibung
-absent.field.startdate: Start Datum
-absent.field.enddate: End Datum
-
+#Address
 address.field.street: Strasse / Nummer
 address.field.postal: PLZ
 address.field.city: Ort
 address.field.country: Land
 
-vehicle.panel: Fahrzeug
+#Driver
+driver.list.name: Fahrer
+driver.panel.name: Fahrer
+driver.panel.new: Neuer Fahrer
+driver.panel.details: Fahrer Details
+driver.panel.edit: Fahrer editieren
+driver.field.id: Fahrer-ID
+driver.field.licence: Fahrausweis-Nr
+driver.field.wheelchair: Rollstuhlfahrten
+driver.field.category: Fahrerkategorie
+driver.button.new: Neuer Fahrer
+
+#Passenger
+passenger.list.name: Fahrgast
+passenger.panel.name: Fahrgast
+passenger.panel.new: Neuer Fahrgast
+passenger.panel.details: Fahrgast Details
+passenger.panel.edit: Fahrgast editieren
+passenger.field.id:  Fahrgast-ID
+passenger.field.monthlybilling: Monatliche Rechnung
+passenger.field.notice: Notizen zum Fahrgast
+passenger.field.handicap: Behinderungen
+passenger.field.insurance: Versichert über
+passenger.button.new: Neuer Fahrgast
+
+#Absent
+absent.list.name: Abwesenheiten
+absent.panel.embedded: Zugeordnete Abwesenheiten
+absent.panel.details: Abwesenheit Details
+absent.panel.new: Neue Abwesenheit
+absent.panel.edit: Abwesenheit editieren
+absent.field.subject: Beschreibung
+absent.field.startdate: Start Datum
+absent.field.enddate: End Datum
+absent.button.new: Neue Abwesenheit
+
+#Vehicle
+vehicle.list.name: Fahrzeuge
+vehicle.field.name: Fahrzeugbezeichnung
+vehicle.field.licencenumber: Kennzeichen
+vehicle.field.dateoffirstregistration: Inverkehrssetzung
+vehicle.field.parkinglotnumber: Parkplatz
+vehicle.field.category: Fehrzeugkategorie
+vehicle.panel.name: Fahrzeug
+vehicle.panel.new: Neues Fahrzeug
+vehicle.panel.details: Fahrzeug Details
+vehicle.button.new: Neues Fahrzeug
+
+#Serviceplan
+serviceplan.list.name: Servicepläne
+serviceplan.field.startdate: Startdatum
+serviceplan.field.enddate: Enddatum
+serviceplan.field.memo: Notizen
+serviceplan.panel.embedded: Zugeordnete Servicepläne
+serviceplan.panel.name: Serviceplan
+serviceplan.panel.new: Neuer Serviceplan
+serviceplan.panel.edit: Serviceplan editieren
+serviceplan.panel.details: Servicplan Details
+serviceplan.button.new: Neuer Serviceplan
+
+#DrivingOrder
+drivingorder.button.new: Neuer Fahrauftrag
+
+#RepeatedDrivingMission
+repeateddrivingmission.button.new: Neuer Dauereinsatz

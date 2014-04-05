@@ -28,17 +28,17 @@ class PassengerAbsentDataGridController extends DataGridAbstractController{
 
     public function getGridDisplayTitel()
     {
-        return 'Abwesenheiten';
+        return 'absent.list.name';
     }
 
     public function createCustomControlTile()
     {
         $customControlTile = new DataGridCustomControlTile();
-        $selectionButton = $customControlTile->add(new SelectionButtonTile('Mit Auswahl'));
-        $selectionButton->add(new TextLinkListTile($this->generateUrl('tixiapi_passenger_absent_editbasic',array('passengerId'=>$this->routeProperties['passengerId'],'absentId'=>DataGridHandler::$dataGirdReplaceIdentifier)),'Editieren',true));
+        $selectionButton = $customControlTile->add(new SelectionButtonTile('button.with.selection'));
+        $selectionButton->add(new TextLinkListTile($this->generateUrl('tixiapi_passenger_absent_editbasic',array('passengerId'=>$this->routeProperties['passengerId'],'absentId'=>DataGridHandler::$dataGirdReplaceIdentifier)),'button.edit',true));
         $selectionButton->add(new SelectionButtonDividerTile());
-        $selectionButton->add(new TextLinkListTile($this->generateUrl('tixiapi_passenger_absent_editbasic',array('passengerId'=>$this->routeProperties['passengerId'],'absentId'=>DataGridHandler::$dataGirdReplaceIdentifier)),'Löschen',true));
-        $customControlTile->add(new LinkButtonTile($this->generateUrl('tixiapi_passenger_absent_new',array('passengerId'=>$this->routeProperties['passengerId'])), 'Neue Abwesenheit', LinkButtonTile::$primaryType));
+        $selectionButton->add(new TextLinkListTile($this->generateUrl('tixiapi_passenger_absent_editbasic',array('passengerId'=>$this->routeProperties['passengerId'],'absentId'=>DataGridHandler::$dataGirdReplaceIdentifier)),'button.delete',true));
+        $customControlTile->add(new LinkButtonTile($this->generateUrl('tixiapi_passenger_absent_new',array('passengerId'=>$this->routeProperties['passengerId'])), 'absent.button.new', LinkButtonTile::$primaryType));
         return $customControlTile;
     }
 
