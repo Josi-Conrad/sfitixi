@@ -41,6 +41,12 @@ class Driver extends Person {
      */
     protected $wheelChairAttendance;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Tixi\CoreDomain\Dispo\RepeatedDrivingAssertionPlan")
+     * @ORM\JoinColumn(name="repeated_driving_assertion_plan", referencedColumnName="id")
+     */
+    protected $repeatedDrivingAssertionPlans;
+
     protected function __construct($title, $firstname, $lastname, $telephone, $address,
                                    $email = null, $entryDate = null, $birthday = null,
                                    $extraMinutes = null, $details = null) {
@@ -49,6 +55,7 @@ class Driver extends Person {
             $email, $entryDate, $birthday, $extraMinutes, $details);
 
         $this->supervisedVehicles = new ArrayCollection();
+        $this->$repeatedDrivingAssertionPlans = new ArrayCollection();
     }
 
     /**
@@ -153,6 +160,7 @@ class Driver extends Person {
     public function getSupervisedVehicles() {
         return $this->supervisedVehicles;
     }
+
 
     /**
      * @param mixed $driverCategory

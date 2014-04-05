@@ -37,6 +37,7 @@ class RepeatedDrivingAssertionController extends Controller{
     public function newMonthlyAssertionAction(Request $request, $driverId) {
         $tileRenderer = $this->get('tixi_api.tilerenderer');
         $shiftTypeRepository = $this->get('shifttype_repository');
+        $assertionPlanRepository = $this->get('repeateddrivingassertionplan_repository');
 
         $shifts = array();
         $shifts[] = $shiftTypeRepository->find(1);
@@ -62,6 +63,16 @@ class RepeatedDrivingAssertionController extends Controller{
         $rootPanel->add(new RepeatedMonthlyAssertionTile('monthlyAssertion',$form));
 
         return new Response($tileRenderer->render($rootPanel));
+    }
+
+    protected function registerOrUpdateAssertionPlan(VehicleRegisterDTO $vehicleDTO) {
+        if (is_null($vehicleDTO->id)) {
+            $vehicle = $this->get('tixi_api.assemblervehicle')->registerDTOtoNewVehicle($vehicleDTO);
+            $this->get('vehicle_repository')->store($vehicle);
+        } else {
+            $vehicle = $this->get('vehicle_repository')->find($vehicleDTO->id);
+            $this->get('tixi_api.assemblervehicle')->registerDTOToVehicle($vehicle, $vehicleDTO);
+        }
     }
 
 } 
