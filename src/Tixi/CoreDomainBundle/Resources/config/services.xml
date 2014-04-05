@@ -36,6 +36,10 @@
 
         <parameter key="route.doctrine.entity">Tixi\CoreDomain\Dispo\Route</parameter>
         <parameter key="route_repository.doctrine.class">Tixi\CoreDomainBundle\Repository\Dispo\RouteRepositoryDoctrine</parameter>
+        <parameter key="shifttype.doctrine.entity">Tixi\CoreDomain\Dispo\ShiftType</parameter>
+        <parameter key="shifttype_repository.doctrine.class">Tixi\CoreDomainBundle\Repository\Dispo\ShiftTypeRepositoryDoctrine</parameter>
+        <parameter key="repeateddrivingassertionplan.doctrine.entity">Tixi\CoreDomain\Dispo\RepeatedDrivingAssertionPlan</parameter>
+        <parameter key="repeateddrivingassertionplan_repository.doctrine.class">Tixi\CoreDomainBundle\Repository\Dispo\RepeatedDrivingAssertionPlanRepository</parameter>
 
     </parameters>
 
@@ -116,6 +120,16 @@
         <service id="route_repository" alias="route_repository.doctrine"></service>
         <service id="route_repository.doctrine" class="%route_repository.doctrine.class%" factory-service="doctrine" factory-method="getrepository">
             <argument type="string">%route.doctrine.entity%</argument>
+        </service>
+
+        <service id="shifttype_repository" alias="shifttype_repository.doctrine"></service>
+        <service id="shifttype_repository.doctrine" class="%shifttype_repository.doctrine.class%" factory-service="doctrine" factory-method="getrepository">
+            <argument type="string">%shifttype.doctrine.entity%</argument>
+        </service>
+
+        <service id="repeateddrivingassertionplan_repository" alias="repeateddrivingassertionplan_repository.doctrine"></service>
+        <service id="repeateddrivingassertionplan_repository.doctrine" class="%repeateddrivingassertionplan_repository.doctrine.class%" factory-service="doctrine" factory-method="getrepository">
+            <argument type="string">%repeateddrivingassertionplan.doctrine.entity%</argument>
         </service>
 
     </services>

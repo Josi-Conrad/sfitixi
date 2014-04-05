@@ -18,13 +18,13 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class RepeatedMonthlyDrivingAssertion extends RepeatedDrivingAssertion{
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="string", length=9)
      */
-    protected $weekday;
+    protected $weekdayAsText;
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="string", length=6)
      */
-    protected $week;
+    protected $relativeWeekAsText;
     /**
      * @ORM\Column(type="integer")
      */

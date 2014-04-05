@@ -8,6 +8,7 @@
 
 namespace Tixi\CoreDomain\Dispo;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -28,13 +29,36 @@ abstract class RepeatedDrivingAssertion implements DrivingAssertionInterface {
      */
     protected $id;
     /**
-     * @ORM\Column(type="datetime", nullable=true)
+     * @ORM\ManyToMany(targetEntity="ShiftType")
+     * @ORM\JoinTable(name="repeateddrivingassertion_to_shifttypes",
+     *      joinColumns={@ORM\JoinColumn(name="repeateddrivingassertion_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="shifttype_id", referencedColumnName="id")})
      */
-    protected $anchorDate;
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    protected $endingDate;
+    protected $shiftTypes;
+
+    public function __construct() {
+        $this->shiftTypes = new ArrayCollection();
+    }
+
+    public function replaceShiftTypes(ArrayCollection $shiftTypes) {
+        $this->shiftTypes = $shiftTypes;
+    }
 
     public abstract function matching(Shift $shift);
+
+    /**
+     * @param mixed $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 }
