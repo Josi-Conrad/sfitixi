@@ -8,16 +8,9 @@
 
 namespace Tixi\ApiBundle\Interfaces;
 
-
-use Tixi\ApiBundle\Helper\DateTimeService;
 use Tixi\CoreDomain\Absent;
 
 class AbsentAssembler {
-
-    //injected by service container via setter method
-    /** @var $dateTimeService  DateTimeService */
-    private $dateTimeService;
-
     /**
      * @param AbsentRegisterDTO $absentDTO
      * @return Absent
@@ -52,8 +45,8 @@ class AbsentAssembler {
         $absentDTO->id = $absent->getId();
         $absentDTO->personId = $absent->getPerson()->getId();
         $absentDTO->subject = $absent->getSubject();
-        $absent->getStartDate();
-        $absent->getEndDate();
+        $absentDTO->startDate = $this->convertDateToString($absent->getStartDate());
+        $absentDTO->endDate = $this->convertDateToString($absent->getEndDate());
         return $absentDTO;
     }
 
@@ -78,17 +71,22 @@ class AbsentAssembler {
         $absentEmbeddedListDTO->id = $absent->getId();
         $absentEmbeddedListDTO->personId = $absent->getPerson()->getId();
         $absentEmbeddedListDTO->subject = $absent->getSubject();
-        $absent->getStartDate();
-        $absent->getEndDate();
+        $absentEmbeddedListDTO->startDate = $this->convertDateToString($absent->getStartDate());
+        $absentEmbeddedListDTO->endDate = $this->convertDateToString($absent->getEndDate());
         return $absentEmbeddedListDTO;
     }
 
-    /**
-     * @param $dateTimeService
-     * Injected by service container
-     */
-    public function setDateTimeService(DateTimeService $dateTimeService) {
-        $this->dateTimeService = $dateTimeService;
+    private function convertStringToDate($string){
+        $date = \DateTime::createFromFormat('d.m.Y', $string);
+        if ($date) {
+            $newDate = clone $date;
+            return $newDate;
+        }
+        return $date;
     }
 
+    private function convertDateToString($date){
+        $stringDate = clone $date;
+        return $stringDate->format('d.m.Y');
+    }
 }

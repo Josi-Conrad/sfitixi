@@ -57,9 +57,6 @@ class UserTest extends WebTestCase {
         $user_find = $this->userRepo->find($user3->getId());
         $this->assertEquals($user3, $user_find);
 
-        $user1->setUsername('travis');
-        $this->userRepo->store($user1);
-
     }
 
     /**

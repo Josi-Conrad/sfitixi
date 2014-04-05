@@ -9,19 +9,11 @@
 namespace Tixi\SecurityBundle\Repository;
 
 
+use Tixi\CoreDomainBundle\Repository\CommonBaseRepositoryDoctrine;
 use Tixi\SecurityBundle\Entity\Role;
 use Tixi\SecurityBundle\Entity\RoleRepository;
-use Doctrine\ORM\EntityRepository;
 
-class RoleRepositoryDoctrine extends EntityRepository implements RoleRepository {
-
-    public function find($id) {
-        return parent::find($id);
-    }
-
-    public function findAll() {
-        return $this->findAllBy();
-    }
+class RoleRepositoryDoctrine extends CommonBaseRepositoryDoctrine implements RoleRepository {
 
     public function store(Role $role) {
         $this->getEntityManager()->persist($role);
@@ -29,9 +21,5 @@ class RoleRepositoryDoctrine extends EntityRepository implements RoleRepository 
 
     public function remove(Role $role) {
         $this->getEntityManager()->remove($role);
-    }
-
-    public function findOneBy(array $criteria, array $orderBy = null){
-        return parent::findOneBy($criteria, $orderBy);
     }
 }

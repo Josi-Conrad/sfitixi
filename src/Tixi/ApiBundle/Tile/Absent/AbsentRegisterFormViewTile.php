@@ -16,12 +16,8 @@ class AbsentRegisterFormViewTile extends AbstractFormViewTile{
 
     public function createFormRows()
     {
-        $this->basicFormRows[] = new FormRowView('Beschreibung',$this->dto->subject);
-        $this->basicFormRows[] = new FormRowView('Start Datum',$this->dto->startDate);
-        $this->basicFormRows[] = new FormRowView('End Datum',$this->dto->endDate);
-    }
-
-    private function dateToString($date){
-        return $date->format('d.m.Y');
+        $this->basicFormRows[] = new FormRowView('absent.field.subject',$this->dto->subject);
+        $this->basicFormRows[] = new FormRowView('absent.field.startdate',$this->dto->startDate);
+        $this->basicFormRows[] = new FormRowView('absent.field.enddate',$this->dto->endDate);
     }
 }
