@@ -13,7 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class AddressRegisterDTO {
     //Address
     public $address_id;
-    public $name;
+    public $address_name;
     public $street;
     /**
      * @Assert\Length(min = "4", max = "6",

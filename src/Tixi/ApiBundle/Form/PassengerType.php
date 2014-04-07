@@ -48,7 +48,7 @@ class PassengerType extends PersonType {
             'label' => 'address.field.street'
         ));
         $builder->add('postalCode', 'text', array(
-            'label' => 'address.field.postal'
+            'label' => 'address.field.postalcode'
         ));
         $builder->add('city', 'text', array(
             'label' => 'address.field.city'

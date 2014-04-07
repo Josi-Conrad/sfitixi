@@ -18,6 +18,7 @@
         <parameter key="tixi_api.datagridhandler.class">Tixi\ApiBundle\Shared\DataGrid\DataGridHandler</parameter>
         <parameter key="tixi_api.datagridcontrollerfactory.class">Tixi\ApiBundle\Shared\DataGrid\DataGridControllerFactory</parameter>
         <parameter key="tixi_api.userassembler.class">Tixi\ApiBundle\Interfaces\UserAssembler</parameter>
+        <parameter key="tixi_api.poiassembler.class">Tixi\ApiBundle\Interfaces\POIAssembler</parameter>
     </parameters>
 
     <services>
@@ -73,7 +74,7 @@
 
         <service id="tixi_api.assemblerAbsent" class="%tixi_api.absentassembler.class%"/>
         <service id="tixi_api.assemblerUser" class="%tixi_api.userassembler.class%"/>
-
+        <service id="tixi_api.assemblerPOI" class="%tixi_api.poiassembler.class%"/>
     </services>
 
 </container>

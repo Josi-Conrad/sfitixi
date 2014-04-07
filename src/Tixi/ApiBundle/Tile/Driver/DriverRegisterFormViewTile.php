@@ -24,9 +24,6 @@ class DriverRegisterFormViewTile extends AbstractFormViewTile {
         $this->basicFormRows[] = new FormRowView('person.field.firstname', $dto->firstname);
         $this->basicFormRows[] = new FormRowView('person.field.lastname', $dto->lastname);
         $this->basicFormRows[] = new FormRowView('person.field.telephone', $dto->telephone);
-        $this->basicFormRows[] = new FormRowView('address.field.street', $dto->street);
-        $this->basicFormRows[] = new FormRowView('address.field.postalcode', $dto->postalCode);
-        $this->basicFormRows[] = new FormRowView('address.field.city', $dto->city);
         $this->basicFormRows[] = new FormRowView('person.field.email', $dto->email);
 
         $this->expandedFormRows[] = new FormRowView('address.field.street', $dto->street);
