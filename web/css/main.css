@@ -56,6 +56,13 @@
     padding-bottom: 24px;
 }
 
+/*##### Driving Assertions #####*/
+.monthlyPart {
+    display: none;
+}
+
+/*##### Global #####*/
+
 input:required:invalid {
-    background-color: #eb9a92!important;
+    /*background-color: #eb9a92!important;*/
 }

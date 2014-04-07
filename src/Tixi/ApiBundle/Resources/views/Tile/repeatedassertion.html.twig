@@ -5,32 +5,105 @@
         {% endif %}
     {% endfor %}
 </div>
-<div class="row">
-    {{ form_start(form, {'attr':{'id':formId, 'class':'form-horizontal customForm'} }) }}
-    <div class="col-md-6">
-        {{ form_row(form.memo) }}
+
+{{ form_start(form, {'attr':{'id':formId, 'class':'form-horizontal customForm'} }) }}
+<div class="row" style="">
+    <div class="col-md-4">
+        <div class="row">
+            <div class="form-group">
+                <div class="col-md-2">
+                    {{ form_label(form.memo, null, {'label_attr': {'class':'col-md-2 control-label'}}) }}
+                </div>
+                <div class="col-md-8">
+                    {{ form_widget(form.memo, { 'attr': {'class': 'form-control'} }) }}
+                    <p class="help-block">{{ form_errors(form.memo) }}</p>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="col-md-6">
-        {{ form_row(form.anchorDate) }}
-        {{ form_row(form.endDate) }}
-        {{ form_row(form.frequency) }}
-        {{ form_row(form.withHolidays) }}
+    <div class="col-md-2">
+        <div class="row">
+            <div class="form-group">
+                <div class="col-md-2">
+                    {{ form_label(form.anchorDate, null, {'label_attr': {'class':'col-md-2 control-label'}}) }}
+                </div>
+                <div class="col-md-9">
+                    {{ form_widget(form.anchorDate, { 'attr': {'class': 'form-control'} }) }}
+                    <p class="help-block">{{ form_errors(form.anchorDate) }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="row">
+            <div class="form-group">
+                <div class="col-md-2">
+                    {{ form_label(form.endDate, null, {'label_attr': {'class':'col-md-2 control-label'}}) }}
+                </div>
+                <div class="col-md-9">
+                    {{ form_widget(form.endDate, { 'attr': {'class': 'form-control'} }) }}
+                    <p class="help-block">{{ form_errors(form.endDate) }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="row">
+            <div class="col-md-10 col-lg-offset-2">
+                {{ form_widget(form.frequency, { 'attr': {'class': 'form-control repeatedDrivingAssertionFrequencyControl'} }) }}
+            </div>
+        </div>
+
+    </div>
+    <div class="col-md-2">
+        <div class="checkbox">
+            <label>
+                {{ form_widget(form.withHolidays) }} {{ form_label(form.withHolidays) }}
+            </label>
+        </div>
     </div>
 </div>
 <div class="row weeklyPart">
-    <div class="col-md-6">
+    <div class="col-md-4">
         <div class="row">
-            {{ form_row(form.weeklyDaysSelector) }}
+            <div class="col-md-12">
+                <h4 class="text-muted">Wählen Sie bitte die Wochentage, an denen gefahren werden soll:</h4>
+            </div>
+            <div class="col-md-12">
+                <div class="weeklyDaySelection">
+                    {% for checkbox in form.weeklyDaysSelector %}
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="checkbox">
+                                    <label>
+                                        {{ form_widget(checkbox) }} {{ form_label(checkbox) }}
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            {#{{ form_row(form.weeklyDaysSelector) }}#}
         </div>
     </div>
-    <div class="col-md-6">
-        <ul class="weeklyShiftSelections"
-            data-prototype="{{ form_widget(form.weeklyShiftSelections.vars.prototype)|e }}">
-            {% for selection in form.weeklyShiftSelections %}
-                <li>  {{ form_errors(selection) }}
-                    {{ form_widget(selection) }}</li>
-            {% endfor %}
-        </ul>
+    <div class="col-md-4">
+        <div class="row">
+            <div class="col-md-12">
+                <h4 class="text-muted">Wählen Sie bitte die Schichten, an denen gefahren werden soll:</h4>
+            </div>
+            <div class="col-md-12">
+                <ul class="weeklyShiftSelections"
+                    data-prototype="{{ form_widget(form.weeklyShiftSelections.vars.prototype)|e }}">
+                    {% for selection in form.weeklyShiftSelections %}
+                        {{ form_errors(selection) }}
+                        {{ form_widget(selection) }}
+                    {% endfor %}
+                </ul>
+                {{ form_widget(form.weeklyShiftSelections) }}
+            </div>
+        </div>
     </div>
 </div>
 <div class="row monthlyPart">
@@ -69,12 +142,15 @@
                     {{ form_widget(selection) }}</li>
             {% endfor %}
         </ul>
+        {{ form_widget(form.monthlyShiftSelections) }}
     </div>
 </div>
 {{ form_end(form) }}
-</div>
+<script type="text/javascript" src="{{ asset('bundles/tixiapi/js/drivingAssertion.js') }}"></script>
 <script type="text/javascript">
     jQuery(function ($) {
-        new FormMonthlyAssertionController();
+        var _repeatedDrivingController = new RepeatedDrivingAssertion();
+        _repeatedDrivingController.init();
     });
 </script>
+

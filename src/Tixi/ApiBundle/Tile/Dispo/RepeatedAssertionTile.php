@@ -2,8 +2,8 @@
 /**
  * Created by PhpStorm.
  * User: faustos
- * Date: 06.04.14
- * Time: 13:48
+ * Date: 05.04.14
+ * Time: 09:57
  */
 
 namespace Tixi\ApiBundle\Tile\Dispo;
@@ -11,6 +11,7 @@ namespace Tixi\ApiBundle\Tile\Dispo;
 
 use Tixi\ApiBundle\Tile\AbstractTile;
 use Tixi\ApiBundle\Tile\Core\FormControlTile;
+use Tixi\ApiBundle\Tile\Core\FormTile;
 
 class RepeatedAssertionTile extends AbstractTile{
 

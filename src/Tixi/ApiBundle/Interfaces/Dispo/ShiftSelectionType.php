@@ -26,7 +26,7 @@ class ShiftSelectionType extends AbstractType{
             'property' => 'name',
             'expanded' => true,
             'multiple' => true,
-            'label' => 'Schichten'
+            'label' => '__label__'
         ));
     }
 

@@ -20,7 +20,7 @@ use Tixi\ApiBundle\Interfaces\Dispo\RepeatedDrivingAssertionRegisterDTO;
 use Tixi\ApiBundle\Interfaces\Dispo\ShiftSelectionDTO;
 use Tixi\ApiBundle\Tile\Core\FormTile;
 use Tixi\ApiBundle\Tile\Core\RootPanel;
-use Tixi\ApiBundle\Tile\Dispo\RepeatedMonthlyAssertionTile;
+use Tixi\ApiBundle\Tile\Dispo\RepeatedAssertionTile;
 
 /**
  * Class RepeatedDrivingAssertionController
@@ -60,7 +60,7 @@ class RepeatedDrivingAssertionController extends Controller{
         }
 
         $rootPanel = new RootPanel('tixiapi_drivers_get', 'Dauereinsatz');
-        $rootPanel->add(new RepeatedMonthlyAssertionTile('monthlyAssertion',$form));
+        $rootPanel->add(new RepeatedAssertionTile('monthlyAssertion',$form));
 
         return new Response($tileRenderer->render($rootPanel));
     }
