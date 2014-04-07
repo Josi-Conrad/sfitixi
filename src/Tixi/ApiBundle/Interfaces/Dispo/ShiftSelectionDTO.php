@@ -10,6 +10,7 @@ namespace Tixi\ApiBundle\Interfaces\Dispo;
 
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Tixi\CoreDomain\Dispo\ShiftType;
 
 class ShiftSelectionDTO {
 
@@ -35,7 +36,6 @@ class ShiftSelectionDTO {
     {
         return $this->shiftSelection;
     }
-
 
 
 } 

@@ -5,8 +5,8 @@
         {% endif %}
     {% endfor %}
 </div>
-{{ form_start(form, {'attr':{'id':formId, 'class':'form-horizontal customForm'} }) }}
 <div class="row">
+    {{ form_start(form, {'attr':{'id':formId, 'class':'form-horizontal customForm'} }) }}
     <div class="col-md-6">
         {{ form_row(form.memo) }}
     </div>

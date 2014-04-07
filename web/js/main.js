@@ -76,7 +76,7 @@ function FormViewController(formViewId) {
 function FormMonthlyAssertionController() {
     var _this = this;
 
-    this._shiftSelectionHolder = $('.shiftSelections');
+    this._shiftSelectionHolder = $('.monthlyShiftSelections');
     this._shiftSelectionIndex = null;
     this._shiftSelections = new Array();
 
@@ -94,7 +94,7 @@ function FormMonthlyAssertionController() {
     }
 
     this._initListeners = function() {
-        $('#repeadedMonthlySelection_firstWeeklySelector input').on('change', function() {
+        $('#repeatedDrivingAssertion_monthlyFirstWeeklySelector input').on('change', function() {
             _this._onSelectorChange(this, 'First');
         });
     }
@@ -129,7 +129,7 @@ function FormMonthlyAssertionController() {
             _newSelection = _prototype.replace(/__name__/g, _index),
             _selectionDomElement = $('<li></li>').append(_newSelection);
         _this._shiftSelectionHolder.append(_selectionDomElement);
-        $('#repeadedMonthlySelection_shiftSelections_'+_index+'_selectionId').val(selectedOccurency+'_'+selectedDay);
+        $('#repeatedDrivingAssertion_monthlyShiftSelections_'+_index+'_selectionId').val(_this._constructSelectionId(selectedOccurency,selectedDay));
         _this._shiftSelections.push(new ShiftSelection(_this._constructSelectionId(selectedOccurency, selectedDay), _selectionDomElement));
     }
 

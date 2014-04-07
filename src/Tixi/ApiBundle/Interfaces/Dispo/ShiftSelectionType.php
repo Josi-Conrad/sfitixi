@@ -15,6 +15,7 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class ShiftSelectionType extends AbstractType{
 
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('selectionId','hidden', array(

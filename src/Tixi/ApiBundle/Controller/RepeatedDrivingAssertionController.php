@@ -12,11 +12,11 @@ namespace Tixi\ApiBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Tixi\ApiBundle\Form\Dispo\RepeatedMonthlyDrivingAssertionType;
+use Tixi\ApiBundle\Form\Dispo\RepeatedDrivingAssertionType;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Tixi\ApiBundle\Interfaces\Dispo\RepeatedMonthlyDrivingAssertionRegisterDTO;
+use Tixi\ApiBundle\Interfaces\Dispo\RepeatedDrivingAssertionRegisterDTO;
 use Tixi\ApiBundle\Interfaces\Dispo\ShiftSelectionDTO;
 use Tixi\ApiBundle\Tile\Core\FormTile;
 use Tixi\ApiBundle\Tile\Core\RootPanel;
@@ -48,10 +48,10 @@ class RepeatedDrivingAssertionController extends Controller{
 //        $shiftSelectionDTO->getShiftSelection()->add($shifts[0]);
 //        $shiftSelectionDTO->getShiftSelection()->add($shifts[1]);
 
-        $assertionDTO = new RepeatedMonthlyDrivingAssertionRegisterDTO();
+        $assertionDTO = new RepeatedDrivingAssertionRegisterDTO();
 //        $assertionDTO->getShiftSelections()->add($shiftSelectionDTO);
 
-        $form = $this->createForm(new RepeatedMonthlyDrivingAssertionType(), $assertionDTO);
+        $form = $this->createForm(new RepeatedDrivingAssertionType(), $assertionDTO);
         $form->handleRequest($request);
         if ($form->isValid()) {
             $assertionFormDTO = $form->getData();
