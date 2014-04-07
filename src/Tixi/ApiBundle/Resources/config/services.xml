@@ -51,11 +51,6 @@
                 <argument type="service" id="tixi_api.datetimeservice" />
             </call>
         </service>
-        <service id="tixi_api.assemblerAbsent" class="%tixi_api.absentassembler.class%">
-            <call method="setDateTimeService">
-                <argument type="service" id="tixi_api.datetimeservice" />
-            </call>
-        </service>
         <service id="tixi_api.repeatedDrivingAssertionAssembler" class="%tixi_api.repeateddrivingassertionassembler.class%"></service>
         <service id="tixi_api.tilerenderer" class="%tixi_api.tilerenderer.class%">
             <call method="setTemplateEngine">
