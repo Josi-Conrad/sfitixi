@@ -3,8 +3,9 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title></title>
+    <title>iTixi</title>
     <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
 
     <link rel="stylesheet" href="{{ asset('css/bootstrap.css') }}">
     <style>
@@ -27,10 +28,11 @@
         <div class="header">
             <div class="pull-left">
                 <h3 class="text-muted">
+                    <img src="{{ asset('images/logo32px.png') }}" alt="Logo iTIXI"/>
                     iTixi 2.0.2
                 </h3>
             </div>
-
+            <div class="pull-right">
             {% if is_granted('IS_AUTHENTICATED_FULLY') %}
 
                 {% include '::topAction.html.twig' %}
@@ -40,14 +42,26 @@
                 {% include '::topActionLogin.html.twig' %}
 
             {% endif %}
-
+            </div>
             <div class="clearfix"></div>
         </div>
         {% include '::topNavigation.html.twig' %}
     </section>
-    <div class="row">
-        {{ apy_breadcrumb_trail_render() }}
-    </div>
+    <section>
+        <div class="pull-left">
+            <div class="row">
+                {{ apy_breadcrumb_trail_render() }}
+            </div>
+        </div>
+        <div class="pull-right">
+            <div class="row">
+                <div class="btn-group-main">
+                    <!--<a href="{{ path('tixiapi_users_get') }}">{% trans %}user.management{% endtrans %}</a>-->
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="clearfix"></div>
     <div class="row">
         {% block body %}{% endblock %}
     </div>

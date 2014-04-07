@@ -35,14 +35,52 @@ class User implements UserInterface, \Serializable {
     private $username;
 
     /**
+     * @ORM\Column(type="string", length=50, nullable=true)
+     */
+    private $email;
+
+    /**
      * @ORM\Column(type="string", length=255)
      */
     private $password;
 
     public function __construct() {
         $this->roles = new ArrayCollection();
-        $this->salt = sha1(uniqid(null, true));
+        //$this->salt = sha1(uniqid(null, true)); //only without bcrypt necessary
         $this->activate();
+    }
+
+    /**
+     * @param $username
+     * @param $password
+     * @param null $email
+     * @return User
+     */
+    public static function registerUser($username, $password, $email = null) {
+        $user = new User();
+        $user->setUsername($username);
+        $user->setPassword($password);
+        if (!empty($email)) {
+            $user->setEmail($email);
+        }
+        return $user;
+    }
+
+    /**
+     * @param null $username
+     * @param null $password
+     * @param null $email
+     */
+    public function updateBasicData($username = null, $password = null, $email = null) {
+        if (!empty($username)) {
+            $this->setUsername($username);
+        }
+        if (!empty($password)) {
+            $this->setPassword($password);
+        }
+        if (!empty($email)) {
+            $this->setEmail($email);
+        }
     }
 
     public function activate() {
@@ -56,18 +94,34 @@ class User implements UserInterface, \Serializable {
     /**
      * @param Role $role
      */
-    public function assignRole($role)
-    {
+    public function assignRole($role) {
         $role->assignUser($this);
         $this->roles->add($role);
     }
 
     /**
+     * @param mixed $email
+     */
+    public function setEmail($email) {
+        $this->email = $email;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getEmail() {
+        return $this->email;
+    }
+
+    /**
      * @return ArrayCollection
      */
-    public function getRoles()
-    {
+    public function getRoles() {
         return $this->roles->toArray();
+    }
+
+    public function getRolesEntity() {
+        return $this->roles;
     }
 
     public function getId() {

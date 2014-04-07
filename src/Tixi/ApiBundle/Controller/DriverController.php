@@ -26,7 +26,7 @@ use Tixi\ApiBundle\Tile\Driver\DriverRegisterFormViewTile;
  * Class DriverController
  * @package Tixi\ApiBundle\Controller
  * @Route("/drivers")
- * @Breadcrumb("driver.panel.new", route="tixiapi_drivers_get")
+ * @Breadcrumb("driver.panel.name", route="tixiapi_drivers_get")
  */
 class DriverController extends Controller {
     /**

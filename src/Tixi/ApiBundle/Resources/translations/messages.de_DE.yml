@@ -2,6 +2,8 @@
 button.back: Abbrechen
 button.search: Suchen
 button.edit: Editieren
+button.login: Login
+button.logout: Logout
 button.delete: Löschen
 button.with.selection: Mit Selektion
 more.details: Weitere Details >>
@@ -10,7 +12,33 @@ less.details: << Weniger Details
 #Home
 home.panel.name: Home
 
+#Disposition
+disposition.panel.name: Disposition
+
+#Prepare
+prepare.panel.name: Bereitstellen
+
+#POI
+poi.panel.name: OVI
+
+#User
+user.management: Benutzerverwaltung
+user.field.username: Benutzername
+user.field.password: Passwort
+user.field.roles: Berechtigungen
+user.field.email: E-Mail
+user.list.name: Benutzer
+user.button.new: Neuer Benutzer
+user.panel.name: Benutzer
+user.panel.new: Neuer Benutzer
+user.panel.details: Benutzer Details
+user.panel.edit: Benutzer editieren
+user.role.user: Benutzer
+user.role.manager: Manager
+user.role.admin: Administrator
+
 #Person
+person.field.age: Alter
 person.field.isactive: Ist Aktiv
 person.field.title: Anrede
 person.title.male: Herr

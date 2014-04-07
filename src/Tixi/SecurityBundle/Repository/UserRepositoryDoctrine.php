@@ -9,19 +9,11 @@
 namespace Tixi\SecurityBundle\Repository;
 
 
+use Tixi\CoreDomainBundle\Repository\CommonBaseRepositoryDoctrine;
 use Tixi\SecurityBundle\Entity\User;
 use Tixi\SecurityBundle\Entity\UserRepository;
-use Doctrine\ORM\EntityRepository;
 
-class UserRepositoryDoctrine extends EntityRepository implements UserRepository {
-
-    public function find($id) {
-        return parent::find($id);
-    }
-
-    public function findAll() {
-        return $this->findAllBy();
-    }
+class UserRepositoryDoctrine extends CommonBaseRepositoryDoctrine implements UserRepository {
 
     public function store(User $user) {
         $this->getEntityManager()->persist($user);
@@ -30,7 +22,6 @@ class UserRepositoryDoctrine extends EntityRepository implements UserRepository 
     public function remove(User $user) {
         $this->getEntityManager()->remove($user);
     }
-
 
     public function findByUserName($username) {
         $userQuery = parent::createQueryBuilder('u')
@@ -48,9 +39,5 @@ class UserRepositoryDoctrine extends EntityRepository implements UserRepository 
             throw new UsernameNotFoundException($message, 0, $e);
         }
         return $user;
-    }
-
-    public function findOneBy(array $criteria, array $orderBy = null){
-        return parent::findOneBy($criteria, $orderBy);
     }
 }
