@@ -13,28 +13,30 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
-use Tixi\ApiBundle\Form\Shared\DatePickerType;
 
-class DriverType extends PersonType {
+class POIType extends AbstractType{
 
     public function buildForm(FormBuilderInterface $builder, array $options) {
 
         parent::buildForm($builder,$options);
 
-        $builder->add('licenceNumber', 'text', array(
-            'label' => 'driver.field.licence',
+        $builder->add('name', 'text', array(
+            'label' => 'poi.field.name',
             'constraints' => array(
                 new NotBlank(array('message'=>'vehicle.nr.not_blank'))
             )
         ));
-        $builder->add('wheelChairAttendance', 'checkbox', array(
-            'label' => 'driver.field.wheelchair'
+        $builder->add('department', 'text', array(
+            'label' => 'poi.field.department'
+        ));
+        $builder->add('telephone', 'text', array(
+            'label' => 'poi.field.telephone'
         ));
 
-        $builder->add('driverCategory', 'entity', array(
-            'class' => 'Tixi\CoreDomain\DriverCategory',
+        $builder->add('keywords', 'entity', array(
+            'class' => 'Tixi\CoreDomain\POIKeyword',
             'property' => 'name',
-            'label' => 'driver.field.category'
+            'label' => 'poi.field.keyword'
         ));
 
         $builder->add('street', 'text', array(
@@ -57,12 +59,12 @@ class DriverType extends PersonType {
      * @return string The name of this type
      */
     public function getName() {
-        return 'driver';
+        return 'poi';
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver) {
         $resolver->setDefaults(array(
-            'data_class' => 'Tixi\ApiBundle\Interfaces\DriverRegisterDTO'
+            'data_class' => 'Tixi\ApiBundle\Interfaces\POIRegisterDTO'
         ));
     }
 }
