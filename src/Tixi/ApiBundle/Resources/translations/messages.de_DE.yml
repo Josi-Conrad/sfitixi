@@ -102,6 +102,7 @@ shift5.name: Schicht 5
 
 #RepeatedDrivingMission
 repeateddrivingmission.panel.new: Neuer Dauereinsatz
+repeateddrivingmission.panel.edit: Dauereinsatz editieren
 repeateddrivingmission.button.new: Neuer Dauereinsatz
 repeateddrivingmission.field.memo: Memo
 repeateddrivingmission.field.anchordate: Ab
@@ -126,7 +127,7 @@ wednesday.name: Mittwoch
 thursday.name: Donnerstag
 friday.name: Freitag
 saturday.name: Samstag
-sonday.name: Sonntag
+sunday.name: Sonntag
 
 monday.abbreviation.name: Mo
 tuesday.abbreviation.name: Di
@@ -134,4 +135,4 @@ wednesday.abbreviation.name: Mi
 thursday.abbreviation.name: Do
 friday.abbreviation.name: Fr
 saturday.abbreviation.name: Sa
-sonday.abbreviation.name: So
+sunday.abbreviation.name: So

@@ -32,40 +32,58 @@ use Tixi\CoreDomainBundle\Repository\Dispo\RepeatedDrivingAssertionRepositoryDoc
  * Class RepeatedDrivingAssertionController
  * @package Tixi\ApiBundle\Controller
  *
- * @Route("/drivers/{driverId}/assertions/repeated")
+ * @Route("/drivers/{driverId}/repeatedassertionplan")
  * @Breadcrumb("driver.panel.name", route="tixiapi_drivers_get")
  */
 class RepeatedDrivingAssertionController extends Controller{
 
     /**
-     * @Route("/new", name="tixiapi_dispo_assertionMonthly")
+     * @Route("/new", name="tixiapi_driver_repeatedassertionplan_new")
      * @Method({"GET","POST"})
      * @Breadcrumb("{driverId}", route={"name"="tixiapi_driver_get", "parameters"={"driverId"}})
      * @Breadcrumb("repeateddrivingmission.panel.new")
      */
-    public function newMonthlyAssertionAction(Request $request, $driverId) {
+    public function newRepeatedAssertionPlanAction(Request $request, $driverId) {
         $tileRenderer = $this->get('tixi_api.tilerenderer');
-        $shiftTypeRepository = $this->get('shifttype_repository');
-        $assertionPlanRepository = $this->get('repeateddrivingassertionplan_repository');
 
-        $shifts = array();
-        $shifts[] = $shiftTypeRepository->find(1);
-        $shifts[] = $shiftTypeRepository->find(3);
-
-        $shiftSelectionDTO = new ShiftSelectionDTO();
-//        $shiftSelectionDTO->selectionId = 'First_Tuesday';
-//        $shiftSelectionDTO->getShiftSelection()->add($shifts[0]);
-//        $shiftSelectionDTO->getShiftSelection()->add($shifts[1]);
-
-        /** @var RepeatedDrivingAssertionRegisterDTO $assertionDTO */
-        $assertionDTO = new RepeatedDrivingAssertionRegisterDTO();
-//        $assertionDTO->getShiftSelections()->add($shiftSelectionDTO);
-
-        $form = $this->createForm(new RepeatedDrivingAssertionType(), $assertionDTO);
+        $form = $this->createForm(new RepeatedDrivingAssertionType(), new RepeatedDrivingAssertionRegisterDTO());
         $form->handleRequest($request);
         if ($form->isValid()) {
             $assertionFormDTO = $form->getData();
             $this->registerOrUpdateAssertionPlan($assertionFormDTO);
+            $this->get('entity_manager')->flush();
+            return $this->redirect($this->generateUrl('tixiapi_driver_get', array('driverId'=>$driverId)));
+        }
+
+        $rootPanel = new RootPanel('tixiapi_drivers_get', 'repeateddrivingmission.panel.new');
+        $rootPanel->add(new RepeatedAssertionTile('monthlyAssertion',$form));
+
+        return new Response($tileRenderer->render($rootPanel));
+    }
+
+    /**
+     * @Route("/{assertionPlanId}/editbasic", name="tixiapi_driver_repeatedassertionplan_editbasic")
+     * @Method({"GET","POST"})
+     * @Breadcrumb("{driverId}", route={"name"="tixiapi_driver_get", "parameters"={"driverId"}})
+     * @Breadcrumb("repeateddrivingmission.panel.edit")
+     */
+    public function editRepeatedAssertionPlanAction(Request $request, $driverId, $assertionPlanId) {
+        $tileRenderer = $this->get('tixi_api.tilerenderer');
+        $assertionPlanRepository = $this->get('repeateddrivingassertionplan_repository');
+        /** @var RepeatedDrivingAssertionAssembler $assembler*/
+        $assembler = $this->get('tixi_api.repeateddrivingassertionassembler');
+
+        /** @var RepeatedDrivingAssertionPlan $assertionPlan */
+        $assertionPlan = $assertionPlanRepository->find($assertionPlanId);
+        if(null === $assertionPlan) {
+            throw $this->createNotFoundException('The assertion plan with id '+$assertionPlanId+' does not exist');
+        }
+        $assertionDTO = $assembler->toRepeatedRegisterDTO($assertionPlan);
+        $form = $this->createForm(new RepeatedDrivingAssertionType(), $assertionDTO);
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            $assertionDTO = $form->getData();
+            $this->registerOrUpdateAssertionPlan($assertionDTO);
             $this->get('entity_manager')->flush();
             return $this->redirect($this->generateUrl('tixiapi_driver_get', array('driverId'=>$driverId)));
         }
@@ -89,9 +107,10 @@ class RepeatedDrivingAssertionController extends Controller{
         if (null === $assertionDTO->id) {
             /** @var RepeatedDrivingAssertionPlan $assertionPlan*/
             $assertionPlan = $assembler->repeatedRegisterDTOToNewDrivingAssertionPlan($assertionDTO);
+            $assertionPlanRepository->store($assertionPlan);
             $repeatedAssertions = new ArrayCollection();
             if($assertionDTO->frequency === 'weekly') {
-
+                $repeatedAssertions = $assembler->repeatedRegisterDTOtoWeeklyDrivingAssertions($assertionDTO);
             }else {
                 $repeatedAssertions = $assembler->repeatedRegisterDTOtoMonthlyDrivingAssertions($assertionDTO);
             }
@@ -99,7 +118,6 @@ class RepeatedDrivingAssertionController extends Controller{
                 $assertionRepository->store($repeatedAssertion);
             }
             $assertionPlan->replaceRepeatedDrivingAssertions($repeatedAssertions);
-            $assertionPlanRepository->store($assertionPlan);
         } else {
 
         }

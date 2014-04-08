@@ -21,13 +21,27 @@ class RepeatedWeeklyDrivingAssertion extends RepeatedDrivingAssertion{
      * @ORM\Column(type="integer")
      */
     protected $weekday;
-    /**
-     * @ORM\Column(type="integer")
-     */
-    protected $week;
 
     public function matching(Shift $shift)
     {
         // TODO: Implement matching() method.
     }
+
+    /**
+     * @param mixed $weekday
+     */
+    public function setWeekday($weekday)
+    {
+        $this->weekday = $weekday;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getWeekday()
+    {
+        return $this->weekday;
+    }
+
+
 }

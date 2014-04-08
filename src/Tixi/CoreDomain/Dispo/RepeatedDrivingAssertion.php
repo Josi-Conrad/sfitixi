@@ -29,6 +29,11 @@ abstract class RepeatedDrivingAssertion implements DrivingAssertionInterface {
      */
     protected $id;
     /**
+     * @ORM\ManyToOne(targetEntity="RepeatedDrivingAssertionPlan", inversedBy="repeatedDrivingAssertions")
+     * @ORM\JoinColumn(name="repeated_assertion_plan_id", referencedColumnName="id")
+     */
+    protected $assertionPlan;
+    /**
      * @ORM\ManyToMany(targetEntity="ShiftType")
      * @ORM\JoinTable(name="repeateddrivingassertion_to_shifttypes",
      *      joinColumns={@ORM\JoinColumn(name="repeateddrivingassertion_id", referencedColumnName="id")},

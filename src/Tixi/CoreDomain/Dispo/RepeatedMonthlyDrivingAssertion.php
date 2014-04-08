@@ -26,6 +26,7 @@ class RepeatedMonthlyDrivingAssertion extends RepeatedDrivingAssertion{
      */
     protected $relativeWeekAsText;
 
+
     public function matching(Shift $shift)
     {
         // TODO: Implement matching() method.

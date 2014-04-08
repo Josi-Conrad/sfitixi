@@ -26,6 +26,10 @@ class RepeatedDrivingAssertionPlan {
      */
     protected $id;
     /**
+     * @ORM\Column(type="text")
+     */
+    protected $memo;
+    /**
      * @ORM\Column(type="datetime")
      */
     protected $anchorDate;
@@ -42,8 +46,8 @@ class RepeatedDrivingAssertionPlan {
      */
     protected $withHolidays;
     /**
-     * @ORM\OneToMany(targetEntity="RepeatedDrivingAssertion", mappedBy="repeated_driving_assertion_plan")
-     * @ORM\JoinColumn(name="repeated_driving_assertion", referencedColumnName="id")
+     * @ORM\OneToMany(targetEntity="RepeatedMonthlyDrivingAssertion", mappedBy="assertionPlan")
+     * @ORM\JoinColumn(name="repeated_driving_assertion_id", referencedColumnName="id")
      */
     protected $repeatedDrivingAssertions;
 
@@ -51,8 +55,9 @@ class RepeatedDrivingAssertionPlan {
         $this->repeatedDrivingAssertions = new ArrayCollection();
     }
 
-    public static function registerRepeatedAssertionPlan(\DateTime $anchorDate, $frequency, $withHoldidays, \DateTime $endingDate=null) {
+    public static function registerRepeatedAssertionPlan($memo, \DateTime $anchorDate, $frequency, $withHoldidays, \DateTime $endingDate=null) {
         $assertion = new RepeatedDrivingAssertionPlan();
+        $assertion->setMemo($memo);
         $assertion->setAnchorDate($anchorDate);
         $assertion->setEndingDate($endingDate);
         $assertion->setFrequency($frequency);
@@ -114,6 +119,24 @@ class RepeatedDrivingAssertionPlan {
     {
         return $this->id;
     }
+
+    /**
+     * @param mixed $memo
+     */
+    public function setMemo($memo)
+    {
+        $this->memo = $memo;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMemo()
+    {
+        return $this->memo;
+    }
+
+
 
     /**
      * @return mixed
