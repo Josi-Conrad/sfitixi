@@ -61,10 +61,17 @@
     display: none;
 }
 
+.weeklyPart, .monthlyPart {
+    border-top: 1px solid #cccccc;
+    padding-top: 16px;
+}
+
 .weeklyShiftSelections .form-group {
     margin: 0!important;
     padding: 0!important;
 }
+
+
 
 /*.weeklyShiftSelections li {*/
     /*list-style-type: none;*/
