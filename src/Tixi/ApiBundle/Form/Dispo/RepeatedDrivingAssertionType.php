@@ -18,7 +18,7 @@ class RepeatedDrivingAssertionType extends AbstractType{
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-
+        $builder->add('id', 'hidden');
         $builder->add('memo', 'text', array(
             'label' => 'repeateddrivingmission.field.memo'
         ));

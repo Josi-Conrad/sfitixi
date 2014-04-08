@@ -25,13 +25,43 @@ class RepeatedMonthlyDrivingAssertion extends RepeatedDrivingAssertion{
      * @ORM\Column(type="string", length=6)
      */
     protected $relativeWeekAsText;
-    /**
-     * @ORM\Column(type="integer")
-     */
-    protected $month;
 
     public function matching(Shift $shift)
     {
         // TODO: Implement matching() method.
     }
+
+    /**
+     * @param mixed $relativeWeekAsText
+     */
+    public function setRelativeWeekAsText($relativeWeekAsText)
+    {
+        $this->relativeWeekAsText = $relativeWeekAsText;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRelativeWeekAsText()
+    {
+        return $this->relativeWeekAsText;
+    }
+
+    /**
+     * @param mixed $weekdayAsText
+     */
+    public function setWeekdayAsText($weekdayAsText)
+    {
+        $this->weekdayAsText = $weekdayAsText;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getWeekdayAsText()
+    {
+        return $this->weekdayAsText;
+    }
+
+
 }

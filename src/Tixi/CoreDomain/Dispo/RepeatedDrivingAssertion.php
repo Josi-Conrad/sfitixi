@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Tixi\CoreDomain\Dispo\RepeatedDrivingAssertion
  *
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Tixi\CoreDomainBundle\Repository\Dispo\RepeatedDrivingAssertionRepositoryDoctrine")
  * @ORM\Table(name="repeated_driving_assertion")
  * @ORM\InheritanceType("SINGLE_TABLE")
  * @ORM\DiscriminatorColumn(name="discr", type="string")
@@ -40,10 +40,6 @@ abstract class RepeatedDrivingAssertion implements DrivingAssertionInterface {
         $this->shiftTypes = new ArrayCollection();
     }
 
-    public function replaceShiftTypes(ArrayCollection $shiftTypes) {
-        $this->shiftTypes = $shiftTypes;
-    }
-
     public abstract function matching(Shift $shift);
 
     /**
@@ -61,4 +57,30 @@ abstract class RepeatedDrivingAssertion implements DrivingAssertionInterface {
     {
         return $this->id;
     }
+
+    /**
+     * @param ShiftType $shiftType
+     */
+    public function addShiftType(ShiftType $shiftType)
+    {
+        $this->shiftTypes->add($shiftType);
+    }
+
+    /**
+     * @param mixed $shiftTypes
+     */
+    public function setShiftTypes($shiftTypes)
+    {
+        $this->shiftTypes = $shiftTypes;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getShiftTypes()
+    {
+        return $this->shiftTypes;
+    }
+
+
 }

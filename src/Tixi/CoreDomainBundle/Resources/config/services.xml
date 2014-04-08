@@ -39,7 +39,9 @@
         <parameter key="shifttype.doctrine.entity">Tixi\CoreDomain\Dispo\ShiftType</parameter>
         <parameter key="shifttype_repository.doctrine.class">Tixi\CoreDomainBundle\Repository\Dispo\ShiftTypeRepositoryDoctrine</parameter>
         <parameter key="repeateddrivingassertionplan.doctrine.entity">Tixi\CoreDomain\Dispo\RepeatedDrivingAssertionPlan</parameter>
-        <parameter key="repeateddrivingassertionplan_repository.doctrine.class">Tixi\CoreDomainBundle\Repository\Dispo\RepeatedDrivingAssertionPlanRepository</parameter>
+        <parameter key="repeateddrivingassertionplan_repository.doctrine.class">Tixi\CoreDomainBundle\Repository\Dispo\RepeatedDrivingAssertionPlanRepositoryDoctrine</parameter>
+        <parameter key="repeateddrivingassertion.doctrine.entity">Tixi\CoreDomain\Dispo\RepeatedDrivingAssertion</parameter>
+        <parameter key="repeateddrivingassertion_repository.doctrine.class">Tixi\CoreDomainBundle\Repository\Dispo\RepeatedDrivingAssertionRepositoryDoctrine</parameter>
 
     </parameters>
 
@@ -130,6 +132,11 @@
         <service id="repeateddrivingassertionplan_repository" alias="repeateddrivingassertionplan_repository.doctrine"></service>
         <service id="repeateddrivingassertionplan_repository.doctrine" class="%repeateddrivingassertionplan_repository.doctrine.class%" factory-service="doctrine" factory-method="getrepository">
             <argument type="string">%repeateddrivingassertionplan.doctrine.entity%</argument>
+        </service>
+
+        <service id="repeateddrivingassertion_repository" alias="repeateddrivingassertion_repository.doctrine"></service>
+        <service id="repeateddrivingassertion_repository.doctrine" class="%repeateddrivingassertion_repository.doctrine.class%" factory-service="doctrine" factory-method="getrepository">
+            <argument type="string">%repeateddrivingassertion.doctrine.entity%</argument>
         </service>
 
     </services>

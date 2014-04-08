@@ -120,7 +120,7 @@ function ShiftSelectionController(selectionIdentifier) {
         var _prototype = _this._shiftSelectionHolder.data('prototype'),
             _index = _this._shiftSelectionHolder.find('li').length,
             _newSelection = _prototype.replace(/__name__/g, _index),
-            _newSelection = _prototype.replace(/__label__/g, selectionText),
+            _newSelection = _newSelection.replace(/__label__/g, selectionText),
             _selectionDomElement = $('<li></li>').append(_newSelection);
         _this._shiftSelectionHolder.append(_selectionDomElement);
         $('#repeatedDrivingAssertion_'+selectionIdentifier+'_'+_index+'_selectionId').val(_this._constructSelectionId(selectedOccurency,selectedDay));

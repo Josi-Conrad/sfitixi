@@ -17,6 +17,4 @@ interface VehicleRepository extends CommonBaseRepository{
     public function store(Vehicle $vehicle);
 
     public function remove(Vehicle $vehicle);
-
-    public function mockData();
 } 

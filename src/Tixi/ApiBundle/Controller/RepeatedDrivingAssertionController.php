@@ -9,6 +9,7 @@
 namespace Tixi\ApiBundle\Controller;
 
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,11 +17,16 @@ use Tixi\ApiBundle\Form\Dispo\RepeatedDrivingAssertionType;
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Tixi\ApiBundle\Interfaces\Dispo\RepeatedDrivingAssertionAssembler;
 use Tixi\ApiBundle\Interfaces\Dispo\RepeatedDrivingAssertionRegisterDTO;
 use Tixi\ApiBundle\Interfaces\Dispo\ShiftSelectionDTO;
 use Tixi\ApiBundle\Tile\Core\FormTile;
 use Tixi\ApiBundle\Tile\Core\RootPanel;
 use Tixi\ApiBundle\Tile\Dispo\RepeatedAssertionTile;
+use Tixi\CoreDomain\Dispo\RepeatedDrivingAssertionPlan;
+use Tixi\CoreDomain\Dispo\RepeatedMonthlyDrivingAssertion;
+use Tixi\CoreDomainBundle\Repository\Dispo\RepeatedDrivingAssertionPlanRepositoryDoctrine;
+use Tixi\CoreDomainBundle\Repository\Dispo\RepeatedDrivingAssertionRepositoryDoctrine;
 
 /**
  * Class RepeatedDrivingAssertionController
@@ -51,6 +57,7 @@ class RepeatedDrivingAssertionController extends Controller{
 //        $shiftSelectionDTO->getShiftSelection()->add($shifts[0]);
 //        $shiftSelectionDTO->getShiftSelection()->add($shifts[1]);
 
+        /** @var RepeatedDrivingAssertionRegisterDTO $assertionDTO */
         $assertionDTO = new RepeatedDrivingAssertionRegisterDTO();
 //        $assertionDTO->getShiftSelections()->add($shiftSelectionDTO);
 
@@ -58,8 +65,9 @@ class RepeatedDrivingAssertionController extends Controller{
         $form->handleRequest($request);
         if ($form->isValid()) {
             $assertionFormDTO = $form->getData();
-            $test = "";
-
+            $this->registerOrUpdateAssertionPlan($assertionFormDTO);
+            $this->get('entity_manager')->flush();
+            return $this->redirect($this->generateUrl('tixiapi_driver_get', array('driverId'=>$driverId)));
         }
 
         $rootPanel = new RootPanel('tixiapi_drivers_get', 'repeateddrivingmission.panel.new');
@@ -68,13 +76,32 @@ class RepeatedDrivingAssertionController extends Controller{
         return new Response($tileRenderer->render($rootPanel));
     }
 
-    protected function registerOrUpdateAssertionPlan(VehicleRegisterDTO $vehicleDTO) {
-        if (is_null($vehicleDTO->id)) {
-            $vehicle = $this->get('tixi_api.assemblervehicle')->registerDTOtoNewVehicle($vehicleDTO);
-            $this->get('vehicle_repository')->store($vehicle);
+    /**
+     * @param RepeatedDrivingAssertionRegisterDTO $assertionDTO
+     */
+    protected function registerOrUpdateAssertionPlan(RepeatedDrivingAssertionRegisterDTO $assertionDTO) {
+        /** @var RepeatedDrivingAssertionPlanRepositoryDoctrine $assertionPlanRepository */
+        $assertionPlanRepository = $this->get('repeateddrivingassertionplan_repository');
+        /** @var RepeatedDrivingAssertionRepositoryDoctrine $assertionRepository*/
+        $assertionRepository = $this->get('repeateddrivingassertion_repository');
+        /** @var RepeatedDrivingAssertionAssembler $assembler*/
+        $assembler = $this->get('tixi_api.repeateddrivingassertionassembler');
+        if (null === $assertionDTO->id) {
+            /** @var RepeatedDrivingAssertionPlan $assertionPlan*/
+            $assertionPlan = $assembler->repeatedRegisterDTOToNewDrivingAssertionPlan($assertionDTO);
+            $repeatedAssertions = new ArrayCollection();
+            if($assertionDTO->frequency === 'weekly') {
+
+            }else {
+                $repeatedAssertions = $assembler->repeatedRegisterDTOtoMonthlyDrivingAssertions($assertionDTO);
+            }
+            foreach($repeatedAssertions as $repeatedAssertion) {
+                $assertionRepository->store($repeatedAssertion);
+            }
+            $assertionPlan->replaceRepeatedDrivingAssertions($repeatedAssertions);
+            $assertionPlanRepository->store($assertionPlan);
         } else {
-            $vehicle = $this->get('vehicle_repository')->find($vehicleDTO->id);
-            $this->get('tixi_api.assemblervehicle')->registerDTOToVehicle($vehicle, $vehicleDTO);
+
         }
     }
 

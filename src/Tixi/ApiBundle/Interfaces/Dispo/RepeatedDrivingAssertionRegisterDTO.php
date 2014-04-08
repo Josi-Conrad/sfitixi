@@ -13,6 +13,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 class RepeatedDrivingAssertionRegisterDTO {
 
+    public $id;
     public $memo;
     public $anchorDate;
     public $endDate;

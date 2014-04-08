@@ -15,7 +15,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Class DrivingAssertionPlan
  * @package Tixi\CoreDomain\Dispo
  *
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Tixi\CoreDomainBundle\Repository\Dispo\RepeatedDrivingAssertionPlanRepositoryDoctrine")
  * @ORM\Table(name="repeated_driving_assertion_plan")
  */
 class RepeatedDrivingAssertionPlan {
@@ -34,7 +34,15 @@ class RepeatedDrivingAssertionPlan {
      */
     protected $endingDate;
     /**
-     * @ORM\ManyToOne(targetEntity="RepeatedDrivingAssertion")
+     * @ORM\Column(type="string", length=7)
+     */
+    protected $frequency;
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    protected $withHolidays;
+    /**
+     * @ORM\OneToMany(targetEntity="RepeatedDrivingAssertion", mappedBy="repeated_driving_assertion_plan")
      * @ORM\JoinColumn(name="repeated_driving_assertion", referencedColumnName="id")
      */
     protected $repeatedDrivingAssertions;
@@ -43,15 +51,16 @@ class RepeatedDrivingAssertionPlan {
         $this->repeatedDrivingAssertions = new ArrayCollection();
     }
 
-    public static function registerRepeatedAssertionPlan(\DateTime $anschorDate, \DateTime $endingDate=null) {
+    public static function registerRepeatedAssertionPlan(\DateTime $anchorDate, $frequency, $withHoldidays, \DateTime $endingDate=null) {
         $assertion = new RepeatedDrivingAssertionPlan();
-        $assertion->setAnchorDate($anschorDate);
+        $assertion->setAnchorDate($anchorDate);
         $assertion->setEndingDate($endingDate);
-
+        $assertion->setFrequency($frequency);
+        $assertion->setWithHolidays($withHoldidays);
         return $assertion;
     }
 
-    public function replaceDrivingAssertions(array $assertions) {
+    public function replaceRepeatedDrivingAssertions(ArrayCollection $assertions) {
         $this->repeatedDrivingAssertions->clear();
         foreach($assertions as $assertion) {
             $this->repeatedDrivingAssertions->add($assertion);
@@ -107,20 +116,46 @@ class RepeatedDrivingAssertionPlan {
     }
 
     /**
-     * @param mixed $repeatedDrivingAssertions
-     */
-    public function setRepeatedDrivingAssertions($repeatedDrivingAssertions)
-    {
-        $this->repeatedDrivingAssertions = $repeatedDrivingAssertions;
-    }
-
-    /**
      * @return mixed
      */
     public function getRepeatedDrivingAssertions()
     {
         return $this->repeatedDrivingAssertions;
     }
+
+    /**
+     * @param mixed $frequency
+     */
+    public function setFrequency($frequency)
+    {
+        $this->frequency = $frequency;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFrequency()
+    {
+        return $this->frequency;
+    }
+
+    /**
+     * @param mixed $withHolidays
+     */
+    public function setWithHolidays($withHolidays)
+    {
+        $this->withHolidays = $withHolidays;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getWithHolidays()
+    {
+        return $this->withHolidays;
+    }
+
+
 
 
 
