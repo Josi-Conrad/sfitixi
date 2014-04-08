@@ -10,3 +10,4 @@ php insert_mysqldata.php addresses.sql
 php insert_mysqldata.php users.sql
 php insert_mysqldata.php vehicle_dummy.sql
 php insert_mysqldata.php persons.sql
+php insert_mysqldata.php shifttypes.sql
