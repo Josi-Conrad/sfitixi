@@ -20,20 +20,20 @@ class RepeatedDrivingAssertionType extends AbstractType{
     {
 
         $builder->add('memo', 'text', array(
-            'label' => 'Memo'
+            'label' => 'repeateddrivingmission.field.memo'
         ));
         $builder->add('anchorDate', new DatePickerType(), array(
-            'label' => 'Ab'
+            'label' => 'repeateddrivingmission.field.anchordate'
         ));
         $builder->add('endDate', new DatePickerType(), array(
-            'label' => 'Bis'
+            'label' => 'repeateddrivingmission.field.endDate'
         ));
         $builder->add('frequency', 'choice', array(
-            'choices' => array('weekly'=>'Wöchentlich','monthly'=>'Monatlich'),
+            'choices' => array('weekly'=>'repeateddrivingmission.field.frequency.weekly','monthly'=>'repeateddrivingmission.field.frequency.monthly'),
             'label' => ' '
         ));
         $builder->add('withHolidays','checkbox',array(
-            'label' => 'inklusive Feiertage'
+            'label' => 'repeateddrivingmission.field.withHolidays'
         ));
 
         //weekly part

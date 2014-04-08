@@ -27,12 +27,15 @@ use Tixi\ApiBundle\Tile\Dispo\RepeatedAssertionTile;
  * @package Tixi\ApiBundle\Controller
  *
  * @Route("/drivers/{driverId}/assertions/repeated")
+ * @Breadcrumb("driver.panel.name", route="tixiapi_drivers_get")
  */
 class RepeatedDrivingAssertionController extends Controller{
 
     /**
      * @Route("/new", name="tixiapi_dispo_assertionMonthly")
      * @Method({"GET","POST"})
+     * @Breadcrumb("{driverId}", route={"name"="tixiapi_driver_get", "parameters"={"driverId"}})
+     * @Breadcrumb("repeateddrivingmission.panel.new")
      */
     public function newMonthlyAssertionAction(Request $request, $driverId) {
         $tileRenderer = $this->get('tixi_api.tilerenderer');
@@ -59,7 +62,7 @@ class RepeatedDrivingAssertionController extends Controller{
 
         }
 
-        $rootPanel = new RootPanel('tixiapi_drivers_get', 'Dauereinsatz');
+        $rootPanel = new RootPanel('tixiapi_drivers_get', 'repeateddrivingmission.panel.new');
         $rootPanel->add(new RepeatedAssertionTile('monthlyAssertion',$form));
 
         return new Response($tileRenderer->render($rootPanel));
