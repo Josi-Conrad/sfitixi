@@ -7,8 +7,10 @@ function RepeatedDrivingAssertion() {
     this._weeklyView = null;
     this._monthlyView = null;
 
+    this._trans = null;
 
-    this.init = function() {
+    this.init = function(trans) {
+        _this._trans = trans;
         _this._weeklyView = $('.weeklyPart');
         _this._monthlyView = $('.monthlyPart');
 
@@ -31,26 +33,32 @@ function RepeatedDrivingAssertion() {
     this._initWeeklyListeners = function() {
         var _labelText;
         $('.weeklyDaySelection input').on('change', function() {
-            _labelText = $(this).parent().find('label').text()+' (jeden)';
+            _labelText = $(this).parent().find('label').text()+' ('+_this._trans['repeateddrivingmission.everyweek.text']+')';
             _this._weeklyAssertionController.onSelectorChange(this, 'Day', _labelText);
         });
     }
 
     this._initMonthlyListeners = function() {
+        var _labelText;
         $('#repeatedDrivingAssertion_monthlyFirstWeeklySelector input').on('change', function() {
-            _this._monthlyAssertionController.onSelectorChange(this, 'First');
+            _labelText = _this._trans[$(this).val()]+'<br/> ('+_this._trans['firstweek.name']+')';
+            _this._monthlyAssertionController.onSelectorChange(this, 'First', _labelText);
         });
         $('#repeatedDrivingAssertion_monthlySecondWeeklySelector input').on('change', function() {
-            _this._monthlyAssertionController.onSelectorChange(this, 'Second');
+            _labelText = _this._trans[$(this).val()]+'<br/> ('+_this._trans['secondweek.name']+')';
+            _this._monthlyAssertionController.onSelectorChange(this, 'Second', _labelText);
         });
         $('#repeatedDrivingAssertion_monthlyThirdWeeklySelector input').on('change', function() {
-            _this._monthlyAssertionController.onSelectorChange(this, 'Third');
+            _labelText = _this._trans[$(this).val()]+'<br/> ('+_this._trans['thirdweek.name']+')';
+            _this._monthlyAssertionController.onSelectorChange(this, 'Third', _labelText);
         });
         $('#repeatedDrivingAssertion_monthlyFourthWeeklySelector input').on('change', function() {
-            _this._monthlyAssertionController.onSelectorChange(this, 'Fourth');
+            _labelText = _this._trans[$(this).val()]+'<br/> ('+_this._trans['fourthweek.name']+')';
+            _this._monthlyAssertionController.onSelectorChange(this, 'Fourth', _labelText);
         });
         $('#repeatedDrivingAssertion_monthlyLastWeeklySelector input').on('change', function() {
-            _this._monthlyAssertionController.onSelectorChange(this, 'Last');
+            _labelText = _this._trans[$(this).val()]+'<br/> ('+_this._trans['lastweek.name']+')';
+            _this._monthlyAssertionController.onSelectorChange(this, 'Last', _labelText);
         });
     }
 

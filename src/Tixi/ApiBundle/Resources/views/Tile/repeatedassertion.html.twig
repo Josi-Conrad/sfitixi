@@ -6,8 +6,11 @@
     {% endfor %}
 </div>
 
+
+{% form_theme form 'TixiApiBundle:Form:fieldsRepeatedDrivingAssertionBootstrap.html.twig' %}
+
 {{ form_start(form, {'attr':{'id':formId, 'class':'form-horizontal customForm'} }) }}
-<div class="row" style="">
+<div class="row">
     <div class="col-md-4">
         <div class="row">
             <div class="form-group">
@@ -67,7 +70,7 @@
     <div class="col-md-4">
         <div class="row">
             <div class="col-md-12">
-                <h4 class="text-muted">Wählen Sie bitte die Wochentage, an denen gefahren werden soll:</h4>
+                <h4 class="text-muted">{{ 'repeateddrivingmission.weekdayselection.text' | trans }}</h4>
             </div>
             <div class="col-md-12">
                 <div class="weeklyDaySelection">
@@ -88,26 +91,33 @@
             {#{{ form_row(form.weeklyDaysSelector) }}#}
         </div>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-8">
         <div class="row">
-            <div class="col-md-12">
-                <h4 class="text-muted">Wählen Sie bitte die Schichten, an denen gefahren werden soll:</h4>
-            </div>
-            <div class="col-md-12">
-                <ul class="weeklyShiftSelections"
-                    data-prototype="{{ form_widget(form.weeklyShiftSelections.vars.prototype)|e }}">
-                    {% for selection in form.weeklyShiftSelections %}
-                        {{ form_errors(selection) }}
-                        {{ form_widget(selection) }}
-                    {% endfor %}
-                </ul>
-                {{ form_widget(form.weeklyShiftSelections) }}
+            <div class="col-md-5">
+                <h4 class="text-muted">{{ 'repeateddrivingmission.shiftselection.text' | trans }}</h4>
             </div>
         </div>
+        <div class="row">
+            <div class="col-md-12">
+                    <ul class="weeklyShiftSelections list-unstyled"
+                        data-prototype="{{ form_widget(form.weeklyShiftSelections.vars.prototype)|e }}">
+                        {% for selection in form.weeklyShiftSelections %}
+                            {{ form_errors(selection) }}
+                            {{ form_widget(selection) }}
+                        {% endfor %}
+                    </ul>
+                    {{ form_widget(form.weeklyShiftSelections) }}
+                </div>
+        </div>
+        </div>
     </div>
-</div>
 <div class="row monthlyPart">
-    <div class="col-md-6">
+    <div class="col-md-5">
+        <div class="row">
+            <div class="col-md-7">
+                <h4 class="text-muted">{{ 'repeateddrivingmission.weekdayselection.text' | trans }}</h4>
+            </div>
+        </div>
         <div class="row">
             <div class="col-md-12">
                 {{ form_row(form.monthlyFirstWeeklySelector) }}
@@ -134,14 +144,23 @@
             </div>
         </div>
     </div>
-    <div class="col-md-6">
-        <ul class="monthlyShiftSelections"
-            data-prototype="{{ form_widget(form.monthlyShiftSelections.vars.prototype)|e }}">
-            {% for selection in form.monthlyShiftSelections %}
-                <li>  {{ form_errors(selection) }}
-                    {{ form_widget(selection) }}</li>
-            {% endfor %}
-        </ul>
+    <div class="col-md-7">
+        <div class="row">
+            <div class="col-md-5">
+                <h4 class="text-muted">{{ 'repeateddrivingmission.shiftselection.text' | trans }}</h4>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="monthlyShiftSelections list-unstyled"
+                    data-prototype="{{ form_widget(form.monthlyShiftSelections.vars.prototype)|e }}">
+                    {% for selection in form.monthlyShiftSelections %}
+                        {{ form_errors(selection) }}
+                        {{ form_widget(selection) }}
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
         {{ form_widget(form.monthlyShiftSelections) }}
     </div>
 </div>
@@ -149,8 +168,23 @@
 <script type="text/javascript" src="{{ asset('bundles/tixiapi/js/DrivingAssertion.js') }}"></script>
 <script type="text/javascript">
     jQuery(function ($) {
-        var _repeatedDrivingController = new RepeatedDrivingAssertion();
-        _repeatedDrivingController.init();
+        var _repeatedDrivingController = new RepeatedDrivingAssertion(),
+            _trans = {
+                'Monday': "{{ 'monday.name' | trans }}",
+                'Tuesday': "{{ 'tuesday.name' | trans }}",
+                'Wednesday': "{{ 'wednesday.name' | trans }}",
+                'Thursday': "{{ 'thursday.name' | trans }}",
+                'Friday': "{{ 'friday.name' | trans }}",
+                'Saturday': "{{ 'saturday.name' | trans }}",
+                'Sonday': "{{ 'sonday.name' | trans }}",
+                'firstweek.name': "{{ 'firstweek.name' | trans }}",
+                'secondweek.name': "{{ 'secondweek.name' | trans }}",
+                'thirdweek.name': "{{ 'thirdweek.name' | trans }}",
+                'fourthweek.name': "{{ 'fourthweek.name' | trans }}",
+                'lastweek.name': "{{ 'lastweek.name' | trans }}",
+                'repeateddrivingmission.everyweek.text': "{{ 'repeateddrivingmission.everyweek.text' | trans }}"
+            };
+        _repeatedDrivingController.init(_trans);
     });
 </script>
 

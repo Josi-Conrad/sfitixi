@@ -6,7 +6,7 @@
         {% endfor %}
 </div>
 <div class="row">
-    <div class="col-md-{% if isStandalone %}6{% else %}12{% endif %} text-right">
+    <div class="col-md-{% if isStandalone %}6{% else %}12{% endif %}">
         {{ form_start(form, {'attr':{'id':formId, 'class':'form-horizontal customForm'} }) }}
         {{ form_end(form) }}
     </div>

@@ -1,9 +1,11 @@
-/*disable bootstrap responsiveness*/
 .container{
     max-width: 1400px!important;
     /*width: 1024px;*/
 }
 
+.checkbox-inline label, .radio-inline label {
+    font-weight: normal!important;
+}
 
 body {
     padding-top: 20px;

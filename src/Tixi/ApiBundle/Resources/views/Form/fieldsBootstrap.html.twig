@@ -1,10 +1,34 @@
+{####### Own types #######}
+{% block datepicker_widget %}
+    {%  set attr = attr|merge({'class': ((attr.class|default('') ~ ' jqueryDatePicker form-control')|trim)}) %}
+    <input type="text" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
+    {#<input type="text" class="jqueryDatePicker form-control" {% if value is not empty %}value="{{ value }}" {% endif %}/>#}
+{% endblock datepicker_widget %}
+
+
+{####### Customized default types #######}
+{% block form_widget_simple %}
+    {% spaceless %}
+        {% set type = type|default('text') %}
+        {% set attr = attr|merge({'class': 'form-control'}) %}
+        <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
+    {% endspaceless %}
+{% endblock form_widget_simple %}
+
+{% block textarea_widget %}
+    {% spaceless %}
+        {% set attr = attr|merge({'class': 'form-control'}) %}
+        <textarea {{ block('widget_attributes') }}>{{ value }}</textarea>
+    {% endspaceless %}
+{% endblock textarea_widget %}
+
 {% block form_row %}
     {% spaceless %}
         <div class="row">
             <div class="form-group">
                 {{ form_label(form, null, {'label_attr': {'class':'col-md-4 control-label'}}) }}
                 <div class="col-md-8">
-                    {{ form_widget(form, { 'attr': {'class': 'form-control'} }) }}
+                    {{ form_widget(form) }}
                     <p class="help-block">{{ form_errors(form) }}</p>
                 </div>
             </div>
@@ -22,8 +46,16 @@
     </div>
 {% endblock submit_widget %}
 
-{% block datepicker_widget %}
-    {%  set attr = attr|merge({'class': ((attr.class|default('') ~ ' jqueryDatePicker')|trim)}) %}
-    <input type="text" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
-    {#<input type="text" class="jqueryDatePicker form-control" {% if value is not empty %}value="{{ value }}" {% endif %}/>#}
-{% endblock datepicker_widget %}
+{% block choice_widget_expanded %}
+    {% spaceless %}
+        <div {{ block('widget_container_attributes') }}>
+            {% for child in form %}
+                <label class="{% if multiple %}checkbox-inline{% else  %}radio-inline{% endif %}">
+                    {{ form_widget(child) }}
+                    {{ form_label(child) }}
+                </label>
+            {% endfor %}
+        </div>
+    {% endspaceless %}
+{% endblock choice_widget_expanded %}
+

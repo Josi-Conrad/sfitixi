@@ -13,7 +13,6 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Tixi\ApiBundle\Form\Shared\DatePickerType;
-use Tixi\ApiBundle\Interfaces\Dispo\ShiftSelectionType;
 
 class RepeatedDrivingAssertionType extends AbstractType{
 
@@ -39,7 +38,7 @@ class RepeatedDrivingAssertionType extends AbstractType{
 
         //weekly part
         $builder->add('weeklyDaysSelector', 'choice', array(
-            'choices' => array('Monday'=>'Montag','Tuesday'=>'Dienstag','Wednesday'=>'Mittwoch','Thursday'=>'Donnerstag','Friday'=>'Freitag','Saturday'=>'Samstag','Sonday'=>'Sonntag'),
+            'choices' => array('Monday'=>'monday.name','Tuesday'=>'tuesday.name','Wednesday'=>'wednesday.name','Thursday'=>'thursday.name','Friday'=>'friday.name','Saturday'=>'saturday.name','Sonday'=>'sonday.name'),
             'multiple' => true,
             'expanded' => true
         ));
@@ -51,34 +50,34 @@ class RepeatedDrivingAssertionType extends AbstractType{
 
         //monthly part
         $builder->add('monthlyFirstWeeklySelector', 'choice', array(
-            'choices' => array('Monday'=>'Montag','Tuesday'=>'Dienstag','Wednesday'=>'Mittwoch','Thursday'=>'Donnerstag','Friday'=>'Freitag','Saturday'=>'Samstag','Sonday'=>'Sonntag'),
+            'choices' => array('Monday'=>'monday.abbreviation.name','Tuesday'=>'tuesday.abbreviation.name','Wednesday'=>'wednesday.abbreviation.name','Thursday'=>'thursday.abbreviation.name','Friday'=>'friday.abbreviation.name','Saturday'=>'saturday.abbreviation.name','Sonday'=>'sonday.abbreviation.name'),
             'multiple' => true,
             'expanded' => true,
-            'label' => 'Erste'
+            'label' => 'firstweek.name'
         ));
         $builder->add('monthlySecondWeeklySelector', 'choice', array(
-            'choices' => array('Monday'=>'Montag','Tuesday'=>'Dienstag','Wednesday'=>'Mittwoch','Thursday'=>'Donnerstag','Friday'=>'Freitag','Saturday'=>'Samstag','Sonday'=>'Sonntag'),
+            'choices' => array('Monday'=>'monday.abbreviation.name','Tuesday'=>'tuesday.abbreviation.name','Wednesday'=>'wednesday.abbreviation.name','Thursday'=>'thursday.abbreviation.name','Friday'=>'friday.abbreviation.name','Saturday'=>'saturday.abbreviation.name','Sonday'=>'sonday.abbreviation.name'),
             'multiple' => true,
             'expanded' => true,
-            'label' => 'Zweite'
+            'label' => 'secondweek.name'
         ));
         $builder->add('monthlyThirdWeeklySelector', 'choice', array(
-            'choices' => array('Monday'=>'Montag','Tuesday'=>'Dienstag','Wednesday'=>'Mittwoch','Thursday'=>'Donnerstag','Friday'=>'Freitag','Saturday'=>'Samstag','Sonday'=>'Sonntag'),
+            'choices' => array('Monday'=>'monday.abbreviation.name','Tuesday'=>'tuesday.abbreviation.name','Wednesday'=>'wednesday.abbreviation.name','Thursday'=>'thursday.abbreviation.name','Friday'=>'friday.abbreviation.name','Saturday'=>'saturday.abbreviation.name','Sonday'=>'sonday.abbreviation.name'),
             'multiple' => true,
             'expanded' => true,
-            'label' => 'Dritte'
+            'label' => 'thirdweek.name'
         ));
         $builder->add('monthlyFourthWeeklySelector', 'choice', array(
-            'choices' => array('Monday'=>'Montag','Tuesday'=>'Dienstag','Wednesday'=>'Mittwoch','Thursday'=>'Donnerstag','Friday'=>'Freitag','Saturday'=>'Samstag','Sonday'=>'Sonntag'),
+            'choices' => array('Monday'=>'monday.abbreviation.name','Tuesday'=>'tuesday.abbreviation.name','Wednesday'=>'wednesday.abbreviation.name','Thursday'=>'thursday.abbreviation.name','Friday'=>'friday.abbreviation.name','Saturday'=>'saturday.abbreviation.name','Sonday'=>'sonday.abbreviation.name'),
             'multiple' => true,
             'expanded' => true,
-            'label' => 'Vierte'
+            'label' => 'fourthweek.name'
         ));
         $builder->add('monthlyLastWeeklySelector', 'choice', array(
-            'choices' => array('Monday'=>'Montag','Tuesday'=>'Dienstag','Wednesday'=>'Mittwoch','Thursday'=>'Donnerstag','Friday'=>'Freitag','Saturday'=>'Samstag','Sonday'=>'Sonntag'),
+            'choices' => array('Monday'=>'monday.abbreviation.name','Tuesday'=>'tuesday.abbreviation.name','Wednesday'=>'wednesday.abbreviation.name','Thursday'=>'thursday.abbreviation.name','Friday'=>'friday.abbreviation.name','Saturday'=>'saturday.abbreviation.name','Sonday'=>'sonday.abbreviation.name'),
             'multiple' => true,
             'expanded' => true,
-            'label' => 'Letzte'
+            'label' => 'lastweek.name'
         ));
         $builder->add('monthlyShiftSelections', 'collection', array(
             'type' => new ShiftSelectionType(),

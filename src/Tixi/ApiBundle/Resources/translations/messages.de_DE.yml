@@ -121,5 +121,37 @@ serviceplan.button.new: Neuer Serviceplan
 #DrivingOrder
 drivingorder.button.new: Neuer Fahrauftrag
 
+#ShiftTypes
+shift1.name: Schicht 1
+shift2.name: Schicht 2
+shift3.name: Schicht 3
+shift4.name: Schicht 4
+shift5.name: Schicht 5
+
 #RepeatedDrivingMission
 repeateddrivingmission.button.new: Neuer Dauereinsatz
+repeateddrivingmission.weekdayselection.text: Wählen Sie bitte die Wochentage, an denen gefahren werden soll:
+repeateddrivingmission.shiftselection.text: Wählen Sie bitte die Schichten, an denen gefahren werden soll:
+repeateddrivingmission.everyweek.text: jeden
+firstweek.name: 1. Woche
+secondweek.name: 2. Woche
+thirdweek.name: 3. Woche
+fourthweek.name: 4. Woche
+lastweek.name: 5. Woche
+
+#Weekdays
+monday.name: Montag
+tuesday.name: Dienstag
+wednesday.name: Mittwoch
+thursday.name: Donnerstag
+friday.name: Freitag
+saturday.name: Samstag
+sonday.name: Sonntag
+
+monday.abbreviation.name: Mo
+tuesday.abbreviation.name: Di
+wednesday.abbreviation.name: Mi
+thursday.abbreviation.name: Do
+friday.abbreviation.name: Fr
+saturday.abbreviation.name: Sa
+sonday.abbreviation.name: So

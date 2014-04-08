@@ -6,7 +6,7 @@
  * Time: 09:41
  */
 
-namespace Tixi\ApiBundle\Interfaces\Dispo;
+namespace Tixi\ApiBundle\Form\Dispo;
 
 
 use Symfony\Component\Form\AbstractType;
