@@ -12,6 +12,8 @@ namespace Tixi\ApiBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Validator\Constraints\DateTime;
+use Symfony\Component\Validator\Constraints\NotBlank;
 use Tixi\ApiBundle\Form\Shared\DatePickerType;
 
 class ServicePlanType extends AbstractType{
@@ -21,10 +23,18 @@ class ServicePlanType extends AbstractType{
         $builder->add('id', 'hidden');
 
         $builder->add('startDate', new DatePickerType(), array(
-            'label' => 'serviceplan.field.startdate'
+            'label' => 'serviceplan.field.startdate',
+            'constraints' => array(
+                new DateTime(),
+                new NotBlank(array('message'=>'serviceplan.date.not_blank'))),
+            'pattern' => '^(0[1-9]|[1|2][0-9]|3[0|1]).(0[1-9]|1[0|1|2]).(19|20)\d\d$'
         ));
         $builder->add('endDate', new DatePickerType(), array(
-            'label' => 'serviceplan.field.enddate'
+            'label' => 'serviceplan.field.enddate',
+            'constraints' => array(
+                new DateTime(),
+                new NotBlank(array('message'=>'serviceplan.date.not_blank'))),
+            'pattern' => '^(0[1-9]|[1|2][0-9]|3[0|1]).(0[1-9]|1[0|1|2]).(19|20)\d\d$'
         ));
         $builder->add('memo', 'text', array(
             'label' => 'serviceplan.field.memo'

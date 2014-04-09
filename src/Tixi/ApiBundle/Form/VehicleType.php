@@ -23,6 +23,11 @@ class VehicleType extends AbstractType{
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('id', 'hidden');
+        $builder->add('category', 'entity', array(
+            'class' => 'Tixi\CoreDomain\VehicleCategory',
+            'property' => 'name',
+            'label' => 'vehicle.field.category'
+        ));
         $builder->add('name', 'text', array(
             'label' => 'vehicle.field.name',
             'constraints' => new NotBlank(array('message'=>'vehicle.name.not_blank'))
@@ -36,11 +41,10 @@ class VehicleType extends AbstractType{
         ));
         $builder->add('dateOfFirstRegistration', new DatePickerType(), array(
             'label' => 'vehicle.field.dateoffirstregistration',
-            'constraints' => new DateTime(),
+            'constraints' => array(
+                new DateTime(),
+                new NotBlank(array('message'=>'vehicle.date.not_blank'))),
             'pattern' => '^(0[1-9]|[1|2][0-9]|3[0|1]).(0[1-9]|1[0|1|2]).(19|20)\d\d$'
-        ));
-        $builder->add('parkingLotNumber', 'integer', array(
-            'label' => 'vehicle.field.parkinglotnumber'
         ));
         $builder->add('supervisor', 'entity', array(
             'class' => 'Tixi\CoreDomain\Driver',
@@ -53,10 +57,8 @@ class VehicleType extends AbstractType{
                         ->orderBy('s.firstname', 'ASC');
                 },
         ));
-        $builder->add('category', 'entity', array(
-            'class' => 'Tixi\CoreDomain\VehicleCategory',
-            'property' => 'name',
-            'label' => 'vehicle.field.category'
+        $builder->add('parking', 'text', array(
+            'label' => 'vehicle.field.parking'
         ));
         $builder->add('memo', 'textarea', array(
             'label' => 'vehicle.field.memo'

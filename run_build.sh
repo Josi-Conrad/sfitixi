@@ -1,6 +1,5 @@
 #!/bin/sh
 echo "Starting new project build"
-echo .
 while true; do
     echo .
     read -p "This will completely recreate the TIXI project database! Confirm with y(es) or n(o):  " yn
@@ -14,7 +13,6 @@ done
 echo .
 echo "Starting Composer dependencies"
 php composer.phar install
-php composer.phar update
 
 echo .
 echo "Recreate database"
@@ -24,7 +22,6 @@ php app/console doctrine:schema:update --force
 php app/console project:build-fulltext
 
 echo .
-echo "Installing Assets with symlinks"
-php app/console assets:install --symlink
-
-run_dataimport.sh
+echo "Insert test_data"
+cd build
+php insert_mysqldata.php test_data.sql

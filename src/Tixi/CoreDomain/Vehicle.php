@@ -48,9 +48,9 @@ class Vehicle implements Entity {
     protected $dateOfFirstRegistration;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="string", length=50, nullable=true)
      */
-    protected $parkingLotNumber;
+    protected $parking;
 
     /**
      * @ORM\Column(type="text", nullable=true)
@@ -69,7 +69,6 @@ class Vehicle implements Entity {
     protected $servicePlans;
 
     /**
-     * @var $supervisor Driver
      * @ORM\ManyToOne(targetEntity="Driver", inversedBy="supervisedVehicles")
      * @ORM\JoinColumn(name="supervisor_id", referencedColumnName="id")
      */
@@ -102,7 +101,7 @@ class Vehicle implements Entity {
         $vehicle->setName($name);
         $vehicle->setLicenceNumber($licenceNumber);
         $vehicle->setDateOfFirstRegistration($dateOfFirstRegistration);
-        $vehicle->setParkingLotNumber($parkingLotNumber);
+        $vehicle->setParking($parkingLotNumber);
         $vehicle->setCategory($category);
         $vehicle->setMemo($memo);
         $vehicle->setManagementDetails($managementDetails);
@@ -132,7 +131,7 @@ class Vehicle implements Entity {
             $this->dateOfFirstRegistration = $dateOfFirstRegistration;
         }
         if (!empty($parkingLotNumber)) {
-            $this->parkingLotNumber = $parkingLotNumber;
+            $this->parking = $parkingLotNumber;
         }
         if (!empty($category)) {
             $this->category = $category;
@@ -309,15 +308,15 @@ class Vehicle implements Entity {
     /**
      * @param mixed $parkingLotNumber
      */
-    public function setParkingLotNumber($parkingLotNumber) {
-        $this->parkingLotNumber = $parkingLotNumber;
+    public function setParking($parkingLotNumber) {
+        $this->parking = $parkingLotNumber;
     }
 
     /**
      * @return mixed
      */
-    public function getParkingLotNumber() {
-        return $this->parkingLotNumber;
+    public function getParking() {
+        return $this->parking;
     }
 
     /**

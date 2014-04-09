@@ -20,14 +20,12 @@ class VehicleAssembler {
      * @throws \Exception
      */
     public function registerDTOtoNewVehicle(VehicleRegisterDTO $vehicleDTO) {
-        $dateOfFirstRegistration = $vehicleDTO->dateOfFirstRegistration;
-        if (!$dateOfFirstRegistration) {
-            throw new \Exception('bade date format detected');
-        }
         $vehicle = Vehicle::registerVehicle($vehicleDTO->name, $vehicleDTO->licenceNumber,
-            $dateOfFirstRegistration, $vehicleDTO->parkingLotNumber, $vehicleDTO->category,
+            $vehicleDTO->dateOfFirstRegistration, $vehicleDTO->parking, $vehicleDTO->category,
             $vehicleDTO->memo, $vehicleDTO->managementDetails);
-        $vehicle->assignSupervisor($vehicleDTO->supervisor);
+        if (!empty($vehicleDTO->supervisor)) {
+            $vehicle->assignSupervisor($vehicleDTO->supervisor);
+        }
         return $vehicle;
     }
 
@@ -37,12 +35,8 @@ class VehicleAssembler {
      * @throws \Exception
      */
     public function registerDTOToVehicle(Vehicle $vehicle, VehicleRegisterDTO $vehicleDTO) {
-        $dateOfFirstRegistration = $vehicleDTO->dateOfFirstRegistration;
-        if (!$dateOfFirstRegistration) {
-            throw new \Exception('bad date format detected');
-        }
         $vehicle->updateBasicData($vehicleDTO->name, $vehicleDTO->licenceNumber,
-            $dateOfFirstRegistration, $vehicleDTO->parkingLotNumber, $vehicleDTO->category,
+            $vehicleDTO->dateOfFirstRegistration, $vehicleDTO->parking, $vehicleDTO->category,
             $vehicleDTO->memo, $vehicleDTO->managementDetails);
         if (!empty($vehicleDTO->supervisor)) {
             $vehicle->assignSupervisor($vehicleDTO->supervisor);
@@ -61,7 +55,7 @@ class VehicleAssembler {
         $vehicleDTO->name = $vehicle->getName();
         $vehicleDTO->licenceNumber = $vehicle->getLicenceNumber();
         $vehicleDTO->dateOfFirstRegistration = $vehicle->getDateOfFirstRegistration();
-        $vehicleDTO->parkingLotNumber = $vehicle->getParkingLotNumber();
+        $vehicleDTO->parking = $vehicle->getParking();
         $vehicleDTO->category = $vehicle->getCategory();
         $vehicleDTO->memo = $vehicle->getMemo();
         $vehicleDTO->managementDetails = $vehicle->getManagementDetails();
@@ -74,7 +68,6 @@ class VehicleAssembler {
      * @return array
      */
     public function vehiclesToVehicleListDTOs($vehicles) {
-        ;
         $dtoArray = array();
         foreach ($vehicles as $vehicle) {
             $dtoArray[] = $this->toVehicleListDTO($vehicle);
@@ -91,9 +84,11 @@ class VehicleAssembler {
         $vehicleListDTO->id = $vehicle->getId();
         $vehicleListDTO->name = $vehicle->getName();
         $vehicleListDTO->licenceNumber = $vehicle->getLicenceNumber();
-        $vehicleListDTO->parkingLotNumber = $vehicle->getParkingLotNumber();
+        $vehicleListDTO->parking = $vehicle->getParking();
         $vehicleListDTO->dateOfFirstRegistration = $vehicle->getDateOfFirstRegistration()->format('d.m.Y');
         $vehicleListDTO->category = $vehicle->getCategory()->getName();
+        $vehicleListDTO->amountOfSeats = $vehicle->getCategory()->getAmountOfSeats();
+        $vehicleListDTO->amountOfWheelChairs = $vehicle->getCategory()->getAmountOfWheelChairs();
         return $vehicleListDTO;
     }
 }
