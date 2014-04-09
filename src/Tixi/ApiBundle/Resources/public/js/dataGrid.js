@@ -131,10 +131,10 @@ function DataGrid(outline, gridId, dblClickCallback, isEmbedded, emptyDefaultTex
         _this._pollDataFromSource(_this._constructDataParams()).done(function(data) {
             if($(data).find('tr').length!==0) {
                 _this._getTableBody().replaceWith($(data));
+                _this._initRowListener();
             }else {
                 _this._getTableBody().replaceWith(_this._createEmptyDataRow());
             }
-            _this._initRowListener();
             _this._activeRow = null;
             _this._updateVisibilityOfCustomActionButton();
             if(resetPagination) {
