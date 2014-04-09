@@ -10,6 +10,7 @@ namespace Tixi\CoreDomain;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Tixi\CoreDomain\Dispo\RepeatedDrivingAssertionPlan;
 use Tixi\CoreDomain\Dispo\Shift;
 
 /**
@@ -42,8 +43,7 @@ class Driver extends Person {
     protected $wheelChairAttendance;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Tixi\CoreDomain\Dispo\RepeatedDrivingAssertionPlan")
-     * @ORM\JoinColumn(name="repeated_driving_assertion_plan", referencedColumnName="id")
+     * @ORM\OneToMany(targetEntity="Tixi\CoreDomain\Dispo\RepeatedDrivingAssertionPlan", mappedBy="driver")
      */
     protected $repeatedDrivingAssertionPlans;
 
@@ -55,7 +55,7 @@ class Driver extends Person {
             $email, $entryDate, $birthday, $extraMinutes, $details);
 
         $this->supervisedVehicles = new ArrayCollection();
-        $this->$repeatedDrivingAssertionPlans = new ArrayCollection();
+        $this->repeatedDrivingAssertionPlans = new ArrayCollection();
     }
 
     /**
@@ -152,6 +152,16 @@ class Driver extends Person {
     public function removeSupervisedVehicle(Vehicle $vehicle) {
         $vehicle->removeSupervisor();
         $this->supervisedVehicles->removeElement($vehicle);
+    }
+
+    public function assignRepeatedDrivingAssertionPlan(RepeatedDrivingAssertionPlan $assertionPlan) {
+        $this->repeatedDrivingAssertionPlans->add($assertionPlan);
+        $assertionPlan->assignDriver($this);
+    }
+
+    public function removeRepeatedDrivingAssertionPlan(RepeatedDrivingAssertionPlan $assertionPlan) {
+        $assertionPlan->removeDriver();
+        $this->repeatedDrivingAssertionPlans->removeElement($assertionPlan);
     }
 
     /**

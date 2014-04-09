@@ -10,11 +10,15 @@ namespace Tixi\ApiBundle\Interfaces\Dispo;
 
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Tixi\ApiBundle\Helper\DateTimeService;
 use Tixi\CoreDomain\Dispo\RepeatedDrivingAssertionPlan;
 use Tixi\CoreDomain\Dispo\RepeatedMonthlyDrivingAssertion;
 use Tixi\CoreDomain\Dispo\RepeatedWeeklyDrivingAssertion;
 
 class RepeatedDrivingAssertionAssembler {
+
+    //injected by service container via setter method
+    private $dateTimeService;
 
     /**
      * @var array
@@ -151,6 +155,32 @@ class RepeatedDrivingAssertionAssembler {
     protected function explodeWeeklySelectionId($selectionId) {
         $explodedArray = explode('_', $selectionId);
         return $explodedArray[1];
+    }
+
+    public function assertionPlansToEmbeddedListDTOs($assertionPlans) {
+        $dtoArray = array();
+        foreach ($assertionPlans as $assertionPlan) {
+            $dtoArray[] = $this->assertionPlanToEmbeddedListDTO($assertionPlan);
+        }
+        return $dtoArray;
+    }
+
+    protected function assertionPlanToEmbeddedListDTO(RepeatedDrivingAssertionPlan $assertionPlan) {
+        $dto = new RepeatedDrivingAssertionEmbeddedListDTO();
+        $dto->id = $assertionPlan->getId();
+        $dto->memo = $assertionPlan->getMemo();
+        $dto->anchorDate = $this->dateTimeService->convertUTCDateTimeToLocalString($assertionPlan->getAnchorDate());
+        $dto->endDate = $this->dateTimeService->convertUTCDateTimeToLocalString($assertionPlan->getEndingDate());
+        $dto->frequency= $assertionPlan->getFrequency();
+        return $dto;
+    }
+
+    /**
+     * @param $dateTimeService
+     * Injected by service container
+     */
+    public function setDateTimeService(DateTimeService $dateTimeService) {
+        $this->dateTimeService = $dateTimeService;
     }
 
 } 

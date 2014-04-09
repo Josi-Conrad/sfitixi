@@ -52,7 +52,11 @@
                 <argument type="service" id="tixi_api.datetimeservice" />
             </call>
         </service>
-        <service id="tixi_api.repeatedDrivingAssertionAssembler" class="%tixi_api.repeateddrivingassertionassembler.class%"></service>
+        <service id="tixi_api.repeatedDrivingAssertionPlanAssembler" class="%tixi_api.repeateddrivingassertionassembler.class%">
+            <call method="setDateTimeService">
+                <argument type="service" id="tixi_api.datetimeservice" />
+            </call>
+        </service>
         <service id="tixi_api.tilerenderer" class="%tixi_api.tilerenderer.class%">
             <call method="setTemplateEngine">
                 <argument type="service" id="templating" />

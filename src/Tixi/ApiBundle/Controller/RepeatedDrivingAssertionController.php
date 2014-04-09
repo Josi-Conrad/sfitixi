@@ -26,6 +26,7 @@ use Tixi\ApiBundle\Tile\Dispo\RepeatedAssertionTile;
 use Tixi\CoreDomain\Dispo\RepeatedDrivingAssertion;
 use Tixi\CoreDomain\Dispo\RepeatedDrivingAssertionPlan;
 use Tixi\CoreDomain\Dispo\RepeatedMonthlyDrivingAssertion;
+use Tixi\CoreDomain\Driver;
 use Tixi\CoreDomainBundle\Repository\Dispo\RepeatedDrivingAssertionPlanRepositoryDoctrine;
 use Tixi\CoreDomainBundle\Repository\Dispo\RepeatedDrivingAssertionRepositoryDoctrine;
 
@@ -39,6 +40,22 @@ use Tixi\CoreDomainBundle\Repository\Dispo\RepeatedDrivingAssertionRepositoryDoc
 class RepeatedDrivingAssertionController extends Controller{
 
     /**
+     * @Route("", name="tixiapi_driver_repeatedassertionplans_get")
+     * @Method({"GET","POST"})
+     */
+    public function getRepeatedAssertionPlansAction(Request $request, $driverId, $embeddedState = false) {
+        $embeddedState = $embeddedState || ($request->get('embedded') !== null && $request->get('embedded'));
+
+        $dataGridHandler = $this->get('tixi_api.datagridhandler');
+        $dataGridControllerFactory = $this->get('tixi_api.datagridcontrollerfactory');
+        $tileRenderer = $this->get('tixi_api.tilerenderer');
+
+        $gridController = $dataGridControllerFactory->createRepeatedDrivingAssertionPlanController($embeddedState, array('driverId' => $driverId));
+        $dataGridTile = $dataGridHandler->createDataGridTileByRequest($request, $gridController);
+        return new Response($tileRenderer->render($dataGridTile));
+    }
+
+    /**
      * @Route("/new", name="tixiapi_driver_repeatedassertionplan_new")
      * @Method({"GET","POST"})
      * @Breadcrumb("{driverId}", route={"name"="tixiapi_driver_get", "parameters"={"driverId"}})
@@ -46,12 +63,12 @@ class RepeatedDrivingAssertionController extends Controller{
      */
     public function newRepeatedAssertionPlanAction(Request $request, $driverId) {
         $tileRenderer = $this->get('tixi_api.tilerenderer');
-
+        $driver = $this->getDriver($driverId);
         $form = $this->createForm(new RepeatedDrivingAssertionType(), new RepeatedDrivingAssertionRegisterDTO());
         $form->handleRequest($request);
         if ($form->isValid()) {
             $assertionFormDTO = $form->getData();
-            $this->registerOrUpdateAssertionPlan($assertionFormDTO);
+            $this->registerOrUpdateAssertionPlan($assertionFormDTO, $driver);
             $this->get('entity_manager')->flush();
             return $this->redirect($this->generateUrl('tixiapi_driver_get', array('driverId'=>$driverId)));
         }
@@ -72,10 +89,11 @@ class RepeatedDrivingAssertionController extends Controller{
         $tileRenderer = $this->get('tixi_api.tilerenderer');
         $assertionPlanRepository = $this->get('repeateddrivingassertionplan_repository');
         /** @var RepeatedDrivingAssertionAssembler $assembler*/
-        $assembler = $this->get('tixi_api.repeateddrivingassertionassembler');
+        $assembler = $this->get('tixi_api.repeateddrivingassertionplanassembler');
 
         /** @var RepeatedDrivingAssertionPlan $assertionPlan */
         $assertionPlan = $assertionPlanRepository->find($assertionPlanId);
+        $driver = $this->getDriver($driverId);
         if(null === $assertionPlan) {
             throw $this->createNotFoundException('The assertion plan with id '+$assertionPlanId+' does not exist');
         }
@@ -84,12 +102,12 @@ class RepeatedDrivingAssertionController extends Controller{
         $form->handleRequest($request);
         if ($form->isValid()) {
             $assertionDTO = $form->getData();
-            $this->registerOrUpdateAssertionPlan($assertionDTO);
+            $this->registerOrUpdateAssertionPlan($assertionDTO, $driver);
             $this->get('entity_manager')->flush();
             return $this->redirect($this->generateUrl('tixiapi_driver_get', array('driverId'=>$driverId)));
         }
 
-        $rootPanel = new RootPanel('tixiapi_drivers_get', 'repeateddrivingmission.panel.new');
+        $rootPanel = new RootPanel('tixiapi_drivers_get', 'repeateddrivingmission.panel.edit');
         $rootPanel->add(new RepeatedAssertionTile('monthlyAssertion',$form, $assertionPlan->getFrequency()));
 
         return new Response($tileRenderer->render($rootPanel));
@@ -97,19 +115,21 @@ class RepeatedDrivingAssertionController extends Controller{
 
     /**
      * @param RepeatedDrivingAssertionRegisterDTO $assertionDTO
+     * @param Driver $driver
      */
-    protected function registerOrUpdateAssertionPlan(RepeatedDrivingAssertionRegisterDTO $assertionDTO) {
+    protected function registerOrUpdateAssertionPlan(RepeatedDrivingAssertionRegisterDTO $assertionDTO, Driver $driver) {
         /** @var RepeatedDrivingAssertionPlanRepositoryDoctrine $assertionPlanRepository */
         $assertionPlanRepository = $this->get('repeateddrivingassertionplan_repository');
         /** @var RepeatedDrivingAssertionRepositoryDoctrine $assertionRepository*/
         $assertionRepository = $this->get('repeateddrivingassertion_repository');
         /** @var RepeatedDrivingAssertionAssembler $assembler*/
-        $assembler = $this->get('tixi_api.repeateddrivingassertionassembler');
+        $assembler = $this->get('tixi_api.repeateddrivingassertionplanassembler');
 
         /** @var RepeatedDrivingAssertionPlan $assertionPlan*/
         $assertionPlan = null;
         if (null === $assertionDTO->id) {
             $assertionPlan = $assembler->repeatedRegisterDTOToNewDrivingAssertionPlan($assertionDTO);
+            $driver->assignRepeatedDrivingAssertionPlan($assertionPlan);
         } else {
             $assertionPlan = $assertionPlanRepository->find($assertionDTO->id);
             $assembler->repeatedRegisterDTOToDrivingAssertionPlan($assertionPlan, $assertionDTO);
@@ -130,6 +150,14 @@ class RepeatedDrivingAssertionController extends Controller{
         }
         $assertionPlan->replaceRepeatedDrivingAssertions($repeatedAssertions);
         $assertionPlanRepository->store($assertionPlan);
+    }
+
+    protected function getDriver($driverId) {
+        $driver = $this->get('driver_repository')->find($driverId);
+        if(null === $driver) {
+            throw $this->createNotFoundException('The driver with id ' . $driverId . ' does not exist');
+        }
+        return $driver;
     }
 
 } 

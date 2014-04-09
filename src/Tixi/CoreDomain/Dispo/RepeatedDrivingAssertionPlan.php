@@ -10,6 +10,7 @@ namespace Tixi\CoreDomain\Dispo;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Tixi\CoreDomain\Driver;
 
 /**
  * Class DrivingAssertionPlan
@@ -49,6 +50,11 @@ class RepeatedDrivingAssertionPlan {
      * @ORM\OneToMany(targetEntity="RepeatedDrivingAssertion", mappedBy="assertionPlan")
      */
     protected $repeatedDrivingAssertions;
+    /**
+     * @ORM\ManyToOne(targetEntity="Tixi\CoreDomain\Driver", inversedBy="repeatedDrivingAssertionPlans")
+     * @ORM\JoinColumn(name="driver_id", referencedColumnName="id")
+     */
+    protected $driver;
 
     protected function __construct() {
         $this->repeatedDrivingAssertions = new ArrayCollection();
@@ -69,6 +75,14 @@ class RepeatedDrivingAssertionPlan {
         foreach($assertions as $assertion) {
             $this->repeatedDrivingAssertions->add($assertion);
         }
+    }
+
+    public function assignDriver(Driver $driver) {
+        $this->driver = $driver;
+    }
+
+    public function removeDriver() {
+        $this->driver = null;
     }
 
     /**

@@ -163,7 +163,7 @@ class ServicePlanController extends Controller {
     protected function getVehicle($vehicleId) {
         $vehicle = $this->get('vehicle_repository')->find($vehicleId);
         if (null === $vehicle) {
-            throw $this->createNotFoundException('The vehicle with id ' . $vehicleId . ' does not exists');
+            throw $this->createNotFoundException('The vehicle with id ' . $vehicleId . ' does not exist');
         }
         return $vehicle;
     }
