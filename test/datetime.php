@@ -12,4 +12,4 @@ $mai = DateTime::createFromFormat('d.m.Y','01.06.2014');
 
 //echo $mai->format('d.m.Y');
 
-echo date('d.m.Y', strtotime('last Saturday',$mai->getTimestamp()));
+echo date('d.m.Y', strtotime('last saturday',$mai->getTimestamp()));

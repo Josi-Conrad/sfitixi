@@ -90,7 +90,7 @@ class RepeatedDrivingAssertionController extends Controller{
         }
 
         $rootPanel = new RootPanel('tixiapi_drivers_get', 'repeateddrivingmission.panel.new');
-        $rootPanel->add(new RepeatedAssertionTile('monthlyAssertion',$form));
+        $rootPanel->add(new RepeatedAssertionTile('monthlyAssertion',$form, $assertionPlan->getFrequency()));
 
         return new Response($tileRenderer->render($rootPanel));
     }
@@ -105,25 +105,31 @@ class RepeatedDrivingAssertionController extends Controller{
         $assertionRepository = $this->get('repeateddrivingassertion_repository');
         /** @var RepeatedDrivingAssertionAssembler $assembler*/
         $assembler = $this->get('tixi_api.repeateddrivingassertionassembler');
-        if (null === $assertionDTO->id) {
-            /** @var RepeatedDrivingAssertionPlan $assertionPlan*/
-            $assertionPlan = $assembler->repeatedRegisterDTOToNewDrivingAssertionPlan($assertionDTO);
-            $repeatedAssertions = new ArrayCollection();
-            if($assertionDTO->frequency === 'weekly') {
-                $repeatedAssertions = $assembler->repeatedRegisterDTOtoWeeklyDrivingAssertions($assertionDTO);
-            }else {
-                $repeatedAssertions = $assembler->repeatedRegisterDTOtoMonthlyDrivingAssertions($assertionDTO);
-            }
-            /** @var RepeatedDrivingAssertion $repeatedAssertion */
-            foreach($repeatedAssertions as $repeatedAssertion) {
-                $repeatedAssertion->setAssertionPlan($assertionPlan);
-                $assertionRepository->store($repeatedAssertion);
-            }
-            $assertionPlan->replaceRepeatedDrivingAssertions($repeatedAssertions);
-            $assertionPlanRepository->store($assertionPlan);
-        } else {
 
+        /** @var RepeatedDrivingAssertionPlan $assertionPlan*/
+        $assertionPlan = null;
+        if (null === $assertionDTO->id) {
+            $assertionPlan = $assembler->repeatedRegisterDTOToNewDrivingAssertionPlan($assertionDTO);
+        } else {
+            $assertionPlan = $assertionPlanRepository->find($assertionDTO->id);
+            $assembler->repeatedRegisterDTOToDrivingAssertionPlan($assertionPlan, $assertionDTO);
+            foreach($assertionPlan->getRepeatedDrivingAssertions() as $previousAssertions) {
+                $assertionRepository->remove($previousAssertions);
+            }
         }
+        $repeatedAssertions = new ArrayCollection();
+        if($assertionDTO->frequency === 'weekly') {
+            $repeatedAssertions = $assembler->repeatedRegisterDTOtoWeeklyDrivingAssertions($assertionDTO);
+        }else {
+            $repeatedAssertions = $assembler->repeatedRegisterDTOtoMonthlyDrivingAssertions($assertionDTO);
+        }
+        /** @var RepeatedDrivingAssertion $repeatedAssertion */
+        foreach($repeatedAssertions as $repeatedAssertion) {
+            $repeatedAssertion->setAssertionPlan($assertionPlan);
+            $assertionRepository->store($repeatedAssertion);
+        }
+        $assertionPlan->replaceRepeatedDrivingAssertions($repeatedAssertions);
+        $assertionPlanRepository->store($assertionPlan);
     }
 
 } 

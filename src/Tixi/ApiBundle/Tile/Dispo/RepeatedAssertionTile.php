@@ -17,16 +17,18 @@ class RepeatedAssertionTile extends AbstractTile{
 
     protected $formId;
     protected $form;
+    protected $frequency;
 
-    public function __construct($formId, $form) {
+    public function __construct($formId, $form, $frequency='') {
         $this->formId = $formId;
         $this->form = $form;
+        $this->frequency = $frequency;
         $this->add(new FormControlTile($formId));
     }
 
     public function getViewParameters()
     {
-        return array('formId'=>$this->formId, 'form'=>$this->form->createView());
+        return array('formId'=>$this->formId, 'form'=>$this->form->createView(), 'frequency'=>$this->frequency);
     }
 
     public function getTemplateName()

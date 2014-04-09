@@ -34,6 +34,7 @@ class RepeatedDrivingAssertionRegisterDTO {
     public $monthlyShiftSelections;
 
     public function __construct() {
+        $this->weeklyDaysSelector = array();
         $this->monthlyFirstWeeklySelector = array();
         $this->monthlySecondWeeklySelector = array();
         $this->monthlyThirdWeeklySelector = array();

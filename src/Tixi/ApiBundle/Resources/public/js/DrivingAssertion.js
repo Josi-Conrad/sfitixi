@@ -7,7 +7,7 @@ function RepeatedDrivingAssertion() {
     this._weeklyView = null;
     this._monthlyView = null;
 
-    this.init = function(trans) {
+    this.init = function(trans, frequency) {
         _this._weeklyView = $('.weeklyPart');
         _this._monthlyView = $('.monthlyPart');
 
@@ -15,8 +15,8 @@ function RepeatedDrivingAssertion() {
         _this._weeklyAssertionController.init('weeklyShiftSelections', trans);
         _this._monthlyAssertionController = new ShiftSelectionController();
         _this._monthlyAssertionController.init('monthlyShiftSelections', trans);
-
         _this._initListeners();
+        if(frequency) {_this._toggleFrequency(frequency);}
     }
 
     this._initListeners = function() {

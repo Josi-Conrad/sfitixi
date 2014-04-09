@@ -18,9 +18,9 @@ class RepeatedDrivingAssertionAssembler {
 
     /**
      * @var array
-     * ISO-8601 numeric representation of the day of the week
+     * php dayname -> ISO-8601 numeric representation of the day of the week
      */
-    protected $numericWeekdayConverter = array(
+    protected $weekdayToNumericConverter = array(
         'Monday'=>1,
         'Tuesday'=>2,
         'Wednesday'=>3,
@@ -30,10 +30,33 @@ class RepeatedDrivingAssertionAssembler {
         'Sunday'=>7,
     );
 
+    /**
+     * @var array
+     * ISO-8601 numeric representation of the day of the week -> php dayname
+     */
+    protected $numericToWeekdayConverter = array(
+        1=>'Monday',
+        2=>'Tuesday',
+        3=>'Wednesday',
+        4=>'Thursday',
+        5=>'Friday',
+        6=>'Saturday',
+        7=>'Sunday'
+    );
+
     public function repeatedRegisterDTOToNewDrivingAssertionPlan(RepeatedDrivingAssertionRegisterDTO $dto) {
         $drivingAssertionPlan = RepeatedDrivingAssertionPlan::registerRepeatedAssertionPlan(
             $dto->memo, $dto->anchorDate, $dto->frequency, $dto->withHolidays, $dto->endDate);
         return $drivingAssertionPlan;
+    }
+
+    public function repeatedRegisterDTOToDrivingAssertionPlan(RepeatedDrivingAssertionPlan $assertionPlan, RepeatedDrivingAssertionRegisterDTO $dto) {
+        $assertionPlan->setMemo($dto->memo);
+        $assertionPlan->setAnchorDate($dto->anchorDate);
+        $assertionPlan->setEndingDate($dto->endDate);
+        $assertionPlan->setFrequency($dto->frequency);
+        $assertionPlan->setWithHolidays($dto->withHolidays);
+        return $assertionPlan;
     }
 
 
@@ -57,7 +80,7 @@ class RepeatedDrivingAssertionAssembler {
         foreach($dto->getWeeklyShiftSelections() as $shiftSelectionDTO) {
             $weekday = $this->explodeWeeklySelectionId($shiftSelectionDTO->getSelectionId());
             $weeklyDrivingAssertion = new RepeatedWeeklyDrivingAssertion();
-            $weeklyDrivingAssertion->setWeekday($this->numericWeekdayConverter[$weekday]);
+            $weeklyDrivingAssertion->setWeekday($this->weekdayToNumericConverter[$weekday]);
             $weeklyDrivingAssertion->setShiftTypes($shiftSelectionDTO->getShiftSelection());
             $weeklyDrivingAssertions->add($weeklyDrivingAssertion);
         }
@@ -73,7 +96,17 @@ class RepeatedDrivingAssertionAssembler {
         $assertionDTO->frequency = $assertionPlan->getFrequency();
         $assertionDTO->withHolidays = $assertionPlan->getWithHolidays();
         if($assertionDTO->frequency === 'weekly') {
-
+            /** @var RepeatedWeeklyDrivingAssertion $weeklyAssertion */
+            foreach($assertionPlan->getRepeatedDrivingAssertions() as $weeklyAssertion) {
+                $assertionDTO->weeklyDaysSelector[] = $this->numericToWeekdayConverter[$weeklyAssertion->getWeekday()];
+                $assertionDTO->weeklyShiftSelections->add(
+                    $this->createShiftSelectionDTO(
+                        'Day',
+                        $this->numericToWeekdayConverter[$weeklyAssertion->getWeekday()],
+                        $weeklyAssertion->getShiftTypes()->toArray()
+                    )
+                );
+            }
         }else {
             /** @var RepeatedMonthlyDrivingAssertion $monthlyAssertion */
             foreach($assertionPlan->getRepeatedDrivingAssertions() as $monthlyAssertion) {
@@ -92,7 +125,7 @@ class RepeatedDrivingAssertionAssembler {
                     $this->createShiftSelectionDTO(
                         $monthlyAssertion->getRelativeWeekAsText(),
                         $monthlyAssertion->getWeekdayAsText(),
-                        $monthlyAssertion->getShiftTypes()
+                        $monthlyAssertion->getShiftTypes()->toArray()
                     )
                 );
             }
@@ -100,10 +133,10 @@ class RepeatedDrivingAssertionAssembler {
         return $assertionDTO;
     }
 
-    protected function createShiftSelectionDTO($selectedOccurency, $selectedDay, $shiftSelection) {
+    protected function createShiftSelectionDTO($selectedOccurency, $selectedDay, array $shiftSelection) {
         $shiftDTO = new ShiftSelectionDTO();
         $shiftDTO->selectionId = $selectedOccurency.'_'.$selectedDay;
-        $shiftDTO->shiftSelection = $shiftSelection;
+        $shiftDTO->shiftSelection = new ArrayCollection($shiftSelection);
         return $shiftDTO;
     }
 
