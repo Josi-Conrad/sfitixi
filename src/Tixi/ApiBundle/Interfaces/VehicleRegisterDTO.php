@@ -14,7 +14,7 @@ class VehicleRegisterDTO {
     public $name;
     public $licenceNumber;
     public $dateOfFirstRegistration;
-    public $parkingLotNumber;
+    public $parking;
     public $category;
     public $memo;
     public $managementDetails;

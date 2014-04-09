@@ -27,36 +27,27 @@ class PersonType extends AbstractType {
             'multiple' => false,
             'expanded' => true
         ));
-        $builder->add('firstname', new TextOnlyType(), array(
+        $builder->add('firstname', 'text', array(
             'label' => 'person.field.firstname',
         ));
-        $builder->add('lastname', new TextOnlyType(), array(
+        $builder->add('lastname', 'text', array(
             'label' => 'person.field.lastname',
         ));
         $builder->add('telephone', 'text', array(
             'label' => 'person.field.telephone',
             'pattern' => '^[\+0-9 ]{5,19}'
         ));
-        $builder->add('email', 'email', array(
-            'required' => false,
-            'label' => 'person.field.email'
+        $builder->add('street', 'text', array(
+            'label' => 'address.field.street'
         ));
-        $builder->add('entryDate', new DatePickerType(), array(
-            'required' => false,
-            'label' => 'person.field.entrydate'
+        $builder->add('postalCode', 'text', array(
+            'label' => 'address.field.postalcode'
         ));
-        $builder->add('birthday', new DatePickerType(), array(
-            'required' => false,
-            'label' => 'person.field.birthday'
+        $builder->add('city', 'text', array(
+            'label' => 'address.field.city'
         ));
-        $builder->add('extraMinutes', 'integer', array(
-            'required' => false,
-            'label' => 'person.field.extraminutes',
-            'pattern' => '^\d+$'
-        ));
-        $builder->add('details', 'textarea', array(
-            'required' => false,
-            'label' => 'person.field.details'
+        $builder->add('country', 'text', array(
+            'label' => 'address.field.country'
         ));
     }
 

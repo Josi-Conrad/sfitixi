@@ -12,6 +12,7 @@ namespace Tixi\ApiBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Tixi\ApiBundle\Form\Shared\DatePickerType;
 
 class PassengerType extends PersonType {
 
@@ -26,7 +27,6 @@ class PassengerType extends PersonType {
             'multiple'  => true,
             'label'     => 'passenger.field.handicap'
         ));
-
         $builder->add('insurances', 'entity', array(
             'class'     => 'Tixi\CoreDomain\Insurance',
             'property'  =>  'name',
@@ -34,27 +34,30 @@ class PassengerType extends PersonType {
             'multiple'  => true,
             'label'     => 'passenger.field.insurance'
         ));
-
         $builder->add('gotMonthlyBilling', 'checkbox', array(
             'required'  => false,
             'label' => 'passenger.field.monthlybilling'
+        ));
+        $builder->add('entryDate', new DatePickerType(), array(
+            'required' => false,
+            'label' => 'person.field.entrydate'
+        ));
+        $builder->add('birthday', new DatePickerType(), array(
+            'required' => false,
+            'label' => 'person.field.birthday'
+        ));
+        $builder->add('extraMinutes', 'integer', array(
+            'required' => false,
+            'label' => 'person.field.extraminutes',
+            'pattern' => '^\d+$'
         ));
         $builder->add('notice', 'textarea', array(
             'required'  => false,
             'label' => 'passenger.field.notice'
         ));
-
-        $builder->add('street', 'text', array(
-            'label' => 'address.field.street'
-        ));
-        $builder->add('postalCode', 'text', array(
-            'label' => 'address.field.postalcode'
-        ));
-        $builder->add('city', 'text', array(
-            'label' => 'address.field.city'
-        ));
-        $builder->add('country', 'text', array(
-            'label' => 'address.field.country'
+        $builder->add('details', 'textarea', array(
+            'required' => false,
+            'label' => 'person.field.details'
         ));
     }
 

@@ -139,7 +139,7 @@ class VehicleController extends Controller {
             $vehicleDTO = $form->getData();
             $this->registerOrUpdateVehicle($vehicleDTO);
             $this->get('entity_manager')->flush();
-            return $this->redirect($this->generateUrl('tixiapi_vehicles_get', array('vehicleId' => $vehicleId)));
+            return $this->redirect($this->generateUrl('tixiapi_vehicle_get', array('vehicleId' => $vehicleId)));
         }
 
         $gridController = $dataGridControllerFactory->createServicePlanController(true, array('vehicleId' => $vehicleId));

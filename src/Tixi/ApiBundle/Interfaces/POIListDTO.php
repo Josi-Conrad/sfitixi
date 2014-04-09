@@ -43,12 +43,8 @@ class POIListDTO implements DataGridSourceClass {
      * @GridField(propertyId="Address.city", headerName="address.field.city", order=8)
      */
     public $city;
-    /**
-     * @GridField(propertyId="POIKeyword.name", headerName="poi.field.keywords", order=9)
-     */
-    public $keywords;
 
     public function getAccessQuery() {
-        return new GenericAccessQuery('POI', 'Tixi\CoreDomain\POI POI JOIN POI.keywords POIKeyword', 'POI.id');
+        return new GenericAccessQuery('POI', 'Tixi\CoreDomain\POI POI JOIN POI.address Address', 'POI.id');
     }
 }

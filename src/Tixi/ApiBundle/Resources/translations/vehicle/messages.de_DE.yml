@@ -4,8 +4,10 @@ vehicle.list.name: Fahrzeuge
 vehicle.field.name: Fahrzeugbezeichnung
 vehicle.field.licencenumber: Kennzeichen
 vehicle.field.dateoffirstregistration: Inverkehrssetzung
-vehicle.field.parkinglotnumber: Parkplatz
+vehicle.field.parking: Parkplatz
 vehicle.field.category: Fehrzeugkategorie
+vehicle.field.category.amountofseats: Anzahl Sitzplätze
+vehicle.field.category.amountofwheelchairs: Anzahl Rollstühle
 vehicle.field.memo: Notizen
 vehicle.field.managementdetails: Verwaltungsdetails
 vehicle.field.supervisor: Fahrzeugbetreuer
@@ -14,9 +16,12 @@ vehicle.field.supervisor.empty: Bitte einen Betreuer auswählen
 vehicle.panel.name: Fahrzeug
 vehicle.panel.new: Neues Fahrzeug
 vehicle.panel.details: Fahrzeug Details
+vehicle.panel.serviceplans: Zugeordnete Servicepläne
 
 vehicle.button.new: Neues Fahrzeug
 vehicle.button.delete: Fahrzeug löschen
+
+vehicle.date.not_blank: Bitte ein Datum wählen
 
 
 #Serviceplan

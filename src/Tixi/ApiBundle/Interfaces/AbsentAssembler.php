@@ -45,8 +45,8 @@ class AbsentAssembler {
         $absentDTO->id = $absent->getId();
         $absentDTO->personId = $absent->getPerson()->getId();
         $absentDTO->subject = $absent->getSubject();
-        $absentDTO->startDate = $this->convertDateToString($absent->getStartDate());
-        $absentDTO->endDate = $this->convertDateToString($absent->getEndDate());
+        $absentDTO->startDate = $absent->getStartDate();
+        $absentDTO->endDate = $absent->getEndDate();
         return $absentDTO;
     }
 
@@ -71,22 +71,8 @@ class AbsentAssembler {
         $absentEmbeddedListDTO->id = $absent->getId();
         $absentEmbeddedListDTO->personId = $absent->getPerson()->getId();
         $absentEmbeddedListDTO->subject = $absent->getSubject();
-        $absentEmbeddedListDTO->startDate = $this->convertDateToString($absent->getStartDate());
-        $absentEmbeddedListDTO->endDate = $this->convertDateToString($absent->getEndDate());
+        $absentEmbeddedListDTO->startDate = $absent->getStartDate()->format('d.m.Y');
+        $absentEmbeddedListDTO->endDate = $absent->getEndDate()->format('d.m.Y');
         return $absentEmbeddedListDTO;
-    }
-
-    private function convertStringToDate($string){
-        $date = \DateTime::createFromFormat('d.m.Y', $string);
-        if ($date) {
-            $newDate = clone $date;
-            return $newDate;
-        }
-        return $date;
-    }
-
-    private function convertDateToString($date){
-        $stringDate = clone $date;
-        return $stringDate->format('d.m.Y');
     }
 }

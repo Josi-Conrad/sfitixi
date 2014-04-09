@@ -14,7 +14,7 @@ use Tixi\ApiBundle\Shared\DataGrid\DataGridSourceClass;
 use Tixi\CoreDomain\Shared\GenericEntityFilter\GenericAccessQuery;
 
 
-class VehicleListDTO implements DataGridSourceClass{
+class VehicleListDTO implements DataGridSourceClass {
     /**
      * @GridField(rowIdentifier=true, propertyId="Vehicle.id")
      */
@@ -29,21 +29,27 @@ class VehicleListDTO implements DataGridSourceClass{
      */
     public $licenceNumber;
     /**
-     * @GridField(propertyId="Vehicle.dateOfFirstRegistration", headerName="vehicle.field.dateoffirstregistration", order=5)
-     */
-    public $dateOfFirstRegistration;
-    /**
-     * @GridField(propertyId="Vehicle.parkingLotNumber", headerName="vehicle.field.parkinglotnumber", order=3)
-     */
-    public $parkingLotNumber;
-    /**
      * @GridField(propertyId="VehicleCategory.name", headerName="vehicle.field.category", order=4)
      */
     public $category;
+    /**
+     * @GridField(propertyId="VehicleCategory.name", headerName="vehicle.field.category.amountofseats", order=5)
+     */
+    public $amountOfSeats;
+    /**
+     * @GridField(propertyId="VehicleCategory.amountOfWheelChairs", headerName="vehicle.field.category.amountofwheelchairs", order=6)
+     */
+    public $amountOfWheelChairs;
+    /**
+     * @GridField(propertyId="Vehicle.parking", headerName="vehicle.field.parking", order=7)
+     */
+    public $parking;
+    /**
+     * @GridField(propertyId="Vehicle.dateOfFirstRegistration", headerName="vehicle.field.dateoffirstregistration", order=8)
+     */
+    public $dateOfFirstRegistration;
 
-
-    public function getAccessQuery()
-    {
+    public function getAccessQuery() {
         return new GenericAccessQuery('Vehicle', 'Tixi\CoreDomain\Vehicle Vehicle JOIN Vehicle.category VehicleCategory', 'Vehicle.id');
     }
 }

@@ -21,6 +21,10 @@ class DriverType extends PersonType {
 
         parent::buildForm($builder,$options);
 
+        $builder->add('email', 'email', array(
+            'required' => false,
+            'label' => 'person.field.email'
+        ));
         $builder->add('licenceNumber', 'text', array(
             'label' => 'driver.field.licence',
             'constraints' => array(
@@ -30,24 +34,27 @@ class DriverType extends PersonType {
         $builder->add('wheelChairAttendance', 'checkbox', array(
             'label' => 'driver.field.wheelchair'
         ));
-
         $builder->add('driverCategory', 'entity', array(
             'class' => 'Tixi\CoreDomain\DriverCategory',
             'property' => 'name',
             'label' => 'driver.field.category'
         ));
-
-        $builder->add('street', 'text', array(
-            'label' => 'address.field.street'
+        $builder->add('entryDate', new DatePickerType(), array(
+            'required' => false,
+            'label' => 'person.field.entrydate'
         ));
-        $builder->add('postalCode', 'text', array(
-            'label' => 'address.field.postalcode'
+        $builder->add('birthday', new DatePickerType(), array(
+            'required' => false,
+            'label' => 'person.field.birthday'
         ));
-        $builder->add('city', 'text', array(
-            'label' => 'address.field.city'
+        $builder->add('extraMinutes', 'integer', array(
+            'required' => false,
+            'label' => 'person.field.extraminutes',
+            'pattern' => '^\d+$'
         ));
-        $builder->add('country', 'text', array(
-            'label' => 'address.field.country'
+        $builder->add('details', 'textarea', array(
+            'required' => false,
+            'label' => 'person.field.details'
         ));
     }
 
