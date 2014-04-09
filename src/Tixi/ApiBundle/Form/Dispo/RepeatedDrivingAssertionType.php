@@ -20,12 +20,15 @@ class RepeatedDrivingAssertionType extends AbstractType{
     {
         $builder->add('id', 'hidden');
         $builder->add('memo', 'text', array(
+            'attr'=>array('title' => 'form.field.title.not_blank'),
             'label' => 'repeateddrivingmission.field.memo'
         ));
         $builder->add('anchorDate', new DatePickerType(), array(
+            'attr'=>array('title' => 'form.field.title.date'),
             'label' => 'repeateddrivingmission.field.anchordate'
         ));
         $builder->add('endDate', new DatePickerType(), array(
+            'required'  => false,
             'label' => 'repeateddrivingmission.field.endDate'
         ));
         $builder->add('frequency', 'choice', array(
@@ -33,6 +36,7 @@ class RepeatedDrivingAssertionType extends AbstractType{
             'label' => ' '
         ));
         $builder->add('withHolidays','checkbox',array(
+            'required'  => false,
             'label' => 'repeateddrivingmission.field.withHolidays'
         ));
 
