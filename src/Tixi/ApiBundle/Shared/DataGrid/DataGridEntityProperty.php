@@ -15,8 +15,8 @@ class DataGridEntityProperty extends GenericEntityProperty{
     protected $isRestrictive;
     protected $isHeader;
 
-    public function __construct($entityByName, $propertyByName, $propertyValue=null, $isRestrictive=false, $isHeader=false) {
-        parent::__construct($entityByName, $propertyByName, $propertyValue);
+    public function __construct($entityByName, $propertyByName, $comparingOperator='=', $propertyValue=null, $isRestrictive=false, $isHeader=false) {
+        parent::__construct($entityByName, $propertyByName, $propertyValue, $comparingOperator);
         $this->isRestrictive = $isRestrictive;
         $this->isHeader = $isHeader;
     }

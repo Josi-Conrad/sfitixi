@@ -121,7 +121,7 @@ class FastGenericEntityAccessorRepositoryDoctrine implements FastGenericEntityAc
                 if($index>0) {
                     $dqlRestrictive .= ' AND ';
                 }
-                $dqlRestrictive .= $property->getEntityPropertyString().' = '.$property->getPropertyValue();
+                $dqlRestrictive .= $property->getEntityPropertyString().' '.$property->getComparingOperator().' '.$property->getPropertyValue();
             }
             $dqlRestrictive .= ')';
         }

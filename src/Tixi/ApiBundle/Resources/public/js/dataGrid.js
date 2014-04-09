@@ -11,7 +11,9 @@ function DataGridManager() {
         _dataGridIdDataAttribut = 'data-gridid',
         _gridId,
         _callback,
-        _isEmbedded;
+        _isEmbedded,
+        _emptyDefaultText;
+
 
     this._dataGrids = [];
 
@@ -22,14 +24,14 @@ function DataGridManager() {
             if(conf && conf[_gridId] && conf[_gridId].dblClickCallback) {
                 _callback = conf[_gridId].dblClickCallback;
                 _isEmbedded = (typeof conf[_gridId].isEmbedded !== 'undefined') ? conf[_gridId].isEmbedded : false;
-                _this._dataGrids.push(new DataGrid(outline,_gridId,_callback,_isEmbedded));
+                _emptyDefaultText = conf[_gridId].emptyDefaultText;
+                _this._dataGrids.push(new DataGrid(outline,_gridId,_callback,_isEmbedded, _emptyDefaultText));
             }
-
         });
     }
 }
 
-function DataGrid(outline, gridId, dblClickCallback, isEmbedded) {
+function DataGrid(outline, gridId, dblClickCallback, isEmbedded, emptyDefaultText) {
     if(this == global) {return new DataGrid(arguments);}
 
     var _this = this,
@@ -44,16 +46,18 @@ function DataGrid(outline, gridId, dblClickCallback, isEmbedded) {
     this._customActionWithSelectionButton = null;
     this._dataSrcUrl = null;
     this._isEmbedded = null;
+    this._emptyDefaultText = null;
 
     this._activeRow = null;
     this._filterstr = null;
     this._orderedByHeader = null;
 
-    this._init = function(outline, gridId, dblClickCallback, isEmbedded) {
+    this._init = function(outline, gridId, dblClickCallback, isEmbedded, emptyDefaultText) {
         _this._outline = $(outline);
         _this._dblClickCallback = dblClickCallback;
         _this._gridId = gridId;
         _this._isEmbedded = isEmbedded;
+        _this._emptyDefaultText = emptyDefaultText;
         _this._initHeaders();
         _this._initDataSrcUrl();
         _this._initControls();
@@ -125,8 +129,12 @@ function DataGrid(outline, gridId, dblClickCallback, isEmbedded) {
 
     this._updateData = function(resetPagination) {
         _this._pollDataFromSource(_this._constructDataParams()).done(function(data) {
-            _this._getTableBody().replaceWith($(data));
-            _this._initRowListener();
+            if($(data).find('tr').length!==0) {
+                _this._getTableBody().replaceWith($(data));
+                _this._initRowListener();
+            }else {
+                _this._getTableBody().replaceWith(_this._createEmptyDataRow());
+            }
             _this._activeRow = null;
             _this._updateVisibilityOfCustomActionButton();
             if(resetPagination) {
@@ -239,7 +247,11 @@ function DataGrid(outline, gridId, dblClickCallback, isEmbedded) {
         return prefixedId.substr(_prefixLength, prefixedId.length);
     }
 
-    _this._init(outline, gridId, dblClickCallback, isEmbedded);
+    this._createEmptyDataRow = function() {
+        return $('<tbody data-totalamountofrows="0"><tr><td colspan="'+_this._headers.length+'">'+_this._emptyDefaultText+'</td> </tr></tbody>');
+    }
+
+    _this._init(outline, gridId, dblClickCallback, isEmbedded, emptyDefaultText);
 }
 
 function DataGridHeader(uiElement, fieldId, callback) {

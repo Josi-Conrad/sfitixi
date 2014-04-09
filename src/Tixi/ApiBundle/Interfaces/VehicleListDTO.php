@@ -20,6 +20,10 @@ class VehicleListDTO implements DataGridSourceClass {
      */
     public $id;
     /**
+     * @GridField(propertyId="Vehicle.isDeleted", restrictive=true)
+     */
+    public $isDeleted = 'false';
+    /**
      * @GridField(propertyId="Vehicle.name", headerName="vehicle.field.name", order=1)
      */
     public $name;

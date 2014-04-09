@@ -34,6 +34,7 @@ abstract class DataGridAbstractController extends ContainerAware{
 
     public function createDataGridJsConf() {
         $embedded = $this->isInEmbeddedState() ? 'true' : 'false';
+        $emptyDataText = $this->container->get('translator')->trans('datagrid.empty.defaulttext');
         return 'conf = {
                     "'.$this->getGridIdentifier().'": {
                         "dblClickCallback": function (rowId) {
@@ -41,7 +42,8 @@ abstract class DataGridAbstractController extends ContainerAware{
                                 _url = _url.replace("__replaceId__", rowId);
                                 window.location = _url;
                         },
-                        "isEmbedded": '.$embedded.'
+                        "isEmbedded": '.$embedded.',
+                        "emptyDefaultText": "'.$emptyDataText.'"
                     }
                 }';
     }

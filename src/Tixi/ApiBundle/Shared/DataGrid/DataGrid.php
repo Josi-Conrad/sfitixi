@@ -9,6 +9,7 @@
 namespace Tixi\ApiBundle\Shared\DataGrid;
 
 use Doctrine\Common\Annotations\FileCacheReader;
+use Tixi\ApiBundle\Shared\DataGrid\Annotations\GridField;
 use Tixi\ApiBundle\Shared\DataGrid\DataGridSourceClass;
 use Tixi\ApiBundle\Shared\DataGrid\RESTHandler\DataGridInputState;
 use Tixi\CoreDomain\Shared\GenericEntityFilter\FilterProperties\OrderBy;
@@ -54,16 +55,18 @@ class DataGrid {
         $properties = array();
 
         foreach($sourceReflectionObject->getProperties() as $reflProperty) {
+            /** @var GridField $dataGridFieldAnnotation */
             $dataGridFieldAnnotation = $this->reader->getPropertyAnnotation($reflProperty, $this->fieldAnnotationClass);
             if(!empty($dataGridFieldAnnotation->propertyId)) {
                 $explodedPropertyId = explode('.', $dataGridFieldAnnotation->propertyId);
                 if(count($explodedPropertyId)<2) {throw new \Exception('misformatted propertyId found on field '.$reflProperty->getName());}
                 $entityName = $explodedPropertyId[0];
                 $propertyName = $explodedPropertyId[1];
+                $comparingOperator = $dataGridFieldAnnotation->comparingOperator;
                 $isRestrictive = $dataGridFieldAnnotation->restrictive;
                 $isHeader = !empty($dataGridFieldAnnotation->headerName);
                 $propertyValue = $reflProperty->getValue($sourceClassInstance);
-                $properties[] = new DataGridEntityProperty($entityName, $propertyName, $propertyValue, $isRestrictive, $isHeader);
+                $properties[] = new DataGridEntityProperty($entityName, $propertyName, $comparingOperator, $propertyValue, $isRestrictive, $isHeader);
             }
         }
         return $properties;

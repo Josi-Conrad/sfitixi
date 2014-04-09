@@ -14,6 +14,7 @@ use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Symfony\Component\DependencyInjection\ContainerAware;
 use Symfony\Component\HttpFoundation\Request;
 use Tixi\ApiBundle\Interfaces\AssemblerInterface;
+use Tixi\ApiBundle\Shared\DataGrid\Annotations\GridField;
 use Tixi\ApiBundle\Shared\DataGrid\DataGridInputState;
 use Tixi\ApiBundle\Shared\DataGrid\Tile\DataGridEmbeddedTile;
 use Tixi\ApiBundle\Shared\DataGrid\Tile\DataGridRowTableTile;
@@ -31,7 +32,6 @@ class DataGridHandler {
 
     public static $dataGirdReplaceIdentifier = '__replaceId__';
 
-    protected $rowIdAnnotationClass = 'Tixi\ApiBundle\Shared\DataGrid\Annotations\GridRowId';
     protected $fieldAnnotationClass = 'Tixi\ApiBundle\Shared\DataGrid\Annotations\GridField';
     protected $headerClass = 'Tixi\ApiBundle\Shared\DataGrid\DataGridHeader';
     protected $fieldClass = 'Tixi\ApiBundle\Shared\DataGrid\DataGridField';
@@ -120,16 +120,18 @@ class DataGridHandler {
         $properties = array();
 
         foreach($sourceReflectionObject->getProperties() as $reflProperty) {
+            /** @var GridField $dataGridFieldAnnotation */
             $dataGridFieldAnnotation = $this->annotationReader->getPropertyAnnotation($reflProperty, $this->fieldAnnotationClass);
             if(!empty($dataGridFieldAnnotation->propertyId)) {
                 $explodedPropertyId = explode('.', $dataGridFieldAnnotation->propertyId);
                 if(count($explodedPropertyId)<2) {throw new \Exception('misformatted propertyId found on field '.$reflProperty->getName());}
                 $entityName = $explodedPropertyId[0];
                 $propertyName = $explodedPropertyId[1];
+                $comparingOperator = $dataGridFieldAnnotation->comparingOperator;
                 $isRestrictive = $dataGridFieldAnnotation->restrictive;
                 $isHeader = !empty($dataGridFieldAnnotation->headerName);
                 $propertyValue = $reflProperty->getValue($sourceClassInstance);
-                $properties[] = new DataGridEntityProperty($entityName, $propertyName, $propertyValue, $isRestrictive, $isHeader);
+                $properties[] = new DataGridEntityProperty($entityName, $propertyName, $comparingOperator, $propertyValue, $isRestrictive, $isHeader);
             }
         }
         return $properties;

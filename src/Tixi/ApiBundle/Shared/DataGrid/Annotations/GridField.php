@@ -25,6 +25,11 @@ class GridField {
     public $restrictive = false;
     /**
      * @var string
+     * Restrictive values can be used to build selection formulas.
+     */
+    public $comparingOperator = '=';
+    /**
+     * @var string
      * Format: EntityName.PropertyName
      */
     public $propertyId;
@@ -36,5 +41,7 @@ class GridField {
      * @var int
      */
     public $order;
+
+
 
 } 
