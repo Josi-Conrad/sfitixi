@@ -10,32 +10,23 @@ namespace Tixi\ApiBundle\Interfaces;
 
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Tixi\ApiBundle\Helper\DateTimeService;
 use Tixi\CoreDomain\Driver;
 use Tixi\CoreDomain\Address;
 
 class DriverAssembler {
-    /**
-     * injected by service container via setter method
-     * @var \Tixi\ApiBundle\Helper\DateTimeService
-     */
-    private $dateTimeService;
-
     /**
      * @param DriverRegisterDTO $driverDTO
      * @throws \Exception
      * @return Driver
      */
     public function registerDTOtoNewDriver(DriverRegisterDTO $driverDTO) {
-        $entryDate = $this->dateTimeService->convertLocalDateTimeToUTCDateTime($driverDTO->entryDate);
-        $birthday = $this->dateTimeService->convertLocalDateTimeToUTCDateTime($driverDTO->birthday);
         $driver = Driver::registerDriver($driverDTO->title, $driverDTO->firstname,
             $driverDTO->lastname, $driverDTO->telephone,
             Address::registerAddress(
                 $driverDTO->street, $driverDTO->postalCode,
                 $driverDTO->city, $driverDTO->country),
             $driverDTO->licenceNumber, $driverDTO->driverCategory, $driverDTO->wheelChairAttendance,
-            $driverDTO->email, $entryDate, $birthday,
+            $driverDTO->email, $driverDTO->entryDate, $driverDTO->birthday,
             $driverDTO->extraMinutes, $driverDTO->details
         );
         return $driver;
@@ -48,8 +39,6 @@ class DriverAssembler {
      * @return Driver
      */
     public function registerDTOToDriver(DriverRegisterDTO $driverDTO, Driver $driver) {
-        $entryDate = $this->dateTimeService->convertLocalDateTimeToUTCDateTime($driverDTO->entryDate);
-        $birthday = $this->dateTimeService->convertLocalDateTimeToUTCDateTime($driverDTO->birthday);
         $address = $driver->getAddress();
         $address->updateAddressBasicData($driverDTO->street, $driverDTO->postalCode,
                 $driverDTO->city, $driverDTO->country);
@@ -57,7 +46,7 @@ class DriverAssembler {
             $driverDTO->lastname, $driverDTO->telephone,
             $address, $driverDTO->licenceNumber, $driverDTO->driverCategory,
             $driverDTO->wheelChairAttendance,
-            $driverDTO->email, $entryDate, $birthday,
+            $driverDTO->email, $driverDTO->entryDate, $driverDTO->birthday,
             $driverDTO->extraMinutes, $driverDTO->details);
         return $driver;
     }
@@ -75,8 +64,8 @@ class DriverAssembler {
         $driverDTO->lastname = $driver->getLastname();
         $driverDTO->telephone = $driver->getTelephone();
         $driverDTO->email = $driver->getEmail();
-        $driverDTO->entryDate = $this->dateTimeService->convertUTCDateTimeToLocalDateTime($driver->getEntryDate());
-        $driverDTO->birthday = $this->dateTimeService->convertUTCDateTimeToLocalDateTime($driver->getBirthday());
+        $driverDTO->entryDate = $driver->getEntryDate();
+        $driverDTO->birthday = $driver->getBirthday();
         $driverDTO->extraMinutes = $driver->getExtraMinutes();
         $driverDTO->details = $driver->getDetails();
 
@@ -122,13 +111,5 @@ class DriverAssembler {
         $driverListDTO->city = $driver->getAddress()->getCity();
         $driverListDTO->driverCategory = $driver->getDriverCategory()->getName();
         return $driverListDTO;
-    }
-
-    /**
-     * @param $dateTimeService
-     * Injected by service container
-     */
-    public function setDateTimeService(DateTimeService $dateTimeService) {
-        $this->dateTimeService = $dateTimeService;
     }
 }

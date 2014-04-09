@@ -44,7 +44,7 @@ class ServicePlanType extends AbstractType{
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Tixi\ApiBundle\Interfaces\ServicePlanAssignDTO'
+            'data_class' => 'Tixi\ApiBundle\Interfaces\ServicePlanRegisterDTO'
         ));
     }
 }

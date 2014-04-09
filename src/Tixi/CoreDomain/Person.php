@@ -508,5 +508,12 @@ class Person {
         return $this->title;
     }
 
+    public function getNameString() {
+        return $this->firstname . ' ' . $this->lastname;
+    }
+
+    public function getNameStringWithID() {
+        return $this->firstname . ' ' . $this->lastname . ' (ID: ' . $this->id . ')';
+    }
 
 }

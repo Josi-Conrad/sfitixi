@@ -9,29 +9,26 @@
 namespace Tixi\ApiBundle\Interfaces;
 
 
-
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Tixi\ApiBundle\Helper\DateTimeService;
 use Tixi\CoreDomain\Vehicle;
 
-class VehicleAssembler{
-
-    //injected by service container via setter method
-    private $dateTimeService;
-
+class VehicleAssembler {
     /**
      * @param VehicleRegisterDTO $vehicleDTO
      * @return Vehicle
      * @throws \Exception
      */
     public function registerDTOtoNewVehicle(VehicleRegisterDTO $vehicleDTO) {
-        $dateOfFirstRegistration = $this->dateTimeService->convertLocalDateTimeToUTCDateTime($vehicleDTO->dateOfFirstRegistration);
-        if(!$dateOfFirstRegistration) {
+        $dateOfFirstRegistration = $vehicleDTO->dateOfFirstRegistration;
+        if (!$dateOfFirstRegistration) {
             throw new \Exception('bade date format detected');
         }
-        return Vehicle::registerVehicle($vehicleDTO->name, $vehicleDTO->licenceNumber,
-            $dateOfFirstRegistration, $vehicleDTO->parkingLotNumber, $vehicleDTO->vehicleCategory);
+        $vehicle = Vehicle::registerVehicle($vehicleDTO->name, $vehicleDTO->licenceNumber,
+            $dateOfFirstRegistration, $vehicleDTO->parkingLotNumber, $vehicleDTO->category,
+            $vehicleDTO->memo, $vehicleDTO->managementDetails);
+        $vehicle->assignSupervisor($vehicleDTO->supervisor);
+        return $vehicle;
     }
 
     /**
@@ -40,12 +37,18 @@ class VehicleAssembler{
      * @throws \Exception
      */
     public function registerDTOToVehicle(Vehicle $vehicle, VehicleRegisterDTO $vehicleDTO) {
-        $dateOfFirstRegistration = $this->dateTimeService->convertLocalDateTimeToUTCDateTime($vehicleDTO->dateOfFirstRegistration);
-        if(!$dateOfFirstRegistration) {
-            throw new \Exception('bade date format detected');
+        $dateOfFirstRegistration = $vehicleDTO->dateOfFirstRegistration;
+        if (!$dateOfFirstRegistration) {
+            throw new \Exception('bad date format detected');
         }
-        return $vehicle->updateBasicData($vehicleDTO->name, $vehicleDTO->licenceNumber,
-            $dateOfFirstRegistration, $vehicleDTO->parkingLotNumber, $vehicleDTO->vehicleCategory);
+        $vehicle->updateBasicData($vehicleDTO->name, $vehicleDTO->licenceNumber,
+            $dateOfFirstRegistration, $vehicleDTO->parkingLotNumber, $vehicleDTO->category,
+            $vehicleDTO->memo, $vehicleDTO->managementDetails);
+        if (!empty($vehicleDTO->supervisor)) {
+            $vehicle->assignSupervisor($vehicleDTO->supervisor);
+        } else {
+            $vehicle->removeSupervisor();
+        }
     }
 
     /**
@@ -55,11 +58,14 @@ class VehicleAssembler{
     public function toVehicleRegisterDTO(Vehicle $vehicle) {
         $vehicleDTO = new VehicleRegisterDTO();
         $vehicleDTO->id = $vehicle->getId();
-        $vehicleDTO->name= $vehicle->getName();
+        $vehicleDTO->name = $vehicle->getName();
         $vehicleDTO->licenceNumber = $vehicle->getLicenceNumber();
-        $vehicleDTO->dateOfFirstRegistration = $this->dateTimeService->convertUTCDateTimeToLocalDateTime($vehicle->getDateOfFirstRegistration());
+        $vehicleDTO->dateOfFirstRegistration = $vehicle->getDateOfFirstRegistration();
         $vehicleDTO->parkingLotNumber = $vehicle->getParkingLotNumber();
-        $vehicleDTO->vehicleCategory = $vehicle->getCategory();
+        $vehicleDTO->category = $vehicle->getCategory();
+        $vehicleDTO->memo = $vehicle->getMemo();
+        $vehicleDTO->managementDetails = $vehicle->getManagementDetails();
+        $vehicleDTO->supervisor = $vehicle->getSupervisor();
         return $vehicleDTO;
     }
 
@@ -67,9 +73,10 @@ class VehicleAssembler{
      * @param $vehicles
      * @return array
      */
-    public function vehiclesToVehicleListDTOs($vehicles) {        ;
+    public function vehiclesToVehicleListDTOs($vehicles) {
+        ;
         $dtoArray = array();
-        foreach($vehicles as $vehicle) {
+        foreach ($vehicles as $vehicle) {
             $dtoArray[] = $this->toVehicleListDTO($vehicle);
         }
         return $dtoArray;
@@ -85,16 +92,8 @@ class VehicleAssembler{
         $vehicleListDTO->name = $vehicle->getName();
         $vehicleListDTO->licenceNumber = $vehicle->getLicenceNumber();
         $vehicleListDTO->parkingLotNumber = $vehicle->getParkingLotNumber();
-        $vehicleListDTO->dateOfFirstRegistration = $this->dateTimeService->convertUTCDateTimeToLocalString($vehicle->getDateOfFirstRegistration());
+        $vehicleListDTO->dateOfFirstRegistration = $vehicle->getDateOfFirstRegistration()->format('d.m.Y');
         $vehicleListDTO->category = $vehicle->getCategory()->getName();
         return $vehicleListDTO;
-    }
-
-    /**
-     * @param $dateTimeService
-     * Injected by service container
-     */
-    public function setDateTimeService(DateTimeService $dateTimeService) {
-        $this->dateTimeService = $dateTimeService;
     }
 }

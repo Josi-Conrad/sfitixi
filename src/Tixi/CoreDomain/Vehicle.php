@@ -43,7 +43,7 @@ class Vehicle implements Entity {
     protected $isActive;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="date")
      */
     protected $dateOfFirstRegistration;
 
@@ -91,15 +91,21 @@ class Vehicle implements Entity {
      * @param $dateOfFirstRegistration
      * @param $parkingLotNumber
      * @param VehicleCategory $category
+     * @param null $memo
+     * @param null $managementDetails
      * @return Vehicle
      */
-    public static function registerVehicle($name, $licenceNumber, $dateOfFirstRegistration, $parkingLotNumber, VehicleCategory $category) {
+    public static function registerVehicle($name, $licenceNumber, $dateOfFirstRegistration,
+                                           $parkingLotNumber, VehicleCategory $category,
+                                           $memo = null, $managementDetails = null) {
         $vehicle = new Vehicle();
         $vehicle->setName($name);
         $vehicle->setLicenceNumber($licenceNumber);
         $vehicle->setDateOfFirstRegistration($dateOfFirstRegistration);
         $vehicle->setParkingLotNumber($parkingLotNumber);
         $vehicle->setCategory($category);
+        $vehicle->setMemo($memo);
+        $vehicle->setManagementDetails($managementDetails);
         $vehicle->activate();
         return $vehicle;
     }
@@ -110,8 +116,12 @@ class Vehicle implements Entity {
      * @param null $dateOfFirstRegistration
      * @param null $parkingLotNumber
      * @param VehicleCategory $category
+     * @param null $memo
+     * @param null $managementDetails
      */
-    public function updateBasicData($name = null, $licenceNumber = null, $dateOfFirstRegistration = null, $parkingLotNumber = null, VehicleCategory $category = null) {
+    public function updateBasicData($name = null, $licenceNumber = null,
+                                    $dateOfFirstRegistration = null, $parkingLotNumber = null,
+                                    VehicleCategory $category = null, $memo = null, $managementDetails = null) {
         if (!empty($name)) {
             $this->name = $name;
         }
@@ -127,11 +137,17 @@ class Vehicle implements Entity {
         if (!empty($category)) {
             $this->category = $category;
         }
+        if (!empty($memo)) {
+            $this->memo = $memo;
+        }
+        if (!empty($managementDetails)) {
+            $this->managementDetails = $managementDetails;
+        }
     }
 
     public static function removeVehicle(Vehicle $vehicle) {
         foreach ($vehicle->getServicePlans() as $s) {
-            /**@var $s ServicePlan*/
+            /**@var $s ServicePlan */
             $s->removeVehicle();
         }
         $vehicle->removeSupervisor();

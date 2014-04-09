@@ -175,16 +175,7 @@ class POI {
      * @param POIKeyword $keyword
      */
     public function assignKeyword(POIKeyword $keyword) {
-        $keyword->assignPOI($this);
         $this->keywords->add($keyword);
-    }
-
-    /**
-     * @param POIKeyword $keyword
-     */
-    public function unsignKeyword(POIKeyword $keyword) {
-        $keyword->unsignPOI($this);
-        $this->keywords->removeElement($keyword);
     }
 
     /**
@@ -192,6 +183,13 @@ class POI {
      */
     public function removeKeyword(POIKeyword $keyword) {
         $this->keywords->removeElement($keyword);
+    }
+
+    /**
+     * @param mixed $keywords
+     */
+    public function setKeywords($keywords) {
+        $this->keywords = $keywords;
     }
 
     /**

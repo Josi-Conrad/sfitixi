@@ -9,6 +9,7 @@
 namespace Tixi\ApiBundle\Form;
 
 
+use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -41,10 +42,27 @@ class VehicleType extends AbstractType{
         $builder->add('parkingLotNumber', 'integer', array(
             'label' => 'vehicle.field.parkinglotnumber'
         ));
-        $builder->add('vehicleCategory', 'entity', array(
+        $builder->add('supervisor', 'entity', array(
+            'class' => 'Tixi\CoreDomain\Driver',
+            'property' => 'nameStringWithID',
+            'label' => 'vehicle.field.supervisor',
+            'empty_data' => null,
+            'empty_value' => 'vehicle.field.supervisor.empty',
+            'query_builder' => function(EntityRepository $er) {
+                    return $er->createQueryBuilder('s')
+                        ->orderBy('s.firstname', 'ASC');
+                },
+        ));
+        $builder->add('category', 'entity', array(
             'class' => 'Tixi\CoreDomain\VehicleCategory',
             'property' => 'name',
             'label' => 'vehicle.field.category'
+        ));
+        $builder->add('memo', 'textarea', array(
+            'label' => 'vehicle.field.memo'
+        ));
+        $builder->add('managementDetails', 'textarea', array(
+            'label' => 'vehicle.field.managementdetails'
         ));
     }
 

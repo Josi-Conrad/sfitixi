@@ -27,11 +27,7 @@
                 <argument type="service" id="service_container" />
             </call>
         </service>
-        <service id="tixi_api.assemblerVehicle" class="%tixi_api.vehicleassembler.class%">
-            <call method="setDateTimeService">
-                <argument type="service" id="tixi_api.datetimeservice" />
-            </call>
-        </service>
+        <service id="tixi_api.assemblerVehicle" class="%tixi_api.vehicleassembler.class%"/>
         <service id="tixi_api.assemblerServicePlan" class="%tixi_api.serviceplanassembler.class%">
             <call method="setDateTimeService">
                 <argument type="service" id="tixi_api.datetimeservice" />
@@ -42,15 +38,8 @@
                 <!--<argument type="service" id="annotation_reader" />-->
             <!--</call>-->
         <!--</service>-->
-        <service id="tixi_api.assemblerDriver" class="%tixi_api.driverassembler.class%">
-            <call method="setDateTimeService">
-                <argument type="service" id="tixi_api.datetimeservice" />
-            </call>
-        </service>
+        <service id="tixi_api.assemblerDriver" class="%tixi_api.driverassembler.class%"/>
         <service id="tixi_api.assemblerPassenger" class="%tixi_api.passengerassembler.class%">
-            <call method="setDateTimeService">
-                <argument type="service" id="tixi_api.datetimeservice" />
-            </call>
         </service>
         <service id="tixi_api.repeatedDrivingAssertionAssembler" class="%tixi_api.repeateddrivingassertionassembler.class%"></service>
         <service id="tixi_api.tilerenderer" class="%tixi_api.tilerenderer.class%">

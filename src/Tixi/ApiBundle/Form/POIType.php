@@ -9,6 +9,7 @@
 namespace Tixi\ApiBundle\Form;
 
 
+use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -30,13 +31,18 @@ class POIType extends AbstractType{
             'label' => 'poi.field.department'
         ));
         $builder->add('telephone', 'text', array(
-            'label' => 'poi.field.telephone'
+            'label' => 'poi.field.telephone',
         ));
 
         $builder->add('keywords', 'entity', array(
             'class' => 'Tixi\CoreDomain\POIKeyword',
             'property' => 'name',
-            'label' => 'poi.field.keyword'
+            'label' => 'poi.field.keyword',
+            'multiple' => true,
+            'query_builder' => function(EntityRepository $er) {
+                    return $er->createQueryBuilder('k')
+                        ->orderBy('k.name', 'ASC');
+                },
         ));
 
         $builder->add('street', 'text', array(
@@ -50,6 +56,22 @@ class POIType extends AbstractType{
         ));
         $builder->add('country', 'text', array(
             'label' => 'address.field.country'
+        ));
+        $builder->add('lat', 'text', array(
+            'label' => 'address.field.lat'
+        ));
+        $builder->add('lng', 'text', array(
+            'label' => 'address.field.lng'
+        ));
+
+        $builder->add('memo', 'textarea', array(
+            'label' => 'poi.field.memo',
+        ));
+        $builder->add('comment', 'textarea', array(
+            'label' => 'poi.field.comment',
+        ));
+        $builder->add('details', 'textarea', array(
+            'label' => 'poi.field.details',
         ));
     }
 

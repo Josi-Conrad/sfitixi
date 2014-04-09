@@ -61,13 +61,13 @@ class VehicleController extends Controller {
         $tileRenderer = $this->get('tixi_api.tilerenderer');
 
         $vehicle = $this->get('vehicle_repository')->find($vehicleId);
-        $vehicleDTO = $this->get('tixi_api.assemblervehicle')->toVehicleListDTO($vehicle);
+        $vehicleDTO = $this->get('tixi_api.assemblervehicle')->toVehicleRegisterDTO($vehicle);
 
         $gridController = $dataGridControllerFactory->createServicePlanController(true, array('vehicleId' => $vehicleId));
         $gridTile = $dataGridHandler->createEmbeddedDataGridTile($gridController);
 
         $rootPanel = new RootPanel('tixiapi_vehicles_get', 'vehicle.panel.name', $vehicle->getName());
-        $panelSplitter = $rootPanel->add(new PanelSplitterTile('7:5'));
+        $panelSplitter = $rootPanel->add(new PanelSplitterTile('1:1'));
         $formPanel = $panelSplitter->addLeft(new PanelTile('vehicle.panel.details', PanelTile::$primaryType));
 
         $formPanel->add(new VehicleRegisterFormViewTile('vehicleRequest', $vehicleDTO, $this->generateUrl('tixiapi_vehicle_editbasic', array('vehicleId' => $vehicleId))));
@@ -130,7 +130,7 @@ class VehicleController extends Controller {
         $gridTile = $dataGridHandler->createEmbeddedDataGridTile($gridController);
 
         $rootPanel = new RootPanel('tixiapi_vehicles_get', 'vehicle.panel.name', $vehicle->getName());
-        $panelSplitter = $rootPanel->add(new PanelSplitterTile('7:5'));
+        $panelSplitter = $rootPanel->add(new PanelSplitterTile('1:1'));
         $formPanel = $panelSplitter->addLeft(new PanelTile('vehicle.panel.details', PanelTile::$primaryType));
         $formPanel->add(new FormTile('vehicleForm', $form));
         $gridPanel = $panelSplitter->addRight(new PanelTile('vehicle.panel.serviceplans'));

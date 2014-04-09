@@ -58,7 +58,7 @@ class AddressPOITest extends WebTestCase {
         $this->addressRepo->store($address);
         $this->em->flush();
 
-        $addressFind = $this->addressRepo->findOneBy(array('street' => 'Hauptstrasse 23', 'name' => 'SZKB'));
+        $addressFind = $this->addressRepo->find($address->getId());
         $this->assertEquals($address, $addressFind);
 
         $this->addressRemove($address);
@@ -96,7 +96,7 @@ class AddressPOITest extends WebTestCase {
         $this->poiRepo->store($poi);
         $this->em->flush();
 
-        $poiFind = $this->poiRepo->findOneBy(array('name' => 'Altersheim Wohnwohl'));
+        $poiFind = $this->poiRepo->find($poi->getId());
         $this->assertEquals($poi, $poiFind);
 
         $this->poiRemove($poi);

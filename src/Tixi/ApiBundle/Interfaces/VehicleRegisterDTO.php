@@ -10,11 +10,13 @@ namespace Tixi\ApiBundle\Interfaces;
 
 
 class VehicleRegisterDTO {
-
     public $id;
     public $name;
     public $licenceNumber;
     public $dateOfFirstRegistration;
     public $parkingLotNumber;
-    public $vehicleCategory;
+    public $category;
+    public $memo;
+    public $managementDetails;
+    public $supervisor;
 }

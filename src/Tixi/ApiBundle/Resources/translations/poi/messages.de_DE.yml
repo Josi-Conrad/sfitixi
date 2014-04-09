@@ -1,0 +1,17 @@
+#POI
+poi.panel.name: OVI
+poi.list.name: Orte von Interesse
+poi.panel.name: OVI
+poi.panel.new: Neuer OVI erfassen
+poi.panel.details: OVI Details
+poi.panel.edit: OVI editieren
+poi.field.id: OVI-ID
+poi.field.name: Name
+poi.field.keyword: Keyword
+poi.field.keywords: Keywords
+poi.field.department: Abteilung
+poi.field.telephone: Telefon
+poi.field.memo: Notizen
+poi.field.comment: Kommentare
+poi.field.details: Details
+poi.button.new: Neuer OVI

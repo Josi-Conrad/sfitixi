@@ -25,6 +25,9 @@ class POIAssembler {
                 $poiDTO->street, $poiDTO->postalCode,
                 $poiDTO->city, $poiDTO->country, $poiDTO->address_name, $poiDTO->lat, $poiDTO->lng, $poiDTO->type),
             $poiDTO->telephone, $poiDTO->comment, $poiDTO->memo, $poiDTO->details);
+        foreach ($poiDTO->keywords as $keyword) {
+            $poi->assignKeyword($keyword);
+        }
         return $poi;
     }
 
@@ -36,11 +39,11 @@ class POIAssembler {
      */
     public function registerDTOToPOI(POIRegisterDTO $poiDTO, POI $poi) {
         $address = $poi->getAddress();
-        $address->updateAddressBasicData($poiDTO->name, $poiDTO->department,
-            Address::registerAddress(
-                $poiDTO->street, $poiDTO->postalCode,
-                $poiDTO->city, $poiDTO->country, $poiDTO->address_name, $poiDTO->lat, $poiDTO->lng, $poiDTO->type),
+        $address->updateAddressBasicData($poiDTO->street, $poiDTO->postalCode,
+            $poiDTO->city, $poiDTO->country, $poiDTO->address_name, $poiDTO->lat, $poiDTO->lng, $poiDTO->type);
+        $poi->updateBasicData($poiDTO->name, $poiDTO->department, $address,
             $poiDTO->telephone, $poiDTO->comment, $poiDTO->memo, $poiDTO->details);
+        $poi->setKeywords($poiDTO->keywords);
         return $poi;
     }
 
@@ -54,6 +57,7 @@ class POIAssembler {
         $poiDTO->isActive = $poi->getIsActive();
         $poiDTO->name = $poi->getName();
         $poiDTO->department = $poi->getDepartment();
+        $poiDTO->telephone = $poi->getTelephone();
         $poiDTO->comment = $poi->getComment();
         $poiDTO->memo = $poi->getMemo();
         $poiDTO->details = $poi->getDetails();
@@ -65,6 +69,8 @@ class POIAssembler {
         $poiDTO->postalCode = $poi->getAddress()->getPostalCode();
         $poiDTO->city = $poi->getAddress()->getCity();
         $poiDTO->country = $poi->getAddress()->getCountry();
+        $poiDTO->lat = $poi->getAddress()->getLat();
+        $poiDTO->lng = $poi->getAddress()->getLng();
 
         return $poiDTO;
     }
@@ -95,11 +101,13 @@ class POIAssembler {
         $poiListDTO->telephone = $poi->getTelephone();
         $poiListDTO->street = $poi->getAddress()->getStreet();
         $poiListDTO->city = $poi->getAddress()->getCity();
+
         $keywords_string = '';
-        foreach($poi->getKeywords() as $keyword){
-            $keywords_string .= ' '.$keyword->getName();
+        foreach ($poi->getKeywords() as $keyword) {
+            $keywords_string .= ' ' . $keyword->getName();
         }
         $poiListDTO->keywords = $keywords_string;
+
         return $poiListDTO;
     }
 }

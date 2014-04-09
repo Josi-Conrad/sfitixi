@@ -18,10 +18,15 @@ class VehicleRegisterFormViewTile extends AbstractFormViewTile{
     {
         $this->basicFormRows[] = new FormRowView('vehicle.field.name',$this->dto->name);
         $this->basicFormRows[] = new FormRowView('vehicle.field.licencenumber',$this->dto->licenceNumber);
-        $this->basicFormRows[] = new FormRowView('vehicle.field.dateoffirstregistration',$this->dto->dateOfFirstRegistration);
+        $this->basicFormRows[] = new FormRowView('vehicle.field.dateoffirstregistration',$this->dto->dateOfFirstRegistration->format('d.m.Y'));
         $this->basicFormRows[] = new FormRowView('vehicle.field.parkinglotnumber',$this->dto->parkingLotNumber);
-        $this->basicFormRows[] = new FormRowView('vehicle.field.category',$this->dto->category);
+        $this->basicFormRows[] = new FormRowView('vehicle.field.category',$this->dto->category->getName());
 
-//        $this->expandedFormRows[] = new FormRowView('Fahrzeugkategorie',$this->dto->category);
+        if(!empty($this->dto->supervisor)){
+            $this->basicFormRows[] = new FormRowView('vehicle.field.supervisor',$this->dto->supervisor->getNameString());
+        }
+
+        $this->expandedFormRows[] = new FormRowView('vehicle.field.memo',$this->dto->memo);
+        $this->expandedFormRows[] = new FormRowView('vehicle.field.managementdetails',$this->dto->managementDetails);
     }
 }

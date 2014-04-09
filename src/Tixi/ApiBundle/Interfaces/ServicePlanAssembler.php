@@ -18,10 +18,10 @@ class ServicePlanAssembler {
     private $dateTimeService;
 
     /**
-     * @param ServicePlanAssignDTO $servicePlanDTO
+     * @param ServicePlanRegisterDTO $servicePlanDTO
      * @return ServicePlan
      */
-    public function registerDTOtoNewServicePlan(ServicePlanAssignDTO $servicePlanDTO) {
+    public function registerDTOtoNewServicePlan(ServicePlanRegisterDTO $servicePlanDTO) {
         $servicePlan = ServicePlan::registerServicePlan(
             $this->dateTimeService->convertLocalDateTimeToUTCDateTime($servicePlanDTO->startDate),
             $this->dateTimeService->convertLocalDateTimeToUTCDateTime($servicePlanDTO->endDate),
@@ -31,11 +31,11 @@ class ServicePlanAssembler {
     }
 
     /**
-     * @param ServicePlanAssignDTO $servicePlanDTO
+     * @param ServicePlanRegisterDTO $servicePlanDTO
      * @param ServicePlan $servicePlan
      * @return ServicePlan
      */
-    public function registerDTOtoServicePlan(ServicePlanAssignDTO $servicePlanDTO, ServicePlan $servicePlan) {
+    public function registerDTOtoServicePlan(ServicePlanRegisterDTO $servicePlanDTO, ServicePlan $servicePlan) {
         $servicePlan->updateBasicData(
             $this->dateTimeService->convertLocalDateTimeToUTCDateTime($servicePlanDTO->startDate),
             $this->dateTimeService->convertLocalDateTimeToUTCDateTime($servicePlanDTO->endDate),
@@ -46,10 +46,10 @@ class ServicePlanAssembler {
 
     /**
      * @param ServicePlan $servicePlan
-     * @return ServicePlanAssignDTO
+     * @return ServicePlanRegisterDTO
      */
-    public function toServicePlanAssignDTO(ServicePlan $servicePlan) {
-        $servicePlanDTO = new ServicePlanAssignDTO();
+    public function toServicePlanRegisterDTO(ServicePlan $servicePlan) {
+        $servicePlanDTO = new ServicePlanRegisterDTO();
         $servicePlanDTO->id = $servicePlan->getId();
         $servicePlanDTO->startDate = $this->dateTimeService->convertUTCDateTimeToLocalDateTime($servicePlan->getStartDate());
         $servicePlanDTO->endDate = $this->dateTimeService->convertUTCDateTimeToLocalDateTime($servicePlan->getEndDate());
@@ -82,31 +82,6 @@ class ServicePlanAssembler {
         $servicePlanEmbeddedListDTO->endDate = $this->dateTimeService->convertUTCDateTimeToLocalString($servicePlan->getEndDate());
         $servicePlanEmbeddedListDTO->memo = $servicePlan->getMemo();
         return $servicePlanEmbeddedListDTO;
-    }
-
-    /**
-     * @param $servicePlans
-     * @return array
-     */
-    public function servicePlansToServicePlanListDTOs($servicePlans) {
-        $dtoArray = array();
-        foreach ($servicePlans as $servicePlan) {
-            $dtoArray[] = $this->toServicePlanListDTO($servicePlan);
-        }
-        return $dtoArray;
-    }
-
-    /**
-     * @param ServicePlan $servicePlan
-     * @return ServicePlanListDTO
-     */
-    public function toServicePlanListDTO(ServicePlan $servicePlan) {
-        $servicePlanListDTO = new ServicePlanListDTO();
-        $servicePlanListDTO->id = $servicePlan->getId();
-        $servicePlanListDTO->startDate = $servicePlan->getStartDate();
-        $servicePlanListDTO->endDate = $servicePlan->getEndDate();
-        $servicePlanListDTO->memo = $servicePlan->getMemo();
-        return $servicePlanListDTO;
     }
 
     /**

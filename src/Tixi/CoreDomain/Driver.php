@@ -45,7 +45,7 @@ class Driver extends Person {
      * @ORM\ManyToOne(targetEntity="Tixi\CoreDomain\Dispo\RepeatedDrivingAssertionPlan")
      * @ORM\JoinColumn(name="repeated_driving_assertion_plan", referencedColumnName="id")
      */
-    protected $repeatedDrivingAssertionPlans;
+    protected $repeatedDrivingAssertionPlan;
 
     protected function __construct($title, $firstname, $lastname, $telephone, $address,
                                    $email = null, $entryDate = null, $birthday = null,
@@ -55,7 +55,6 @@ class Driver extends Person {
             $email, $entryDate, $birthday, $extraMinutes, $details);
 
         $this->supervisedVehicles = new ArrayCollection();
-        $this->$repeatedDrivingAssertionPlans = new ArrayCollection();
     }
 
     /**

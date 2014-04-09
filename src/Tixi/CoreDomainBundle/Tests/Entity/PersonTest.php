@@ -208,7 +208,7 @@ class PersonTest extends WebTestCase {
         $this->passengerRepo->store($passenger);
         $this->em->flush();
 
-        $passengerFind = $this->passengerRepo->findOneBy(array('telephone' => '0293292323'));
+        $passengerFind = $this->passengerRepo->find($passenger->getId());
         $this->assertEquals($passenger, $passengerFind);
         $this->assertEquals($passengerFind->getCorrespondenceAddress(), $passengerFind->getAddress());
 

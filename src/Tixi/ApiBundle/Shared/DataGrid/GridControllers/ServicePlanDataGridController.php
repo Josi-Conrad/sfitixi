@@ -10,7 +10,6 @@ namespace Tixi\ApiBundle\Shared\DataGrid\GridControllers;
 
 
 use Tixi\ApiBundle\Interfaces\ServicePlanEmbeddedListDTO;
-use Tixi\ApiBundle\Interfaces\ServicePlanListDTO;
 use Tixi\ApiBundle\Shared\DataGrid\DataGridAbstractController;
 use Tixi\ApiBundle\Shared\DataGrid\DataGridHandler;
 use Tixi\ApiBundle\Shared\DataGrid\Tile\DataGridCustomControlTile;

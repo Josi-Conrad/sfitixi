@@ -15,7 +15,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Tixi\ApiBundle\Form\ServicePlanType;
-use Tixi\ApiBundle\Interfaces\ServicePlanAssignDTO;
+use Tixi\ApiBundle\Interfaces\ServicePlanRegisterDTO;
 use Tixi\ApiBundle\Tile\Core\FormTile;
 use Tixi\ApiBundle\Tile\Core\RootPanel;
 use Tixi\ApiBundle\Tile\ServicePlan\ServicePlanRegisterFormViewTile;
@@ -61,7 +61,7 @@ class ServicePlanController extends Controller {
         if (null === $servicePlan) {
             throw $this->createNotFoundException('The serviceplan with id ' . $servicePlanId . ' does not exists');
         }
-        $servicePlanDTO = $assembler->toServicePlanAssignDTO($servicePlan);
+        $servicePlanDTO = $assembler->toServicePlanRegisterDTO($servicePlan);
         $rootPanel = new RootPanel('servicePlanDetail', 'serviceplan.panel.details');
         $rootPanel->add(new ServicePlanRegisterFormViewTile('servicePlanRequest', $servicePlanDTO, $this->generateUrl('tixiapi_serviceplan_editbasic', array('vehicleId' => $vehicleId, 'servicePlanId' => $servicePlanId))));
 
@@ -80,8 +80,8 @@ class ServicePlanController extends Controller {
         $form = $this->getForm();
         $form->handleRequest($request);
         if ($form->isValid()) {
-            $servicePlanAssignDTO = $form->getData();
-            $this->registerOrUpdateServicePlanToVehicle($servicePlanAssignDTO, $vehicle);
+            $servicePlanDTO = $form->getData();
+            $this->registerOrUpdateServicePlanToVehicle($servicePlanDTO, $vehicle);
             $this->get('entity_manager')->flush();
             return $this->redirect($this->generateUrl('tixiapi_vehicle_get', array('vehicleId' => $vehicleId)));
         }
@@ -107,7 +107,7 @@ class ServicePlanController extends Controller {
         if (null === $servicePlan) {
             throw $this->createNotFoundException('This servicePlan does not exist');
         }
-        $servicePlanDTO = $servicePlanAssembler->toServicePlanAssignDTO($servicePlan);
+        $servicePlanDTO = $servicePlanAssembler->toServicePlanRegisterDTO($servicePlan);
 
         $form = $this->getForm(null, $servicePlanDTO);
         $form->handleRequest($request);
@@ -125,10 +125,10 @@ class ServicePlanController extends Controller {
     }
 
     /**
-     * @param ServicePlanAssignDTO $servicePlanDTO
+     * @param ServicePlanRegisterDTO $servicePlanDTO
      * @param Vehicle $vehicle
      */
-    protected function registerOrUpdateServicePlanToVehicle(ServicePlanAssignDTO $servicePlanDTO, Vehicle $vehicle) {
+    protected function registerOrUpdateServicePlanToVehicle(ServicePlanRegisterDTO $servicePlanDTO, Vehicle $vehicle) {
         if (empty($servicePlanDTO->id)) {
             $servicePlan = $this->get('tixi_api.assemblerserviceplan')->registerDTOtoNewServicePlan($servicePlanDTO);
             $vehicle->assignServicePlan($servicePlan);

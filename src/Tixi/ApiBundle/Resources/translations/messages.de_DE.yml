@@ -18,78 +18,6 @@ disposition.panel.name: Disposition
 #Prepare
 prepare.panel.name: Bereitstellen
 
-#POI
-poi.panel.name: OVI
-poi.list.name: Orte von Interesse
-poi.panel.name: OVI
-poi.panel.new: Neuer OVI erfassen
-poi.panel.details: OVI Details
-poi.panel.edit: OVI editieren
-poi.field.id: OVI-ID
-poi.field.name: Name
-poi.field.keyword: Keyword
-poi.field.keywords: Keywords
-poi.field.department: Abteilung
-poi.field.telephone: Telefon
-poi.button.new: Neuer OVI
-
-#User
-user.management: Benutzerverwaltung
-user.field.username: Benutzername
-user.field.password: Passwort
-user.field.roles: Berechtigungen
-user.field.email: E-Mail
-user.list.name: Benutzer
-user.button.new: Neuer Benutzer
-user.panel.name: Benutzer
-user.panel.new: Neuer Benutzer
-user.panel.details: Benutzer Details
-user.panel.edit: Benutzer editieren
-user.role.user: Benutzer
-user.role.manager: Manager
-user.role.admin: Administrator
-
-#Address
-address.field.street: Strasse / Nummer
-address.field.postalcode: PLZ
-address.field.city: Ort
-address.field.country: Land
-
-#Absent
-absent.list.name: Abwesenheiten
-absent.panel.embedded: Zugeordnete Abwesenheiten
-absent.panel.details: Abwesenheit Details
-absent.panel.new: Neue Abwesenheit
-absent.panel.edit: Abwesenheit editieren
-absent.field.subject: Beschreibung
-absent.field.startdate: Start Datum
-absent.field.enddate: End Datum
-absent.button.new: Neue Abwesenheit
-
-#Vehicle
-vehicle.list.name: Fahrzeuge
-vehicle.field.name: Fahrzeugbezeichnung
-vehicle.field.licencenumber: Kennzeichen
-vehicle.field.dateoffirstregistration: Inverkehrssetzung
-vehicle.field.parkinglotnumber: Parkplatz
-vehicle.field.category: Fehrzeugkategorie
-vehicle.panel.name: Fahrzeug
-vehicle.panel.new: Neues Fahrzeug
-vehicle.panel.details: Fahrzeug Details
-vehicle.button.new: Neues Fahrzeug
-
-#Serviceplan
-serviceplan.list.name: Servicepläne
-serviceplan.field.startdate: Startdatum
-serviceplan.field.enddate: Enddatum
-serviceplan.field.memo: Notizen
-serviceplan.panel.embedded: Zugeordnete Servicepläne
-serviceplan.panel.name: Serviceplan
-serviceplan.panel.new: Neuer Serviceplan
-serviceplan.panel.edit: Serviceplan editieren
-serviceplan.panel.details: Servicplan Details
-serviceplan.button.new: Neuer Serviceplan
-
 #DrivingOrder
 drivingorder.button.new: Neuer Fahrauftrag
 
@@ -110,10 +38,10 @@ repeateddrivingmission.field.endDate: Bis
 repeateddrivingmission.field.frequency.weekly: wöchentlich
 repeateddrivingmission.field.frequency.monthly: monatlich
 repeateddrivingmission.field.withHolidays: inklusive Feiertage
-
 repeateddrivingmission.weekdayselection.text: Wählen Sie bitte die Wochentage, an denen gefahren werden soll:
 repeateddrivingmission.shiftselection.text: Wählen Sie bitte die Schichten, an denen gefahren werden soll:
 repeateddrivingmission.everyweek.text: jeden
+
 firstweek.name: 1. Woche
 secondweek.name: 2. Woche
 thirdweek.name: 3. Woche
