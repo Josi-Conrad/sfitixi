@@ -31,10 +31,13 @@ shift5.name: Schicht 5
 #RepeatedDrivingMission
 repeateddrivingmission.panel.new: Neuer Dauereinsatz
 repeateddrivingmission.panel.edit: Dauereinsatz editieren
+repeateddrivingmission.panel.embedded: Zugeordnete Dauereinsätze
 repeateddrivingmission.button.new: Neuer Dauereinsatz
+repeateddrivingmission.list.name: Dauereinsätze
 repeateddrivingmission.field.memo: Memo
 repeateddrivingmission.field.anchordate: Ab
 repeateddrivingmission.field.endDate: Bis
+repeateddrivingmission.field.frequency: Frequenz
 repeateddrivingmission.field.frequency.weekly: wöchentlich
 repeateddrivingmission.field.frequency.monthly: monatlich
 repeateddrivingmission.field.withHolidays: inklusive Feiertage

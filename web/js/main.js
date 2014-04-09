@@ -27,7 +27,6 @@ $(document).ready(function() {
 });
 
 function FormViewController(formViewId) {
-   console.log(formViewId)
     var _this = this,
         _formView = $(formViewId),
         _expandedViewSection = _formView.find('.formViewExpanded'),

@@ -15,6 +15,7 @@ use Tixi\ApiBundle\Shared\DataGrid\GridControllers\DriverDataGridController;
 use Tixi\ApiBundle\Shared\DataGrid\GridControllers\PassengerAbsentDataGridController;
 use Tixi\ApiBundle\Shared\DataGrid\GridControllers\PassengerDataGridController;
 use Tixi\ApiBundle\Shared\DataGrid\GridControllers\POIDataGridController;
+use Tixi\ApiBundle\Shared\DataGrid\GridControllers\RepeatedDrivingAssertionsDataGridController;
 use Tixi\ApiBundle\Shared\DataGrid\GridControllers\ServicePlanDataGridController;
 use Tixi\ApiBundle\Shared\DataGrid\GridControllers\UserDataGridController;
 use Tixi\ApiBundle\Shared\DataGrid\GridControllers\VehicleDataGridController;
@@ -51,5 +52,9 @@ class DataGridControllerFactory extends ContainerAware{
 
     public function createPOIController($embeddedState=false, array $routeProperties=array()) {
         return new POIDataGridController($this->container, $embeddedState, $routeProperties);
+    }
+
+    public function createRepeatedDrivingAssertionPlanController($embeddedState=false, array $routeProperties=array()) {
+        return new RepeatedDrivingAssertionsDataGridController($this->container, $embeddedState, $routeProperties);
     }
 } 

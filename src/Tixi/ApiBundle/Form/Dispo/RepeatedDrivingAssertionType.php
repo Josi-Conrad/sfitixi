@@ -38,7 +38,7 @@ class RepeatedDrivingAssertionType extends AbstractType{
 
         //weekly part
         $builder->add('weeklyDaysSelector', 'choice', array(
-            'choices' => array('Monday'=>'monday.name','Tuesday'=>'tuesday.name','Wednesday'=>'wednesday.name','Thursday'=>'thursday.name','Friday'=>'friday.name','Saturday'=>'saturday.name','Sunday'=>'sunday.name'),
+            'choices' => array('monday'=>'monday.name','tuesday'=>'tuesday.name','wednesday'=>'wednesday.name','thursday'=>'thursday.name','friday'=>'friday.name','saturday'=>'saturday.name','sunday'=>'sunday.name'),
             'multiple' => true,
             'expanded' => true
         ));
@@ -50,31 +50,31 @@ class RepeatedDrivingAssertionType extends AbstractType{
 
         //monthly part
         $builder->add('monthlyFirstWeeklySelector', 'choice', array(
-            'choices' => array('Monday'=>'monday.abbreviation.name','Tuesday'=>'tuesday.abbreviation.name','Wednesday'=>'wednesday.abbreviation.name','Thursday'=>'thursday.abbreviation.name','Friday'=>'friday.abbreviation.name','Saturday'=>'saturday.abbreviation.name','Sunday'=>'sunday.abbreviation.name'),
+            'choices' => array('monday'=>'monday.abbreviation.name','tuesday'=>'tuesday.abbreviation.name','wednesday'=>'wednesday.abbreviation.name','thursday'=>'thursday.abbreviation.name','friday'=>'friday.abbreviation.name','saturday'=>'saturday.abbreviation.name','sunday'=>'sunday.abbreviation.name'),
             'multiple' => true,
             'expanded' => true,
             'label' => 'firstweek.name'
         ));
         $builder->add('monthlySecondWeeklySelector', 'choice', array(
-            'choices' => array('Monday'=>'monday.abbreviation.name','Tuesday'=>'tuesday.abbreviation.name','Wednesday'=>'wednesday.abbreviation.name','Thursday'=>'thursday.abbreviation.name','Friday'=>'friday.abbreviation.name','Saturday'=>'saturday.abbreviation.name','Sunday'=>'sunday.abbreviation.name'),
+            'choices' => array('monday'=>'monday.abbreviation.name','tuesday'=>'tuesday.abbreviation.name','wednesday'=>'wednesday.abbreviation.name','thursday'=>'thursday.abbreviation.name','friday'=>'friday.abbreviation.name','saturday'=>'saturday.abbreviation.name','sunday'=>'sunday.abbreviation.name'),
             'multiple' => true,
             'expanded' => true,
             'label' => 'secondweek.name'
         ));
         $builder->add('monthlyThirdWeeklySelector', 'choice', array(
-            'choices' => array('Monday'=>'monday.abbreviation.name','Tuesday'=>'tuesday.abbreviation.name','Wednesday'=>'wednesday.abbreviation.name','Thursday'=>'thursday.abbreviation.name','Friday'=>'friday.abbreviation.name','Saturday'=>'saturday.abbreviation.name','Sunday'=>'sunday.abbreviation.name'),
+            'choices' => array('monday'=>'monday.abbreviation.name','tuesday'=>'tuesday.abbreviation.name','wednesday'=>'wednesday.abbreviation.name','thursday'=>'thursday.abbreviation.name','friday'=>'friday.abbreviation.name','saturday'=>'saturday.abbreviation.name','sunday'=>'sunday.abbreviation.name'),
             'multiple' => true,
             'expanded' => true,
             'label' => 'thirdweek.name'
         ));
         $builder->add('monthlyFourthWeeklySelector', 'choice', array(
-            'choices' => array('Monday'=>'monday.abbreviation.name','Tuesday'=>'tuesday.abbreviation.name','Wednesday'=>'wednesday.abbreviation.name','Thursday'=>'thursday.abbreviation.name','Friday'=>'friday.abbreviation.name','Saturday'=>'saturday.abbreviation.name','Sunday'=>'sunday.abbreviation.name'),
+            'choices' => array('monday'=>'monday.abbreviation.name','tuesday'=>'tuesday.abbreviation.name','wednesday'=>'wednesday.abbreviation.name','thursday'=>'thursday.abbreviation.name','friday'=>'friday.abbreviation.name','saturday'=>'saturday.abbreviation.name','sunday'=>'sunday.abbreviation.name'),
             'multiple' => true,
             'expanded' => true,
             'label' => 'fourthweek.name'
         ));
         $builder->add('monthlyLastWeeklySelector', 'choice', array(
-            'choices' => array('Monday'=>'monday.abbreviation.name','Tuesday'=>'tuesday.abbreviation.name','Wednesday'=>'wednesday.abbreviation.name','Thursday'=>'thursday.abbreviation.name','Friday'=>'friday.abbreviation.name','Saturday'=>'saturday.abbreviation.name','Sunday'=>'sunday.abbreviation.name'),
+            'choices' => array('monday'=>'monday.abbreviation.name','tuesday'=>'tuesday.abbreviation.name','wednesday'=>'wednesday.abbreviation.name','thursday'=>'thursday.abbreviation.name','friday'=>'friday.abbreviation.name','saturday'=>'saturday.abbreviation.name','sunday'=>'sunday.abbreviation.name'),
             'multiple' => true,
             'expanded' => true,
             'label' => 'lastweek.name'
