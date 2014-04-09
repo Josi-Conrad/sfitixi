@@ -48,8 +48,8 @@ class VehicleType extends AbstractType{
             'constraints' => new DateTime(),
             'pattern' => '^(0[1-9]|[1|2][0-9]|3[0|1]).(0[1-9]|1[0|1|2]).(19|20)\d\d$'
         ));
-        $builder->add('parkingLotNumber', 'integer', array(
-            'label' => 'vehicle.field.parkinglotnumber',
+        $builder->add('parking', 'integer', array(
+            'label' => 'vehicle.field.parking',
             'attr'=>array('title' => 'form.field.title.digit'),
             'constraints' => array(
                 new NotBlank(array('message'=>'vehicle.nr.not_blank'))
