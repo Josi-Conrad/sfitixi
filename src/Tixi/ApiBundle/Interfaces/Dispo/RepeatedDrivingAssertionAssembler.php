@@ -100,7 +100,7 @@ class RepeatedDrivingAssertionAssembler {
         return $assertionDTO;
     }
 
-    protected function createShiftSelectionDTO($selectedOccurency, $selectedDay, ArrayCollection $shiftSelection) {
+    protected function createShiftSelectionDTO($selectedOccurency, $selectedDay, $shiftSelection) {
         $shiftDTO = new ShiftSelectionDTO();
         $shiftDTO->selectionId = $selectedOccurency.'_'.$selectedDay;
         $shiftDTO->shiftSelection = $shiftSelection;

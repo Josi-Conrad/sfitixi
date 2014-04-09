@@ -10,14 +10,14 @@
 {% block form_widget_simple %}
     {% spaceless %}
         {% set type = type|default('text') %}
-        {% set attr = attr|merge({'class': 'form-control'}) %}
+        {%  set attr = attr|merge({'class': ((attr.class|default('') ~ ' form-control')|trim)}) %}
         <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
     {% endspaceless %}
 {% endblock form_widget_simple %}
 
 {% block textarea_widget %}
     {% spaceless %}
-        {% set attr = attr|merge({'class': 'form-control'}) %}
+        {%  set attr = attr|merge({'class': ((attr.class|default('') ~ ' form-control')|trim)}) %}
         <textarea {{ block('widget_attributes') }}>{{ value }}</textarea>
     {% endspaceless %}
 {% endblock textarea_widget %}
@@ -40,7 +40,7 @@
     <div class="row">
     {% spaceless %}
         {% set type = type|default('submit') %}
-        {% set attr = {'class':'btn btn-primary col-md-2 col-md-offset-10'} %}
+        {%  set attr = attr|merge({'class': ((attr.class|default('') ~ ' btn btn-primary col-md-2 col-md-offset-10')|trim)}) %}
         {{ block('button_widget') }}
     {% endspaceless %}
     </div>

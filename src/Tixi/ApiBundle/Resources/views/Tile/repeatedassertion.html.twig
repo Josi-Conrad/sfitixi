@@ -102,8 +102,10 @@
                     <ul class="weeklyShiftSelections list-unstyled"
                         data-prototype="{{ form_widget(form.weeklyShiftSelections.vars.prototype)|e }}">
                         {% for selection in form.weeklyShiftSelections %}
-                            {{ form_errors(selection) }}
-                            {{ form_widget(selection) }}
+                            <li>
+                                {{ form_errors(selection) }}
+                                {{ form_widget(selection) }}
+                            </li>
                         {% endfor %}
                     </ul>
                     {{ form_widget(form.weeklyShiftSelections) }}
@@ -155,8 +157,10 @@
                 <ul class="monthlyShiftSelections list-unstyled"
                     data-prototype="{{ form_widget(form.monthlyShiftSelections.vars.prototype)|e }}">
                     {% for selection in form.monthlyShiftSelections %}
-                        {{ form_errors(selection) }}
-                        {{ form_widget(selection) }}
+                        <li>
+                            {{ form_errors(selection) }}
+                            {{ form_widget(selection) }}
+                        </li>
                     {% endfor %}
                 </ul>
             </div>
@@ -176,7 +180,7 @@
                 'Thursday': "{{ 'thursday.name' | trans }}",
                 'Friday': "{{ 'friday.name' | trans }}",
                 'Saturday': "{{ 'saturday.name' | trans }}",
-                'Sonday': "{{ 'sonday.name' | trans }}",
+                'Sunday': "{{ 'sunday.name' | trans }}",
                 'firstweek.name': "{{ 'firstweek.name' | trans }}",
                 'secondweek.name': "{{ 'secondweek.name' | trans }}",
                 'thirdweek.name': "{{ 'thirdweek.name' | trans }}",
