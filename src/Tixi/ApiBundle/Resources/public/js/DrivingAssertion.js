@@ -29,25 +29,25 @@ function RepeatedDrivingAssertion() {
 
     this._initWeeklyListeners = function() {
         $('.weeklyDaySelection input').on('change', function() {
-            _this._weeklyAssertionController.onSelectorChange(this, 'Day');
+            _this._weeklyAssertionController.onSelectorChange(this, 'day');
         });
     }
 
     this._initMonthlyListeners = function() {
         $('#repeatedDrivingAssertion_monthlyFirstWeeklySelector input').on('change', function() {
-            _this._monthlyAssertionController.onSelectorChange(this, 'First');
+            _this._monthlyAssertionController.onSelectorChange(this, 'first');
         });
         $('#repeatedDrivingAssertion_monthlySecondWeeklySelector input').on('change', function() {
-            _this._monthlyAssertionController.onSelectorChange(this, 'Second');
+            _this._monthlyAssertionController.onSelectorChange(this, 'second');
         });
         $('#repeatedDrivingAssertion_monthlyThirdWeeklySelector input').on('change', function() {
-            _this._monthlyAssertionController.onSelectorChange(this, 'Third');
+            _this._monthlyAssertionController.onSelectorChange(this, 'third');
         });
         $('#repeatedDrivingAssertion_monthlyFourthWeeklySelector input').on('change', function() {
-            _this._monthlyAssertionController.onSelectorChange(this, 'Fourth');
+            _this._monthlyAssertionController.onSelectorChange(this, 'fourth');
         });
         $('#repeatedDrivingAssertion_monthlyLastWeeklySelector input').on('change', function() {
-            _this._monthlyAssertionController.onSelectorChange(this, 'Last');
+            _this._monthlyAssertionController.onSelectorChange(this, 'last');
         });
     }
 
@@ -142,17 +142,17 @@ function ShiftSelectionController() {
 
     this._constructSelectionText = function(selectedOccurency, selectedDay) {
         var _labelText;
-        if(selectedOccurency==='Day') {
+        if(selectedOccurency==='day') {
             _labelText = _this._trans[selectedDay]+' ('+_this._trans['repeateddrivingmission.everyweek.text']+')';
-        }else if(selectedOccurency==='First') {
+        }else if(selectedOccurency==='first') {
             _labelText = _this._trans[selectedDay]+'<br/> ('+_this._trans['firstweek.name']+')';
-        }else if(selectedOccurency==='Second') {
+        }else if(selectedOccurency==='second') {
             _labelText = _this._trans[selectedDay]+'<br/> ('+_this._trans['secondweek.name']+')';
-        }else if(selectedOccurency==='Third') {
+        }else if(selectedOccurency==='third') {
             _labelText = _this._trans[selectedDay]+'<br/> ('+_this._trans['thirdweek.name']+')';
-        }else if(selectedOccurency==='Fourth') {
+        }else if(selectedOccurency==='fourth') {
             _labelText = _this._trans[selectedDay]+'<br/> ('+_this._trans['fourthweek.name']+')';
-        }else if(selectedOccurency==='Last') {
+        }else if(selectedOccurency==='last') {
             _labelText = _this._trans[selectedDay]+'<br/> ('+_this._trans['lastweek.name']+')';
         }
         return _labelText;

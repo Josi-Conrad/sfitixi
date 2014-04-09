@@ -21,13 +21,13 @@ class RepeatedDrivingAssertionAssembler {
      * php dayname -> ISO-8601 numeric representation of the day of the week
      */
     protected $weekdayToNumericConverter = array(
-        'Monday'=>1,
-        'Tuesday'=>2,
-        'Wednesday'=>3,
-        'Thursday'=>4,
-        'Friday'=>5,
-        'Saturday'=>6,
-        'Sunday'=>7,
+        'monday'=>1,
+        'tuesday'=>2,
+        'wednesday'=>3,
+        'thursday'=>4,
+        'friday'=>5,
+        'saturday'=>6,
+        'sunday'=>7,
     );
 
     /**
@@ -35,13 +35,13 @@ class RepeatedDrivingAssertionAssembler {
      * ISO-8601 numeric representation of the day of the week -> php dayname
      */
     protected $numericToWeekdayConverter = array(
-        1=>'Monday',
-        2=>'Tuesday',
-        3=>'Wednesday',
-        4=>'Thursday',
-        5=>'Friday',
-        6=>'Saturday',
-        7=>'Sunday'
+        1=>'monday',
+        2=>'tuesday',
+        3=>'wednesday',
+        4=>'thursday',
+        5=>'friday',
+        6=>'saturday',
+        7=>'sunday'
     );
 
     public function repeatedRegisterDTOToNewDrivingAssertionPlan(RepeatedDrivingAssertionRegisterDTO $dto) {
@@ -101,7 +101,7 @@ class RepeatedDrivingAssertionAssembler {
                 $assertionDTO->weeklyDaysSelector[] = $this->numericToWeekdayConverter[$weeklyAssertion->getWeekday()];
                 $assertionDTO->weeklyShiftSelections->add(
                     $this->createShiftSelectionDTO(
-                        'Day',
+                        'day',
                         $this->numericToWeekdayConverter[$weeklyAssertion->getWeekday()],
                         $weeklyAssertion->getShiftTypes()->toArray()
                     )
@@ -110,15 +110,15 @@ class RepeatedDrivingAssertionAssembler {
         }else {
             /** @var RepeatedMonthlyDrivingAssertion $monthlyAssertion */
             foreach($assertionPlan->getRepeatedDrivingAssertions() as $monthlyAssertion) {
-                if($monthlyAssertion->getRelativeWeekAsText()==='First') {
+                if($monthlyAssertion->getRelativeWeekAsText()==='first') {
                     $assertionDTO->monthlyFirstWeeklySelector[]=$monthlyAssertion->getWeekdayAsText();
-                }else if($monthlyAssertion->getRelativeWeekAsText()==='Second') {
+                }else if($monthlyAssertion->getRelativeWeekAsText()==='second') {
                     $assertionDTO->monthlySecondWeeklySelector[]=$monthlyAssertion->getWeekdayAsText();
-                }else if($monthlyAssertion->getRelativeWeekAsText()==='Third') {
+                }else if($monthlyAssertion->getRelativeWeekAsText()==='third') {
                     $assertionDTO->monthlyThirdWeeklySelector[]=$monthlyAssertion->getWeekdayAsText();
-                }else if($monthlyAssertion->getRelativeWeekAsText()==='Fourth') {
+                }else if($monthlyAssertion->getRelativeWeekAsText()==='fourth') {
                     $assertionDTO->monthlyFourthWeeklySelector[]=$monthlyAssertion->getWeekdayAsText();
-                }else if($monthlyAssertion->getRelativeWeekAsText()==='Last') {
+                }else if($monthlyAssertion->getRelativeWeekAsText()==='last') {
                     $assertionDTO->monthlyLastWeeklySelector[]=$monthlyAssertion->getWeekdayAsText();
                 }
                 $assertionDTO->monthlyShiftSelections->add(
