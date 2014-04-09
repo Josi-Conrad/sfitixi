@@ -5,7 +5,7 @@
             data-toggle="dropdown">
         {{ displayName|trans }} <span class="caret"></span>
     </button>
-    <ul class="dropdown-menu selectedAction" role="menu">
+    <ul class="dropdown-menu selectedAction text-left" role="menu">
         {% for resolvedElement in children %}
             {{ resolvedElement.rawData | raw }}
         {% endfor %}

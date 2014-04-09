@@ -43,7 +43,9 @@ abstract class DataGridAbstractController extends ContainerAware{
                                 window.location = _url;
                         },
                         "isEmbedded": '.$embedded.',
-                        "emptyDefaultText": "'.$emptyDataText.'"
+                        "trans": {
+                            "emptyDefaultText": "'.$emptyDataText.'"
+                        }
                     }
                 }';
     }
