@@ -11,7 +11,7 @@ less.details: << Weniger Details
 delete.logically.standardtext: Möchten Sie das Dokument wirklich löschen? Sie können das Dokument später wiederherstellen.
 
 #Datagrid
-datagrid.empty.defaulttext: Es sind noch keine Dokumente zugeordnet.
+datagrid.empty.defaulttext: Es wurden keine Dokumente gefunden.
 
 #Home
 home.panel.name: Home

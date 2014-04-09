@@ -1,14 +1,18 @@
 <div class="row text-right">
         {% for resolvedElement in children %}
             {% if 'formcontrol' in resolvedElement.viewIndentifiers %}
-                {{ resolvedElement.rawData | raw }}
+                {% if isStandalone %}<div class="col-md-12">{% endif %}
+                    {{ resolvedElement.rawData | raw }}
+                {% if isStandalone %}</div>{% endif %}
             {% endif %}
         {% endfor %}
 </div>
 <div class="row">
     <div class="col-md-{% if isStandalone %}6{% else %}12{% endif %}">
-        {{ form_start(form, {'attr':{'id':formId, 'class':'form-horizontal customForm'} }) }}
-        {{ form_end(form) }}
+        {% if isStandalone %}<div class="col-md-12">{% endif %}
+            {{ form_start(form, {'attr':{'id':formId, 'class':'form-horizontal customForm'} }) }}
+            {{ form_end(form) }}
+        {% if isStandalone %}</div>{% endif %}
     </div>
 </div>
 <script type="text/javascript">

@@ -1,5 +1,5 @@
 {% if children is defined %}
-    <div class="col-md-12 text-right">
+    <div class="text-right">
         {% for resolvedElement in children %}
             {{ resolvedElement.rawData | raw }}
         {% endfor %}

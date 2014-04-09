@@ -13,7 +13,7 @@ use Tixi\ApiBundle\Tile\AbstractTile;
 
 abstract class AbstractFormViewTile extends AbstractTile{
 
-    protected   $basicFormRows=array();
+    protected $basicFormRows=array();
     protected $expandedFormRows=array();
     protected $isStandalone;
     protected $formViewId;

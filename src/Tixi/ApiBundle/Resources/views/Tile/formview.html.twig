@@ -1,48 +1,52 @@
 <div class="row text-right">
-        {% for resolvedElement in children %}
-            {% if 'formviewcontrol' in resolvedElement.viewIndentifiers %}
+    {% for resolvedElement in children %}
+        {% if 'formviewcontrol' in resolvedElement.viewIndentifiers %}
+            {% if isStandalone %}<div class="col-md-12">{% endif %}
                 {{ resolvedElement.rawData | raw }}
-            {% endif %}
-        {% endfor %}
+            {% if isStandalone %}</div>{% endif %}
+        {% endif %}
+    {% endfor %}
 </div>
 <div class="row">
-    <div id="{{ formViewId }}" class="formView">
-        <div class="col-md-{% if isStandalone %}6{% else %}12{% endif %}">
-            <div class="row">
-            {% if basicFormRows is not empty %}
-                <form class="form-horizontal formViewBasic">
-                    {% for row in basicFormRows %}
-                        <div class="form-group">
-                            <label class="control-label col-md-4">{{ row.getFieldLabelText()|trans }}</label>
+    {% if isStandalone %}<div class="col-md-12">{% endif %}
+        <div id="{{ formViewId }}" class="formView">
+            <div class="col-md-{% if isStandalone %}6{% else %}12{% endif %}">
+                <div class="row">
+                    {% if basicFormRows is not empty %}
+                        <form class="form-horizontal formViewBasic">
+                            {% for row in basicFormRows %}
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">{{ row.getFieldLabelText()|trans }}</label>
 
-                            <div class="col-md-8">
-                                <p class="form-control-static">{{ row.getFieldValue() }}</p>
-                            </div>
-                        </div>
-                    {% endfor %}
-                </form>
-            {% endif %}
-            {% if expandedFormRows is not empty %}
-                <form class="form-horizontal formViewExpanded">
-                    {% for row in expandedFormRows %}
-                        <div class="form-group">
-                            <label class="control-label col-md-4">{{ row.getFieldLabelText()|trans }}</label>
+                                    <div class="col-md-8">
+                                        <p class="form-control-static">{{ row.getFieldValue() }}</p>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </form>
+                    {% endif %}
+                    {% if expandedFormRows is not empty %}
+                        <form class="form-horizontal formViewExpanded">
+                            {% for row in expandedFormRows %}
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">{{ row.getFieldLabelText()|trans }}</label>
 
-                            <div class="col-md-8">
-                                <p class="form-control-static">{{ row.getFieldValue() }}</p>
-                            </div>
-                        </div>
-                    {% endfor %}
-                </form>
-                <a href="#" class="expandFormButton">{% trans %} more.details {% endtrans %}</a>
-                <a href="#" class="dexpandFormButton" hidden="true">{% trans %} less.details {% endtrans %}</a>
-                <script type="text/javascript">
-                    jQuery(function ($) {
-                        new FormViewController({{ formViewId }});
-                    });
-                </script>
-            {% endif %}
+                                    <div class="col-md-8">
+                                        <p class="form-control-static">{{ row.getFieldValue() }}</p>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </form>
+                        <a href="#" class="expandFormButton">{% trans %} more.details {% endtrans %}</a>
+                        <a href="#" class="dexpandFormButton" hidden="true">{% trans %} less.details {% endtrans %}</a>
+                        <script type="text/javascript">
+                            jQuery(function ($) {
+                                new FormViewController({{ formViewId }});
+                            });
+                        </script>
+                    {% endif %}
+                </div>
+            </div>
         </div>
-        </div>
-    </div>
+    {% if isStandalone %}</div>{% endif %}
 </div>
