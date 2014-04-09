@@ -9,9 +9,18 @@
     <div class="panel-body">
         <div class="col-md-12">
             {% for resolvedElement in children %}
-                {{ resolvedElement.rawData | raw }}
+                {% if 'panelfooter' not in resolvedElement.viewIndentifiers %}
+                    {{ resolvedElement.rawData | raw }}
+                {% endif %}
             {% endfor %}
         </div>
     </div>
+    {% for resolvedElement in children %}
+        {% if 'panelfooter' in resolvedElement.viewIndentifiers %}
+            <div class="panel-footer">
+                {{ resolvedElement.rawData | raw }}
+            </div>
+        {% endif %}
+    {% endfor %}
 </div>
 {% endblock %}

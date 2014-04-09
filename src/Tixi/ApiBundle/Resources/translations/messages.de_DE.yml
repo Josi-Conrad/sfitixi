@@ -8,6 +8,7 @@ button.delete: Löschen
 button.with.selection: Mit Selektion
 more.details: Weitere Details >>
 less.details: << Weniger Details
+delete.logically.standardtext: Möchten Sie die Entität wirklich löschen? Sie können die Entität später wiederherstellen.
 
 #Home
 home.panel.name: Home

@@ -13,6 +13,11 @@ use Symfony\Component\DependencyInjection\ContainerAware;
 use Symfony\Component\Validator\Constraints\DateTime;
 
 class DateTimeService extends ContainerAware {
+
+    public static function getUTCNowDateTime() {
+        return new \DateTime('now',new \DateTimeZone('UTC'));
+    }
+
     /**
      * @param \DateTime $utcDate
      * @return string

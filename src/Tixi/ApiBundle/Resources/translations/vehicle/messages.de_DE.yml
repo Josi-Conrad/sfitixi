@@ -16,6 +16,7 @@ vehicle.panel.new: Neues Fahrzeug
 vehicle.panel.details: Fahrzeug Details
 
 vehicle.button.new: Neues Fahrzeug
+vehicle.button.delete: Fahrzeug löschen
 
 
 #Serviceplan

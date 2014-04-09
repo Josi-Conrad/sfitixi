@@ -16,13 +16,17 @@ use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Tixi\ApiBundle\Form\VehicleType;
+use Tixi\ApiBundle\Interfaces\VehicleAssembler;
 use Tixi\ApiBundle\Interfaces\VehicleRegisterDTO;
 use Tixi\ApiBundle\Shared\DataGrid\GridControllers\VehicleDataGridControls;
 use Tixi\ApiBundle\Tile\Core\FormTile;
+use Tixi\ApiBundle\Tile\Core\PanelDeleteFooterTile;
 use Tixi\ApiBundle\Tile\Core\PanelSplitterTile;
 use Tixi\ApiBundle\Tile\Core\PanelTile;
 use Tixi\ApiBundle\Tile\Core\RootPanel;
 use Tixi\ApiBundle\Tile\Vehicle\VehicleRegisterFormViewTile;
+use Tixi\CoreDomain\Vehicle;
+use Tixi\CoreDomain\VehicleRepository;
 
 
 /**
@@ -59,9 +63,11 @@ class VehicleController extends Controller {
         $dataGridHandler = $this->get('tixi_api.datagridhandler');
         $dataGridControllerFactory = $this->get('tixi_api.datagridcontrollerfactory');
         $tileRenderer = $this->get('tixi_api.tilerenderer');
+        /** @var VehicleAssembler $assembler */
+        $assembler = $this->get('tixi_api.assemblervehicle');
 
-        $vehicle = $this->get('vehicle_repository')->find($vehicleId);
-        $vehicleDTO = $this->get('tixi_api.assemblervehicle')->toVehicleRegisterDTO($vehicle);
+        $vehicle = $this->getVehicle($vehicleId);
+        $vehicleDTO = $assembler->toVehicleRegisterDTO($vehicle);
 
         $gridController = $dataGridControllerFactory->createServicePlanController(true, array('vehicleId' => $vehicleId));
         $gridTile = $dataGridHandler->createEmbeddedDataGridTile($gridController);
@@ -73,7 +79,19 @@ class VehicleController extends Controller {
         $formPanel->add(new VehicleRegisterFormViewTile('vehicleRequest', $vehicleDTO, $this->generateUrl('tixiapi_vehicle_editbasic', array('vehicleId' => $vehicleId))));
         $gridPanel = $panelSplitter->addRight(new PanelTile('serviceplan.panel.embedded'));
         $gridPanel->add($gridTile);
+        $rootPanel->add(new PanelDeleteFooterTile($this->generateUrl('tixiapi_vehicle_delete', array('vehicleId' => $vehicleId)),'vehicle.button.delete'));
         return new Response($tileRenderer->render($rootPanel));
+    }
+
+    /**
+     * @Route("/{vehicleId}/delete",name="tixiapi_vehicle_delete")
+     * @Method({"GET","POST"})
+     */
+    public function deleteVehicleAction(Request $request, $vehicleId) {
+        $vehicle = $this->getVehicle($vehicleId);
+        $vehicle->deleteLogically();
+        $this->get('entity_manager')->flush();
+        return $this->redirect($this->generateUrl('tixiapi_vehicles_get'));
     }
 
     /**
@@ -109,13 +127,11 @@ class VehicleController extends Controller {
         $dataGridControllerFactory = $this->get('tixi_api.datagridcontrollerfactory');
         $tileRenderer = $this->get('tixi_api.tilerenderer');
         $vehicleRepository = $this->get('vehicle_repository');
-        $vehicleAssembler = $this->get('tixi_api.assemblervehicle');
+        /** @var VehicleAssembler $assembler */
+        $assembler = $this->get('tixi_api.assemblervehicle');
 
-        $vehicle = $vehicleRepository->find($vehicleId);
-        if (null === $vehicle) {
-            throw $this->createNotFoundException('The vehicle does not exist');
-        }
-        $vehicleDTO = $vehicleAssembler->toVehicleRegisterDTO($vehicle);
+        $vehicle = $this->getVehicle($vehicleId);
+        $vehicleDTO = $assembler->toVehicleRegisterDTO($vehicle);
 
         $form = $this->getForm(null, $vehicleDTO);
         $form->handleRequest($request);
@@ -140,12 +156,16 @@ class VehicleController extends Controller {
     }
 
     protected function registerOrUpdateVehicle(VehicleRegisterDTO $vehicleDTO) {
-        if (is_null($vehicleDTO->id)) {
-            $vehicle = $this->get('tixi_api.assemblervehicle')->registerDTOtoNewVehicle($vehicleDTO);
-            $this->get('vehicle_repository')->store($vehicle);
+        /** @var VehicleAssembler $assembler */
+        $assembler = $this->get('tixi_api.assemblervehicle');
+        /** @var VehicleRepository $repository */
+        $repository = $this->get('vehicle_repository');
+        if (null === $vehicleDTO->id) {
+            $vehicle = $assembler->registerDTOtoNewVehicle($vehicleDTO);
+            $repository->store($vehicle);
         } else {
-            $vehicle = $this->get('vehicle_repository')->find($vehicleDTO->id);
-            $this->get('tixi_api.assemblervehicle')->registerDTOToVehicle($vehicle, $vehicleDTO);
+            $vehicle = $repository->find($vehicleDTO->id);
+            $assembler->registerDTOToVehicle($vehicle, $vehicleDTO);
         }
     }
 
@@ -159,6 +179,15 @@ class VehicleController extends Controller {
             $options = array();
         }
         return $this->createForm(new VehicleType(), $vehicleDTO, $options);
+    }
+
+    protected function getVehicle($vehicleId) {
+        $vehicleRepository = $this->get('vehicle_repository');
+        $vehicle = $vehicleRepository->find($vehicleId);
+        if (null === $vehicle) {
+            throw $this->createNotFoundException('The vehicle does not exist');
+        }
+        return $vehicle;
     }
 
 

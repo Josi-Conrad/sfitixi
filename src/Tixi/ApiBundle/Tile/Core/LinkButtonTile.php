@@ -34,7 +34,7 @@ class LinkButtonTile extends AbstractTile{
 
     public function getViewParameters()
     {
-        return array('displayText'=>$this->displayText, 'tagetSrc'=>$this->targetSrc, 'type'=>$this->type);
+        return array('displayText'=>$this->displayText, 'targetSrc'=>$this->targetSrc, 'type'=>$this->type);
     }
 
     public function getTemplateName()

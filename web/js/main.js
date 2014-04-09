@@ -10,6 +10,14 @@ $(document).ready(function() {
             });
         }else if($(this).hasClass('submitButton')) {
             //handled in seperate class
+        }else if($(this).hasClass('deleteButton')) {
+            $(this).on('click',function(event) {
+                event.preventDefault();
+                var _deleteConfirmText = $(this).data('deleteconfirmtext');
+                if(confirm(_deleteConfirmText)) {
+                    window.location = $(this).attr('data-targetSrc');
+                }
+            });
         }else {
             if(!$(this).hasClass('linkWithDelegatedResolve')) {
                 $(this).on('click',function(event) {

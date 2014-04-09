@@ -11,6 +11,7 @@ namespace Tixi\CoreDomain;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Tixi\ApiBundle\Form\VehicleType;
+use Tixi\CoreDomain\Shared\CommonBaseEntity;
 use Tixi\CoreDomain\Shared\Entity;
 
 /**
@@ -19,7 +20,7 @@ use Tixi\CoreDomain\Shared\Entity;
  * @ORM\Entity(repositoryClass="Tixi\CoreDomainBundle\Repository\VehicleRepositoryDoctrine")
  * @ORM\Table(name="vehicle")
  */
-class Vehicle implements Entity {
+class Vehicle extends CommonBaseEntity implements Entity {
     /**
      * @ORM\Id
      * @ORM\Column(type="bigint", name="id")
@@ -81,8 +82,9 @@ class Vehicle implements Entity {
     protected $category;
 
 
-    private function __construct() {
+    protected function __construct() {
         $this->servicePlans = new ArrayCollection();
+        parent::__construct();
     }
 
     /**
@@ -143,6 +145,7 @@ class Vehicle implements Entity {
         if (!empty($managementDetails)) {
             $this->managementDetails = $managementDetails;
         }
+        $this->updateModifiedDate();
     }
 
     public static function removeVehicle(Vehicle $vehicle) {
