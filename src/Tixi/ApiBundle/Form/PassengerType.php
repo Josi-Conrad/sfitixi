@@ -12,6 +12,8 @@ namespace Tixi\ApiBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Validator\Constraints\DateTime;
+use Symfony\Component\Validator\Constraints\Regex;
 use Tixi\ApiBundle\Form\Shared\DatePickerType;
 
 class PassengerType extends PersonType {
