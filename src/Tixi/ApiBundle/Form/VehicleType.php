@@ -30,17 +30,18 @@ class VehicleType extends AbstractType{
         ));
         $builder->add('name', 'text', array(
             'label' => 'vehicle.field.name',
-            'attr'=>array('title' => 'form.field.title.notBlank'),
-            'constraints' => new NotBlank(array('message'=>'vehicle.name.not_blank')),
-
+            'attr'=>array('title' => 'form.field.title.not_blank'),
+            'constraints' => array(
+                new NotBlank(array('message'=>'vehicle.name.not_blank'))
+            ),
         ));
         $builder->add('licenceNumber', 'text', array(
             'label' => 'vehicle.field.licencenumber',
-            'attr'=>array('title' => 'form.field.title.digit'),
+            'attr'=>array('title' => 'form.field.title.gletter_digit_space'),
+            'pattern' => '^[A-Z\d ]+$',
             'constraints' => array(
-                new NotBlank(array('message'=>'vehicle.nr.not_blank')),
-                new Regex(array('message'=>'vehicle.nr.not_nr','pattern'=>'/\d+/'))),
-            'pattern' => '^\d+$'
+                new NotBlank(array('message'=>'vehicle.nr.not_blank'))
+            ),
         ));
         $builder->add('dateOfFirstRegistration', new DatePickerType(), array(
             'label' => 'vehicle.field.dateoffirstregistration',
@@ -61,6 +62,7 @@ class VehicleType extends AbstractType{
                 },
         ));
         $builder->add('parking', 'text', array(
+            'required'  => false,
             'label' => 'vehicle.field.parking'
         ));
         $builder->add('memo', 'textarea', array(

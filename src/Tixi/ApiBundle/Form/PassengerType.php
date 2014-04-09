@@ -40,16 +40,29 @@ class PassengerType extends PersonType {
         ));
         $builder->add('entryDate', new DatePickerType(), array(
             'required' => false,
-            'label' => 'person.field.entrydate'
+            'label' => 'person.field.entrydate',
+            'attr'=>array('title' => 'form.field.title.date'),
+            'pattern' => '^(0[1-9]|[1|2][0-9]|3[0|1]).(0[1-9]|1[0|1|2]).(19|20)\d\d$',
+            'constraints' => array(
+                new DateTime(),
+            ),
         ));
         $builder->add('birthday', new DatePickerType(), array(
             'required' => false,
-            'label' => 'person.field.birthday'
+            'label' => 'person.field.birthday',
+            'attr'=>array('title' => 'form.field.title.date'),
+            'pattern' => '^(0[1-9]|[1|2][0-9]|3[0|1]).(0[1-9]|1[0|1|2]).(19|20)\d\d$',
+            'constraints' => array(
+                new DateTime(),
+            ),
         ));
         $builder->add('extraMinutes', 'integer', array(
             'required' => false,
             'label' => 'person.field.extraminutes',
-            'pattern' => '^\d+$'
+            'attr'=>array('title' => 'form.field.title.digit'),
+            'constraints' => array(
+                new Regex(array('message'=>'form.field.title.digit','pattern'=>'/\d+/'))
+            ),
         ));
         $builder->add('notice', 'textarea', array(
             'required'  => false,

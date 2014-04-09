@@ -106,9 +106,9 @@ class VehicleController extends Controller {
         $form->handleRequest($request);
         if ($form->isValid()) {
             $vehicleDTO = $form->getData();
-            $this->registerOrUpdateVehicle($vehicleDTO);
+            $vehicle = $this->registerOrUpdateVehicle($vehicleDTO);
             $this->get('entity_manager')->flush();
-            return $this->redirect($this->generateUrl('tixiapi_vehicles_get'));
+            return $this->redirect($this->generateUrl('tixiapi_vehicle_get', array('vehicleId' => $vehicle->getId())));
         }
 
         $rootPanel = new RootPanel('tixiapi_vehicles_get', 'vehicle.panel.new');
@@ -155,20 +155,31 @@ class VehicleController extends Controller {
         return new Response($tileRenderer->render($rootPanel));
     }
 
+    /**
+     * @param VehicleRegisterDTO $vehicleDTO
+     * @return null|object|Vehicle
+     */
     protected function registerOrUpdateVehicle(VehicleRegisterDTO $vehicleDTO) {
-        /** @var VehicleAssembler $assembler */
         $assembler = $this->get('tixi_api.assemblervehicle');
-        /** @var VehicleRepository $repository */
         $repository = $this->get('vehicle_repository');
         if (null === $vehicleDTO->id) {
             $vehicle = $assembler->registerDTOtoNewVehicle($vehicleDTO);
             $repository->store($vehicle);
+            return $vehicle;
         } else {
             $vehicle = $repository->find($vehicleDTO->id);
             $assembler->registerDTOToVehicle($vehicle, $vehicleDTO);
+            return $vehicle;
         }
     }
 
+    /**
+     * @param null $targetRoute
+     * @param null $vehicleDTO
+     * @param array $parameters
+     * @param string $method
+     * @return \Symfony\Component\Form\Form
+     */
     protected function getForm($targetRoute = null, $vehicleDTO = null, $parameters = array(), $method = 'POST') {
         if ($targetRoute) {
             $options = array(
@@ -181,6 +192,11 @@ class VehicleController extends Controller {
         return $this->createForm(new VehicleType(), $vehicleDTO, $options);
     }
 
+    /**
+     * @param $vehicleId
+     * @return null|object
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     */
     protected function getVehicle($vehicleId) {
         $vehicleRepository = $this->get('vehicle_repository');
         $vehicle = $vehicleRepository->find($vehicleId);

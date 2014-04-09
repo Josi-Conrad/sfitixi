@@ -29,6 +29,14 @@ class DriverRegisterFormViewTile extends AbstractFormViewTile {
         $this->expandedFormRows[] = new FormRowView('address.field.street', $dto->street);
         $this->expandedFormRows[] = new FormRowView('address.field.postalcode', $dto->postalCode);
         $this->expandedFormRows[] = new FormRowView('address.field.city', $dto->city);
+
+        if (!empty($dto->entryDate)) {
+        $this->expandedFormRows[] = new FormRowView('person.field.entrydate', $dto->entryDate->format('d.m.Y'));
+        }
+        if (!empty($dto->birthday)) {
+        $this->expandedFormRows[] = new FormRowView('person.field.birthday', $dto->birthday->format('d.m.Y'));
+        }
+        $this->expandedFormRows[] = new FormRowView('person.field.extraminutes', $dto->extraMinutes);
     }
 
     /**
