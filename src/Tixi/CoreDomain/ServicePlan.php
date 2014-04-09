@@ -9,6 +9,7 @@
 namespace Tixi\CoreDomain;
 
 use Doctrine\ORM\Mapping as ORM;
+use Tixi\CoreDomain\Shared\CommonBaseEntity;
 use Tixi\CoreDomain\Shared\Entity;
 
 /**
@@ -16,7 +17,7 @@ use Tixi\CoreDomain\Shared\Entity;
  * @ORM\Entity(repositoryClass="Tixi\CoreDomainBundle\Repository\ServicePlanRepositoryDoctrine")
  * @ORM\Table(name="serviceplan")
  */
-class ServicePlan implements Entity {
+class ServicePlan extends CommonBaseEntity implements Entity {
 
     /**
      * @ORM\Id
@@ -42,8 +43,8 @@ class ServicePlan implements Entity {
      */
     protected $memo;
 
-    private function __construct() {
-
+    protected  function __construct() {
+        parent::__construct();
     }
 
     /**

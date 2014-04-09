@@ -17,6 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Tixi\ApiBundle\Form\ServicePlanType;
 use Tixi\ApiBundle\Interfaces\ServicePlanRegisterDTO;
 use Tixi\ApiBundle\Tile\Core\FormTile;
+use Tixi\ApiBundle\Tile\Core\PanelDeleteFooterTile;
 use Tixi\ApiBundle\Tile\Core\RootPanel;
 use Tixi\ApiBundle\Tile\ServicePlan\ServicePlanRegisterFormViewTile;
 use Tixi\CoreDomain\Vehicle;
@@ -52,20 +53,31 @@ class ServicePlanController extends Controller {
      * @Breadcrumb("serviceplan.panel.details")
      */
     public function getServiceplanAction(Request $request, $vehicleId, $servicePlanId) {
-        $servicePlanRepository = $this->get('serviceplan_repository');
         $assembler = $this->get('tixi_api.assemblerserviceplan');
         $tileRenderer = $this->get('tixi_api.tilerenderer');
 
-        $vehicle = $this->getVehicle($vehicleId);
-        $servicePlan = $servicePlanRepository->find($servicePlanId);
-        if (null === $servicePlan) {
-            throw $this->createNotFoundException('The serviceplan with id ' . $servicePlanId . ' does not exists');
-        }
+        $servicePlan = $this->getServicePlan($servicePlanId);
         $servicePlanDTO = $assembler->toServicePlanRegisterDTO($servicePlan);
         $rootPanel = new RootPanel('servicePlanDetail', 'serviceplan.panel.details');
-        $rootPanel->add(new ServicePlanRegisterFormViewTile('servicePlanRequest', $servicePlanDTO, $this->generateUrl('tixiapi_serviceplan_editbasic', array('vehicleId' => $vehicleId, 'servicePlanId' => $servicePlanId))));
+
+        $rootPanel->add(new ServicePlanRegisterFormViewTile('servicePlanRequest', $servicePlanDTO,
+            $this->generateUrl('tixiapi_serviceplan_editbasic',
+                array('vehicleId' => $vehicleId, 'servicePlanId' => $servicePlanId)),true));
+        $rootPanel->add(new PanelDeleteFooterTile($this->generateUrl('tixiapi_serviceplan_delete',
+            array('vehicleId' => $vehicleId, 'servicePlanId'=>$servicePlanId)),'serviceplan.button.delete'));
 
         return new Response($tileRenderer->render($rootPanel));
+    }
+
+    /**
+     * @Route("/{servicePlanId}/delete",name="tixiapi_serviceplan_delete")
+     * @Method({"GET","POST"})
+     */
+    public function deleteServicePlanAction(Request $request, $vehicleId, $servicePlanId) {
+        $servicePlan = $this->getServicePlan($servicePlanId);
+        $servicePlan->deleteLogically();
+        $this->get('entity_manager')->flush();
+        return $this->redirect($this->generateUrl('tixiapi_vehicle_get',array('vehicleId' => $vehicleId)));
     }
 
     /**
@@ -120,7 +132,8 @@ class ServicePlanController extends Controller {
 
         $rootPanel = new RootPanel('tixiapi_vehicles_get', 'serviceplan.panel.edit');
         $rootPanel->add(new FormTile('absentNewForm', $form, true));
-
+        $rootPanel->add(new PanelDeleteFooterTile($this->generateUrl('tixiapi_serviceplan_delete',
+            array('vehicleId' => $vehicleId, 'servicePlanId'=>$servicePlanId)),'serviceplan.button.delete'));
         return new Response($tileRenderer->render($rootPanel));
     }
 
@@ -156,14 +169,28 @@ class ServicePlanController extends Controller {
     }
 
     /**
+     * @param $servicePlanId
+     * @return mixed
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     */
+    protected function getServicePlan($servicePlanId) {
+        $servicePlanRepository = $this->get('serviceplan_repository');
+        $servicePlan = $servicePlanRepository->find($servicePlanId);
+        if (null === $servicePlan) {
+            throw $this->createNotFoundException('The ServicePlan with id ' . $servicePlan . ' does not exist');
+        }
+        return $servicePlan;
+    }
+    /**
      * @param $vehicleId
      * @return null|object
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
     protected function getVehicle($vehicleId) {
-        $vehicle = $this->get('vehicle_repository')->find($vehicleId);
+        $vehicleRepository = $this->get('vehicle_repository');
+        $vehicle = $vehicleRepository->find($vehicleId);
         if (null === $vehicle) {
-            throw $this->createNotFoundException('The vehicle with id ' . $vehicleId . ' does not exist');
+            throw $this->createNotFoundException('The vehicle does not exist');
         }
         return $vehicle;
     }

@@ -19,6 +19,10 @@ class ServicePlanEmbeddedListDTO implements DataGridSourceClass{
      */
     public $id;
     /**
+     * @GridField(propertyId="ServicePlan.isDeleted", restrictive=true)
+     */
+    public $isDeleted = 'false';
+    /**
      * @GridField(propertyId="Vehicle.id", restrictive=true)
      */
     public $vehicleId;

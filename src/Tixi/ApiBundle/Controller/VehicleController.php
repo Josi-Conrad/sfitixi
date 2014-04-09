@@ -49,7 +49,7 @@ class VehicleController extends Controller {
         $dataGridControllerFactory = $this->get('tixi_api.datagridcontrollerfactory');
         $tileRenderer = $this->get('tixi_api.tilerenderer');
 
-        $gridController = $dataGridControllerFactory->createVehicleController($isEmbedded);
+        $gridController = $dataGridControllerFactory->createVehicleController($embeddedState);
         $dataGridTile = $dataGridHandler->createDataGridTileByRequest($request, $gridController);
         return new Response($tileRenderer->render($dataGridTile));
     }
@@ -151,7 +151,7 @@ class VehicleController extends Controller {
         $formPanel->add(new FormTile('vehicleForm', $form));
         $gridPanel = $panelSplitter->addRight(new PanelTile('vehicle.panel.serviceplans'));
         $gridPanel->add($gridTile);
-
+        $rootPanel->add(new PanelDeleteFooterTile($this->generateUrl('tixiapi_vehicle_delete', array('vehicleId' => $vehicleId)),'vehicle.button.delete'));
         return new Response($tileRenderer->render($rootPanel));
     }
 
