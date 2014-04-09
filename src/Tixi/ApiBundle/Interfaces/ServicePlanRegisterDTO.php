@@ -9,7 +9,7 @@
 namespace Tixi\ApiBundle\Interfaces;
 
 
-class ServicePlanAssignDTO {
+class ServicePlanRegisterDTO {
     public $id;
     public $startDate;
     public $endDate;

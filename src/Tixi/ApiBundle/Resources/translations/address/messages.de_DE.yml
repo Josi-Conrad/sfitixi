@@ -1,0 +1,39 @@
+#Person
+person.field.age: Alter
+person.field.isactive: Ist Aktiv
+person.field.title: Anrede
+person.title.male: Herr
+person.title.female: Frau
+person.field.firstname: Vorname
+person.field.lastname: Nachname
+person.field.telephone: Telefon-Nr
+person.field.email: E-Mail
+person.field.entrydate: Eintrittsdatum
+person.field.birthday: Geburtsdatum
+person.field.extraminutes: Extra-Minuten
+person.field.details: Details
+
+#Driver
+driver.list.name: Fahrer
+driver.panel.name: Fahrer
+driver.panel.new: Neuer Fahrer
+driver.panel.details: Fahrer Details
+driver.panel.edit: Fahrer editieren
+driver.field.id: Fahrer-ID
+driver.field.licence: Fahrausweis-Nr
+driver.field.wheelchair: Rollstuhlfahrten
+driver.field.category: Fahrerkategorie
+driver.button.new: Neuer Fahrer
+
+#Passenger
+passenger.list.name: Fahrgast
+passenger.panel.name: Fahrgast
+passenger.panel.new: Neuer Fahrgast
+passenger.panel.details: Fahrgast Details
+passenger.panel.edit: Fahrgast editieren
+passenger.field.id:  Fahrgast-ID
+passenger.field.monthlybilling: Monatliche Rechnung
+passenger.field.notice: Notizen zum Fahrgast
+passenger.field.handicap: Behinderungen
+passenger.field.insurance: Versichert über
+passenger.button.new: Neuer Fahrgast
