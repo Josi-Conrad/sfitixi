@@ -84,9 +84,9 @@ function DataGrid(outline, gridId, dblClickCallback, isEmbedded) {
     }
 
     this._initFilterControl = function() {
-        var _filterControlOutline = $('.filterControl'),
-            _filterTextInput = _filterControlOutline.find('.gridFilterInput'),
-            _filterCommitButton = _filterControlOutline.find('.gridFilterCommit');
+        var _filterControlOutline = _this._outline.find('.filterControl'),
+            _filterTextInput = $(_filterControlOutline).find('.gridFilterInput'),
+            _filterCommitButton = $(_filterControlOutline).find('.gridFilterCommit');
         _filterCommitButton.on('click', function() {
             _this._onFilterControlActivation(_filterTextInput.val());
         });
@@ -99,9 +99,9 @@ function DataGrid(outline, gridId, dblClickCallback, isEmbedded) {
 
     this._initCustomControlsWithSelection = function() {
         var _url;
-        _this._customActionWithSelectionButton = $('.actionControl .selectionButton');
+        _this._customActionWithSelectionButton = _this._outline.find('.actionControl .selectionButton');
         $(_this._customActionWithSelectionButton).prop("disabled",true);
-        $('.actionControl .textLink').each(function() {
+        _this._outline.find('.actionControl .textLink').each(function() {
             $(this).on('click', function(event) {
                 event.preventDefault();
                 if(_this._activeRow) {
