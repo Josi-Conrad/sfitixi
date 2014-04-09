@@ -2,3 +2,7 @@ telephone.nr.invalid: Dies ist keine gültige Telefon-Nummer
 email.invalid: Dies kann keine gültige E-Mailadresse sein
 postal.code.min: Postleitzahl mindestend {{ limit }} Zeichen
 postal.code.max: Postleitzahl maximal {{ limit }} Zeichen
+
+field.not_blank: Bitte geben Sie einen Wert ein
+field.not_digit: Bitte geben Sie eine Zahl ein
+field.not_selected: Auswahl erforderlich

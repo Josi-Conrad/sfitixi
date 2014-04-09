@@ -24,19 +24,24 @@ class ServicePlanType extends AbstractType{
 
         $builder->add('startDate', new DatePickerType(), array(
             'label' => 'serviceplan.field.startdate',
+            'attr'=>array('title' => 'form.field.title.date'),
+            'pattern' => '^(0[1-9]|[1|2][0-9]|3[0|1]).(0[1-9]|1[0|1|2]).(19|20)\d\d$',
             'constraints' => array(
                 new DateTime(),
-                new NotBlank(array('message'=>'serviceplan.date.not_blank'))),
-            'pattern' => '^(0[1-9]|[1|2][0-9]|3[0|1]).(0[1-9]|1[0|1|2]).(19|20)\d\d$'
+                new NotBlank(array('message'=>'serviceplan.date.not_blank'))
+            ),
         ));
         $builder->add('endDate', new DatePickerType(), array(
             'label' => 'serviceplan.field.enddate',
+            'attr'=>array('title' => 'form.field.title.date'),
+            'pattern' => '^(0[1-9]|[1|2][0-9]|3[0|1]).(0[1-9]|1[0|1|2]).(19|20)\d\d$',
             'constraints' => array(
                 new DateTime(),
-                new NotBlank(array('message'=>'serviceplan.date.not_blank'))),
-            'pattern' => '^(0[1-9]|[1|2][0-9]|3[0|1]).(0[1-9]|1[0|1|2]).(19|20)\d\d$'
+                new NotBlank(array('message'=>'serviceplan.date.not_blank'))
+            ),
         ));
         $builder->add('memo', 'text', array(
+            'required'  => false,
             'label' => 'serviceplan.field.memo'
         ));
     }

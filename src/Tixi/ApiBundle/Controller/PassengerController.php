@@ -63,11 +63,11 @@ class PassengerController extends Controller {
         $gridController = $dataGridControllerFactory->createPassengerAbsentController(true, array('passengerId' => $passengerId));
         $gridTile = $dataGridHandler->createEmbeddedDataGridTile($gridController);
 
-        $rootPanel = new RootPanel('tixiapi_passengers_get', $passenger->getFirstname().' '.$passenger->getLastname());
+        $rootPanel = new RootPanel('tixiapi_passengers_get', $passenger->getFirstname() . ' ' . $passenger->getLastname());
         $panelSplitter = $rootPanel->add(new PanelSplitterTile('1:1'));
         $formPanel = $panelSplitter->addLeft(new PanelTile('passenger.panel.details', PanelTile::$primaryType));
         $formPanel->add(new PassengerRegisterFormViewTile('passengerRequest', $passengerDTO, $this->generateUrl('tixiapi_passenger_editbasic', array('passengerId' => $passengerId))));
-        $gridPanel = $panelSplitter->addRight(new PanelTile('Zugeordnete Abwesenheiten'));
+        $gridPanel = $panelSplitter->addRight(new PanelTile('absent.panel.embedded'));
         $gridPanel->add($gridTile);
 
         return new Response($tileRenderer->render($rootPanel));
@@ -85,9 +85,9 @@ class PassengerController extends Controller {
         $form->handleRequest($request);
         if ($form->isValid()) {
             $passengerDTO = $form->getData();
-            $this->registerOrUpdatePassenger($passengerDTO);
+            $passenger = $this->registerOrUpdatePassenger($passengerDTO);
             $this->get('entity_manager')->flush();
-            return $this->redirect($this->generateUrl('tixiapi_passengers_get'));
+            return $this->redirect($this->generateUrl('tixiapi_passenger_get', array('passengerId' => $passenger->getId())));
         }
 
         $rootPanel = new RootPanel('tixiapi_passengers_get', 'passenger.panel.new');
@@ -126,7 +126,7 @@ class PassengerController extends Controller {
         $gridController = $dataGridControllerFactory->createPassengerAbsentController(true, array('passengerId' => $passengerId));
         $gridTile = $dataGridHandler->createEmbeddedDataGridTile($gridController);
 
-        $rootPanel = new RootPanel('tixiapi_passengers_get', $passenger->getFirstname().' '.$passenger->getLastname());
+        $rootPanel = new RootPanel('tixiapi_passengers_get', $passenger->getFirstname() . ' ' . $passenger->getLastname());
         $panelSplitter = $rootPanel->add(new PanelSplitterTile('1:1'));
         $formPanel = $panelSplitter->addLeft(new PanelTile('passenger.panel.edit', PanelTile::$primaryType));
         $formPanel->add(new FormTile('passengerForm', $form));
@@ -138,17 +138,20 @@ class PassengerController extends Controller {
 
     /**
      * @param PassengerRegisterDTO $passengerDTO
+     * @return null|object|\Tixi\CoreDomain\Passenger
      */
     protected function registerOrUpdatePassenger(PassengerRegisterDTO $passengerDTO) {
         if (empty($passengerDTO->person_id)) {
             $passenger = $this->get('tixi_api.assemblerpassenger')->registerDTOtoNewPassenger($passengerDTO);
             $this->get('address_repository')->store($passenger->getAddress());
             $this->get('passenger_repository')->store($passenger);
+            return $passenger;
         } else {
             $passenger = $this->get('passenger_repository')->find($passengerDTO->person_id);
             $this->get('tixi_api.assemblerpassenger')->registerDTOtoPassenger($passenger, $passengerDTO);
             $this->get('address_repository')->store($passenger->getAddress());
             $this->get('passenger_repository')->store($passenger);
+            return $passenger;
         }
     }
 

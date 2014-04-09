@@ -12,7 +12,9 @@ namespace Tixi\ApiBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Validator\Constraints\DateTime;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Regex;
 use Tixi\ApiBundle\Form\Shared\DatePickerType;
 
 class DriverType extends PersonType {
@@ -27,30 +29,49 @@ class DriverType extends PersonType {
         ));
         $builder->add('licenceNumber', 'text', array(
             'label' => 'driver.field.licence',
+            'attr'=>array('title' => 'form.field.title.not_blank'),
             'constraints' => array(
-                new NotBlank(array('message'=>'vehicle.nr.not_blank'))
-            )
+                new NotBlank(array('message'=>'form.field.not_blank'))
+            ),
         ));
         $builder->add('wheelChairAttendance', 'checkbox', array(
+            'required' => false,
             'label' => 'driver.field.wheelchair'
         ));
         $builder->add('driverCategory', 'entity', array(
             'class' => 'Tixi\CoreDomain\DriverCategory',
             'property' => 'name',
-            'label' => 'driver.field.category'
+            'label' => 'driver.field.category',
+            'attr'=>array('title' => 'form.field.title.not_selected'),
+            'constraints' => array(
+                new NotBlank(array('message'=>'form.field.not_blank'))
+            ),
         ));
         $builder->add('entryDate', new DatePickerType(), array(
             'required' => false,
-            'label' => 'person.field.entrydate'
+            'label' => 'person.field.entrydate',
+            'attr'=>array('title' => 'form.field.title.date'),
+            'pattern' => '^(0[1-9]|[1|2][0-9]|3[0|1]).(0[1-9]|1[0|1|2]).(19|20)\d\d$',
+            'constraints' => array(
+                new DateTime(),
+            ),
         ));
         $builder->add('birthday', new DatePickerType(), array(
             'required' => false,
-            'label' => 'person.field.birthday'
+            'label' => 'person.field.birthday',
+            'attr'=>array('title' => 'form.field.title.date'),
+            'pattern' => '^(0[1-9]|[1|2][0-9]|3[0|1]).(0[1-9]|1[0|1|2]).(19|20)\d\d$',
+            'constraints' => array(
+                new DateTime(),
+            ),
         ));
         $builder->add('extraMinutes', 'integer', array(
             'required' => false,
             'label' => 'person.field.extraminutes',
-            'pattern' => '^\d+$'
+            'attr'=>array('title' => 'form.field.title.digit'),
+            'constraints' => array(
+                new Regex(array('message'=>'form.field.title.digit','pattern'=>'/\d+/'))
+            ),
         ));
         $builder->add('details', 'textarea', array(
             'required' => false,

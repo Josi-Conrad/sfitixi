@@ -90,9 +90,9 @@ class DriverController extends Controller {
         $form->handleRequest($request);
         if ($form->isValid()) {
             $driverDTO = $form->getData();
-            $this->registerOrUpdateDriver($driverDTO);
+            $driver = $this->registerOrUpdateDriver($driverDTO);
             $this->get('entity_manager')->flush();
-            return $this->redirect($this->generateUrl('tixiapi_drivers_get'));
+            return $this->redirect($this->generateUrl('tixiapi_driver_get', array('driverId' => $driver->getId())));
         }
 
         $rootPanel = new RootPanel('tixiapi_drivers_get', 'driver.panel.new');
@@ -145,15 +145,18 @@ class DriverController extends Controller {
 
     /**
      * @param DriverRegisterDTO $driverDTO
+     * @return null|object|\Tixi\CoreDomain\Driver
      */
     protected function registerOrUpdateDriver(DriverRegisterDTO $driverDTO) {
         if (empty($driverDTO->person_id)) {
             $driver = $this->get('tixi_api.assemblerdriver')->registerDTOtoNewDriver($driverDTO);
             $this->get('address_repository')->store($driver->getAddress());
             $this->get('driver_repository')->store($driver);
+            return $driver;
         } else {
             $driver = $this->get('driver_repository')->find($driverDTO->person_id);
             $this->get('tixi_api.assemblerdriver')->registerDTOtoDriver($driverDTO, $driver);
+            return $driver;
         }
     }
 

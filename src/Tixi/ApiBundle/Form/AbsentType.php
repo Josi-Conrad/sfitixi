@@ -12,6 +12,8 @@ namespace Tixi\ApiBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Validator\Constraints\DateTime;
+use Symfony\Component\Validator\Constraints\NotBlank;
 use Tixi\ApiBundle\Form\Shared\DatePickerType;
 
 class AbsentType extends AbstractType{
@@ -23,10 +25,22 @@ class AbsentType extends AbstractType{
             'label' => 'absent.field.subject'
         ));
         $builder->add('startDate', new DatePickerType(), array(
-            'label' => 'absent.field.startdate'
+            'label' => 'absent.field.startdate',
+            'attr'=>array('title' => 'form.field.title.date'),
+            'pattern' => '^(0[1-9]|[1|2][0-9]|3[0|1]).(0[1-9]|1[0|1|2]).(19|20)\d\d$',
+            'constraints' => array(
+                new DateTime(),
+                new NotBlank(array('message'=>'absent.date.not_blank')),
+            ),
         ));
         $builder->add('endDate', new DatePickerType(), array(
-            'label' => 'absent.field.enddate'
+            'label' => 'absent.field.enddate',
+            'attr'=>array('title' => 'form.field.title.date'),
+            'pattern' => '^(0[1-9]|[1|2][0-9]|3[0|1]).(0[1-9]|1[0|1|2]).(19|20)\d\d$',
+            'constraints' => array(
+                new DateTime(),
+                new NotBlank(array('message'=>'absent.date.not_blank')),
+            ),
         ));
 
     }

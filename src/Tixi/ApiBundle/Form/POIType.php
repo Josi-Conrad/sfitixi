@@ -23,18 +23,22 @@ class POIType extends AbstractType{
 
         $builder->add('name', 'text', array(
             'label' => 'poi.field.name',
+            'attr'=>array('title' => 'form.field.title.not_blank'),
             'constraints' => array(
-                new NotBlank(array('message'=>'vehicle.nr.not_blank'))
-            )
+                new NotBlank(array('message'=>'field.not_blank'))
+            ),
         ));
         $builder->add('department', 'text', array(
-            'label' => 'poi.field.department'
+            'required' => false,
+            'label' => 'poi.field.department',
         ));
         $builder->add('telephone', 'text', array(
+            'required' => false,
             'label' => 'poi.field.telephone',
         ));
 
         $builder->add('keywords', 'entity', array(
+            'required' => false,
             'class' => 'Tixi\CoreDomain\POIKeyword',
             'property' => 'name',
             'label' => 'poi.field.keyword',
@@ -44,33 +48,54 @@ class POIType extends AbstractType{
                         ->orderBy('k.name', 'ASC');
                 },
         ));
-
         $builder->add('street', 'text', array(
-            'label' => 'address.field.street'
+            'label' => 'address.field.street',
+            'attr'=>array('title' => 'form.field.title.not_blank'),
+            'constraints' => array(
+                new NotBlank(array('message'=>'field.not_blank'))
+            ),
         ));
         $builder->add('postalCode', 'text', array(
-            'label' => 'address.field.postalcode'
+            'label' => 'address.field.postalcode',
+            'pattern' => '^[\+0-9A-Z]{4,7}',
+            'attr'=>array('title' => 'form.field.title.postalcode'),
+            'constraints' => array(
+                new NotBlank(array('message'=>'field.not_blank'))
+            ),
         ));
         $builder->add('city', 'text', array(
-            'label' => 'address.field.city'
+            'label' => 'address.field.city',
+            'attr'=>array('title' => 'form.field.title.not_blank'),
+            'constraints' => array(
+                new NotBlank(array('message'=>'field.not_blank'))
+            ),
         ));
         $builder->add('country', 'text', array(
-            'label' => 'address.field.country'
+            'label' => 'address.field.country',
+            'attr'=>array('title' => 'form.field.title.not_blank'),
+            'constraints' => array(
+                new NotBlank(array('message'=>'field.not_blank'))
+            ),
         ));
         $builder->add('lat', 'text', array(
+            'required' => false,
             'label' => 'address.field.lat'
         ));
         $builder->add('lng', 'text', array(
+            'required' => false,
             'label' => 'address.field.lng'
         ));
 
         $builder->add('memo', 'textarea', array(
+            'required' => false,
             'label' => 'poi.field.memo',
         ));
         $builder->add('comment', 'textarea', array(
+            'required' => false,
             'label' => 'poi.field.comment',
         ));
         $builder->add('details', 'textarea', array(
+            'required' => false,
             'label' => 'poi.field.details',
         ));
     }

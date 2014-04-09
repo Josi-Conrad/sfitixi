@@ -79,9 +79,9 @@ class UserController extends Controller {
             if(!$this->isUsernameAvailable($userDTO->username)){
                 return new Response($tileRenderer->render($rootPanel));
             }
-            $this->registerOrUpdateUser($userDTO);
+            $user = $this->registerOrUpdateUser($userDTO);
             $this->get('entity_manager')->flush();
-            return $this->redirect($this->generateUrl('tixiapi_users_get'));
+            return $this->redirect($this->generateUrl('tixiapi_user_get', array('userId' => $user->getId())));
         }
         return new Response($tileRenderer->render($rootPanel));
     }
@@ -115,6 +115,7 @@ class UserController extends Controller {
 
     /**
      * @param UserRegisterDTO $userDTO
+     * @return null|object|\Tixi\SecurityBundle\Entity\User
      */
     protected function registerOrUpdateUser(UserRegisterDTO $userDTO) {
         if (empty($userDTO->id)) {
@@ -122,10 +123,12 @@ class UserController extends Controller {
             $this->encodeUserPassword($user);
             $this->assignNormalUserRole($user);
             $this->get('tixi_user_repository')->store($user);
+            return $user;
         } else {
             $user = $this->get('tixi_user_repository')->find($userDTO->id);
             $this->get('tixi_api.assembleruser')->registerDTOtoUser($userDTO, $user);
             $this->encodeUserPassword($user);
+            return $user;
         }
     }
 

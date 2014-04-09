@@ -10,7 +10,7 @@ namespace Tixi\ApiBundle\Interfaces;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
-class PersonRegisterDTO extends AddressRegisterDTO{
+class PersonRegisterDTO extends AddressRegisterDTO {
     //Person
     public $person_id;
     public $isActive;

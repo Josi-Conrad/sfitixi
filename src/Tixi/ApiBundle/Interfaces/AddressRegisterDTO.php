@@ -15,10 +15,6 @@ class AddressRegisterDTO {
     public $address_id;
     public $address_name;
     public $street;
-    /**
-     * @Assert\Length(min = "4", max = "6",
-     * minMessage="postal.code.min", maxMessage="postal.code.max")
-     */
     public $postalCode;
     public $city;
     public $country;

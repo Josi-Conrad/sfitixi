@@ -77,9 +77,9 @@ class POIController extends Controller {
         $form->handleRequest($request);
         if ($form->isValid()) {
             $poiDTO = $form->getData();
-            $this->registerOrUpdatePOI($poiDTO);
+            $poi = $this->registerOrUpdatePOI($poiDTO);
             $this->get('entity_manager')->flush();
-            return $this->redirect($this->generateUrl('tixiapi_pois_get'));
+            return $this->redirect($this->generateUrl('tixiapi_poi_get', array('poiId' => $poi->getId())));
         }
 
         $rootPanel = new RootPanel('tixiapi_pois_get', 'poi.panel.new');
@@ -117,15 +117,18 @@ class POIController extends Controller {
 
     /**
      * @param POIRegisterDTO $poiDTO
+     * @return null|object|\Tixi\CoreDomain\POI
      */
     protected function registerOrUpdatePOI(POIRegisterDTO $poiDTO) {
         if (empty($poiDTO->id)) {
             $poi = $this->get('tixi_api.assemblerpoi')->registerDTOtoNewPOI($poiDTO);
             $this->get('address_repository')->store($poi->getAddress());
             $this->get('poi_repository')->store($poi);
+            return $poi;
         } else {
             $poi = $this->get('poi_repository')->find($poiDTO->id);
             $this->get('tixi_api.assemblerpoi')->registerDTOtoPOI($poiDTO, $poi);
+            return $poi;
         }
     }
 

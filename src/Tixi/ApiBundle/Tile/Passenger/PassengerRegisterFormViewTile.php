@@ -24,10 +24,19 @@ class PassengerRegisterFormViewTile extends AbstractFormViewTile {
         $this->basicFormRows[] = new FormRowView('person.field.firstname', $dto->firstname);
         $this->basicFormRows[] = new FormRowView('person.field.lastname', $dto->lastname);
         $this->basicFormRows[] = new FormRowView('person.field.telephone', $dto->telephone);
+        $this->basicFormRows[] = new FormRowView('passenger.field.notice', $dto->notice);
 
         $this->expandedFormRows[] = new FormRowView('address.field.street', $dto->street);
         $this->expandedFormRows[] = new FormRowView('address.field.postalcode', $dto->postalCode);
         $this->expandedFormRows[] = new FormRowView('address.field.city', $dto->city);
+
+        if (!empty($dto->entryDate)) {
+            $this->expandedFormRows[] = new FormRowView('person.field.entrydate', $dto->entryDate->format('d.m.Y'));
+        }
+        if (!empty($dto->birthday)) {
+            $this->expandedFormRows[] = new FormRowView('person.field.birthday', $dto->birthday->format('d.m.Y'));
+        }
+        $this->expandedFormRows[] = new FormRowView('person.field.extraminutes', $dto->extraMinutes);
     }
 
     /**

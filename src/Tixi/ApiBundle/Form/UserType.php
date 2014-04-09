@@ -20,14 +20,25 @@ class UserType extends AbstractType{
         $builder->add('id', 'hidden');
 
         $builder->add('username', 'text', array(
-            'label' => 'user.field.username'
+            'label' => 'user.field.username',
+            'attr'=>array('title' => 'form.field.title.letter_digit'),
+            'pattern' => '^[a-zA-Z\d]+$',
+            'constraints' => array(
+                new NotBlank(array('message'=>'user.name.not_blank'))
+            ),
         ));
         $builder->add('password', 'password', array(
-            'label' => 'user.field.password'
+            'label' => 'user.field.password',
+            'constraints' => array(
+                new NotBlank(array('message'=>'user.password.not_blank'))
+            ),
         ));
         $builder->add('email', 'email', array(
             'label' => 'user.field.email',
-            'required' => false
+            'required' => false,
+            'constraints' => array(
+                new NotBlank(array('message'=>'user.email.not_blank'))
+            ),
         ));
     }
 
