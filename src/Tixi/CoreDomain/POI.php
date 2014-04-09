@@ -49,7 +49,7 @@ class POI {
 
     /**
      * Department name like "Dialyse"
-     * @ORM\Column(type="string", length=50)
+     * @ORM\Column(type="string", length=50, nullable=true)
      */
     protected $department;
 
