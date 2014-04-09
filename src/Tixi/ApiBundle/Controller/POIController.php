@@ -60,7 +60,7 @@ class POIController extends Controller {
         $poiDTO = $this->get('tixi_api.assemblerpoi')->poiToPOIRegisterDTO($poi);
         $rootPanel = new RootPanel('tixiapi_pois_get', $poi->getName());
         $rootPanel->add(new POIRegisterFormViewTile('poiRequest', $poiDTO,
-            $this->generateUrl('tixiapi_poi_editbasic', array('poiId' => $poiId))));
+            $this->generateUrl('tixiapi_poi_editbasic', array('poiId' => $poiId)),true));
 
         return new Response($tileRenderer->render($rootPanel));
     }
