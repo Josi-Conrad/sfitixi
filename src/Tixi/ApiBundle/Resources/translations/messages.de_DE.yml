@@ -67,3 +67,8 @@ thursday.abbreviation.name: Do
 friday.abbreviation.name: Fr
 saturday.abbreviation.name: Sa
 sunday.abbreviation.name: So
+
+#Form field titles
+form.field.title.notBlank: Wert erforderlich
+form.field.title.digit: Darf nur aus Zahlen bestehen
+form.field.title.date: Muss das Format dd.mm.yyyy haben

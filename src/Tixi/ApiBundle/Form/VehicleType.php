@@ -30,10 +30,13 @@ class VehicleType extends AbstractType{
         ));
         $builder->add('name', 'text', array(
             'label' => 'vehicle.field.name',
-            'constraints' => new NotBlank(array('message'=>'vehicle.name.not_blank'))
+            'attr'=>array('title' => 'form.field.title.notBlank'),
+            'constraints' => new NotBlank(array('message'=>'vehicle.name.not_blank')),
+
         ));
         $builder->add('licenceNumber', 'text', array(
             'label' => 'vehicle.field.licencenumber',
+            'attr'=>array('title' => 'form.field.title.digit'),
             'constraints' => array(
                 new NotBlank(array('message'=>'vehicle.nr.not_blank')),
                 new Regex(array('message'=>'vehicle.nr.not_nr','pattern'=>'/\d+/'))),
@@ -41,15 +44,22 @@ class VehicleType extends AbstractType{
         ));
         $builder->add('dateOfFirstRegistration', new DatePickerType(), array(
             'label' => 'vehicle.field.dateoffirstregistration',
-            'constraints' => array(
-                new DateTime(),
-                new NotBlank(array('message'=>'vehicle.date.not_blank'))),
+            'attr'=>array('title' => 'form.field.title.date'),
+            'constraints' => new DateTime(),
             'pattern' => '^(0[1-9]|[1|2][0-9]|3[0|1]).(0[1-9]|1[0|1|2]).(19|20)\d\d$'
+        ));
+        $builder->add('parkingLotNumber', 'integer', array(
+            'label' => 'vehicle.field.parkinglotnumber',
+            'attr'=>array('title' => 'form.field.title.digit'),
+            'constraints' => array(
+                new NotBlank(array('message'=>'vehicle.nr.not_blank'))
+            )
         ));
         $builder->add('supervisor', 'entity', array(
             'class' => 'Tixi\CoreDomain\Driver',
             'property' => 'nameStringWithID',
             'label' => 'vehicle.field.supervisor',
+            'required'  => false,
             'empty_data' => null,
             'empty_value' => 'vehicle.field.supervisor.empty',
             'query_builder' => function(EntityRepository $er) {
@@ -61,10 +71,12 @@ class VehicleType extends AbstractType{
             'label' => 'vehicle.field.parking'
         ));
         $builder->add('memo', 'textarea', array(
-            'label' => 'vehicle.field.memo'
+            'label' => 'vehicle.field.memo',
+            'required'  => false,
         ));
         $builder->add('managementDetails', 'textarea', array(
-            'label' => 'vehicle.field.managementdetails'
+            'label' => 'vehicle.field.managementdetails',
+            'required'  => false,
         ));
     }
 

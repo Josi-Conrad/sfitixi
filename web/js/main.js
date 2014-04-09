@@ -9,12 +9,7 @@ $(document).ready(function() {
                 window.history.back();
             });
         }else if($(this).hasClass('submitButton')) {
-            var _targetFormId = $(this).attr('data-targetFormId');
-            $(this).on('click',function(event) {
-                console.log('#'+_targetFormId)
-                event.preventDefault();
-                $('#'+_targetFormId).submit();
-            });
+            //handled in seperate class
         }else {
             if(!$(this).hasClass('linkWithDelegatedResolve')) {
                 $(this).on('click',function(event) {

@@ -11,3 +11,8 @@
         {{ form_end(form) }}
     </div>
 </div>
+<script type="text/javascript">
+    jQuery(function ($) {
+        new FormValidationController('{{ formId }}');
+    });
+</script>
