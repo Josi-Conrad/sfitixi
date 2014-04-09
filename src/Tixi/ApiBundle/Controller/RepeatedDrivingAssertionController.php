@@ -23,6 +23,7 @@ use Tixi\ApiBundle\Interfaces\Dispo\ShiftSelectionDTO;
 use Tixi\ApiBundle\Tile\Core\FormTile;
 use Tixi\ApiBundle\Tile\Core\RootPanel;
 use Tixi\ApiBundle\Tile\Dispo\RepeatedAssertionTile;
+use Tixi\CoreDomain\Dispo\RepeatedDrivingAssertion;
 use Tixi\CoreDomain\Dispo\RepeatedDrivingAssertionPlan;
 use Tixi\CoreDomain\Dispo\RepeatedMonthlyDrivingAssertion;
 use Tixi\CoreDomainBundle\Repository\Dispo\RepeatedDrivingAssertionPlanRepositoryDoctrine;
@@ -107,17 +108,19 @@ class RepeatedDrivingAssertionController extends Controller{
         if (null === $assertionDTO->id) {
             /** @var RepeatedDrivingAssertionPlan $assertionPlan*/
             $assertionPlan = $assembler->repeatedRegisterDTOToNewDrivingAssertionPlan($assertionDTO);
-            $assertionPlanRepository->store($assertionPlan);
             $repeatedAssertions = new ArrayCollection();
             if($assertionDTO->frequency === 'weekly') {
                 $repeatedAssertions = $assembler->repeatedRegisterDTOtoWeeklyDrivingAssertions($assertionDTO);
             }else {
                 $repeatedAssertions = $assembler->repeatedRegisterDTOtoMonthlyDrivingAssertions($assertionDTO);
             }
+            /** @var RepeatedDrivingAssertion $repeatedAssertion */
             foreach($repeatedAssertions as $repeatedAssertion) {
+                $repeatedAssertion->setAssertionPlan($assertionPlan);
                 $assertionRepository->store($repeatedAssertion);
             }
             $assertionPlan->replaceRepeatedDrivingAssertions($repeatedAssertions);
+            $assertionPlanRepository->store($assertionPlan);
         } else {
 
         }

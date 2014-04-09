@@ -46,8 +46,7 @@ class RepeatedDrivingAssertionPlan {
      */
     protected $withHolidays;
     /**
-     * @ORM\OneToMany(targetEntity="RepeatedMonthlyDrivingAssertion", mappedBy="assertionPlan")
-     * @ORM\JoinColumn(name="repeated_driving_assertion_id", referencedColumnName="id")
+     * @ORM\OneToMany(targetEntity="RepeatedDrivingAssertion", mappedBy="assertionPlan")
      */
     protected $repeatedDrivingAssertions;
 

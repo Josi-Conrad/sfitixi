@@ -18,8 +18,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="repeated_driving_assertion")
  * @ORM\InheritanceType("SINGLE_TABLE")
  * @ORM\DiscriminatorColumn(name="discr", type="string")
- * @ORM\DiscriminatorMap({"daily" = "RepeatedDailyDrivingAssertion",
- * "weekly" = "RepeatedWeeklyDrivingAssertion", "monthly" = "RepeatedMonthlyDrivingAssertion"})
+ * @ORM\DiscriminatorMap({"weekly" = "RepeatedWeeklyDrivingAssertion", "monthly" = "RepeatedMonthlyDrivingAssertion"})
  */
 abstract class RepeatedDrivingAssertion implements DrivingAssertionInterface {
     /**
@@ -30,7 +29,7 @@ abstract class RepeatedDrivingAssertion implements DrivingAssertionInterface {
     protected $id;
     /**
      * @ORM\ManyToOne(targetEntity="RepeatedDrivingAssertionPlan", inversedBy="repeatedDrivingAssertions")
-     * @ORM\JoinColumn(name="repeated_assertion_plan_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="repeatedassertionplan_id", referencedColumnName="id")
      */
     protected $assertionPlan;
     /**
@@ -46,6 +45,22 @@ abstract class RepeatedDrivingAssertion implements DrivingAssertionInterface {
     }
 
     public abstract function matching(Shift $shift);
+
+    /**
+     * @param RepeatedDrivingAssertionPlan $assertionPlan
+     */
+    public function setAssertionPlan(RepeatedDrivingAssertionPlan $assertionPlan)
+    {
+        $this->assertionPlan = $assertionPlan;
+    }
+
+    /**
+     * @return RepeatedDrivingAssertionPlan
+     */
+    public function getAssertionPlan()
+    {
+        return $this->assertionPlan;
+    }
 
     /**
      * @param mixed $id
