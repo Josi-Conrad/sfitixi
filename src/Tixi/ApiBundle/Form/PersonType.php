@@ -15,7 +15,7 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\NotNull;
 use Tixi\ApiBundle\Form\Shared\DatePickerType;
-use Tixi\ApiBundle\Form\Shared\TextOnlyType;
+use Tixi\ApiBundle\Form\Shared\TelephoneType;
 
 class PersonType extends AbstractType {
 
@@ -43,13 +43,8 @@ class PersonType extends AbstractType {
                 new NotBlank(array('message'=>'field.not_blank'))
             ),
         ));
-        $builder->add('telephone', 'text', array(
+        $builder->add('telephone', new TelephoneType(), array(
             'label' => 'person.field.telephone',
-            'pattern' => '^[\+0-9 -]{5,19}',
-            'attr'=>array('title' => 'form.field.title.telephone'),
-            'constraints' => array(
-                new NotBlank(array('message'=>'field.not_blank'))
-            ),
         ));
         $builder->add('street', 'text', array(
             'label' => 'address.field.street',
