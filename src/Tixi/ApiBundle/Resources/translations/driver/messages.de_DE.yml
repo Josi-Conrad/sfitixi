@@ -12,3 +12,4 @@ driver.field.wheelchair: Rollstuhlfahrten
 driver.field.category: Fahrerkategorie
 
 driver.button.new: Neuer Fahrer
+driver.button.delete: Fahrer löschen

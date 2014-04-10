@@ -17,6 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Tixi\ApiBundle\Form\DriverType;
 use Tixi\ApiBundle\Interfaces\DriverRegisterDTO;
 use Tixi\ApiBundle\Tile\Core\FormTile;
+use Tixi\ApiBundle\Tile\Core\PanelDeleteFooterTile;
 use Tixi\ApiBundle\Tile\Core\PanelSplitterTile;
 use Tixi\ApiBundle\Tile\Core\PanelTile;
 use Tixi\ApiBundle\Tile\Core\RootPanel;
@@ -56,9 +57,10 @@ class DriverController extends Controller {
         $dataGridHandler = $this->get('tixi_api.datagridhandler');
         $dataGridControllerFactory = $this->get('tixi_api.datagridcontrollerfactory');
         $tileRenderer = $this->get('tixi_api.tilerenderer');
+        $assembler = $this->get('tixi_api.assemblerdriver');
 
-        $driver = $this->get('driver_repository')->find($driverId);
-        $driverDTO = $this->get('tixi_api.assemblerdriver')->driverToDriverRegisterDTO($driver);
+        $driver = $this->getDriver($driverId);
+        $driverDTO = $assembler->driverToDriverRegisterDTO($driver);
 
         $absentGridController = $dataGridControllerFactory->createDriverAbsentController(true, array('driverId' => $driverId));
         $absentGridTile = $dataGridHandler->createEmbeddedDataGridTile($absentGridController);
@@ -74,8 +76,19 @@ class DriverController extends Controller {
         $absentGridPanel->add($absentGridTile);
         $repeatedAssertionGridPanel = $panelSplitter->addRight(new PanelTile('repeateddrivingmission.panel.embedded'));
         $repeatedAssertionGridPanel->add($repeatedAssertionGridTile);
-
+        $rootPanel->add(new PanelDeleteFooterTile($this->generateUrl('tixiapi_driver_delete', array('driverId' => $driverId)),'driver.button.delete'));
         return new Response($tileRenderer->render($rootPanel));
+    }
+
+    /**
+     * @Route("/{driverId}/delete",name="tixiapi_driver_delete")
+     * @Method({"GET","POST"})
+     */
+    public function deleteDriverAction(Request $request, $driverId) {
+        $driver = $this->getDriver($driverId);
+        $driver->deleteLogically();
+        $this->get('entity_manager')->flush();
+        return $this->redirect($this->generateUrl('tixiapi_drivers_get'));
     }
 
     /**
@@ -139,7 +152,7 @@ class DriverController extends Controller {
         $formPanel->add(new FormTile('driverForm', $form));
         $gridPanel = $panelSplitter->addRight(new PanelTile('absent.panel.embedded'));
         $gridPanel->add($gridTile);
-
+        $rootPanel->add(new PanelDeleteFooterTile($this->generateUrl('tixiapi_driver_delete', array('driverId' => $driverId)),'driver.button.delete'));
         return new Response($tileRenderer->render($rootPanel));
     }
 
@@ -177,5 +190,14 @@ class DriverController extends Controller {
             $options = array();
         }
         return $this->createForm(new DriverType(), $driverDTO, $options);
+    }
+
+    protected function getDriver($driverId) {
+        $driverRepository = $this->get('driver_repository');
+        $driver = $driverRepository->find($driverId);
+        if(null === $driver) {
+            throw $this->createNotFoundException('The Driver with id ' . $driverId . ' does not exist');
+        }
+        return $driver;
     }
 }

@@ -11,6 +11,8 @@ namespace Tixi\CoreDomain\Dispo;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Tixi\CoreDomain\Driver;
+use Tixi\CoreDomain\Shared\CommonBaseEntity;
+use Tixi\CoreDomain\Shared\Entity;
 
 /**
  * Class DrivingAssertionPlan
@@ -19,7 +21,7 @@ use Tixi\CoreDomain\Driver;
  * @ORM\Entity(repositoryClass="Tixi\CoreDomainBundle\Repository\Dispo\RepeatedDrivingAssertionPlanRepositoryDoctrine")
  * @ORM\Table(name="repeated_driving_assertion_plan")
  */
-class RepeatedDrivingAssertionPlan {
+class RepeatedDrivingAssertionPlan extends CommonBaseEntity implements Entity{
     /**
      * @ORM\Id
      * @ORM\Column(type="integer", name="id")
@@ -58,6 +60,7 @@ class RepeatedDrivingAssertionPlan {
 
     protected function __construct() {
         $this->repeatedDrivingAssertions = new ArrayCollection();
+        parent::__construct();
     }
 
     public static function registerRepeatedAssertionPlan($memo, \DateTime $anchorDate, $frequency, $withHoldidays, \DateTime $endingDate=null) {
