@@ -9,3 +9,4 @@ absent.field.subject: Beschreibung
 absent.field.startdate: Start Datum
 absent.field.enddate: End Datum
 absent.button.new: Neue Abwesenheit
+absent.button.delete: Abwesenheit löschen
