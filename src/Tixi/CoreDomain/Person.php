@@ -224,27 +224,13 @@ class Person {
         if (!empty($address)) {
             $this->setAddress($address);
         }
-        if (!empty($email)) {
-            $this->setEmail($email);
-        }
-        if (!empty($entryDate)) {
-            $this->setEntryDate($entryDate);
-        }
-        if (!empty($birthday)) {
-            $this->setBirthday($birthday);
-        }
-        if (!empty($extraMinutes)) {
-            $this->setExtraMinutes($extraMinutes);
-        }
-        if (!empty($details)) {
-            $this->setDetails($details);
-        }
-        if (!empty($correspondenceAddress)) {
-            $this->setCorrespondenceAddress($correspondenceAddress);
-        }
-        if (!empty($billingAddress)) {
-            $this->setBillingAddress($billingAddress);
-        }
+        $this->setEmail($email);
+        $this->setEntryDate($entryDate);
+        $this->setBirthday($birthday);
+        $this->setExtraMinutes($extraMinutes);
+        $this->setDetails($details);
+        $this->setCorrespondenceAddress($correspondenceAddress);
+        $this->setBillingAddress($billingAddress);
     }
 
     public function removePerson() {

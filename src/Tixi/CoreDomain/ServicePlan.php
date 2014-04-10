@@ -43,7 +43,7 @@ class ServicePlan extends CommonBaseEntity implements Entity {
      */
     protected $memo;
 
-    protected  function __construct() {
+    protected function __construct() {
         parent::__construct();
     }
 
@@ -57,9 +57,7 @@ class ServicePlan extends CommonBaseEntity implements Entity {
         $servicePlan = new ServicePlan();
         $servicePlan->setStartDate($startDate);
         $servicePlan->setEndDate($endDate);
-        if (!empty($memo)) {
-            $servicePlan->setMemo($memo);
-        }
+        $servicePlan->setMemo($memo);
         return $servicePlan;
     }
 
@@ -70,9 +68,7 @@ class ServicePlan extends CommonBaseEntity implements Entity {
         if (!empty($endDate)) {
             $this->setEndDate($endDate);
         }
-        if (!empty($memo)) {
-            $this->setMemo($memo);
-        }
+        $this->setMemo($memo);
     }
 
     /**

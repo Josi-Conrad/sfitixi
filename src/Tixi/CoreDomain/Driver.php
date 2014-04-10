@@ -118,9 +118,7 @@ class Driver extends Person {
         if (!empty($driverCategory)) {
             $this->setDriverCategory($driverCategory);
         }
-        if (!empty($wheelChairAttendance)) {
-            $this->setWheelChairAttendance($wheelChairAttendance);
-        }
+        $this->setWheelChairAttendance($wheelChairAttendance);
     }
 
     /**

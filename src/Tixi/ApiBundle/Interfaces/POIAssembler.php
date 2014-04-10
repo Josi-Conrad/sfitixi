@@ -20,11 +20,11 @@ class POIAssembler {
      * @return POI
      */
     public function registerDTOtoNewPOI(POIRegisterDTO $poiDTO) {
-        $poi = POI::registerPOI($poiDTO->name, $poiDTO->department,
+        $poi = POI::registerPOI($poiDTO->name,
             Address::registerAddress(
                 $poiDTO->street, $poiDTO->postalCode,
                 $poiDTO->city, $poiDTO->country, $poiDTO->address_name, $poiDTO->lat, $poiDTO->lng, $poiDTO->type),
-            $poiDTO->telephone, $poiDTO->comment, $poiDTO->memo, $poiDTO->details);
+            $poiDTO->department, $poiDTO->telephone, $poiDTO->comment, $poiDTO->memo, $poiDTO->details);
         foreach ($poiDTO->keywords as $keyword) {
             $poi->assignKeyword($keyword);
         }
@@ -41,7 +41,7 @@ class POIAssembler {
         $address = $poi->getAddress();
         $address->updateAddressBasicData($poiDTO->street, $poiDTO->postalCode,
             $poiDTO->city, $poiDTO->country, $poiDTO->address_name, $poiDTO->lat, $poiDTO->lng, $poiDTO->type);
-        $poi->updateBasicData($poiDTO->name, $poiDTO->department, $address,
+        $poi->updateBasicData($poiDTO->name, $address, $poiDTO->department,
             $poiDTO->telephone, $poiDTO->comment, $poiDTO->memo, $poiDTO->details);
         $poi->setKeywords($poiDTO->keywords);
         return $poi;

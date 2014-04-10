@@ -97,19 +97,10 @@ class Address {
         $address->setPostalCode($postalCode);
         $address->setCity($city);
         $address->setCountry($country);
-
-        if (!empty($name)) {
-            $address->setName($name);
-        }
-        if (!empty($lat)) {
-            $address->setLat($lat);
-        }
-        if (!empty($lng)) {
-            $address->setLng($lng);
-        }
-        if (!empty($type)) {
-            $address->setType($type);
-        }
+        $address->setName($name);
+        $address->setLat($lat);
+        $address->setLng($lng);
+        $address->setType($type);
         $address->setEditFlag($editFlag);
 
         return $address;
@@ -143,18 +134,10 @@ class Address {
         if (!empty($country)) {
             $this->setCountry($country);
         }
-        if (!empty($name)) {
-            $this->setName($name);
-        }
-        if (!empty($lat)) {
-            $this->setLat($lat);
-        }
-        if (!empty($lng)) {
-            $this->setLng($lng);
-        }
-        if (!empty($type)) {
-            $this->setType($type);
-        }
+        $this->setName($name);
+        $this->setLat($lat);
+        $this->setLng($lng);
+        $this->setType($type);
         $this->setEditFlag($editFlag);
     }
 

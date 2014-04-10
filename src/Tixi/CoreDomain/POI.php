@@ -88,26 +88,22 @@ class POI {
      * @param null $details
      * @return POI
      */
-    public static function registerPoi($name, $department, Address $address,
+    public static function registerPoi($name, Address $address, $department = null,
                                        $telephone = null, $comment = null, $memo = null, $details = null) {
         $poi = new POI();
 
-        $poi->setName($name);
-        $poi->setDepartment($department);
-        $poi->assignAddress($address);
+        if (!empty($name)) {
+            $poi->setName($name);
+        }
+        if (!empty($address)) {
+            $poi->setAddress($address);
+        }
 
-        if (!empty($telephone)) {
-            $poi->setTelephone($telephone);
-        }
-        if (!empty($comment)) {
-            $poi->setComment($comment);
-        }
-        if (!empty($memo)) {
-            $poi->setMemo($memo);
-        }
-        if (!empty($details)) {
-            $poi->setDetails($details);
-        }
+        $poi->setDepartment($department);
+        $poi->setTelephone($telephone);
+        $poi->setComment($comment);
+        $poi->setMemo($memo);
+        $poi->setDetails($details);
 
         $poi->activate();
 
@@ -123,29 +119,19 @@ class POI {
      * @param null $memo
      * @param null $details
      */
-    public function updateBasicData($name = null, $department = null, Address $address = null,
+    public function updateBasicData($name = null, Address $address = null, $department = null,
                                     $telephone = null, $comment = null, $memo = null, $details = null) {
         if (!empty($name)) {
             $this->setName($name);
         }
-        if (!empty($department)) {
-            $this->setDepartment($department);
-        }
         if (!empty($address)) {
             $this->setAddress($address);
         }
-        if (!empty($telephone)) {
-            $this->setTelephone($telephone);
-        }
-        if (!empty($comment)) {
-            $this->setComment($comment);
-        }
-        if (!empty($memo)) {
-            $this->setMemo($memo);
-        }
-        if (!empty($details)) {
-            $this->setDetails($details);
-        }
+        $this->setDepartment($department);
+        $this->setTelephone($telephone);
+        $this->setComment($comment);
+        $this->setMemo($memo);
+        $this->setDetails($details);
     }
 
     /**
