@@ -56,6 +56,14 @@ class RepeatedDrivingAssertionController extends Controller{
     }
 
     /**
+     * @Route("/{assertionPlanId}/delete",name="tixiapi_driver_repeatedassertionplan_delete")
+     * @Method({"GET","POST"})
+     */
+    public function deleteRepeatedAssertionPlanAction(Request $request, $driverId, $assertionPlanId) {
+
+    }
+
+    /**
      * @Route("/new", name="tixiapi_driver_repeatedassertionplan_new")
      * @Method({"GET","POST"})
      * @Breadcrumb("{driverId}", route={"name"="tixiapi_driver_get", "parameters"={"driverId"}})
@@ -150,6 +158,15 @@ class RepeatedDrivingAssertionController extends Controller{
         }
         $assertionPlan->replaceRepeatedDrivingAssertions($repeatedAssertions);
         $assertionPlanRepository->store($assertionPlan);
+    }
+
+    protected function getAssertionPlan($assertionPlanId) {
+        $assertionPlanRepository = $this->get('repeateddrivingassertionplan_repository');
+        $assertionPlan = $assertionPlanRepository->find($assertionPlanId);
+        if(null === $assertionPlan) {
+            throw $this->createNotFoundException('The AssertionPlan with id ' . $assertionPlanId . ' does not exist');
+        }
+        return $assertionPlan;
     }
 
     protected function getDriver($driverId) {

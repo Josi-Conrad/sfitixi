@@ -10,6 +10,8 @@ namespace Tixi\CoreDomain;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Tixi\CoreDomain\Shared\CommonBaseEntity;
+use Tixi\CoreDomain\Shared\Entity;
 
 /**
  * Tixi\CoreDomain\Person
@@ -20,7 +22,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @ORM\DiscriminatorColumn(name="discr", type="string")
  * @ORM\DiscriminatorMap({"person" = "Person", "driver" = "Driver", "passenger" = "Passenger"})
  */
-class Person {
+class Person extends CommonBaseEntity implements Entity{
     /**
      * @ORM\Id
      * @ORM\Column(type="bigint", name="id")
