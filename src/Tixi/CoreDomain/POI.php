@@ -10,6 +10,8 @@ namespace Tixi\CoreDomain;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Tixi\CoreDomain\Shared\CommonBaseEntity;
+use Tixi\CoreDomain\Shared\Entity;
 
 /**
  * Tixi\CoreDomain\POI
@@ -17,7 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="Tixi\CoreDomainBundle\Repository\POIRepositoryDoctrine")
  * @ORM\Table(name="poi")
  */
-class POI {
+class POI extends CommonBaseEntity implements Entity{
     /**
      * @ORM\Id
      * @ORM\Column(type="bigint", name="id")
@@ -74,8 +76,9 @@ class POI {
      */
     protected $details;
 
-    private function __construct() {
+    protected  function __construct() {
         $this->keywords = new ArrayCollection();
+        parent::__construct();
     }
 
     /**

@@ -17,6 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Tixi\ApiBundle\Form\POIType;
 use Tixi\ApiBundle\Interfaces\POIRegisterDTO;
 use Tixi\ApiBundle\Tile\Core\FormTile;
+use Tixi\ApiBundle\Tile\Core\PanelDeleteFooterTile;
 use Tixi\ApiBundle\Tile\Core\PanelSplitterTile;
 use Tixi\ApiBundle\Tile\Core\PanelTile;
 use Tixi\ApiBundle\Tile\Core\RootPanel;
@@ -53,16 +54,26 @@ class POIController extends Controller {
      */
     public function getPOIAction(Request $request, $poiId) {
         $tileRenderer = $this->get('tixi_api.tilerenderer');
-        $poi = $this->get('poi_repository')->find($poiId);
-        if (null === $poi) {
-            throw $this->createNotFoundException('The poi with id ' . $poiId . ' does not exists');
-        }
-        $poiDTO = $this->get('tixi_api.assemblerpoi')->poiToPOIRegisterDTO($poi);
+        $assembler = $this->get('tixi_api.assemblerpoi');
+
+        $poi = $this->getPoi($poiId);
+        $poiDTO = $assembler->poiToPOIRegisterDTO($poi);
         $rootPanel = new RootPanel('tixiapi_pois_get', $poi->getName());
         $rootPanel->add(new POIRegisterFormViewTile('poiRequest', $poiDTO,
             $this->generateUrl('tixiapi_poi_editbasic', array('poiId' => $poiId)),true));
-
+        $rootPanel->add(new PanelDeleteFooterTile($this->generateUrl('tixiapi_poi_delete', array('poiId' => $poiId)),'poi.button.delete'));
         return new Response($tileRenderer->render($rootPanel));
+    }
+
+    /**
+     * @Route("/{poiId}/delete",name="tixiapi_poi_delete")
+     * @Method({"GET","POST"})
+     */
+    public function deletePOIAction(Request $request, $poiId) {
+        $poi = $this->getPoi($poiId);
+        $poi->deleteLogically();
+        $this->get('entity_manager')->flush();
+        return $this->redirect($this->generateUrl('tixiapi_pois_get'));
     }
 
     /**
@@ -96,12 +107,10 @@ class POIController extends Controller {
      */
     public function editPOIAction(Request $request, $poiId) {
         $tileRenderer = $this->get('tixi_api.tilerenderer');
-        $poiAssembler = $this->get('tixi_api.assemblerpoi');
-        $poi = $this->get('poi_repository')->find($poiId);
-        if (null === $poi) {
-            throw $this->createNotFoundException('This poi does not exist');
-        }
-        $poiDTO = $poiAssembler->poiToPOIRegisterDTO($poi);
+        $assembler = $this->get('tixi_api.assemblerpoi');
+
+        $poi = $this->getPoi($poiId);
+        $poiDTO = $assembler->poiToPOIRegisterDTO($poi);
         $form = $this->getForm(null, $poiDTO);
         $form->handleRequest($request);
         if ($form->isValid()) {
@@ -112,6 +121,7 @@ class POIController extends Controller {
         }
         $rootPanel = new RootPanel('tixiapi_pois_get', 'poi.panel.edit');
         $rootPanel->add(new FormTile('poiEditForm', $form, true));
+        $rootPanel->add(new PanelDeleteFooterTile($this->generateUrl('tixiapi_poi_delete', array('poiId' => $poiId)),'poi.button.delete'));
         return new Response($tileRenderer->render($rootPanel));
     }
 
@@ -120,14 +130,17 @@ class POIController extends Controller {
      * @return null|object|\Tixi\CoreDomain\POI
      */
     protected function registerOrUpdatePOI(POIRegisterDTO $poiDTO) {
+        $assembler = $this->get('tixi_api.assemblerpoi');
+        $poiRepository = $this->get('poi_repository');
+        $addressRepository = $this->get('address_repository');
         if (empty($poiDTO->id)) {
-            $poi = $this->get('tixi_api.assemblerpoi')->registerDTOtoNewPOI($poiDTO);
-            $this->get('address_repository')->store($poi->getAddress());
-            $this->get('poi_repository')->store($poi);
+            $poi = $assembler->registerDTOtoNewPOI($poiDTO);
+            $addressRepository->store($poi->getAddress());
+            $poiRepository->store($poi);
             return $poi;
         } else {
-            $poi = $this->get('poi_repository')->find($poiDTO->id);
-            $this->get('tixi_api.assemblerpoi')->registerDTOtoPOI($poiDTO, $poi);
+            $poi = $poiRepository->find($poiDTO->id);
+            $assembler->registerDTOtoPOI($poiDTO, $poi);
             return $poi;
         }
     }
@@ -149,5 +162,19 @@ class POIController extends Controller {
             $options = array();
         }
         return $this->createForm(new POIType(), $poiDTO, $options);
+    }
+
+    /**
+     * @param $poiId
+     * @return mixed
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     */
+    protected function getPoi($poiId) {
+        $poiRepository = $this->get('poi_repository');
+        $poi = $poiRepository->find($poiId);
+        if (null === $poi) {
+            throw $this->createNotFoundException('The POI with id ' . $poi . ' does not exist');
+        }
+        return $poi;
     }
 }

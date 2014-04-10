@@ -24,6 +24,10 @@ class POIListDTO implements DataGridSourceClass {
      */
     public $id;
     /**
+     * @GridField(propertyId="POI.isDeleted", restrictive=true)
+     */
+    public $isDeleted = 'false';
+    /**
      * @GridField(propertyId="POI.name", headerName="poi.field.name", order=3)
      */
     public $name;

@@ -15,3 +15,4 @@ poi.field.memo: Notizen
 poi.field.comment: Kommentare
 poi.field.details: Details
 poi.button.new: Neuer OVI
+poi.button.delete: OVI löschen
