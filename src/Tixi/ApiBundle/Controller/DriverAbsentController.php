@@ -63,13 +63,13 @@ class DriverAbsentController extends Controller {
         $rootPanel = new RootPanel('tixiapi_drivers_get', 'absent.panel.details');
         $rootPanel->add(new AbsentRegisterFormViewTile('absentRequest', $absentDTO,
             $this->generateUrl('tixiapi_driver_absent_editbasic', array('driverId' => $driverId, 'absentId' => $absentId)),true));
-        $rootPanel->add(new PanelDeleteFooterTile($this->generateUrl('tixiapi_absent_delete',
+        $rootPanel->add(new PanelDeleteFooterTile($this->generateUrl('tixiapi_driver_absent_delete',
             array('driverId' => $driverId, 'absentId'=>$absentId)),'absent.button.delete'));
         return new Response($tileRenderer->render($rootPanel));
     }
 
     /**
-     * @Route("/{absentId}/delete",name="tixiapi_absent_delete")
+     * @Route("/{absentId}/delete",name="tixiapi_driver_absent_delete")
      * @Method({"GET","POST"})
      */
     public function deleteAbsentAction(Request $request, $driverId, $absentId) {
@@ -130,7 +130,7 @@ class DriverAbsentController extends Controller {
 
         $rootPanel = new RootPanel('tixiapi_drivers_get', 'absent.panel.edit');
         $rootPanel->add(new FormTile('absentNewForm', $form, true));
-        $rootPanel->add(new PanelDeleteFooterTile($this->generateUrl('tixiapi_absent_delete',
+        $rootPanel->add(new PanelDeleteFooterTile($this->generateUrl('tixiapi_driver_absent_delete',
             array('driverId' => $driverId, 'absentId'=>$absentId)),'absent.button.delete'));
 
         return new Response($tileRenderer->render($rootPanel));

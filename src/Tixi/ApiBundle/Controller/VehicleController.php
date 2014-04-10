@@ -201,7 +201,7 @@ class VehicleController extends Controller {
         $vehicleRepository = $this->get('vehicle_repository');
         $vehicle = $vehicleRepository->find($vehicleId);
         if (null === $vehicle) {
-            throw $this->createNotFoundException('The vehicle does not exist');
+            throw $this->createNotFoundException('The Vehicle with id ' . $vehicleId . ' does not exist');
         }
         return $vehicle;
     }

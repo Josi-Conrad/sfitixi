@@ -10,3 +10,4 @@ passenger.field.notice: Notizen zum Fahrgast
 passenger.field.handicap: Behinderungen
 passenger.field.insurance: Versichert über
 passenger.button.new: Neuer Fahrgast
+passenger.button.delete: Fahrgast löschen
