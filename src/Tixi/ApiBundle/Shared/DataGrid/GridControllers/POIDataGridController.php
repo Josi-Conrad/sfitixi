@@ -16,6 +16,7 @@ use Tixi\ApiBundle\Shared\DataGrid\Tile\DataGridCustomControlTile;
 use Tixi\ApiBundle\Tile\Core\LinkButtonTile;
 use Tixi\ApiBundle\Tile\Core\SelectionButtonDividerTile;
 use Tixi\ApiBundle\Tile\Core\SelectionButtonTile;
+use Tixi\ApiBundle\Tile\Core\TextLinkListDeleteTile;
 use Tixi\ApiBundle\Tile\Core\TextLinkListTile;
 use Tixi\CoreDomain\Shared\GenericEntityFilter\GenericEntityFilter;
 
@@ -34,7 +35,7 @@ class POIDataGridController extends DataGridAbstractController {
         $selectionButton = $customControlTile->add(new SelectionButtonTile('button.with.selection'));
         $selectionButton->add(new TextLinkListTile($this->generateUrl('tixiapi_poi_editbasic', array('poiId' => DataGridHandler::$dataGirdReplaceIdentifier)), 'button.edit', true));
         $selectionButton->add(new SelectionButtonDividerTile());
-        $selectionButton->add(new TextLinkListTile($this->generateUrl('tixiapi_poi_editbasic', array('poiId' => DataGridHandler::$dataGirdReplaceIdentifier)), 'button.delete', true));
+        $selectionButton->add(new TextLinkListDeleteTile($this->generateUrl('tixiapi_poi_delete', array('poiId' => DataGridHandler::$dataGirdReplaceIdentifier)), 'button.delete', true));
         $customControlTile->add(new LinkButtonTile($this->generateUrl('tixiapi_poi_new'), 'poi.button.new', LinkButtonTile::$primaryType));
         return $customControlTile;
     }
