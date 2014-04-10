@@ -42,6 +42,7 @@ repeateddrivingmission.panel.new: Neuer Dauereinsatz
 repeateddrivingmission.panel.edit: Dauereinsatz editieren
 repeateddrivingmission.panel.embedded: Zugeordnete Dauereinsätze
 repeateddrivingmission.button.new: Neuer Dauereinsatz
+repeateddrivingmission.button.delete: Dauereinsatz löschen
 repeateddrivingmission.list.name: Dauereinsätze
 repeateddrivingmission.field.memo: Memo
 repeateddrivingmission.field.anchordate: Ab

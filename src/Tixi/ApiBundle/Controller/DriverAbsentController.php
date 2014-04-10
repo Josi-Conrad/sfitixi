@@ -65,7 +65,7 @@ class DriverAbsentController extends Controller {
 
         $rootPanel = new RootPanel('absentDetail', 'absent.panel.details');
         $rootPanel->add(new AbsentRegisterFormViewTile('absentRequest', $absentDTO,
-            $this->generateUrl('tixiapi_driver_absent_editbasic', array('driverId' => $driverId, 'absentId' => $absentId))));
+            $this->generateUrl('tixiapi_driver_absent_editbasic', array('driverId' => $driverId, 'absentId' => $absentId)),true));
 
         return new Response($tileRenderer->render($rootPanel));
     }
