@@ -22,7 +22,7 @@ use Tixi\CoreDomain\Shared\Entity;
  * @ORM\DiscriminatorColumn(name="discr", type="string")
  * @ORM\DiscriminatorMap({"person" = "Person", "driver" = "Driver", "passenger" = "Passenger"})
  */
-class Person extends CommonBaseEntity implements Entity{
+class Person extends CommonBaseEntity implements Entity {
     /**
      * @ORM\Id
      * @ORM\Column(type="bigint", name="id")
@@ -106,15 +106,6 @@ class Person extends CommonBaseEntity implements Entity{
     protected $details;
 
     /**
-     * @ORM\Column(type="datetime", nullable=true)
-     */
-    protected $creationDate;
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     */
-    protected $modifyDate;
-
-    /**
      * @param $title
      * @param $firstname
      * @param $lastname
@@ -133,7 +124,6 @@ class Person extends CommonBaseEntity implements Entity{
                                    $extraMinutes = null, $details = null, $correspondenceAddress = null,
                                    $billingAddress = null) {
 
-        $this->creationDate = new \DateTime("now");
         $this->absents = new ArrayCollection();
 
         $this->setTitle($title);
@@ -141,28 +131,16 @@ class Person extends CommonBaseEntity implements Entity{
         $this->setLastname($lastname);
         $this->setTelephone($telephone);
         $this->setAddress($address);
-        if (!empty($email)) {
-            $this->setEmail($email);
-        }
-        if (!empty($entryDate)) {
-            $this->setEntryDate($entryDate);
-        }
-        if (!empty($birthday)) {
-            $this->setBirthday($birthday);
-        }
-        if (!empty($extraMinutes)) {
-            $this->setExtraMinutes($extraMinutes);
-        }
-        if (!empty($details)) {
-            $this->setDetails($details);
-        }
-        if (!empty($correspondenceAddress)) {
-            $this->setCorrespondenceAddress($correspondenceAddress);
-        }
-        if (!empty($billingAddress)) {
-            $this->setBillingAddress($billingAddress);
-        }
+        $this->setEmail($email);
+        $this->setEntryDate($entryDate);
+        $this->setBirthday($birthday);
+        $this->setExtraMinutes($extraMinutes);
+        $this->setDetails($details);
+        $this->setCorrespondenceAddress($correspondenceAddress);
+        $this->setBillingAddress($billingAddress);
         $this->activate();
+
+        parent::__construct();
     }
 
     /**
@@ -209,8 +187,6 @@ class Person extends CommonBaseEntity implements Entity{
                                           $address = null, $email = null, $entryDate = null, $birthday = null,
                                           $extraMinutes = null, $details = null, $correspondenceAddress = null, $billingAddress = null) {
 
-        $this->modifyDate = new \DateTime("now");
-
         if (!empty($title)) {
             $this->setTitle($title);
         }
@@ -233,6 +209,8 @@ class Person extends CommonBaseEntity implements Entity{
         $this->setDetails($details);
         $this->setCorrespondenceAddress($correspondenceAddress);
         $this->setBillingAddress($billingAddress);
+
+        $this->updateModifiedDate();
     }
 
     public function removePerson() {
