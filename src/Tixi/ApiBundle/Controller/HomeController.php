@@ -29,4 +29,11 @@ class HomeController extends Controller {
         $template = 'TixiApiBundle:Home:get.html.twig';
         return $this->render($template);
     }
+
+    /**
+     * @Route("/dummy",name="tixiapi_home_dummy")
+     */
+    public function dummyAction() {
+
+    }
 }

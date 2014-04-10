@@ -34,10 +34,10 @@ class ServicePlanEmbeddedListDTO implements DataGridSourceClass{
      * @GridField(propertyId="ServicePlan.endDate", headerName="serviceplan.field.enddate", order=2)
      */
     public $endDate;
-    /**
-     * @GridField(propertyId="ServicePlan.memo", headerName="serviceplan.field.memo", order=3)
-     */
-    public $memo;
+//    /**
+//     * @GridField(propertyId="ServicePlan.memo", headerName="serviceplan.field.memo", order=3)
+//     */
+//    public $memo;
 
     public function getAccessQuery()
     {

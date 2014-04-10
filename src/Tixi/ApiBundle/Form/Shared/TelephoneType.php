@@ -21,11 +21,11 @@ class TelephoneType extends AbstractType {
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver) {
         $resolver->setDefaults(array(
-            'pattern' => $this->pattern,
+//            'pattern' => $this->pattern,
             'attr' => array('title' => 'form.field.title.telephone'),
-            'constraints' => array(
-                new Regex(array('message'=>'field.telephone','pattern'=> '/'.$this->pattern.'/'))
-            ),
+//            'constraints' => array(
+//                new Regex(array('message'=>'field.telephone','pattern'=> '/'.$this->pattern.'/'))
+//            ),
         ));
     }
 

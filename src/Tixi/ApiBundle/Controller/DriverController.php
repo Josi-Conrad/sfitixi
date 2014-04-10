@@ -143,15 +143,20 @@ class DriverController extends Controller {
             return $this->redirect($this->generateUrl('tixiapi_driver_get', array('driverId' => $driverId)));
         }
 
-        $gridController = $dataGridControllerFactory->createDriverAbsentController(true, array('driverId' => $driverId));
-        $gridTile = $dataGridHandler->createEmbeddedDataGridTile($gridController);
+        $absentGridController = $dataGridControllerFactory->createDriverAbsentController(true, array('driverId' => $driverId));
+        $absentGridTile = $dataGridHandler->createEmbeddedDataGridTile($absentGridController);
+
+        $repeatedAssertionPlanController = $dataGridControllerFactory->createRepeatedDrivingAssertionPlanController(true, array('driverId'=>$driverId));
+        $repeatedAssertionGridTile = $dataGridHandler->createEmbeddedDataGridTile($repeatedAssertionPlanController);
 
         $rootPanel = new RootPanel('tixiapi_drivers_get', $driver->getFirstname().' '.$driver->getLastname());
         $panelSplitter = $rootPanel->add(new PanelSplitterTile('1:1'));
         $formPanel = $panelSplitter->addLeft(new PanelTile('driver.panel.edit', PanelTile::$primaryType));
         $formPanel->add(new FormTile('driverForm', $form));
-        $gridPanel = $panelSplitter->addRight(new PanelTile('absent.panel.embedded'));
-        $gridPanel->add($gridTile);
+        $absentGridPanel = $panelSplitter->addRight(new PanelTile('absent.panel.embedded'));
+        $absentGridPanel->add($absentGridTile);
+        $repeatedAssertionGridPanel = $panelSplitter->addRight(new PanelTile('repeateddrivingmission.panel.embedded'));
+        $repeatedAssertionGridPanel->add($repeatedAssertionGridTile);
         $rootPanel->add(new PanelDeleteFooterTile($this->generateUrl('tixiapi_driver_delete', array('driverId' => $driverId)),'driver.button.delete'));
         return new Response($tileRenderer->render($rootPanel));
     }
