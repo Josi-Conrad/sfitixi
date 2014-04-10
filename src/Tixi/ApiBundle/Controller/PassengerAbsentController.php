@@ -63,9 +63,9 @@ class PassengerAbsentController extends Controller {
         }
         $absentDTO = $this->get('tixi_api.assemblerabsent')->absentToAbsentRegisterDTO($absent);
 
-        $rootPanel = new RootPanel('absentDetails', 'absent.panel.details');
+        $rootPanel = new RootPanel('tixiapi_passengers_get', 'absent.panel.details');
         $rootPanel->add(new AbsentRegisterFormViewTile('absentRequest', $absentDTO,
-            $this->generateUrl('tixiapi_passenger_absent_editbasic', array('passengerId' => $passengerId, 'absentId' => $absentId))));
+            $this->generateUrl('tixiapi_passenger_absent_editbasic', array('passengerId' => $passengerId, 'absentId' => $absentId)), true));
 
         return new Response($tileRenderer->render($rootPanel));
     }
