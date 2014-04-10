@@ -18,6 +18,7 @@ use Tixi\ApiBundle\Form\AbsentType;
 use Tixi\ApiBundle\Interfaces\AbsentListDTO;
 use Tixi\ApiBundle\Interfaces\AbsentRegisterDTO;
 use Tixi\ApiBundle\Tile\Core\FormTile;
+use Tixi\ApiBundle\Tile\Core\PanelDeleteFooterTile;
 use Tixi\ApiBundle\Tile\Core\RootPanel;
 use Tixi\ApiBundle\Tile\Absent\AbsentRegisterFormViewTile;
 use Tixi\CoreDomain\Absent;
@@ -53,21 +54,29 @@ class PassengerAbsentController extends Controller {
      * @Breadcrumb("absent.panel.name")
      */
     public function getAbsentAction(Request $request, $passengerId, $absentId) {
-        $absentRepository = $this->get('absent_repository');
         $tileRenderer = $this->get('tixi_api.tilerenderer');
+        $assembler = $this->get('tixi_api.assemblerabsent');
 
-        $passenger = $this->getPassenger($passengerId);
-        $absent = $absentRepository->find($absentId);
-        if (null === $absent) {
-            throw $this->createNotFoundException('The absent with id ' . $absentId . ' does not exists');
-        }
-        $absentDTO = $this->get('tixi_api.assemblerabsent')->absentToAbsentRegisterDTO($absent);
+        $absent = $this->getAbsent($absentId);
+        $absentDTO = $assembler->absentToAbsentRegisterDTO($absent);
 
         $rootPanel = new RootPanel('absentDetails', 'absent.panel.details');
         $rootPanel->add(new AbsentRegisterFormViewTile('absentRequest', $absentDTO,
-            $this->generateUrl('tixiapi_passenger_absent_editbasic', array('passengerId' => $passengerId, 'absentId' => $absentId))));
-
+            $this->generateUrl('tixiapi_passenger_absent_editbasic', array('passengerId' => $passengerId, 'absentId' => $absentId)),true));
+        $rootPanel->add(new PanelDeleteFooterTile($this->generateUrl('tixiapi_passenger_absent_delete',
+            array('passengerId' => $passengerId, 'absentId'=>$absentId)),'absent.button.delete'));
         return new Response($tileRenderer->render($rootPanel));
+    }
+
+    /**
+     * @Route("/{absentId}/delete",name="tixiapi_passenger_absent_delete")
+     * @Method({"GET","POST"})
+     */
+    public function delteAbsentAction(Request $request, $passengerId, $absentId) {
+        $absent = $this->getAbsent($absentId);
+        $absent->deleteLogically();
+        $this->get('entity_manager')->flush();
+        return $this->redirect($this->generateUrl('tixiapi_passenger_get',array('passengerId' => $passengerId)));
     }
 
     /**
@@ -103,16 +112,11 @@ class PassengerAbsentController extends Controller {
      */
     public function editAbsentAction(Request $request, $passengerId, $absentId) {
         $tileRenderer = $this->get('tixi_api.tilerenderer');
-        $absentRepository = $this->get('absent_repository');
-        $passengerRepository = $this->get('passenger_repository');
         $absentAssembler = $this->get('tixi_api.assemblerabsent');
 
+        $absent = $this->getAbsent($absentId);
         /**@var $passenger \Tixi\CoreDomain\Absent */
-        $absent = $absentRepository->find($absentId);
-        $passenger = $passengerRepository->find($passengerId);
-        if (null === $absent) {
-            throw $this->createNotFoundException('This absent does not exist');
-        }
+        $passenger = $this->getPassenger($passengerId);
         $absentDTO = $absentAssembler->absentToAbsentRegisterDTO($absent);
 
         $form = $this->getForm(null, $absentDTO);
@@ -126,7 +130,8 @@ class PassengerAbsentController extends Controller {
 
         $rootPanel = new RootPanel('tixiapi_passengers_get', 'absent.panel.edit');
         $rootPanel->add(new FormTile('absentNewForm', $form, true));
-
+        $rootPanel->add(new PanelDeleteFooterTile($this->generateUrl('tixiapi_passenger_absent_delete',
+            array('passengerId' => $passengerId, 'absentId'=>$absentId)),'absent.button.delete'));
         return new Response($tileRenderer->render($rootPanel));
     }
 
@@ -135,14 +140,16 @@ class PassengerAbsentController extends Controller {
      * @param Passenger $passenger
      */
     protected function registerOrUpdateAbsentToPassenger(AbsentRegisterDTO $absentDTO, Passenger $passenger) {
+        $absentRepository = $this->get('absent_repository');
+        $assembler = $this->get('tixi_api.assemblerabsent');
         if (empty($absentDTO->id)) {
-            $absent = Absent::registerAbsent($absentDTO->subject, $absentDTO->startDate, $absentDTO->endDate);
+            $absent = $assembler->registerDTOtoNewAbsent($absentDTO);
             $passenger->assignAbsent($absent);
-            $this->get('absent_repository')->store($absent);
+            $absentRepository->store($absent);
         } else {
             /**@var $absent Absent */
-            $absent = $this->get('absent_repository')->find($absentDTO->id);
-            $absent->updateBasicData($absentDTO->subject, $absentDTO->startDate, $absentDTO->endDate);
+            $absent = $absentRepository->find($absentDTO->id);
+            $assembler->registerDTOtoAbsent($absentDTO, $absent);
         }
     }
 
@@ -165,6 +172,25 @@ class PassengerAbsentController extends Controller {
         return $this->createForm(new AbsentType(), $absentDTO, $options);
     }
 
+    /**
+     * @param $absentId
+     * @return mixed
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     */
+    protected function getAbsent($absentId) {
+        $absentRepository = $this->get('absent_repository');
+        $absent = $absentRepository->find($absentId);
+        if(null === $absent) {
+            throw $this->createNotFoundException('The Absent with id ' . $absentId . ' does not exists');
+        }
+        return $absent;
+    }
+
+    /**
+     * @param $passengerId
+     * @return mixed
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     */
     protected function getPassenger($passengerId) {
         $passenger = $this->get('passenger_repository')->find($passengerId);
         if (null === $passenger) {
