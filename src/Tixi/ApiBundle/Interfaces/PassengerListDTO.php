@@ -24,6 +24,10 @@ class PassengerListDTO implements DataGridSourceClass {
      */
     public $id;
     /**
+     * @GridField(propertyId="Passenger.isDeleted", restrictive=true)
+     */
+    public $isDeleted = 'false';
+    /**
      * @GridField(propertyId="Passenger.firstname", headerName="person.field.firstname", order=3)
      */
     public $firstname;

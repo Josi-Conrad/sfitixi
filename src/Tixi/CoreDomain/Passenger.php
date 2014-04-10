@@ -64,12 +64,12 @@ class Passenger extends Person {
                                    $extraMinutes = null, $details = null, $correspondenceAddress = null,
                                    $billingAddress = null) {
 
-        parent::__construct($title, $firstname, $lastname, $telephone, $address,
-            $email, $entryDate, $birthday, $extraMinutes, $details, $correspondenceAddress, $billingAddress);
-
         $this->handicaps = new ArrayCollection();
         $this->insurances = new ArrayCollection();
         $this->drivingOrders = new ArrayCollection();
+
+        parent::__construct($title, $firstname, $lastname, $telephone, $address,
+            $email, $entryDate, $birthday, $extraMinutes, $details, $correspondenceAddress, $billingAddress);
     }
 
     /**

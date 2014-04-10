@@ -16,6 +16,7 @@ use Tixi\ApiBundle\Shared\DataGrid\Tile\DataGridCustomControlTile;
 use Tixi\ApiBundle\Tile\Core\LinkButtonTile;
 use Tixi\ApiBundle\Tile\Core\SelectionButtonDividerTile;
 use Tixi\ApiBundle\Tile\Core\SelectionButtonTile;
+use Tixi\ApiBundle\Tile\Core\TextLinkListDeleteTile;
 use Tixi\ApiBundle\Tile\Core\TextLinkListTile;
 use Tixi\CoreDomain\Shared\GenericEntityFilter\GenericEntityFilter;
 
@@ -34,9 +35,9 @@ class PassengerDataGridController extends DataGridAbstractController {
         $selectionButton = $customControlTile->add(new SelectionButtonTile('button.with.selection'));
         $selectionButton->add(new TextLinkListTile($this->generateUrl('tixiapi_passenger_editbasic', array('passengerId' => DataGridHandler::$dataGirdReplaceIdentifier)), 'button.edit', true));
         $selectionButton->add(new TextLinkListTile($this->generateUrl('tixiapi_passenger_absent_new', array('passengerId' => DataGridHandler::$dataGirdReplaceIdentifier)), 'absent.button.new', true));
-        $selectionButton->add(new TextLinkListTile($this->generateUrl('tixiapi_passenger_editbasic', array('passengerId' => DataGridHandler::$dataGirdReplaceIdentifier)), 'drivingorder.button.new', true));
+//        $selectionButton->add(new TextLinkListTile($this->generateUrl('tixiapi_passenger_editbasic', array('passengerId' => DataGridHandler::$dataGirdReplaceIdentifier)), 'drivingorder.button.new', true));
         $selectionButton->add(new SelectionButtonDividerTile());
-        $selectionButton->add(new TextLinkListTile($this->generateUrl('tixiapi_passenger_editbasic', array('passengerId' => DataGridHandler::$dataGirdReplaceIdentifier)), 'button.delete', true));
+        $selectionButton->add(new TextLinkListDeleteTile($this->generateUrl('tixiapi_passenger_delete', array('passengerId' => DataGridHandler::$dataGirdReplaceIdentifier)), 'button.delete', true));
         $customControlTile->add(new LinkButtonTile($this->generateUrl('tixiapi_passenger_new'), 'passenger.button.new', LinkButtonTile::$primaryType));
         return $customControlTile;
     }
