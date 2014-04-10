@@ -3,20 +3,15 @@
 <head>
     <title>iTixi Build</title>
     <link rel="stylesheet" href="bootstrap.css">
-    <style>
-        body {
-            padding-top: 50px;
-        }
-    </style>
 </head>
 <body>
 
-<div class="header text-center">
+<div class="header text-center" style="padding-top: 50px">
     <h3 class="text-muted">
         iTIXI Buildserver
     </h3>
 </div>
-<div class="container text-center">
+<div class="container text-center" style="padding-top: 20px">
     <div>
         <a href="sfitixi/web/app.php/">iTixi App - Productive</a>
     </div>
@@ -32,7 +27,15 @@
     <div>
         <a href="https://travis-ci.org/hertus/sfitixi">Build on Travis-Ci</a>
     </div>
-
+</div>
+<div class="container text-center" style="padding-top: 50px">
+    <div>
+        <small>
+        This Server checks github repository every 5min for changes and will rebuild the whole <br>
+        application if changes were pushed. Check out github repository on: <br>
+        <a href="https://github.com/hertus/sfitixi">Github sfitixi</a>
+        </small>
+    </div>
 </div>
 </body>
 </html>
