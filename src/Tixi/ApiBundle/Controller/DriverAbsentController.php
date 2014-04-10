@@ -144,7 +144,7 @@ class DriverAbsentController extends Controller {
         $absentRepository = $this->get('absent_repository');
         $assembler = $this->get('tixi_api.assemblerabsent');
         if (empty($absentDTO->id)) {
-            $absent = $absentRepository->registerDTOtoNewAbsent($absentDTO);
+            $absent = $assembler->registerDTOtoNewAbsent($absentDTO);
             $driver->assignAbsent($absent);
             $absentRepository->store($absent);
         } else {
@@ -188,7 +188,7 @@ class DriverAbsentController extends Controller {
 
     /**
      * @param $driverId
-     * @return null|object
+     * @return mixed
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
     protected function getDriver($driverId) {
