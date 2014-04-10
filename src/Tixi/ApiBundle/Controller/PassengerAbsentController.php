@@ -28,7 +28,7 @@ use Tixi\CoreDomain\Passenger;
  * Class PassengerAbsentController
  * @package Tixi\ApiBundle\Controller
  * @Route("/passengers/{passengerId}/absents")
- * @Breadcrumb("passenger.panel.name", route="tixiapi_passengers_get")
+ * @Breadcrumb("passenger.breadcrumb.name", route="tixiapi_passengers_get")
  */
 class PassengerAbsentController extends Controller {
 

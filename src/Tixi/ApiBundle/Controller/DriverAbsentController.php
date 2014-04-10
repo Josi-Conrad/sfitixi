@@ -27,7 +27,7 @@ use Tixi\CoreDomain\Driver;
  * Class DriverAbsentController
  * @package Tixi\ApiBundle\Controller
  * @Route("/drivers/{driverId}/absents")
- * @Breadcrumb("driver.panel.name", route="tixiapi_drivers_get")
+ * @Breadcrumb("driver.breadcrumb.name", route="tixiapi_drivers_get")
  */
 class DriverAbsentController extends Controller {
 

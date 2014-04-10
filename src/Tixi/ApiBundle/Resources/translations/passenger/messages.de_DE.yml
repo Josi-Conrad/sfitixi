@@ -1,5 +1,7 @@
 #Passenger
-passenger.list.name: Fahrgast
+passenger.list.name: Alle Fahrgäste
+passenger.breadcrumb.name: Fahrgäste
+
 passenger.panel.name: Fahrgast
 passenger.panel.new: Neuer Fahrgast
 passenger.panel.details: Fahrgast Details

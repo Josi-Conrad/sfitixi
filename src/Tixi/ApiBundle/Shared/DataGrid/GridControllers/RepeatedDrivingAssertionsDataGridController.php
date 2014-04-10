@@ -41,6 +41,7 @@ class RepeatedDrivingAssertionsDataGridController extends DataGridAbstractContro
     {
         $customControlTile = new DataGridCustomControlTile();
         $selectionButton = $customControlTile->add(new SelectionButtonTile('button.with.selection'));
+        $selectionButton->add(new TextLinkListTile($this->generateUrl('tixiapi_driver_repeatedassertionplan_editbasic',array('driverId'=>$this->routeProperties['driverId'],'assertionPlanId'=>DataGridHandler::$dataGirdReplaceIdentifier)),'button.show',true));
         $selectionButton->add(new TextLinkListTile($this->generateUrl('tixiapi_driver_repeatedassertionplan_editbasic',array('driverId'=>$this->routeProperties['driverId'],'assertionPlanId'=>DataGridHandler::$dataGirdReplaceIdentifier)),'button.edit',true));
         $selectionButton->add(new SelectionButtonDividerTile());
         $selectionButton->add(new TextLinkListDeleteTile($this->generateUrl('tixiapi_driver_repeatedassertionplan_delete',array('driverId'=>$this->routeProperties['driverId'],'assertionPlanId'=>DataGridHandler::$dataGirdReplaceIdentifier)),'button.delete',true));

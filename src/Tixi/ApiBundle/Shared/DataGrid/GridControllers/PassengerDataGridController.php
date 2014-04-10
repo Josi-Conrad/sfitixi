@@ -33,6 +33,7 @@ class PassengerDataGridController extends DataGridAbstractController {
     public function createCustomControlTile() {
         $customControlTile = new DataGridCustomControlTile();
         $selectionButton = $customControlTile->add(new SelectionButtonTile('button.with.selection'));
+        $selectionButton->add(new TextLinkListTile($this->generateUrl('tixiapi_passenger_get', array('passengerId' => DataGridHandler::$dataGirdReplaceIdentifier)), 'button.show', true));
         $selectionButton->add(new TextLinkListTile($this->generateUrl('tixiapi_passenger_editbasic', array('passengerId' => DataGridHandler::$dataGirdReplaceIdentifier)), 'button.edit', true));
         $selectionButton->add(new TextLinkListTile($this->generateUrl('tixiapi_passenger_absent_new', array('passengerId' => DataGridHandler::$dataGirdReplaceIdentifier)), 'absent.button.new', true));
 //        $selectionButton->add(new TextLinkListTile($this->generateUrl('tixiapi_passenger_editbasic', array('passengerId' => DataGridHandler::$dataGirdReplaceIdentifier)), 'drivingorder.button.new', true));

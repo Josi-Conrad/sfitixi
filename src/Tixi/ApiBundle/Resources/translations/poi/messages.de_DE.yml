@@ -1,6 +1,7 @@
 #POI
-poi.panel.name: OVI
-poi.list.name: Orte von Interesse
+poi.list.name: Alle Orte von Interesse
+poi.breadcrumb.name: OVIs
+
 poi.panel.name: OVI
 poi.panel.new: Neuer OVI erfassen
 poi.panel.details: OVI Details

@@ -33,6 +33,7 @@ class POIDataGridController extends DataGridAbstractController {
     public function createCustomControlTile() {
         $customControlTile = new DataGridCustomControlTile();
         $selectionButton = $customControlTile->add(new SelectionButtonTile('button.with.selection'));
+        $selectionButton->add(new TextLinkListTile($this->generateUrl('tixiapi_poi_get', array('poiId' => DataGridHandler::$dataGirdReplaceIdentifier)), 'button.show', true));
         $selectionButton->add(new TextLinkListTile($this->generateUrl('tixiapi_poi_editbasic', array('poiId' => DataGridHandler::$dataGirdReplaceIdentifier)), 'button.edit', true));
         $selectionButton->add(new SelectionButtonDividerTile());
         $selectionButton->add(new TextLinkListDeleteTile($this->generateUrl('tixiapi_poi_delete', array('poiId' => DataGridHandler::$dataGirdReplaceIdentifier)), 'button.delete', true));

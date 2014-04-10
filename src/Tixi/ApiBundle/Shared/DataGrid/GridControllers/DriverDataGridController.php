@@ -33,6 +33,7 @@ class DriverDataGridController extends DataGridAbstractController {
     public function createCustomControlTile() {
         $customControlTile = new DataGridCustomControlTile();
         $selectionButton = $customControlTile->add(new SelectionButtonTile('button.with.selection'));
+        $selectionButton->add(new TextLinkListTile($this->generateUrl('tixiapi_driver_get', array('driverId' => DataGridHandler::$dataGirdReplaceIdentifier)), 'button.show', true));
         $selectionButton->add(new TextLinkListTile($this->generateUrl('tixiapi_driver_editbasic', array('driverId' => DataGridHandler::$dataGirdReplaceIdentifier)), 'button.edit', true));
         $selectionButton->add(new TextLinkListTile($this->generateUrl('tixiapi_driver_absent_new', array('driverId' => DataGridHandler::$dataGirdReplaceIdentifier)), 'absent.button.new', true));
         $selectionButton->add(new TextLinkListTile($this->generateUrl('tixiapi_driver_repeatedassertionplan_new', array('driverId' => DataGridHandler::$dataGirdReplaceIdentifier)), 'repeateddrivingmission.button.new', true));

@@ -27,7 +27,7 @@ use Tixi\ApiBundle\Tile\POI\POIRegisterFormViewTile;
  * Class POIController
  * @package Tixi\ApiBundle\Controller
  * @Route("/pois")
- * @Breadcrumb("poi.panel.name", route="tixiapi_pois_get")
+ * @Breadcrumb("poi.breadcrumb.name", route="tixiapi_pois_get")
  */
 class POIController extends Controller {
     /**
@@ -58,7 +58,7 @@ class POIController extends Controller {
 
         $poi = $this->getPoi($poiId);
         $poiDTO = $assembler->poiToPOIRegisterDTO($poi);
-        $rootPanel = new RootPanel('tixiapi_pois_get', $poi->getName());
+        $rootPanel = new RootPanel('tixiapi_pois_get', 'poi.panel.name', $poi->getName());
         $rootPanel->add(new POIRegisterFormViewTile('poiRequest', $poiDTO,
             $this->generateUrl('tixiapi_poi_editbasic', array('poiId' => $poiId)),true));
         $rootPanel->add(new PanelDeleteFooterTile($this->generateUrl('tixiapi_poi_delete', array('poiId' => $poiId)),'poi.button.delete'));
