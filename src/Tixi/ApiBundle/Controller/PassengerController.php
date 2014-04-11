@@ -27,7 +27,7 @@ use Tixi\ApiBundle\Tile\Passenger\PassengerRegisterFormViewTile;
  * Class PassengerController
  * @package Tixi\ApiBundle\Controller
  * @Route("/passengers")
- * @Breadcrumb("passenger.panel.name", route="tixiapi_passengers_get")
+ * @Breadcrumb("passenger.breadcrumb.name", route="tixiapi_passengers_get")
  */
 class PassengerController extends Controller {
     /**
@@ -64,7 +64,7 @@ class PassengerController extends Controller {
         $gridController = $dataGridControllerFactory->createPassengerAbsentController(true, array('passengerId' => $passengerId));
         $gridTile = $dataGridHandler->createEmbeddedDataGridTile($gridController);
 
-        $rootPanel = new RootPanel('tixiapi_passengers_get', $passenger->getFirstname() . ' ' . $passenger->getLastname());
+        $rootPanel = new RootPanel('tixiapi_passengers_get', 'passenger.panel.name', $passenger->getFirstname() . ' ' . $passenger->getLastname());
         $panelSplitter = $rootPanel->add(new PanelSplitterTile('1:1'));
         $formPanel = $panelSplitter->addLeft(new PanelTile('passenger.panel.details', PanelTile::$primaryType));
         $formPanel->add(new PassengerRegisterFormViewTile('passengerRequest', $passengerDTO, $this->generateUrl('tixiapi_passenger_editbasic', array('passengerId' => $passengerId))));
@@ -134,7 +134,7 @@ class PassengerController extends Controller {
         $gridController = $dataGridControllerFactory->createPassengerAbsentController(true, array('passengerId' => $passengerId));
         $gridTile = $dataGridHandler->createEmbeddedDataGridTile($gridController);
 
-        $rootPanel = new RootPanel('tixiapi_passengers_get', $passenger->getFirstname() . ' ' . $passenger->getLastname());
+        $rootPanel = new RootPanel('tixiapi_passengers_get', 'passenger.panel.name', $passenger->getFirstname() . ' ' . $passenger->getLastname());
         $panelSplitter = $rootPanel->add(new PanelSplitterTile('1:1'));
         $formPanel = $panelSplitter->addLeft(new PanelTile('passenger.panel.edit', PanelTile::$primaryType));
         $formPanel->add(new FormTile('passengerForm', $form));

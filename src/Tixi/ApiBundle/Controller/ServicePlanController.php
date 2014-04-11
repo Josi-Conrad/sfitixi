@@ -26,7 +26,7 @@ use Tixi\CoreDomain\Vehicle;
 /**
  * Class ServicePlanController
  * @package Tixi\ApiBundle\Controller
- * @Breadcrumb("vehicle.panel.name", route="tixiapi_vehicles_get")
+ * @Breadcrumb("vehicle.breadcrumb.name", route="tixiapi_vehicles_get")
  * @Route("/vehicles/{vehicleId}/serviceplans")
  */
 class ServicePlanController extends Controller {

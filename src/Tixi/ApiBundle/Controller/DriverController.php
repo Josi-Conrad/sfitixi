@@ -27,7 +27,7 @@ use Tixi\ApiBundle\Tile\Driver\DriverRegisterFormViewTile;
  * Class DriverController
  * @package Tixi\ApiBundle\Controller
  * @Route("/drivers")
- * @Breadcrumb("driver.panel.name", route="tixiapi_drivers_get")
+ * @Breadcrumb("driver.breadcrumb.name", route="tixiapi_drivers_get")
  */
 class DriverController extends Controller {
     /**
@@ -68,7 +68,7 @@ class DriverController extends Controller {
         $repeatedAssertionPlanController = $dataGridControllerFactory->createRepeatedDrivingAssertionPlanController(true, array('driverId'=>$driverId));
         $repeatedAssertionGridTile = $dataGridHandler->createEmbeddedDataGridTile($repeatedAssertionPlanController);
 
-        $rootPanel = new RootPanel('tixiapi_drivers_get', $driver->getFirstname().' '.$driver->getLastname());
+        $rootPanel = new RootPanel('tixiapi_drivers_get', 'driver.panel.name', $driver->getFirstname().' '.$driver->getLastname());
         $panelSplitter = $rootPanel->add(new PanelSplitterTile('1:1'));
         $formPanel = $panelSplitter->addLeft(new PanelTile('driver.panel.details', PanelTile::$primaryType));
         $formPanel->add(new DriverRegisterFormViewTile('driverRequest', $driverDTO, $this->generateUrl('tixiapi_driver_editbasic', array('driverId' => $driverId))));
@@ -149,7 +149,7 @@ class DriverController extends Controller {
         $repeatedAssertionPlanController = $dataGridControllerFactory->createRepeatedDrivingAssertionPlanController(true, array('driverId'=>$driverId));
         $repeatedAssertionGridTile = $dataGridHandler->createEmbeddedDataGridTile($repeatedAssertionPlanController);
 
-        $rootPanel = new RootPanel('tixiapi_drivers_get', $driver->getFirstname().' '.$driver->getLastname());
+        $rootPanel = new RootPanel('tixiapi_drivers_get', 'driver.panel.name', $driver->getFirstname().' '.$driver->getLastname());
         $panelSplitter = $rootPanel->add(new PanelSplitterTile('1:1'));
         $formPanel = $panelSplitter->addLeft(new PanelTile('driver.panel.edit', PanelTile::$primaryType));
         $formPanel->add(new FormTile('driverForm', $form));
