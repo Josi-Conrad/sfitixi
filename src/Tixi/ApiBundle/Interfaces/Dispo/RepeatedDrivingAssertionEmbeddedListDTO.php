@@ -19,6 +19,10 @@ class RepeatedDrivingAssertionEmbeddedListDTO implements DataGridSourceClass {
      */
     public $id;
     /**
+     * @GridField(propertyId="RepeatedDrivingAssertionPlan.isDeleted", restrictive=true)
+     */
+    public $isDeleted = 'false';
+    /**
      * @GridField(propertyId="Driver.id", restrictive=true)
      */
     public $driverId;

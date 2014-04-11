@@ -64,12 +64,12 @@ class Passenger extends Person {
                                    $extraMinutes = null, $details = null, $correspondenceAddress = null,
                                    $billingAddress = null) {
 
-        parent::__construct($title, $firstname, $lastname, $telephone, $address,
-            $email, $entryDate, $birthday, $extraMinutes, $details, $correspondenceAddress, $billingAddress);
-
         $this->handicaps = new ArrayCollection();
         $this->insurances = new ArrayCollection();
         $this->drivingOrders = new ArrayCollection();
+
+        parent::__construct($title, $firstname, $lastname, $telephone, $address,
+            $email, $entryDate, $birthday, $extraMinutes, $details, $correspondenceAddress, $billingAddress);
     }
 
     /**
@@ -105,10 +105,7 @@ class Passenger extends Person {
         $passenger->setIsInWheelChair($isInWheelChair);
         $passenger->setGotMonthlyBilling($gotMonthlyBilling);
         $passenger->setIsOverweight($isOverWeight);
-
-        if (!empty($notice)) {
-            $passenger->setNotice($notice);
-        }
+        $passenger->setNotice($notice);
 
         return $passenger;
     }
@@ -119,9 +116,9 @@ class Passenger extends Person {
      * @param null $lastname
      * @param null $telephone
      * @param Address $address
-     * @param null $isInWheelChair
-     * @param null $gotMonthlyBilling
-     * @param null $isOverWeight
+     * @param bool|null $isInWheelChair
+     * @param bool|null $gotMonthlyBilling
+     * @param bool|null $isOverWeight
      * @param null $email
      * @param null $entryDate
      * @param null $birthday
@@ -133,7 +130,7 @@ class Passenger extends Person {
      * @internal param \Tixi\CoreDomain\Handicap $handicap
      */
     public function updatePassengerBasicData($title = null, $firstname = null, $lastname = null, $telephone = null,
-                                             Address $address, $isInWheelChair = null, $gotMonthlyBilling = null,
+                                             Address $address, $isInWheelChair = false, $gotMonthlyBilling = null,
                                              $isOverWeight = null, $email = null, $entryDate = null, $birthday = null,
                                              $extraMinutes = null, $details = null, $notice = null, $correspondenceAddress = null,
                                              $billingAddress = null) {
@@ -143,18 +140,10 @@ class Passenger extends Person {
             $extraMinutes, $details, $correspondenceAddress, $billingAddress
         );
 
-        if (!empty($isInWheelChair)) {
-            $this->setIsInWheelChair($isInWheelChair);
-        }
-        if (!empty($gotMonthlyBilling)) {
-            $this->setGotMonthlyBilling($gotMonthlyBilling);
-        }
-        if (!empty($isOverWeight)) {
-            $this->setIsOverweight($isOverWeight);
-        }
-        if (!empty($notice)) {
-            $this->setNotice($notice);
-        }
+        $this->setIsInWheelChair($isInWheelChair);
+        $this->setGotMonthlyBilling($gotMonthlyBilling);
+        $this->setIsOverweight($isOverWeight);
+        $this->setNotice($notice);
     }
 
     /**
@@ -167,28 +156,28 @@ class Passenger extends Person {
     /**
      * @param Handicap $handicap
      */
-    public function assignHandicap(Handicap $handicap){
+    public function assignHandicap(Handicap $handicap) {
         $this->handicaps->add($handicap);
     }
 
     /**
      * @param Handicap $handicap
      */
-    public function removeHandicap(Handicap $handicap){
+    public function removeHandicap(Handicap $handicap) {
         $this->handicaps->removeElement($handicap);
     }
 
     /**
      * @param Insurance $insurance
      */
-    public function assignInsurance(Insurance $insurance){
+    public function assignInsurance(Insurance $insurance) {
         $this->insurances->add($insurance);
     }
 
     /**
      * @param Insurance $insurance
      */
-    public function removeInsurance(Insurance $insurance){
+    public function removeInsurance(Insurance $insurance) {
         $this->insurances->removeElement($insurance);
     }
 

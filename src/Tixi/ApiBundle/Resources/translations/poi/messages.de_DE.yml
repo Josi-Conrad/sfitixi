@@ -1,6 +1,7 @@
 #POI
-poi.panel.name: OVI
-poi.list.name: Orte von Interesse
+poi.list.name: Alle Orte von Interesse
+poi.breadcrumb.name: OVIs
+
 poi.panel.name: OVI
 poi.panel.new: Neuer OVI erfassen
 poi.panel.details: OVI Details
@@ -15,3 +16,4 @@ poi.field.memo: Notizen
 poi.field.comment: Kommentare
 poi.field.details: Details
 poi.button.new: Neuer OVI
+poi.button.delete: OVI löschen

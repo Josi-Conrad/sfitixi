@@ -21,6 +21,7 @@ use Tixi\ApiBundle\Interfaces\Dispo\RepeatedDrivingAssertionAssembler;
 use Tixi\ApiBundle\Interfaces\Dispo\RepeatedDrivingAssertionRegisterDTO;
 use Tixi\ApiBundle\Interfaces\Dispo\ShiftSelectionDTO;
 use Tixi\ApiBundle\Tile\Core\FormTile;
+use Tixi\ApiBundle\Tile\Core\PanelDeleteFooterTile;
 use Tixi\ApiBundle\Tile\Core\RootPanel;
 use Tixi\ApiBundle\Tile\Dispo\RepeatedAssertionTile;
 use Tixi\CoreDomain\Dispo\RepeatedDrivingAssertion;
@@ -53,6 +54,18 @@ class RepeatedDrivingAssertionController extends Controller{
         $gridController = $dataGridControllerFactory->createRepeatedDrivingAssertionPlanController($embeddedState, array('driverId' => $driverId));
         $dataGridTile = $dataGridHandler->createDataGridTileByRequest($request, $gridController);
         return new Response($tileRenderer->render($dataGridTile));
+    }
+
+    /**
+     * @Route("/{assertionPlanId}/delete",name="tixiapi_driver_repeatedassertionplan_delete")
+     * @Method({"GET","POST"})
+     */
+    public function deleteRepeatedAssertionPlanAction(Request $request, $driverId, $assertionPlanId) {
+        $assertionPlan = $this->getAssertionPlan($assertionPlanId);
+        $assertionPlan->deleteLogically();
+        $this->get('entity_manager')->flush();
+        return $this->redirect($this->generateUrl('tixiapi_driver_get',array('driverId' => $driverId)));
+
     }
 
     /**
@@ -109,7 +122,8 @@ class RepeatedDrivingAssertionController extends Controller{
 
         $rootPanel = new RootPanel('tixiapi_drivers_get', 'repeateddrivingmission.panel.edit');
         $rootPanel->add(new RepeatedAssertionTile('monthlyAssertion',$form, $assertionPlan->getFrequency()));
-
+        $rootPanel->add(new PanelDeleteFooterTile($this->generateUrl('tixiapi_driver_repeatedassertionplan_delete',
+            array('driverId' => $driverId, 'assertionPlanId'=>$assertionPlanId)),'repeateddrivingmission.button.delete'));
         return new Response($tileRenderer->render($rootPanel));
     }
 
@@ -150,6 +164,15 @@ class RepeatedDrivingAssertionController extends Controller{
         }
         $assertionPlan->replaceRepeatedDrivingAssertions($repeatedAssertions);
         $assertionPlanRepository->store($assertionPlan);
+    }
+
+    protected function getAssertionPlan($assertionPlanId) {
+        $assertionPlanRepository = $this->get('repeateddrivingassertionplan_repository');
+        $assertionPlan = $assertionPlanRepository->find($assertionPlanId);
+        if(null === $assertionPlan) {
+            throw $this->createNotFoundException('The AssertionPlan with id ' . $assertionPlanId . ' does not exist');
+        }
+        return $assertionPlan;
     }
 
     protected function getDriver($driverId) {

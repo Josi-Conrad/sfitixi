@@ -18,6 +18,7 @@ use Tixi\ApiBundle\Form\AbsentType;
 use Tixi\ApiBundle\Interfaces\AbsentListDTO;
 use Tixi\ApiBundle\Interfaces\AbsentRegisterDTO;
 use Tixi\ApiBundle\Tile\Core\FormTile;
+use Tixi\ApiBundle\Tile\Core\PanelDeleteFooterTile;
 use Tixi\ApiBundle\Tile\Core\RootPanel;
 use Tixi\ApiBundle\Tile\Absent\AbsentRegisterFormViewTile;
 use Tixi\CoreDomain\Driver;
@@ -26,7 +27,7 @@ use Tixi\CoreDomain\Driver;
  * Class DriverAbsentController
  * @package Tixi\ApiBundle\Controller
  * @Route("/drivers/{driverId}/absents")
- * @Breadcrumb("driver.panel.name", route="tixiapi_drivers_get")
+ * @Breadcrumb("driver.breadcrumb.name", route="tixiapi_drivers_get")
  */
 class DriverAbsentController extends Controller {
 
@@ -53,21 +54,29 @@ class DriverAbsentController extends Controller {
      * @Breadcrumb("absent.panel.details")
      */
     public function getAbsentAction(Request $request, $driverId, $absentId) {
-        $absentRepository = $this->get('absent_repository');
         $tileRenderer = $this->get('tixi_api.tilerenderer');
+        $assembler = $this->get('tixi_api.assemblerabsent');
 
-        $driver = $this->getDriver($driverId);
-        $absent = $absentRepository->find($absentId);
-        if (null === $absent) {
-            throw $this->createNotFoundException('The absent with id ' . $absentId . ' does not exists');
-        }
-        $absentDTO = $this->get('tixi_api.assemblerabsent')->absentToAbsentRegisterDTO($absent);
+        $absent = $this->getAbsent($absentId);
+        $absentDTO = $assembler->absentToAbsentRegisterDTO($absent);
 
-        $rootPanel = new RootPanel('absentDetail', 'absent.panel.details');
+        $rootPanel = new RootPanel('tixiapi_drivers_get', 'absent.panel.details');
         $rootPanel->add(new AbsentRegisterFormViewTile('absentRequest', $absentDTO,
-            $this->generateUrl('tixiapi_driver_absent_editbasic', array('driverId' => $driverId, 'absentId' => $absentId))));
-
+            $this->generateUrl('tixiapi_driver_absent_editbasic', array('driverId' => $driverId, 'absentId' => $absentId)),true));
+        $rootPanel->add(new PanelDeleteFooterTile($this->generateUrl('tixiapi_driver_absent_delete',
+            array('driverId' => $driverId, 'absentId'=>$absentId)),'absent.button.delete'));
         return new Response($tileRenderer->render($rootPanel));
+    }
+
+    /**
+     * @Route("/{absentId}/delete",name="tixiapi_driver_absent_delete")
+     * @Method({"GET","POST"})
+     */
+    public function deleteAbsentAction(Request $request, $driverId, $absentId) {
+        $absent = $this->getAbsent($absentId);
+        $absent->deleteLogically();
+        $this->get('entity_manager')->flush();
+        return $this->redirect($this->generateUrl('tixiapi_driver_get',array('driverId' => $driverId)));
     }
 
     /**
@@ -103,16 +112,11 @@ class DriverAbsentController extends Controller {
      */
     public function editAbsentAction(Request $request, $driverId, $absentId) {
         $tileRenderer = $this->get('tixi_api.tilerenderer');
-        $absentRepository = $this->get('absent_repository');
-        $driverRepository = $this->get('driver_repository');
         $absentAssembler = $this->get('tixi_api.assemblerabsent');
 
         /**@var $driver \Tixi\CoreDomain\Absent */
-        $absent = $absentRepository->find($absentId);
-        $driver = $driverRepository->find($driverId);
-        if (null === $absent) {
-            throw $this->createNotFoundException('This absent does not exist');
-        }
+        $absent = $this->getAbsent($absentId);
+        $driver = $this->getDriver($driverId);
         $absentDTO = $absentAssembler->absentToAbsentRegisterDTO($absent);
 
         $form = $this->getForm(null, $absentDTO);
@@ -126,6 +130,8 @@ class DriverAbsentController extends Controller {
 
         $rootPanel = new RootPanel('tixiapi_drivers_get', 'absent.panel.edit');
         $rootPanel->add(new FormTile('absentNewForm', $form, true));
+        $rootPanel->add(new PanelDeleteFooterTile($this->generateUrl('tixiapi_driver_absent_delete',
+            array('driverId' => $driverId, 'absentId'=>$absentId)),'absent.button.delete'));
 
         return new Response($tileRenderer->render($rootPanel));
     }
@@ -135,13 +141,15 @@ class DriverAbsentController extends Controller {
      * @param Driver $driver
      */
     protected function registerOrUpdateAbsentToDriver(AbsentRegisterDTO $absentDTO, Driver $driver) {
+        $absentRepository = $this->get('absent_repository');
+        $assembler = $this->get('tixi_api.assemblerabsent');
         if (empty($absentDTO->id)) {
-            $absent = $this->get('tixi_api.assemblerabsent')->registerDTOtoNewAbsent($absentDTO);
+            $absent = $assembler->registerDTOtoNewAbsent($absentDTO);
             $driver->assignAbsent($absent);
-            $this->get('absent_repository')->store($absent);
+            $absentRepository->store($absent);
         } else {
-            $absent = $this->get('absent_repository')->find($absentDTO->id);
-            $this->get('tixi_api.assemblerabsent')->registerDTOtoAbsent($absentDTO, $absent);
+            $absent = $absentRepository->find($absentDTO->id);
+            $assembler->registerDTOtoAbsent($absentDTO, $absent);
         }
     }
 
@@ -165,12 +173,27 @@ class DriverAbsentController extends Controller {
     }
 
     /**
+     * @param $absentId
+     * @return mixed
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     */
+    protected function getAbsent($absentId) {
+        $absentRepository = $this->get('absent_repository');
+        $absent = $absentRepository->find($absentId);
+        if(null === $absent) {
+            throw $this->createNotFoundException('The Absent with id ' . $absentId . ' does not exists');
+        }
+        return $absent;
+    }
+
+    /**
      * @param $driverId
-     * @return null|object
+     * @return mixed
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
     protected function getDriver($driverId) {
-        $driver = $this->get('driver_repository')->find($driverId);
+        $driverRepository = $this->get('driver_repository');
+        $driver = $driverRepository->find($driverId);
         if (null === $driver) {
             throw $this->createNotFoundException('The driver with id ' . $driverId . ' does not exists');
         }

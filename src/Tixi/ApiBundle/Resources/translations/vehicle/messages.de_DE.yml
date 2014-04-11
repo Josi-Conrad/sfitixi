@@ -1,5 +1,11 @@
 #Vehicle
-vehicle.list.name: Fahrzeuge
+vehicle.list.name: Alle Fahrzeuge
+vehicle.breadcrumb.name: Fahrzeuge
+
+vehicle.panel.name: Fahrzeug
+vehicle.panel.new: Neues Fahrzeug
+vehicle.panel.details: Fahrzeug Details
+vehicle.panel.serviceplans: Zugeordnete Servicepläne
 
 vehicle.field.name: Fahrzeugbezeichnung
 vehicle.field.licencenumber: Kennzeichen
@@ -13,11 +19,6 @@ vehicle.field.managementdetails: Verwaltungsdetails
 vehicle.field.supervisor: Fahrzeugbetreuer
 vehicle.field.supervisor.empty: Bitte einen Betreuer auswählen
 
-vehicle.panel.name: Fahrzeug
-vehicle.panel.new: Neues Fahrzeug
-vehicle.panel.details: Fahrzeug Details
-vehicle.panel.serviceplans: Zugeordnete Servicepläne
-
 vehicle.button.new: Neues Fahrzeug
 vehicle.button.delete: Fahrzeug löschen
 
@@ -26,12 +27,13 @@ vehicle.date.not_blank: Bitte ein Datum wählen
 
 #Serviceplan
 serviceplan.list.name: Servicepläne
+serviceplan.breadcrumb.name: Servicepläne
 
 serviceplan.field.startdate: Start
 serviceplan.field.enddate: Ende
 serviceplan.field.memo: Notizen
 
-serviceplan.panel.embedded: Zugeordnete Servicepläne
+serviceplan.panel.embedded: Servicepläne
 serviceplan.panel.name: Serviceplan
 serviceplan.panel.new: Neuer Serviceplan
 serviceplan.panel.edit: Serviceplan editieren

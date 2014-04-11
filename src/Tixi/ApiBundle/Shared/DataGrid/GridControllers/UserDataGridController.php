@@ -32,6 +32,7 @@ class UserDataGridController extends DataGridAbstractController {
     public function createCustomControlTile() {
         $customControlTile = new DataGridCustomControlTile();
         $selectionButton = $customControlTile->add(new SelectionButtonTile('button.with.selection'));
+        $selectionButton->add(new TextLinkListTile($this->generateUrl('tixiapi_user_get', array('userId' => DataGridHandler::$dataGirdReplaceIdentifier)), 'button.show', true));
         $selectionButton->add(new TextLinkListTile($this->generateUrl('tixiapi_user_editbasic', array('userId' => DataGridHandler::$dataGirdReplaceIdentifier)), 'button.edit', true));
         $selectionButton->add(new SelectionButtonDividerTile());
         $selectionButton->add(new TextLinkListTile($this->generateUrl('tixiapi_user_editbasic', array('userId' => DataGridHandler::$dataGirdReplaceIdentifier)), 'button.delete', true));

@@ -51,11 +51,10 @@ class Driver extends Person {
                                    $email = null, $entryDate = null, $birthday = null,
                                    $extraMinutes = null, $details = null) {
 
-        parent::__construct($title, $firstname, $lastname, $telephone, $address,
-            $email, $entryDate, $birthday, $extraMinutes, $details);
-
         $this->supervisedVehicles = new ArrayCollection();
         $this->repeatedDrivingAssertionPlans = new ArrayCollection();
+        parent::__construct($title, $firstname, $lastname, $telephone, $address,
+            $email, $entryDate, $birthday, $extraMinutes, $details);
     }
 
     /**
@@ -118,9 +117,7 @@ class Driver extends Person {
         if (!empty($driverCategory)) {
             $this->setDriverCategory($driverCategory);
         }
-        if (!empty($wheelChairAttendance)) {
-            $this->setWheelChairAttendance($wheelChairAttendance);
-        }
+        $this->setWheelChairAttendance($wheelChairAttendance);
     }
 
     /**

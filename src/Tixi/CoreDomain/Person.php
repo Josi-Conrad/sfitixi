@@ -10,6 +10,8 @@ namespace Tixi\CoreDomain;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Tixi\CoreDomain\Shared\CommonBaseEntity;
+use Tixi\CoreDomain\Shared\Entity;
 
 /**
  * Tixi\CoreDomain\Person
@@ -20,7 +22,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @ORM\DiscriminatorColumn(name="discr", type="string")
  * @ORM\DiscriminatorMap({"person" = "Person", "driver" = "Driver", "passenger" = "Passenger"})
  */
-class Person {
+class Person extends CommonBaseEntity implements Entity {
     /**
      * @ORM\Id
      * @ORM\Column(type="bigint", name="id")
@@ -104,15 +106,6 @@ class Person {
     protected $details;
 
     /**
-     * @ORM\Column(type="datetime", nullable=true)
-     */
-    protected $creationDate;
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     */
-    protected $modifyDate;
-
-    /**
      * @param $title
      * @param $firstname
      * @param $lastname
@@ -131,7 +124,6 @@ class Person {
                                    $extraMinutes = null, $details = null, $correspondenceAddress = null,
                                    $billingAddress = null) {
 
-        $this->creationDate = new \DateTime("now");
         $this->absents = new ArrayCollection();
 
         $this->setTitle($title);
@@ -139,28 +131,16 @@ class Person {
         $this->setLastname($lastname);
         $this->setTelephone($telephone);
         $this->setAddress($address);
-        if (!empty($email)) {
-            $this->setEmail($email);
-        }
-        if (!empty($entryDate)) {
-            $this->setEntryDate($entryDate);
-        }
-        if (!empty($birthday)) {
-            $this->setBirthday($birthday);
-        }
-        if (!empty($extraMinutes)) {
-            $this->setExtraMinutes($extraMinutes);
-        }
-        if (!empty($details)) {
-            $this->setDetails($details);
-        }
-        if (!empty($correspondenceAddress)) {
-            $this->setCorrespondenceAddress($correspondenceAddress);
-        }
-        if (!empty($billingAddress)) {
-            $this->setBillingAddress($billingAddress);
-        }
+        $this->setEmail($email);
+        $this->setEntryDate($entryDate);
+        $this->setBirthday($birthday);
+        $this->setExtraMinutes($extraMinutes);
+        $this->setDetails($details);
+        $this->setCorrespondenceAddress($correspondenceAddress);
+        $this->setBillingAddress($billingAddress);
         $this->activate();
+
+        parent::__construct();
     }
 
     /**
@@ -207,8 +187,6 @@ class Person {
                                           $address = null, $email = null, $entryDate = null, $birthday = null,
                                           $extraMinutes = null, $details = null, $correspondenceAddress = null, $billingAddress = null) {
 
-        $this->modifyDate = new \DateTime("now");
-
         if (!empty($title)) {
             $this->setTitle($title);
         }
@@ -224,27 +202,15 @@ class Person {
         if (!empty($address)) {
             $this->setAddress($address);
         }
-        if (!empty($email)) {
-            $this->setEmail($email);
-        }
-        if (!empty($entryDate)) {
-            $this->setEntryDate($entryDate);
-        }
-        if (!empty($birthday)) {
-            $this->setBirthday($birthday);
-        }
-        if (!empty($extraMinutes)) {
-            $this->setExtraMinutes($extraMinutes);
-        }
-        if (!empty($details)) {
-            $this->setDetails($details);
-        }
-        if (!empty($correspondenceAddress)) {
-            $this->setCorrespondenceAddress($correspondenceAddress);
-        }
-        if (!empty($billingAddress)) {
-            $this->setBillingAddress($billingAddress);
-        }
+        $this->setEmail($email);
+        $this->setEntryDate($entryDate);
+        $this->setBirthday($birthday);
+        $this->setExtraMinutes($extraMinutes);
+        $this->setDetails($details);
+        $this->setCorrespondenceAddress($correspondenceAddress);
+        $this->setBillingAddress($billingAddress);
+
+        $this->updateModifiedDate();
     }
 
     public function removePerson() {

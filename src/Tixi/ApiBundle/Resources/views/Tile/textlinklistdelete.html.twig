@@ -1,0 +1,4 @@
+{% set resolvedLater = resolvedLater | default(false) %}
+<li>
+    <a data-targetSrc="{{ targetSrc }}" data-deleteconfirmtext="{{ 'delete.logically.standardtext'|trans }}" class="customLink textLink textLinkDelete {% if resolvedLater %}linkWithDelegatedResolve{% endif %}" href="#">{{ displayName|trans }}</a>
+</li>

@@ -132,18 +132,12 @@ class Vehicle extends CommonBaseEntity implements Entity {
         if (!empty($dateOfFirstRegistration)) {
             $this->dateOfFirstRegistration = $dateOfFirstRegistration;
         }
-        if (!empty($parkingLotNumber)) {
-            $this->parking = $parkingLotNumber;
-        }
+        $this->parking = $parkingLotNumber;
         if (!empty($category)) {
             $this->category = $category;
         }
-        if (!empty($memo)) {
-            $this->memo = $memo;
-        }
-        if (!empty($managementDetails)) {
-            $this->managementDetails = $managementDetails;
-        }
+        $this->memo = $memo;
+        $this->managementDetails = $managementDetails;
         $this->updateModifiedDate();
     }
 

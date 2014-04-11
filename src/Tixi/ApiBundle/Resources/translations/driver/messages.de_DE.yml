@@ -1,6 +1,6 @@
 #Driver
-driver.list.name: Fahrer
-
+driver.list.name: Alle Fahrer
+driver.breadcrumb.name: Fahrer
 driver.panel.name: Fahrer
 driver.panel.new: Neuer Fahrer
 driver.panel.details: Fahrer Details
@@ -12,3 +12,4 @@ driver.field.wheelchair: Rollstuhlfahrten
 driver.field.category: Fahrerkategorie
 
 driver.button.new: Neuer Fahrer
+driver.button.delete: Fahrer löschen

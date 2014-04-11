@@ -82,7 +82,7 @@ class AddressPOITest extends WebTestCase {
         $this->poiKeywordRepo->store($poiKeyword1);
         $this->poiKeywordRepo->store($poiKeyword2);
         $this->poiKeywordRepo->store($poiKeyword3);
-        $poi = POI::registerPoi('Krankenhaus', 'Therapie', $address, '041 818 21 21');
+        $poi = POI::registerPoi('Krankenhaus', $address, 'Therapie', '041 818 21 21');
         $poi->assignKeyword($poiKeyword1);
         $poi->assignKeyword($poiKeyword2);
         $poi->assignKeyword($poiKeyword3);
@@ -92,7 +92,7 @@ class AddressPOITest extends WebTestCase {
         $poiFind = $this->poiRepo->find($poi->getId());
         $this->assertEquals($poi, $poiFind);
 
-        $poi->updateBasicData('Altersheim Wohnwohl', 'Pflege', null, '041 818 31 31', 'Gutes Heim');
+        $poi->updateBasicData('Altersheim Wohnwohl', null, 'Pflege', '041 818 31 31', 'Gutes Heim');
         $this->poiRepo->store($poi);
         $this->em->flush();
 

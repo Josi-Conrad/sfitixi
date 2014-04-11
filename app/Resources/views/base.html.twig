@@ -3,9 +3,11 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>iTixi</title>
+    {% set titleDisplayText = titleDisplayText|default('App') %}
+    {% set titleDisplaySubText = titleDisplaySubText|default('') %}
+    <title>iTixi - {{ titleDisplayText|trans }} {{ titleDisplaySubText|trans }}</title>
     <meta name="description" content="">
-    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}"/>
 
     <link rel="stylesheet" href="{{ asset('css/bootstrap.css') }}">
     <style>
@@ -33,15 +35,15 @@
                 </h3>
             </div>
             <div class="pull-right">
-            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
 
-                {% include '::topAction.html.twig' %}
+                    {% include '::topAction.html.twig' %}
 
-            {% else %}
+                {% else %}
 
-                {% include '::topActionLogin.html.twig' %}
+                    {% include '::topActionLogin.html.twig' %}
 
-            {% endif %}
+                {% endif %}
             </div>
             <div class="clearfix"></div>
         </div>

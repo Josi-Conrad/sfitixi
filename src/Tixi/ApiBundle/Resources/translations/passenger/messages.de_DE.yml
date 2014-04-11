@@ -1,5 +1,7 @@
 #Passenger
-passenger.list.name: Fahrgast
+passenger.list.name: Alle Fahrgäste
+passenger.breadcrumb.name: Fahrgäste
+
 passenger.panel.name: Fahrgast
 passenger.panel.new: Neuer Fahrgast
 passenger.panel.details: Fahrgast Details
@@ -10,3 +12,4 @@ passenger.field.notice: Notizen zum Fahrgast
 passenger.field.handicap: Behinderungen
 passenger.field.insurance: Versichert über
 passenger.button.new: Neuer Fahrgast
+passenger.button.delete: Fahrgast löschen

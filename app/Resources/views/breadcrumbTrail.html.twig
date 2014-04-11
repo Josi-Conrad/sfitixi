@@ -8,7 +8,8 @@
             <li {% for attr,value in breadcrumb.attributes -%}
             {%- if attr == 'class' %}{% set value = value ~ ' ' ~ class %}{% endif -%}
             {{ attr }}="{{ value }}"
-        {%- endfor %}{% if breadcrumb.attributes.class is not defined %} class="{{ class }}"{% endif %}>
+        {%- endfor %}
+            {% if breadcrumb.attributes.class is not defined %} class="{{ class }}"{% endif %}>
             {%- if breadcrumb.url is null or loop.last -%}
                 {{ breadcrumb.title|trans }}
             {%- else -%}

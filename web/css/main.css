@@ -8,6 +8,7 @@
     display: none;
 }
 
+
 /* Buttons Main upper right corner */
 .btn-group-main{
     bottom: 15px;
@@ -89,5 +90,9 @@
 
 .invalid input:required:valid {
     background-color: rgba(46, 204, 113, 0.47)!important;
-
 }
+
+.textLinkDelete {
+    color: #d9534f!important;
+}
+

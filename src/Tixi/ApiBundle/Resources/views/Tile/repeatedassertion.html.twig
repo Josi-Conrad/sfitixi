@@ -1,3 +1,4 @@
+<div class="col-md-12">
 <div class="row text-right">
     {% for resolvedElement in children %}
         {% if 'formcontrol' in resolvedElement.viewIndentifiers %}
@@ -169,6 +170,7 @@
     </div>
 </div>
 {{ form_end(form) }}
+</div>
 <script type="text/javascript" src="{{ asset('bundles/tixiapi/js/DrivingAssertion.js') }}"></script>
 <script type="text/javascript">
     jQuery(function ($) {
@@ -189,6 +191,7 @@
                 'repeateddrivingmission.everyweek.text': "{{ 'repeateddrivingmission.everyweek.text' | trans }}"
             };
         _repeatedDrivingController.init(_trans,'{{ frequency }}');
+        new FormValidationController('{{ formId }}');
     });
 </script>
 

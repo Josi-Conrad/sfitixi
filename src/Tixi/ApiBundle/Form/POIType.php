@@ -14,67 +14,67 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Tixi\ApiBundle\Form\Shared\TelephoneType;
 
-class POIType extends AbstractType{
+class POIType extends AbstractType {
 
     public function buildForm(FormBuilderInterface $builder, array $options) {
 
-        parent::buildForm($builder,$options);
+        parent::buildForm($builder, $options);
 
         $builder->add('name', 'text', array(
             'label' => 'poi.field.name',
-            'attr'=>array('title' => 'form.field.title.not_blank'),
+            'attr' => array('title' => 'form.field.title.not_blank'),
             'constraints' => array(
-                new NotBlank(array('message'=>'field.not_blank'))
+                new NotBlank(array('message' => 'field.not_blank'))
             ),
         ));
         $builder->add('department', 'text', array(
             'required' => false,
             'label' => 'poi.field.department',
         ));
-        $builder->add('telephone', 'text', array(
+        $builder->add('telephone', new TelephoneType(), array(
             'required' => false,
             'label' => 'poi.field.telephone',
         ));
-
         $builder->add('keywords', 'entity', array(
             'required' => false,
             'class' => 'Tixi\CoreDomain\POIKeyword',
             'property' => 'name',
             'label' => 'poi.field.keyword',
             'multiple' => true,
-            'query_builder' => function(EntityRepository $er) {
+            'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('k')
                         ->orderBy('k.name', 'ASC');
                 },
         ));
         $builder->add('street', 'text', array(
             'label' => 'address.field.street',
-            'attr'=>array('title' => 'form.field.title.not_blank'),
+            'attr' => array('title' => 'form.field.title.not_blank'),
             'constraints' => array(
-                new NotBlank(array('message'=>'field.not_blank'))
+                new NotBlank(array('message' => 'field.not_blank'))
             ),
         ));
         $builder->add('postalCode', 'text', array(
             'label' => 'address.field.postalcode',
             'pattern' => '^[\+0-9A-Z]{4,7}',
-            'attr'=>array('title' => 'form.field.title.postalcode'),
+            'attr' => array('title' => 'form.field.title.postalcode'),
             'constraints' => array(
-                new NotBlank(array('message'=>'field.not_blank'))
+                new NotBlank(array('message' => 'field.not_blank'))
             ),
         ));
         $builder->add('city', 'text', array(
             'label' => 'address.field.city',
-            'attr'=>array('title' => 'form.field.title.not_blank'),
+            'attr' => array('title' => 'form.field.title.not_blank'),
             'constraints' => array(
-                new NotBlank(array('message'=>'field.not_blank'))
+                new NotBlank(array('message' => 'field.not_blank'))
             ),
         ));
         $builder->add('country', 'text', array(
             'label' => 'address.field.country',
-            'attr'=>array('title' => 'form.field.title.not_blank'),
+            'attr' => array('title' => 'form.field.title.not_blank'),
             'constraints' => array(
-                new NotBlank(array('message'=>'field.not_blank'))
+                new NotBlank(array('message' => 'field.not_blank'))
             ),
         ));
         $builder->add('lat', 'text', array(
