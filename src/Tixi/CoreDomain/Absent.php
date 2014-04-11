@@ -72,7 +72,7 @@ class Absent extends CommonBaseEntity implements Entity {
      * @param null $startDate
      * @param null $endDate
      */
-    public function updateBasicData($subject = null, $startDate = null, $endDate = null) {
+    public function updateAbsentData($subject = null, $startDate = null, $endDate = null) {
         if (!empty($subject)) {
             $this->setSubject($subject);
         }

@@ -9,12 +9,10 @@
 namespace Tixi\ApiBundle\Form;
 
 
-use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints\DateTime;
 use Symfony\Component\Validator\Constraints\Regex;
-use Tixi\ApiBundle\Form\Shared\DatePickerType;
 
 class PassengerType extends PersonType {
 
@@ -40,23 +38,13 @@ class PassengerType extends PersonType {
             'required'  => false,
             'label' => 'passenger.field.monthlybilling'
         ));
-        $builder->add('entryDate', new DatePickerType(), array(
+        $builder->add('entryDate', 'datePicker', array(
             'required' => false,
             'label' => 'person.field.entrydate',
-            'attr'=>array('title' => 'form.field.title.date'),
-            'pattern' => '^(0[1-9]|[1|2][0-9]|3[0|1]).(0[1-9]|1[0|1|2]).(19|20)\d\d$',
-            'constraints' => array(
-                new DateTime(),
-            ),
         ));
-        $builder->add('birthday', new DatePickerType(), array(
+        $builder->add('birthday', 'datePicker', array(
             'required' => false,
             'label' => 'person.field.birthday',
-            'attr'=>array('title' => 'form.field.title.date'),
-            'pattern' => '^(0[1-9]|[1|2][0-9]|3[0|1]).(0[1-9]|1[0|1|2]).(19|20)\d\d$',
-            'constraints' => array(
-                new DateTime(),
-            ),
         ));
         $builder->add('extraMinutes', 'integer', array(
             'required' => false,

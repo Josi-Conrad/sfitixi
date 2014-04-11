@@ -35,7 +35,7 @@ class VehicleAssembler {
      * @throws \Exception
      */
     public function registerDTOToVehicle(Vehicle $vehicle, VehicleRegisterDTO $vehicleDTO) {
-        $vehicle->updateBasicData($vehicleDTO->name, $vehicleDTO->licenceNumber,
+        $vehicle->updateVehicleData($vehicleDTO->name, $vehicleDTO->licenceNumber,
             $vehicleDTO->dateOfFirstRegistration, $vehicleDTO->parking, $vehicleDTO->category,
             $vehicleDTO->memo, $vehicleDTO->managementDetails);
         if (!empty($vehicleDTO->supervisor)) {

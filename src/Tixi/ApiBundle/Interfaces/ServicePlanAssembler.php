@@ -40,7 +40,7 @@ class ServicePlanAssembler {
      * @return ServicePlan
      */
     public function registerDTOtoServicePlan(ServicePlanRegisterDTO $servicePlanDTO, ServicePlan $servicePlan) {
-        $servicePlan->updateBasicData(
+        $servicePlan->updateServicePlanData(
             $servicePlanDTO->startDate,
             $servicePlanDTO->endDate,
             $servicePlanDTO->memo

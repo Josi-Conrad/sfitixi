@@ -46,9 +46,9 @@ class PassengerAssembler {
      */
     public function registerDTOToPassenger(Passenger $passenger, PassengerRegisterDTO $passengerDTO) {
         $address = $passenger->getAddress();
-        $address->updateAddressBasicData($passengerDTO->street, $passengerDTO->postalCode,
+        $address->updateAddressData($passengerDTO->street, $passengerDTO->postalCode,
             $passengerDTO->city, $passengerDTO->country);
-        $passenger->updatePassengerBasicData($passengerDTO->title, $passengerDTO->firstname,
+        $passenger->updatePassengerData($passengerDTO->title, $passengerDTO->firstname,
             $passengerDTO->lastname, $passengerDTO->telephone,
             $address, $passengerDTO->isInWheelChair,
             $passengerDTO->gotMonthlyBilling, $passengerDTO->isOverweight,

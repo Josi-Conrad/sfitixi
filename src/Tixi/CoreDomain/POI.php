@@ -122,7 +122,7 @@ class POI extends CommonBaseEntity implements Entity{
      * @param null $memo
      * @param null $details
      */
-    public function updateBasicData($name = null, Address $address = null, $department = null,
+    public function updatePOIData($name = null, Address $address = null, $department = null,
                                     $telephone = null, $comment = null, $memo = null, $details = null) {
         if (!empty($name)) {
             $this->setName($name);

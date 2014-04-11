@@ -54,7 +54,7 @@ class AddressPOITest extends WebTestCase {
         $addressFind = $this->addressRepo->find($address->getId());
         $this->assertEquals($address, $addressFind);
 
-        $address->updateAddressBasicData('Hauptstrasse 23', '6430', 'Schwyz', 'Schweiz', 'SZKB', 48.2108, 57.1228, 'Bank');
+        $address->updateAddressData('Hauptstrasse 23', '6430', 'Schwyz', 'Schweiz', 'SZKB', 48.2108, 57.1228, 'Bank');
         $this->addressRepo->store($address);
         $this->em->flush();
 
@@ -92,7 +92,7 @@ class AddressPOITest extends WebTestCase {
         $poiFind = $this->poiRepo->find($poi->getId());
         $this->assertEquals($poi, $poiFind);
 
-        $poi->updateBasicData('Altersheim Wohnwohl', null, 'Pflege', '041 818 31 31', 'Gutes Heim');
+        $poi->updatePOIData('Altersheim Wohnwohl', null, 'Pflege', '041 818 31 31', 'Gutes Heim');
         $this->poiRepo->store($poi);
         $this->em->flush();
 

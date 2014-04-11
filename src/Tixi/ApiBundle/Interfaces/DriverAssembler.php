@@ -40,9 +40,9 @@ class DriverAssembler {
      */
     public function registerDTOToDriver(DriverRegisterDTO $driverDTO, Driver $driver) {
         $address = $driver->getAddress();
-        $address->updateAddressBasicData($driverDTO->street, $driverDTO->postalCode,
+        $address->updateAddressData($driverDTO->street, $driverDTO->postalCode,
                 $driverDTO->city, $driverDTO->country);
-        $driver->updateDriverBasicData($driverDTO->title, $driverDTO->firstname,
+        $driver->updateDriverData($driverDTO->title, $driverDTO->firstname,
             $driverDTO->lastname, $driverDTO->telephone,
             $address, $driverDTO->licenceNumber, $driverDTO->driverCategory,
             $driverDTO->wheelChairAttendance,

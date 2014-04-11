@@ -29,7 +29,7 @@ class AbsentAssembler {
      * @return Absent
      */
     public function registerDTOtoAbsent(AbsentRegisterDTO $absentDTO, Absent $absent) {
-        $absent->updateBasicData(
+        $absent->updateAbsentData(
             $absentDTO->subject,
             $absentDTO->startDate,
             $absentDTO->endDate);

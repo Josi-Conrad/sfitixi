@@ -117,7 +117,7 @@ class Address {
      * @param null $type
      * @param bool $editFlag
      */
-    public function updateAddressBasicData($street = null, $postalCode = null,
+    public function updateAddressData($street = null, $postalCode = null,
                                            $city = null, $country = null,
                                            $name = null, $lat = null, $lng = null, $type = null,
                                            $editFlag = false) {

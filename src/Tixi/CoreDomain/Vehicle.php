@@ -120,7 +120,7 @@ class Vehicle extends CommonBaseEntity implements Entity {
      * @param null $memo
      * @param null $managementDetails
      */
-    public function updateBasicData($name = null, $licenceNumber = null,
+    public function updateVehicleData($name = null, $licenceNumber = null,
                                     $dateOfFirstRegistration = null, $parkingLotNumber = null,
                                     VehicleCategory $category = null, $memo = null, $managementDetails = null) {
         if (!empty($name)) {

@@ -129,13 +129,13 @@ class Passenger extends Person {
      * @param null $billingAddress
      * @internal param \Tixi\CoreDomain\Handicap $handicap
      */
-    public function updatePassengerBasicData($title = null, $firstname = null, $lastname = null, $telephone = null,
+    public function updatePassengerData($title = null, $firstname = null, $lastname = null, $telephone = null,
                                              Address $address, $isInWheelChair = false, $gotMonthlyBilling = null,
                                              $isOverWeight = null, $email = null, $entryDate = null, $birthday = null,
                                              $extraMinutes = null, $details = null, $notice = null, $correspondenceAddress = null,
                                              $billingAddress = null) {
 
-        parent::updatePersonBasicData(
+        parent::updatePersonData(
             $title, $firstname, $lastname, $telephone, $address, $email, $entryDate, $birthday,
             $extraMinutes, $details, $correspondenceAddress, $billingAddress
         );

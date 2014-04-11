@@ -11,10 +11,8 @@ namespace Tixi\ApiBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\NotNull;
-use Tixi\ApiBundle\Form\Shared\DatePickerType;
 use Tixi\ApiBundle\Form\Shared\TelephoneType;
 
 class PersonType extends AbstractType {

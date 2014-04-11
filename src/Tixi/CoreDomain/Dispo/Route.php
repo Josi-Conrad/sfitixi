@@ -61,7 +61,7 @@ class Route {
         return $route;
     }
 
-    public function updateRouteBasicData($startAddress = null, $targetAddress = null, $duration = null, $distance = null) {
+    public function updateRouteData($startAddress = null, $targetAddress = null, $duration = null, $distance = null) {
         $this->setChangeDate(new \DateTime('now'));
         $this->setStartAddress($startAddress);
         $this->setTargetAddress($targetAddress);

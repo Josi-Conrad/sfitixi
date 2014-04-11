@@ -16,7 +16,6 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints\DateTime;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Regex;
-use Tixi\ApiBundle\Form\Shared\DatePickerType;
 
 class VehicleType extends AbstractType{
 
@@ -43,11 +42,8 @@ class VehicleType extends AbstractType{
                 new NotBlank(array('message'=>'vehicle.nr.not_blank'))
             ),
         ));
-        $builder->add('dateOfFirstRegistration', new DatePickerType(), array(
+        $builder->add('dateOfFirstRegistration', 'datePicker', array(
             'label' => 'vehicle.field.dateoffirstregistration',
-            'attr'=>array('title' => 'form.field.title.date'),
-            'constraints' => new DateTime(),
-            'pattern' => '^(0[1-9]|[1|2][0-9]|3[0|1]).(0[1-9]|1[0|1|2]).(19|20)\d\d$'
         ));
         $builder->add('supervisor', 'entity', array(
             'class' => 'Tixi\CoreDomain\Driver',

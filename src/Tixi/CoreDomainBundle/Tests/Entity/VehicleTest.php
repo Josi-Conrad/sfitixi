@@ -52,7 +52,7 @@ class VehicleTest extends WebTestCase {
         $vehicle_find = $this->vehicleRepo->find($vehicle->getId());
         $this->assertEquals($vehicle, $vehicle_find);
 
-        $vehicle->updateBasicData('VW Maxi 1', 'CH+212331', new \DateTime('2013-02-02'), 3, $vehicleCat);
+        $vehicle->updateVehicleData('VW Maxi 1', 'CH+212331', new \DateTime('2013-02-02'), 3, $vehicleCat);
         $this->vehicleRepo->store($vehicle);
         $this->em->flush();
 

@@ -61,7 +61,7 @@ class ServicePlan extends CommonBaseEntity implements Entity {
         return $servicePlan;
     }
 
-    public function updateBasicData($startDate = null, $endDate = null, $memo = null) {
+    public function updateServicePlanData($startDate = null, $endDate = null, $memo = null) {
         if (!empty($startDate)) {
             $this->setStartDate($startDate);
         }

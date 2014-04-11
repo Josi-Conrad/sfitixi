@@ -105,7 +105,7 @@ class PersonTest extends WebTestCase {
         $address = Address::registerAddress('Hauptstrasse 11', '6430', 'Schwyz', 'Schweiz', 48.55446, 75.54659, 'Wohnung', 1);
         $this->addressRepo->store($address);
         $driverCategory = $this->createDriverCategory('Freiwillig');
-        $driver->updateDriverBasicData(
+        $driver->updateDriverData(
             'm', 'Muni', 'Meier', '041 333 32 32',
             $address, 'FEA12345', $driverCategory, false, 'test@test.de', $date, $date,
             5, 'alles nur ein Test');
@@ -198,7 +198,7 @@ class PersonTest extends WebTestCase {
         $passengerFind = $this->passengerRepo->find($passenger->getId());
         $this->assertEquals($passenger, $passengerFind);
 
-        $passenger->updatePassengerBasicData(
+        $passenger->updatePassengerData(
             'f', 'Mila', 'Tolina', '0293292323',
             $address, true, true, false, 'der@test.de', new \DateTime(), new \DateTime(),
             2, 'goodies', 'notices');

@@ -102,12 +102,12 @@ class Driver extends Person {
      * @param null $extraMinutes
      * @param null $details
      */
-    public function updateDriverBasicData($title = null, $firstname = null, $lastname = null, $telephone = null,
+    public function updateDriverData($title = null, $firstname = null, $lastname = null, $telephone = null,
                                           Address $address = null, $licenceNumber = null, DriverCategory $driverCategory = null,
                                           $wheelChairAttendance = null, $email = null, $entryDate = null, $birthday = null,
                                           $extraMinutes = null, $details = null) {
 
-        parent::updatePersonBasicData(
+        parent::updatePersonData(
             $title, $firstname, $lastname, $telephone, $address, $email, $entryDate, $birthday, $extraMinutes, $details
         );
 
@@ -224,6 +224,5 @@ class Driver extends Person {
     public function getWheelChairAttendance() {
         return $this->wheelChairAttendance;
     }
-
 
 }

@@ -61,7 +61,7 @@ class AddressManagementImplDoctrine extends Controller implements AddressManagem
         if (!empty($addressHandleDTO->id)) {
             /** @var Address $address */
             $address = $this->get('address_repository')->find($addressHandleDTO->id);
-            $address->updateAddressBasicData(
+            $address->updateAddressData(
                 $addressHandleDTO->name,
                 $addressHandleDTO->street,
                 $addressHandleDTO->postalCode,

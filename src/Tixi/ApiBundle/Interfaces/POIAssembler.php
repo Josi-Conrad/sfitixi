@@ -39,9 +39,9 @@ class POIAssembler {
      */
     public function registerDTOToPOI(POIRegisterDTO $poiDTO, POI $poi) {
         $address = $poi->getAddress();
-        $address->updateAddressBasicData($poiDTO->street, $poiDTO->postalCode,
+        $address->updateAddressData($poiDTO->street, $poiDTO->postalCode,
             $poiDTO->city, $poiDTO->country, $poiDTO->address_name, $poiDTO->lat, $poiDTO->lng, $poiDTO->type);
-        $poi->updateBasicData($poiDTO->name, $address, $poiDTO->department,
+        $poi->updatePOIData($poiDTO->name, $address, $poiDTO->department,
             $poiDTO->telephone, $poiDTO->comment, $poiDTO->memo, $poiDTO->details);
         $poi->setKeywords($poiDTO->keywords);
         return $poi;

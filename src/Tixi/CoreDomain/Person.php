@@ -183,7 +183,7 @@ class Person extends CommonBaseEntity implements Entity {
      * @param null $correspondenceAddress
      * @param null $billingAddress
      */
-    public function updatePersonBasicData($title = null, $firstname = null, $lastname = null, $telephone = null,
+    public function updatePersonData($title = null, $firstname = null, $lastname = null, $telephone = null,
                                           $address = null, $email = null, $entryDate = null, $birthday = null,
                                           $extraMinutes = null, $details = null, $correspondenceAddress = null, $billingAddress = null) {
 

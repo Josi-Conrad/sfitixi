@@ -5,9 +5,10 @@
 {% endblock datePicker_widget %}
 
 {% block dateTimePicker_widget %}
-    {% set attr = attr|merge({'class': (attr.class|default('') ~ ' jqueryDateTimePicker form-control')|trim}) %}
+    <div>
     {{ form_widget(form.date, {'id' : id ~ '_date'}) }}
     {{ form_widget(form.time, {'id' : id ~ '_time'}) }}
+    </div>
 {% endblock dateTimePicker_widget %}
 
 {####### Customized default types #######}
