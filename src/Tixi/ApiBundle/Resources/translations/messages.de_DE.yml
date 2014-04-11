@@ -1,11 +1,13 @@
 #Buttons
 button.back: Abbrechen
+button.save: Speichern
 button.search: Suchen
 button.edit: Editieren
 button.login: Login
 button.logout: Logout
 button.delete: Löschen
 button.with.selection: Mit Selektion
+
 more.details: Weitere Details >>
 less.details: << Weniger Details
 delete.logically.standardtext: Möchten Sie das Dokument wirklich löschen? Sie können das Dokument später wiederherstellen.

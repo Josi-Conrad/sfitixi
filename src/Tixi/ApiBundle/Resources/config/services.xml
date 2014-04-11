@@ -68,6 +68,14 @@
         <service id="tixi_api.assemblerAbsent" class="%tixi_api.absentassembler.class%"/>
         <service id="tixi_api.assemblerUser" class="%tixi_api.userassembler.class%"/>
         <service id="tixi_api.assemblerPOI" class="%tixi_api.poiassembler.class%"/>
+
+        <service id="form.type.datePicker" class="Tixi\ApiBundle\Form\Shared\DatePickerType">
+            <tag name="form.type" alias="datePicker" />
+        </service>
+        <service id="form.type.dateTimePicker" class="Tixi\ApiBundle\Form\Shared\DateTimePickerType">
+            <tag name="form.type" alias="dateTimePicker" />
+        </service>
+
     </services>
 
 </container>

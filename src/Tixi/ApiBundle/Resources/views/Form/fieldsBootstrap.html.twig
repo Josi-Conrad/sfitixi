@@ -1,10 +1,14 @@
 {####### Own types #######}
-{% block datepicker_widget %}
-    {%  set attr = attr|merge({'class': ((attr.class|default('') ~ ' jqueryDatePicker form-control')|trim)}) %}
-    <input type="text" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
-    {#<input type="text" class="jqueryDatePicker form-control" {% if value is not empty %}value="{{ value }}" {% endif %}/>#}
-{% endblock datepicker_widget %}
+{% block datePicker_widget %}
+        {% set attr = attr|merge({'class': ((attr.class|default('') ~ ' jqueryDatePicker form-control')|trim)}) %}
+        <input type="text" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
+{% endblock datePicker_widget %}
 
+{% block dateTimePicker_widget %}
+    {% set attr = attr|merge({'class': (attr.class|default('') ~ ' jqueryDateTimePicker form-control')|trim}) %}
+    {{ form_widget(form.date, {'id' : id ~ '_date'}) }}
+    {{ form_widget(form.time, {'id' : id ~ '_time'}) }}
+{% endblock dateTimePicker_widget %}
 
 {####### Customized default types #######}
 {% block form_widget_simple %}

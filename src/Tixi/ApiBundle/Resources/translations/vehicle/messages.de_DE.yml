@@ -27,8 +27,8 @@ vehicle.date.not_blank: Bitte ein Datum wählen
 #Serviceplan
 serviceplan.list.name: Servicepläne
 
-serviceplan.field.startdate: Startdatum
-serviceplan.field.enddate: Enddatum
+serviceplan.field.startdate: Start
+serviceplan.field.enddate: Ende
 serviceplan.field.memo: Notizen
 
 serviceplan.panel.embedded: Zugeordnete Servicepläne

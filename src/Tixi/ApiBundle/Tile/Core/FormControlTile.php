@@ -15,8 +15,8 @@ use Tixi\ApiBundle\Tile\AbstractTile;
 class FormControlTile extends AbstractTile{
 
     public function __construct($formId) {
-        $this->add(new BackButtonTile('Abbrechen'));
-        $this->add(new SubmitButtonTile($formId, 'Speichern', SubmitButtonTile::$primaryType));
+        $this->add(new BackButtonTile('button.back'));
+        $this->add(new SubmitButtonTile($formId, 'button.save', SubmitButtonTile::$primaryType));
     }
 
     public function getTemplateName()

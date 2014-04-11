@@ -10,21 +10,26 @@ namespace Tixi\ApiBundle\Form\Shared;
 
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Validator\Constraints\DateTime;
 
-class DatePickerType extends AbstractType{
+class DatePickerType extends AbstractType {
 
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
-    {
+    public function setDefaultOptions(OptionsResolverInterface $resolver) {
         $resolver->setDefaults(array(
             'widget' => 'single_text',
-            'format' => 'dd.MM.yyyy'
+            'format' => 'dd.MM.yyyy',
+            'attr' => array(
+                'title' => 'form.field.title.date',
+            ),
+            'pattern' => '^(0[1-9]|[1|2][0-9]|3[0|1]).(0[1-9]|1[0|1|2]).(19|20)\d\d$',
+            'constraints' => array(
+                new DateTime(),
+            ),
         ));
     }
 
-    public function getParent()
-    {
+    public function getParent() {
         return 'date';
     }
 
@@ -33,8 +38,7 @@ class DatePickerType extends AbstractType{
      *
      * @return string The name of this type
      */
-    public function getName()
-    {
-        return 'datepicker';
+    public function getName() {
+        return 'datePicker';
     }
 }

@@ -47,23 +47,13 @@ class DriverType extends PersonType {
                 new NotBlank(array('message'=>'form.field.not_blank'))
             ),
         ));
-        $builder->add('entryDate', new DatePickerType(), array(
+        $builder->add('entryDate', 'datePicker', array(
             'required' => false,
             'label' => 'person.field.entrydate',
-            'attr'=>array('title' => 'form.field.title.date'),
-            'pattern' => '^(0[1-9]|[1|2][0-9]|3[0|1]).(0[1-9]|1[0|1|2]).(19|20)\d\d$',
-            'constraints' => array(
-                new DateTime(),
-            ),
         ));
-        $builder->add('birthday', new DatePickerType(), array(
+        $builder->add('birthday', 'datePicker', array(
             'required' => false,
             'label' => 'person.field.birthday',
-            'attr'=>array('title' => 'form.field.title.date'),
-            'pattern' => '^(0[1-9]|[1|2][0-9]|3[0|1]).(0[1-9]|1[0|1|2]).(19|20)\d\d$',
-            'constraints' => array(
-                new DateTime(),
-            ),
         ));
         $builder->add('extraMinutes', 'integer', array(
             'required' => false,

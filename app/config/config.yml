@@ -50,6 +50,8 @@ assetic:
 # Doctrine Configuration
 doctrine:
     dbal:
+      types:
+        utcdatetime: Tixi\CoreDomainBundle\Types\UTCDateTimeType
       default_connection: tixi
       connections:
         tixi:

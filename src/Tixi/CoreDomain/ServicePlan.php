@@ -31,11 +31,11 @@ class ServicePlan extends CommonBaseEntity implements Entity {
      */
     protected $vehicle;
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="utcdatetime")
      */
     protected $startDate;
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="utcdatetime")
      */
     protected $endDate;
     /**
@@ -136,7 +136,7 @@ class ServicePlan extends CommonBaseEntity implements Entity {
     }
 
     /**
-     * @return mixed
+     * @return \DateTime
      */
     public function getStartDate() {
         return $this->startDate;

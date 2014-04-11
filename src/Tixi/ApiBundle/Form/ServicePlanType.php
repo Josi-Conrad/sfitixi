@@ -14,7 +14,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints\DateTime;
 use Symfony\Component\Validator\Constraints\NotBlank;
-use Tixi\ApiBundle\Form\Shared\DatePickerType;
 
 class ServicePlanType extends AbstractType{
 
@@ -22,18 +21,16 @@ class ServicePlanType extends AbstractType{
     {
         $builder->add('id', 'hidden');
 
-        $builder->add('startDate', new DatePickerType(), array(
+        $builder->add('startDate', 'dateTimePicker', array(
             'label' => 'serviceplan.field.startdate',
-            'attr'=>array('title' => 'form.field.title.date'),
             'pattern' => '^(0[1-9]|[1|2][0-9]|3[0|1]).(0[1-9]|1[0|1|2]).(19|20)\d\d$',
             'constraints' => array(
                 new DateTime(),
                 new NotBlank(array('message'=>'serviceplan.date.not_blank'))
             ),
         ));
-        $builder->add('endDate', new DatePickerType(), array(
+        $builder->add('endDate', 'dateTimePicker', array(
             'label' => 'serviceplan.field.enddate',
-            'attr'=>array('title' => 'form.field.title.date'),
             'pattern' => '^(0[1-9]|[1|2][0-9]|3[0|1]).(0[1-9]|1[0|1|2]).(19|20)\d\d$',
             'constraints' => array(
                 new DateTime(),

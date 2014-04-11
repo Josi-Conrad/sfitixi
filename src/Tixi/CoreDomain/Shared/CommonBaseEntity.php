@@ -9,7 +9,6 @@
 namespace Tixi\CoreDomain\Shared;
 
 use Doctrine\ORM\Mapping as ORM;
-use Tixi\ApiBundle\Helper\DateTimeService;
 
 /**
  * Class CommonBaseEntity
@@ -22,22 +21,28 @@ class CommonBaseEntity {
      */
     protected $isDeleted;
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="utcdatetime")
      */
     protected $creationDateTime;
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="utcdatetime")
      */
     protected $modifiedDateTime;
 
+    /**
+     * Contructor of BaseEntity with creationTime and modifiedTime
+     */
     protected  function __construct() {
         $this->isDeleted = false;
-        $this->creationDateTime = DateTimeService::getUTCNowDateTime();
-        $this->modifiedDateTime = DateTimeService::getUTCNowDateTime();
+        $this->creationDateTime = new \DateTime();
+        $this->modifiedDateTime = new \DateTime();
     }
 
+    /**
+     * Update of BaseEntity with modifiedTime
+     */
     protected function updateModifiedDate() {
-        $this->modifiedDateTime = DateTimeService::getUTCNowDateTime();
+        $this->modifiedDateTime = new \DateTime();
     }
     /**
      * @return \DateTime
@@ -53,6 +58,7 @@ class CommonBaseEntity {
     {
         return $this->modifiedDateTime;
     }
+
 
     public function deleteLogically() {
         $this->isDeleted = true;
