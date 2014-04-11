@@ -37,7 +37,7 @@ class WorkingDay {
      */
     protected $drivingPools;
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="date")
      */
     protected $date;
 

@@ -48,14 +48,8 @@ class Route {
      * @ORM\Column(type="integer")
      */
     protected $distance;
-    /**
-     * route information updates on
-     * @ORM\Column(type="datetime")
-     */
-    protected $changeDate;
 
     private function __construct() {
-        $this->changeDate = new \DateTime();
     }
 
     public static function registerRoute($startAddress, $targetAddress, $duration = null, $distance = null) {
@@ -144,19 +138,4 @@ class Route {
     public function getTargetAddress() {
         return $this->targetAddress;
     }
-
-    /**
-     * @param mixed $changeDate
-     */
-    public function setChangeDate($changeDate) {
-        $this->changeDate = $changeDate;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getChangeDate() {
-        return $this->changeDate;
-    }
-
 }

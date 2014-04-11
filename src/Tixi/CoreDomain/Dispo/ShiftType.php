@@ -30,11 +30,11 @@ class ShiftType {
      */
     protected $name;
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="utcdatetime")
      */
     protected $start;
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="utcdatetime")
      */
     protected $end;
 

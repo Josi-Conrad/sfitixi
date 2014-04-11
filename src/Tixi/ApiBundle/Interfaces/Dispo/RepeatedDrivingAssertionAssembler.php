@@ -169,8 +169,8 @@ class RepeatedDrivingAssertionAssembler {
         $dto = new RepeatedDrivingAssertionEmbeddedListDTO();
         $dto->id = $assertionPlan->getId();
         $dto->memo = $assertionPlan->getMemo();
-        $dto->anchorDate = $this->dateTimeService->convertUTCDateTimeToLocalString($assertionPlan->getAnchorDate());
-        $dto->endDate = $this->dateTimeService->convertUTCDateTimeToLocalString($assertionPlan->getEndingDate());
+        $dto->anchorDate = $assertionPlan->getAnchorDate()->format('d.m.Y');
+        $dto->endDate = $assertionPlan->getEndingDate()->format('d.m.Y');
         $dto->frequency= $assertionPlan->getFrequency();
         return $dto;
     }

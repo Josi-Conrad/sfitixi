@@ -39,7 +39,7 @@ class DrivingOrder {
      */
     protected $route;
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="utcdatetime")
      */
     protected $pickUpTime;
 
