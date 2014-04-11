@@ -13,6 +13,10 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Tixi\App\AppBundle\Controller\AddressManagementImplDoctrine;
 use Tixi\CoreDomain\Address;
 
+/**
+ * Class AddressServiceTest
+ * @package Tixi\App\AppBundle\Tests
+ */
 class AddressServiceTest extends WebTestCase {
     /**
      * @var \Doctrine\ORM\EntityManager

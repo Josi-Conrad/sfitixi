@@ -225,4 +225,10 @@ class Driver extends Person {
         return $this->wheelChairAttendance;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getRepeatedDrivingAssertionPlans() {
+        return $this->repeatedDrivingAssertionPlans;
+    }
 }

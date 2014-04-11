@@ -8,7 +8,10 @@
 
 namespace Tixi\App\AppBundle\Interfaces;
 
-
+/**
+ * Class AddressHandleDTO
+ * @package Tixi\App\AppBundle\Interfaces
+ */
 class AddressHandleDTO {
 
     public $id;

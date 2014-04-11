@@ -11,8 +11,16 @@ namespace Tixi\App\AppBundle\Interfaces;
 
 use Tixi\CoreDomain\Address;
 
+/**
+ * Class AddressHandleAssembler
+ * @package Tixi\App\AppBundle\Interfaces
+ */
 class AddressHandleAssembler {
 
+    /**
+     * @param Address $address
+     * @return AddressHandleDTO
+     */
     public static function toAddressHandleDTO(Address $address){
         $addressHandleDTO = new AddressHandleDTO();
 

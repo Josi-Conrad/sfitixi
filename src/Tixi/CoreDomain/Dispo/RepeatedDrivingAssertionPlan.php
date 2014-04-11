@@ -63,13 +63,13 @@ class RepeatedDrivingAssertionPlan extends CommonBaseEntity implements Entity{
         parent::__construct();
     }
 
-    public static function registerRepeatedAssertionPlan($memo, \DateTime $anchorDate, $frequency, $withHoldidays, \DateTime $endingDate=null) {
+    public static function registerRepeatedAssertionPlan($memo, \DateTime $anchorDate, $frequency, $withHolidays, \DateTime $endingDate=null) {
         $assertion = new RepeatedDrivingAssertionPlan();
         $assertion->setMemo($memo);
         $assertion->setAnchorDate($anchorDate);
         $assertion->setEndingDate($endingDate);
         $assertion->setFrequency($frequency);
-        $assertion->setWithHolidays($withHoldidays);
+        $assertion->setWithHolidays($withHolidays);
         return $assertion;
     }
 

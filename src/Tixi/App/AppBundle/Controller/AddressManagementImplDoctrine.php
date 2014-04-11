@@ -12,6 +12,10 @@ use Tixi\CoreDomain\City;
 use Tixi\CoreDomain\PostalCode;
 use Tixi\CoreDomain\Country;
 
+/**
+ * Class AddressManagementImplDoctrine
+ * @package Tixi\App\AppBundle\Controller
+ */
 class AddressManagementImplDoctrine extends Controller implements AddressManagement {
     /**
      * @param $addressString

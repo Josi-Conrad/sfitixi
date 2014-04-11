@@ -52,6 +52,13 @@ class Route {
     private function __construct() {
     }
 
+    /**
+     * @param $startAddress
+     * @param $targetAddress
+     * @param null $duration
+     * @param null $distance
+     * @return Route
+     */
     public static function registerRoute($startAddress, $targetAddress, $duration = null, $distance = null) {
         $route = new Route();
         $route->setStartAddress($startAddress);
@@ -61,6 +68,12 @@ class Route {
         return $route;
     }
 
+    /**
+     * @param null $startAddress
+     * @param null $targetAddress
+     * @param null $duration
+     * @param null $distance
+     */
     public function updateRouteData($startAddress = null, $targetAddress = null, $duration = null, $distance = null) {
         $this->setChangeDate(new \DateTime('now'));
         $this->setStartAddress($startAddress);
