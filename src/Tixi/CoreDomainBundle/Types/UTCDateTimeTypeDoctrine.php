@@ -13,7 +13,11 @@ use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\DateTimeType;
 
-class UTCDateTimeType extends DateTimeType {
+/**
+ * Class UTCDateTimeTypeDoctrine
+ * @package Tixi\CoreDomainBundle\Types
+ */
+class UTCDateTimeTypeDoctrine extends DateTimeType {
     static private $utc = null;
 
     /**
