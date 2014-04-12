@@ -10,6 +10,10 @@ namespace Tixi\ApiBundle\Interfaces;
 
 use Tixi\CoreDomain\Absent;
 
+/**
+ * Class AbsentAssembler
+ * @package Tixi\ApiBundle\Interfaces
+ */
 class AbsentAssembler {
     /**
      * @param AbsentRegisterDTO $absentDTO

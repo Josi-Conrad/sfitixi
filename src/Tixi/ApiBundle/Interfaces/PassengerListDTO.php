@@ -13,7 +13,10 @@ use Tixi\ApiBundle\Shared\DataGrid\Annotations\GridField;
 use Tixi\ApiBundle\Shared\DataGrid\DataGridSourceClass;
 use Tixi\CoreDomain\Shared\GenericEntityFilter\GenericAccessQuery;
 
-
+/**
+ * Class PassengerListDTO
+ * @package Tixi\ApiBundle\Interfaces
+ */
 class PassengerListDTO implements DataGridSourceClass {
     /**
      * @GridField(propertyId="Passenger.isActive")

@@ -15,8 +15,15 @@ use Symfony\Component\Validator\Constraints\DateTime;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Regex;
 
+/**
+ * Class DriverType
+ * @package Tixi\ApiBundle\Form
+ */
 class DriverType extends PersonType {
-
+    /**
+     * @param FormBuilderInterface $builder
+     * @param array $options
+     */
     public function buildForm(FormBuilderInterface $builder, array $options) {
 
         parent::buildForm($builder,$options);
@@ -76,6 +83,9 @@ class DriverType extends PersonType {
         return 'driver';
     }
 
+    /**
+     * @param OptionsResolverInterface $resolver
+     */
     public function setDefaultOptions(OptionsResolverInterface $resolver) {
         $resolver->setDefaults(array(
             'data_class' => 'Tixi\ApiBundle\Interfaces\DriverRegisterDTO'

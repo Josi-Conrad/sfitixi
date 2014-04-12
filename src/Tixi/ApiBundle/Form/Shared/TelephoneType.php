@@ -14,6 +14,10 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Regex;
 
+/**
+ * Class TelephoneType
+ * @package Tixi\ApiBundle\Form\Shared
+ */
 class TelephoneType extends AbstractType {
     protected $pattern = '^[\+0-9 -()]{3,19}';
     /**
@@ -29,6 +33,9 @@ class TelephoneType extends AbstractType {
         ));
     }
 
+    /**
+     * @return null|string|\Symfony\Component\Form\FormTypeInterface
+     */
     public function getParent() {
         return 'text';
     }

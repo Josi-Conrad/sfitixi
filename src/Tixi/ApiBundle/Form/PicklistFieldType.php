@@ -11,6 +11,10 @@ namespace Tixi\ApiBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 
+/**
+ * Class PicklistFieldType
+ * @package Tixi\ApiBundle\Form
+ */
 class PicklistFieldType extends AbstractType {
 
     /**

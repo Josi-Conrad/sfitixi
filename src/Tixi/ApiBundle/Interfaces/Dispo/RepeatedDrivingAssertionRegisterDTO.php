@@ -8,9 +8,12 @@
 
 namespace Tixi\ApiBundle\Interfaces\Dispo;
 
-
 use Doctrine\Common\Collections\ArrayCollection;
 
+/**
+ * Class RepeatedDrivingAssertionRegisterDTO
+ * @package Tixi\ApiBundle\Interfaces\Dispo
+ */
 class RepeatedDrivingAssertionRegisterDTO {
 
     public $id;
@@ -83,8 +86,6 @@ class RepeatedDrivingAssertionRegisterDTO {
     {
         return $this->monthlyThirdWeeklySelector;
     }
-
-
 
     /**
      * @return mixed

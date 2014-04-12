@@ -13,6 +13,10 @@ use Tixi\CoreDomain\ServicePlan;
 use Tixi\CoreDomain\Vehicle;
 use Tixi\CoreDomain\VehicleCategory;
 
+/**
+ * Class VehicleTest
+ * @package Tixi\CoreDomainBundle\Tests\Entity
+ */
 class VehicleTest extends WebTestCase {
 
     /**

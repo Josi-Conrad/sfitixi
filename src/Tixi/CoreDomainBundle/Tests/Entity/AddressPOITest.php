@@ -18,6 +18,10 @@ use Tixi\CoreDomain\Handicap;
 use Tixi\CoreDomain\POI;
 use Tixi\CoreDomain\POIKeyword;
 
+/**
+ * Class AddressPOITest
+ * @package Tixi\CoreDomainBundle\Tests\Entity
+ */
 class AddressPOITest extends WebTestCase {
     /**
      * @var \Doctrine\ORM\EntityManager

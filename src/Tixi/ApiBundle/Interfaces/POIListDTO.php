@@ -13,7 +13,10 @@ use Tixi\ApiBundle\Shared\DataGrid\Annotations\GridField;
 use Tixi\ApiBundle\Shared\DataGrid\DataGridSourceClass;
 use Tixi\CoreDomain\Shared\GenericEntityFilter\GenericAccessQuery;
 
-
+/**
+ * Class POIListDTO
+ * @package Tixi\ApiBundle\Interfaces
+ */
 class POIListDTO implements DataGridSourceClass {
     /**
      * @GridField(propertyId="POI.isActive")
@@ -48,6 +51,9 @@ class POIListDTO implements DataGridSourceClass {
      */
     public $city;
 
+    /**
+     * @return GenericAccessQuery
+     */
     public function getAccessQuery() {
         return new GenericAccessQuery('POI', 'Tixi\CoreDomain\POI POI JOIN POI.address Address', 'POI.id');
     }

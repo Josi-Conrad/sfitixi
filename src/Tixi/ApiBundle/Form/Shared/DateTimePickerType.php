@@ -13,6 +13,10 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
+/**
+ * Class DateTimePickerType
+ * @package Tixi\ApiBundle\Form\Shared
+ */
 class DateTimePickerType extends AbstractType {
     /**
      * {@inheritdoc}
@@ -32,6 +36,9 @@ class DateTimePickerType extends AbstractType {
         $builder->addModelTransformer(new DateTimeArrayTransformer());
     }
 
+    /**
+     * @param OptionsResolverInterface $resolver
+     */
     public function setDefaultOptions(OptionsResolverInterface $resolver) {
         $resolver->setDefaults(array());
     }

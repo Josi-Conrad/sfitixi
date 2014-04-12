@@ -13,6 +13,10 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Tixi\CoreDomain\Vehicle;
 
+/**
+ * Class VehicleAssembler
+ * @package Tixi\ApiBundle\Interfaces
+ */
 class VehicleAssembler {
     /**
      * @param VehicleRegisterDTO $vehicleDTO

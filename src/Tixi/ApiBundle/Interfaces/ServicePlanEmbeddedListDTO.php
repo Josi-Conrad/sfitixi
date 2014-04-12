@@ -12,6 +12,10 @@ use Tixi\ApiBundle\Shared\DataGrid\Annotations\GridField;
 use Tixi\ApiBundle\Shared\DataGrid\DataGridSourceClass;
 use Tixi\CoreDomain\Shared\GenericEntityFilter\GenericAccessQuery;
 
+/**
+ * Class ServicePlanEmbeddedListDTO
+ * @package Tixi\ApiBundle\Interfaces
+ */
 class ServicePlanEmbeddedListDTO implements DataGridSourceClass{
 
     /**
@@ -39,11 +43,18 @@ class ServicePlanEmbeddedListDTO implements DataGridSourceClass{
      */
     public $memo;
 
+    /**
+     * @return GenericAccessQuery
+     */
     public function getAccessQuery()
     {
         return new GenericAccessQuery('ServicePlan', 'Tixi\CoreDomain\ServicePlan ServicePlan JOIN ServicePlan.vehicle Vehicle', 'ServicePlan.id');
     }
 
+    /**
+     * @param $vehicleId
+     * @return ServicePlanEmbeddedListDTO
+     */
     public static function createReferenceDTOByVehicleId($vehicleId) {
         $dto = new ServicePlanEmbeddedListDTO();
         $dto->vehicleId = $vehicleId;

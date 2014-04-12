@@ -11,6 +11,10 @@ namespace Tixi\ApiBundle\Form\Shared;
 
 use Symfony\Component\Form\DataTransformerInterface;
 
+/**
+ * Class DateTimeArrayTransformer
+ * @package Tixi\ApiBundle\Form\Shared
+ */
 class DateTimeArrayTransformer implements DataTransformerInterface {
     public function transform($datetime) {
         if (null !== $datetime) {
@@ -29,6 +33,10 @@ class DateTimeArrayTransformer implements DataTransformerInterface {
         return $result;
     }
 
+    /**
+     * @param mixed $array
+     * @return mixed|null
+     */
     public function reverseTransform($array) {
         $date = $array['date'];
         $time = $array['time'];

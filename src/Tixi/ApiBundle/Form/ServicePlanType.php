@@ -15,8 +15,15 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints\DateTime;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
+/**
+ * Class ServicePlanType
+ * @package Tixi\ApiBundle\Form
+ */
 class ServicePlanType extends AbstractType{
-
+    /**
+     * @param FormBuilderInterface $builder
+     * @param array $options
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('id', 'hidden');
@@ -53,6 +60,9 @@ class ServicePlanType extends AbstractType{
         return 'serviceplan';
     }
 
+    /**
+     * @param OptionsResolverInterface $resolver
+     */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(

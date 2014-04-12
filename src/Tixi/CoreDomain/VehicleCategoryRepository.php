@@ -12,9 +12,20 @@ namespace Tixi\CoreDomain;
 use Symfony\Component\Security\Core\User\User;
 use Tixi\CoreDomain\Shared\CommonBaseRepository;
 
+/**
+ * Interface VehicleCategoryRepository
+ * @package Tixi\CoreDomain
+ */
 interface VehicleCategoryRepository extends CommonBaseRepository{
-
+    /**
+     * @param VehicleCategory $vehicleCategory
+     * @return mixed
+     */
     public function store(VehicleCategory $vehicleCategory);
 
+    /**
+     * @param VehicleCategory $vehicleCategory
+     * @return mixed
+     */
     public function remove(VehicleCategory $vehicleCategory);
 } 

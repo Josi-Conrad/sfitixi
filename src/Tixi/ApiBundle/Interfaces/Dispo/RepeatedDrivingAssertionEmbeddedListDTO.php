@@ -12,7 +12,10 @@ use Tixi\ApiBundle\Shared\DataGrid\Annotations\GridField;
 use Tixi\ApiBundle\Shared\DataGrid\DataGridSourceClass;
 use Tixi\CoreDomain\Shared\GenericEntityFilter\GenericAccessQuery;
 
-
+/**
+ * Class RepeatedDrivingAssertionEmbeddedListDTO
+ * @package Tixi\ApiBundle\Interfaces\Dispo
+ */
 class RepeatedDrivingAssertionEmbeddedListDTO implements DataGridSourceClass {
     /**
      * @GridField(rowIdentifier=true, propertyId="RepeatedDrivingAssertionPlan.id")
@@ -43,11 +46,18 @@ class RepeatedDrivingAssertionEmbeddedListDTO implements DataGridSourceClass {
      */
     public $frequency;
 
+    /**
+     * @return GenericAccessQuery
+     */
     public function getAccessQuery()
     {
         return new GenericAccessQuery('RepeatedDrivingAssertionPlan', 'Tixi\CoreDomain\Dispo\RepeatedDrivingAssertionPlan RepeatedDrivingAssertionPlan JOIN RepeatedDrivingAssertionPlan.driver Driver', 'RepeatedDrivingAssertionPlan.id');
     }
 
+    /**
+     * @param $driverId
+     * @return RepeatedDrivingAssertionEmbeddedListDTO
+     */
     public static function createReferenceDTOByDriverId($driverId) {
         $dto = new RepeatedDrivingAssertionEmbeddedListDTO();
         $dto->driverId = $driverId;

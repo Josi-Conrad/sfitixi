@@ -13,6 +13,10 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Tixi\CoreDomain\Driver;
 use Tixi\CoreDomain\Address;
 
+/**
+ * Class DriverAssembler
+ * @package Tixi\ApiBundle\Interfaces
+ */
 class DriverAssembler {
     /**
      * @param DriverRegisterDTO $driverDTO

@@ -14,8 +14,15 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints\DateTime;
 use Symfony\Component\Validator\Constraints\Regex;
 
+/**
+ * Class PassengerType
+ * @package Tixi\ApiBundle\Form
+ */
 class PassengerType extends PersonType {
-
+    /**
+     * @param FormBuilderInterface $builder
+     * @param array $options
+     */
     public function buildForm(FormBuilderInterface $builder, array $options) {
 
         parent::buildForm($builder,$options);
@@ -73,6 +80,9 @@ class PassengerType extends PersonType {
         return 'passenger';
     }
 
+    /**
+     * @param OptionsResolverInterface $resolver
+     */
     public function setDefaultOptions(OptionsResolverInterface $resolver) {
         $resolver->setDefaults(array(
             'data_class' => 'Tixi\ApiBundle\Interfaces\PassengerRegisterDTO'

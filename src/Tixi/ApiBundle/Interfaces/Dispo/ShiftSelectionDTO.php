@@ -12,6 +12,10 @@ namespace Tixi\ApiBundle\Interfaces\Dispo;
 use Doctrine\Common\Collections\ArrayCollection;
 use Tixi\CoreDomain\Dispo\ShiftType;
 
+/**
+ * Class ShiftSelectionDTO
+ * @package Tixi\ApiBundle\Interfaces\Dispo
+ */
 class ShiftSelectionDTO {
 
     public $selectionId;

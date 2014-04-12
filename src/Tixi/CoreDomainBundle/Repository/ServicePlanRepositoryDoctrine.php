@@ -15,48 +15,27 @@ use Tixi\CoreDomain\ServicePlan;
 use Tixi\CoreDomain\ServicePlanRepository;
 use Tixi\CoreDomain\Vehicle;
 
+/**
+ * Class ServicePlanRepositoryDoctrine
+ * @package Tixi\CoreDomainBundle\Repository
+ */
 class ServicePlanRepositoryDoctrine extends CommonBaseRepositoryDoctrine implements ServicePlanRepository {
-
-
-
+    /**
+     * @param ServicePlan $servicePlan
+     * @return mixed|void
+     */
     public function store(ServicePlan $servicePlan)
     {
         $this->getEntityManager()->persist($servicePlan);
     }
 
+    /**
+     * @param ServicePlan $servicePlan
+     * @return mixed|void
+     */
     public function remove(ServicePlan $servicePlan)
     {
         $this->getEntityManager()->remove($servicePlan);
     }
-
-
-//    public function findAllByParent($parentEntity, array $orderBy = null, $page = null, $limit = null, $filterStr = null, $sourceDTO = null)
-//    {
-//        $correctedPage = (is_null($page)) ? null : $page-1;
-//        $servicePlans = $parentEntity->getAssociatedServicePlans();
-//        $criteria = Criteria::create();
-//        if(!is_null($filterStr) && !is_null($sourceDTO)) {
-//            foreach($sourceDTO as $field=>$value) {
-//                $criteria->orWhere(Criteria::expr()->contains($field,$filterStr));
-//            }
-//        }
-//        $criteria->orderBy($orderBy);
-//        $criteria->setFirstResult($correctedPage*$limit);
-//        $criteria->setMaxResults($limit);
-//        $filteredServicePlans =  $servicePlans->matching($criteria);
-//        return $filteredServicePlans;
-//    }
-//
-//    public function getNumberOfTotalRecordsByParent($parentEntity, $filterStr = null, $sourceDTO = null)
-//    {
-//        $servicePlans = $parentEntity->getAssociatedServicePlans();
-//        $criteria = Criteria::create();
-//        if(!is_null($filterStr) && !is_null($sourceDTO)) {
-//            foreach($sourceDTO as $field=>$value) {
-//                $criteria->orWhere(Criteria::expr()->contains($field,$filterStr));
-//            }
-//        }
-//        return $servicePlans->matching($criteria)->count();
-//    }
 
 }

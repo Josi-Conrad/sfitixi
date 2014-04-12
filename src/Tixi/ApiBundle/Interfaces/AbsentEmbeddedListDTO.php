@@ -12,6 +12,10 @@ use Tixi\ApiBundle\Shared\DataGrid\Annotations\GridField;
 use Tixi\ApiBundle\Shared\DataGrid\DataGridSourceClass;
 use Tixi\CoreDomain\Shared\GenericEntityFilter\GenericAccessQuery;
 
+/**
+ * Class AbsentEmbeddedListDTO
+ * @package Tixi\ApiBundle\Interfaces
+ */
 class AbsentEmbeddedListDTO implements DataGridSourceClass{
     /**
      * @GridField(rowIdentifier=true, propertyId="Absent.id")
@@ -38,12 +42,18 @@ class AbsentEmbeddedListDTO implements DataGridSourceClass{
      */
     public $endDate;
 
-
+    /**
+     * @return GenericAccessQuery
+     */
     public function getAccessQuery()
     {
         return new GenericAccessQuery('Absent', 'Tixi\CoreDomain\Absent Absent JOIN Absent.person Person', 'Absent.id');
     }
 
+    /**
+     * @param $personId
+     * @return AbsentEmbeddedListDTO
+     */
     public static function createReferenceDTOByPersonId($personId) {
         $dto = new AbsentEmbeddedListDTO();
         $dto->personId = $personId;
