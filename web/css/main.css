@@ -8,7 +8,6 @@
     display: none;
 }
 
-
 /* Buttons Main upper right corner */
 .btn-group-main{
     bottom: 15px;
@@ -17,9 +16,6 @@
 }
 
 /*##### Login Form #####*/
-.login {
-    font: 14px Helvetica, Arial, Sans-Serif;
-}
 
 .login section {
     border: 1px solid #bababa;
@@ -75,8 +71,6 @@
     margin: 0!important;
     padding: 0!important;
 }
-
-
 
 /*.weeklyShiftSelections li {*/
     /*list-style-type: none;*/

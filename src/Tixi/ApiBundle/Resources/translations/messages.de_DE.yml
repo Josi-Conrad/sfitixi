@@ -4,10 +4,12 @@ button.save: Speichern
 button.search: Suchen
 button.show: Anzeigen
 button.edit: Editieren
-button.login: Login
-button.logout: Logout
 button.delete: Löschen
 button.with.selection: Mit Selektion
+
+button.login: Login
+button.logout: Logout
+button.settings: Einstellungen
 
 more.details: Weitere Details >>
 less.details: << Weniger Details
@@ -19,75 +21,7 @@ datagrid.empty.defaulttext: Es wurden keine Dokumente gefunden.
 #Home
 home.panel.name: Home
 
-#Disposition
-disposition.panel.name: Disposition
 
 #Prepare
 prepare.panel.name: Bereitstellen
 
-#DrivingOrder
-drivingorder.button.new: Neuer Fahrauftrag
-
-#ShiftTypes
-shift1.name: Schicht 1
-shift2.name: Schicht 2
-shift3.name: Schicht 3
-shift4.name: Schicht 4
-shift5.name: Schicht 5
-
-#User Roles
-role.user: Benutzer
-role.manager: Manager
-role.admin: Administrator
-
-#RepeatedDrivingMission
-repeateddrivingmission.panel.new: Neuer Dauereinsatz
-repeateddrivingmission.panel.edit: Dauereinsatz editieren
-repeateddrivingmission.panel.embedded: Zugeordnete Dauereinsätze
-repeateddrivingmission.button.new: Neuer Dauereinsatz
-repeateddrivingmission.button.delete: Dauereinsatz löschen
-repeateddrivingmission.list.name: Dauereinsätze
-repeateddrivingmission.field.memo: Memo
-repeateddrivingmission.field.anchordate: Ab
-repeateddrivingmission.field.endDate: Bis
-repeateddrivingmission.field.frequency: Frequenz
-repeateddrivingmission.field.frequency.weekly: wöchentlich
-repeateddrivingmission.field.frequency.monthly: monatlich
-repeateddrivingmission.field.withHolidays: inklusive Feiertage
-repeateddrivingmission.weekdayselection.text: Wählen Sie bitte die Wochentage, an denen gefahren werden soll:
-repeateddrivingmission.shiftselection.text: Wählen Sie bitte die Schichten, an denen gefahren werden soll:
-repeateddrivingmission.everyweek.text: jeden
-
-firstweek.name: 1. Woche
-secondweek.name: 2. Woche
-thirdweek.name: 3. Woche
-fourthweek.name: 4. Woche
-lastweek.name: 5. Woche
-
-#Weekdays
-monday.name: Montag
-tuesday.name: Dienstag
-wednesday.name: Mittwoch
-thursday.name: Donnerstag
-friday.name: Freitag
-saturday.name: Samstag
-sunday.name: Sonntag
-
-monday.abbreviation.name: Mo
-tuesday.abbreviation.name: Di
-wednesday.abbreviation.name: Mi
-thursday.abbreviation.name: Do
-friday.abbreviation.name: Fr
-saturday.abbreviation.name: Sa
-sunday.abbreviation.name: So
-
-#Form field titles
-form.field.title.postalcode: Wert muss einer PLZ entsprechen (6430)
-form.field.title.not_blank: Wert erforderlich
-form.field.title.letter_digit: Darf nur aus Buchstaben und Zahlen bestehen
-form.field.title.gletter_digit: Darf nur aus Grossbuchstaben und Zahlen bestehen
-form.field.title.letter_digit_space: Darf nur aus Zahlen, Buchstaben und Leerzeichen bestehen
-form.field.title.gletter_digit_space: Darf nur aus Grossbuchstaben, Zahlen und Leerzeichen bestehen
-form.field.title.telephone: Muss einer Telefonnummer entsprechen (+41-41 800 00 00)
-form.field.title.digit: Darf nur aus Zahlen bestehen
-form.field.title.date: Muss das Format dd.mm.yyyy haben (z.B. 21.03.2014)

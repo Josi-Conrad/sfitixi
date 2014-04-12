@@ -8,15 +8,7 @@
     <title>iTixi - {{ titleDisplayText|trans }} {{ titleDisplaySubText|trans }}</title>
     <meta name="description" content="">
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}"/>
-
     <link rel="stylesheet" href="{{ asset('css/bootstrap.css') }}">
-    <style>
-        body {
-            padding-top: 50px;
-            padding-bottom: 20px;
-        }
-    </style>
-    {#<link rel="stylesheet" href="{{ asset('css/vendor/bootstrap-theme.css') }}">#}
     <link rel="stylesheet" href="{{ asset('css/tixiBootstrapTheme.css') }}">
     <link rel="stylesheet" href="{{ asset('css/main.css') }}">
     <link rel="stylesheet" href="{{ asset('css/jqueryui/ui-lightness/jquery-ui-1.10.4.custom.css') }}">
@@ -26,55 +18,35 @@
 </head>
 <body>
 <div class="container">
-    <section>
-        <div class="header">
-            <div class="pull-left">
-                <h3 class="text-muted">
-                    <img src="{{ asset('images/logo32px.png') }}" alt="Logo iTIXI"/>
-                    iTixi 2.0.2
-                </h3>
-            </div>
-            <div class="pull-right">
-                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-
-                    {% include '::topAction.html.twig' %}
-
-                {% else %}
-
-                    {% include '::topActionLogin.html.twig' %}
-
-                {% endif %}
-            </div>
-            <div class="clearfix"></div>
+    <div>
+        <div class="pull-left text-left">
+            <h3 class="text-muted">
+                <img src="{{ asset('images/logo32px.png') }}" alt="Logo iTIXI"/>
+                iTixi 2.0.2
+            </h3>
         </div>
-        {% include '::topNavigation.html.twig' %}
-    </section>
-    <section>
-        <div class="pull-left">
-            <div class="row">
-                {{ apy_breadcrumb_trail_render() }}
-            </div>
+        <div class="pull-right text-right">
+            {% include '::topAction.html.twig' %}
         </div>
-        <div class="pull-right">
-            <div class="row">
-                <div class="btn-group-main">
-                    <!--<a href="{{ path('tixiapi_users_get') }}">{% trans %}user.management{% endtrans %}</a>-->
-                </div>
-            </div>
-        </div>
-    </section>
+    </div>
     <div class="clearfix"></div>
-    <div class="row">
-        {% block body %}{% endblock %}
+    <div>
+        {% include '::topNavigation.html.twig' %}
     </div>
     <div class="row">
+        {{ apy_breadcrumb_trail_render() }}
+    </div>
+    <div>
+        {% block body %}{% endblock %}
+    </div>
+    <div>
         <hr>
-
         <footer>
             <p>&copy; Company 2013</p>
         </footer>
     </div>
 </div>
+
 <!-- /container -->
 <script src="{{ asset('js/bootstrap.js') }}"></script>
 <script src="{{ asset('js/main.js') }}"></script>
@@ -82,7 +54,6 @@
 <script src="{{ asset('bundles/tixiapi/js/dataGrid.js') }}"></script>
 
 {% block javascriptscustom %}{% endblock %}
-
 
 </body>
 </html>
