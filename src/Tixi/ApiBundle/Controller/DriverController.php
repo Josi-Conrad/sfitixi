@@ -33,6 +33,9 @@ class DriverController extends Controller {
     /**
      * @Route("", name="tixiapi_drivers_get")
      * @Method({"GET","POST"})
+     * @param Request $request
+     * @param bool $embeddedState
+     * @return Response
      */
     public function getDriversAction(Request $request, $embeddedState = false) {
         $embeddedParameter = (null === $request->get('embedded') || $request->get('embedded') === 'false') ? false : true;
@@ -51,6 +54,9 @@ class DriverController extends Controller {
      * @Route("/{driverId}", requirements={"driverId" = "^(?!new)[^/]+$"}, name="tixiapi_driver_get")
      * @Method({"GET","POST"})
      * @Breadcrumb("{driverId}", route={"name"="tixiapi_driver_get", "parameters"={"driverId"}})
+     * @param Request $request
+     * @param $driverId
+     * @return Response
      */
     public function getDriverAction(Request $request, $driverId) {
 
@@ -83,6 +89,9 @@ class DriverController extends Controller {
     /**
      * @Route("/{driverId}/delete",name="tixiapi_driver_delete")
      * @Method({"GET","POST"})
+     * @param Request $request
+     * @param $driverId
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function deleteDriverAction(Request $request, $driverId) {
         $driver = $this->getDriver($driverId);
@@ -95,6 +104,8 @@ class DriverController extends Controller {
      * @Route("/new", name="tixiapi_driver_new")
      * @Method({"GET","POST"})
      * @Breadcrumb("driver.panel.new", route="tixiapi_driver_new")
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      */
     public function newDriverAction(Request $request) {
         $tileRenderer = $this->get('tixi_api.tilerenderer');
@@ -117,8 +128,11 @@ class DriverController extends Controller {
     /**
      * @Route("/{driverId}/edit", name="tixiapi_driver_edit")
      * @Method({"GET","POST"})
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      * @Breadcrumb("{driverId}", route={"name"="tixiapi_driver_edit", "parameters"={"driverId"}})
+     * @param Request $request
+     * @param $driverId
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
     public function editDriverAction(Request $request, $driverId) {
         $dataGridHandler = $this->get('tixi_api.datagridhandler');
@@ -197,6 +211,11 @@ class DriverController extends Controller {
         return $this->createForm(new DriverType(), $driverDTO, $options);
     }
 
+    /**
+     * @param $driverId
+     * @return null|object
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     */
     protected function getDriver($driverId) {
         $driverRepository = $this->get('driver_repository');
         $driver = $driverRepository->find($driverId);
