@@ -35,6 +35,10 @@ class PassengerAbsentController extends Controller {
     /**
      * @Route("", name="tixiapi_passenger_absents_get")
      * @Method({"GET","POST"})
+     * @param $passengerId
+     * @param Request $request
+     * @param bool $embeddedState
+     * @return Response
      */
     public function getAbsentsAction($passengerId, Request $request, $embeddedState = false) {
         $embeddedState = $embeddedState || ($request->get('embedded') !== null && $request->get('embedded'));
@@ -52,6 +56,10 @@ class PassengerAbsentController extends Controller {
      * @Route("/{absentId}", requirements={"absentId" = "^(?!new)[^/]+$"}, name="tixiapi_passenger_absent_get")
      * @Breadcrumb("{passengerId}", route={"name"="tixiapi_passenger_get", "parameters"={"passengerId"}})
      * @Breadcrumb("absent.panel.name")
+     * @param Request $request
+     * @param $passengerId
+     * @param $absentId
+     * @return Response
      */
     public function getAbsentAction(Request $request, $passengerId, $absentId) {
         $tileRenderer = $this->get('tixi_api.tilerenderer');
@@ -71,6 +79,10 @@ class PassengerAbsentController extends Controller {
     /**
      * @Route("/{absentId}/delete",name="tixiapi_passenger_absent_delete")
      * @Method({"GET","POST"})
+     * @param Request $request
+     * @param $passengerId
+     * @param $absentId
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function delteAbsentAction(Request $request, $passengerId, $absentId) {
         $absent = $this->getAbsent($absentId);
@@ -84,6 +96,9 @@ class PassengerAbsentController extends Controller {
      * @Method({"GET","POST"})
      * @Breadcrumb("{passengerId}", route={"name"="tixiapi_passenger_get", "parameters"={"passengerId"}})
      * @Breadcrumb("absent.panel.new")
+     * @param Request $request
+     * @param $passengerId
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      */
     public function newAbsentAction(Request $request, $passengerId) {
         $tileRenderer = $this->get('tixi_api.tilerenderer');
@@ -109,6 +124,10 @@ class PassengerAbsentController extends Controller {
      * @Method({"GET","POST"})
      * @Breadcrumb("{passengerId}", route={"name"="tixiapi_passenger_get", "parameters"={"passengerId"}})
      * @Breadcrumb("absent.panel.edit")
+     * @param Request $request
+     * @param $passengerId
+     * @param $absentId
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      */
     public function editAbsentAction(Request $request, $passengerId, $absentId) {
         $tileRenderer = $this->get('tixi_api.tilerenderer');

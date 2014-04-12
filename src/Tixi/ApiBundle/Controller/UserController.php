@@ -33,6 +33,9 @@ class UserController extends Controller {
     /**
      * @Route("", name="tixiapi_users_get")
      * @Method({"GET","POST"})
+     * @param Request $request
+     * @param bool $embeddedState
+     * @return Response
      */
     public function getUsersAction(Request $request, $embeddedState = false) {
         $embeddedParameter = (null === $request->get('embedded') || $request->get('embedded') === 'false') ? false : true;
@@ -49,6 +52,10 @@ class UserController extends Controller {
      * @Route("/{userId}", requirements={"userId" = "^(?!new)[^/]+$"}, name="tixiapi_user_get")
      * @Method({"GET","POST"})
      * @Breadcrumb("{userId}", route={"name"="tixiapi_user_get", "parameters"={"userId"}})
+     * @param Request $request
+     * @param $userId
+     * @return Response
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
     public function getUserAction(Request $request, $userId) {
         $tileRenderer = $this->get('tixi_api.tilerenderer');
@@ -67,6 +74,8 @@ class UserController extends Controller {
      * @Route("/new", name="tixiapi_user_new")
      * @Method({"GET","POST"})
      * @Breadcrumb("user.panel.new", route="tixiapi_user_new")
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      */
     public function newUserAction(Request $request) {
         $tileRenderer = $this->get('tixi_api.tilerenderer');
@@ -89,8 +98,11 @@ class UserController extends Controller {
     /**
      * @Route("/{userId}/edit", name="tixiapi_user_edit")
      * @Method({"GET","POST"})
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      * @Breadcrumb("{userId}", route={"name"="tixiapi_user_edit", "parameters"={"userId"}})
+     * @param Request $request
+     * @param $userId
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
     public function editUserAction(Request $request, $userId) {
         $tileRenderer = $this->get('tixi_api.tilerenderer');
@@ -151,10 +163,18 @@ class UserController extends Controller {
         return $this->createForm(new UserType(), $userDTO, $options);
     }
 
+    /**
+     * @param User $user
+     */
     public function assignNormalUserRole(User $user){
         $user->assignRole($this->getUserRole('ROLE_USER'));
     }
 
+    /**
+     * @param $roleName
+     * @return null|object
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     */
     public function getUserRole($roleName) {
         $role = $this->get('tixi_role_repository')->findOneBy(array('role' => $roleName));
         if (empty($role)) {
@@ -163,6 +183,10 @@ class UserController extends Controller {
         return $role;
     }
 
+    /**
+     * @param $username
+     * @return bool
+     */
     public function isUsernameAvailable($username) {
         $duplicate = $this->get('tixi_user_repository')->findOneBy(array('username' => $username));
         if (!empty($duplicate)) {
@@ -171,6 +195,9 @@ class UserController extends Controller {
         return true;
     }
 
+    /**
+     * @param User $user
+     */
     protected function encodeUserPassword(User $user){
         $encFactory = $this->get('security.encoder_factory');
         $encoder = $encFactory->getEncoder($user);

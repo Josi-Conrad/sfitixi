@@ -40,6 +40,9 @@ class VehicleController extends Controller {
     /**
      * @Route("",name="tixiapi_vehicles_get")
      * @Method({"GET","POST"})
+     * @param Request $request
+     * @param bool $embeddedState
+     * @return Response
      */
     public function getVehiclesAction(Request $request, $embeddedState = false) {
         $embeddedParameter = (null === $request->get('embedded') || $request->get('embedded') === 'false') ? false : true;
@@ -58,6 +61,9 @@ class VehicleController extends Controller {
      * @Route("/{vehicleId}",requirements={"vehicleId" = "^(?!new)[^/]+$"},name="tixiapi_vehicle_get")
      * @Method({"GET","POST"})
      * @Breadcrumb("{vehicleId}", route={"name"="tixiapi_vehicle_get", "parameters"={"vehicleId"}})
+     * @param Request $request
+     * @param $vehicleId
+     * @return Response
      */
     public function getVehicleAction(Request $request, $vehicleId) {
         $dataGridHandler = $this->get('tixi_api.datagridhandler');
@@ -86,6 +92,9 @@ class VehicleController extends Controller {
     /**
      * @Route("/{vehicleId}/delete",name="tixiapi_vehicle_delete")
      * @Method({"GET","POST"})
+     * @param Request $request
+     * @param $vehicleId
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function deleteVehicleAction(Request $request, $vehicleId) {
         $vehicle = $this->getVehicle($vehicleId);
@@ -98,6 +107,8 @@ class VehicleController extends Controller {
      * @Route("/new",name="tixiapi_vehicle_new")
      * @Method({"GET","POST"})
      * @Breadcrumb("vehicle.panel.new", route="tixiapi_vehicle_new")
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      */
     public function newVehicleAction(Request $request) {
         $tileRenderer = $this->get('tixi_api.tilerenderer');
@@ -121,6 +132,9 @@ class VehicleController extends Controller {
      * @Route("/{vehicleId}/edit",name="tixiapi_vehicle_edit")
      * @Method({"GET","POST"})
      * @Breadcrumb("{vehicleId}", route={"name"="tixiapi_vehicle_edit", "parameters"={"vehicleId"}})
+     * @param Request $request
+     * @param $vehicleId
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      */
     public function editVehicleAction(Request $request, $vehicleId) {
         $dataGridHandler = $this->get('tixi_api.datagridhandler');

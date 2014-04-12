@@ -33,6 +33,9 @@ class POIController extends Controller {
     /**
      * @Route("", name="tixiapi_pois_get")
      * @Method({"GET","POST"})
+     * @param Request $request
+     * @param bool $embeddedState
+     * @return Response
      */
     public function getPOIsAction(Request $request, $embeddedState = false) {
         $embeddedParameter = (null === $request->get('embedded') || $request->get('embedded') === 'false') ? false : true;
@@ -51,6 +54,9 @@ class POIController extends Controller {
      * @Route("/{poiId}", requirements={"poiId" = "^(?!new)[^/]+$"}, name="tixiapi_poi_get")
      * @Method({"GET","POST"})
      * @Breadcrumb("{poiId}", route={"name"="tixiapi_poi_get", "parameters"={"poiId"}})
+     * @param Request $request
+     * @param $poiId
+     * @return Response
      */
     public function getPOIAction(Request $request, $poiId) {
         $tileRenderer = $this->get('tixi_api.tilerenderer');
@@ -68,6 +74,9 @@ class POIController extends Controller {
     /**
      * @Route("/{poiId}/delete",name="tixiapi_poi_delete")
      * @Method({"GET","POST"})
+     * @param Request $request
+     * @param $poiId
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function deletePOIAction(Request $request, $poiId) {
         $poi = $this->getPoi($poiId);
@@ -80,6 +89,8 @@ class POIController extends Controller {
      * @Route("/new", name="tixiapi_poi_new")
      * @Method({"GET","POST"})
      * @Breadcrumb("poi.panel.new", route="tixiapi_poi_new")
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      */
     public function newPOIAction(Request $request) {
         $tileRenderer = $this->get('tixi_api.tilerenderer');
@@ -102,8 +113,10 @@ class POIController extends Controller {
     /**
      * @Route("/{poiId}/edit", name="tixiapi_poi_edit")
      * @Method({"GET","POST"})
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      * @Breadcrumb("{poiId}", route={"name"="tixiapi_poi_edit", "parameters"={"poiId"}})
+     * @param Request $request
+     * @param $poiId
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      */
     public function editPOIAction(Request $request, $poiId) {
         $tileRenderer = $this->get('tixi_api.tilerenderer');

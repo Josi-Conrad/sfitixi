@@ -33,6 +33,9 @@ class PassengerController extends Controller {
     /**
      * @Route("", name="tixiapi_passengers_get")
      * @Method({"GET","POST"})
+     * @param Request $request
+     * @param bool $embeddedState
+     * @return Response
      */
     public function getPassengersAction(Request $request, $embeddedState = false) {
         $embeddedParameter = (null === $request->get('embedded') || $request->get('embedded') === 'false') ? false : true;
@@ -50,6 +53,9 @@ class PassengerController extends Controller {
     /**
      * @Route("/{passengerId}", requirements={"passengerId" = "^(?!new)[^/]+$"}, name="tixiapi_passenger_get")
      * @Breadcrumb("{passengerId}", route={"name"="tixiapi_passenger_get", "parameters"={"passengerId"}})
+     * @param Request $request
+     * @param $passengerId
+     * @return Response
      */
     public function getPassengerAction(Request $request, $passengerId) {
         $dataGridHandler = $this->get('tixi_api.datagridhandler');
@@ -77,6 +83,9 @@ class PassengerController extends Controller {
     /**
      * @Route("/{passengerId}/delete",name="tixiapi_passenger_delete")
      * @Method({"GET","POST"})
+     * @param Request $request
+     * @param $passengerId
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function deletePassenger(Request $request, $passengerId) {
         $passanger = $this->getPassenger($passengerId);
@@ -89,6 +98,8 @@ class PassengerController extends Controller {
      * @Route("/new", name="tixiapi_passenger_new")
      * @Method({"GET","POST"})
      * @Breadcrumb("passenger.panel.new", route="tixiapi_passenger_new")
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      */
     public function newPassengerAction(Request $request) {
         $tileRenderer = $this->get('tixi_api.tilerenderer');
@@ -112,6 +123,9 @@ class PassengerController extends Controller {
      * @Route("/{passengerId}/edit", name="tixiapi_passenger_edit")
      * @Method({"GET","POST"})
      * @Breadcrumb("{passengerId}", route={"name"="tixiapi_passenger_edit", "parameters"={"passengerId"}})
+     * @param Request $request
+     * @param $passengerId
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      */
     public function editPassengerAction(Request $request, $passengerId) {
         $dataGridHandler = $this->get('tixi_api.datagridhandler');
@@ -185,6 +199,11 @@ class PassengerController extends Controller {
         return $this->createForm(new PassengerType(), $passengerDTO, $options);
     }
 
+    /**
+     * @param $passengerId
+     * @return null|object
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     */
     public function getPassenger($passengerId) {
         $passengerRepository = $this->get('passenger_repository');
         $passenger = $passengerRepository->find($passengerId);
