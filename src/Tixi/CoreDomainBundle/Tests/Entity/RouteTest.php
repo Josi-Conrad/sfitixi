@@ -70,7 +70,7 @@ class RouteTest extends WebTestCase {
      * {@inheritDoc}
      */
     protected function tearDown() {
-        parent::tearDown();
         $this->em->rollback();
+        parent::tearDown();
     }
 }

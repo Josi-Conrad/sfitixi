@@ -101,14 +101,6 @@ class VehicleTest extends WebTestCase {
     }
 
     /**
-     * {@inheritDoc}
-     */
-    protected function tearDown() {
-        parent::tearDown();
-        $this->em->rollback();
-    }
-
-    /**
      * @param $from
      * @param $to
      * @return ServicePlan
@@ -117,6 +109,14 @@ class VehicleTest extends WebTestCase {
         $servicePlan = ServicePlan::registerServicePlan($from, $to);
         $this->servicePlanRepo->store($servicePlan);
         return $servicePlan;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function tearDown() {
+        $this->em->rollback();
+        parent::tearDown();
     }
 
 }
