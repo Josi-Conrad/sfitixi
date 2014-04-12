@@ -93,7 +93,7 @@ class RepeatedDrivingAssertionController extends Controller{
     }
 
     /**
-     * @Route("/{assertionPlanId}/editbasic", name="tixiapi_driver_repeatedassertionplan_editbasic")
+     * @Route("/{assertionPlanId}/edit", name="tixiapi_driver_repeatedassertionplan_edit")
      * @Method({"GET","POST"})
      * @Breadcrumb("{driverId}", route={"name"="tixiapi_driver_get", "parameters"={"driverId"}})
      * @Breadcrumb("repeateddrivingmission.panel.edit")

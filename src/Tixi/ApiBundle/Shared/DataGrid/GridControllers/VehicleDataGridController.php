@@ -39,7 +39,7 @@ class VehicleDataGridController extends DataGridAbstractController{
         $customControlTile = new DataGridCustomControlTile();
         $selectionButton = $customControlTile->add(new SelectionButtonTile('button.with.selection'));
         $selectionButton->add(new TextLinkListTile($this->generateUrl('tixiapi_vehicle_get',array('vehicleId'=>DataGridHandler::$dataGirdReplaceIdentifier)),'button.show',true));
-        $selectionButton->add(new TextLinkListTile($this->generateUrl('tixiapi_vehicle_editbasic',array('vehicleId'=>DataGridHandler::$dataGirdReplaceIdentifier)),'button.edit',true));
+        $selectionButton->add(new TextLinkListTile($this->generateUrl('tixiapi_vehicle_edit',array('vehicleId'=>DataGridHandler::$dataGirdReplaceIdentifier)),'button.edit',true));
         $selectionButton->add(new TextLinkListTile($this->generateUrl('tixiapi_serviceplan_new',array('vehicleId'=>DataGridHandler::$dataGirdReplaceIdentifier)),'serviceplan.button.new',true));
         $selectionButton->add(new SelectionButtonDividerTile());
         $selectionButton->add(new TextLinkListDeleteTile($this->generateUrl('tixiapi_vehicle_delete',array('vehicleId'=>DataGridHandler::$dataGirdReplaceIdentifier)),'button.delete',true));

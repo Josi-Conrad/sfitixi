@@ -71,7 +71,7 @@ class DriverController extends Controller {
         $rootPanel = new RootPanel('tixiapi_drivers_get', 'driver.panel.name', $driver->getFirstname().' '.$driver->getLastname());
         $panelSplitter = $rootPanel->add(new PanelSplitterTile('1:1'));
         $formPanel = $panelSplitter->addLeft(new PanelTile('driver.panel.details', PanelTile::$primaryType));
-        $formPanel->add(new DriverRegisterFormViewTile('driverRequest', $driverDTO, $this->generateUrl('tixiapi_driver_editbasic', array('driverId' => $driverId))));
+        $formPanel->add(new DriverRegisterFormViewTile('driverRequest', $driverDTO, $this->generateUrl('tixiapi_driver_edit', array('driverId' => $driverId))));
         $absentGridPanel = $panelSplitter->addRight(new PanelTile('absent.panel.embedded'));
         $absentGridPanel->add($absentGridTile);
         $repeatedAssertionGridPanel = $panelSplitter->addRight(new PanelTile('repeateddrivingmission.panel.embedded'));
@@ -115,10 +115,10 @@ class DriverController extends Controller {
     }
 
     /**
-     * @Route("/{driverId}/editbasic", name="tixiapi_driver_editbasic")
+     * @Route("/{driverId}/edit", name="tixiapi_driver_edit")
      * @Method({"GET","POST"})
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
-     * @Breadcrumb("{driverId}", route={"name"="tixiapi_driver_editbasic", "parameters"={"driverId"}})
+     * @Breadcrumb("{driverId}", route={"name"="tixiapi_driver_edit", "parameters"={"driverId"}})
      */
     public function editDriverAction(Request $request, $driverId) {
         $dataGridHandler = $this->get('tixi_api.datagridhandler');

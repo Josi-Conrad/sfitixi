@@ -76,7 +76,7 @@ class VehicleController extends Controller {
         $panelSplitter = $rootPanel->add(new PanelSplitterTile('1:1'));
         $formPanel = $panelSplitter->addLeft(new PanelTile('vehicle.panel.details', PanelTile::$primaryType));
 
-        $formPanel->add(new VehicleRegisterFormViewTile('vehicleRequest', $vehicleDTO, $this->generateUrl('tixiapi_vehicle_editbasic', array('vehicleId' => $vehicleId))));
+        $formPanel->add(new VehicleRegisterFormViewTile('vehicleRequest', $vehicleDTO, $this->generateUrl('tixiapi_vehicle_edit', array('vehicleId' => $vehicleId))));
         $gridPanel = $panelSplitter->addRight(new PanelTile('serviceplan.panel.embedded'));
         $gridPanel->add($gridTile);
         $rootPanel->add(new PanelDeleteFooterTile($this->generateUrl('tixiapi_vehicle_delete', array('vehicleId' => $vehicleId)),'vehicle.button.delete'));
@@ -118,9 +118,9 @@ class VehicleController extends Controller {
     }
 
     /**
-     * @Route("/{vehicleId}/editbasic",name="tixiapi_vehicle_editbasic")
+     * @Route("/{vehicleId}/edit",name="tixiapi_vehicle_edit")
      * @Method({"GET","POST"})
-     * @Breadcrumb("{vehicleId}", route={"name"="tixiapi_vehicle_editbasic", "parameters"={"vehicleId"}})
+     * @Breadcrumb("{vehicleId}", route={"name"="tixiapi_vehicle_edit", "parameters"={"vehicleId"}})
      */
     public function editVehicleAction(Request $request, $vehicleId) {
         $dataGridHandler = $this->get('tixi_api.datagridhandler');

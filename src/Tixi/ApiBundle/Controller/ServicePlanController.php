@@ -61,7 +61,7 @@ class ServicePlanController extends Controller {
         $rootPanel = new RootPanel('servicePlanDetail', 'serviceplan.panel.details');
 
         $rootPanel->add(new ServicePlanRegisterFormViewTile('servicePlanRequest', $servicePlanDTO,
-            $this->generateUrl('tixiapi_serviceplan_editbasic',
+            $this->generateUrl('tixiapi_serviceplan_edit',
                 array('vehicleId' => $vehicleId, 'servicePlanId' => $servicePlanId)),true));
         $rootPanel->add(new PanelDeleteFooterTile($this->generateUrl('tixiapi_serviceplan_delete',
             array('vehicleId' => $vehicleId, 'servicePlanId'=>$servicePlanId)),'serviceplan.button.delete'));
@@ -103,7 +103,7 @@ class ServicePlanController extends Controller {
     }
 
     /**
-     * @Route("/{servicePlanId}/editbasic", name="tixiapi_serviceplan_editbasic")
+     * @Route("/{servicePlanId}/edit", name="tixiapi_serviceplan_edit")
      * @Method({"GET","POST"})
      * @Breadcrumb("{vehicleId}", route={"name"="tixiapi_vehicle_get", "parameters"={"vehicleId"}})
      * @Breadcrumb("serviceplan.panel.edit")

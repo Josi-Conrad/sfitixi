@@ -60,7 +60,7 @@ class POIController extends Controller {
         $poiDTO = $assembler->poiToPOIRegisterDTO($poi);
         $rootPanel = new RootPanel('tixiapi_pois_get', 'poi.panel.name', $poi->getName());
         $rootPanel->add(new POIRegisterFormViewTile('poiRequest', $poiDTO,
-            $this->generateUrl('tixiapi_poi_editbasic', array('poiId' => $poiId)),true));
+            $this->generateUrl('tixiapi_poi_edit', array('poiId' => $poiId)),true));
         $rootPanel->add(new PanelDeleteFooterTile($this->generateUrl('tixiapi_poi_delete', array('poiId' => $poiId)),'poi.button.delete'));
         return new Response($tileRenderer->render($rootPanel));
     }
@@ -100,10 +100,10 @@ class POIController extends Controller {
     }
 
     /**
-     * @Route("/{poiId}/editbasic", name="tixiapi_poi_editbasic")
+     * @Route("/{poiId}/edit", name="tixiapi_poi_edit")
      * @Method({"GET","POST"})
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
-     * @Breadcrumb("{poiId}", route={"name"="tixiapi_poi_editbasic", "parameters"={"poiId"}})
+     * @Breadcrumb("{poiId}", route={"name"="tixiapi_poi_edit", "parameters"={"poiId"}})
      */
     public function editPOIAction(Request $request, $poiId) {
         $tileRenderer = $this->get('tixi_api.tilerenderer');

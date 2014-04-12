@@ -59,7 +59,7 @@ class UserController extends Controller {
         $userDTO = $this->get('tixi_api.assembleruser')->userToUserRegisterDTO($user);
         $rootPanel = new RootPanel('tixiapi_users_get', $user->getUsername());
         $rootPanel->add(new UserRegisterFormViewTile('userRequest', $userDTO,
-            $this->generateUrl('tixiapi_user_editbasic', array('userId' => $userId))));
+            $this->generateUrl('tixiapi_user_edit', array('userId' => $userId))));
         return new Response($tileRenderer->render($rootPanel));
     }
 
@@ -87,10 +87,10 @@ class UserController extends Controller {
     }
 
     /**
-     * @Route("/{userId}/editbasic", name="tixiapi_user_editbasic")
+     * @Route("/{userId}/edit", name="tixiapi_user_edit")
      * @Method({"GET","POST"})
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
-     * @Breadcrumb("{userId}", route={"name"="tixiapi_user_editbasic", "parameters"={"userId"}})
+     * @Breadcrumb("{userId}", route={"name"="tixiapi_user_edit", "parameters"={"userId"}})
      */
     public function editUserAction(Request $request, $userId) {
         $tileRenderer = $this->get('tixi_api.tilerenderer');

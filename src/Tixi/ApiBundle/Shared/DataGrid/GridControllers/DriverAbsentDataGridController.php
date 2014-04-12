@@ -37,7 +37,7 @@ class DriverAbsentDataGridController extends DataGridAbstractController{
         $customControlTile = new DataGridCustomControlTile();
         $selectionButton = $customControlTile->add(new SelectionButtonTile('button.with.selection'));
         $selectionButton->add(new TextLinkListTile($this->generateUrl('tixiapi_driver_absent_get',array('driverId'=>$this->routeProperties['driverId'],'absentId'=>DataGridHandler::$dataGirdReplaceIdentifier)),'button.show',true));
-        $selectionButton->add(new TextLinkListTile($this->generateUrl('tixiapi_driver_absent_editbasic',array('driverId'=>$this->routeProperties['driverId'],'absentId'=>DataGridHandler::$dataGirdReplaceIdentifier)),'button.edit',true));
+        $selectionButton->add(new TextLinkListTile($this->generateUrl('tixiapi_driver_absent_edit',array('driverId'=>$this->routeProperties['driverId'],'absentId'=>DataGridHandler::$dataGirdReplaceIdentifier)),'button.edit',true));
         $selectionButton->add(new SelectionButtonDividerTile());
         $selectionButton->add(new TextLinkListDeleteTile($this->generateUrl('tixiapi_driver_absent_delete',array('driverId'=>$this->routeProperties['driverId'],'absentId'=>DataGridHandler::$dataGirdReplaceIdentifier)),'button.delete',true));
         $customControlTile->add(new LinkButtonTile($this->generateUrl('tixiapi_driver_absent_new',array('driverId'=>$this->routeProperties['driverId'])), 'absent.button.new', LinkButtonTile::$primaryType));

@@ -67,7 +67,7 @@ class PassengerController extends Controller {
         $rootPanel = new RootPanel('tixiapi_passengers_get', 'passenger.panel.name', $passenger->getFirstname() . ' ' . $passenger->getLastname());
         $panelSplitter = $rootPanel->add(new PanelSplitterTile('1:1'));
         $formPanel = $panelSplitter->addLeft(new PanelTile('passenger.panel.details', PanelTile::$primaryType));
-        $formPanel->add(new PassengerRegisterFormViewTile('passengerRequest', $passengerDTO, $this->generateUrl('tixiapi_passenger_editbasic', array('passengerId' => $passengerId))));
+        $formPanel->add(new PassengerRegisterFormViewTile('passengerRequest', $passengerDTO, $this->generateUrl('tixiapi_passenger_edit', array('passengerId' => $passengerId))));
         $gridPanel = $panelSplitter->addRight(new PanelTile('absent.panel.embedded'));
         $gridPanel->add($gridTile);
         $rootPanel->add(new PanelDeleteFooterTile($this->generateUrl('tixiapi_passenger_delete', array('passengerId' => $passengerId)),'passenger.button.delete'));
@@ -109,9 +109,9 @@ class PassengerController extends Controller {
     }
 
     /**
-     * @Route("/{passengerId}/editbasic", name="tixiapi_passenger_editbasic")
+     * @Route("/{passengerId}/edit", name="tixiapi_passenger_edit")
      * @Method({"GET","POST"})
-     * @Breadcrumb("{passengerId}", route={"name"="tixiapi_passenger_editbasic", "parameters"={"passengerId"}})
+     * @Breadcrumb("{passengerId}", route={"name"="tixiapi_passenger_edit", "parameters"={"passengerId"}})
      */
     public function editPassengerAction(Request $request, $passengerId) {
         $dataGridHandler = $this->get('tixi_api.datagridhandler');

@@ -62,7 +62,7 @@ class PassengerAbsentController extends Controller {
 
         $rootPanel = new RootPanel('tixiapi_passengers_get', 'absent.panel.details');
         $rootPanel->add(new AbsentRegisterFormViewTile('absentRequest', $absentDTO,
-            $this->generateUrl('tixiapi_passenger_absent_editbasic', array('passengerId' => $passengerId, 'absentId' => $absentId)),true));
+            $this->generateUrl('tixiapi_passenger_absent_edit', array('passengerId' => $passengerId, 'absentId' => $absentId)),true));
         $rootPanel->add(new PanelDeleteFooterTile($this->generateUrl('tixiapi_passenger_absent_delete',
             array('passengerId' => $passengerId, 'absentId'=>$absentId)),'absent.button.delete'));
         return new Response($tileRenderer->render($rootPanel));
@@ -105,7 +105,7 @@ class PassengerAbsentController extends Controller {
     }
 
     /**
-     * @Route("/{absentId}/editbasic", name="tixiapi_passenger_absent_editbasic")
+     * @Route("/{absentId}/edit", name="tixiapi_passenger_absent_edit")
      * @Method({"GET","POST"})
      * @Breadcrumb("{passengerId}", route={"name"="tixiapi_passenger_get", "parameters"={"passengerId"}})
      * @Breadcrumb("absent.panel.edit")

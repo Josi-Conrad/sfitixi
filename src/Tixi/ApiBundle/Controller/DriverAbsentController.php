@@ -62,7 +62,7 @@ class DriverAbsentController extends Controller {
 
         $rootPanel = new RootPanel('tixiapi_drivers_get', 'absent.panel.details');
         $rootPanel->add(new AbsentRegisterFormViewTile('absentRequest', $absentDTO,
-            $this->generateUrl('tixiapi_driver_absent_editbasic', array('driverId' => $driverId, 'absentId' => $absentId)),true));
+            $this->generateUrl('tixiapi_driver_absent_edit', array('driverId' => $driverId, 'absentId' => $absentId)),true));
         $rootPanel->add(new PanelDeleteFooterTile($this->generateUrl('tixiapi_driver_absent_delete',
             array('driverId' => $driverId, 'absentId'=>$absentId)),'absent.button.delete'));
         return new Response($tileRenderer->render($rootPanel));
@@ -105,7 +105,7 @@ class DriverAbsentController extends Controller {
     }
 
     /**
-     * @Route("/{absentId}/editbasic", name="tixiapi_driver_absent_editbasic")
+     * @Route("/{absentId}/edit", name="tixiapi_driver_absent_edit")
      * @Method({"GET","POST"})
      * @Breadcrumb(" {driverId}", route={"name"="tixiapi_driver_get", "parameters"={"driverId"}})
      * @Breadcrumb("absent.panel.edit")
