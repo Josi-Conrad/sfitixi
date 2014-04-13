@@ -12,6 +12,10 @@ use Tixi\ApiBundle\Shared\DataGrid\Annotations\GridField;
 use Tixi\ApiBundle\Shared\DataGrid\DataGridSourceClass;
 use Tixi\CoreDomain\Shared\GenericEntityFilter\GenericAccessQuery;
 
+/**
+ * Class UserListDTO
+ * @package Tixi\ApiBundle\Interfaces
+ */
 class UserListDTO implements DataGridSourceClass{
     /**
      * @GridField(rowIdentifier=true, propertyId="User.id")
@@ -30,12 +34,18 @@ class UserListDTO implements DataGridSourceClass{
      */
     public $roles;
 
-
+    /**
+     * @return GenericAccessQuery
+     */
     public function getAccessQuery()
     {
         return new GenericAccessQuery('User', 'Tixi\SecurityBundle\Entity\User User JOIN User.roles Role', 'User.id');
     }
 
+    /**
+     * @param $userId
+     * @return UserListDTO
+     */
     public static function createReferenceDTOByUserId($userId) {
         $dto = new UserListDTO();
         $dto->id = $userId;

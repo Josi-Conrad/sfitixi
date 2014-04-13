@@ -12,7 +12,15 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\SecurityContext;
 
+/**
+ * Class SecurityController
+ * @package Tixi\SecurityBundle\Controller
+ */
 class SecurityController extends Controller {
+    /**
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function loginAction(Request $request) {
 
         $session = $request->getSession();

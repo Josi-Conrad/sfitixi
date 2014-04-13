@@ -8,7 +8,10 @@
 
 namespace Tixi\ApiBundle\Interfaces;
 
-
+/**
+ * Class ServicePlanRegisterDTO
+ * @package Tixi\ApiBundle\Interfaces
+ */
 class ServicePlanRegisterDTO {
     public $id;
     public $startDate;

@@ -1,0 +1,10 @@
+#Form field titles
+form.field.title.postalcode: Wert muss einer PLZ entsprechen (6430)
+form.field.title.not_blank: Wert erforderlich
+form.field.title.letter_digit: Darf nur aus Buchstaben und Zahlen bestehen
+form.field.title.gletter_digit: Darf nur aus Grossbuchstaben und Zahlen bestehen
+form.field.title.letter_digit_space: Darf nur aus Zahlen, Buchstaben und Leerzeichen bestehen
+form.field.title.gletter_digit_space: Darf nur aus Grossbuchstaben, Zahlen und Leerzeichen bestehen
+form.field.title.telephone: Muss einer Telefonnummer entsprechen (+41-41 800 00 00)
+form.field.title.digit: Darf nur aus Zahlen bestehen
+form.field.title.date: Muss das Format dd.mm.yyyy haben (z.B. 21.03.2014)

@@ -24,6 +24,8 @@ class HomeController extends Controller {
     /**
      * @Route("",name="tixiapi_home")
      * @Method({"GET","POST"})
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function getHomeAction(Request $request) {
         $template = 'TixiApiBundle:Home:get.html.twig';

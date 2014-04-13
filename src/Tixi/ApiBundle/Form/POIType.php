@@ -16,8 +16,15 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Tixi\ApiBundle\Form\Shared\TelephoneType;
 
+/**
+ * Class POIType
+ * @package Tixi\ApiBundle\Form
+ */
 class POIType extends AbstractType {
-
+    /**
+     * @param FormBuilderInterface $builder
+     * @param array $options
+     */
     public function buildForm(FormBuilderInterface $builder, array $options) {
 
         parent::buildForm($builder, $options);
@@ -109,6 +116,9 @@ class POIType extends AbstractType {
         return 'poi';
     }
 
+    /**
+     * @param OptionsResolverInterface $resolver
+     */
     public function setDefaultOptions(OptionsResolverInterface $resolver) {
         $resolver->setDefaults(array(
             'data_class' => 'Tixi\ApiBundle\Interfaces\POIRegisterDTO'

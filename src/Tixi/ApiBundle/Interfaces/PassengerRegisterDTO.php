@@ -9,6 +9,10 @@ namespace Tixi\ApiBundle\Interfaces;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
+/**
+ * Class PassengerRegisterDTO
+ * @package Tixi\ApiBundle\Interfaces
+ */
 class PassengerRegisterDTO extends PersonRegisterDTO {
     //Passenger
     public $isInWheelChair;

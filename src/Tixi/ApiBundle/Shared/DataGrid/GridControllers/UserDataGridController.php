@@ -33,9 +33,9 @@ class UserDataGridController extends DataGridAbstractController {
         $customControlTile = new DataGridCustomControlTile();
         $selectionButton = $customControlTile->add(new SelectionButtonTile('button.with.selection'));
         $selectionButton->add(new TextLinkListTile($this->generateUrl('tixiapi_user_get', array('userId' => DataGridHandler::$dataGirdReplaceIdentifier)), 'button.show', true));
-        $selectionButton->add(new TextLinkListTile($this->generateUrl('tixiapi_user_editbasic', array('userId' => DataGridHandler::$dataGirdReplaceIdentifier)), 'button.edit', true));
+        $selectionButton->add(new TextLinkListTile($this->generateUrl('tixiapi_user_edit', array('userId' => DataGridHandler::$dataGirdReplaceIdentifier)), 'button.edit', true));
         $selectionButton->add(new SelectionButtonDividerTile());
-        $selectionButton->add(new TextLinkListTile($this->generateUrl('tixiapi_user_editbasic', array('userId' => DataGridHandler::$dataGirdReplaceIdentifier)), 'button.delete', true));
+        $selectionButton->add(new TextLinkListTile($this->generateUrl('tixiapi_user_edit', array('userId' => DataGridHandler::$dataGirdReplaceIdentifier)), 'button.delete', true));
         $customControlTile->add(new LinkButtonTile($this->generateUrl('tixiapi_user_new'), 'user.button.new', LinkButtonTile::$primaryType));
         return $customControlTile;
     }

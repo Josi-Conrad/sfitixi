@@ -33,6 +33,10 @@ class ServicePlanController extends Controller {
     /**
      * @Route("",name="tixiapi_serviceplans_get")
      * @Method({"GET","POST"})
+     * @param $vehicleId
+     * @param Request $request
+     * @param bool $embeddedState
+     * @return Response
      */
     public function getServiceplansAction($vehicleId, Request $request, $embeddedState = false) {
         $embeddedState = $embeddedState || ($request->get('embedded') !== null && $request->get('embedded'));
@@ -51,6 +55,10 @@ class ServicePlanController extends Controller {
      * @Method({"GET","POST"})
      * @Breadcrumb("{vehicleId}", route={"name"="tixiapi_vehicle_get", "parameters"={"vehicleId"}})
      * @Breadcrumb("serviceplan.panel.details")
+     * @param Request $request
+     * @param $vehicleId
+     * @param $servicePlanId
+     * @return Response
      */
     public function getServiceplanAction(Request $request, $vehicleId, $servicePlanId) {
         $assembler = $this->get('tixi_api.assemblerserviceplan');
@@ -61,7 +69,7 @@ class ServicePlanController extends Controller {
         $rootPanel = new RootPanel('servicePlanDetail', 'serviceplan.panel.details');
 
         $rootPanel->add(new ServicePlanRegisterFormViewTile('servicePlanRequest', $servicePlanDTO,
-            $this->generateUrl('tixiapi_serviceplan_editbasic',
+            $this->generateUrl('tixiapi_serviceplan_edit',
                 array('vehicleId' => $vehicleId, 'servicePlanId' => $servicePlanId)),true));
         $rootPanel->add(new PanelDeleteFooterTile($this->generateUrl('tixiapi_serviceplan_delete',
             array('vehicleId' => $vehicleId, 'servicePlanId'=>$servicePlanId)),'serviceplan.button.delete'));
@@ -72,6 +80,10 @@ class ServicePlanController extends Controller {
     /**
      * @Route("/{servicePlanId}/delete",name="tixiapi_serviceplan_delete")
      * @Method({"GET","POST"})
+     * @param Request $request
+     * @param $vehicleId
+     * @param $servicePlanId
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function deleteServicePlanAction(Request $request, $vehicleId, $servicePlanId) {
         $servicePlan = $this->getServicePlan($servicePlanId);
@@ -85,6 +97,9 @@ class ServicePlanController extends Controller {
      * @Method({"GET","POST"})
      * @Breadcrumb("{vehicleId}", route={"name"="tixiapi_vehicle_get", "parameters"={"vehicleId"}})
      * @Breadcrumb("serviceplan.panel.new")
+     * @param Request $request
+     * @param $vehicleId
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      */
     public function newServiceplanAction(Request $request, $vehicleId) {
         $tileRenderer = $this->get('tixi_api.tilerenderer');
@@ -103,10 +118,15 @@ class ServicePlanController extends Controller {
     }
 
     /**
-     * @Route("/{servicePlanId}/editbasic", name="tixiapi_serviceplan_editbasic")
+     * @Route("/{servicePlanId}/edit", name="tixiapi_serviceplan_edit")
      * @Method({"GET","POST"})
      * @Breadcrumb("{vehicleId}", route={"name"="tixiapi_vehicle_get", "parameters"={"vehicleId"}})
      * @Breadcrumb("serviceplan.panel.edit")
+     * @param Request $request
+     * @param $vehicleId
+     * @param $servicePlanId
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
     public function editServiceplanAction(Request $request, $vehicleId, $servicePlanId) {
         $tileRenderer = $this->get('tixi_api.tilerenderer');

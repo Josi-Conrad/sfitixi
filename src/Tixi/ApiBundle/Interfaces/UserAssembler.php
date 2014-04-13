@@ -12,6 +12,10 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Security\Core\Encoder\EncoderFactory;
 use Tixi\SecurityBundle\Entity\User;
 
+/**
+ * Class UserAssembler
+ * @package Tixi\ApiBundle\Interfaces
+ */
 class UserAssembler {
     /**
      * @param UserRegisterDTO $userDTO
@@ -64,6 +68,10 @@ class UserAssembler {
         return $dtoArray;
     }
 
+    /**
+     * @param User $user
+     * @return UserListDTO
+     */
     public function toUserListDTO(User $user) {
         $userListDTO = new UserListDTO();
         $userListDTO->id = $user->getId();
@@ -73,6 +81,10 @@ class UserAssembler {
         return $userListDTO;
     }
 
+    /**
+     * @param $roles
+     * @return string
+     */
     private function rolesToString($roles) {
         $string = '| ';
         foreach ($roles as $role) {

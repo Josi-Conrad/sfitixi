@@ -12,6 +12,10 @@ namespace Tixi\ApiBundle\Helper;
 use Symfony\Component\DependencyInjection\ContainerAware;
 use Symfony\Component\Validator\Constraints\DateTime;
 
+/**
+ * Class DateTimeService
+ * @package Tixi\ApiBundle\Helper
+ */
 class DateTimeService extends ContainerAware {
     /**
      * @param \DateTime $utcDate

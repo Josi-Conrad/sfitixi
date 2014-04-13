@@ -14,6 +14,10 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Tixi\SecurityBundle\Entity\UserRepository;
 
+/**
+ * Class UserProvider
+ * @package Tixi\SecurityBundle\Provider
+ */
 class UserProvider implements UserProviderInterface {
 
     /**
@@ -21,10 +25,18 @@ class UserProvider implements UserProviderInterface {
      */
     protected $userRepository;
 
+    /**
+     * @param UserRepository $userRepository
+     */
     public function __construct(UserRepository $userRepository) {
         $this->userRepository = $userRepository;
     }
 
+    /**
+     * @param string $username
+     * @return mixed|UserInterface
+     * @throws \Symfony\Component\Security\Core\Exception\UsernameNotFoundException
+     */
     public function loadUserByUsername($username) {
         $user = $this->userRepository->findOneBy(array('username' => $username));
         if (!$user) {
@@ -33,6 +45,11 @@ class UserProvider implements UserProviderInterface {
         return $user;
     }
 
+    /**
+     * @param UserInterface $user
+     * @return mixed|UserInterface
+     * @throws UnsupportedUserException
+     */
     public function refreshUser(UserInterface $user) {
         $class = get_class($user);
         if (!$this->supportsClass($class)) {
@@ -46,6 +63,10 @@ class UserProvider implements UserProviderInterface {
         return $this->userRepository->find($user->getId());
     }
 
+    /**
+     * @param string $class
+     * @return bool
+     */
     public function supportsClass($class) {
         return $this->userRepository->getClassName() === $class
         || is_subclass_of($class, $this->userRepository->getClassName());

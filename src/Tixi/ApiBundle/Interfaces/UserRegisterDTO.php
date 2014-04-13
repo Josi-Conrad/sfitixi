@@ -8,7 +8,10 @@
 
 namespace Tixi\ApiBundle\Interfaces;
 
-
+/**
+ * Class UserRegisterDTO
+ * @package Tixi\ApiBundle\Interfaces
+ */
 class UserRegisterDTO {
     public $id;
     public $username;

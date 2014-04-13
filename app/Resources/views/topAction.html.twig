@@ -1,4 +1,24 @@
+<div>
+    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+        <div>
+            <a href="{{ path('tixi_logout') }}">{{ app.user.username }}: {% trans %}button.logout{% endtrans %}</a>
+        </div>
+        {% if is_granted('ROLE_MANAGER') %}
+            <div>
+                <a href="{{ path('tixiapi_users_get') }}">{% trans %}button.settings{% endtrans %}</a>
+            </div>
+        {% else %}
+            <div>
 
-    <div class="btn-group-main">
-        <a href="{{ path('tixi_logout') }}">{{ app.user.username }}: {% trans %}button.logout{% endtrans %}</a></li>
-    </div>
+            </div>
+        {% endif %}
+
+    {% else %}
+        <div>
+            <a href="{{ path('tixi_login') }}">{% trans %}button.login{% endtrans %}</a>
+        </div>
+        <div>
+
+        </div>
+    {% endif %}
+</div>

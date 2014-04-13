@@ -15,8 +15,15 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\NotNull;
 use Tixi\ApiBundle\Form\Shared\TelephoneType;
 
+/**
+ * Class PersonType
+ * @package Tixi\ApiBundle\Form
+ */
 class PersonType extends AbstractType {
-
+    /**
+     * @param FormBuilderInterface $builder
+     * @param array $options
+     */
     public function buildForm(FormBuilderInterface $builder, array $options) {
 
         $builder->add('title', 'choice', array(

@@ -8,7 +8,10 @@
 
 namespace Tixi\ApiBundle\Interfaces;
 
-
+/**
+ * Class VehicleRegisterDTO
+ * @package Tixi\ApiBundle\Interfaces
+ */
 class VehicleRegisterDTO {
     public $id;
     public $name;

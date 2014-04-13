@@ -16,3 +16,8 @@ user.role.admin: Administrator
 usern.name.not_blank: Ein Benutzername ist erforferlich
 usern.email.not_blank: Eine E-Mail Adresse ist erforferlich
 usern.password.not_blank: Ein Passwort ist erforferlich
+
+#User Roles
+role.user: Benutzer
+role.manager: Manager
+role.admin: Administrator

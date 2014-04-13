@@ -13,6 +13,10 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Tixi\CoreDomain\POI;
 use Tixi\CoreDomain\Address;
 
+/**
+ * Class POIAssembler
+ * @package Tixi\ApiBundle\Interfaces
+ */
 class POIAssembler {
     /**
      * @param POIRegisterDTO $poiDTO

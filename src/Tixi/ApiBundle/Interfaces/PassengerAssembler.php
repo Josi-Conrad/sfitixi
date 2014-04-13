@@ -14,6 +14,10 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Tixi\CoreDomain\Passenger;
 use Tixi\CoreDomain\Address;
 
+/**
+ * Class PassengerAssembler
+ * @package Tixi\ApiBundle\Interfaces
+ */
 class PassengerAssembler {
     /**
      * @param PassengerRegisterDTO $passengerDTO

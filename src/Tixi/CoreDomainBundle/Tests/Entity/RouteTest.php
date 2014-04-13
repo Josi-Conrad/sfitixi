@@ -13,6 +13,10 @@ use Symfony\Component\Validator\Constraints\DateTime;
 use Tixi\CoreDomain\Address;
 use Tixi\CoreDomain\Dispo\Route;
 
+/**
+ * Class RouteTest
+ * @package Tixi\CoreDomainBundle\Tests\Entity
+ */
 class RouteTest extends WebTestCase {
     /**
      * @var \Doctrine\ORM\EntityManager
@@ -70,7 +74,7 @@ class RouteTest extends WebTestCase {
      * {@inheritDoc}
      */
     protected function tearDown() {
-        parent::tearDown();
         $this->em->rollback();
+        parent::tearDown();
     }
 }

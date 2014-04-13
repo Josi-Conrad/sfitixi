@@ -14,13 +14,22 @@ use Tixi\CoreDomain\Dispo\RepeatedDrivingAssertionPlan;
 use Tixi\CoreDomain\Dispo\RepeatedDrivingAssertionPlanRepository;
 use Tixi\CoreDomainBundle\Repository\CommonBaseRepositoryDoctrine;
 
+/**
+ * Class RepeatedDrivingAssertionPlanRepositoryDoctrine
+ * @package Tixi\CoreDomainBundle\Repository\Dispo
+ */
 class RepeatedDrivingAssertionPlanRepositoryDoctrine extends CommonBaseRepositoryDoctrine implements RepeatedDrivingAssertionPlanRepository{
-
+    /**
+     * @param RepeatedDrivingAssertionPlan $assertionPlan
+     */
     public function store(RepeatedDrivingAssertionPlan $assertionPlan)
     {
         $this->getEntityManager()->persist($assertionPlan);
     }
 
+    /**
+     * @param RepeatedDrivingAssertionPlan $assertionPlan
+     */
     public function remove(RepeatedDrivingAssertionPlan $assertionPlan)
     {
         $this->getEntityManager()->remove($assertionPlan);

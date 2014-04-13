@@ -43,6 +43,10 @@ class RepeatedDrivingAssertionController extends Controller{
     /**
      * @Route("", name="tixiapi_driver_repeatedassertionplans_get")
      * @Method({"GET","POST"})
+     * @param Request $request
+     * @param $driverId
+     * @param bool $embeddedState
+     * @return Response
      */
     public function getRepeatedAssertionPlansAction(Request $request, $driverId, $embeddedState = false) {
         $embeddedState = $embeddedState || ($request->get('embedded') !== null && $request->get('embedded'));
@@ -59,6 +63,10 @@ class RepeatedDrivingAssertionController extends Controller{
     /**
      * @Route("/{assertionPlanId}/delete",name="tixiapi_driver_repeatedassertionplan_delete")
      * @Method({"GET","POST"})
+     * @param Request $request
+     * @param $driverId
+     * @param $assertionPlanId
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function deleteRepeatedAssertionPlanAction(Request $request, $driverId, $assertionPlanId) {
         $assertionPlan = $this->getAssertionPlan($assertionPlanId);
@@ -73,6 +81,9 @@ class RepeatedDrivingAssertionController extends Controller{
      * @Method({"GET","POST"})
      * @Breadcrumb("{driverId}", route={"name"="tixiapi_driver_get", "parameters"={"driverId"}})
      * @Breadcrumb("repeateddrivingmission.panel.new")
+     * @param Request $request
+     * @param $driverId
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      */
     public function newRepeatedAssertionPlanAction(Request $request, $driverId) {
         $tileRenderer = $this->get('tixi_api.tilerenderer');
@@ -93,10 +104,15 @@ class RepeatedDrivingAssertionController extends Controller{
     }
 
     /**
-     * @Route("/{assertionPlanId}/editbasic", name="tixiapi_driver_repeatedassertionplan_editbasic")
+     * @Route("/{assertionPlanId}/edit", name="tixiapi_driver_repeatedassertionplan_edit")
      * @Method({"GET","POST"})
      * @Breadcrumb("{driverId}", route={"name"="tixiapi_driver_get", "parameters"={"driverId"}})
      * @Breadcrumb("repeateddrivingmission.panel.edit")
+     * @param Request $request
+     * @param $driverId
+     * @param $assertionPlanId
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
     public function editRepeatedAssertionPlanAction(Request $request, $driverId, $assertionPlanId) {
         $tileRenderer = $this->get('tixi_api.tilerenderer');
@@ -166,6 +182,11 @@ class RepeatedDrivingAssertionController extends Controller{
         $assertionPlanRepository->store($assertionPlan);
     }
 
+    /**
+     * @param $assertionPlanId
+     * @return null|object
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     */
     protected function getAssertionPlan($assertionPlanId) {
         $assertionPlanRepository = $this->get('repeateddrivingassertionplan_repository');
         $assertionPlan = $assertionPlanRepository->find($assertionPlanId);
@@ -175,6 +196,11 @@ class RepeatedDrivingAssertionController extends Controller{
         return $assertionPlan;
     }
 
+    /**
+     * @param $driverId
+     * @return null|object
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     */
     protected function getDriver($driverId) {
         $driver = $this->get('driver_repository')->find($driverId);
         if(null === $driver) {

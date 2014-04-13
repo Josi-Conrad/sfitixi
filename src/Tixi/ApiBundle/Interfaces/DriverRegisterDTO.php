@@ -10,6 +10,10 @@ namespace Tixi\ApiBundle\Interfaces;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
+/**
+ * Class DriverRegisterDTO
+ * @package Tixi\ApiBundle\Interfaces
+ */
 class DriverRegisterDTO extends PersonRegisterDTO {
     //Driver
     public $licenceNumber;

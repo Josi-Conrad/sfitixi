@@ -13,7 +13,10 @@ use Tixi\ApiBundle\Shared\DataGrid\Annotations\GridField;
 use Tixi\ApiBundle\Shared\DataGrid\DataGridSourceClass;
 use Tixi\CoreDomain\Shared\GenericEntityFilter\GenericAccessQuery;
 
-
+/**
+ * Class DriverListDTO
+ * @package Tixi\ApiBundle\Interfaces
+ */
 class DriverListDTO implements DataGridSourceClass {
     /**
      * @GridField(propertyId="Driver.isActive")
@@ -52,6 +55,9 @@ class DriverListDTO implements DataGridSourceClass {
      */
     public $driverCategory;
 
+    /**
+     * @return GenericAccessQuery
+     */
     public function getAccessQuery() {
         return new GenericAccessQuery('Driver', 'Tixi\CoreDomain\Driver Driver JOIN Driver.driverCategory DriverCategory
         JOIN Driver.address Address', 'Driver.id');

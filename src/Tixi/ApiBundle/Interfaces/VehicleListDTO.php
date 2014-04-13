@@ -13,7 +13,10 @@ use Tixi\ApiBundle\Shared\DataGrid\Annotations\GridField;
 use Tixi\ApiBundle\Shared\DataGrid\DataGridSourceClass;
 use Tixi\CoreDomain\Shared\GenericEntityFilter\GenericAccessQuery;
 
-
+/**
+ * Class VehicleListDTO
+ * @package Tixi\ApiBundle\Interfaces
+ */
 class VehicleListDTO implements DataGridSourceClass {
     /**
      * @GridField(rowIdentifier=true, propertyId="Vehicle.id")
@@ -53,6 +56,9 @@ class VehicleListDTO implements DataGridSourceClass {
      */
     public $dateOfFirstRegistration;
 
+    /**
+     * @return GenericAccessQuery
+     */
     public function getAccessQuery() {
         return new GenericAccessQuery('Vehicle', 'Tixi\CoreDomain\Vehicle Vehicle JOIN Vehicle.category VehicleCategory', 'Vehicle.id');
     }

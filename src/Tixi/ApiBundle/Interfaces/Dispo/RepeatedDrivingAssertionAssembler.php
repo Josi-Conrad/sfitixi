@@ -15,6 +15,10 @@ use Tixi\CoreDomain\Dispo\RepeatedDrivingAssertionPlan;
 use Tixi\CoreDomain\Dispo\RepeatedMonthlyDrivingAssertion;
 use Tixi\CoreDomain\Dispo\RepeatedWeeklyDrivingAssertion;
 
+/**
+ * Class RepeatedDrivingAssertionAssembler
+ * @package Tixi\ApiBundle\Interfaces\Dispo
+ */
 class RepeatedDrivingAssertionAssembler {
 
     //injected by service container via setter method
@@ -48,12 +52,21 @@ class RepeatedDrivingAssertionAssembler {
         7=>'sunday'
     );
 
+    /**
+     * @param RepeatedDrivingAssertionRegisterDTO $dto
+     * @return RepeatedDrivingAssertionPlan
+     */
     public function repeatedRegisterDTOToNewDrivingAssertionPlan(RepeatedDrivingAssertionRegisterDTO $dto) {
         $drivingAssertionPlan = RepeatedDrivingAssertionPlan::registerRepeatedAssertionPlan(
             $dto->memo, $dto->anchorDate, $dto->frequency, $dto->withHolidays, $dto->endDate);
         return $drivingAssertionPlan;
     }
 
+    /**
+     * @param RepeatedDrivingAssertionPlan $assertionPlan
+     * @param RepeatedDrivingAssertionRegisterDTO $dto
+     * @return RepeatedDrivingAssertionPlan
+     */
     public function repeatedRegisterDTOToDrivingAssertionPlan(RepeatedDrivingAssertionPlan $assertionPlan, RepeatedDrivingAssertionRegisterDTO $dto) {
         $assertionPlan->setMemo($dto->memo);
         $assertionPlan->setAnchorDate($dto->anchorDate);
@@ -63,7 +76,10 @@ class RepeatedDrivingAssertionAssembler {
         return $assertionPlan;
     }
 
-
+    /**
+     * @param RepeatedDrivingAssertionRegisterDTO $dto
+     * @return ArrayCollection
+     */
     public function repeatedRegisterDTOtoMonthlyDrivingAssertions(RepeatedDrivingAssertionRegisterDTO $dto) {
         $monthlyDrivingAssertions = new ArrayCollection();
         /** @var ShiftSelectionDTO $shiftSelectionDTO */
@@ -78,6 +94,10 @@ class RepeatedDrivingAssertionAssembler {
         return $monthlyDrivingAssertions;
     }
 
+    /**
+     * @param RepeatedDrivingAssertionRegisterDTO $dto
+     * @return ArrayCollection
+     */
     public function repeatedRegisterDTOtoWeeklyDrivingAssertions(RepeatedDrivingAssertionRegisterDTO $dto) {
         $weeklyDrivingAssertions = new ArrayCollection();
         /** @var ShiftSelectionDTO $shiftSelectionDTO */
@@ -91,6 +111,10 @@ class RepeatedDrivingAssertionAssembler {
         return $weeklyDrivingAssertions;
     }
 
+    /**
+     * @param RepeatedDrivingAssertionPlan $assertionPlan
+     * @return RepeatedDrivingAssertionRegisterDTO
+     */
     public function toRepeatedRegisterDTO(RepeatedDrivingAssertionPlan $assertionPlan) {
         $assertionDTO = new RepeatedDrivingAssertionRegisterDTO();
         $assertionDTO->id = $assertionPlan->getId();
@@ -137,6 +161,12 @@ class RepeatedDrivingAssertionAssembler {
         return $assertionDTO;
     }
 
+    /**
+     * @param $selectedOccurency
+     * @param $selectedDay
+     * @param array $shiftSelection
+     * @return ShiftSelectionDTO
+     */
     protected function createShiftSelectionDTO($selectedOccurency, $selectedDay, array $shiftSelection) {
         $shiftDTO = new ShiftSelectionDTO();
         $shiftDTO->selectionId = $selectedOccurency.'_'.$selectedDay;
@@ -144,6 +174,10 @@ class RepeatedDrivingAssertionAssembler {
         return $shiftDTO;
     }
 
+    /**
+     * @param $selectionId
+     * @return array
+     */
     protected function explodeMonthlySelectionId($selectionId) {
         $explodedArray = explode('_', $selectionId);
         return array(
@@ -152,11 +186,19 @@ class RepeatedDrivingAssertionAssembler {
         );
     }
 
+    /**
+     * @param $selectionId
+     * @return mixed
+     */
     protected function explodeWeeklySelectionId($selectionId) {
         $explodedArray = explode('_', $selectionId);
         return $explodedArray[1];
     }
 
+    /**
+     * @param $assertionPlans
+     * @return array
+     */
     public function assertionPlansToEmbeddedListDTOs($assertionPlans) {
         $dtoArray = array();
         foreach ($assertionPlans as $assertionPlan) {
@@ -165,6 +207,10 @@ class RepeatedDrivingAssertionAssembler {
         return $dtoArray;
     }
 
+    /**
+     * @param RepeatedDrivingAssertionPlan $assertionPlan
+     * @return RepeatedDrivingAssertionEmbeddedListDTO
+     */
     protected function assertionPlanToEmbeddedListDTO(RepeatedDrivingAssertionPlan $assertionPlan) {
         $dto = new RepeatedDrivingAssertionEmbeddedListDTO();
         $dto->id = $assertionPlan->getId();

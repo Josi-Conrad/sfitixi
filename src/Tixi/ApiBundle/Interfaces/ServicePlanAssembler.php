@@ -12,6 +12,10 @@ namespace Tixi\ApiBundle\Interfaces;
 use Tixi\ApiBundle\Helper\DateTimeService;
 use Tixi\CoreDomain\ServicePlan;
 
+/**
+ * Class ServicePlanAssembler
+ * @package Tixi\ApiBundle\Interfaces
+ */
 class ServicePlanAssembler {
 
     //

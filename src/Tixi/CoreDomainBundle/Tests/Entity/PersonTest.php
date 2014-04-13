@@ -21,6 +21,10 @@ use Tixi\CoreDomain\Contradict;
 use Tixi\CoreDomain\Vehicle;
 use Tixi\CoreDomain\VehicleCategory;
 
+/**
+ * Class PersonTest
+ * @package Tixi\CoreDomainBundle\Tests\Entity
+ */
 class PersonTest extends WebTestCase {
     /**
      * @var \Doctrine\ORM\EntityManager
@@ -275,7 +279,7 @@ class PersonTest extends WebTestCase {
      * {@inheritDoc}
      */
     protected function tearDown() {
-        parent::tearDown();
         $this->em->rollback();
+        parent::tearDown();
     }
 }

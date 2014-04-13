@@ -34,6 +34,10 @@ class DriverAbsentController extends Controller {
     /**
      * @Route("", name="tixiapi_driver_absents_get")
      * @Method({"GET","POST"})
+     * @param $driverId
+     * @param Request $request
+     * @param bool $embeddedState
+     * @return Response
      */
     public function getAbsentsAction($driverId, Request $request, $embeddedState = false) {
         $embeddedState = $embeddedState || ($request->get('embedded') !== null && $request->get('embedded'));
@@ -52,6 +56,10 @@ class DriverAbsentController extends Controller {
      * @Method({"GET","POST"})
      * @Breadcrumb("{driverId}", route={"name"="tixiapi_driver_get", "parameters"={"driverId"}})
      * @Breadcrumb("absent.panel.details")
+     * @param Request $request
+     * @param $driverId
+     * @param $absentId
+     * @return Response
      */
     public function getAbsentAction(Request $request, $driverId, $absentId) {
         $tileRenderer = $this->get('tixi_api.tilerenderer');
@@ -62,7 +70,7 @@ class DriverAbsentController extends Controller {
 
         $rootPanel = new RootPanel('tixiapi_drivers_get', 'absent.panel.details');
         $rootPanel->add(new AbsentRegisterFormViewTile('absentRequest', $absentDTO,
-            $this->generateUrl('tixiapi_driver_absent_editbasic', array('driverId' => $driverId, 'absentId' => $absentId)),true));
+            $this->generateUrl('tixiapi_driver_absent_edit', array('driverId' => $driverId, 'absentId' => $absentId)),true));
         $rootPanel->add(new PanelDeleteFooterTile($this->generateUrl('tixiapi_driver_absent_delete',
             array('driverId' => $driverId, 'absentId'=>$absentId)),'absent.button.delete'));
         return new Response($tileRenderer->render($rootPanel));
@@ -71,6 +79,10 @@ class DriverAbsentController extends Controller {
     /**
      * @Route("/{absentId}/delete",name="tixiapi_driver_absent_delete")
      * @Method({"GET","POST"})
+     * @param Request $request
+     * @param $driverId
+     * @param $absentId
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function deleteAbsentAction(Request $request, $driverId, $absentId) {
         $absent = $this->getAbsent($absentId);
@@ -84,6 +96,9 @@ class DriverAbsentController extends Controller {
      * @Method({"GET","POST"})
      * @Breadcrumb("{driverId}", route={"name"="tixiapi_driver_get", "parameters"={"driverId"}})
      * @Breadcrumb("absent.panel.new")
+     * @param Request $request
+     * @param $driverId
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      */
     public function newAbsentAction(Request $request, $driverId) {
         $tileRenderer = $this->get('tixi_api.tilerenderer');
@@ -105,10 +120,14 @@ class DriverAbsentController extends Controller {
     }
 
     /**
-     * @Route("/{absentId}/editbasic", name="tixiapi_driver_absent_editbasic")
+     * @Route("/{absentId}/edit", name="tixiapi_driver_absent_edit")
      * @Method({"GET","POST"})
      * @Breadcrumb(" {driverId}", route={"name"="tixiapi_driver_get", "parameters"={"driverId"}})
      * @Breadcrumb("absent.panel.edit")
+     * @param Request $request
+     * @param $driverId
+     * @param $absentId
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      */
     public function editAbsentAction(Request $request, $driverId, $absentId) {
         $tileRenderer = $this->get('tixi_api.tilerenderer');
@@ -174,7 +193,7 @@ class DriverAbsentController extends Controller {
 
     /**
      * @param $absentId
-     * @return mixed
+     * @return null|object
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
     protected function getAbsent($absentId) {
@@ -188,7 +207,7 @@ class DriverAbsentController extends Controller {
 
     /**
      * @param $driverId
-     * @return mixed
+     * @return null|object
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
     protected function getDriver($driverId) {

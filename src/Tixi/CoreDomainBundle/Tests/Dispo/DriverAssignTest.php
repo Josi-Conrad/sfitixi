@@ -14,6 +14,10 @@ use Tixi\CoreDomain\Dispo\RepeatedDrivingAssertionPlan;
 use Tixi\CoreDomain\Dispo\RepeatedWeeklyDrivingAssertion;
 use Tixi\CoreDomain\Driver;
 
+/**
+ * Class DriverAssignTest
+ * @package Tixi\CoreDomainBundle\Tests\Entity
+ */
 class DriverAssignTest extends WebTestCase {
     /**
      * @var \Doctrine\ORM\EntityManager
@@ -99,7 +103,7 @@ class DriverAssignTest extends WebTestCase {
      * {@inheritDoc}
      */
     protected function tearDown() {
-        parent::tearDown();
         $this->em->rollback();
+        parent::tearDown();
     }
 }

@@ -10,6 +10,10 @@ namespace Tixi\ApiBundle\Interfaces;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
+/**
+ * Class POIRegisterDTO
+ * @package Tixi\ApiBundle\Interfaces
+ */
 class POIRegisterDTO extends AddressRegisterDTO {
     //POI
     public $id;

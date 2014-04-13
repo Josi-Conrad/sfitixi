@@ -16,7 +16,16 @@ use Tixi\SecurityBundle\Form\Model\Authorize;
 use Tixi\SecurityBundle\Entity\Client;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
+/**
+ * Class AuthorizeController
+ * @package Tixi\SecurityBundle\Controller
+ */
 class AuthorizeController extends BaseAuthorizeController {
+    /**
+     * @param Request $request
+     * @return \FOS\OAuthServerBundle\Controller\Response|\Symfony\Component\HttpFoundation\Response
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     */
     public function authorizeAction(Request $request) {
         if (!$request->get('client_id')) {
             throw new NotFoundHttpException("Client id parameter {$request->get('client_id')} is missing.");

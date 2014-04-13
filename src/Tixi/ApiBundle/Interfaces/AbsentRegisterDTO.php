@@ -8,7 +8,10 @@
 
 namespace Tixi\ApiBundle\Interfaces;
 
-
+/**
+ * Class AbsentRegisterDTO
+ * @package Tixi\ApiBundle\Interfaces
+ */
 class AbsentRegisterDTO {
     public $id;
     public $subject;

@@ -51,7 +51,7 @@ assetic:
 doctrine:
     dbal:
       types:
-        utcdatetime: Tixi\CoreDomainBundle\Types\UTCDateTimeType
+        utcdatetime: Tixi\CoreDomainBundle\Types\UTCDateTimeTypeDoctrine
       default_connection: tixi
       connections:
         tixi:
