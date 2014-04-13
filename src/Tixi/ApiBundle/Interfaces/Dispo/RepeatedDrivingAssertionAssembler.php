@@ -170,7 +170,7 @@ class RepeatedDrivingAssertionAssembler {
         $dto->id = $assertionPlan->getId();
         $dto->memo = $assertionPlan->getMemo();
         $dto->anchorDate = $assertionPlan->getAnchorDate()->format('d.m.Y');
-        $dto->endDate = $assertionPlan->getEndingDate()->format('d.m.Y');
+        $dto->endDate = $assertionPlan->getEndingDate() ? $assertionPlan->getEndingDate()->format('d.m.Y') : null;
         $dto->frequency= $assertionPlan->getFrequency();
         return $dto;
     }
