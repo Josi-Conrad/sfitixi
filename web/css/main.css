@@ -6,6 +6,12 @@
 
 .dataGrid .header {
     cursor: pointer;
+    display: inline-block;
+
+}
+
+.dataGrid .sortIcon {
+    margin-left: 5px;
 }
 
 .paginationControl {

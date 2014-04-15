@@ -72,8 +72,8 @@ function DataGrid(outline, gridId, dblClickCallback, isEmbedded, trans) {
 
     this._initHeaders = function() {
         _this._headers = [];
-        _this._outline.find('.header').each(function(index, header) {
-            _this._headers.push(new DataGridHeader($(header), $(header).attr('data-fieldid'),_this._onHeaderClick));
+        _this._outline.find('.headerWrapper').each(function(index, headerWrapper) {
+            _this._headers.push(new DataGridHeader(headerWrapper, $($(headerWrapper).find('.header')).attr('data-fieldid'),_this._onHeaderClick));
         });
     }
 
@@ -262,7 +262,7 @@ function DataGrid(outline, gridId, dblClickCallback, isEmbedded, trans) {
     _this._init(outline, gridId, dblClickCallback, isEmbedded, trans);
 }
 
-function DataGridHeader(uiElement, fieldId, callback) {
+function DataGridHeader(headerWrapper, fieldId, callback) {
     if(this == global) {return new DataGrid(arguments);}
 
     var _this = this,
@@ -270,22 +270,26 @@ function DataGridHeader(uiElement, fieldId, callback) {
             asc : 'ASC',
             desc : 'DESC'
         };
-
     this._fieldId = null;
     this._callback = null;
-    this._uiElement = null;
+    this._headerWrapper = null;
+    this._header = null;
+
 
     this._init = function() {
         this._fieldId = fieldId;
         this._callback = callback;
-        uiElement.on('click',_this._onHeaderClick);
-        this._uiElement = uiElement;
+        this._headerWrapper = headerWrapper;
+        this._header = $(headerWrapper).find('.header');
+        $(_this._header).on('click',_this._onHeaderClick);
+
     }
 
     this._orderingState = null;
 
     this.resetOrdering = function() {
         _this._orderingState = null;
+        _this._updateSortIcon();
     }
 
     this._getFieldId = function() {
@@ -313,6 +317,20 @@ function DataGridHeader(uiElement, fieldId, callback) {
             _this._orderingState = _orderingStates.desc;
         }else {
             _this._orderingState = null;
+        }
+        _this._updateSortIcon();
+    }
+
+    this._updateSortIcon = function() {
+        var _headerSortIcon = $(_this._headerWrapper).find('.sortIcon');
+        if(_this._orderingState === _orderingStates.asc) {
+            $(_headerSortIcon).addClass('glyphicon-sort-by-alphabet');
+        }else if(_this._orderingState === _orderingStates.desc) {
+            $(_headerSortIcon).removeClass('glyphicon-sort-by-alphabet');
+            $(_headerSortIcon).addClass('glyphicon-sort-by-alphabet-alt');
+        }else {
+            $(_headerSortIcon).removeClass('glyphicon-sort-by-alphabet');
+            $(_headerSortIcon).removeClass('glyphicon-sort-by-alphabet-alt');
         }
     }
 

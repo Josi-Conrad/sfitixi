@@ -28,20 +28,16 @@
                 <tr>
                     {% for header in gridState.getHeaders() %}
                         <th>
-                            <div id="{{ 'fpx_' ~ menuId ~ '_' ~ gridId ~ '_header_' ~ header.getFieldPropertyName() }}" class="header"
-                                 data-fieldId="{{ header.getFieldPropertyName() }}">{{ header.getHeaderName()|trans }}</div>
+                            <div class="headerWrapper">
+                                <div id="{{ 'fpx_' ~ menuId ~ '_' ~ gridId ~ '_header_' ~ header.getFieldPropertyName() }}" class="header"
+                                     data-fieldId="{{ header.getFieldPropertyName() }}">{{ header.getHeaderName()|trans }}</div>
+                                <span class="sortIcon glyphicon"></span>
+                            </div>
                         </th>
                     {% endfor %}
                 </tr>
                 </thead>
-                <tbody data-totalamountofrows=0>
-
-                </tbody>
-                {#{% for resolvedElement in children %}#}
-                    {#{% if 'datagridrowstable' in resolvedElement.viewIndentifiers %}#}
-                        {#{{ resolvedElement.rawData | raw }}#}
-                    {#{% endif %}#}
-                {#{% endfor %}#}
+                <tbody data-totalamountofrows=0></tbody>
             </table>
         </div>
     </div>
