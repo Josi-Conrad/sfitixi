@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Tixi\ApiBundle\Form\POIType;
 use Tixi\ApiBundle\Interfaces\POIRegisterDTO;
+use Tixi\ApiBundle\Menu\MenuService;
 use Tixi\ApiBundle\Tile\Core\FormTile;
 use Tixi\ApiBundle\Tile\Core\PanelDeleteFooterTile;
 use Tixi\ApiBundle\Tile\Core\PanelSplitterTile;
@@ -30,6 +31,13 @@ use Tixi\ApiBundle\Tile\POI\POIRegisterFormViewTile;
  * @Breadcrumb("poi.breadcrumb.name", route="tixiapi_pois_get")
  */
 class POIController extends Controller {
+
+    protected $menuId;
+
+    public function __construct() {
+        $this->menuId = MenuService::$menuPoiId;
+    }
+
     /**
      * @Route("", name="tixiapi_pois_get")
      * @Method({"GET","POST"})
@@ -38,16 +46,25 @@ class POIController extends Controller {
      * @return Response
      */
     public function getPOIsAction(Request $request, $embeddedState = false) {
-        $embeddedParameter = (null === $request->get('embedded') || $request->get('embedded') === 'false') ? false : true;
-        $isEmbedded = ($embeddedState || $embeddedParameter);
+        $embeddedState = $embeddedState || $request->get('embedded') === "true";
+        $isPartial = $request->get('partial') === "true";
 
         $dataGridHandler = $this->get('tixi_api.datagridhandler');
         $dataGridControllerFactory = $this->get('tixi_api.datagridcontrollerfactory');
         $tileRenderer = $this->get('tixi_api.tilerenderer');
 
-        $gridController = $dataGridControllerFactory->createPOIController($isEmbedded);
+        $gridController = $dataGridControllerFactory->createPOIController($embeddedState);
         $dataGridTile = $dataGridHandler->createDataGridTileByRequest($request, $gridController);
-        return new Response($tileRenderer->render($dataGridTile));
+
+        $rootPanel = null;
+        if(!$embeddedState && !$isPartial) {
+            $rootPanel = new RootPanel($this->menuId, 'poi.list.name');
+            $rootPanel->add($dataGridTile);
+        }else {
+            // doesn't exist at the moment
+        }
+
+        return new Response($tileRenderer->render($rootPanel));
     }
 
     /**
@@ -64,10 +81,11 @@ class POIController extends Controller {
 
         $poi = $this->getPoi($poiId);
         $poiDTO = $assembler->poiToPOIRegisterDTO($poi);
-        $rootPanel = new RootPanel('tixiapi_pois_get', 'poi.panel.name', $poi->getName());
+        $rootPanel = new RootPanel($this->menuId, 'poi.panel.name', $poi->getName());
         $rootPanel->add(new POIRegisterFormViewTile('poiRequest', $poiDTO,
             $this->generateUrl('tixiapi_poi_edit', array('poiId' => $poiId)),true));
         $rootPanel->add(new PanelDeleteFooterTile($this->generateUrl('tixiapi_poi_delete', array('poiId' => $poiId)),'poi.button.delete'));
+
         return new Response($tileRenderer->render($rootPanel));
     }
 
@@ -82,6 +100,7 @@ class POIController extends Controller {
         $poi = $this->getPoi($poiId);
         $poi->deleteLogically();
         $this->get('entity_manager')->flush();
+
         return $this->redirect($this->generateUrl('tixiapi_pois_get'));
     }
 
@@ -104,8 +123,8 @@ class POIController extends Controller {
             return $this->redirect($this->generateUrl('tixiapi_poi_get', array('poiId' => $poi->getId())));
         }
 
-        $rootPanel = new RootPanel('tixiapi_pois_get', 'poi.panel.new');
-        $rootPanel->add(new FormTile('poiNewForm', $form, true));
+        $rootPanel = new RootPanel($this->menuId, 'poi.panel.new');
+        $rootPanel->add(new FormTile($form, true));
 
         return new Response($tileRenderer->render($rootPanel));
     }
@@ -124,7 +143,7 @@ class POIController extends Controller {
 
         $poi = $this->getPoi($poiId);
         $poiDTO = $assembler->poiToPOIRegisterDTO($poi);
-        $form = $this->getForm(null, $poiDTO);
+        $form = $this->getForm($poiDTO);
         $form->handleRequest($request);
         if ($form->isValid()) {
             $poiDTO = $form->getData();
@@ -132,9 +151,10 @@ class POIController extends Controller {
             $this->get('entity_manager')->flush();
             return $this->redirect($this->generateUrl('tixiapi_poi_get', array('poiId' => $poiId)));
         }
-        $rootPanel = new RootPanel('tixiapi_pois_get', 'poi.panel.edit');
-        $rootPanel->add(new FormTile('poiEditForm', $form, true));
+        $rootPanel = new RootPanel($this->menuId, 'poi.panel.edit');
+        $rootPanel->add(new FormTile($form, true));
         $rootPanel->add(new PanelDeleteFooterTile($this->generateUrl('tixiapi_poi_delete', array('poiId' => $poiId)),'poi.button.delete'));
+
         return new Response($tileRenderer->render($rootPanel));
     }
 
@@ -165,7 +185,7 @@ class POIController extends Controller {
      * @param string $method
      * @return \Symfony\Component\Form\Form
      */
-    protected function getForm($targetRoute = null, $poiDTO = null, $parameters = array(), $method = 'POST') {
+    protected function getForm($poiDTO = null, $targetRoute = null, $parameters = array(), $method = 'POST') {
         if ($targetRoute) {
             $options = array(
                 'action' => $this->generateUrl($targetRoute, $parameters),
@@ -174,7 +194,7 @@ class POIController extends Controller {
         } else {
             $options = array();
         }
-        return $this->createForm(new POIType(), $poiDTO, $options);
+        return $this->createForm(new POIType($this->menuId), $poiDTO, $options);
     }
 
     /**
@@ -186,7 +206,7 @@ class POIController extends Controller {
         $poiRepository = $this->get('poi_repository');
         $poi = $poiRepository->find($poiId);
         if (null === $poi) {
-            throw $this->createNotFoundException('The POI with id ' . $poi . ' does not exist');
+            throw $this->createNotFoundException('The poi with id ' . $poi . ' does not exist');
         }
         return $poi;
     }

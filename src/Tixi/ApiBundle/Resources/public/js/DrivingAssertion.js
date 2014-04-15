@@ -7,14 +7,14 @@ function RepeatedDrivingAssertion() {
     this._weeklyView = null;
     this._monthlyView = null;
 
-    this.init = function(trans, frequency) {
+    this.init = function(trans, frequency, formId) {
         _this._weeklyView = $('.weeklyPart');
         _this._monthlyView = $('.monthlyPart');
 
         _this._weeklyAssertionController = new ShiftSelectionController();
-        _this._weeklyAssertionController.init('weeklyShiftSelections', trans);
+        _this._weeklyAssertionController.init('weeklyShiftSelections', trans, formId);
         _this._monthlyAssertionController = new ShiftSelectionController();
-        _this._monthlyAssertionController.init('monthlyShiftSelections', trans);
+        _this._monthlyAssertionController.init('monthlyShiftSelections', trans, formId);
         _this._initListeners();
         if(frequency) {_this._toggleFrequency(frequency);}
     }
@@ -72,9 +72,12 @@ function ShiftSelectionController() {
     this._selectionIdentifier = null;
     this._trans = null;
 
-    this.init = function(selectionIdentifier, trans) {
+    this._formId = null;
+
+    this.init = function(selectionIdentifier, trans, formId) {
         _this._trans = trans;
         _this._selectionIdentifier = selectionIdentifier;
+        _this._formId = formId;
         _this._shiftSelectionHolder = $('.'+selectionIdentifier);
         _this._shiftSelectionIndex = _this._shiftSelectionHolder.find('li').length;
         _this._shiftSelections = new Array();
@@ -124,7 +127,7 @@ function ShiftSelectionController() {
             _newSelection = _newSelection.replace(/__label__/g, selectionText),
             _selectionDomElement = $('<li></li>').append(_newSelection);
         _this._shiftSelectionHolder.append(_selectionDomElement);
-        $('#repeatedDrivingAssertion_'+_this._selectionIdentifier+'_'+_index+'_selectionId').val(_this._constructSelectionId(selectedOccurency,selectedDay));
+        $('#'+_this._formId+'_'+_this._selectionIdentifier+'_'+_index+'_selectionId').val(_this._constructSelectionId(selectedOccurency,selectedDay));
         _this._shiftSelections.push(new ShiftSelection(_this._constructSelectionId(selectedOccurency, selectedDay), _selectionDomElement));
     }
 

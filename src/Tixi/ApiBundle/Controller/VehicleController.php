@@ -18,6 +18,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Tixi\ApiBundle\Form\VehicleType;
 use Tixi\ApiBundle\Interfaces\VehicleAssembler;
 use Tixi\ApiBundle\Interfaces\VehicleRegisterDTO;
+use Tixi\ApiBundle\Menu\MenuService;
+use Tixi\ApiBundle\Shared\DataGrid\GridControllers\VehicleDataGridController;
 use Tixi\ApiBundle\Shared\DataGrid\GridControllers\VehicleDataGridControls;
 use Tixi\ApiBundle\Tile\Core\FormTile;
 use Tixi\ApiBundle\Tile\Core\PanelDeleteFooterTile;
@@ -26,7 +28,6 @@ use Tixi\ApiBundle\Tile\Core\PanelTile;
 use Tixi\ApiBundle\Tile\Core\RootPanel;
 use Tixi\ApiBundle\Tile\Vehicle\VehicleRegisterFormViewTile;
 use Tixi\CoreDomain\Vehicle;
-use Tixi\CoreDomain\VehicleRepository;
 
 
 /**
@@ -37,6 +38,12 @@ use Tixi\CoreDomain\VehicleRepository;
  */
 class VehicleController extends Controller {
 
+    protected $menuId;
+
+    public function __construct() {
+        $this->menuId = MenuService::$menuVehicleId;
+    }
+
     /**
      * @Route("",name="tixiapi_vehicles_get")
      * @Method({"GET","POST"})
@@ -45,8 +52,8 @@ class VehicleController extends Controller {
      * @return Response
      */
     public function getVehiclesAction(Request $request, $embeddedState = false) {
-        $embeddedParameter = (null === $request->get('embedded') || $request->get('embedded') === 'false') ? false : true;
-        $isEmbedded = ($embeddedState || $embeddedParameter);
+        $embeddedState = $embeddedState || $request->get('embedded') === "true";
+        $isPartial = $request->get('partial') === "true";
 
         $dataGridHandler = $this->get('tixi_api.datagridhandler');
         $dataGridControllerFactory = $this->get('tixi_api.datagridcontrollerfactory');
@@ -54,7 +61,16 @@ class VehicleController extends Controller {
 
         $gridController = $dataGridControllerFactory->createVehicleController($embeddedState);
         $dataGridTile = $dataGridHandler->createDataGridTileByRequest($request, $gridController);
-        return new Response($tileRenderer->render($dataGridTile));
+
+        $rootPanel = null;
+        if(!$embeddedState && !$isPartial) {
+            $rootPanel = new RootPanel($this->menuId, 'vehicle.list.name');
+            $rootPanel->add($dataGridTile);
+        }else {
+            $rootPanel = $dataGridTile;
+        }
+
+        return new Response($tileRenderer->render($rootPanel));
     }
 
     /**
@@ -78,7 +94,7 @@ class VehicleController extends Controller {
         $gridController = $dataGridControllerFactory->createServicePlanController(true, array('vehicleId' => $vehicleId));
         $gridTile = $dataGridHandler->createEmbeddedDataGridTile($gridController);
 
-        $rootPanel = new RootPanel('tixiapi_vehicles_get', 'vehicle.panel.name', $vehicle->getName());
+        $rootPanel = new RootPanel($this->menuId, 'vehicle.panel.name', $vehicle->getName());
         $panelSplitter = $rootPanel->add(new PanelSplitterTile('1:1'));
         $formPanel = $panelSplitter->addLeft(new PanelTile('vehicle.panel.details', PanelTile::$primaryType));
 
@@ -86,6 +102,7 @@ class VehicleController extends Controller {
         $gridPanel = $panelSplitter->addRight(new PanelTile('serviceplan.panel.embedded'));
         $gridPanel->add($gridTile);
         $rootPanel->add(new PanelDeleteFooterTile($this->generateUrl('tixiapi_vehicle_delete', array('vehicleId' => $vehicleId)),'vehicle.button.delete'));
+
         return new Response($tileRenderer->render($rootPanel));
     }
 
@@ -100,6 +117,7 @@ class VehicleController extends Controller {
         $vehicle = $this->getVehicle($vehicleId);
         $vehicle->deleteLogically();
         $this->get('entity_manager')->flush();
+
         return $this->redirect($this->generateUrl('tixiapi_vehicles_get'));
     }
 
@@ -122,8 +140,8 @@ class VehicleController extends Controller {
             return $this->redirect($this->generateUrl('tixiapi_vehicle_get', array('vehicleId' => $vehicle->getId())));
         }
 
-        $rootPanel = new RootPanel('tixiapi_vehicles_get', 'vehicle.panel.new');
-        $rootPanel->add(new FormTile('vehicleNewForm', $form, true));
+        $rootPanel = new RootPanel($this->menuId, 'vehicle.panel.new');
+        $rootPanel->add(new FormTile($form, true));
 
         return new Response($tileRenderer->render($rootPanel));
     }
@@ -140,14 +158,13 @@ class VehicleController extends Controller {
         $dataGridHandler = $this->get('tixi_api.datagridhandler');
         $dataGridControllerFactory = $this->get('tixi_api.datagridcontrollerfactory');
         $tileRenderer = $this->get('tixi_api.tilerenderer');
-        $vehicleRepository = $this->get('vehicle_repository');
         /** @var VehicleAssembler $assembler */
         $assembler = $this->get('tixi_api.assemblervehicle');
 
         $vehicle = $this->getVehicle($vehicleId);
         $vehicleDTO = $assembler->toVehicleRegisterDTO($vehicle);
 
-        $form = $this->getForm(null, $vehicleDTO);
+        $form = $this->getForm($vehicleDTO);
         $form->handleRequest($request);
         if ($form->isValid()) {
             $vehicleDTO = $form->getData();
@@ -159,13 +176,14 @@ class VehicleController extends Controller {
         $gridController = $dataGridControllerFactory->createServicePlanController(true, array('vehicleId' => $vehicleId));
         $gridTile = $dataGridHandler->createEmbeddedDataGridTile($gridController);
 
-        $rootPanel = new RootPanel('tixiapi_vehicles_get', 'vehicle.panel.name', $vehicle->getName());
+        $rootPanel = new RootPanel($this->menuId, 'vehicle.panel.name', $vehicle->getName());
         $panelSplitter = $rootPanel->add(new PanelSplitterTile('1:1'));
         $formPanel = $panelSplitter->addLeft(new PanelTile('vehicle.panel.details', PanelTile::$primaryType));
-        $formPanel->add(new FormTile('vehicleForm', $form));
+        $formPanel->add(new FormTile($form));
         $gridPanel = $panelSplitter->addRight(new PanelTile('vehicle.panel.serviceplans'));
         $gridPanel->add($gridTile);
         $rootPanel->add(new PanelDeleteFooterTile($this->generateUrl('tixiapi_vehicle_delete', array('vehicleId' => $vehicleId)),'vehicle.button.delete'));
+
         return new Response($tileRenderer->render($rootPanel));
     }
 
@@ -188,13 +206,13 @@ class VehicleController extends Controller {
     }
 
     /**
-     * @param null $targetRoute
      * @param null $vehicleDTO
+     * @param null $targetRoute
      * @param array $parameters
      * @param string $method
      * @return \Symfony\Component\Form\Form
      */
-    protected function getForm($targetRoute = null, $vehicleDTO = null, $parameters = array(), $method = 'POST') {
+    protected function getForm($vehicleDTO = null, $targetRoute = null, $parameters = array(), $method = 'POST') {
         if ($targetRoute) {
             $options = array(
                 'action' => $this->generateUrl($targetRoute, $parameters),
@@ -203,7 +221,7 @@ class VehicleController extends Controller {
         } else {
             $options = array();
         }
-        return $this->createForm(new VehicleType(), $vehicleDTO, $options);
+        return $this->createForm(new VehicleType($this->menuId), $vehicleDTO, $options);
     }
 
     /**
@@ -215,10 +233,8 @@ class VehicleController extends Controller {
         $vehicleRepository = $this->get('vehicle_repository');
         $vehicle = $vehicleRepository->find($vehicleId);
         if (null === $vehicle) {
-            throw $this->createNotFoundException('The Vehicle with id ' . $vehicleId . ' does not exist');
+            throw $this->createNotFoundException('The vehicle with id ' . $vehicleId . ' does not exist');
         }
         return $vehicle;
     }
-
-
 }

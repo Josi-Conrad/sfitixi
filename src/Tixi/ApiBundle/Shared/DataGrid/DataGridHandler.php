@@ -39,18 +39,18 @@ class DataGridHandler {
     protected $annotationReader;
     protected $router;
 
-    public function createDataGridTileByRequest(Request $request, DataGridAbstractController $gridControl) {
-        $dataGridInputState = $this->initStateByRequest($request, $gridControl->getReferenceDTO());
+    public function createDataGridTileByRequest(Request $request, DataGridAbstractController $gridController) {
+        $dataGridInputState = $this->initStateByRequest($request, $gridController->getReferenceDTO());
         $fgeaFilter = $this->createFgeaFilter($dataGridInputState);
-        $sourceDTOs = $gridControl->constructDtosFromFgeaFilter($fgeaFilter);
-        $totalAmountOfRows = $gridControl->getTotalAmountOfRowsByFgeaFilter($fgeaFilter);
-        return $this->createDataGridTile($dataGridInputState, $sourceDTOs, $totalAmountOfRows, $gridControl);
+        $sourceDTOs = $gridController->constructDtosFromFgeaFilter($fgeaFilter);
+        $totalAmountOfRows = $gridController->getTotalAmountOfRowsByFgeaFilter($fgeaFilter);
+        return $this->createDataGridTile($dataGridInputState, $sourceDTOs, $totalAmountOfRows, $gridController);
     }
 
     public function createEmbeddedDataGridTile(DataGridAbstractController $gridController) {
         $headers = $this->createHeaderArray($gridController->getReferenceDTO());
         $outputState = DataGridOutputState::createEmbeddedOutputState($gridController->getGridIdentifier(), $headers, $gridController->getDataSrcUrl());
-        $embeddedTile = new DataGridEmbeddedTile($outputState, $gridController->createDataGridJsConf());
+        $embeddedTile = new DataGridEmbeddedTile($outputState, $gridController->createDataGridJsConf(), $gridController->getGridIdentifier());
         $embeddedTile->add($gridController->createCustomControlTile());
         return $embeddedTile;
     }
@@ -74,15 +74,9 @@ class DataGridHandler {
             $headers = $this->createHeaderArray($gridController->getReferenceDTO());
             $outputState = DataGridOutputState::createOutputState($gridController->getGridIdentifier(), $headers, $rows, $totalAmountOfRows);
             $dataGridTile = null;
-            if(!$gridController->isInEmbeddedState()) {
-                $returnTile = new RootPanel($gridController->getMenuIdentifier(), $gridController->getGridDisplayTitel());
-                $dataGridTile = $returnTile->add(new DataGridTile($outputState, $gridController->createDataGridJsConf()));
-            }else {
-                $returnTile = new PanelTile($gridController->getGridDisplayTitel());
-                $dataGridTile = $returnTile->add(new DataGridEmbeddedTile($outputState, $gridController->createDataGridJsConf()));
-            }
-            $dataGridTile->add($gridController->createCustomControlTile());
-            $dataGridTile->add(new DataGridRowTableTile($outputState));
+            $returnTile = new DataGridTile($outputState, $gridController->createDataGridJsConf(), $gridController->getGridIdentifier());
+            $returnTile->add($gridController->createCustomControlTile());
+            $returnTile->add(new DataGridRowTableTile($outputState));
         }else {
             $outputState = DataGridOutputState::createPartialOutputState($gridController->getGridIdentifier(), $rows, $totalAmountOfRows);
             $returnTile = new DataGridRowTableTile($outputState);

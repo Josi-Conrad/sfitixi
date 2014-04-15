@@ -17,6 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Tixi\ApiBundle\Form\AbsentType;
 use Tixi\ApiBundle\Interfaces\AbsentListDTO;
 use Tixi\ApiBundle\Interfaces\AbsentRegisterDTO;
+use Tixi\ApiBundle\Menu\MenuService;
 use Tixi\ApiBundle\Tile\Core\FormTile;
 use Tixi\ApiBundle\Tile\Core\PanelDeleteFooterTile;
 use Tixi\ApiBundle\Tile\Core\RootPanel;
@@ -32,6 +33,12 @@ use Tixi\CoreDomain\Passenger;
  */
 class PassengerAbsentController extends Controller {
 
+    protected $menuId;
+
+    public function __construct() {
+        $this->menuId = MenuService::$menuPassengerAbsentId;
+    }
+
     /**
      * @Route("", name="tixiapi_passenger_absents_get")
      * @Method({"GET","POST"})
@@ -41,7 +48,8 @@ class PassengerAbsentController extends Controller {
      * @return Response
      */
     public function getAbsentsAction($passengerId, Request $request, $embeddedState = false) {
-        $embeddedState = $embeddedState || ($request->get('embedded') !== null && $request->get('embedded'));
+        $embeddedState = $embeddedState || $request->get('embedded') === "true";
+        $isPartial = $request->get('partial') === "true";
 
         $dataGridHandler = $this->get('tixi_api.datagridhandler');
         $dataGridControllerFactory = $this->get('tixi_api.datagridcontrollerfactory');
@@ -49,7 +57,15 @@ class PassengerAbsentController extends Controller {
 
         $gridController = $dataGridControllerFactory->createPassengerAbsentController($embeddedState, array('passengerId' => $passengerId));
         $dataGridTile = $dataGridHandler->createDataGridTileByRequest($request, $gridController);
-        return new Response($tileRenderer->render($dataGridTile));
+
+        $rootPanel = null;
+        if(!$embeddedState && !$isPartial) {
+            // doesn't exist at the moment
+        }else {
+            $rootPanel = $dataGridTile;
+        }
+
+        return new Response($tileRenderer->render($rootPanel));
     }
 
     /**
@@ -68,11 +84,12 @@ class PassengerAbsentController extends Controller {
         $absent = $this->getAbsent($absentId);
         $absentDTO = $assembler->absentToAbsentRegisterDTO($absent);
 
-        $rootPanel = new RootPanel('tixiapi_passengers_get', 'absent.panel.details');
+        $rootPanel = new RootPanel($this->menuId, 'absent.panel.details');
         $rootPanel->add(new AbsentRegisterFormViewTile('absentRequest', $absentDTO,
             $this->generateUrl('tixiapi_passenger_absent_edit', array('passengerId' => $passengerId, 'absentId' => $absentId)),true));
         $rootPanel->add(new PanelDeleteFooterTile($this->generateUrl('tixiapi_passenger_absent_delete',
             array('passengerId' => $passengerId, 'absentId'=>$absentId)),'absent.button.delete'));
+
         return new Response($tileRenderer->render($rootPanel));
     }
 
@@ -88,6 +105,7 @@ class PassengerAbsentController extends Controller {
         $absent = $this->getAbsent($absentId);
         $absent->deleteLogically();
         $this->get('entity_manager')->flush();
+
         return $this->redirect($this->generateUrl('tixiapi_passenger_get',array('passengerId' => $passengerId)));
     }
 
@@ -102,8 +120,8 @@ class PassengerAbsentController extends Controller {
      */
     public function newAbsentAction(Request $request, $passengerId) {
         $tileRenderer = $this->get('tixi_api.tilerenderer');
-        $passenger = $this->getPassenger($passengerId);
 
+        $passenger = $this->getPassenger($passengerId);
         $form = $this->getForm();
         $form->handleRequest($request);
         if ($form->isValid()) {
@@ -112,9 +130,8 @@ class PassengerAbsentController extends Controller {
             $this->get('entity_manager')->flush();
             return $this->redirect($this->generateUrl('tixiapi_passenger_get', array('passengerId' => $passengerId)));
         }
-
-        $rootPanel = new RootPanel('tixiapi_passengers_get', 'absent.panel.new');
-        $rootPanel->add(new FormTile('absentNewForm', $form, true));
+        $rootPanel = new RootPanel($this->menuId, 'absent.panel.new');
+        $rootPanel->add(new FormTile($form, true));
 
         return new Response($tileRenderer->render($rootPanel));
     }
@@ -138,7 +155,7 @@ class PassengerAbsentController extends Controller {
         $passenger = $this->getPassenger($passengerId);
         $absentDTO = $absentAssembler->absentToAbsentRegisterDTO($absent);
 
-        $form = $this->getForm(null, $absentDTO);
+        $form = $this->getForm($absentDTO);
         $form->handleRequest($request);
         if ($form->isValid()) {
             $absentDTO = $form->getData();
@@ -147,10 +164,11 @@ class PassengerAbsentController extends Controller {
             return $this->redirect($this->generateUrl('tixiapi_passenger_get', array('passengerId' => $passengerId)));
         }
 
-        $rootPanel = new RootPanel('tixiapi_passengers_get', 'absent.panel.edit');
-        $rootPanel->add(new FormTile('absentNewForm', $form, true));
+        $rootPanel = new RootPanel($this->menuId, 'absent.panel.edit');
+        $rootPanel->add(new FormTile($form, true));
         $rootPanel->add(new PanelDeleteFooterTile($this->generateUrl('tixiapi_passenger_absent_delete',
             array('passengerId' => $passengerId, 'absentId'=>$absentId)),'absent.button.delete'));
+
         return new Response($tileRenderer->render($rootPanel));
     }
 
@@ -179,7 +197,7 @@ class PassengerAbsentController extends Controller {
      * @param string $method
      * @return \Symfony\Component\Form\Form
      */
-    protected function getForm($targetRoute = null, $absentDTO = null, $parameters = array(), $method = 'POST') {
+    protected function getForm($absentDTO = null, $targetRoute = null, $parameters = array(), $method = 'POST') {
         if ($targetRoute) {
             $options = array(
                 'action' => $this->generateUrl($targetRoute, $parameters),
@@ -188,7 +206,7 @@ class PassengerAbsentController extends Controller {
         } else {
             $options = array();
         }
-        return $this->createForm(new AbsentType(), $absentDTO, $options);
+        return $this->createForm(new AbsentType($this->menuId), $absentDTO, $options);
     }
 
     /**
@@ -200,7 +218,7 @@ class PassengerAbsentController extends Controller {
         $absentRepository = $this->get('absent_repository');
         $absent = $absentRepository->find($absentId);
         if(null === $absent) {
-            throw $this->createNotFoundException('The Absent with id ' . $absentId . ' does not exists');
+            throw $this->createNotFoundException('The absent with id ' . $absentId . ' does not exists');
         }
         return $absent;
     }

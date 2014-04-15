@@ -16,11 +16,14 @@ class LinkButtonTile extends AbstractTile{
     public static $primaryType = 'primary';
     public static $defaultType = 'default';
 
+    protected $buttonId;
     protected $targetSrc;
     protected $type;
     protected $displayText;
 
-    public function __construct($targetSrc, $displayText, $type=null, $replaceId=null, $replaceWith=null) {
+
+    public function __construct($buttonId, $targetSrc, $displayText, $type=null, $replaceId=null, $replaceWith=null) {
+        $this->buttonId = $buttonId;
         $this->displayText = $displayText;
         $this->type = (null !== $type) ? $type : self::$defaultType;
         $this->targetSrc = (null !== $replaceId && null !== $replaceWith) ?
@@ -34,7 +37,7 @@ class LinkButtonTile extends AbstractTile{
 
     public function getViewParameters()
     {
-        return array('displayText'=>$this->displayText, 'targetSrc'=>$this->targetSrc, 'type'=>$this->type);
+        return array('buttonId'=>$this->buttonId, 'displayText'=>$this->displayText, 'targetSrc'=>$this->targetSrc, 'type'=>$this->type);
     }
 
     public function getTemplateName()

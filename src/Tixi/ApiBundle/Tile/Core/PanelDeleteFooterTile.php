@@ -14,7 +14,7 @@ use Tixi\ApiBundle\Tile\AbstractTile;
 class PanelDeleteFooterTile extends AbstractTile{
 
     public function __construct($targetSrc, $deleteText) {
-        $this->add(new DeleteButtonTile($targetSrc, $deleteText));
+        $this->add(new DeleteButtonTile('delete', $targetSrc, $deleteText));
     }
 
     public function getViewIdentifiers() {

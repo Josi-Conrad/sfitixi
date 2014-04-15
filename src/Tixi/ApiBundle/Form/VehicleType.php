@@ -16,12 +16,13 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints\DateTime;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Regex;
+use Tixi\ApiBundle\Form\Shared\CommonAbstractType;
 
 /**
  * Class VehicleType
  * @package Tixi\ApiBundle\Form
  */
-class VehicleType extends AbstractType{
+class VehicleType extends CommonAbstractType{
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -76,16 +77,6 @@ class VehicleType extends AbstractType{
             'label' => 'vehicle.field.managementdetails',
             'required'  => false,
         ));
-    }
-
-    /**
-     * Returns the name of this type.
-     *
-     * @return string The name of this type
-     */
-    public function getName()
-    {
-        return 'vehicle';
     }
 
     /**

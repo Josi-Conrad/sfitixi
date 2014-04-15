@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Tixi\ApiBundle\Form\DriverType;
 use Tixi\ApiBundle\Interfaces\DriverRegisterDTO;
+use Tixi\ApiBundle\Menu\MenuService;
 use Tixi\ApiBundle\Tile\Core\FormTile;
 use Tixi\ApiBundle\Tile\Core\PanelDeleteFooterTile;
 use Tixi\ApiBundle\Tile\Core\PanelSplitterTile;
@@ -30,6 +31,11 @@ use Tixi\ApiBundle\Tile\Driver\DriverRegisterFormViewTile;
  * @Breadcrumb("driver.breadcrumb.name", route="tixiapi_drivers_get")
  */
 class DriverController extends Controller {
+    protected $menuId;
+
+    public function __construct() {
+        $this->menuId = MenuService::$menuDriverId;
+    }
     /**
      * @Route("", name="tixiapi_drivers_get")
      * @Method({"GET","POST"})
@@ -38,16 +44,25 @@ class DriverController extends Controller {
      * @return Response
      */
     public function getDriversAction(Request $request, $embeddedState = false) {
-        $embeddedParameter = (null === $request->get('embedded') || $request->get('embedded') === 'false') ? false : true;
-        $isEmbedded = ($embeddedState || $embeddedParameter);
+        $embeddedState = $embeddedState || $request->get('embedded') === "true";
+        $isPartial = $request->get('partial') === "true";
 
         $dataGridHandler = $this->get('tixi_api.datagridhandler');
         $dataGridControllerFactory = $this->get('tixi_api.datagridcontrollerfactory');
         $tileRenderer = $this->get('tixi_api.tilerenderer');
 
-        $gridController = $dataGridControllerFactory->createDriverController($isEmbedded);
+        $gridController = $dataGridControllerFactory->createDriverController($embeddedState);
         $dataGridTile = $dataGridHandler->createDataGridTileByRequest($request, $gridController);
-        return new Response($tileRenderer->render($dataGridTile));
+
+        $rootPanel = null;
+        if(!$embeddedState && !$isPartial) {
+            $rootPanel = new RootPanel($this->menuId, 'driver.list.name');
+            $rootPanel->add($dataGridTile);
+        }else {
+            // doesn't exist at the moment
+        }
+
+        return new Response($tileRenderer->render($rootPanel));
     }
 
     /**
@@ -59,7 +74,6 @@ class DriverController extends Controller {
      * @return Response
      */
     public function getDriverAction(Request $request, $driverId) {
-
         $dataGridHandler = $this->get('tixi_api.datagridhandler');
         $dataGridControllerFactory = $this->get('tixi_api.datagridcontrollerfactory');
         $tileRenderer = $this->get('tixi_api.tilerenderer');
@@ -74,7 +88,7 @@ class DriverController extends Controller {
         $repeatedAssertionPlanController = $dataGridControllerFactory->createRepeatedDrivingAssertionPlanController(true, array('driverId'=>$driverId));
         $repeatedAssertionGridTile = $dataGridHandler->createEmbeddedDataGridTile($repeatedAssertionPlanController);
 
-        $rootPanel = new RootPanel('tixiapi_drivers_get', 'driver.panel.name', $driver->getFirstname().' '.$driver->getLastname());
+        $rootPanel = new RootPanel($this->menuId, 'driver.panel.name', $driver->getFirstname().' '.$driver->getLastname());
         $panelSplitter = $rootPanel->add(new PanelSplitterTile('1:1'));
         $formPanel = $panelSplitter->addLeft(new PanelTile('driver.panel.details', PanelTile::$primaryType));
         $formPanel->add(new DriverRegisterFormViewTile('driverRequest', $driverDTO, $this->generateUrl('tixiapi_driver_edit', array('driverId' => $driverId))));
@@ -119,8 +133,8 @@ class DriverController extends Controller {
             return $this->redirect($this->generateUrl('tixiapi_driver_get', array('driverId' => $driver->getId())));
         }
 
-        $rootPanel = new RootPanel('tixiapi_drivers_get', 'driver.panel.new');
-        $rootPanel->add(new FormTile('driverNewForm', $form, true));
+        $rootPanel = new RootPanel($this->menuId, 'driver.panel.new');
+        $rootPanel->add(new FormTile($form, true));
 
         return new Response($tileRenderer->render($rootPanel));
     }
@@ -138,17 +152,13 @@ class DriverController extends Controller {
         $dataGridHandler = $this->get('tixi_api.datagridhandler');
         $dataGridControllerFactory = $this->get('tixi_api.datagridcontrollerfactory');
         $tileRenderer = $this->get('tixi_api.tilerenderer');
-        $driverRepository = $this->get('driver_repository');
         $driverAssembler = $this->get('tixi_api.assemblerdriver');
 
         /**@var $driver \Tixi\CoreDomain\Driver */
-        $driver = $driverRepository->find($driverId);
-        if (null === $driver) {
-            throw $this->createNotFoundException('This driver does not exist');
-        }
+        $driver = $this->getDriver($driverId);
         $driverDTO = $driverAssembler->driverToDriverRegisterDTO($driver);
 
-        $form = $this->getForm(null, $driverDTO);
+        $form = $this->getForm($driverDTO);
         $form->handleRequest($request);
         if ($form->isValid()) {
             $driverDTO = $form->getData();
@@ -163,10 +173,10 @@ class DriverController extends Controller {
         $repeatedAssertionPlanController = $dataGridControllerFactory->createRepeatedDrivingAssertionPlanController(true, array('driverId'=>$driverId));
         $repeatedAssertionGridTile = $dataGridHandler->createEmbeddedDataGridTile($repeatedAssertionPlanController);
 
-        $rootPanel = new RootPanel('tixiapi_drivers_get', 'driver.panel.name', $driver->getFirstname().' '.$driver->getLastname());
+        $rootPanel = new RootPanel($this->menuId, 'driver.panel.name', $driver->getFirstname().' '.$driver->getLastname());
         $panelSplitter = $rootPanel->add(new PanelSplitterTile('1:1'));
         $formPanel = $panelSplitter->addLeft(new PanelTile('driver.panel.edit', PanelTile::$primaryType));
-        $formPanel->add(new FormTile('driverForm', $form));
+        $formPanel->add(new FormTile($form));
         $absentGridPanel = $panelSplitter->addRight(new PanelTile('absent.panel.embedded'));
         $absentGridPanel->add($absentGridTile);
         $repeatedAssertionGridPanel = $panelSplitter->addRight(new PanelTile('repeateddrivingmission.panel.embedded'));
@@ -199,7 +209,7 @@ class DriverController extends Controller {
      * @param string $method
      * @return \Symfony\Component\Form\Form
      */
-    protected function getForm($targetRoute = null, $driverDTO = null, $parameters = array(), $method = 'POST') {
+    protected function getForm($driverDTO = null, $targetRoute = null, $parameters = array(), $method = 'POST') {
         if ($targetRoute) {
             $options = array(
                 'action' => $this->generateUrl($targetRoute, $parameters),
@@ -208,7 +218,7 @@ class DriverController extends Controller {
         } else {
             $options = array();
         }
-        return $this->createForm(new DriverType(), $driverDTO, $options);
+        return $this->createForm(new DriverType($this->menuId), $driverDTO, $options);
     }
 
     /**
@@ -220,7 +230,7 @@ class DriverController extends Controller {
         $driverRepository = $this->get('driver_repository');
         $driver = $driverRepository->find($driverId);
         if(null === $driver) {
-            throw $this->createNotFoundException('The Driver with id ' . $driverId . ' does not exist');
+            throw $this->createNotFoundException('The driver with id ' . $driverId . ' does not exist');
         }
         return $driver;
     }

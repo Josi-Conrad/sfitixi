@@ -5,7 +5,7 @@ vehicle.breadcrumb.name: Fahrzeuge
 vehicle.panel.name: Fahrzeug
 vehicle.panel.new: Neues Fahrzeug
 vehicle.panel.details: Fahrzeug Details
-vehicle.panel.serviceplans: Zugeordnete Servicepläne
+vehicle.panel.serviceplans: Servicepläne
 
 vehicle.field.name: Fahrzeugbezeichnung
 vehicle.field.licencenumber: Kennzeichen

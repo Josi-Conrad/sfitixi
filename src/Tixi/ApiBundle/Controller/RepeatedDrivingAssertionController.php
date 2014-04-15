@@ -20,6 +20,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Tixi\ApiBundle\Interfaces\Dispo\RepeatedDrivingAssertionAssembler;
 use Tixi\ApiBundle\Interfaces\Dispo\RepeatedDrivingAssertionRegisterDTO;
 use Tixi\ApiBundle\Interfaces\Dispo\ShiftSelectionDTO;
+use Tixi\ApiBundle\Menu\MenuService;
 use Tixi\ApiBundle\Tile\Core\FormTile;
 use Tixi\ApiBundle\Tile\Core\PanelDeleteFooterTile;
 use Tixi\ApiBundle\Tile\Core\RootPanel;
@@ -40,6 +41,12 @@ use Tixi\CoreDomainBundle\Repository\Dispo\RepeatedDrivingAssertionRepositoryDoc
  */
 class RepeatedDrivingAssertionController extends Controller{
 
+    protected $menuId;
+
+    public function __construct() {
+        $this->menuId = MenuService::$menuDriverRepeatedAssertionId;
+    }
+
     /**
      * @Route("", name="tixiapi_driver_repeatedassertionplans_get")
      * @Method({"GET","POST"})
@@ -49,7 +56,8 @@ class RepeatedDrivingAssertionController extends Controller{
      * @return Response
      */
     public function getRepeatedAssertionPlansAction(Request $request, $driverId, $embeddedState = false) {
-        $embeddedState = $embeddedState || ($request->get('embedded') !== null && $request->get('embedded'));
+        $embeddedState = $embeddedState || $request->get('embedded') === "true";
+        $isPartial = $request->get('partial') === "true";
 
         $dataGridHandler = $this->get('tixi_api.datagridhandler');
         $dataGridControllerFactory = $this->get('tixi_api.datagridcontrollerfactory');
@@ -57,7 +65,15 @@ class RepeatedDrivingAssertionController extends Controller{
 
         $gridController = $dataGridControllerFactory->createRepeatedDrivingAssertionPlanController($embeddedState, array('driverId' => $driverId));
         $dataGridTile = $dataGridHandler->createDataGridTileByRequest($request, $gridController);
-        return new Response($tileRenderer->render($dataGridTile));
+
+        $rootPanel = null;
+        if(!$embeddedState && !$isPartial) {
+            // doesn't exist at the moment
+        }else {
+            $rootPanel = $dataGridTile;
+        }
+
+        return new Response($tileRenderer->render($rootPanel));
     }
 
     /**
@@ -72,8 +88,8 @@ class RepeatedDrivingAssertionController extends Controller{
         $assertionPlan = $this->getAssertionPlan($assertionPlanId);
         $assertionPlan->deleteLogically();
         $this->get('entity_manager')->flush();
-        return $this->redirect($this->generateUrl('tixiapi_driver_get',array('driverId' => $driverId)));
 
+        return $this->redirect($this->generateUrl('tixiapi_driver_get',array('driverId' => $driverId)));
     }
 
     /**
@@ -87,8 +103,9 @@ class RepeatedDrivingAssertionController extends Controller{
      */
     public function newRepeatedAssertionPlanAction(Request $request, $driverId) {
         $tileRenderer = $this->get('tixi_api.tilerenderer');
+
         $driver = $this->getDriver($driverId);
-        $form = $this->createForm(new RepeatedDrivingAssertionType(), new RepeatedDrivingAssertionRegisterDTO());
+        $form = $this->createForm(new RepeatedDrivingAssertionType($this->menuId), new RepeatedDrivingAssertionRegisterDTO());
         $form->handleRequest($request);
         if ($form->isValid()) {
             $assertionFormDTO = $form->getData();
@@ -97,8 +114,8 @@ class RepeatedDrivingAssertionController extends Controller{
             return $this->redirect($this->generateUrl('tixiapi_driver_get', array('driverId'=>$driverId)));
         }
 
-        $rootPanel = new RootPanel('tixiapi_drivers_get', 'repeateddrivingmission.panel.new');
-        $rootPanel->add(new RepeatedAssertionTile('monthlyAssertion',$form));
+        $rootPanel = new RootPanel($this->menuId, 'repeateddrivingmission.panel.new');
+        $rootPanel->add(new RepeatedAssertionTile($form));
 
         return new Response($tileRenderer->render($rootPanel));
     }
@@ -121,13 +138,11 @@ class RepeatedDrivingAssertionController extends Controller{
         $assembler = $this->get('tixi_api.repeateddrivingassertionplanassembler');
 
         /** @var RepeatedDrivingAssertionPlan $assertionPlan */
-        $assertionPlan = $assertionPlanRepository->find($assertionPlanId);
+        $assertionPlan = $this->getAssertionPlan($assertionPlanId);
         $driver = $this->getDriver($driverId);
-        if(null === $assertionPlan) {
-            throw $this->createNotFoundException('The assertion plan with id '+$assertionPlanId+' does not exist');
-        }
         $assertionDTO = $assembler->toRepeatedRegisterDTO($assertionPlan);
-        $form = $this->createForm(new RepeatedDrivingAssertionType(), $assertionDTO);
+
+        $form = $this->createForm(new RepeatedDrivingAssertionType($this->menuId), $assertionDTO);
         $form->handleRequest($request);
         if ($form->isValid()) {
             $assertionDTO = $form->getData();
@@ -136,10 +151,11 @@ class RepeatedDrivingAssertionController extends Controller{
             return $this->redirect($this->generateUrl('tixiapi_driver_get', array('driverId'=>$driverId)));
         }
 
-        $rootPanel = new RootPanel('tixiapi_drivers_get', 'repeateddrivingmission.panel.edit');
-        $rootPanel->add(new RepeatedAssertionTile('monthlyAssertion',$form, $assertionPlan->getFrequency()));
+        $rootPanel = new RootPanel($this->menuId, 'repeateddrivingmission.panel.edit');
+        $rootPanel->add(new RepeatedAssertionTile($form, $assertionPlan->getFrequency()));
         $rootPanel->add(new PanelDeleteFooterTile($this->generateUrl('tixiapi_driver_repeatedassertionplan_delete',
             array('driverId' => $driverId, 'assertionPlanId'=>$assertionPlanId)),'repeateddrivingmission.button.delete'));
+
         return new Response($tileRenderer->render($rootPanel));
     }
 
@@ -191,7 +207,7 @@ class RepeatedDrivingAssertionController extends Controller{
         $assertionPlanRepository = $this->get('repeateddrivingassertionplan_repository');
         $assertionPlan = $assertionPlanRepository->find($assertionPlanId);
         if(null === $assertionPlan) {
-            throw $this->createNotFoundException('The AssertionPlan with id ' . $assertionPlanId . ' does not exist');
+            throw $this->createNotFoundException('The assertionplan with id ' . $assertionPlanId . ' does not exist');
         }
         return $assertionPlan;
     }

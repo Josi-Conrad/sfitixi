@@ -1,5 +1,5 @@
 {% set embedded = embedded|default(false) %}
-<button type="button"
+<button type="button" id="{{ 'fpx_' ~ menuId ~ '_' ~ buttonId }}"
         class="customLink deleteButton btn btn-danger {% if embedded %}btn-sm{% endif %}"
         data-targetSrc="{{ targetSrc }}" data-deleteConfirmText="{{ deleteConfirmText|trans }}">{{ displayText|trans }}
 

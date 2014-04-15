@@ -1,3 +1,4 @@
+{% set menuId = menuId|default('home') %}
 <!DOCTYPE html>
 <html class="no-js">
 <head>
@@ -31,7 +32,8 @@
     </div>
     <div class="clearfix"></div>
     <div>
-        {% include '::topNavigation.html.twig' %}
+        {{ renderMenu(menuId) }}
+        {#{% include '::topNavigation.html.twig' %}#}
     </div>
     <div class="row">
         {{ apy_breadcrumb_trail_render() }}

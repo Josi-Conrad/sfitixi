@@ -13,11 +13,13 @@ use Tixi\ApiBundle\Tile\AbstractTile;
 
 class TextLinkTile extends AbstractTile{
 
+    protected $buttonId;
     protected $targetSrc;
     protected $displayName;
     protected $resolvedLater;
 
-    public function __construct($targetSrc, $displayName, $resolvedLater = false, $replaceId=null, $replaceWith=null) {
+    public function __construct($buttonId, $targetSrc, $displayName, $resolvedLater = false, $replaceId=null, $replaceWith=null) {
+        $this->buttonId = $buttonId;
         $this->displayName = $displayName;
         $this->targetSrc = (null !== $replaceId && null !== $replaceWith) ?
             str_replace($replaceId, $replaceWith, $targetSrc) :
@@ -26,7 +28,7 @@ class TextLinkTile extends AbstractTile{
     }
 
     public function getViewParameters() {
-        return array('resolvedLater'=>$this->resolvedLater, 'displayName'=>$this->displayName, 'targetSrc'=>$this->targetSrc);
+        return array('buttonId'=>$this->buttonId, 'resolvedLater'=>$this->resolvedLater, 'displayName'=>$this->displayName, 'targetSrc'=>$this->targetSrc);
     }
 
     public function getTemplateName()

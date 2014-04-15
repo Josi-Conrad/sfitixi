@@ -16,12 +16,13 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints\DateTime;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Tixi\ApiBundle\Form\Shared\CommonAbstractType;
 
 /**
  * Class AbsentType
  * @package Tixi\ApiBundle\Form
  */
-class AbsentType extends AbstractType{
+class AbsentType extends CommonAbstractType{
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -38,16 +39,6 @@ class AbsentType extends AbstractType{
         $builder->add('endDate', 'datePicker', array(
             'label' => 'absent.field.enddate',
         ));
-    }
-
-    /**
-     * Returns the name of this type.
-     *
-     * @return string The name of this type
-     */
-    public function getName()
-    {
-        return 'absent';
     }
 
     /**

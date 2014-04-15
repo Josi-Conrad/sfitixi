@@ -17,6 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Tixi\ApiBundle\Form\AbsentType;
 use Tixi\ApiBundle\Interfaces\AbsentListDTO;
 use Tixi\ApiBundle\Interfaces\AbsentRegisterDTO;
+use Tixi\ApiBundle\Menu\MenuService;
 use Tixi\ApiBundle\Tile\Core\FormTile;
 use Tixi\ApiBundle\Tile\Core\PanelDeleteFooterTile;
 use Tixi\ApiBundle\Tile\Core\RootPanel;
@@ -30,7 +31,11 @@ use Tixi\CoreDomain\Driver;
  * @Breadcrumb("driver.breadcrumb.name", route="tixiapi_drivers_get")
  */
 class DriverAbsentController extends Controller {
+    protected $menuId;
 
+    public function __construct() {
+        $this->menuId = MenuService::$menuDriverAbsentId;
+    }
     /**
      * @Route("", name="tixiapi_driver_absents_get")
      * @Method({"GET","POST"})
@@ -40,7 +45,8 @@ class DriverAbsentController extends Controller {
      * @return Response
      */
     public function getAbsentsAction($driverId, Request $request, $embeddedState = false) {
-        $embeddedState = $embeddedState || ($request->get('embedded') !== null && $request->get('embedded'));
+        $embeddedState = $embeddedState || $request->get('embedded') === "true";
+        $isPartial = $request->get('partial') === "true";
 
         $dataGridHandler = $this->get('tixi_api.datagridhandler');
         $dataGridControllerFactory = $this->get('tixi_api.datagridcontrollerfactory');
@@ -48,7 +54,15 @@ class DriverAbsentController extends Controller {
 
         $gridController = $dataGridControllerFactory->createDriverAbsentController($embeddedState, array('driverId' => $driverId));
         $dataGridTile = $dataGridHandler->createDataGridTileByRequest($request, $gridController);
-        return new Response($tileRenderer->render($dataGridTile));
+
+        $rootPanel = null;
+        if(!$embeddedState && !$isPartial) {
+            // doesn't exist at the moment
+        }else {
+            $rootPanel = $dataGridTile;
+        }
+
+        return new Response($tileRenderer->render($rootPanel));
     }
 
     /**
@@ -68,11 +82,12 @@ class DriverAbsentController extends Controller {
         $absent = $this->getAbsent($absentId);
         $absentDTO = $assembler->absentToAbsentRegisterDTO($absent);
 
-        $rootPanel = new RootPanel('tixiapi_drivers_get', 'absent.panel.details');
+        $rootPanel = new RootPanel($this->menuId, 'absent.panel.details');
         $rootPanel->add(new AbsentRegisterFormViewTile('absentRequest', $absentDTO,
             $this->generateUrl('tixiapi_driver_absent_edit', array('driverId' => $driverId, 'absentId' => $absentId)),true));
         $rootPanel->add(new PanelDeleteFooterTile($this->generateUrl('tixiapi_driver_absent_delete',
             array('driverId' => $driverId, 'absentId'=>$absentId)),'absent.button.delete'));
+
         return new Response($tileRenderer->render($rootPanel));
     }
 
@@ -102,8 +117,8 @@ class DriverAbsentController extends Controller {
      */
     public function newAbsentAction(Request $request, $driverId) {
         $tileRenderer = $this->get('tixi_api.tilerenderer');
-        $driver = $this->getDriver($driverId);
 
+        $driver = $this->getDriver($driverId);
         $form = $this->getForm();
         $form->handleRequest($request);
         if ($form->isValid()) {
@@ -113,8 +128,8 @@ class DriverAbsentController extends Controller {
             return $this->redirect($this->generateUrl('tixiapi_driver_get', array('driverId' => $driverId)));
         }
 
-        $rootPanel = new RootPanel('tixiapi_drivers_get', 'absent.panel.new');
-        $rootPanel->add(new FormTile('absentNewForm', $form, true));
+        $rootPanel = new RootPanel($this->menuId, 'absent.panel.new');
+        $rootPanel->add(new FormTile($form, true));
 
         return new Response($tileRenderer->render($rootPanel));
     }
@@ -138,7 +153,7 @@ class DriverAbsentController extends Controller {
         $driver = $this->getDriver($driverId);
         $absentDTO = $absentAssembler->absentToAbsentRegisterDTO($absent);
 
-        $form = $this->getForm(null, $absentDTO);
+        $form = $this->getForm($absentDTO);
         $form->handleRequest($request);
         if ($form->isValid()) {
             $absentDTO = $form->getData();
@@ -147,8 +162,8 @@ class DriverAbsentController extends Controller {
             return $this->redirect($this->generateUrl('tixiapi_driver_get', array('driverId' => $driverId)));
         }
 
-        $rootPanel = new RootPanel('tixiapi_drivers_get', 'absent.panel.edit');
-        $rootPanel->add(new FormTile('absentNewForm', $form, true));
+        $rootPanel = new RootPanel($this->menuId, 'absent.panel.edit');
+        $rootPanel->add(new FormTile($form, true));
         $rootPanel->add(new PanelDeleteFooterTile($this->generateUrl('tixiapi_driver_absent_delete',
             array('driverId' => $driverId, 'absentId'=>$absentId)),'absent.button.delete'));
 
@@ -179,7 +194,7 @@ class DriverAbsentController extends Controller {
      * @param string $method
      * @return \Symfony\Component\Form\Form
      */
-    protected function getForm($targetRoute = null, $absentDTO = null, $parameters = array(), $method = 'POST') {
+    protected function getForm($absentDTO = null, $targetRoute = null, $parameters = array(), $method = 'POST') {
         if ($targetRoute) {
             $options = array(
                 'action' => $this->generateUrl($targetRoute, $parameters),
@@ -188,7 +203,7 @@ class DriverAbsentController extends Controller {
         } else {
             $options = array();
         }
-        return $this->createForm(new AbsentType(), $absentDTO, $options);
+        return $this->createForm(new AbsentType($this->menuId), $absentDTO, $options);
     }
 
     /**
@@ -200,7 +215,7 @@ class DriverAbsentController extends Controller {
         $absentRepository = $this->get('absent_repository');
         $absent = $absentRepository->find($absentId);
         if(null === $absent) {
-            throw $this->createNotFoundException('The Absent with id ' . $absentId . ' does not exists');
+            throw $this->createNotFoundException('The absent with id ' . $absentId . ' does not exists');
         }
         return $absent;
     }

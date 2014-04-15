@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Tixi\ApiBundle\Form\ServicePlanType;
 use Tixi\ApiBundle\Interfaces\ServicePlanRegisterDTO;
+use Tixi\ApiBundle\Menu\MenuService;
 use Tixi\ApiBundle\Tile\Core\FormTile;
 use Tixi\ApiBundle\Tile\Core\PanelDeleteFooterTile;
 use Tixi\ApiBundle\Tile\Core\RootPanel;
@@ -30,6 +31,13 @@ use Tixi\CoreDomain\Vehicle;
  * @Route("/vehicles/{vehicleId}/serviceplans")
  */
 class ServicePlanController extends Controller {
+
+    protected $menuId;
+
+    public function __construct() {
+        $this->menuId = MenuService::$menuServicePlanId;
+    }
+
     /**
      * @Route("",name="tixiapi_serviceplans_get")
      * @Method({"GET","POST"})
@@ -39,7 +47,8 @@ class ServicePlanController extends Controller {
      * @return Response
      */
     public function getServiceplansAction($vehicleId, Request $request, $embeddedState = false) {
-        $embeddedState = $embeddedState || ($request->get('embedded') !== null && $request->get('embedded'));
+        $embeddedState = $embeddedState || $request->get('embedded') === "true";
+        $isPartial = $request->get('partial') === "true";
 
         $dataGridHandler = $this->get('tixi_api.datagridhandler');
         $dataGridControllerFactory = $this->get('tixi_api.datagridcontrollerfactory');
@@ -47,7 +56,15 @@ class ServicePlanController extends Controller {
 
         $gridController = $dataGridControllerFactory->createServicePlanController($embeddedState, array('vehicleId' => $vehicleId));
         $dataGridTile = $dataGridHandler->createDataGridTileByRequest($request, $gridController);
-        return new Response($tileRenderer->render($dataGridTile));
+
+        $rootPanel = null;
+        if(!$embeddedState && !$isPartial) {
+            // doesn't exist at the moment
+        }else {
+            $rootPanel = $dataGridTile;
+        }
+
+        return new Response($tileRenderer->render($rootPanel));
     }
 
     /**
@@ -66,7 +83,7 @@ class ServicePlanController extends Controller {
 
         $servicePlan = $this->getServicePlan($servicePlanId);
         $servicePlanDTO = $assembler->toServicePlanRegisterDTO($servicePlan);
-        $rootPanel = new RootPanel('servicePlanDetail', 'serviceplan.panel.details');
+        $rootPanel = new RootPanel($this->menuId, 'serviceplan.panel.details');
 
         $rootPanel->add(new ServicePlanRegisterFormViewTile('servicePlanRequest', $servicePlanDTO,
             $this->generateUrl('tixiapi_serviceplan_edit',
@@ -89,6 +106,7 @@ class ServicePlanController extends Controller {
         $servicePlan = $this->getServicePlan($servicePlanId);
         $servicePlan->deleteLogically();
         $this->get('entity_manager')->flush();
+
         return $this->redirect($this->generateUrl('tixiapi_vehicle_get',array('vehicleId' => $vehicleId)));
     }
 
@@ -103,6 +121,7 @@ class ServicePlanController extends Controller {
      */
     public function newServiceplanAction(Request $request, $vehicleId) {
         $tileRenderer = $this->get('tixi_api.tilerenderer');
+
         $vehicle = $this->getVehicle($vehicleId);
         $form = $this->getForm();
         $form->handleRequest($request);
@@ -112,8 +131,9 @@ class ServicePlanController extends Controller {
             $this->get('entity_manager')->flush();
             return $this->redirect($this->generateUrl('tixiapi_vehicle_get', array('vehicleId' => $vehicleId)));
         }
-        $rootPanel = new RootPanel('tixiapi_vehicles_get', 'serviceplan.panel.new');
-        $rootPanel->add(new FormTile('servicePlanNewForm', $form, true));
+        $rootPanel = new RootPanel($this->menuId, 'serviceplan.panel.new');
+        $rootPanel->add(new FormTile($form, true));
+
         return new Response($tileRenderer->render($rootPanel));
     }
 
@@ -130,15 +150,10 @@ class ServicePlanController extends Controller {
      */
     public function editServiceplanAction(Request $request, $vehicleId, $servicePlanId) {
         $tileRenderer = $this->get('tixi_api.tilerenderer');
-        $servicePlanRepository = $this->get('serviceplan_repository');
-        $vehicleRepository = $this->get('vehicle_repository');
         $servicePlanAssembler = $this->get('tixi_api.assemblerserviceplan');
 
-        $servicePlan = $servicePlanRepository->find($servicePlanId);
-        $vehicle = $vehicleRepository->find($vehicleId);
-        if (null === $servicePlan) {
-            throw $this->createNotFoundException('This servicePlan does not exist');
-        }
+        $servicePlan = $this->getServicePlan($servicePlanId);
+        $vehicle = $this->getVehicle($vehicleId);
         $servicePlanDTO = $servicePlanAssembler->toServicePlanRegisterDTO($servicePlan);
 
         $form = $this->getForm(null, $servicePlanDTO);
@@ -151,7 +166,7 @@ class ServicePlanController extends Controller {
         }
 
         $rootPanel = new RootPanel('tixiapi_vehicles_get', 'serviceplan.panel.edit');
-        $rootPanel->add(new FormTile('absentNewForm', $form, true));
+        $rootPanel->add(new FormTile($form, true));
         $rootPanel->add(new PanelDeleteFooterTile($this->generateUrl('tixiapi_serviceplan_delete',
             array('vehicleId' => $vehicleId, 'servicePlanId'=>$servicePlanId)),'serviceplan.button.delete'));
         return new Response($tileRenderer->render($rootPanel));
@@ -185,7 +200,7 @@ class ServicePlanController extends Controller {
             $options['action'] = $this->generateUrl($targetRoute, $parameters);
             $options['method'] = $method;
         }
-        return $this->createForm(new ServicePlanType(), $servicePlanDTO, $options);
+        return $this->createForm(new ServicePlanType($this->menuId), $servicePlanDTO, $options);
     }
 
     /**
@@ -197,7 +212,7 @@ class ServicePlanController extends Controller {
         $servicePlanRepository = $this->get('serviceplan_repository');
         $servicePlan = $servicePlanRepository->find($servicePlanId);
         if (null === $servicePlan) {
-            throw $this->createNotFoundException('The ServicePlan with id ' . $servicePlan . ' does not exist');
+            throw $this->createNotFoundException('The serviceplan with id ' . $servicePlan . ' does not exist');
         }
         return $servicePlan;
     }
@@ -210,7 +225,7 @@ class ServicePlanController extends Controller {
         $vehicleRepository = $this->get('vehicle_repository');
         $vehicle = $vehicleRepository->find($vehicleId);
         if (null === $vehicle) {
-            throw $this->createNotFoundException('The Vehicle with id ' . $vehicleId . ' does not exist');
+            throw $this->createNotFoundException('The vehicle with id ' . $vehicleId . ' does not exist');
         }
         return $vehicle;
     }

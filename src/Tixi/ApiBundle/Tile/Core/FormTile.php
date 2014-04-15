@@ -17,11 +17,11 @@ class FormTile extends AbstractTile{
     protected $form;
     protected $isStandalone;
 
-    public function __construct($formId, $form, $isStandalone=false) {
-        $this->formId = $formId;
+    public function __construct($form, $isStandalone=false) {
+        $this->formId = $form->getName();
         $this->form = $form;
         $this->isStandalone = $isStandalone;
-        $this->add(new FormControlTile($formId));
+        $this->add(new FormControlTile($this->formId));
     }
 
     public function getViewParameters()

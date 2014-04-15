@@ -13,11 +13,13 @@ use Tixi\ApiBundle\Tile\AbstractTile;
 
 class DeleteButtonTile extends AbstractTile{
 
+    protected $buttonId;
     protected $displayText;
     protected $targetSrc;
     protected $deleteConfirmText;
 
-    public function __construct($targetSrc, $displayText, $deleteConfirmText='delete.logically.standardtext') {
+    public function __construct($buttonId, $targetSrc, $displayText, $deleteConfirmText='delete.logically.standardtext') {
+        $this->buttonId = $buttonId;
         $this->targetSrc = $targetSrc;
         $this->displayText = $displayText;
         $this->deleteConfirmText = $deleteConfirmText;
@@ -25,7 +27,7 @@ class DeleteButtonTile extends AbstractTile{
 
     public function getViewParameters()
     {
-        return array('targetSrc'=>$this->targetSrc, 'displayText'=>$this->displayText, 'deleteConfirmText'=>$this->deleteConfirmText);
+        return array('buttonId'=>$this->buttonId, 'targetSrc'=>$this->targetSrc, 'displayText'=>$this->displayText, 'deleteConfirmText'=>$this->deleteConfirmText);
     }
 
     public function getTemplateName()

@@ -20,6 +20,7 @@ use Symfony\Component\Validator\Constraints\Regex;
  * @package Tixi\ApiBundle\Form
  */
 class DriverType extends PersonType {
+
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -72,15 +73,6 @@ class DriverType extends PersonType {
             'required' => false,
             'label' => 'person.field.details'
         ));
-    }
-
-    /**
-     * Returns the name of this type.
-     *
-     * @return string The name of this type
-     */
-    public function getName() {
-        return 'driver';
     }
 
     /**

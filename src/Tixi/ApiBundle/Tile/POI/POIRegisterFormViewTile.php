@@ -16,17 +16,17 @@ class POIRegisterFormViewTile extends AbstractFormViewTile {
 
     public function createFormRows() {
         $dto = $this->dto;
-        $this->basicFormRows[] = new FormRowView('poi.field.id', $dto->id);
+        $this->basicFormRows[] = new FormRowView('id', 'poi.field.id', $dto->id);
 
-        $this->basicFormRows[] = new FormRowView('poi.field.name', $dto->name);
-        $this->basicFormRows[] = new FormRowView('poi.field.department', $dto->department);
-        $this->basicFormRows[] = new FormRowView('poi.field.telephone', $dto->telephone);
-        $this->basicFormRows[] = new FormRowView('address.field.street', $dto->street);
-        $this->basicFormRows[] = new FormRowView('address.field.postalcode', $dto->postalCode);
-        $this->basicFormRows[] = new FormRowView('address.field.city', $dto->city);
+        $this->basicFormRows[] = new FormRowView('name', 'poi.field.name', $dto->name);
+        $this->basicFormRows[] = new FormRowView('department', 'poi.field.department', $dto->department);
+        $this->basicFormRows[] = new FormRowView('telephone', 'poi.field.telephone', $dto->telephone);
+        $this->basicFormRows[] = new FormRowView('street', 'address.field.street', $dto->street);
+        $this->basicFormRows[] = new FormRowView('postalcode', 'address.field.postalcode', $dto->postalCode);
+        $this->basicFormRows[] = new FormRowView('city', 'address.field.city', $dto->city);
 
-        $this->expandedFormRows[] = new FormRowView('poi.field.memo', $dto->memo);
-        $this->expandedFormRows[] = new FormRowView('poi.field.comment', $dto->comment);
-        $this->expandedFormRows[] = new FormRowView('poi.field.details', $dto->details);
+        $this->expandedFormRows[] = new FormRowView('memo', 'poi.field.memo', $dto->memo);
+        $this->expandedFormRows[] = new FormRowView('comment', 'poi.field.comment', $dto->comment);
+        $this->expandedFormRows[] = new FormRowView('details', 'poi.field.details', $dto->details);
     }
 }

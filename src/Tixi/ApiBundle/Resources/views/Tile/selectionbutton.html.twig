@@ -1,6 +1,6 @@
 {% set embedded = embedded|default(false) %}
 <div class="btn-group">
-    <button type="button"
+    <button type="button" id="{{ 'fpx_' ~ menuId ~ '_' ~ selectionButtonId }}"
             class="btn btn-default dropdown-toggle selectionButton {% if embedded %}btn-sm{% endif %}"
             data-toggle="dropdown">
         {{ displayName|trans }} <span class="caret"></span>

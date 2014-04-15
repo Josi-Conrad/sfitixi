@@ -6,6 +6,8 @@
 
 
     <parameters>
+        <parameter key="tixi_api.twig.menurenderer.class">Tixi\ApiBundle\Menu\MenuTwigExtension</parameter>
+        <parameter key="tixi_api.menuservice.class">Tixi\ApiBundle\Menu\MenuService</parameter>
         <parameter key="tixi_api.datetimeservice.class">Tixi\ApiBundle\Helper\DateTimeService</parameter>
         <parameter key="tixi_api.vehicleassembler.class">Tixi\ApiBundle\Interfaces\VehicleAssembler</parameter>
         <parameter key="tixi_api.serviceplanassembler.class">Tixi\ApiBundle\Interfaces\ServicePlanAssembler</parameter>
@@ -21,6 +23,17 @@
     </parameters>
 
     <services>
+        <service id="tixi_api.twig.menurenderer" class="%tixi_api.twig.menurenderer.class%">
+            <tag name="twig.extension" />
+            <call method="setMenuService">
+                <argument type="service" id="tixi_api.menuservice" />
+            </call>
+        </service>
+        <service id="tixi_api.menuservice" class="%tixi_api.menuservice.class%">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
         <service id="tixi_api.datetimeservice" class="%tixi_api.datetimeservice.class%">
             <call method="setContainer">
                 <argument type="service" id="service_container" />

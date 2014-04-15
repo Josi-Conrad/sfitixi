@@ -14,13 +14,14 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Tixi\ApiBundle\Form\Shared\CommonAbstractType;
 use Tixi\ApiBundle\Form\Shared\TelephoneType;
 
 /**
  * Class POIType
  * @package Tixi\ApiBundle\Form
  */
-class POIType extends AbstractType {
+class POIType extends CommonAbstractType {
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -105,15 +106,6 @@ class POIType extends AbstractType {
             'required' => false,
             'label' => 'poi.field.details',
         ));
-    }
-
-    /**
-     * Returns the name of this type.
-     *
-     * @return string The name of this type
-     */
-    public function getName() {
-        return 'poi';
     }
 
     /**

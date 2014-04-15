@@ -190,7 +190,7 @@
                 'lastweek.name': "{{ 'lastweek.name' | trans }}",
                 'repeateddrivingmission.everyweek.text': "{{ 'repeateddrivingmission.everyweek.text' | trans }}"
             };
-        _repeatedDrivingController.init(_trans,'{{ frequency }}');
+        _repeatedDrivingController.init(_trans,'{{ frequency }}','{{ formId }}');
         new FormValidationController('{{ formId }}');
     });
 </script>

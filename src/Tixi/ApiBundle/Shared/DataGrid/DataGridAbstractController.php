@@ -24,7 +24,7 @@ abstract class DataGridAbstractController extends ContainerAware{
     protected $routeProperties;
     private $isEmbedded;
 
-    public function __construct(ContainerInterface $container, $embeddedState=false, array $routeProperties) {
+    public function __construct(ContainerInterface $container, $embeddedState=false, array $routeProperties=array()) {
         $this->setContainer($container);
         $this->router = $container->get('router');
         $this->fgeaRepository = $container->get('tixi_coredomain.fgea_repository');
@@ -58,11 +58,11 @@ abstract class DataGridAbstractController extends ContainerAware{
         return $this->isEmbedded;
     }
 
-    public abstract function getMenuIdentifier();
+//    public abstract function getMenuIdentifier();
 
     public abstract function getGridIdentifier();
 
-    public abstract function getGridDisplayTitel();
+//    public abstract function getGridDisplayTitel();
 
     public abstract function createCustomControlTile();
 

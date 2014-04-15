@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Tixi\ApiBundle\Form\UserType;
 use Tixi\ApiBundle\Interfaces\UserRegisterDTO;
+use Tixi\ApiBundle\Menu\MenuService;
 use Tixi\ApiBundle\Tile\Core\FormTile;
 use Tixi\ApiBundle\Tile\Core\PanelSplitterTile;
 use Tixi\ApiBundle\Tile\Core\PanelTile;
@@ -30,6 +31,13 @@ use Tixi\SecurityBundle\Entity\User;
  * @Breadcrumb("user.panel.name", route="tixiapi_users_get")
  */
 class UserController extends Controller {
+
+    protected $menuId;
+
+    public function __construct() {
+        $this->menuId = MenuService::$menuUserId;
+    }
+
     /**
      * @Route("", name="tixiapi_users_get")
      * @Method({"GET","POST"})
@@ -38,14 +46,25 @@ class UserController extends Controller {
      * @return Response
      */
     public function getUsersAction(Request $request, $embeddedState = false) {
-        $embeddedParameter = (null === $request->get('embedded') || $request->get('embedded') === 'false') ? false : true;
-        $isEmbedded = ($embeddedState || $embeddedParameter);
+        $embeddedState = $embeddedState || $request->get('embedded') === "true";
+        $isPartial = $request->get('partial') === "true";
+
         $dataGridHandler = $this->get('tixi_api.datagridhandler');
         $dataGridControllerFactory = $this->get('tixi_api.datagridcontrollerfactory');
         $tileRenderer = $this->get('tixi_api.tilerenderer');
-        $gridController = $dataGridControllerFactory->createUserController($isEmbedded);
+
+        $gridController = $dataGridControllerFactory->createUserController($embeddedState);
         $dataGridTile = $dataGridHandler->createDataGridTileByRequest($request, $gridController);
-        return new Response($tileRenderer->render($dataGridTile));
+
+        $rootPanel = null;
+        if(!$embeddedState && !$isPartial) {
+            $rootPanel = new RootPanel($this->menuId, 'user.list.name');
+            $rootPanel->add($dataGridTile);
+        }else {
+            $rootPanel = $dataGridTile;
+        }
+
+        return new Response($tileRenderer->render($rootPanel));
     }
 
     /**
@@ -59,14 +78,17 @@ class UserController extends Controller {
      */
     public function getUserAction(Request $request, $userId) {
         $tileRenderer = $this->get('tixi_api.tilerenderer');
-        $user = $this->get('tixi_user_repository')->find($userId);
+        $userRepository = $this->get('tixi_user_repository');
+
+        $user = $userRepository->find($userId);
         if (null === $user) {
             throw $this->createNotFoundException('The user with id ' . $userId . ' does not exists');
         }
         $userDTO = $this->get('tixi_api.assembleruser')->userToUserRegisterDTO($user);
-        $rootPanel = new RootPanel('tixiapi_users_get', $user->getUsername());
+        $rootPanel = new RootPanel($this->menuId, $user->getUsername());
         $rootPanel->add(new UserRegisterFormViewTile('userRequest', $userDTO,
             $this->generateUrl('tixiapi_user_edit', array('userId' => $userId))));
+
         return new Response($tileRenderer->render($rootPanel));
     }
 
@@ -81,8 +103,8 @@ class UserController extends Controller {
         $tileRenderer = $this->get('tixi_api.tilerenderer');
         $form = $this->getForm();
         $form->handleRequest($request);
-        $rootPanel = new RootPanel('tixiapi_users_get', 'user.panel.new');
-        $rootPanel->add(new FormTile('userNewForm', $form, true));
+        $rootPanel = new RootPanel($this->menuId, 'user.panel.new');
+        $rootPanel->add(new FormTile($form, true));
         if ($form->isValid()) {
             $userDTO = $form->getData();
             if(!$this->isUsernameAvailable($userDTO->username)){
@@ -92,6 +114,7 @@ class UserController extends Controller {
             $this->get('entity_manager')->flush();
             return $this->redirect($this->generateUrl('tixiapi_user_get', array('userId' => $user->getId())));
         }
+
         return new Response($tileRenderer->render($rootPanel));
     }
 
@@ -112,7 +135,7 @@ class UserController extends Controller {
             throw $this->createNotFoundException('This user does not exist');
         }
         $userDTO = $userAssembler->userToUserRegisterDTO($user);
-        $form = $this->getForm(null, $userDTO);
+        $form = $this->getForm($userDTO);
         $form->handleRequest($request);
         if ($form->isValid()) {
             $userDTO = $form->getData();
@@ -120,8 +143,9 @@ class UserController extends Controller {
             $this->get('entity_manager')->flush();
             return $this->redirect($this->generateUrl('tixiapi_user_get', array('userId' => $userId)));
         }
-        $rootPanel = new RootPanel('tixiapi_users_get', 'user.panel.edit');
-        $rootPanel->add(new FormTile('userEditForm', $form, true));
+        $rootPanel = new RootPanel($this->menuId, 'user.panel.edit');
+        $rootPanel->add(new FormTile($form, true));
+
         return new Response($tileRenderer->render($rootPanel));
     }
 
@@ -151,7 +175,7 @@ class UserController extends Controller {
      * @param string $method
      * @return \Symfony\Component\Form\Form
      */
-    protected function getForm($targetRoute = null, $userDTO = null, $parameters = array(), $method = 'POST') {
+    protected function getForm($userDTO = null, $targetRoute = null, $parameters = array(), $method = 'POST') {
         if ($targetRoute) {
             $options = array(
                 'action' => $this->generateUrl($targetRoute, $parameters),

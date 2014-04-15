@@ -13,13 +13,14 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\NotNull;
+use Tixi\ApiBundle\Form\Shared\CommonAbstractType;
 use Tixi\ApiBundle\Form\Shared\TelephoneType;
 
 /**
  * Class PersonType
  * @package Tixi\ApiBundle\Form
  */
-class PersonType extends AbstractType {
+class PersonType extends CommonAbstractType {
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -80,14 +81,5 @@ class PersonType extends AbstractType {
                 new NotBlank(array('message'=>'field.not_blank'))
             ),
         ));
-    }
-
-    /**
-     * Returns the name of this type.
-     *
-     * @return string The name of this type
-     */
-    public function getName() {
-        return 'person';
     }
 }

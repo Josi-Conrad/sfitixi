@@ -19,11 +19,11 @@ class RepeatedAssertionTile extends AbstractTile{
     protected $form;
     protected $frequency;
 
-    public function __construct($formId, $form, $frequency='') {
-        $this->formId = $formId;
+    public function __construct($form, $frequency='') {
+        $this->formId = $form->getName();
         $this->form = $form;
         $this->frequency = $frequency;
-        $this->add(new FormControlTile($formId));
+        $this->add(new FormControlTile($this->formId));
     }
 
     public function getViewParameters()

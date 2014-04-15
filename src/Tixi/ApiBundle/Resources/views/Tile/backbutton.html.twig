@@ -1,4 +1,4 @@
 {% set embedded = embedded|default(false) %}
-<button type="button"
+<button type="button" id="{{ 'fpx_' ~ menuId ~ '_back' }}"
         class="customLink backButton btn {% if type == 'primary' %}btn-primary{% else %}btn-default{% endif %} {% if embedded %}btn-sm{% endif %}">{{ displayText|trans }}
 </button>

@@ -16,15 +16,17 @@ class DataGridTile extends AbstractTile{
 
     protected $dataGridOutputState;
     protected $gridConfJS;
+    protected $gridId;
 
-    public function __construct(DataGridOutputState $dataGridOutputState, $gridConfJS) {
+    public function __construct(DataGridOutputState $dataGridOutputState, $gridConfJS, $gridId) {
         $this->dataGridOutputState = $dataGridOutputState;
         $this->gridConfJS = $gridConfJS;
+        $this->gridId = $gridId;
     }
 
     public function getViewParameters()
     {
-        return array('gridState'=>$this->dataGridOutputState, 'gridConfJS'=>$this->gridConfJS);
+        return array('gridId'=>$this->gridId, 'gridState'=>$this->dataGridOutputState, 'gridConfJS'=>$this->gridConfJS);
     }
 
     public function getTemplateName()

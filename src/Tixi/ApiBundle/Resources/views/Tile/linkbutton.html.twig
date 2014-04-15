@@ -1,5 +1,5 @@
 {% set embedded = embedded|default(false) %}
-<button type="button"
+<button type="button" id="{{ 'fpx_' ~ menuId ~ '_' ~ buttonId }}"
         class="customLink linkButton btn {% if type == 'primary' %}btn-primary{% else %}btn-default{% endif %} {% if embedded %}btn-sm{% endif %}"
         data-targetSrc="{{ targetSrc }}">{{ displayText|trans }}
 </button>

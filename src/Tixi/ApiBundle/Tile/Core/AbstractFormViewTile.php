@@ -26,7 +26,6 @@ abstract class AbstractFormViewTile extends AbstractTile{
         $this->formViewId = $formViewId;
         $this->add(new FormViewControlTile($editPath));
         $this->createFormRows();
-
     }
 
     public abstract function createFormRows();

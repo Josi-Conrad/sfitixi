@@ -14,14 +14,16 @@ use Tixi\ApiBundle\Tile\AbstractTile;
 class SelectionButtonTile extends AbstractTile{
 
     protected $displayName;
+    protected $selectionButtonId;
 
-    public function __construct($displayName) {
+    public function __construct($selectionButtonId, $displayName) {
+        $this->selectionButtonId = $selectionButtonId;
         $this->displayName = $displayName;
     }
 
     public function getViewParameters()
     {
-        return array('displayName'=>$this->displayName);
+        return array('selectionButtonId'=>$this->selectionButtonId, 'displayName'=>$this->displayName);
     }
 
     public function getTemplateName()

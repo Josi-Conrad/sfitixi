@@ -15,7 +15,7 @@ use Tixi\ApiBundle\Tile\Core\FormRowView;
 class UserRegisterFormViewTile extends AbstractFormViewTile {
 
     public function createFormRows() {
-        $this->basicFormRows[] = new FormRowView('user.field.username',$this->dto->username);
-        $this->basicFormRows[] = new FormRowView('user.field.email',$this->dto->email);
+        $this->basicFormRows[] = new FormRowView('username', 'user.field.username',$this->dto->username);
+        $this->basicFormRows[] = new FormRowView('email', 'user.field.email',$this->dto->email);
     }
 }

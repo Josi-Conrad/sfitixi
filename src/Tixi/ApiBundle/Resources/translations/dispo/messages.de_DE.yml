@@ -14,7 +14,7 @@ shift5.name: Schicht 5
 #RepeatedDrivingMission
 repeateddrivingmission.panel.new: Neuer Dauereinsatz
 repeateddrivingmission.panel.edit: Dauereinsatz editieren
-repeateddrivingmission.panel.embedded: Zugeordnete Dauereinsätze
+repeateddrivingmission.panel.embedded: Dauereinsätze
 repeateddrivingmission.button.new: Neuer Dauereinsatz
 repeateddrivingmission.button.delete: Dauereinsatz löschen
 repeateddrivingmission.list.name: Dauereinsätze

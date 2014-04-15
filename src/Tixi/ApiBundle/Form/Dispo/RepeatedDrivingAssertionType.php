@@ -12,9 +12,10 @@ namespace Tixi\ApiBundle\Form\Dispo;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Tixi\ApiBundle\Form\Shared\CommonAbstractType;
 use Tixi\ApiBundle\Form\Shared\DatePickerType;
 
-class RepeatedDrivingAssertionType extends AbstractType{
+class RepeatedDrivingAssertionType extends CommonAbstractType{
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -88,16 +89,6 @@ class RepeatedDrivingAssertionType extends AbstractType{
             'allow_add' => true,
             'allow_delete' => true
         ));
-
-    }
-    /**
-     * Returns the name of this type.
-     *
-     * @return string The name of this type
-     */
-    public function getName()
-    {
-        return 'repeatedDrivingAssertion';
 
     }
 

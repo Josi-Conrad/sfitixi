@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Tixi\ApiBundle\Form\PassengerType;
 use Tixi\ApiBundle\Interfaces\PassengerRegisterDTO;
+use Tixi\ApiBundle\Menu\MenuService;
 use Tixi\ApiBundle\Tile\Core\FormTile;
 use Tixi\ApiBundle\Tile\Core\PanelDeleteFooterTile;
 use Tixi\ApiBundle\Tile\Core\PanelSplitterTile;
@@ -30,6 +31,13 @@ use Tixi\ApiBundle\Tile\Passenger\PassengerRegisterFormViewTile;
  * @Breadcrumb("passenger.breadcrumb.name", route="tixiapi_passengers_get")
  */
 class PassengerController extends Controller {
+
+    protected $menuId;
+
+    public function __construct() {
+        $this->menuId = MenuService::$menuPassengerId;
+    }
+
     /**
      * @Route("", name="tixiapi_passengers_get")
      * @Method({"GET","POST"})
@@ -38,16 +46,25 @@ class PassengerController extends Controller {
      * @return Response
      */
     public function getPassengersAction(Request $request, $embeddedState = false) {
-        $embeddedParameter = (null === $request->get('embedded') || $request->get('embedded') === 'false') ? false : true;
-        $isEmbedded = ($embeddedState || $embeddedParameter);
+        $embeddedState = $embeddedState || $request->get('embedded') === "true";
+        $isPartial = $request->get('partial') === "true";
 
         $dataGridHandler = $this->get('tixi_api.datagridhandler');
         $dataGridControllerFactory = $this->get('tixi_api.datagridcontrollerfactory');
         $tileRenderer = $this->get('tixi_api.tilerenderer');
 
-        $gridController = $dataGridControllerFactory->createPassengerController($isEmbedded);
+        $gridController = $dataGridControllerFactory->createPassengerController($embeddedState);
         $dataGridTile = $dataGridHandler->createDataGridTileByRequest($request, $gridController);
-        return new Response($tileRenderer->render($dataGridTile));
+
+        $rootPanel = null;
+        if(!$embeddedState && !$isPartial) {
+            $rootPanel = new RootPanel($this->menuId, 'passenger.list.name');
+            $rootPanel->add($dataGridTile);
+        }else {
+            // doesn't exist at the moment
+        }
+
+        return new Response($tileRenderer->render($rootPanel));
     }
 
     /**
@@ -70,13 +87,14 @@ class PassengerController extends Controller {
         $gridController = $dataGridControllerFactory->createPassengerAbsentController(true, array('passengerId' => $passengerId));
         $gridTile = $dataGridHandler->createEmbeddedDataGridTile($gridController);
 
-        $rootPanel = new RootPanel('tixiapi_passengers_get', 'passenger.panel.name', $passenger->getFirstname() . ' ' . $passenger->getLastname());
+        $rootPanel = new RootPanel($this->menuId, 'passenger.panel.name', $passenger->getFirstname() . ' ' . $passenger->getLastname());
         $panelSplitter = $rootPanel->add(new PanelSplitterTile('1:1'));
         $formPanel = $panelSplitter->addLeft(new PanelTile('passenger.panel.details', PanelTile::$primaryType));
         $formPanel->add(new PassengerRegisterFormViewTile('passengerRequest', $passengerDTO, $this->generateUrl('tixiapi_passenger_edit', array('passengerId' => $passengerId))));
         $gridPanel = $panelSplitter->addRight(new PanelTile('absent.panel.embedded'));
         $gridPanel->add($gridTile);
         $rootPanel->add(new PanelDeleteFooterTile($this->generateUrl('tixiapi_passenger_delete', array('passengerId' => $passengerId)),'passenger.button.delete'));
+
         return new Response($tileRenderer->render($rootPanel));
     }
 
@@ -91,6 +109,7 @@ class PassengerController extends Controller {
         $passanger = $this->getPassenger($passengerId);
         $passanger->deleteLogically();
         $this->get('entity_manager')->flush();
+
         return $this->redirect($this->generateUrl('tixiapi_passengers_get'));
     }
 
@@ -113,8 +132,8 @@ class PassengerController extends Controller {
             return $this->redirect($this->generateUrl('tixiapi_passenger_get', array('passengerId' => $passenger->getId())));
         }
 
-        $rootPanel = new RootPanel('tixiapi_passengers_get', 'passenger.panel.new');
-        $rootPanel->add(new FormTile('passengerNewForm', $form, true));
+        $rootPanel = new RootPanel($this->menuId, 'passenger.panel.new');
+        $rootPanel->add(new FormTile($form, true));
 
         return new Response($tileRenderer->render($rootPanel));
     }
@@ -136,7 +155,7 @@ class PassengerController extends Controller {
         $passenger = $this->getPassenger($passengerId);
         $passengerDTO = $passengerAssembler->passengerToPassengerRegisterDTO($passenger);
 
-        $form = $this->getForm(null, $passengerDTO);
+        $form = $this->getForm($passengerDTO);
         $form->handleRequest($request);
         if ($form->isValid()) {
             $passengerDTO = $form->getData();
@@ -148,13 +167,14 @@ class PassengerController extends Controller {
         $gridController = $dataGridControllerFactory->createPassengerAbsentController(true, array('passengerId' => $passengerId));
         $gridTile = $dataGridHandler->createEmbeddedDataGridTile($gridController);
 
-        $rootPanel = new RootPanel('tixiapi_passengers_get', 'passenger.panel.name', $passenger->getFirstname() . ' ' . $passenger->getLastname());
+        $rootPanel = new RootPanel($this->menuId, 'passenger.panel.name', $passenger->getFirstname() . ' ' . $passenger->getLastname());
         $panelSplitter = $rootPanel->add(new PanelSplitterTile('1:1'));
         $formPanel = $panelSplitter->addLeft(new PanelTile('passenger.panel.edit', PanelTile::$primaryType));
-        $formPanel->add(new FormTile('passengerForm', $form));
+        $formPanel->add(new FormTile($form));
         $gridPanel = $panelSplitter->addRight(new PanelTile('absent.panel.embedded'));
         $gridPanel->add($gridTile);
         $rootPanel->add(new PanelDeleteFooterTile($this->generateUrl('tixiapi_passenger_delete', array('passengerId' => $passengerId)),'passenger.button.delete'));
+
         return new Response($tileRenderer->render($rootPanel));
     }
 
@@ -187,7 +207,7 @@ class PassengerController extends Controller {
      * @param string $method
      * @return \Symfony\Component\Form\Form
      */
-    protected function getForm($targetRoute = null, $passengerDTO = null, $parameters = array(), $method = 'POST') {
+    protected function getForm($passengerDTO = null, $targetRoute = null, $parameters = array(), $method = 'POST') {
         if ($targetRoute) {
             $options = array(
                 'action' => $this->generateUrl($targetRoute, $parameters),
@@ -196,7 +216,7 @@ class PassengerController extends Controller {
         } else {
             $options = array();
         }
-        return $this->createForm(new PassengerType(), $passengerDTO, $options);
+        return $this->createForm(new PassengerType($this->menuId), $passengerDTO, $options);
     }
 
     /**
@@ -208,7 +228,7 @@ class PassengerController extends Controller {
         $passengerRepository = $this->get('passenger_repository');
         $passenger = $passengerRepository->find($passengerId);
         if(null === $passenger) {
-            throw $this->createNotFoundException('The Passenger with id ' . $passengerId . ' does not exist');
+            throw $this->createNotFoundException('The passenger with id ' . $passengerId . ' does not exist');
         }
         return $passenger;
     }

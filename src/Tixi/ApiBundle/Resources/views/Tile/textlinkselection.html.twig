@@ -1,0 +1,4 @@
+{% set resolvedLater = resolvedLater | default(false) %}
+<li>
+    <a id="{{ 'fpx_' ~ menuId ~ '_' ~ selectionButtonId ~ '_' ~ buttonId}}" data-targetSrc="{{ targetSrc }}" class="customLink textLink {% if resolvedLater %}linkWithDelegatedResolve{% endif %}" href="#">{{ displayName|trans }}</a>
+</li>

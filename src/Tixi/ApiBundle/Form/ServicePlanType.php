@@ -14,12 +14,13 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints\DateTime;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Tixi\ApiBundle\Form\Shared\CommonAbstractType;
 
 /**
  * Class ServicePlanType
  * @package Tixi\ApiBundle\Form
  */
-class ServicePlanType extends AbstractType{
+class ServicePlanType extends CommonAbstractType{
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -57,7 +58,7 @@ class ServicePlanType extends AbstractType{
      */
     public function getName()
     {
-        return 'serviceplan';
+        return 'fpw_vehicle_serviceplan';
     }
 
     /**

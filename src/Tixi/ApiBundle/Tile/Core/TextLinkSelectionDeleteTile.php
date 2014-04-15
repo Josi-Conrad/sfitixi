@@ -9,16 +9,16 @@
 namespace Tixi\ApiBundle\Tile\Core;
 
 
-class TextLinkListDeleteTile extends TextLinkTile{
+class TextLinkSelectionDeleteTile extends TextLinkTile{
 
     public function getTemplateName()
     {
-        return 'TixiApiBundle:Tile:textlinklistdelete.html.twig';
+        return 'TixiApiBundle:Tile:textlinkselectiondelete.html.twig';
     }
 
     public function getName()
     {
-        return 'textlinklistdelete';
+        return 'textlinkselectiondelete';
     }
 
 } 
