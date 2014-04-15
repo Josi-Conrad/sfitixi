@@ -59,7 +59,7 @@ class DriverController extends Controller {
             $rootPanel = new RootPanel($this->menuId, 'driver.list.name');
             $rootPanel->add($dataGridTile);
         }else {
-            // doesn't exist at the moment
+            $rootPanel = $dataGridTile;
         }
 
         return new Response($tileRenderer->render($rootPanel));
