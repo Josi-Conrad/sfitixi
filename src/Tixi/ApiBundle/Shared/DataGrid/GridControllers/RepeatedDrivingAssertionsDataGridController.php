@@ -24,7 +24,7 @@ class RepeatedDrivingAssertionsDataGridController extends DataGridAbstractContro
 
     public function getGridIdentifier()
     {
-        return 'repeateddrivingassertions';
+        return 'repeatedassertions';
     }
 
     public function createCustomControlTile()

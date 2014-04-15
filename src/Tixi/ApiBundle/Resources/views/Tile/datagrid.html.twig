@@ -29,7 +29,7 @@
                 <tr>
                     {% for header in gridState.getHeaders() %}
                         <th>
-                            <div class="header"
+                            <div id="{{ 'fpx_' ~ menuId ~ '_' ~ gridId ~ '_header_' ~ header.getFieldPropertyName() }}" class="header"
                                  data-fieldId="{{ header.getFieldPropertyName() }}">{{ header.getHeaderName()|trans }}</div>
                         </th>
                     {% endfor %}
@@ -47,11 +47,11 @@
         <div class="bottomControlWrapper">
             <div class="paginationControl">
                 <div class="btn-group btn-group-sm">
-                    <button type="button" class="btn btn-default first"><<</button>
-                    <button type="button" class="btn btn-default previous"><</button>
-                    <button type="button" class="btn btn-default pageIndication"></button>
-                    <button type="button" class="btn btn-default next">></button>
-                    <button type="button" class="btn btn-default last">>></button>
+                    <button type="button" id="{{ 'fpx_' ~ menuId ~ '_' ~ gridId ~ '_paging_first'}}" class="btn btn-default first"><<</button>
+                    <button type="button" id="{{ 'fpx_' ~ menuId ~ '_' ~ gridId ~ '_paging_previous'}}" class="btn btn-default previous"><</button>
+                    <button type="button" id="{{ 'fpr_' ~ menuId ~ '_' ~ gridId ~ '_paging_page'}}" class="btn btn-default pageIndication"></button>
+                    <button type="button" id="{{ 'fpx_' ~ menuId ~ '_' ~ gridId ~ '_paging_next'}}" class="btn btn-default next">></button>
+                    <button type="button" id="{{ 'fpx_' ~ menuId ~ '_' ~ gridId ~ '_paging_last'}}" class="btn btn-default last">>></button>
                 </div>
             </div>
         </div>

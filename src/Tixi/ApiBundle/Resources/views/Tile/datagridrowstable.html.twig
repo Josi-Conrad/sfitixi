@@ -1,8 +1,8 @@
 <tbody data-totalamountofrows="{{ gridState.getTotalAmountOfRows() }}">
 {% for row in gridState.getRows() %}
-    <tr data-rowid="{{ gridState.getGridIdentifier() ~ '_' ~ row.rowId }}">
-        {% for fieldValue in row.fieldValues %}
-            <td>{{ fieldValue }}</td>
+    <tr id="{{ 'fpr_' ~ gridState.getMenuId() ~ '_' ~ gridState.getGridIdentifier() ~ '_row_' ~ row.getRowId() }}" data-rowid="{{ gridState.getGridIdentifier() ~ '_' ~ row.getRowId() }}">
+        {% for field in row.getFields() %}
+            <td id="{{ 'fpr_' ~ gridState.getMenuId() ~ '_' ~ gridState.getGridIdentifier() ~ '_row_' ~ row.getRowId() ~ '_' ~ field.getFieldPropertyName() }}">{{ field.getFieldValue() }}</td>
         {% endfor %}
     </tr>
 {% endfor %}

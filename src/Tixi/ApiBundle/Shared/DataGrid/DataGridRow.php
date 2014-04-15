@@ -29,12 +29,21 @@ class DataGridRow {
         return $this->rowId;
     }
 
-    public function getFieldValues() {
-        $fieldValues = array();
-        foreach($this->fields as $field) {
-            $fieldValues[] = $field->getFieldValue();
-        }
-        return $fieldValues;
+    /**
+     * @return array
+     */
+    public function getFields()
+    {
+        return $this->fields;
     }
+
+//
+//    public function getFieldValues() {
+//        $fieldValues = array();
+//        foreach($this->fields as $field) {
+//            $fieldValues[] = $field->getFieldValue();
+//        }
+//        return $fieldValues;
+//    }
 
 } 

@@ -52,7 +52,7 @@ class DriverController extends Controller {
         $tileRenderer = $this->get('tixi_api.tilerenderer');
 
         $gridController = $dataGridControllerFactory->createDriverController($embeddedState);
-        $dataGridTile = $dataGridHandler->createDataGridTileByRequest($request, $gridController);
+        $dataGridTile = $dataGridHandler->createDataGridTileByRequest($request, $this->menuId, $gridController);
 
         $rootPanel = null;
         if(!$embeddedState && !$isPartial) {
@@ -83,10 +83,10 @@ class DriverController extends Controller {
         $driverDTO = $assembler->driverToDriverRegisterDTO($driver);
 
         $absentGridController = $dataGridControllerFactory->createDriverAbsentController(true, array('driverId' => $driverId));
-        $absentGridTile = $dataGridHandler->createEmbeddedDataGridTile($absentGridController);
+        $absentGridTile = $dataGridHandler->createEmbeddedDataGridTile($this->menuId, $absentGridController);
 
         $repeatedAssertionPlanController = $dataGridControllerFactory->createRepeatedDrivingAssertionPlanController(true, array('driverId'=>$driverId));
-        $repeatedAssertionGridTile = $dataGridHandler->createEmbeddedDataGridTile($repeatedAssertionPlanController);
+        $repeatedAssertionGridTile = $dataGridHandler->createEmbeddedDataGridTile($this->menuId, $repeatedAssertionPlanController);
 
         $rootPanel = new RootPanel($this->menuId, 'driver.panel.name', $driver->getFirstname().' '.$driver->getLastname());
         $panelSplitter = $rootPanel->add(new PanelSplitterTile('1:1'));
@@ -168,10 +168,10 @@ class DriverController extends Controller {
         }
 
         $absentGridController = $dataGridControllerFactory->createDriverAbsentController(true, array('driverId' => $driverId));
-        $absentGridTile = $dataGridHandler->createEmbeddedDataGridTile($absentGridController);
+        $absentGridTile = $dataGridHandler->createEmbeddedDataGridTile($this->menuId, $absentGridController);
 
         $repeatedAssertionPlanController = $dataGridControllerFactory->createRepeatedDrivingAssertionPlanController(true, array('driverId'=>$driverId));
-        $repeatedAssertionGridTile = $dataGridHandler->createEmbeddedDataGridTile($repeatedAssertionPlanController);
+        $repeatedAssertionGridTile = $dataGridHandler->createEmbeddedDataGridTile($this->menuId, $repeatedAssertionPlanController);
 
         $rootPanel = new RootPanel($this->menuId, 'driver.panel.name', $driver->getFirstname().' '.$driver->getLastname());
         $panelSplitter = $rootPanel->add(new PanelSplitterTile('1:1'));

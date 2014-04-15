@@ -56,7 +56,7 @@ class PassengerAbsentController extends Controller {
         $tileRenderer = $this->get('tixi_api.tilerenderer');
 
         $gridController = $dataGridControllerFactory->createPassengerAbsentController($embeddedState, array('passengerId' => $passengerId));
-        $dataGridTile = $dataGridHandler->createDataGridTileByRequest($request, $gridController);
+        $dataGridTile = $dataGridHandler->createDataGridTileByRequest($request, $this->menuId, $gridController);
 
         $rootPanel = null;
         if(!$embeddedState && !$isPartial) {

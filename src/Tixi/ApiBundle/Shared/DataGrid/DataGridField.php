@@ -29,4 +29,14 @@ class DataGridField {
     public function getFieldValue() {
         return $this->fieldValue;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getFieldPropertyName()
+    {
+        return $this->fieldPropertyName;
+    }
+
+
 } 

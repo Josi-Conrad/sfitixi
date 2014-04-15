@@ -55,7 +55,7 @@ class ServicePlanController extends Controller {
         $tileRenderer = $this->get('tixi_api.tilerenderer');
 
         $gridController = $dataGridControllerFactory->createServicePlanController($embeddedState, array('vehicleId' => $vehicleId));
-        $dataGridTile = $dataGridHandler->createDataGridTileByRequest($request, $gridController);
+        $dataGridTile = $dataGridHandler->createDataGridTileByRequest($request, $this->menuId, $gridController);
 
         $rootPanel = null;
         if(!$embeddedState && !$isPartial) {

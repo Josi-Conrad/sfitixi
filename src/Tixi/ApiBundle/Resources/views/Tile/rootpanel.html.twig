@@ -1,7 +1,6 @@
 {% extends '::base.html.twig' %}
-{% set topNavigationActivePage = menuId %}
-{% set titleDisplayText = headerDisplayText %}
-{% set titleDisplaySubText = headerDisplaySubtitleText %}
+{% set titleDisplayText = headerDisplayText|default('') %}
+{% set titleDisplaySubText = headerDisplaySubtitleText|default('') %}
 {% block body %}
 <div class="panel panel-default">
     <div class="panel-heading">

@@ -60,7 +60,7 @@ class VehicleController extends Controller {
         $tileRenderer = $this->get('tixi_api.tilerenderer');
 
         $gridController = $dataGridControllerFactory->createVehicleController($embeddedState);
-        $dataGridTile = $dataGridHandler->createDataGridTileByRequest($request, $gridController);
+        $dataGridTile = $dataGridHandler->createDataGridTileByRequest($request, $this->menuId, $gridController);
 
         $rootPanel = null;
         if(!$embeddedState && !$isPartial) {
@@ -92,7 +92,7 @@ class VehicleController extends Controller {
         $vehicleDTO = $assembler->toVehicleRegisterDTO($vehicle);
 
         $gridController = $dataGridControllerFactory->createServicePlanController(true, array('vehicleId' => $vehicleId));
-        $gridTile = $dataGridHandler->createEmbeddedDataGridTile($gridController);
+        $gridTile = $dataGridHandler->createEmbeddedDataGridTile($this->menuId, $gridController);
 
         $rootPanel = new RootPanel($this->menuId, 'vehicle.panel.name', $vehicle->getName());
         $panelSplitter = $rootPanel->add(new PanelSplitterTile('1:1'));
@@ -174,7 +174,7 @@ class VehicleController extends Controller {
         }
 
         $gridController = $dataGridControllerFactory->createServicePlanController(true, array('vehicleId' => $vehicleId));
-        $gridTile = $dataGridHandler->createEmbeddedDataGridTile($gridController);
+        $gridTile = $dataGridHandler->createEmbeddedDataGridTile($this->menuId, $gridController);
 
         $rootPanel = new RootPanel($this->menuId, 'vehicle.panel.name', $vehicle->getName());
         $panelSplitter = $rootPanel->add(new PanelSplitterTile('1:1'));

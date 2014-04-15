@@ -26,10 +26,10 @@ class MenuService extends ContainerAware{
     public static $menuPoiId = 'poi';
     public static $menuDriverId = 'driver';
     public static $menuVehicleId = 'vehicle';
-    public static $menuServicePlanId = 'vehicle_serviceplan';
-    public static $menuDriverAbsentId = 'driver_absent';
-    public static $menuDriverRepeatedAssertionId = 'driver_repeatedassertion';
-    public static $menuPassengerAbsentId = 'passenger_absent';
+    public static $menuServicePlanId = 'vehicle_serviceplans';
+    public static $menuDriverAbsentId = 'driver_absents';
+    public static $menuDriverRepeatedAssertionId = 'driver_repeatedassertions';
+    public static $menuPassengerAbsentId = 'passenger_absents';
     public static $menuUserId = 'user';
 
 

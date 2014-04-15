@@ -54,7 +54,7 @@ class UserController extends Controller {
         $tileRenderer = $this->get('tixi_api.tilerenderer');
 
         $gridController = $dataGridControllerFactory->createUserController($embeddedState);
-        $dataGridTile = $dataGridHandler->createDataGridTileByRequest($request, $gridController);
+        $dataGridTile = $dataGridHandler->createDataGridTileByRequest($request, $this->menuId, $gridController);
 
         $rootPanel = null;
         if(!$embeddedState && !$isPartial) {

@@ -11,6 +11,7 @@ namespace Tixi\ApiBundle\Shared\DataGrid;
 
 class DataGridOutputState {
 
+    protected $menuId;
     protected $gridIdentifier;
     protected $dataSrcUrl;
     protected $totalAmountOfRows;
@@ -21,8 +22,9 @@ class DataGridOutputState {
 
     }
 
-    public static function createOutputState($gridIdentifier, array $gridHeaders, array $gridRows, $totalAmountOfRows, $dataSrcUrl=null) {
+    public static function createOutputState($menuId, $gridIdentifier, array $gridHeaders, array $gridRows, $totalAmountOfRows, $dataSrcUrl=null) {
         $outputState = new DataGridOutputState();
+        $outputState->setMenuId($menuId);
         $outputState->setGridIdentifier($gridIdentifier);
         $outputState->setHeaders($gridHeaders);
         $outputState->setRows($gridRows);
@@ -31,21 +33,40 @@ class DataGridOutputState {
         return $outputState;
     }
 
-    public static function createEmbeddedOutputState($gridIdentifier, array $gridHeaders, $dataSrcUrl) {
+    public static function createEmbeddedOutputState($menuId, $gridIdentifier, array $gridHeaders, $dataSrcUrl) {
         $outputState = new DataGridOutputState();
+        $outputState->setMenuId($menuId);
         $outputState->setGridIdentifier($gridIdentifier);
         $outputState->setHeaders($gridHeaders);
         $outputState->setDataSrcUrl($dataSrcUrl);
         return $outputState;
     }
 
-    public static function createPartialOutputState($gridIdentifier, array $gridRows, $totalAmountOfRows) {
+    public static function createPartialOutputState($menuId, $gridIdentifier, array $gridRows, $totalAmountOfRows) {
         $outputState = new DataGridOutputState();
+        $outputState->setMenuId($menuId);
         $outputState->setGridIdentifier($gridIdentifier);
         $outputState->setRows($gridRows);
         $outputState->setTotalAmountOfRows($totalAmountOfRows);
         return $outputState;
     }
+
+    /**
+     * @param mixed $menuId
+     */
+    public function setMenuId($menuId)
+    {
+        $this->menuId = $menuId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMenuId()
+    {
+        return $this->menuId;
+    }
+
 
     /**
      * @param null $dataSrcUrl

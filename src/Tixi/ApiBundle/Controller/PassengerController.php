@@ -54,7 +54,7 @@ class PassengerController extends Controller {
         $tileRenderer = $this->get('tixi_api.tilerenderer');
 
         $gridController = $dataGridControllerFactory->createPassengerController($embeddedState);
-        $dataGridTile = $dataGridHandler->createDataGridTileByRequest($request, $gridController);
+        $dataGridTile = $dataGridHandler->createDataGridTileByRequest($request, $this->menuId, $gridController);
 
         $rootPanel = null;
         if(!$embeddedState && !$isPartial) {
@@ -85,7 +85,7 @@ class PassengerController extends Controller {
         $passengerDTO = $assembler->passengerToPassengerRegisterDTO($passenger);
 
         $gridController = $dataGridControllerFactory->createPassengerAbsentController(true, array('passengerId' => $passengerId));
-        $gridTile = $dataGridHandler->createEmbeddedDataGridTile($gridController);
+        $gridTile = $dataGridHandler->createEmbeddedDataGridTile($this->menuId, $gridController);
 
         $rootPanel = new RootPanel($this->menuId, 'passenger.panel.name', $passenger->getFirstname() . ' ' . $passenger->getLastname());
         $panelSplitter = $rootPanel->add(new PanelSplitterTile('1:1'));
@@ -165,7 +165,7 @@ class PassengerController extends Controller {
         }
 
         $gridController = $dataGridControllerFactory->createPassengerAbsentController(true, array('passengerId' => $passengerId));
-        $gridTile = $dataGridHandler->createEmbeddedDataGridTile($gridController);
+        $gridTile = $dataGridHandler->createEmbeddedDataGridTile($this->menuId, $gridController);
 
         $rootPanel = new RootPanel($this->menuId, 'passenger.panel.name', $passenger->getFirstname() . ' ' . $passenger->getLastname());
         $panelSplitter = $rootPanel->add(new PanelSplitterTile('1:1'));
