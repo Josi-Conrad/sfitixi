@@ -21,7 +21,7 @@ use Tixi\ApiBundle\Tile\Core\FormTile;
 use Tixi\ApiBundle\Tile\Core\PanelSplitterTile;
 use Tixi\ApiBundle\Tile\Core\PanelTile;
 use Tixi\ApiBundle\Tile\Core\RootPanel;
-use Tixi\ApiBundle\Tile\User\UserRegisterFormViewTile;
+use Tixi\ApiBundle\Tile\CustomFormView\UserRegisterFormViewTile;
 use Tixi\SecurityBundle\Entity\User;
 
 /**

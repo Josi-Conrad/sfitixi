@@ -20,7 +20,7 @@ use Tixi\ApiBundle\Menu\MenuService;
 use Tixi\ApiBundle\Tile\Core\FormTile;
 use Tixi\ApiBundle\Tile\Core\PanelDeleteFooterTile;
 use Tixi\ApiBundle\Tile\Core\RootPanel;
-use Tixi\ApiBundle\Tile\ServicePlan\ServicePlanRegisterFormViewTile;
+use Tixi\ApiBundle\Tile\CustomFormView\ServicePlanRegisterFormViewTile;
 use Tixi\CoreDomain\Vehicle;
 
 

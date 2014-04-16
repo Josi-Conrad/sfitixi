@@ -15,7 +15,7 @@ use Tixi\ApiBundle\Shared\DataGrid\GridControllers\DriverDataGridController;
 use Tixi\ApiBundle\Shared\DataGrid\GridControllers\Management\HandicapDataGridController;
 use Tixi\ApiBundle\Shared\DataGrid\GridControllers\Management\InsuranceDataGridController;
 use Tixi\ApiBundle\Shared\DataGrid\GridControllers\Management\PoiKeywordDataGridController;
-use Tixi\ApiBundle\Shared\DataGrid\GridControllers\Management\VehicleTypeDataGridController;
+use Tixi\ApiBundle\Shared\DataGrid\GridControllers\Management\VehicleCategoryDataGridController;
 use Tixi\ApiBundle\Shared\DataGrid\GridControllers\PassengerAbsentDataGridController;
 use Tixi\ApiBundle\Shared\DataGrid\GridControllers\PassengerDataGridController;
 use Tixi\ApiBundle\Shared\DataGrid\GridControllers\POIDataGridController;
@@ -63,11 +63,11 @@ class DataGridControllerFactory extends ContainerAware{
     }
 
     //management
-    public function createManagementVehicleTypesController($embeddedState=false, array $routeProperties=array()) {
-        return new VehicleTypeDataGridController($this->container, $embeddedState, $routeProperties);
+    public function createManagementVehicleTypeController($embeddedState=false, array $routeProperties=array()) {
+        return new VehicleCategoryDataGridController($this->container, $embeddedState, $routeProperties);
     }
 
-    public function createManagementPoiKeywordsController($embeddedState=false, array $routeProperties=array()) {
+    public function createManagementPoiKeywordController($embeddedState=false, array $routeProperties=array()) {
         return new PoiKeywordDataGridController($this->container, $embeddedState, $routeProperties);
     }
 
