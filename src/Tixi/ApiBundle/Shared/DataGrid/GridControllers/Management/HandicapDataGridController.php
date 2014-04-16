@@ -9,6 +9,38 @@
 namespace Tixi\ApiBundle\Shared\DataGrid\GridControllers\Management;
 
 
-class HandicapDataGridController {
+use Tixi\ApiBundle\Shared\DataGrid\DataGridAbstractController;
+use Tixi\CoreDomain\Shared\GenericEntityFilter\GenericEntityFilter;
 
-} 
+class HandicapDataGridController extends DataGridAbstractController {
+
+    public function getGridIdentifier()
+    {
+        // TODO: Implement getGridIdentifier() method.
+    }
+
+    public function createCustomControlTile()
+    {
+        // TODO: Implement createCustomControlTile() method.
+    }
+
+    public function getDblClickPath()
+    {
+        // TODO: Implement getDblClickPath() method.
+    }
+
+    public function getReferenceDTO()
+    {
+        // TODO: Implement getReferenceDTO() method.
+    }
+
+    public function constructDtosFromFgeaFilter(GenericEntityFilter $filter)
+    {
+        // TODO: Implement constructDtosFromFgeaFilter() method.
+    }
+
+    public function getDataSrcUrl()
+    {
+        // TODO: Implement getDataSrcUrl() method.
+    }
+}

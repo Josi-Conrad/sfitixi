@@ -12,6 +12,10 @@ namespace Tixi\ApiBundle\Shared\DataGrid;
 use Symfony\Component\DependencyInjection\ContainerAware;
 use Tixi\ApiBundle\Shared\DataGrid\GridControllers\DriverAbsentDataGridController;
 use Tixi\ApiBundle\Shared\DataGrid\GridControllers\DriverDataGridController;
+use Tixi\ApiBundle\Shared\DataGrid\GridControllers\Management\HandicapDataGridController;
+use Tixi\ApiBundle\Shared\DataGrid\GridControllers\Management\InsuranceDataGridController;
+use Tixi\ApiBundle\Shared\DataGrid\GridControllers\Management\PoiKeywordDataGridController;
+use Tixi\ApiBundle\Shared\DataGrid\GridControllers\Management\VehicleTypeDataGridController;
 use Tixi\ApiBundle\Shared\DataGrid\GridControllers\PassengerAbsentDataGridController;
 use Tixi\ApiBundle\Shared\DataGrid\GridControllers\PassengerDataGridController;
 use Tixi\ApiBundle\Shared\DataGrid\GridControllers\POIDataGridController;
@@ -56,5 +60,22 @@ class DataGridControllerFactory extends ContainerAware{
 
     public function createRepeatedDrivingAssertionPlanController($embeddedState=false, array $routeProperties=array()) {
         return new RepeatedDrivingAssertionsDataGridController($this->container, $embeddedState, $routeProperties);
+    }
+
+    //management
+    public function createManagementVehicleTypesController($embeddedState=false, array $routeProperties=array()) {
+        return new VehicleTypeDataGridController($this->container, $embeddedState, $routeProperties);
+    }
+
+    public function createManagementPoiKeywordsController($embeddedState=false, array $routeProperties=array()) {
+        return new PoiKeywordDataGridController($this->container, $embeddedState, $routeProperties);
+    }
+
+    public function createManagementHandicapController($embeddedState=false, array $routeProperties=array()) {
+        return new HandicapDataGridController($this->container, $embeddedState, $routeProperties);
+    }
+
+    public function createManagementInsuranceController($embeddedState=false, array $routeProperties=array()) {
+        return new InsuranceDataGridController($this->container, $embeddedState, $routeProperties);
     }
 } 
