@@ -32,7 +32,14 @@ class MenuService extends ContainerAware{
     public static $menuDriverRepeatedAssertionId = 'driver_repeatedassertions';
     public static $menuPassengerAbsentId = 'passenger_absents';
     public static $menuUserId = 'user';
-    public static $menuManagementUsersId = 'management_users';
+    public static $menuManagementUserId = 'management_users';
+    public static $menuManagementVehicleTypeId = 'management_vehicletypes';
+    public static $menuManagementPoiKeywordsId = 'management_poikeywords';
+    public static $menuManagementHandicapId = 'management_handicaps';
+    public static $menuManagementInsuranceId = 'management_insurances';
+    public static $menuManagementBankHolidayId = 'management_bankholidays';
+    public static $menuManagementZoningPlanId = 'management_zoningplans';
+    public static $menuManagementShiftTypeId = 'management_shifttypes';
 
     public static $menuSelectionManagementId = 'management';
 
@@ -61,10 +68,10 @@ class MenuService extends ContainerAware{
         $menuTile->add(new MenuItemTile(self::$menuVehicleId, $this->generateUrl('tixiapi_vehicles_get'), 'vehicle.panel.name', $rootId === self::$menuVehicleId));
         //ToDo should only be visible for users with role $$$
         $managementSelectionTile = $menuTile->add(new MenuSelectionItemTile(
-            self::$menuSelectionManagementId, 'Management',$this->checkSelectionRootActivity(self::$menuManagementUsersId, $activeItem))
+            self::$menuSelectionManagementId, 'Management',$this->checkSelectionRootActivity(self::$menuManagementUserId, $activeItem))
         );
         $managementSelectionTile->add(new MenuItemTile(
-            self::$menuVehicleId, $this->generateUrl('tixiapi_vehicles_get'), 'vehicle.panel.name', $this->checkSelectionChildActivity(self::$menuManagementUsersId, $activeItem)));
+            self::$menuVehicleId, $this->generateUrl('tixiapi_vehicles_get'), 'vehicle.panel.name', $this->checkSelectionChildActivity(self::$menuManagementUserId, $activeItem)));
         return $menuTile;
     }
 
