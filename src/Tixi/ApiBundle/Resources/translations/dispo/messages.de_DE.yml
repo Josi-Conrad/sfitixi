@@ -6,7 +6,6 @@ drivingorder.button.new: Neuer Fahrauftrag
 
 #ShiftTypes
 shifttype.list.name: Alle Schichten
-shifttype.breadcrumb.name: Schichten
 shifttype.panel.name: Schichten
 shifttype.panel.new: Neue Schicht
 shifttype.panel.edit: Schicht editieren

@@ -98,7 +98,7 @@ class DriverAssignTest extends WebTestCase {
         $shift = new ShiftType();
         $shift->setStart(new \DateTime());
         $shift->setEnd(new \DateTime());
-        $shift->setName('Schicht 1');
+        $shift->setName('Test');
         $this->shiftTypeRepo->store($shift);
 
         $repeatedDrivingAssertionWeekly = new RepeatedWeeklyDrivingAssertion();

@@ -32,9 +32,9 @@ class ShiftTypeDataGridController extends DataGridAbstractController{
         $customControlTile = new DataGridCustomControlTile();
         $selectionButton = $customControlTile->add(new SelectionButtonTile($this->getGridIdentifier().'_selection', 'button.with.selection'));
         $selectionButton->add(new TextLinkSelectionTile('edit', $this->generateUrl('tixiapi_management_shifttype_edit',array('shiftTypeId'=>DataGridHandler::$dataGirdReplaceIdentifier)),'button.edit',true));
-        $selectionButton->add(new SelectionButtonDividerTile());
-        $selectionButton->add(new TextLinkSelectionDeleteTile('delete', $this->generateUrl('tixiapi_management_shifttype_delete',array('shiftTypeId'=>DataGridHandler::$dataGirdReplaceIdentifier)),'button.delete',true));
-        $linkButton = $customControlTile->add(new LinkButtonTile($this->getGridIdentifier().'_new', $this->generateUrl('tixiapi_management_shifttype_new'),'shifttype.button.new', LinkButtonTile::$primaryType));
+        //$selectionButton->add(new SelectionButtonDividerTile());
+        //$selectionButton->add(new TextLinkSelectionDeleteTile('delete', $this->generateUrl('tixiapi_management_shifttype_delete',array('shiftTypeId'=>DataGridHandler::$dataGirdReplaceIdentifier)),'button.delete',true));
+        //$customControlTile->add(new LinkButtonTile($this->getGridIdentifier().'_new', $this->generateUrl('tixiapi_management_shifttype_new'),'shifttype.button.new', LinkButtonTile::$primaryType));
         return $customControlTile;
     }
 
@@ -56,7 +56,7 @@ class ShiftTypeDataGridController extends DataGridAbstractController{
         $shiftTypes = $this->getEntitiesByFgeaFilter($filter);
         $dtos = array();
         if (!$this->isInEmbeddedState()) {
-            $dtos = $assembler->shiftTypesToShiftTypeListDTOs($shiftTypes);
+            $dtos = $assembler->ShiftTypesToShiftTypeListDTOs($shiftTypes);
         }
         return $dtos;
     }

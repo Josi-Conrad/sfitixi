@@ -2,9 +2,12 @@
 user.management: Benutzerverwaltung
 user.field.username: Benutzername
 user.field.password: Passwort
+user.field.actual_password: Aktuelles Passwort
+user.field.new_password: Neues Passwort
+user.field.new_password_2: Neues Passwort bestätigen
 user.field.roles: Berechtigungen
 user.field.email: E-Mail
-user.list.name: Benutzer
+user.list.name: Alle Benutzer
 user.button.new: Neuer Benutzer
 user.panel.name: Benutzer
 user.panel.new: Neuer Benutzer
@@ -13,9 +16,6 @@ user.panel.edit: Benutzer editieren
 user.role.user: Benutzer
 user.role.manager: Manager
 user.role.admin: Administrator
-usern.name.not_blank: Ein Benutzername ist erforferlich
-usern.email.not_blank: Eine E-Mail Adresse ist erforferlich
-usern.password.not_blank: Ein Passwort ist erforferlich
 
 #User Roles
 role.user: Benutzer

@@ -41,15 +41,4 @@ class ShiftTypeListDTO implements DataGridSourceClass{
     {
         return new GenericAccessQuery('ShiftType', 'Tixi\CoreDomain\Dispo\ShiftType ShiftType', 'ShiftType.id');
     }
-
-    /**
-     * @param $shiftTypeId
-     * @internal param $personId
-     * @return ShiftTypeListDTO
-     */
-    public static function createReferenceDTOByShiftTypeId($shiftTypeId) {
-        $dto = new ShiftTypeListDTO();
-        $dto->id = $shiftTypeId;
-        return $dto;
-    }
 }

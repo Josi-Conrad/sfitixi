@@ -21,8 +21,9 @@
         <parameter key="tixi_api.poiassembler.class">Tixi\ApiBundle\Interfaces\POIAssembler</parameter>
 
         <!-- Management -->
-        <parameter key="tixi_api.userassembler.class">Tixi\ApiBundle\Interfaces\UserAssembler</parameter>
+        <parameter key="tixi_api.userassembler.class">Tixi\ApiBundle\Interfaces\Management\UserAssembler</parameter>
         <parameter key="tixi_api.shifttypeassembler.class">Tixi\ApiBundle\Interfaces\Management\ShiftTypeAssembler</parameter>
+        <parameter key="tixi_api.bankholidayassembler.class">Tixi\ApiBundle\Interfaces\Management\BankHolidayAssembler</parameter>
 
     </parameters>
 
@@ -98,7 +99,7 @@
                 <argument type="service" id="tixi_api.datetimeservice" />
             </call>
         </service>
-
+        <service id="tixi_api.assemblerBankHoliday" class="%tixi_api.bankholidayassembler.class%"/>
 
     </services>
 

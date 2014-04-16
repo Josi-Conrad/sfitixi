@@ -69,11 +69,15 @@ class MenuService extends ContainerAware{
          * render management functions only if user got manager role
          */
         if($this->container->get('security.context')->isGranted('ROLE_MANAGER')){
-            $managementSelectionTile = $menuTile->add(new MenuSelectionItemTile(
-                    self::$menuSelectionManagementId, 'management.panel.name',$this->checkSelectionRootActivity(self::$menuManagementUserId, $activeItem))
-            );
-            $managementSelectionTile->add(new MenuItemTile(
-                self::$menuVehicleId, $this->generateUrl('tixiapi_vehicles_get'), 'vehicle.panel.name', $this->checkSelectionChildActivity(self::$menuManagementUserId, $activeItem)));
+            $managementSelectionTile = $menuTile->add(new MenuSelectionItemTile(self::$menuSelectionManagementId,
+                'management.panel.name',$this->checkSelectionRootActivity(self::$menuManagementUserId, $activeItem)));
+            $managementSelectionTile->add(new MenuItemTile(self::$menuVehicleId,
+                $this->generateUrl('tixiapi_management_shifttypes_get'), 'shifttype.panel.name', $this->checkSelectionChildActivity(self::$menuManagementUserId, $activeItem)));
+            $managementSelectionTile->add(new MenuItemTile(self::$menuVehicleId,
+                $this->generateUrl('tixiapi_management_bankholidays_get'), 'bankholiday.panel.name', $this->checkSelectionChildActivity(self::$menuManagementUserId, $activeItem)));
+            $managementSelectionTile->add(new MenuItemTile(self::$menuVehicleId,
+                $this->generateUrl('tixiapi_management_users_get'), 'user.panel.name', $this->checkSelectionChildActivity(self::$menuManagementUserId, $activeItem)));
+
         }
 
         return $menuTile;

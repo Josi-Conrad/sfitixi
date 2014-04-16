@@ -6,7 +6,7 @@
  * Time: 23:05
  */
 
-namespace Tixi\ApiBundle\Form;
+namespace Tixi\ApiBundle\Form\Management;
 
 
 use Symfony\Component\Form\AbstractType;
@@ -15,10 +15,10 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 /**
- * Class UserType
- * @package Tixi\ApiBundle\Form
+ * Class UserProfileType
+ * @package Tixi\ApiBundle\Form\Management
  */
-class UserType extends AbstractType{
+class UserProfileType extends AbstractType{
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -27,25 +27,29 @@ class UserType extends AbstractType{
     {
         $builder->add('id', 'hidden');
 
-        $builder->add('username', 'text', array(
-            'label' => 'user.field.username',
-            'attr'=>array('title' => 'form.field.title.letter_digit'),
-            'pattern' => '^[a-zA-Z\d]+$',
+        $builder->add('email', 'email', array(
+            'label' => 'user.field.email',
             'constraints' => array(
-                new NotBlank(array('message'=>'user.name.not_blank'))
+                new NotBlank(array('message'=>'user.email.not_blank'))
             ),
         ));
+
         $builder->add('password', 'password', array(
-            'label' => 'user.field.password',
+            'label' => 'user.field.actual_password',
             'constraints' => array(
                 new NotBlank(array('message'=>'user.password.not_blank'))
             ),
         ));
-        $builder->add('email', 'email', array(
-            'label' => 'user.field.email',
-            'required' => false,
+        $builder->add('new_password_1', 'password', array(
+            'label' => 'user.field.new_password',
             'constraints' => array(
-                new NotBlank(array('message'=>'user.email.not_blank'))
+                new NotBlank(array('message'=>'user.password.not_blank'))
+            ),
+        ));
+        $builder->add('new_password_2', 'password', array(
+            'label' => 'user.field.new_password_2',
+            'constraints' => array(
+                new NotBlank(array('message'=>'user.password.not_blank'))
             ),
         ));
     }
@@ -57,7 +61,7 @@ class UserType extends AbstractType{
      */
     public function getName()
     {
-        return 'user';
+        return 'userprofile';
     }
 
     /**
@@ -66,7 +70,7 @@ class UserType extends AbstractType{
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Tixi\ApiBundle\Interfaces\UserRegisterDTO'
+            'data_class' => 'Tixi\ApiBundle\Interfaces\Management\UserProfileDTO'
         ));
     }
 }

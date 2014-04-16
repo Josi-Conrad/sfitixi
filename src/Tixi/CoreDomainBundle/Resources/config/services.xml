@@ -33,7 +33,8 @@
         <parameter key="vehicle_repository.doctrine.class">Tixi\CoreDomainBundle\Repository\VehicleRepositoryDoctrine</parameter>
         <parameter key="vehiclecategory.doctrine.entity">Tixi\CoreDomain\VehicleCategory</parameter>
         <parameter key="vehiclecategory_repository.doctrine.class">Tixi\CoreDomainBundle\Repository\VehicleCategoryRepositoryDoctrine</parameter>
-
+        <parameter key="bankholiday.doctrine.entity">Tixi\CoreDomain\BankHoliday</parameter>
+        <parameter key="bankholiday_repository.doctrine.class">Tixi\CoreDomainBundle\Repository\BankHolidayRepository</parameter>
         <parameter key="route.doctrine.entity">Tixi\CoreDomain\Dispo\Route</parameter>
         <parameter key="route_repository.doctrine.class">Tixi\CoreDomainBundle\Repository\Dispo\RouteRepositoryDoctrine</parameter>
         <parameter key="shifttype.doctrine.entity">Tixi\CoreDomain\Dispo\ShiftType</parameter>
@@ -139,6 +140,10 @@
             <argument type="string">%repeateddrivingassertion.doctrine.entity%</argument>
         </service>
 
+        <service id="bankholiday_repository" alias="bankholiday_repository.doctrine"></service>
+        <service id="bankholiday_repository.doctrine" class="%bankholiday_repository.doctrine.class%" factory-service="doctrine" factory-method="getrepository">
+            <argument type="string">%bankholiday.doctrine.entity%</argument>
+        </service>
     </services>
 
 </container>

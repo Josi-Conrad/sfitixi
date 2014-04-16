@@ -47,6 +47,15 @@ INSERT INTO `shift_type` (`id`,`name`,`start`,`end`) VALUES ('3','Schicht 3','00
 INSERT INTO `shift_type` (`id`,`name`,`start`,`end`) VALUES ('4','Schicht 4','0000-00-00 16:00:00','0000-00-00 20:00:00');
 INSERT INTO `shift_type` (`id`,`name`,`start`,`end`) VALUES ('5','Schicht 5','0000-00-00 20:00:00','0000-00-00 00:00:00');
 
+/*
+insert_bankholidays
+ */
+INSERT INTO `bankholiday` (`id`,`name`,`startDate`,`endDate`,`isDeleted`,`creationDateTime`,`modifiedDateTime`)
+ VALUES (1,'Karfreitag','2014-04-18','2014-04-18',0,'2014-04-16 19:17:02','2014-04-16 19:17:02');
+INSERT INTO `bankholiday` (`id`,`name`,`startDate`,`endDate`,`isDeleted`,`creationDateTime`,`modifiedDateTime`)
+ VALUES (2,'Ostern','2014-04-20','2014-04-21',0,'2014-04-16 19:17:14','2014-04-16 19:17:14');
+INSERT INTO `bankholiday` (`id`,`name`,`startDate`,`endDate`,`isDeleted`,`creationDateTime`,`modifiedDateTime`)
+VALUES (3,'Test','2014-07-20','2014-07-27',0,'2014-04-16 19:17:14','2014-04-16 19:17:14');
 
 /*
 insert_vehicles

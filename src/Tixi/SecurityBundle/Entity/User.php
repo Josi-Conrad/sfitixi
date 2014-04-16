@@ -2,15 +2,16 @@
 
 namespace Tixi\SecurityBundle\Entity;
 
-use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Tixi\CoreDomain\Shared\CommonBaseEntity;
 
 /**
  * @ORM\Entity(repositoryClass="Tixi\SecurityBundle\Repository\UserRepositoryDoctrine")
  * @ORM\Table(name="user")
  */
-class User implements UserInterface, \Serializable {
+class User extends CommonBaseEntity implements AdvancedUserInterface, \Serializable {
     /**
      * @ORM\Id
      * @ORM\Column(name="id", type="integer")
@@ -81,6 +82,16 @@ class User implements UserInterface, \Serializable {
         if (!empty($email)) {
             $this->setEmail($email);
         }
+    }
+
+    public function deleteLogically() {
+        parent::deleteLogically();
+        $this->inactivate();
+    }
+
+    public function undeleteLogically() {
+        parent::undeleteLogically();
+        $this->activate();
     }
 
     public function activate() {
@@ -208,5 +219,61 @@ class User implements UserInterface, \Serializable {
      */
     public function eraseCredentials() {
         // TODO: Implement eraseCredentials() method.
+    }
+
+    /**
+     * Checks whether the user's account has expired.
+     *
+     * Internally, if this method returns false, the authentication system
+     * will throw an AccountExpiredException and prevent login.
+     *
+     * @return Boolean true if the user's account is non expired, false otherwise
+     *
+     * @see AccountExpiredException
+     */
+    public function isAccountNonExpired() {
+        return true;
+    }
+
+    /**
+     * Checks whether the user is locked.
+     *
+     * Internally, if this method returns false, the authentication system
+     * will throw a LockedException and prevent login.
+     *
+     * @return Boolean true if the user is not locked, false otherwise
+     *
+     * @see LockedException
+     */
+    public function isAccountNonLocked() {
+        return true;
+    }
+
+    /**
+     * Checks whether the user's credentials (password) has expired.
+     *
+     * Internally, if this method returns false, the authentication system
+     * will throw a CredentialsExpiredException and prevent login.
+     *
+     * @return Boolean true if the user's credentials are non expired, false otherwise
+     *
+     * @see CredentialsExpiredException
+     */
+    public function isCredentialsNonExpired() {
+        return true;
+    }
+
+    /**
+     * Checks whether the user is enabled.
+     *
+     * Internally, if this method returns false, the authentication system
+     * will throw a DisabledException and prevent login.
+     *
+     * @return Boolean true if the user is enabled, false otherwise
+     *
+     * @see DisabledException
+     */
+    public function isEnabled() {
+        return $this->isActive;
     }
 }

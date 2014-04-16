@@ -1,0 +1,9 @@
+#BankHoliday
+bankholiday.list.name: Alle Feiertage
+bankholiday.panel.name: Feiertage
+bankholiday.panel.new: Neuer Feiertag
+bankholiday.panel.edit: Feiertag editieren
+bankholiday.field.name: Feiertags-Name
+bankholiday.field.start: Start-Datum
+bankholiday.field.end: End-Datum
+bankholiday.button.new: Neuer Feiertag

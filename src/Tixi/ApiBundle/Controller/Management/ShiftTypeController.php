@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: faustos
+ * User: hert
  * Date: 16.04.14
  * Time: 13:21
  */
@@ -9,11 +9,14 @@
 namespace Tixi\ApiBundle\Controller\Management;
 
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
+use Doctrine\DBAL\DBALException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Tixi\ApiBundle\Form\Management\ShiftTypeType;
 use Tixi\ApiBundle\Interfaces\Management\ShiftTypeRegisterDTO;
 use Tixi\ApiBundle\Menu\MenuService;
@@ -25,7 +28,7 @@ use Tixi\CoreDomain\Dispo\ShiftType;
  * Class ShiftTypeController
  * @package Tixi\ApiBundle\Controller\Management
  * @Breadcrumb("management.breadcrumb.name")
- * @Breadcrumb("shifttype.breadcrumb.name", route="tixiapi_management_shifttypes_get")
+ * @Breadcrumb("shifttype.panel.name", route="tixiapi_management_shifttypes_get")
  * @Route("/management/shifttypes")
  */
 class ShiftTypeController extends Controller {
@@ -41,9 +44,13 @@ class ShiftTypeController extends Controller {
      * @Method({"GET","POST"})
      * @param Request $request
      * @param bool $embeddedState
+     * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
      * @return Response
      */
     public function getShiftTypeAction(Request $request, $embeddedState = false) {
+        if (false === $this->get('security.context')->isGranted('ROLE_MANAGER')) {
+            throw new AccessDeniedException();
+        }
         $embeddedState = $embeddedState || $request->get('embedded') === "true";
         $isPartial = $request->get('partial') === "true";
 
@@ -70,11 +77,23 @@ class ShiftTypeController extends Controller {
      * @Method({"GET","POST"})
      * @param Request $request
      * @param $shiftTypeId
+     * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function deleteShiftTypeAction(Request $request, $shiftTypeId) {
+        if (false === $this->get('security.context')->isGranted('ROLE_MANAGER')) {
+            throw new AccessDeniedException();
+        }
         $shiftType = $this->getShiftType($shiftTypeId);
-        $shiftType->deleteLogically();
+        $this->get('entity_manager')->beginTransaction();
+        try {
+            $this->get('shifttype_repository')->remove($shiftType);
+        } catch (Exception $e) {
+            //SQLSTATE[23000]: Integrity constraint violation: 1451 Cannot delete
+            $this->get('entity_manager')->rollback();
+            return $this->redirect($this->generateUrl('tixiapi_management_shifttypes_get', array('error' => 'in use')));
+        }
+        $this->get('entity_manager')->commit();
         $this->get('entity_manager')->flush();
 
         return $this->redirect($this->generateUrl('tixiapi_management_shifttypes_get'));
@@ -85,9 +104,13 @@ class ShiftTypeController extends Controller {
      * @Method({"GET","POST"})
      * @Breadcrumb("shifttype.panel.new", route="tixiapi_management_shifttype_new")
      * @param Request $request
+     * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      */
     public function newShiftTypeAction(Request $request) {
+        if (false === $this->get('security.context')->isGranted('ROLE_MANAGER')) {
+            throw new AccessDeniedException();
+        }
         $tileRenderer = $this->get('tixi_api.tilerenderer');
 
         $form = $this->getForm();
@@ -111,10 +134,14 @@ class ShiftTypeController extends Controller {
      * @Breadcrumb("{shiftTypeId}", route={"name"="tixiapi_management_shifttype_edit", "parameters"={"shiftTypeId"}})
      * @param Request $request
      * @param $shiftTypeId
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
+     * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      */
     public function editShiftTypeAction(Request $request, $shiftTypeId) {
+        if (false === $this->get('security.context')->isGranted('ROLE_MANAGER')) {
+            throw new AccessDeniedException();
+        }
         $tileRenderer = $this->get('tixi_api.tilerenderer');
         $shiftTypeAssembler = $this->get('tixi_api.assemblerShiftType');
         $shiftType = $this->get('shifttype_repository')->find($shiftTypeId);
@@ -171,6 +198,7 @@ class ShiftTypeController extends Controller {
 
     /**
      * @param ShiftTypeRegisterDTO $shiftTypeDTO
+     * @return null|object|\Tixi\CoreDomain\Dispo\ShiftType
      */
     protected function registerOrUpdateShiftType(ShiftTypeRegisterDTO $shiftTypeDTO) {
         $shiftTypeRepository = $this->get('shifttype_repository');
@@ -178,9 +206,11 @@ class ShiftTypeController extends Controller {
         if (empty($shiftTypeDTO->id)) {
             $shiftType = $shiftTypeAssembler->registerDTOtoNewShiftType($shiftTypeDTO);
             $shiftTypeRepository->store($shiftType);
+            return $shiftType;
         } else {
             $shiftType = $shiftTypeRepository->find($shiftTypeDTO->id);
             $shiftTypeAssembler->registerDTOtoShiftType($shiftTypeDTO, $shiftType);
+            return $shiftType;
         }
     }
 

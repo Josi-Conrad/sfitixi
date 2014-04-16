@@ -4,9 +4,9 @@
             {{ app.user.username }} <a href="{{ path('tixi_logout') }}">{% trans %}button.logout{% endtrans %}</a>
         </div>
             <div>
-                <a href="{{ path('tixiapi_users_get') }}">{% trans %}button.settings{% endtrans %}</a>
+                <a href="{{ path('tixiapi_user_profile_get') }}">{% trans %}button.settings{% endtrans %}</a>
                 |
-                <a href="{{ path('tixiapi_home') }}">{% trans %}button.help{% endtrans %}</a>
+                <a href="{{ path('tixiapi_help') }}">{% trans %}button.help{% endtrans %}</a>
             </div>
     {% else %}
         <div>
