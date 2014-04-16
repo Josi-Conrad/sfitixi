@@ -43,6 +43,37 @@ class ShiftType {
     }
 
     /**
+     * @param $name
+     * @param $start
+     * @param $end
+     * @return ShiftType
+     */
+    public static function registerShiftType($name, $start, $end) {
+        $shiftType = new ShiftType();
+        $shiftType->setName($name);
+        $shiftType->setStart($start);
+        $shiftType->setEnd($end);
+        return $shiftType;
+    }
+
+    /**
+     * @param null $name
+     * @param null $start
+     * @param null $end
+     */
+    public function updateShiftTypeData($name = null, $start = null, $end = null) {
+        if (!empty($name)) {
+            $this->setName($name);
+        }
+        if (!empty($start)) {
+            $this->setStart($start);
+        }
+        if (!empty($end)) {
+            $this->setEnd($end);
+        }
+    }
+
+    /**
      * @param \DateTime $dateTime
      * @return bool
      */
@@ -54,16 +85,14 @@ class ShiftType {
     /**
      * @return mixed
      */
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
     }
 
     /**
      * @return mixed
      */
-    public function getName()
-    {
+    public function getName() {
         return $this->name;
     }
 
@@ -75,33 +104,31 @@ class ShiftType {
     }
 
     /**
-     * @return mixed
+     * @return \DateTime
      */
-    public function getStart()
-    {
+    public function getStart() {
         return $this->start;
     }
 
     /**
-     * @param mixed $start
+     * @param \DateTime $start
      */
-    public function setStart($start) {
+    public function setStart(\DateTime $start) {
         $this->start = $start;
     }
 
 
     /**
-     * @return mixed
+     * @return \DateTime
      */
-    public function getEnd()
-    {
+    public function getEnd() {
         return $this->end;
     }
 
     /**
-     * @param mixed $end
+     * @param \DateTime $end
      */
-    public function setEnd($end) {
+    public function setEnd(\DateTime $end) {
         $this->end = $end;
     }
 

@@ -15,6 +15,7 @@ use Tixi\ApiBundle\Shared\DataGrid\GridControllers\DriverDataGridController;
 use Tixi\ApiBundle\Shared\DataGrid\GridControllers\Management\HandicapDataGridController;
 use Tixi\ApiBundle\Shared\DataGrid\GridControllers\Management\InsuranceDataGridController;
 use Tixi\ApiBundle\Shared\DataGrid\GridControllers\Management\PoiKeywordDataGridController;
+use Tixi\ApiBundle\Shared\DataGrid\GridControllers\Management\ShiftTypeDataGridController;
 use Tixi\ApiBundle\Shared\DataGrid\GridControllers\Management\VehicleCategoryDataGridController;
 use Tixi\ApiBundle\Shared\DataGrid\GridControllers\PassengerAbsentDataGridController;
 use Tixi\ApiBundle\Shared\DataGrid\GridControllers\PassengerDataGridController;
@@ -77,5 +78,9 @@ class DataGridControllerFactory extends ContainerAware{
 
     public function createManagementInsuranceController($embeddedState=false, array $routeProperties=array()) {
         return new InsuranceDataGridController($this->container, $embeddedState, $routeProperties);
+    }
+
+    public function createManagementShiftTypeController($embeddedState=false, array $routeProperties=array()) {
+        return new ShiftTypeDataGridController($this->container, $embeddedState, $routeProperties);
     }
 } 

@@ -18,11 +18,16 @@
         <parameter key="tixi_api.tilerenderer.class">Tixi\ApiBundle\Tile\TileRenderer</parameter>
         <parameter key="tixi_api.datagridhandler.class">Tixi\ApiBundle\Shared\DataGrid\DataGridHandler</parameter>
         <parameter key="tixi_api.datagridcontrollerfactory.class">Tixi\ApiBundle\Shared\DataGrid\DataGridControllerFactory</parameter>
-        <parameter key="tixi_api.userassembler.class">Tixi\ApiBundle\Interfaces\UserAssembler</parameter>
         <parameter key="tixi_api.poiassembler.class">Tixi\ApiBundle\Interfaces\POIAssembler</parameter>
+
+        <!-- Management -->
+        <parameter key="tixi_api.userassembler.class">Tixi\ApiBundle\Interfaces\UserAssembler</parameter>
+        <parameter key="tixi_api.shifttypeassembler.class">Tixi\ApiBundle\Interfaces\Management\ShiftTypeAssembler</parameter>
+
     </parameters>
 
     <services>
+        <!-- MenuId -->
         <service id="tixi_api.twig.menurenderer" class="%tixi_api.twig.menurenderer.class%">
             <tag name="twig.extension" />
             <call method="setMenuService">
@@ -34,25 +39,15 @@
                 <argument type="service" id="service_container" />
             </call>
         </service>
+
+        <!-- DateTimeServer -->
         <service id="tixi_api.datetimeservice" class="%tixi_api.datetimeservice.class%">
             <call method="setContainer">
                 <argument type="service" id="service_container" />
             </call>
         </service>
-        <service id="tixi_api.assemblerVehicle" class="%tixi_api.vehicleassembler.class%"/>
-        <service id="tixi_api.assemblerServicePlan" class="%tixi_api.serviceplanassembler.class%">
-            <call method="setDateTimeService">
-                <argument type="service" id="tixi_api.datetimeservice" />
-            </call>
-        </service>
-        <service id="tixi_api.assemblerDriver" class="%tixi_api.driverassembler.class%"/>
-        <service id="tixi_api.assemblerPassenger" class="%tixi_api.passengerassembler.class%">
-        </service>
-        <service id="tixi_api.repeatedDrivingAssertionPlanAssembler" class="%tixi_api.repeateddrivingassertionassembler.class%">
-            <call method="setDateTimeService">
-                <argument type="service" id="tixi_api.datetimeservice" />
-            </call>
-        </service>
+
+        <!-- Tile -->
         <service id="tixi_api.tilerenderer" class="%tixi_api.tilerenderer.class%">
             <call method="setTemplateEngine">
                 <argument type="service" id="templating" />
@@ -72,16 +67,38 @@
             </call>
         </service>
 
-        <service id="tixi_api.assemblerAbsent" class="%tixi_api.absentassembler.class%"/>
-        <service id="tixi_api.assemblerUser" class="%tixi_api.userassembler.class%"/>
-        <service id="tixi_api.assemblerPOI" class="%tixi_api.poiassembler.class%"/>
-
+        <!-- FormTypes -->
         <service id="form.type.datePicker" class="Tixi\ApiBundle\Form\Shared\DatePickerType">
             <tag name="form.type" alias="datePicker" />
         </service>
         <service id="form.type.dateTimePicker" class="Tixi\ApiBundle\Form\Shared\DateTimePickerType">
             <tag name="form.type" alias="dateTimePicker" />
         </service>
+
+        <!-- Assembers -->
+        <service id="tixi_api.assemblerVehicle" class="%tixi_api.vehicleassembler.class%"/>
+        <service id="tixi_api.assemblerDriver" class="%tixi_api.driverassembler.class%"/>
+        <service id="tixi_api.assemblerPassenger" class="%tixi_api.passengerassembler.class%"/>
+        <service id="tixi_api.assemblerAbsent" class="%tixi_api.absentassembler.class%"/>
+        <service id="tixi_api.assemblerUser" class="%tixi_api.userassembler.class%"/>
+        <service id="tixi_api.assemblerPOI" class="%tixi_api.poiassembler.class%"/>
+        <service id="tixi_api.assemblerServicePlan" class="%tixi_api.serviceplanassembler.class%">
+            <call method="setDateTimeService">
+                <argument type="service" id="tixi_api.datetimeservice" />
+            </call>
+        </service>
+        <service id="tixi_api.repeatedDrivingAssertionPlanAssembler" class="%tixi_api.repeateddrivingassertionassembler.class%">
+            <call method="setDateTimeService">
+                <argument type="service" id="tixi_api.datetimeservice" />
+            </call>
+        </service>
+        <!-- Management -->
+        <service id="tixi_api.assemblerShiftType" class="%tixi_api.shifttypeassembler.class%">
+            <call method="setDateTimeService">
+                <argument type="service" id="tixi_api.datetimeservice" />
+            </call>
+        </service>
+
 
     </services>
 
