@@ -218,7 +218,9 @@ class DriverController extends Controller {
         } else {
             $options = array();
         }
-        return $this->createForm(new DriverType($this->menuId), $driverDTO, $options);
+        return $this->createForm(new DriverType(
+            $this->menuId, $this->get('security.context')->getToken()->getUser()),
+            $driverDTO, $options);
     }
 
     /**

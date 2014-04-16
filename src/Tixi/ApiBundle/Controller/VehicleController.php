@@ -221,7 +221,9 @@ class VehicleController extends Controller {
         } else {
             $options = array();
         }
-        return $this->createForm(new VehicleType($this->menuId), $vehicleDTO, $options);
+        return $this->createForm(new VehicleType(
+            $this->menuId, $this->get('security.context')->getToken()->getUser()),
+            $vehicleDTO, $options);
     }
 
     /**

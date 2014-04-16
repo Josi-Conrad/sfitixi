@@ -216,7 +216,9 @@ class PassengerController extends Controller {
         } else {
             $options = array();
         }
-        return $this->createForm(new PassengerType($this->menuId), $passengerDTO, $options);
+        return $this->createForm(new PassengerType(
+            $this->menuId, $this->get('security.context')->getToken()->getUser()),
+            $passengerDTO, $options);
     }
 
     /**
