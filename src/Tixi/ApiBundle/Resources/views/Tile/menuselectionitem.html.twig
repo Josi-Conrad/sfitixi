@@ -1,0 +1,13 @@
+{% set children = children|default('') %}
+<li class="dropdown {% if isActive %}active{% endif %}">
+    <a id="{{ 'fpx_' ~ menuSelectionId }}" class="dropdown-toggle" data-toggle="dropdown" href="#">
+        {{ displayName|trans }} <span class="caret"></span>
+    </a>
+    <ul class="dropdown-menu">
+        {% for resolvedElement in children %}
+            {% if 'menuitem' in resolvedElement.viewIndentifiers %}
+                {{ resolvedElement.rawData | raw }}
+            {% endif %}
+        {% endfor %}
+    </ul>
+</li>

@@ -14,6 +14,7 @@ namespace Tixi\ApiBundle\Menu;
 use Symfony\Component\DependencyInjection\ContainerAware;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Tixi\ApiBundle\Tile\Core\MenuItemTile;
+use Tixi\ApiBundle\Tile\Core\MenuSelectionItemTile;
 use Tixi\ApiBundle\Tile\Core\MenuTile;
 use Tixi\ApiBundle\Tile\TileRenderer;
 
@@ -31,6 +32,9 @@ class MenuService extends ContainerAware{
     public static $menuDriverRepeatedAssertionId = 'driver_repeatedassertions';
     public static $menuPassengerAbsentId = 'passenger_absents';
     public static $menuUserId = 'user';
+    public static $menuManagementUsersId = 'management_users';
+
+    public static $menuSelectionManagementId = 'management';
 
 
 
@@ -55,6 +59,12 @@ class MenuService extends ContainerAware{
         $menuTile->add(new MenuItemTile(self::$menuPoiId, $this->generateUrl('tixiapi_pois_get'), 'poi.panel.name', $rootId === self::$menuPoiId));
         $menuTile->add(new MenuItemTile(self::$menuDriverId, $this->generateUrl('tixiapi_drivers_get'), 'driver.panel.name', $rootId === self::$menuDriverId));
         $menuTile->add(new MenuItemTile(self::$menuVehicleId, $this->generateUrl('tixiapi_vehicles_get'), 'vehicle.panel.name', $rootId === self::$menuVehicleId));
+        //ToDo should only be visible for users with role $$$
+        $managementSelectionTile = $menuTile->add(new MenuSelectionItemTile(
+            self::$menuSelectionManagementId, 'Management',$this->checkSelectionRootActivity(self::$menuManagementUsersId, $activeItem))
+        );
+        $managementSelectionTile->add(new MenuItemTile(
+            self::$menuVehicleId, $this->generateUrl('tixiapi_vehicles_get'), 'vehicle.panel.name', $this->checkSelectionChildActivity(self::$menuManagementUsersId, $activeItem)));
         return $menuTile;
     }
 
@@ -64,5 +74,23 @@ class MenuService extends ContainerAware{
 
     protected function extractRootId($activeItem) {
         return explode('_', $activeItem)[0];
+    }
+
+    protected function extractSelectionId($activeItem) {
+        $exploded = explode('_', $activeItem);
+        $toReturn = '';
+        if(count($exploded)>1) {
+            $toReturn = $exploded[1];
+        }
+        return $toReturn;
+    }
+
+    protected function checkSelectionRootActivity($menuId, $activeItem) {
+        return $this->extractRootId($menuId) === $this->extractRootId($activeItem);
+    }
+
+    protected function checkSelectionChildActivity($menuId, $activeItem) {
+        return ($this->checkSelectionRootActivity($menuId, $activeItem) &&
+            $this->extractSelectionId($menuId) === $this->extractSelectionId($activeItem));
     }
 } 
