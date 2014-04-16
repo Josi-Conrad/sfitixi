@@ -33,7 +33,7 @@ class MenuService extends ContainerAware{
     public static $menuPassengerAbsentId = 'passenger_absents';
     public static $menuUserId = 'user';
     public static $menuManagementUserId = 'management_users';
-    public static $menuManagementVehicleTypeId = 'management_vehicletypes';
+    public static $menuManagementVehicleCategoryId = 'management_vehiclecategories';
     public static $menuManagementPoiKeywordsId = 'management_poikeywords';
     public static $menuManagementHandicapId = 'management_handicaps';
     public static $menuManagementInsuranceId = 'management_insurances';

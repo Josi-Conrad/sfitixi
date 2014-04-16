@@ -12,7 +12,7 @@ namespace Tixi\ApiBundle\Shared\DataGrid\GridControllers\Management;
 use Tixi\ApiBundle\Shared\DataGrid\DataGridAbstractController;
 use Tixi\CoreDomain\Shared\GenericEntityFilter\GenericEntityFilter;
 
-class VehicleTypeDataGridController extends DataGridAbstractController{
+class VehicleCategoryDataGridController extends DataGridAbstractController{
 
     public function getGridIdentifier()
     {
