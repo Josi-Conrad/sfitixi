@@ -103,3 +103,7 @@
     color: #d9534f!important;
 }
 
+form .required::after {
+    content: ' *';
+}
+
