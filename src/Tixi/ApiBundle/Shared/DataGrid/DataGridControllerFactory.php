@@ -63,11 +63,11 @@ class DataGridControllerFactory extends ContainerAware{
     }
 
     //management
-    public function createManagementVehicleTypesController($embeddedState=false, array $routeProperties=array()) {
+    public function createManagementVehicleTypeController($embeddedState=false, array $routeProperties=array()) {
         return new VehicleTypeDataGridController($this->container, $embeddedState, $routeProperties);
     }
 
-    public function createManagementPoiKeywordsController($embeddedState=false, array $routeProperties=array()) {
+    public function createManagementPoiKeywordController($embeddedState=false, array $routeProperties=array()) {
         return new PoiKeywordDataGridController($this->container, $embeddedState, $routeProperties);
     }
 
