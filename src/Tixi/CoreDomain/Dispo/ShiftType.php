@@ -54,14 +54,6 @@ class ShiftType {
     /**
      * @return mixed
      */
-    public function getEnd()
-    {
-        return $this->end;
-    }
-
-    /**
-     * @return mixed
-     */
     public function getId()
     {
         return $this->id;
@@ -76,6 +68,13 @@ class ShiftType {
     }
 
     /**
+     * @param mixed $name
+     */
+    public function setName($name) {
+        $this->name = $name;
+    }
+
+    /**
      * @return mixed
      */
     public function getStart()
@@ -83,6 +82,27 @@ class ShiftType {
         return $this->start;
     }
 
+    /**
+     * @param mixed $start
+     */
+    public function setStart($start) {
+        $this->start = $start;
+    }
 
+
+    /**
+     * @return mixed
+     */
+    public function getEnd()
+    {
+        return $this->end;
+    }
+
+    /**
+     * @param mixed $end
+     */
+    public function setEnd($end) {
+        $this->end = $end;
+    }
 
 } 
