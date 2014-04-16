@@ -14,12 +14,27 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints\DateTime;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Regex;
+use Tixi\SecurityBundle\Entity\User;
 
 /**
  * Class DriverType
  * @package Tixi\ApiBundle\Form
  */
 class DriverType extends PersonType {
+    /**
+     * inject current User to check security roles
+     * @var User $user
+     */
+    protected $user;
+
+    /**
+     * @param $menuId
+     * @param User $user
+     */
+    public function __construct($menuId, User $user) {
+        parent::__construct($menuId);
+        $this->user = $user;
+    }
 
     /**
      * @param FormBuilderInterface $builder
@@ -69,10 +84,13 @@ class DriverType extends PersonType {
                 new Regex(array('message'=>'form.field.title.digit','pattern'=>'/\d+/'))
             ),
         ));
-        $builder->add('details', 'textarea', array(
-            'required' => false,
-            'label' => 'person.field.details'
-        ));
+
+        if($this->user->hasRole('ROLE_MANAGER')){
+            $builder->add('details', 'textarea', array(
+                'required' => false,
+                'label' => 'person.field.details'
+            ));
+        }
     }
 
     /**

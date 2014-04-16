@@ -29,6 +29,5 @@ class VehicleRegisterFormViewTile extends AbstractFormViewTile{
         }
 
         $this->basicFormRows[] = new FormRowView('memo','vehicle.field.memo',$this->dto->memo);
-        $this->basicFormRows[] = new FormRowView('managementDetails','vehicle.field.managementdetails',$this->dto->managementDetails);
     }
 }

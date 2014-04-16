@@ -13,8 +13,14 @@ use Symfony\Component\Form\AbstractType;
 
 abstract class CommonAbstractType extends AbstractType{
 
+    /**
+     * menuId to identify and set corresponding ID from current view
+     */
     protected $menuId;
 
+    /**
+     * @param $menuId
+     */
     public function __construct($menuId) {
         $this->menuId = $menuId;
     }

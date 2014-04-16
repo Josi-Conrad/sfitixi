@@ -114,6 +114,21 @@ class User implements UserInterface, \Serializable {
     }
 
     /**
+     * @param $roleName
+     * @internal param $role
+     * @return mixed
+     */
+    public function hasRole($roleName) {
+        $found = false;
+        foreach ($this->roles as $role) {
+            if ($role->getRole() == $roleName) {
+                $found = true;
+            }
+        }
+        return $found;
+    }
+
+    /**
      * @return ArrayCollection
      */
     public function getRoles() {
