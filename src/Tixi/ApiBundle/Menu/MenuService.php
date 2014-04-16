@@ -44,15 +44,13 @@ class MenuService extends ContainerAware{
     public static $menuSelectionManagementId = 'management';
 
 
-
-
     public function __construct() {
         $this->activeMenuId = 'home';
     }
 
     public function createMenu($activeMenuItem=null) {
         $tileRender = $this->container->get('tixi_api.tilerenderer');
-        $activeItem = (null !== $activeMenuItem) ? $activeMenuItem : self::$menuHomeId;
+        $activeItem = (null !== $activeMenuItem) ? $activeMenuItem : self::$menuHomeIdmeId;
         return $tileRender->render($this->constructMenuTile($activeItem));
     }
 
@@ -66,12 +64,18 @@ class MenuService extends ContainerAware{
         $menuTile->add(new MenuItemTile(self::$menuPoiId, $this->generateUrl('tixiapi_pois_get'), 'poi.panel.name', $rootId === self::$menuPoiId));
         $menuTile->add(new MenuItemTile(self::$menuDriverId, $this->generateUrl('tixiapi_drivers_get'), 'driver.panel.name', $rootId === self::$menuDriverId));
         $menuTile->add(new MenuItemTile(self::$menuVehicleId, $this->generateUrl('tixiapi_vehicles_get'), 'vehicle.panel.name', $rootId === self::$menuVehicleId));
-        //ToDo should only be visible for users with role $$$
-        $managementSelectionTile = $menuTile->add(new MenuSelectionItemTile(
-            self::$menuSelectionManagementId, 'Management',$this->checkSelectionRootActivity(self::$menuManagementUserId, $activeItem))
-        );
-        $managementSelectionTile->add(new MenuItemTile(
-            self::$menuVehicleId, $this->generateUrl('tixiapi_vehicles_get'), 'vehicle.panel.name', $this->checkSelectionChildActivity(self::$menuManagementUserId, $activeItem)));
+
+        /**
+         * render management functions only if user got manager role
+         */
+        if($this->container->get('security.context')->isGranted('ROLE_MANAGER')){
+            $managementSelectionTile = $menuTile->add(new MenuSelectionItemTile(
+                    self::$menuSelectionManagementId, 'management.panel.name',$this->checkSelectionRootActivity(self::$menuManagementUserId, $activeItem))
+            );
+            $managementSelectionTile->add(new MenuItemTile(
+                self::$menuVehicleId, $this->generateUrl('tixiapi_vehicles_get'), 'vehicle.panel.name', $this->checkSelectionChildActivity(self::$menuManagementUserId, $activeItem)));
+        }
+
         return $menuTile;
     }
 

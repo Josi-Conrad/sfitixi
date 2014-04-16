@@ -3,18 +3,18 @@
     <div class="login">
         <section>
             <div class="panel-heading">
-                <h2 class="text-muted" style="text-align:center">Login</h2>
+                <h2 class="text-muted" style="text-align:center">{% trans %} login.panel.name {% endtrans %}</h2>
             </div>
             <form name="loginForm" action="{{ path('tixi_login_check') }}"
                   method="post" enctype="application/x-www-form-urlencoded">
                 <p>
-                    <label for="fpw_username">Benutzername:</label>
+                    <label for="fpw_username">{% trans %} login.form.username {% endtrans %}</label>
                     <input type="text" id="username" name="_username" value="{{ last_username }}"
                            autocomplete="on" required autofocus/>
                 </p>
 
                 <p>
-                    <label for="fpw_password">Passwort:</label>
+                    <label for="fpw_password">{% trans %} login.form.password {% endtrans %}</label>
                     <input type="password" id="password" name="_password"
                            required/>
                 </p>
@@ -25,7 +25,7 @@
 
                 <p>
                     <button type="submit" id="login" class="btn btn-primary">
-                        Anmelden
+                        {% trans %} login.button.login {% endtrans %}
                     </button>
                 </p>
                 <p>
