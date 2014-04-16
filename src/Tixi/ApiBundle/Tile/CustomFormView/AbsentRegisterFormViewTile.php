@@ -6,7 +6,7 @@
  * Time: 13:07
  */
 
-namespace Tixi\ApiBundle\Tile\Absent;
+namespace Tixi\ApiBundle\Tile\CustomFormView;
 
 
 use Tixi\ApiBundle\Tile\Core\AbstractFormViewTile;

@@ -21,7 +21,7 @@ use Tixi\ApiBundle\Menu\MenuService;
 use Tixi\ApiBundle\Tile\Core\FormTile;
 use Tixi\ApiBundle\Tile\Core\PanelDeleteFooterTile;
 use Tixi\ApiBundle\Tile\Core\RootPanel;
-use Tixi\ApiBundle\Tile\Absent\AbsentRegisterFormViewTile;
+use Tixi\ApiBundle\Tile\CustomFormView\AbsentRegisterFormViewTile;
 use Tixi\CoreDomain\Driver;
 
 /**

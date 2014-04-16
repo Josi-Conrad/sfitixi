@@ -41,3 +41,6 @@ serviceplan.panel.details: Serviceplan Details
 
 serviceplan.button.new: Neuer Serviceplan
 serviceplan.button.delete: Serviceplan löschen
+
+#Management_VehicleType
+vehicletype.list.name: Alle Fahrzeugtypen

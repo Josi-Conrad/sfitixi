@@ -6,7 +6,7 @@
  * Time: 12:02
  */
 
-namespace Tixi\ApiBundle\Tile\POI;
+namespace Tixi\ApiBundle\Tile\CustomFormView;
 
 use Symfony\Component\Validator\Constraints\DateTime;
 use Tixi\ApiBundle\Tile\Core\AbstractFormViewTile;

@@ -22,7 +22,7 @@ use Tixi\ApiBundle\Tile\Core\PanelDeleteFooterTile;
 use Tixi\ApiBundle\Tile\Core\PanelSplitterTile;
 use Tixi\ApiBundle\Tile\Core\PanelTile;
 use Tixi\ApiBundle\Tile\Core\RootPanel;
-use Tixi\ApiBundle\Tile\POI\POIRegisterFormViewTile;
+use Tixi\ApiBundle\Tile\CustomFormView\POIRegisterFormViewTile;
 
 /**
  * Class POIController
