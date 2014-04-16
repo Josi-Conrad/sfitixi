@@ -1,0 +1,4 @@
+login.panel.name: Login
+login.form.username: Benutzername
+login.form.password: Passwort
+login.button.login: Anmelden

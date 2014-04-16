@@ -22,9 +22,6 @@ Doctrine 2.4
 2) Build and Deploy
 --------------------
 
-### Symfony 2.3 Installation
-See [**Symfony Install Book**][1] for detailed instructions
-
 ### Build iTixi
 Execute `run_build.sh` to run composer install for dependencies and
 doctrines database mapping, asset installation and test_data import.
@@ -55,6 +52,10 @@ Password:   pass
 
 ### ROLE_MANAGER
 User:       manager
+Password:   pass
+
+### ROLE_DISPO
+User:       dispo
 Password:   pass
 
 ### ROLE_USER
