@@ -49,6 +49,7 @@ class User extends CommonBaseEntity implements AdvancedUserInterface, \Serializa
         $this->roles = new ArrayCollection();
         //$this->salt = sha1(uniqid(null, true)); //only without bcrypt necessary
         $this->activate();
+        parent::__construct();
     }
 
     /**
