@@ -228,7 +228,7 @@ class DriverController extends Controller {
      * @return null|object
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
-    protected function getDriver($driverId) {
+    protected function  getDriver($driverId) {
         $driverRepository = $this->get('driver_repository');
         $driver = $driverRepository->find($driverId);
         if(null === $driver) {

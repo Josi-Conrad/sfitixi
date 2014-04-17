@@ -28,7 +28,29 @@ class HomeController extends Controller {
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function getHomeAction(Request $request) {
-        $template = 'TixiApiBundle:Home:get.html.twig';
+        $template = 'TixiApiBundle:Home:getHome.html.twig';
+        return $this->render($template);
+    }
+
+    /**
+     * @Route("/help",name="tixiapi_help")
+     * @Method({"GET","POST"})
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function getHelpAction(Request $request) {
+        $template = 'TixiApiBundle:Home:getHelp.html.twig';
+        return $this->render($template);
+    }
+
+    /**
+     * @Route("/support",name="tixiapi_support")
+     * @Method({"GET","POST"})
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function getSupportAction(Request $request) {
+        $template = 'TixiApiBundle:Home:getSupport.html.twig';
         return $this->render($template);
     }
 }

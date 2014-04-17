@@ -17,8 +17,6 @@ use Tixi\CoreDomain\ServicePlan;
  * @package Tixi\ApiBundle\Interfaces
  */
 class ServicePlanAssembler {
-
-    //
     /**
      * injected by service container via setter method
      * @var $dateTimeService DateTimeService
@@ -64,7 +62,6 @@ class ServicePlanAssembler {
         $servicePlanDTO->endDate =
             $this->dateTimeService->convertToLocalDateTime($servicePlan->getEndDate());
         $servicePlanDTO->memo = $servicePlan->getMemo();
-        $servicePlanDTO->vehicleId = $servicePlan->getVehicle()->getId();
         return $servicePlanDTO;
     }
 

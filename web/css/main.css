@@ -1,4 +1,4 @@
-/*##### Data Grid #####*/
+/* Data Grid */
 .dataGrid table .selected td {
     color: #ffffff;
     background-color: #e67e22!important;
@@ -7,7 +7,6 @@
 .dataGrid .header {
     cursor: pointer;
     display: inline-block;
-
 }
 
 .dataGrid .sortIcon {
@@ -18,14 +17,18 @@
     display: none;
 }
 
-/* Buttons Main upper right corner */
+/* Top Action */
+.upperRightMargin{
+    margin-top: 15px;
+}
+
 .btn-group-main{
     bottom: 15px;
     position: relative;
     top: 15px;
 }
 
-/*##### Login Form #####*/
+/* Login Form */
 
 .login section {
     border: 1px solid #bababa;

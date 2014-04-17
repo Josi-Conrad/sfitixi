@@ -6,11 +6,11 @@
  * Time: 18:03
  */
 
-namespace Tixi\ApiBundle\Interfaces;
+namespace Tixi\ApiBundle\Interfaces\Management;
 
 /**
  * Class UserRegisterDTO
- * @package Tixi\ApiBundle\Interfaces
+ * @package Tixi\ApiBundle\Interfaces\Management
  */
 class UserRegisterDTO {
     public $id;

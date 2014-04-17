@@ -5,11 +5,15 @@ disposition.panel.name: Disposition
 drivingorder.button.new: Neuer Fahrauftrag
 
 #ShiftTypes
-shift1.name: Schicht 1
-shift2.name: Schicht 2
-shift3.name: Schicht 3
-shift4.name: Schicht 4
-shift5.name: Schicht 5
+shifttype.list.name: Alle Schichten
+shifttype.panel.name: Schichten
+shifttype.panel.new: Neue Schicht
+shifttype.panel.edit: Schicht editieren
+shifttype.field.name: Schicht-Name
+shifttype.field.start: Startzeit
+shifttype.field.end: Endzeit
+shifttype.button.new: Neue Schicht
+
 
 #RepeatedDrivingMission
 repeateddrivingmission.panel.new: Neuer Dauereinsatz

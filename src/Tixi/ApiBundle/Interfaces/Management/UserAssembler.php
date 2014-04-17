@@ -6,7 +6,7 @@
  * Time: 17:45
  */
 
-namespace Tixi\ApiBundle\Interfaces;
+namespace Tixi\ApiBundle\Interfaces\Management;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Security\Core\Encoder\EncoderFactory;
@@ -48,6 +48,19 @@ class UserAssembler {
      */
     public function userToUserRegisterDTO(User $user) {
         $userDTO = new UserRegisterDTO();
+        $userDTO->id = $user->getId();
+        $userDTO->username = $user->getUsername();
+        $userDTO->password = $user->getPassword();
+        $userDTO->email = $user->getEmail();
+        return $userDTO;
+    }
+
+    /**
+     * @param User $user
+     * @return UserProfileDTO
+     */
+    public function userToUserProfileDTO(User $user) {
+        $userDTO = new UserProfileDTO();
         $userDTO->id = $user->getId();
         $userDTO->username = $user->getUsername();
         $userDTO->password = $user->getPassword();

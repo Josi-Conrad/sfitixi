@@ -12,16 +12,18 @@ namespace Tixi\ApiBundle\Shared\DataGrid;
 use Symfony\Component\DependencyInjection\ContainerAware;
 use Tixi\ApiBundle\Shared\DataGrid\GridControllers\DriverAbsentDataGridController;
 use Tixi\ApiBundle\Shared\DataGrid\GridControllers\DriverDataGridController;
+use Tixi\ApiBundle\Shared\DataGrid\GridControllers\Management\BankHolidayDataGridController;
 use Tixi\ApiBundle\Shared\DataGrid\GridControllers\Management\HandicapDataGridController;
 use Tixi\ApiBundle\Shared\DataGrid\GridControllers\Management\InsuranceDataGridController;
 use Tixi\ApiBundle\Shared\DataGrid\GridControllers\Management\PoiKeywordDataGridController;
+use Tixi\ApiBundle\Shared\DataGrid\GridControllers\Management\ShiftTypeDataGridController;
 use Tixi\ApiBundle\Shared\DataGrid\GridControllers\Management\VehicleCategoryDataGridController;
 use Tixi\ApiBundle\Shared\DataGrid\GridControllers\PassengerAbsentDataGridController;
 use Tixi\ApiBundle\Shared\DataGrid\GridControllers\PassengerDataGridController;
 use Tixi\ApiBundle\Shared\DataGrid\GridControllers\POIDataGridController;
 use Tixi\ApiBundle\Shared\DataGrid\GridControllers\RepeatedDrivingAssertionsDataGridController;
 use Tixi\ApiBundle\Shared\DataGrid\GridControllers\ServicePlanDataGridController;
-use Tixi\ApiBundle\Shared\DataGrid\GridControllers\UserDataGridController;
+use Tixi\ApiBundle\Shared\DataGrid\GridControllers\Management\UserDataGridController;
 use Tixi\ApiBundle\Shared\DataGrid\GridControllers\VehicleDataGridController;
 
 class DataGridControllerFactory extends ContainerAware{
@@ -77,5 +79,13 @@ class DataGridControllerFactory extends ContainerAware{
 
     public function createManagementInsuranceController($embeddedState=false, array $routeProperties=array()) {
         return new InsuranceDataGridController($this->container, $embeddedState, $routeProperties);
+    }
+
+    public function createManagementShiftTypeController($embeddedState=false, array $routeProperties=array()) {
+        return new ShiftTypeDataGridController($this->container, $embeddedState, $routeProperties);
+    }
+
+    public function createManagementBankHolidayController($embeddedState=false, array $routeProperties=array()) {
+        return new BankHolidayDataGridController($this->container, $embeddedState, $routeProperties);
     }
 } 

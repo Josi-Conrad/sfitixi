@@ -33,7 +33,6 @@
     <div class="clearfix"></div>
     <div>
         {{ renderMenu(menuId) }}
-        {#{% include '::topNavigation.html.twig' %}#}
     </div>
     <div class="row">
         {{ apy_breadcrumb_trail_render() }}
@@ -44,7 +43,11 @@
     <div>
         <hr>
         <footer>
-            <p>&copy; Company 2013</p>
+            <p>
+                &copy; Company 2013 | <a href="{{ path('tixiapi_support') }}">
+                    {% trans %}button.support{% endtrans %}
+                </a>
+            </p>
         </footer>
     </div>
 </div>

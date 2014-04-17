@@ -30,6 +30,8 @@ class DateTimeService extends ContainerAware {
     }
 
     /**
+     * Not used anymore to persist,
+     * as doctrine saves all DateTimes to UTC (utcdatetime type)
      * @param \DateTime $localDate
      * @return \DateTime
      */
@@ -51,6 +53,15 @@ class DateTimeService extends ContainerAware {
         }
     }
 
+    /**
+     * @param \DateTime $utcDate
+     * @return string
+     */
+    public function convertToLocalTimeString($utcDate) {
+        if (null !== $utcDate) {
+            return $this->convertToLocalDateTime($utcDate)->format('H:i');
+        }
+    }
     /**
      * @param $localDateStr
      * @return \DateTime

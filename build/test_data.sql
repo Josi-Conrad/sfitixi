@@ -9,19 +9,25 @@ Test Data Import
 Symfony UsersLogins
 */
 INSERT INTO `role` (`id`,`name`,`role`) VALUES (1,'User','ROLE_USER');
-INSERT INTO `role` (`id`,`name`,`role`) VALUES (2,'Manager','ROLE_MANAGER');
-INSERT INTO `role` (`id`,`name`,`role`) VALUES (3,'Administrator','ROLE_ADMIN');
+INSERT INTO `role` (`id`,`name`,`role`) VALUES (2,'Disponent','ROLE_DISPO');
+INSERT INTO `role` (`id`,`name`,`role`) VALUES (3,'Manager','ROLE_MANAGER');
+INSERT INTO `role` (`id`,`name`,`role`) VALUES (4,'Administrator','ROLE_ADMIN');
 
 INSERT INTO `user` (`id`,`is_active`,`username`,`password`,`email`) VALUES (1,1,'admin','$2y$12$d1lUQkXSUK/6YKJz59Kkbep1egTCJfyCLu7oIrspFBlhcxkXMPgGa', 'rschelbe@hsr.ch');
 INSERT INTO `user` (`id`,`is_active`,`username`,`password`,`email`) VALUES (2,1,'manager','$2y$12$yRvd9NQEtkBKMXFkG68wleAFVppdJvtk24601QysAB/WqObfhxrVu', 'manager@tixi.ch');
-INSERT INTO `user` (`id`,`is_active`,`username`,`password`,`email`) VALUES (3,1,'user','$2y$12$uythl5SYahaKi9v06WJPpOHosK/pNHTja0/q4iVtVoDpa29vJ9Bl2', 'test@tixi.ch');
+INSERT INTO `user` (`id`,`is_active`,`username`,`password`,`email`) VALUES (3,1,'dispo','$2y$12$uythl5SYahaKi9v06WJPpOHosK/pNHTja0/q4iVtVoDpa29vJ9Bl2', 'test@tixi.ch');
+INSERT INTO `user` (`id`,`is_active`,`username`,`password`,`email`) VALUES (4,1,'user','$2y$12$uythl5SYahaKi9v06WJPpOHosK/pNHTja0/q4iVtVoDpa29vJ9Bl2', 'test@tixi.ch');
 
 INSERT INTO `user_to_role` (`user_id`,`role_id`) VALUES (1,1);
 INSERT INTO `user_to_role` (`user_id`,`role_id`) VALUES (1,2);
 INSERT INTO `user_to_role` (`user_id`,`role_id`) VALUES (1,3);
+INSERT INTO `user_to_role` (`user_id`,`role_id`) VALUES (1,4);
 INSERT INTO `user_to_role` (`user_id`,`role_id`) VALUES (2,1);
 INSERT INTO `user_to_role` (`user_id`,`role_id`) VALUES (2,2);
+INSERT INTO `user_to_role` (`user_id`,`role_id`) VALUES (2,3);
 INSERT INTO `user_to_role` (`user_id`,`role_id`) VALUES (3,1);
+INSERT INTO `user_to_role` (`user_id`,`role_id`) VALUES (3,2);
+INSERT INTO `user_to_role` (`user_id`,`role_id`) VALUES (4,1);
 
 /*
 insert_categories
@@ -35,12 +41,21 @@ INSERT INTO `poi_keyword` VALUES (1,'Therapie'),(2,'Arztpraxis'),(3,'Werkstatt')
 /*
 insert_shifttypes
 */
-INSERT INTO `shift_type` (`id`,`name`,`start`,`end`) VALUES ('1','shift1.name','0000-00-00 00:00:00','0000-00-00 00:00:00');
-INSERT INTO `shift_type` (`id`,`name`,`start`,`end`) VALUES ('2','shift2.name','0000-00-00 00:00:00','0000-00-00 00:00:00');
-INSERT INTO `shift_type` (`id`,`name`,`start`,`end`) VALUES ('3','shift3.name','0000-00-00 00:00:00','0000-00-00 00:00:00');
-INSERT INTO `shift_type` (`id`,`name`,`start`,`end`) VALUES ('4','shift4.name','0000-00-00 00:00:00','0000-00-00 00:00:00');
-INSERT INTO `shift_type` (`id`,`name`,`start`,`end`) VALUES ('5','shift5.name','0000-00-00 00:00:00','0000-00-00 00:00:00');
+INSERT INTO `shift_type` (`id`,`name`,`start`,`end`) VALUES ('1','Schicht 1','0000-00-00 00:00:00','0000-00-00 08:00:00');
+INSERT INTO `shift_type` (`id`,`name`,`start`,`end`) VALUES ('2','Schicht 2','0000-00-00 08:00:00','0000-00-00 12:00:00');
+INSERT INTO `shift_type` (`id`,`name`,`start`,`end`) VALUES ('3','Schicht 3','0000-00-00 12:00:00','0000-00-00 16:00:00');
+INSERT INTO `shift_type` (`id`,`name`,`start`,`end`) VALUES ('4','Schicht 4','0000-00-00 16:00:00','0000-00-00 20:00:00');
+INSERT INTO `shift_type` (`id`,`name`,`start`,`end`) VALUES ('5','Schicht 5','0000-00-00 20:00:00','0000-00-00 00:00:00');
 
+/*
+insert_bankholidays
+ */
+INSERT INTO `bankholiday` (`id`,`name`,`startDate`,`endDate`,`isDeleted`,`creationDateTime`,`modifiedDateTime`)
+ VALUES (1,'Karfreitag','2014-04-18','2014-04-18',0,'2014-04-16 19:17:02','2014-04-16 19:17:02');
+INSERT INTO `bankholiday` (`id`,`name`,`startDate`,`endDate`,`isDeleted`,`creationDateTime`,`modifiedDateTime`)
+ VALUES (2,'Ostern','2014-04-20','2014-04-21',0,'2014-04-16 19:17:14','2014-04-16 19:17:14');
+INSERT INTO `bankholiday` (`id`,`name`,`startDate`,`endDate`,`isDeleted`,`creationDateTime`,`modifiedDateTime`)
+VALUES (3,'Test','2014-07-20','2014-07-27',0,'2014-04-16 19:17:14','2014-04-16 19:17:14');
 
 /*
 insert_vehicles
