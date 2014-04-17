@@ -51,6 +51,7 @@ class POIType extends CommonAbstractType {
             'property' => 'name',
             'label' => 'poi.field.keyword',
             'multiple' => true,
+            'expanded' => true,
             'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('k')
                         ->orderBy('k.name', 'ASC');
