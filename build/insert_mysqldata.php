@@ -14,11 +14,36 @@ $sql = file_get_contents($sql_file);
 if (!$sql) {
     die ("Error opening file: " . $sql_file . "\n");
 }
-mysqli_multi_query($mysqli, $sql);
-if ($mysqli->error) {
-    trigger_error($mysqli->error, E_USER_ERROR);
-} else {
-    echo "Tables from " . $sql_file . " imported successfully!" . "\n";
+
+$succ = true;
+if ($mysqli->multi_query($sql)) {
+    do {
+        /* store first result set */
+        if ($result = $mysqli->store_result()) {
+            while ($row = $result->fetch_row()) {
+                printf("%s\n", $row[0]);
+            }
+            $result->free();
+        }
+        if ($mysqli->error) {
+            $succ = false;
+            trigger_error($mysqli->error, E_USER_ERROR);
+        }
+        if (!$mysqli->more_results()) {
+            break;
+        }
+        if (!$mysqli->next_result()) {
+            break;
+        }
+    } while (true);
 }
+
 $mysqli->close();
+
+if($succ){
+    echo "Tables from " . $sql_file . " imported!" . "\n";
+} else {
+    echo "Some error happend!" . "\n";
+}
+
 ?>

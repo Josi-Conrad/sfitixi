@@ -8,15 +8,17 @@ Test Data Import
 /*
 Symfony UsersLogins
 */
-INSERT INTO `role` (`id`,`name`,`role`) VALUES (1,'User','ROLE_USER');
-INSERT INTO `role` (`id`,`name`,`role`) VALUES (2,'Disponent','ROLE_DISPO');
-INSERT INTO `role` (`id`,`name`,`role`) VALUES (3,'Manager','ROLE_MANAGER');
-INSERT INTO `role` (`id`,`name`,`role`) VALUES (4,'Administrator','ROLE_ADMIN');
+INSERT INTO `role` (`id`,`name`,`role`) VALUES
+  (1,'User','ROLE_USER'),
+  (2,'Disponent','ROLE_DISPO'),
+  (3,'Manager','ROLE_MANAGER'),
+  (4,'Administrator','ROLE_ADMIN');
 
-INSERT INTO `user` (`id`,`is_active`,`username`,`password`,`email`) VALUES (1,1,'admin','$2y$12$d1lUQkXSUK/6YKJz59Kkbep1egTCJfyCLu7oIrspFBlhcxkXMPgGa', 'rschelbe@hsr.ch');
-INSERT INTO `user` (`id`,`is_active`,`username`,`password`,`email`) VALUES (2,1,'manager','$2y$12$yRvd9NQEtkBKMXFkG68wleAFVppdJvtk24601QysAB/WqObfhxrVu', 'manager@tixi.ch');
-INSERT INTO `user` (`id`,`is_active`,`username`,`password`,`email`) VALUES (3,1,'dispo','$2y$12$uythl5SYahaKi9v06WJPpOHosK/pNHTja0/q4iVtVoDpa29vJ9Bl2', 'test@tixi.ch');
-INSERT INTO `user` (`id`,`is_active`,`username`,`password`,`email`) VALUES (4,1,'user','$2y$12$uythl5SYahaKi9v06WJPpOHosK/pNHTja0/q4iVtVoDpa29vJ9Bl2', 'test@tixi.ch');
+INSERT INTO `user` (`id`,`is_active`,`username`,`password`,`email`) VALUES
+  (1,1,'admin','$2y$12$d1lUQkXSUK/6YKJz59Kkbep1egTCJfyCLu7oIrspFBlhcxkXMPgGa', 'rschelbe@hsr.ch'),
+  (2,1,'manager','$2y$12$yRvd9NQEtkBKMXFkG68wleAFVppdJvtk24601QysAB/WqObfhxrVu', 'manager@tixi.ch'),
+  (3,1,'dispo','$2y$12$uythl5SYahaKi9v06WJPpOHosK/pNHTja0/q4iVtVoDpa29vJ9Bl2', 'test@tixi.ch'),
+  (4,1,'user','$2y$12$uythl5SYahaKi9v06WJPpOHosK/pNHTja0/q4iVtVoDpa29vJ9Bl2', 'test@tixi.ch');
 
 INSERT INTO `user_to_role` (`user_id`,`role_id`) VALUES (1,1);
 INSERT INTO `user_to_role` (`user_id`,`role_id`) VALUES (1,2);
@@ -32,30 +34,28 @@ INSERT INTO `user_to_role` (`user_id`,`role_id`) VALUES (4,1);
 /*
 insert_categories
 */
-INSERT INTO `driver_category` VALUES (1, 'Freiwillig'),(2, 'Mitglied'),(3, 'Zivildienst');
-INSERT INTO `vehicle_category` VALUES (1,'Movano',5,1),(2,'VM Maxi',4,1),(3,'VM Caddy',4,2);
-INSERT INTO `handicap` VALUES (1, 'Sehbehinderung'),(2, 'Gehbehinderung'),(3, 'Hörbehinderung'),(4, 'Sprachbehinderung'),(5, 'geistige Behinderung');
-INSERT INTO `insurance` VALUES (1, 'AHV'),(2, 'IV');
-INSERT INTO `poi_keyword` VALUES (1,'Therapie'),(2,'Arztpraxis'),(3,'Werkstatt'),(4,'Arbeitsplatz'),(5,'Klinik'),(6,'Zahnarzt');
+INSERT INTO `driver_category` (`id`,`name`) VALUES (1, 'Freiwillig'),(2, 'Mitglied'),(3, 'Zivildienst');
+INSERT INTO `vehicle_category` (`id`,`name`,`amountOfSeats`,`amountOfWheelChairs`) VALUES (1,'Movano',5,1),(2,'VM Maxi',4,1),(3,'VM Caddy',4,2);
+INSERT INTO `handicap` (`id`,`name`) VALUES (1, 'Sehbehinderung'),(2, 'Gehbehinderung'),(3, 'Hörbehinderung'),(4, 'Sprachbehinderung'),(5, 'geistige Behinderung');
+INSERT INTO `insurance` (`id`,`name`) VALUES (1, 'AHV'),(2, 'IV');
+INSERT INTO `poi_keyword` (`id`,`name`) VALUES (1,'Therapie'),(2,'Arztpraxis'),(3,'Werkstatt'),(4,'Arbeitsplatz'),(5,'Klinik'),(6,'Zahnarzt');
 
 /*
 insert_shifttypes
 */
-INSERT INTO `shift_type` (`id`,`name`,`start`,`end`) VALUES ('1','Schicht 1','0000-00-00 00:00:00','0000-00-00 08:00:00');
-INSERT INTO `shift_type` (`id`,`name`,`start`,`end`) VALUES ('2','Schicht 2','0000-00-00 08:00:00','0000-00-00 12:00:00');
-INSERT INTO `shift_type` (`id`,`name`,`start`,`end`) VALUES ('3','Schicht 3','0000-00-00 12:00:00','0000-00-00 16:00:00');
-INSERT INTO `shift_type` (`id`,`name`,`start`,`end`) VALUES ('4','Schicht 4','0000-00-00 16:00:00','0000-00-00 20:00:00');
-INSERT INTO `shift_type` (`id`,`name`,`start`,`end`) VALUES ('5','Schicht 5','0000-00-00 20:00:00','0000-00-00 00:00:00');
+INSERT INTO `shift_type` (`id`,`name`,`start`,`end`) VALUES ('1','Schicht 1','0000-00-00 00:00:00','0000-00-00 08:00:00'),
+('2','Schicht 2','0000-00-00 08:00:00','0000-00-00 12:00:00'),
+('3','Schicht 3','0000-00-00 12:00:00','0000-00-00 16:00:00'),
+('4','Schicht 4','0000-00-00 16:00:00','0000-00-00 20:00:00'),
+('5','Schicht 5','0000-00-00 20:00:00','0000-00-00 00:00:00');
 
 /*
 insert_bankholidays
  */
 INSERT INTO `bankholiday` (`id`,`name`,`startDate`,`endDate`,`isDeleted`,`creationDateTime`,`modifiedDateTime`)
- VALUES (1,'Karfreitag','2014-04-18','2014-04-18',0,'2014-04-16 19:17:02','2014-04-16 19:17:02');
-INSERT INTO `bankholiday` (`id`,`name`,`startDate`,`endDate`,`isDeleted`,`creationDateTime`,`modifiedDateTime`)
- VALUES (2,'Ostern','2014-04-20','2014-04-21',0,'2014-04-16 19:17:14','2014-04-16 19:17:14');
-INSERT INTO `bankholiday` (`id`,`name`,`startDate`,`endDate`,`isDeleted`,`creationDateTime`,`modifiedDateTime`)
-VALUES (3,'Test','2014-07-20','2014-07-27',0,'2014-04-16 19:17:14','2014-04-16 19:17:14');
+VALUES (1,'Karfreitag','2014-04-18','2014-04-18',0,'2014-04-16 19:17:02','2014-04-16 19:17:02'),
+(2,'Ostern','2014-04-20','2014-04-21',0,'2014-04-16 19:17:14','2014-04-16 19:17:14'),
+(3,'Test','2014-07-20','2014-07-27',0,'2014-04-16 19:17:14','2014-04-16 19:17:14');
 
 /*
 insert_vehicles
@@ -2309,32 +2309,34 @@ INSERT INTO `person` (`discr`,`isActive`,`address_id`,`title`,`firstname`,`lastn
 /*
 insert_serviceplan
 */
-INSERT INTO `serviceplan` (`id`,`vehicle_id`,`startDate`,`endDate`,`memo`) VALUES (1,1,'2014-04-16 22:00:00','2014-04-22 22:00:00','jährliche Service');
-INSERT INTO `serviceplan` (`id`,`vehicle_id`,`startDate`,`endDate`,`memo`) VALUES (2,1,'2014-07-04 22:00:00','2014-07-11 22:00:00','test2');
-INSERT INTO `serviceplan` (`id`,`vehicle_id`,`startDate`,`endDate`,`memo`) VALUES (3,1,'2013-12-31 23:00:00','2014-03-31 22:00:00','alter Service');
+INSERT INTO `serviceplan` (`id`,`vehicle_id`,`startDate`,`endDate`,`memo`)
+VALUES (1,1,'2014-04-16 22:00:00','2014-04-22 22:00:00','jährliche Service'),
+(2,1,'2014-07-04 22:00:00','2014-07-11 22:00:00','test2'),
+(3,1,'2013-12-31 23:00:00','2014-03-31 22:00:00','alter Service');
 
 /*
 insert_absent
 */
-INSERT INTO `absent` (`id`,`person_id`,`subject`,`startDate`,`endDate`) VALUES (1,1,'Ferien','2014-07-04','2014-07-11');
-INSERT INTO `absent` (`id`,`person_id`,`subject`,`startDate`,`endDate`) VALUES (2,1,'Ferien Alt','2014-01-01','2014-01-09');
-INSERT INTO `absent` (`id`,`person_id`,`subject`,`startDate`,`endDate`) VALUES (3,1,'Doktor','2014-05-30','2014-05-30');
-INSERT INTO `absent` (`id`,`person_id`,`subject`,`startDate`,`endDate`) VALUES (4,28,'Ferien','2014-07-05','2014-07-31');
-INSERT INTO `absent` (`id`,`person_id`,`subject`,`startDate`,`endDate`) VALUES (5,28,'Ferien alt','2014-01-02','2014-01-10');
+INSERT INTO `absent` (`id`,`person_id`,`subject`,`startDate`,`endDate`)
+VALUES (1,1,'Ferien','2014-07-04','2014-07-11'),
+  (2,1,'Ferien Alt','2014-01-01','2014-01-09'),
+  (3,1,'Doktor','2014-05-30','2014-05-30'),
+  (4,28,'Ferien','2014-07-05','2014-07-31'),
+  (5,28,'Ferien alt','2014-01-02','2014-01-10');
 
 /*
 insert_poi_to_keywords
 */
-INSERT INTO `poi_to_keywords` (`poi_id`,`poikeyword_id`) VALUES (1,2);
-INSERT INTO `poi_to_keywords` (`poi_id`,`poikeyword_id`) VALUES (1,4);
-INSERT INTO `poi_to_keywords` (`poi_id`,`poikeyword_id`) VALUES (1,5);
+INSERT INTO `poi_to_keywords` (`poi_id`,`poikeyword_id`) VALUES (1,2), (1,4), (1,5);
 
 /*
 insert_repeated_shift
 */
-INSERT INTO `repeated_driving_assertion_plan` (`id`,`driver_id`,`memo`,`anchorDate`,`endingDate`,`frequency`,`withHolidays`) VALUES (1,1,'Normaleinsatz','2014-04-01 00:00:00','2015-04-01 00:00:00','weekly',1);
+INSERT INTO `repeated_driving_assertion_plan` (`id`,`driver_id`,`memo`,`anchorDate`,`endingDate`,`frequency`,`withHolidays`)
+VALUES (1,1,'Normaleinsatz','2014-04-01 00:00:00','2015-04-01 00:00:00','weekly',1);
 
-INSERT INTO `repeated_driving_assertion` (`id`,`repeatedassertionplan_id`,`discr`,`weekday`,`weekdayAsText`,`relativeWeekAsText`) VALUES (1,1,'weekly',3,NULL,NULL);
+INSERT INTO `repeated_driving_assertion` (`id`,`repeatedassertionplan_id`,`discr`,`weekday`,`weekdayAsText`,`relativeWeekAsText`)
+VALUES (1,1,'weekly',3,NULL,NULL);
 
 INSERT INTO `repeateddrivingassertion_to_shifttypes` (`repeateddrivingassertion_id`,`shifttype_id`) VALUES (1,'1');
 INSERT INTO `repeateddrivingassertion_to_shifttypes` (`repeateddrivingassertion_id`,`shifttype_id`) VALUES (1,'2');

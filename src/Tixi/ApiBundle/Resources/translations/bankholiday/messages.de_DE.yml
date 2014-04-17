@@ -7,3 +7,4 @@ bankholiday.field.name: Feiertags-Name
 bankholiday.field.start: Start-Datum
 bankholiday.field.end: End-Datum
 bankholiday.button.new: Neuer Feiertag
+bankholiday.button.delete: Feiertag löschen

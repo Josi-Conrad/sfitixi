@@ -37,6 +37,7 @@ class UserType extends AbstractType{
         ));
         $builder->add('password', 'password', array(
             'label' => 'user.field.password',
+            'required' => false,
             'constraints' => array(
                 new NotBlank(array('message'=>'user.password.not_blank'))
             ),

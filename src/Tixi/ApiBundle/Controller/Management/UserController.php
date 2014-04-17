@@ -19,6 +19,7 @@ use Tixi\ApiBundle\Form\Management\UserType;
 use Tixi\ApiBundle\Interfaces\Management\UserRegisterDTO;
 use Tixi\ApiBundle\Menu\MenuService;
 use Tixi\ApiBundle\Tile\Core\FormTile;
+use Tixi\ApiBundle\Tile\Core\PanelDeleteFooterTile;
 use Tixi\ApiBundle\Tile\Core\PanelSplitterTile;
 use Tixi\ApiBundle\Tile\Core\PanelTile;
 use Tixi\ApiBundle\Tile\Core\RootPanel;
@@ -74,35 +75,6 @@ class UserController extends Controller {
     }
 
     /**
-     * @Route("/{userId}", requirements={"userId" = "^(?!new)[^/]+$"}, name="tixiapi_management_user_get")
-     * @Method({"GET","POST"})
-     * @Breadcrumb("{userId}", route={"name"="tixiapi_management_user_get", "parameters"={"userId"}})
-     * @param Request $request
-     * @param $userId
-     * @throws AccessDeniedException
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
-     * @return Response
-     */
-    public function getUserAction(Request $request, $userId) {
-        if (false === $this->get('security.context')->isGranted('ROLE_ADMIN')) {
-            throw new AccessDeniedException();
-        }
-        $tileRenderer = $this->get('tixi_api.tilerenderer');
-        $userRepository = $this->get('tixi_user_repository');
-
-        $user = $userRepository->find($userId);
-        if (null === $user) {
-            throw $this->createNotFoundException('The user with id ' . $userId . ' does not exists');
-        }
-        $userDTO = $this->get('tixi_api.assembleruser')->userToUserRegisterDTO($user);
-        $rootPanel = new RootPanel($this->menuId, $user->getUsername());
-        $rootPanel->add(new UserRegisterFormViewTile('userRequest', $userDTO,
-            $this->generateUrl('tixiapi_management_user_edit', array('userId' => $userId))));
-
-        return new Response($tileRenderer->render($rootPanel));
-    }
-
-    /**
      * @Route("/new", name="tixiapi_management_user_new")
      * @Method({"GET","POST"})
      * @Breadcrumb("user.panel.new", route="tixiapi_management_user_new")
@@ -115,6 +87,7 @@ class UserController extends Controller {
             throw new AccessDeniedException();
         }
         $tileRenderer = $this->get('tixi_api.tilerenderer');
+
         $form = $this->getForm();
         $form->handleRequest($request);
         $rootPanel = new RootPanel($this->menuId, 'user.panel.new');
@@ -159,10 +132,12 @@ class UserController extends Controller {
             $userDTO = $form->getData();
             $this->registerOrUpdateUser($userDTO);
             $this->get('entity_manager')->flush();
-            return $this->redirect($this->generateUrl('tixiapi_management_user_get', array('userId' => $userId)));
+            return $this->redirect($this->generateUrl('tixiapi_management_users_get', array('userId' => $userId)));
         }
         $rootPanel = new RootPanel($this->menuId, 'user.panel.edit');
         $rootPanel->add(new FormTile($form, true));
+        $rootPanel->add(new PanelDeleteFooterTile($this->generateUrl('tixiapi_management_user_delete',
+            array('userId' => $userId)),'user.button.delete'));
 
         return new Response($tileRenderer->render($rootPanel));
     }
