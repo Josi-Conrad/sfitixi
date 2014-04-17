@@ -42,5 +42,18 @@ serviceplan.panel.details: Serviceplan Details
 serviceplan.button.new: Neuer Serviceplan
 serviceplan.button.delete: Serviceplan löschen
 
-#Management_VehicleType
-vehicletype.list.name: Alle Fahrzeugtypen
+#Management_VehicleCategory
+vehiclecategory.breadcrumb.name: Fahrzeugkategorien
+
+vehiclecategory.list.name: Alle Fahrzeugkategorien
+
+vehiclecategory.panel.name: Fahrzeugkategorie
+vehiclecategory.panel.new: Neue Fahrzeugkategorie
+vehiclecategory.panel.edit: Fahrzeugkategorie bearbeiten
+
+vehiclecategory.button.new: Neue Fahrzeugkategorie
+vehiclecategory.button.delete: Fahrzeugkategorie löschen
+
+vehiclecategory.field.name: Kategoriebezeichnung
+
+

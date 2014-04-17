@@ -25,3 +25,5 @@ home.panel.name: Home
 #Prepare
 prepare.panel.name: Bereitstellen
 
+#Management
+management.panel.name: Management

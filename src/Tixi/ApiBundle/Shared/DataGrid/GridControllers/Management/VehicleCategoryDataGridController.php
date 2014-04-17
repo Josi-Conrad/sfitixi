@@ -9,45 +9,62 @@
 namespace Tixi\ApiBundle\Shared\DataGrid\GridControllers\Management;
 
 
+use Tixi\ApiBundle\Interfaces\Management\VehicleCategoryAssembler;
+use Tixi\ApiBundle\Interfaces\Management\VehicleCategoryListDTO;
 use Tixi\ApiBundle\Shared\DataGrid\DataGridAbstractController;
+use Tixi\ApiBundle\Shared\DataGrid\DataGridHandler;
+use Tixi\ApiBundle\Shared\DataGrid\Tile\DataGridCustomControlTile;
+use Tixi\ApiBundle\Tile\Core\LinkButtonTile;
+use Tixi\ApiBundle\Tile\Core\SelectionButtonDividerTile;
+use Tixi\ApiBundle\Tile\Core\SelectionButtonTile;
+use Tixi\ApiBundle\Tile\Core\TextLinkSelectionDeleteTile;
+use Tixi\ApiBundle\Tile\Core\TextLinkSelectionTile;
 use Tixi\CoreDomain\Shared\GenericEntityFilter\GenericEntityFilter;
 
 class VehicleCategoryDataGridController extends DataGridAbstractController{
 
     public function getGridIdentifier()
     {
-        return 'vehicletypesy';
+        return 'vehiclecategories';
     }
 
     public function createCustomControlTile()
     {
         $customControlTile = new DataGridCustomControlTile();
         $selectionButton = $customControlTile->add(new SelectionButtonTile($this->getGridIdentifier().'_selection', 'button.with.selection'));
-        $selectionButton->add(new TextLinkSelectionTile('show', $this->generateUrl('tixiapi_vehicle_get',array('vehicleId'=>DataGridHandler::$dataGirdReplaceIdentifier)),'button.show',true));
-        $selectionButton->add(new TextLinkSelectionTile('edit', $this->generateUrl('tixiapi_vehicle_edit',array('vehicleId'=>DataGridHandler::$dataGirdReplaceIdentifier)),'button.edit',true));
+        $selectionButton->add(new TextLinkSelectionTile('edit', $this->generateUrl('tixiapi_management_vehiclecategory_edit',array('vehicleCategoryId'=>DataGridHandler::$dataGirdReplaceIdentifier)),'button.edit',true));
         $selectionButton->add(new SelectionButtonDividerTile());
-        $selectionButton->add(new TextLinkSelectionDeleteTile('delete', $this->generateUrl('tixiapi_vehicle_delete',array('vehicleId'=>DataGridHandler::$dataGirdReplaceIdentifier)),'button.delete',true));
-        $linkButton = $customControlTile->add(new LinkButtonTile($this->getGridIdentifier().'_new', $this->generateUrl('tixiapi_vehicle_new'),'vehicle.button.new', LinkButtonTile::$primaryType));
+        $selectionButton->add(new TextLinkSelectionDeleteTile('delete', $this->generateUrl('tixiapi_management_vehiclecategory_delete',array('vehicleCategoryId'=>DataGridHandler::$dataGirdReplaceIdentifier)),'button.delete',true));
+        $linkButton = $customControlTile->add(new LinkButtonTile($this->getGridIdentifier().'_new', $this->generateUrl('tixiapi_management_vehiclecategory_new'),'vehiclecategory.button.new', LinkButtonTile::$primaryType));
         return $customControlTile;
     }
 
     public function getDblClickPath()
     {
-        // TODO: Implement getDblClickPath() method.
+        return $this->generateUrl('tixiapi_management_vehiclecategory_edit',array('vehicleCategoryId'=>DataGridHandler::$dataGirdReplaceIdentifier));
     }
 
     public function getReferenceDTO()
     {
-        // TODO: Implement getReferenceDTO() method.
+        if(!$this->isInEmbeddedState()) {
+            return new VehicleCategoryListDTO();
+        }
     }
 
     public function constructDtosFromFgeaFilter(GenericEntityFilter $filter)
     {
-        // TODO: Implement constructDtosFromFgeaFilter() method.
+        /** @var VehicleCategoryAssembler $assembler */
+        $assembler = $this->container->get('tixi_api.assemblervehiclecategory');
+        $vehicleCategories = $this->getEntitiesByFgeaFilter($filter);
+        $dtos = array();
+        if(!$this->isInEmbeddedState()) {
+            $dtos = $assembler->vehicleCategoriesToVehicleCategoryListDTOs($vehicleCategories);
+        }
+        return $dtos;
     }
 
     public function getDataSrcUrl()
     {
-        // TODO: Implement getDataSrcUrl() method.
+        return null;
     }
 }

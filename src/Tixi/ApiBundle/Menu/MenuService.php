@@ -68,10 +68,10 @@ class MenuService extends ContainerAware{
         $menuTile->add(new MenuItemTile(self::$menuVehicleId, $this->generateUrl('tixiapi_vehicles_get'), 'vehicle.panel.name', $rootId === self::$menuVehicleId));
         //ToDo should only be visible for users with role $$$
         $managementSelectionTile = $menuTile->add(new MenuSelectionItemTile(
-            self::$menuSelectionManagementId, 'Management',$this->checkSelectionRootActivity(self::$menuManagementUserId, $activeItem))
+            self::$menuSelectionManagementId, 'management.panel.name',$this->checkSelectionRootActivity(self::$menuSelectionManagementId, $activeItem))
         );
         $managementSelectionTile->add(new MenuItemTile(
-            self::$menuVehicleId, $this->generateUrl('tixiapi_vehicles_get'), 'vehicle.panel.name', $this->checkSelectionChildActivity(self::$menuManagementUserId, $activeItem)));
+            self::$menuManagementVehicleCategoryId, $this->generateUrl('tixiapi_management_vehiclecategories_get'), 'vehiclecategory.panel.name', $this->checkSelectionChildActivity(self::$menuManagementVehicleCategoryId, $activeItem)));
         return $menuTile;
     }
 

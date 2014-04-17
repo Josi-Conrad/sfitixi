@@ -20,6 +20,7 @@
         <parameter key="tixi_api.datagridcontrollerfactory.class">Tixi\ApiBundle\Shared\DataGrid\DataGridControllerFactory</parameter>
         <parameter key="tixi_api.userassembler.class">Tixi\ApiBundle\Interfaces\UserAssembler</parameter>
         <parameter key="tixi_api.poiassembler.class">Tixi\ApiBundle\Interfaces\POIAssembler</parameter>
+        <parameter key="tixi_api.vehiclecategoryassebler.class">Tixi\ApiBundle\Interfaces\Management\VehicleCategoryAssembler</parameter>
     </parameters>
 
     <services>
@@ -82,6 +83,8 @@
         <service id="form.type.dateTimePicker" class="Tixi\ApiBundle\Form\Shared\DateTimePickerType">
             <tag name="form.type" alias="dateTimePicker" />
         </service>
+
+        <service id="tixi_api.assemblerVehicleCategory" class="%tixi_api.vehiclecategoryassebler.class%"/>
 
     </services>
 

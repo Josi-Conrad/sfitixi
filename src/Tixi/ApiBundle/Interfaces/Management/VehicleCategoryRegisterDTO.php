@@ -10,5 +10,8 @@ namespace Tixi\ApiBundle\Interfaces\Management;
 
 
 class VehicleCategoryRegisterDTO {
-
+    public $id;
+    public $name;
+    public $amountOfSeats;
+    public $amountOfWheelChairs;
 } 

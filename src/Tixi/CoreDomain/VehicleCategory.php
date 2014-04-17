@@ -9,12 +9,14 @@
 namespace Tixi\CoreDomain;
 
 use Doctrine\ORM\Mapping as ORM;
+use Tixi\CoreDomain\Shared\CommonBaseEntity;
+use Tixi\CoreDomain\Shared\Entity;
 
 /**
  * @ORM\Entity(repositoryClass="Tixi\CoreDomainBundle\Repository\VehicleCategoryRepositoryDoctrine")
  * @ORM\Table(name="vehicle_category")
  */
-class VehicleCategory {
+class VehicleCategory extends CommonBaseEntity implements Entity{
     /**
      * @ORM\Id
      * @ORM\Column(name="id", type="integer")
@@ -37,7 +39,8 @@ class VehicleCategory {
      */
     protected $amountOfWheelChairs;
 
-    private function __construct() {
+    protected  function __construct() {
+        parent::__construct();
     }
 
     public static function registerVehicleCategory($name, $amountOfSeats, $amountOfWheelChairs = 0) {
@@ -48,6 +51,24 @@ class VehicleCategory {
         $vehicleCategory->setAmountOfWheelChairs($amountOfWheelChairs);
 
         return $vehicleCategory;
+    }
+
+    /**
+     * @param null $name
+     * @param null $amountOfSeats
+     * @param null $amountOfWheelChairs
+     */
+    public function updateData($name=null, $amountOfSeats=null, $amountOfWheelChairs=null) {
+        if(null!==$name) {
+            $this->name=$name;
+        }
+        if(null !== $amountOfSeats) {
+            $this->amountOfSeats = $amountOfSeats;
+        }
+        if(null !== $amountOfWheelChairs) {
+            $this->amountOfWheelChairs = $amountOfWheelChairs;
+        }
+        $this->updateModifiedDate();
     }
 
     /**
