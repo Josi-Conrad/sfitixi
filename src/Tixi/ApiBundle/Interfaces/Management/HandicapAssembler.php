@@ -22,13 +22,13 @@ class HandicapAssembler {
     }
 
     public function toHandicapRegisterDTO(Handicap $handicap) {
-        $poiKeywordDTO = new HandicapRegisterDTO();
-        $poiKeywordDTO->id = $handicap->getId();
-        $poiKeywordDTO->name = $handicap->getName();
-        return $poiKeywordDTO;
+        $handicapDTO = new HandicapRegisterDTO();
+        $handicapDTO->id = $handicap->getId();
+        $handicapDTO->name = $handicap->getName();
+        return $handicapDTO;
     }
 
-    public function poiKeywordsToHandicapListDTOs($handicaps) {
+    public function handicapsToHandicapListDTOs($handicaps) {
         $dtoArray = array();
         foreach($handicaps as $handicap) {
             $dtoArray[] = $this->toHandicapListDTO($handicap);

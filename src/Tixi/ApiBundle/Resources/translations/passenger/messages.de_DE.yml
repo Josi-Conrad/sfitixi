@@ -28,3 +28,16 @@ handicap.button.delete: Behinderung löschen
 handicap.name.not_blank: Bitte ein Name definieren
 handicap.field.name: Behinderung
 
+#Insurance
+insurance.list.name: Alle Versicherungen
+
+insurance.panel.name: Versicherung
+insurance.panel.new: Neue Versicherung
+insurance.panel.edit: Versicherung editieren
+insurance.breadcrumb.name: Versicherungen
+
+insurance.button.new: Neue Versicherung
+insurance.button.delete: Versicherung löschen
+
+insurance.name.not_blank: Bitte einen Namen definieren
+insurance.field.name: Versicherung

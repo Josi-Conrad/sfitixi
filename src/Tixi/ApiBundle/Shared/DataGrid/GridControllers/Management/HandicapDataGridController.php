@@ -21,6 +21,10 @@ use Tixi\ApiBundle\Tile\Core\TextLinkSelectionDeleteTile;
 use Tixi\ApiBundle\Tile\Core\TextLinkSelectionTile;
 use Tixi\CoreDomain\Shared\GenericEntityFilter\GenericEntityFilter;
 
+/**
+ * Class HandicapDataGridController
+ * @package Tixi\ApiBundle\Shared\DataGrid\GridControllers\Management
+ */
 class HandicapDataGridController extends DataGridAbstractController {
 
     public function getGridIdentifier()
@@ -58,7 +62,7 @@ class HandicapDataGridController extends DataGridAbstractController {
         $handicaps = $this->getEntitiesByFgeaFilter($filter);
         $dtos = array();
         if(!$this->isInEmbeddedState()) {
-            $dtos = $assembler->poiKeywordsToHandicapListDTOs($handicaps);
+            $dtos = $assembler->handicapsToHandicapListDTOs($handicaps);
         }
         return $dtos;
     }

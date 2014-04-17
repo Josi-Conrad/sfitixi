@@ -8,7 +8,183 @@
 
 namespace Tixi\ApiBundle\Controller\Management;
 
+use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Tixi\ApiBundle\Form\Management\InsuranceType;
+use Tixi\ApiBundle\Interfaces\Management\InsuranceAssembler;
+use Tixi\ApiBundle\Interfaces\Management\InsuranceRegisterDTO;
+use Tixi\ApiBundle\Menu\MenuService;
+use Tixi\ApiBundle\Tile\Core\FormTile;
+use Tixi\ApiBundle\Tile\Core\PanelDeleteFooterTile;
+use Tixi\ApiBundle\Tile\Core\RootPanel;
 
-class InsuranceController {
+/**
+ * Class InsuranceController
+ * @package Tixi\ApiBundle\Controller\Management
+ * @Breadcrumb("insurance.breadcrumb.name", route="tixiapi_management_insurances_get")
+ * @Route("/management/insurances")
+ */
+class InsuranceController extends Controller{
+
+    protected $menuId;
+
+    public function __construct() {
+        $this->menuId = MenuService::$menuManagementInsuranceId;
+    }
+
+    /**
+     * @Route("",name="tixiapi_management_insurances_get")
+     * @Method({"GET","POST"})
+     * @param Request $request
+     * @param bool $embeddedState
+     * @return Response
+     */
+    public function getInsurancesAction(Request $request, $embeddedState = false) {
+        $embeddedState = $embeddedState || $request->get('embedded') === "true";
+        $isPartial = $request->get('partial') === "true";
+
+        $dataGridHandler = $this->get('tixi_api.datagridhandler');
+        $dataGridControllerFactory = $this->get('tixi_api.datagridcontrollerfactory');
+        $tileRenderer = $this->get('tixi_api.tilerenderer');
+
+        $gridController = $dataGridControllerFactory->createManagementInsuranceController($embeddedState);
+        $dataGridTile = $dataGridHandler->createDataGridTileByRequest($request, $this->menuId, $gridController);
+
+        $rootPanel = null;
+        if(!$embeddedState && !$isPartial) {
+            $rootPanel = new RootPanel($this->menuId, 'insurance.list.name');
+            $rootPanel->add($dataGridTile);
+        }else {
+            $rootPanel = $dataGridTile;
+        }
+
+        return new Response($tileRenderer->render($rootPanel));
+    }
+
+    /**
+     * @Route("/{insuranceId}/delete",name="tixiapi_management_insurance_delete")
+     * @Method({"GET","POST"})
+     * @param Request $request
+     * @param $insuranceId
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function deleteInsuranceAction(Request $request, $insuranceId) {
+        $handicap = $this->getInsurance($insuranceId);
+        $handicap->deleteLogically();
+        $this->get('entity_manager')->flush();
+
+        return $this->redirect($this->generateUrl('tixiapi_management_handicaps_get'));
+    }
+
+    /**
+     * @Route("/new",name="tixiapi_management_insurance_new")
+     * @Method({"GET","POST"})
+     * @Breadcrumb("insurance.panel.new", route="tixiapi_management_insurance_new")
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
+     */
+    public function newInsuranceAction(Request $request) {
+        $tileRenderer = $this->get('tixi_api.tilerenderer');
+
+        $form = $this->getForm();
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            $insuranceDTO = $form->getData();
+            $this->registerOrUpdateInsurance($insuranceDTO);
+            $this->get('entity_manager')->flush();
+            return $this->redirect($this->generateUrl('tixiapi_management_insurances_get'));
+        }
+
+        $rootPanel = new RootPanel($this->menuId, 'handicap.panel.new');
+        $rootPanel->add(new FormTile($form, true));
+
+        return new Response($tileRenderer->render($rootPanel));
+    }
+
+    /**
+     * @Route("/{insuranceId}/edit", name="tixiapi_management_insurance_edit")
+     * @Method({"GET","POST"})
+     * @Breadcrumb("{insuranceId}", route={"name"="tixiapi_management_insurance_edit", "parameters"={"insuranceId"}})
+     * @param Request $request
+     * @param $insuranceId
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
+     */
+    public function editInsuranceAction(Request $request, $insuranceId) {
+        $tileRenderer = $this->get('tixi_api.tilerenderer');
+        /** @var InsuranceAssembler $assembler */
+        $assembler = $this->get('tixi_api.assemblerinsurance');
+
+        $insurance = $this->getInsurance($insuranceId);
+        $insuranceDTO = $assembler->toInsuranceRegisterDTO($insurance);
+        $form = $this->getForm($insuranceDTO);
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            $insuranceDTO = $form->getData();
+            $this->registerOrUpdateInsurance($insuranceDTO);
+            $this->get('entity_manager')->flush();
+            return $this->redirect($this->generateUrl('tixiapi_management_insurances_get'));
+        }
+        $rootPanel = new RootPanel($this->menuId, 'insurance.panel.edit');
+        $rootPanel->add(new FormTile($form, true));
+        $rootPanel->add(new PanelDeleteFooterTile($this->generateUrl('tixiapi_management_insurance_delete', array('insuranceId' => $insuranceId)),'insurance.button.delete'));
+
+        return new Response($tileRenderer->render($rootPanel));
+    }
+
+    /**
+     * @param null $insuranceDTO
+     * @param null $targetRoute
+     * @param array $parameters
+     * @param string $method
+     * @return mixed
+     */
+    protected function getForm($insuranceDTO = null, $targetRoute = null, $parameters = array(), $method = 'POST') {
+        if ($targetRoute) {
+            $options = array(
+                'action' => $this->generateUrl($targetRoute, $parameters),
+                'method' => $method
+            );
+        } else {
+            $options = array();
+        }
+        return $this->createForm(new InsuranceType($this->menuId), $insuranceDTO, $options);
+    }
+
+    /**
+     * @param InsuranceRegisterDTO $dto
+     * @return mixed
+     */
+    protected function registerOrUpdateInsurance(InsuranceRegisterDTO $dto) {
+        /** @var InsuranceAssembler $assembler */
+        $assembler = $this->get('tixi_api.assemblerinsurance');
+        $repository = $this->get('insurance_repository');
+        if(null === $dto->id) {
+            $insurance = $assembler->registerDTOtoNewInsurance($dto);
+            $repository->store($insurance);
+            return $insurance;
+        }else {
+            $insurance = $this->getInsurance($dto->id);
+            $assembler->registerDTOtoInsurance($insurance, $dto);
+            return $insurance;
+        }
+    }
+
+    /**
+     * @param $insuranceId
+     * @return mixed
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     */
+    protected function getInsurance($insuranceId) {
+        $repository = $this->get('insurance_repository');
+        $insurance = $repository->find($insuranceId);
+        if (null === $insurance) {
+            throw $this->createNotFoundException('The insurance with id ' . $insuranceId . ' does not exist');
+        }
+        return $insurance;
+    }
 
 } 

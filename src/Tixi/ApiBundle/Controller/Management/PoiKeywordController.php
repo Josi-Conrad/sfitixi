@@ -87,7 +87,7 @@ class PoiKeywordController extends Controller{
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      */
-    public function newVehicleCategoryAction(Request $request) {
+    public function newPoiKeywordAction(Request $request) {
         $tileRenderer = $this->get('tixi_api.tilerenderer');
 
         $form = $this->getForm();
@@ -113,7 +113,7 @@ class PoiKeywordController extends Controller{
      * @param $poiKeywordId
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      */
-    public function editPOIAction(Request $request, $poiKeywordId) {
+    public function editPoiKeywordAction(Request $request, $poiKeywordId) {
         $tileRenderer = $this->get('tixi_api.tilerenderer');
         /** @var PoiKeywordAssembler $assembler */
         $assembler = $this->get('tixi_api.assemblerpoikeyword');

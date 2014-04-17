@@ -113,7 +113,7 @@ class HandicapController extends Controller {
      * @param $handicapId
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      */
-    public function editPOIAction(Request $request, $handicapId) {
+    public function editHandicapAction(Request $request, $handicapId) {
         $tileRenderer = $this->get('tixi_api.tilerenderer');
         /** @var HandicapAssembler $assembler */
         $assembler = $this->get('tixi_api.assemblerhandicap');

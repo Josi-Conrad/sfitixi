@@ -9,6 +9,8 @@
 namespace Tixi\CoreDomain;
 
 use Doctrine\ORM\Mapping as ORM;
+use Tixi\CoreDomain\Shared\CommonBaseEntity;
+use Tixi\CoreDomain\Shared\Entity;
 
 /**
  * Tixi\CoreDomain\Insurance
@@ -16,7 +18,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="Tixi\CoreDomainBundle\Repository\InsuranceRepositoryDoctrine")
  * @ORM\Table(name="insurance")
  */
-class Insurance {
+class Insurance extends CommonBaseEntity implements Entity{
     /**
      * @ORM\Id
      * @ORM\Column(type="integer", name="id")
@@ -29,12 +31,8 @@ class Insurance {
      */
     protected $name;
 
-    /**
-     * @param $name
-     * @return Insurance
-     */
-    private function __construct($name) {
-        $this->setName($name);
+    protected  function __construct() {
+        parent::__construct();
     }
 
     /**
@@ -42,7 +40,15 @@ class Insurance {
      * @return Insurance
      */
     public static function registerInsurance($name){
-        return new Insurance($name);
+        $insurance = new Insurance();
+        $insurance->setName($name);
+        return $insurance;
+    }
+
+    public function updateData($name=null) {
+        if(null !== $name) {
+            $this->setName($name);
+        }
     }
 
     /**

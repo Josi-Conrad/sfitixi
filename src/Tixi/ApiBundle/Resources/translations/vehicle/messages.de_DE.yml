@@ -56,7 +56,7 @@ vehiclecategory.button.new: Neue Fahrzeugkategorie
 vehiclecategory.button.delete: Fahrzeugkategorie löschen
 
 vehiclecategory.field.name: Kategoriebezeichnung
-vehiclecategory.name.not_blank: Bitte ein Name definieren
+vehiclecategory.name.not_blank: Bitte einen Namen definieren
 
 
 
