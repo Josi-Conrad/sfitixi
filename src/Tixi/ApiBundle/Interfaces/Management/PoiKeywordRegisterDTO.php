@@ -2,19 +2,17 @@
 /**
  * Created by PhpStorm.
  * User: faustos
- * Date: 16.04.14
- * Time: 14:08
+ * Date: 17.04.14
+ * Time: 08:59
  */
 
 namespace Tixi\ApiBundle\Interfaces\Management;
 
 /**
- * Class VehicleCategoryRegisterDTO
+ * Class PoiKeywordRegisterDTO
  * @package Tixi\ApiBundle\Interfaces\Management
  */
-class VehicleCategoryRegisterDTO {
+class PoiKeywordRegisterDTO {
     public $id;
     public $name;
-    public $amountOfSeats;
-    public $amountOfWheelChairs;
 } 

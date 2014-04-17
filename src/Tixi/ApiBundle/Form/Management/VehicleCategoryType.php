@@ -20,7 +20,7 @@ class VehicleCategoryType extends CommonAbstractType{
         $builder->add('id', 'hidden');
         $builder->add('name', 'text', array(
             'label' => 'vehicle.field.name',
-            'attr' => array('size'=>'50', 'title' => 'form.field.title.not_blank'),
+            'attr' => array('title' => 'form.field.title.not_blank'),
             'constraints' => array(
                 new NotBlank(array('message' => 'vehicle.name.not_blank'))
             ),
@@ -42,5 +42,4 @@ class VehicleCategoryType extends CommonAbstractType{
         ));
 
     }
-
 } 

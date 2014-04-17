@@ -10,6 +10,8 @@ namespace Tixi\CoreDomain;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Tixi\CoreDomain\Shared\CommonBaseEntity;
+use Tixi\CoreDomain\Shared\Entity;
 
 /**
  * Tixi\CoreDomain\POIKeyword
@@ -17,7 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="Tixi\CoreDomainBundle\Repository\POIKeywordRepositoryDoctrine")
  * @ORM\Table(name="poi_keyword")
  */
-class POIKeyword {
+class POIKeyword extends CommonBaseEntity implements Entity{
     /**
      * @ORM\Id
      * @ORM\Column(type="integer", name="id")
@@ -39,8 +41,9 @@ class POIKeyword {
     /**
      *
      */
-    private function __construct() {
+    protected  function __construct() {
         $this->pois = new ArrayCollection();
+        parent::__construct();
     }
 
     /**
@@ -51,6 +54,12 @@ class POIKeyword {
         $poiKeyword =  new POIKeyword();
         $poiKeyword->setName($name);
         return $poiKeyword;
+    }
+
+    public function updateData($name=null) {
+        if(null !== $name) {
+            $this->name = $name;
+        }
     }
 
     public function assignPOI($poi) {
