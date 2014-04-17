@@ -1,0 +1,28 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: faustos
+ * Date: 17.04.14
+ * Time: 09:39
+ */
+
+namespace Tixi\ApiBundle\Form\Management;
+
+
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Tixi\ApiBundle\Form\Shared\CommonAbstractType;
+
+class HandicapType extends CommonAbstractType{
+
+    public function buildForm(FormBuilderInterface $builder, array $options) {
+        $builder->add('id', 'hidden');
+        $builder->add('name', 'text', array(
+            'label' => 'handicap.field.name',
+            'attr' => array('title' => 'form.field.title.not_blank'),
+            'constraints' => array(
+                new NotBlank(array('message' => 'handicap.name.not_blank'))
+            ),
+        ));
+    }
+} 

@@ -9,6 +9,8 @@
 namespace Tixi\CoreDomain;
 
 use Doctrine\ORM\Mapping as ORM;
+use Tixi\CoreDomain\Shared\CommonBaseEntity;
+use Tixi\CoreDomain\Shared\Entity;
 
 /**
  * Tixi\CoreDomain\Handicap
@@ -16,7 +18,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="Tixi\CoreDomainBundle\Repository\HandicapRepositoryDoctrine")
  * @ORM\Table(name="handicap")
  */
-class Handicap {
+class Handicap extends CommonBaseEntity implements Entity{
     /**
      * @ORM\Id
      * @ORM\Column(type="integer", name="id")
@@ -29,12 +31,8 @@ class Handicap {
      */
     protected $name;
 
-    /**
-     * @param $name
-     * @return Handicap
-     */
-    private function __construct($name) {
-        $this->setName($name);
+    protected function __construct() {
+        parent::__construct();
     }
 
     /**
@@ -42,7 +40,18 @@ class Handicap {
      * @return Handicap
      */
     public static function registerHandicap($name){
-        return new Handicap($name);
+        $handicap = new Handicap();
+        $handicap->setName($name);
+        return $handicap;
+    }
+
+    /**
+     * @param null $name
+     */
+    public function updateData($name=null) {
+        if(null !== $name) {
+            $this->setName($name);
+        }
     }
 
     /**

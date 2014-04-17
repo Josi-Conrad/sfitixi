@@ -13,3 +13,18 @@ passenger.field.handicap: Behinderungen
 passenger.field.insurance: Versichert über
 passenger.button.new: Neuer Fahrgast
 passenger.button.delete: Fahrgast löschen
+
+#Handicap
+handicap.list.name: Alle Handicaps
+
+handicap.panel.name: Behinderung
+handicap.panel.new: Neue Behinderung
+handicap.panel.edit: Behinderung editieren
+handicap.breadcrumb.name: Handicaps
+
+handicap.button.new: Neue Behinderung
+handicap.button.delete: Behinderung löschen
+
+handicap.name.not_blank: Bitte ein Name definieren
+handicap.field.name: Behinderung
+

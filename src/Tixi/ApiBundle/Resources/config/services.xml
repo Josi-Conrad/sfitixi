@@ -23,6 +23,7 @@
         <!-- Management -->
         <parameter key="tixi_api.vehiclecategoryassembler.class">Tixi\ApiBundle\Interfaces\Management\VehicleCategoryAssembler</parameter>
         <parameter key="tixi_api.poikeywordassembler.class">Tixi\ApiBundle\Interfaces\Management\PoiKeywordAssembler</parameter>
+        <parameter key="tixi_api.handicapassembler.class">Tixi\ApiBundle\Interfaces\Management\HandicapAssembler</parameter>
         <parameter key="tixi_api.userassembler.class">Tixi\ApiBundle\Interfaces\Management\UserAssembler</parameter>
         <parameter key="tixi_api.shifttypeassembler.class">Tixi\ApiBundle\Interfaces\Management\ShiftTypeAssembler</parameter>
         <parameter key="tixi_api.bankholidayassembler.class">Tixi\ApiBundle\Interfaces\Management\BankHolidayAssembler</parameter>
@@ -98,6 +99,7 @@
         <!-- Management -->
         <service id="tixi_api.assemblerVehicleCategory" class="%tixi_api.vehiclecategoryassembler.class%"/>
         <service id="tixi_api.assemblerPoiKeyword" class="%tixi_api.poikeywordassembler.class%"/>
+        <service id="tixi_api.assemblerHandicap" class="%tixi_api.handicapassembler.class%"/>
         <service id="tixi_api.assemblerShiftType" class="%tixi_api.shifttypeassembler.class%">
             <call method="setDateTimeService">
                 <argument type="service" id="tixi_api.datetimeservice" />

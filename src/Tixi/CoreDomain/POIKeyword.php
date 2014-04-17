@@ -56,9 +56,12 @@ class POIKeyword extends CommonBaseEntity implements Entity{
         return $poiKeyword;
     }
 
+    /**
+     * @param null $name
+     */
     public function updateData($name=null) {
         if(null !== $name) {
-            $this->name = $name;
+            $this->setName($name);
         }
     }
 

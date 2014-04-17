@@ -80,6 +80,9 @@ class MenuService extends ContainerAware{
             $managementSelectionTile->add(new MenuItemTile(self::$menuManagementPoiKeywordsId,
                 $this->generateUrl('tixiapi_management_poikeywords_get'), 'poikeyword.panel.name', $this->checkSelectionChildActivity(self::$menuManagementPoiKeywordsId, $activeItem)));
 
+            $managementSelectionTile->add(new MenuItemTile(self::$menuManagementHandicapId,
+                $this->generateUrl('tixiapi_management_handicaps_get'), 'handicap.panel.name', $this->checkSelectionChildActivity(self::$menuManagementHandicapId, $activeItem)));
+
             $managementSelectionTile->add(new MenuItemTile(self::$menuManagementShiftTypeId,
                 $this->generateUrl('tixiapi_management_shifttypes_get'), 'shifttype.panel.name', $this->checkSelectionChildActivity(self::$menuManagementShiftTypeId, $activeItem)));
 
