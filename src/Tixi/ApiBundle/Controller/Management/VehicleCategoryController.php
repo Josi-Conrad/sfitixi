@@ -25,7 +25,7 @@ use Tixi\ApiBundle\Tile\Core\RootPanel;
 /**
  * Class VehicleTypeController
  * @package Tixi\ApiBundle\Controller\Management
- * @Breadcrumb("vehiclecategory.breadcrumb.name", route="tixiapi_vehicles_get")
+ * @Breadcrumb("vehiclecategory.breadcrumb.name", route="tixiapi_management_vehiclecategories_get")
  * @Route("/management/vehiclecategories")
  */
 class VehicleCategoryController extends Controller{
@@ -43,7 +43,7 @@ class VehicleCategoryController extends Controller{
      * @param bool $embeddedState
      * @return Response
      */
-    public function getVehicleCategoryAction(Request $request, $embeddedState = false) {
+    public function getVehicleCategoriesAction(Request $request, $embeddedState = false) {
         $embeddedState = $embeddedState || $request->get('embedded') === "true";
         $isPartial = $request->get('partial') === "true";
 
@@ -135,6 +135,13 @@ class VehicleCategoryController extends Controller{
         return new Response($tileRenderer->render($rootPanel));
     }
 
+    /**
+     * @param null $vehicleCategoryDTO
+     * @param null $targetRoute
+     * @param array $parameters
+     * @param string $method
+     * @return \Symfony\Component\Form\Form
+     */
     protected function getForm($vehicleCategoryDTO = null, $targetRoute = null, $parameters = array(), $method = 'POST') {
         if ($targetRoute) {
             $options = array(
@@ -147,6 +154,10 @@ class VehicleCategoryController extends Controller{
         return $this->createForm(new VehicleCategoryType($this->menuId), $vehicleCategoryDTO, $options);
     }
 
+    /**
+     * @param VehicleCategoryRegisterDTO $dto
+     * @return mixed|\Tixi\CoreDomain\VehicleCategory
+     */
     protected function registerOrUpdateVehicleCategory(VehicleCategoryRegisterDTO $dto) {
         /** @var VehicleCategoryAssembler $assembler */
         $assembler = $this->get('tixi_api.assemblervehiclecategory');

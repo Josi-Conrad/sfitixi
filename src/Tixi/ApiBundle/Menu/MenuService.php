@@ -73,13 +73,20 @@ class MenuService extends ContainerAware{
         if($this->container->get('security.context')->isGranted('ROLE_MANAGER')){
             $managementSelectionTile = $menuTile->add(new MenuSelectionItemTile(self::$menuSelectionManagementId,
                 'management.panel.name',$this->checkSelectionRootActivity(self::$menuManagementUserId, $activeItem)));
-            $managementSelectionTile->add(new MenuItemTile(self::$menuManagementVehicleCategoryId, 
+
+            $managementSelectionTile->add(new MenuItemTile(self::$menuManagementVehicleCategoryId,
                 $this->generateUrl('tixiapi_management_vehiclecategories_get'), 'vehiclecategory.panel.name', $this->checkSelectionChildActivity(self::$menuManagementVehicleCategoryId, $activeItem)));
-            $managementSelectionTile->add(new MenuItemTile(self::$menuVehicleId,
-                $this->generateUrl('tixiapi_management_shifttypes_get'), 'shifttype.panel.name', $this->checkSelectionChildActivity(self::$menuManagementUserId, $activeItem)));
-            $managementSelectionTile->add(new MenuItemTile(self::$menuVehicleId,
-                $this->generateUrl('tixiapi_management_bankholidays_get'), 'bankholiday.panel.name', $this->checkSelectionChildActivity(self::$menuManagementUserId, $activeItem)));
-            $managementSelectionTile->add(new MenuItemTile(self::$menuVehicleId,
+
+            $managementSelectionTile->add(new MenuItemTile(self::$menuManagementPoiKeywordsId,
+                $this->generateUrl('tixiapi_management_poikeywords_get'), 'poikeyword.panel.name', $this->checkSelectionChildActivity(self::$menuManagementPoiKeywordsId, $activeItem)));
+
+            $managementSelectionTile->add(new MenuItemTile(self::$menuManagementShiftTypeId,
+                $this->generateUrl('tixiapi_management_shifttypes_get'), 'shifttype.panel.name', $this->checkSelectionChildActivity(self::$menuManagementShiftTypeId, $activeItem)));
+
+            $managementSelectionTile->add(new MenuItemTile(self::$menuManagementBankHolidayId,
+                $this->generateUrl('tixiapi_management_bankholidays_get'), 'bankholiday.panel.name', $this->checkSelectionChildActivity(self::$menuManagementBankHolidayId, $activeItem)));
+
+            $managementSelectionTile->add(new MenuItemTile(self::$menuManagementUserId,
                 $this->generateUrl('tixiapi_management_users_get'), 'user.panel.name', $this->checkSelectionChildActivity(self::$menuManagementUserId, $activeItem)));
 
         }

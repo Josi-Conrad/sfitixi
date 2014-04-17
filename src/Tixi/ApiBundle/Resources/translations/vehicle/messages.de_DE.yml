@@ -22,6 +22,7 @@ vehicle.field.supervisor.empty: Bitte einen Betreuer auswählen
 vehicle.button.new: Neues Fahrzeug
 vehicle.button.delete: Fahrzeug löschen
 
+vehicle.name.not_blank: Bitte ein Name definieren
 vehicle.date.not_blank: Bitte ein Datum wählen
 
 
@@ -55,5 +56,7 @@ vehiclecategory.button.new: Neue Fahrzeugkategorie
 vehiclecategory.button.delete: Fahrzeugkategorie löschen
 
 vehiclecategory.field.name: Kategoriebezeichnung
+vehiclecategory.name.not_blank: Bitte ein Name definieren
+
 
 

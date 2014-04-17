@@ -17,3 +17,17 @@ poi.field.comment: Kommentare
 poi.field.details: Details
 poi.button.new: Neuer OVI
 poi.button.delete: OVI löschen
+
+#POI Keyword
+poikeyword.list.name: Alle OVI-Keywords
+
+poikeyword.panel.name: OVI-Keyword
+poikeyword.panel.new: Neues OVI-Keyword erfassen
+poikeyword.panel.edit: OVI-Keyword editieren
+
+poikeyword.field.name: Keyword
+poikeyword.name.not_blank: Bitte ein Name definieren
+poikeyword.breadcrumb.name: OVI-Keywords
+
+poikeyword.button.new: Neues OVI-Keyword
+poikeyword.button.delete: OVI-Keyword löschen
