@@ -40,7 +40,7 @@ class VehicleListDTO implements DataGridSourceClass {
      */
     public $category;
     /**
-     * @GridField(propertyId="VehicleCategory.name", headerName="vehicle.field.category.amountofseats", order=5)
+     * @GridField(propertyId="VehicleCategory.amountOfSeats", headerName="vehicle.field.category.amountofseats", order=5)
      */
     public $amountOfSeats;
     /**
