@@ -9,10 +9,10 @@ Test Data Import
 Symfony UsersLogins
 */
 INSERT INTO `role` (`id`,`name`,`role`) VALUES
-  (1,'User','ROLE_USER'),
-  (2,'Disponent','ROLE_DISPO'),
-  (3,'Manager','ROLE_MANAGER'),
-  (4,'Administrator','ROLE_ADMIN');
+  (1,'user.role.user','ROLE_USER'),
+  (2,'user.role.dispo','ROLE_DISPO'),
+  (3,'user.role.manager','ROLE_MANAGER'),
+  (4,'user.role.admin','ROLE_ADMIN');
 
 INSERT INTO `user` (`id`,`is_active`,`username`,`password`,`email`) VALUES
   (1,1,'admin','$2y$12$d1lUQkXSUK/6YKJz59Kkbep1egTCJfyCLu7oIrspFBlhcxkXMPgGa', 'rschelbe@hsr.ch'),

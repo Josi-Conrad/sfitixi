@@ -15,10 +15,10 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 /**
- * Class UserType
+ * Class UserRegisterType
  * @package Tixi\ApiBundle\Form\Management
  */
-class UserType extends AbstractType{
+class UserRegisterType extends AbstractType{
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -26,7 +26,11 @@ class UserType extends AbstractType{
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('id', 'hidden');
-
+        $builder->add('role', 'entity', array(
+            'class' => 'Tixi\SecurityBundle\Entity\Role',
+            'property' => 'name',
+            'label' => 'user.field.role'
+        ));
         $builder->add('username', 'text', array(
             'label' => 'user.field.username',
             'attr'=>array('title' => 'form.field.title.letter_digit'),
@@ -37,7 +41,6 @@ class UserType extends AbstractType{
         ));
         $builder->add('password', 'password', array(
             'label' => 'user.field.password',
-            'required' => false,
             'constraints' => array(
                 new NotBlank(array('message'=>'user.password.not_blank'))
             ),

@@ -70,18 +70,26 @@ class User extends CommonBaseEntity implements AdvancedUserInterface, \Serializa
 
     /**
      * @param null $username
-     * @param null $password
      * @param null $email
+     * @internal param null $password
      */
-    public function updateBasicData($username = null, $password = null, $email = null) {
+    public function updateBasicData($username = null, $email = null) {
         if (!empty($username)) {
             $this->setUsername($username);
         }
-        if (!empty($password)) {
-            $this->setPassword($password);
-        }
         if (!empty($email)) {
             $this->setEmail($email);
+        }
+    }
+
+    /**
+     * @param null $password
+     * @internal param null $username
+     * @internal param null $email
+     */
+    public function updatePassword($password) {
+        if (!empty($password)) {
+            $this->setPassword($password);
         }
     }
 
@@ -107,10 +115,21 @@ class User extends CommonBaseEntity implements AdvancedUserInterface, \Serializa
      * @param Role $role
      */
     public function assignRole($role) {
-        $role->assignUser($this);
-        $this->roles->add($role);
+        if (!$this->roles->contains($role)) {
+            $role->assignUser($this);
+            $this->roles->add($role);
+        }
     }
 
+    /**
+     * @param Role $role
+     */
+    public function unsignRole($role) {
+        if ($this->roles->contains($role)) {
+            $role->unsignUser($this);
+            $this->roles->removeElement($role);
+        }
+    }
     /**
      * @param mixed $email
      */
@@ -147,10 +166,58 @@ class User extends CommonBaseEntity implements AdvancedUserInterface, \Serializa
         return $this->roles->toArray();
     }
 
+    /**
+     * @return ArrayCollection
+     */
     public function getRolesEntity() {
         return $this->roles;
     }
 
+    /**
+     *
+     */
+    public function getHighestRole() {
+        /**@var Role $role */
+        $highest = null;
+        $roleAdmin = null;
+        $roleManager = null;
+        $roleDispo = null;
+        $roleUser = null;
+
+        foreach ($this->getRolesEntity() as $role) {
+            if ($role->getRole() == Role::$roleAdmin) {
+                $roleAdmin = $role;
+            }
+            if ($role->getRole() == Role::$roleManager) {
+                $roleManager = $role;
+            }
+            if ($role->getRole() == Role::$roleDispo) {
+                $roleDispo = $role;
+            }
+            if ($role->getRole() == Role::$roleUser) {
+                $roleUser = $role;
+            }
+        }
+
+        if (null !== $roleUser) {
+            $highest = $roleUser;
+        }
+        if (null !== $roleDispo) {
+            $highest = $roleDispo;
+        }
+        if (null !== $roleManager) {
+            $highest = $roleManager;
+        }
+        if (null !== $roleAdmin) {
+            $highest = $roleAdmin;
+        }
+
+        return $highest;
+    }
+
+    /**
+     * @return mixed
+     */
     public function getId() {
         return $this->id;
     }

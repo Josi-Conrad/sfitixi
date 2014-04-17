@@ -14,6 +14,7 @@ namespace Tixi\ApiBundle\Interfaces\Management;
  */
 class UserRegisterDTO {
     public $id;
+    public $role;
     public $username;
     public $password;
     public $email;

@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Tixi\ApiBundle\Form\Management\UserProfileType;
+use Tixi\ApiBundle\Interfaces\Management\UserProfileDTO;
 use Tixi\ApiBundle\Interfaces\Management\UserRegisterDTO;
 use Tixi\ApiBundle\Menu\MenuService;
 use Tixi\ApiBundle\Tile\Core\FormTile;
@@ -74,22 +75,13 @@ class UserProfileController extends Controller {
     }
 
     /**
-     * @param UserRegisterDTO $userDTO
+     * @param UserProfileDTO $userDTO
      * @return null|object|\Tixi\SecurityBundle\Entity\User
      */
-    protected function registerOrUpdateUser(UserRegisterDTO $userDTO) {
-        if (empty($userDTO->id)) {
-            $user = $this->get('tixi_api.assembleruser')->registerDTOtoNewUser($userDTO);
-            $this->encodeUserPassword($user);
-            $this->assignNormalUserRole($user);
-            $this->get('tixi_user_repository')->store($user);
-            return $user;
-        } else {
-            $user = $this->get('tixi_user_repository')->find($userDTO->id);
-            $this->get('tixi_api.assembleruser')->registerDTOtoUser($userDTO, $user);
-            $this->encodeUserPassword($user);
-            return $user;
-        }
+    protected function registerOrUpdateUser(UserProfileDTO $userDTO) {
+        $user = $this->get('tixi_user_repository')->find($userDTO->id);
+        $this->get('tixi_api.assembleruser')->registerProfileDTOtoUser($userDTO, $user);
+        return $user;
     }
 
     /**
@@ -114,7 +106,7 @@ class UserProfileController extends Controller {
     /**
      * @param User $user
      */
-    protected function assignNormalUserRole(User $user){
+    protected function assignNormalUserRole(User $user) {
         $user->assignRole($this->getUserRole('ROLE_USER'));
     }
 
@@ -143,21 +135,16 @@ class UserProfileController extends Controller {
         return true;
     }
 
-    protected function getUserById($userId){
+    /**
+     * @param $userId
+     * @return null|object
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     */
+    protected function getUserById($userId) {
         $user = $this->get('tixi_user_repository')->find($userId);
-        if(null === $user){
+        if (null === $user) {
             throw $this->createNotFoundException('The user with id ' . $userId . ' does not exist');
         }
         return $user;
-    }
-
-    /**
-     * @param User $user
-     */
-    protected function encodeUserPassword(User $user){
-        $encFactory = $this->get('security.encoder_factory');
-        $encoder = $encFactory->getEncoder($user);
-        $encPassword = $encoder->encodePassword($user->getPassword(), $user->getSalt());
-        $user->setPassword($encPassword);
     }
 }

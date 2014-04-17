@@ -10,8 +10,20 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="Tixi\SecurityBundle\Repository\RoleRepositoryDoctrine")
  * @ORM\Table(name="role")
  */
-class Role implements RoleInterface, \Serializable
-{
+class Role implements RoleInterface, \Serializable {
+    /**
+     * All valid Roles, with highest Role at last place
+     * @var string
+     */
+    public static $roleUser = 'ROLE_USER';
+    public static $roleUserName = 'user.role.user';
+    public static $roleDispo = 'ROLE_DISPO';
+    public static $roleDispoName = 'user.role.dispo';
+    public static $roleManager = 'ROLE_MANAGER';
+    public static $roleManagerName = 'user.role.manager';
+    public static $roleAdmin = 'ROLE_ADMIN';
+    public static $roleAdminName = 'user.role.admin';
+
     /**
      * @ORM\Id()
      * @ORM\Column(name="id", type="integer")
@@ -34,20 +46,38 @@ class Role implements RoleInterface, \Serializable
      */
     private $role;
 
-    private function __construct()
-    {
+    private function __construct() {
         $this->users = new ArrayCollection();
     }
 
-    public static function registerRole($name, $roleName){
+    /**
+     * @param $name
+     * @param $roleName
+     * @return Role
+     */
+    public static function registerRole($name, $roleName) {
         $role = new Role();
         $role->setName($name);
         $role->setRole($roleName);
         return $role;
     }
 
-    public function assignUser($user){
-        $this->users->add($user);
+    /**
+     * @param $user
+     */
+    public function assignUser($user) {
+        if (!$this->users->contains($user)) {
+            $this->users->add($user);
+        }
+    }
+
+    /**
+     * @param $user
+     */
+    public function unsignUser($user) {
+        if ($this->users->contains($user)) {
+            $this->users->removeElement($user);
+        }
     }
 
     /**

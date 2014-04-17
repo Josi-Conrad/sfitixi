@@ -1,20 +1,27 @@
 #User
 user.management: Benutzerverwaltung
+
 user.field.username: Benutzername
 user.field.password: Passwort
 user.field.actual_password: Aktuelles Passwort
 user.field.new_password: Neues Passwort
-user.field.new_password_2: Neues Passwort bestätigen
+user.field.new_password_2: Passwort bestätigen
 user.field.roles: Berechtigungen
 user.field.email: E-Mail
+user.field.role: Berechtigung
+
 user.list.name: Alle Benutzer
+
 user.button.new: Neuer Benutzer
 user.button.delete: Benutzer löschen
+
 user.panel.name: Benutzer
 user.panel.new: Neuer Benutzer
 user.panel.details: Benutzer Details
 user.panel.edit: Benutzer editieren
+
 user.role.user: Benutzer
+user.role.dispo: Disponent
 user.role.manager: Manager
 user.role.admin: Administrator
 

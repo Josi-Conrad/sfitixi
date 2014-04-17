@@ -9,14 +9,14 @@
 namespace Tixi\ApiBundle\Interfaces\Management;
 
 /**
- * Class UserProfileDTO
+ * Class UserEditDTO
  * @package Tixi\ApiBundle\Interfaces\Management
  */
-class UserProfileDTO {
+class UserEditDTO {
     public $id;
+    public $role;
     public $username;
-    public $password;
-    public $new_password;
     public $email;
+    public $password;
 }
 

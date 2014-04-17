@@ -15,7 +15,9 @@ use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Tixi\ApiBundle\Form\Management\UserType;
+use Tixi\ApiBundle\Form\Management\UserEditType;
+use Tixi\ApiBundle\Form\Management\UserRegisterType;
+use Tixi\ApiBundle\Interfaces\Management\UserEditDTO;
 use Tixi\ApiBundle\Interfaces\Management\UserRegisterDTO;
 use Tixi\ApiBundle\Menu\MenuService;
 use Tixi\ApiBundle\Tile\Core\FormTile;
@@ -23,7 +25,6 @@ use Tixi\ApiBundle\Tile\Core\PanelDeleteFooterTile;
 use Tixi\ApiBundle\Tile\Core\PanelSplitterTile;
 use Tixi\ApiBundle\Tile\Core\PanelTile;
 use Tixi\ApiBundle\Tile\Core\RootPanel;
-use Tixi\ApiBundle\Tile\CustomFormView\UserRegisterFormViewTile;
 use Tixi\SecurityBundle\Entity\User;
 
 /**
@@ -64,10 +65,10 @@ class UserController extends Controller {
         $dataGridTile = $dataGridHandler->createDataGridTileByRequest($request, $this->menuId, $gridController);
 
         $rootPanel = null;
-        if(!$embeddedState && !$isPartial) {
+        if (!$embeddedState && !$isPartial) {
             $rootPanel = new RootPanel($this->menuId, 'user.list.name');
             $rootPanel->add($dataGridTile);
-        }else {
+        } else {
             $rootPanel = $dataGridTile;
         }
 
@@ -87,19 +88,18 @@ class UserController extends Controller {
             throw new AccessDeniedException();
         }
         $tileRenderer = $this->get('tixi_api.tilerenderer');
-
-        $form = $this->getForm();
+        $form = $this->createForm(new UserRegisterType());
         $form->handleRequest($request);
         $rootPanel = new RootPanel($this->menuId, 'user.panel.new');
         $rootPanel->add(new FormTile($form, true));
         if ($form->isValid()) {
             $userDTO = $form->getData();
-            if(!$this->isUsernameAvailable($userDTO->username)){
+            if (!$this->isUsernameAvailable($userDTO->username)) {
                 return new Response($tileRenderer->render($rootPanel));
             }
-            $user = $this->registerOrUpdateUser($userDTO);
+            $user = $this->registerUser($userDTO);
             $this->get('entity_manager')->flush();
-            return $this->redirect($this->generateUrl('tixiapi_management_user_get', array('userId' => $user->getId())));
+            return $this->redirect($this->generateUrl('tixiapi_management_users_get', array('userId' => $user->getId())));
         }
 
         return new Response($tileRenderer->render($rootPanel));
@@ -125,19 +125,19 @@ class UserController extends Controller {
         if (null === $user) {
             throw $this->createNotFoundException('This user does not exist');
         }
-        $userDTO = $userAssembler->userToUserRegisterDTO($user);
-        $form = $this->getForm($userDTO);
+        $userDTO = $userAssembler->userToUserEditDTO($user);
+        $form = $this->getEditForm($userDTO);
         $form->handleRequest($request);
         if ($form->isValid()) {
             $userDTO = $form->getData();
-            $this->registerOrUpdateUser($userDTO);
+            $this->updateUser($userDTO);
             $this->get('entity_manager')->flush();
             return $this->redirect($this->generateUrl('tixiapi_management_users_get', array('userId' => $userId)));
         }
         $rootPanel = new RootPanel($this->menuId, 'user.panel.edit');
         $rootPanel->add(new FormTile($form, true));
         $rootPanel->add(new PanelDeleteFooterTile($this->generateUrl('tixiapi_management_user_delete',
-            array('userId' => $userId)),'user.button.delete'));
+            array('userId' => $userId)), 'user.button.delete'));
 
         return new Response($tileRenderer->render($rootPanel));
     }
@@ -162,21 +162,22 @@ class UserController extends Controller {
 
     /**
      * @param UserRegisterDTO $userDTO
-     * @return null|object|\Tixi\SecurityBundle\Entity\User
+     * @return User
      */
-    protected function registerOrUpdateUser(UserRegisterDTO $userDTO) {
-        if (empty($userDTO->id)) {
-            $user = $this->get('tixi_api.assembleruser')->registerDTOtoNewUser($userDTO);
-            $this->encodeUserPassword($user);
-            $this->assignNormalUserRole($user);
-            $this->get('tixi_user_repository')->store($user);
-            return $user;
-        } else {
-            $user = $this->get('tixi_user_repository')->find($userDTO->id);
-            $this->get('tixi_api.assembleruser')->registerDTOtoUser($userDTO, $user);
-            $this->encodeUserPassword($user);
-            return $user;
-        }
+    protected function registerUser(UserRegisterDTO $userDTO) {
+        $user = $this->get('tixi_api.assembleruser')->registerDTOtoNewUser($userDTO, $this->get('tixi_role_repository'));
+        $this->get('tixi_user_repository')->store($user);
+        return $user;
+    }
+
+    /**
+     * @param UserEditDTO $userDTO
+     * @return null|object
+     */
+    protected function updateUser(UserEditDTO $userDTO) {
+        $user = $this->get('tixi_user_repository')->find($userDTO->id);
+        $this->get('tixi_api.assembleruser')->registerEditDTOtoUser($userDTO, $user, $this->get('tixi_role_repository'));
+        return $user;
     }
 
     /**
@@ -186,7 +187,7 @@ class UserController extends Controller {
      * @param string $method
      * @return \Symfony\Component\Form\Form
      */
-    protected function getForm($userDTO = null, $targetRoute = null, $parameters = array(), $method = 'POST') {
+    protected function getEditForm($userDTO = null, $targetRoute = null, $parameters = array(), $method = 'POST') {
         if ($targetRoute) {
             $options = array(
                 'action' => $this->generateUrl($targetRoute, $parameters),
@@ -195,14 +196,7 @@ class UserController extends Controller {
         } else {
             $options = array();
         }
-        return $this->createForm(new UserType(), $userDTO, $options);
-    }
-
-    /**
-     * @param User $user
-     */
-    protected function assignNormalUserRole(User $user){
-        $user->assignRole($this->getUserRole('ROLE_USER'));
+        return $this->createForm(new UserEditType(), $userDTO, $options);
     }
 
     /**
@@ -230,21 +224,11 @@ class UserController extends Controller {
         return true;
     }
 
-    protected function getUserById($userId){
+    protected function getUserById($userId) {
         $user = $this->get('tixi_user_repository')->find($userId);
-        if(null === $user){
+        if (null === $user) {
             throw $this->createNotFoundException('The user with id ' . $userId . ' does not exist');
         }
         return $user;
-    }
-
-    /**
-     * @param User $user
-     */
-    protected function encodeUserPassword(User $user){
-        $encFactory = $this->get('security.encoder_factory');
-        $encoder = $encFactory->getEncoder($user);
-        $encPassword = $encoder->encodePassword($user->getPassword(), $user->getSalt());
-        $user->setPassword($encPassword);
     }
 }
