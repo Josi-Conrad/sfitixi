@@ -34,19 +34,19 @@ function RepeatedDrivingAssertion() {
     }
 
     this._initMonthlyListeners = function() {
-        $('#repeatedDrivingAssertion_monthlyFirstWeeklySelector input').on('change', function() {
+        $('#fpw_driver_repeatedassertions_monthlyFirstWeeklySelector input').on('change', function() {
             _this._monthlyAssertionController.onSelectorChange(this, 'first');
         });
-        $('#repeatedDrivingAssertion_monthlySecondWeeklySelector input').on('change', function() {
+        $('#fpw_driver_repeatedassertions_monthlySecondWeeklySelector input').on('change', function() {
             _this._monthlyAssertionController.onSelectorChange(this, 'second');
         });
-        $('#repeatedDrivingAssertion_monthlyThirdWeeklySelector input').on('change', function() {
+        $('#fpw_driver_repeatedassertions_monthlyThirdWeeklySelector input').on('change', function() {
             _this._monthlyAssertionController.onSelectorChange(this, 'third');
         });
-        $('#repeatedDrivingAssertion_monthlyFourthWeeklySelector input').on('change', function() {
+        $('#fpw_driver_repeatedassertions_monthlyFourthWeeklySelector input').on('change', function() {
             _this._monthlyAssertionController.onSelectorChange(this, 'fourth');
         });
-        $('#repeatedDrivingAssertion_monthlyLastWeeklySelector input').on('change', function() {
+        $('#fpw_driver_repeatedassertions_monthlyLastWeeklySelector input').on('change', function() {
             _this._monthlyAssertionController.onSelectorChange(this, 'last');
         });
     }
