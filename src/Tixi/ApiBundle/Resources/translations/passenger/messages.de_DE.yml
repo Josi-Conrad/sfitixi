@@ -15,12 +15,12 @@ passenger.button.new: Neuer Fahrgast
 passenger.button.delete: Fahrgast löschen
 
 #Handicap
-handicap.list.name: Alle Handicaps
+handicap.list.name: Alle Behinderungen
 
 handicap.panel.name: Behinderung
 handicap.panel.new: Neue Behinderung
 handicap.panel.edit: Behinderung editieren
-handicap.breadcrumb.name: Handicaps
+handicap.breadcrumb.name: Behinderungen
 
 handicap.button.new: Neue Behinderung
 handicap.button.delete: Behinderung löschen
