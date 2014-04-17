@@ -10,6 +10,7 @@ namespace Tixi\ApiBundle\Form\Management;
 
 
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Regex;
 use Tixi\ApiBundle\Form\Shared\CommonAbstractType;
@@ -41,5 +42,14 @@ class VehicleCategoryType extends CommonAbstractType{
             ),
         ));
 
+    }
+
+    /**
+     * @param OptionsResolverInterface $resolver
+     */
+    public function setDefaultOptions(OptionsResolverInterface $resolver) {
+        $resolver->setDefaults(array(
+            'data_class' => 'Tixi\ApiBundle\Interfaces\Management\VehicleCategoryRegisterDTO'
+        ));
     }
 } 

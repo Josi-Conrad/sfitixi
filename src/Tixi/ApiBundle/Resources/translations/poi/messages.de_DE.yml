@@ -26,7 +26,7 @@ poikeyword.panel.new: Neues OVI-Keyword erfassen
 poikeyword.panel.edit: OVI-Keyword editieren
 
 poikeyword.field.name: Keyword
-poikeyword.name.not_blank: Bitte ein Name definieren
+poikeyword.name.not_blank: Bitte einen Namen definieren
 poikeyword.breadcrumb.name: OVI-Keywords
 
 poikeyword.button.new: Neues OVI-Keyword

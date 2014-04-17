@@ -10,6 +10,7 @@ namespace Tixi\ApiBundle\Form\Management;
 
 
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Tixi\ApiBundle\Form\Shared\CommonAbstractType;
 
@@ -23,6 +24,15 @@ class HandicapType extends CommonAbstractType{
             'constraints' => array(
                 new NotBlank(array('message' => 'handicap.name.not_blank'))
             ),
+        ));
+    }
+
+    /**
+     * @param OptionsResolverInterface $resolver
+     */
+    public function setDefaultOptions(OptionsResolverInterface $resolver) {
+        $resolver->setDefaults(array(
+            'data_class' => 'Tixi\ApiBundle\Interfaces\Management\HandicapRegisterDTO'
         ));
     }
 } 

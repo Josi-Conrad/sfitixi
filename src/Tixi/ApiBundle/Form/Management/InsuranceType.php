@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: faustos
  * Date: 17.04.14
- * Time: 08:46
+ * Time: 09:39
  */
 
 namespace Tixi\ApiBundle\Form\Management;
@@ -14,15 +14,15 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Tixi\ApiBundle\Form\Shared\CommonAbstractType;
 
-class PoiKeywordType extends CommonAbstractType{
+class InsuranceType extends CommonAbstractType{
 
     public function buildForm(FormBuilderInterface $builder, array $options) {
         $builder->add('id', 'hidden');
         $builder->add('name', 'text', array(
-            'label' => 'poikeyword.field.name',
+            'label' => 'insurance.field.name',
             'attr' => array('title' => 'form.field.title.not_blank'),
             'constraints' => array(
-                new NotBlank(array('message' => 'poikeyword.name.not_blank'))
+                new NotBlank(array('message' => 'insurance.name.not_blank'))
             ),
         ));
     }
@@ -32,7 +32,7 @@ class PoiKeywordType extends CommonAbstractType{
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver) {
         $resolver->setDefaults(array(
-            'data_class' => 'Tixi\ApiBundle\Interfaces\Management\PoiKeywordRegisterDTO'
+            'data_class' => 'Tixi\ApiBundle\Interfaces\Management\InsuranceRegisterDTO'
         ));
     }
 } 
