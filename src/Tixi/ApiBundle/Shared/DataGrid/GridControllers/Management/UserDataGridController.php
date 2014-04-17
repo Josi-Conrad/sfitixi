@@ -29,7 +29,6 @@ class UserDataGridController extends DataGridAbstractController {
     public function createCustomControlTile() {
         $customControlTile = new DataGridCustomControlTile();
         $selectionButton = $customControlTile->add(new SelectionButtonTile($this->getGridIdentifier().'_selection', 'button.with.selection'));
-        $selectionButton->add(new TextLinkSelectionTile('show', $this->generateUrl('tixiapi_management_user_get', array('userId' => DataGridHandler::$dataGirdReplaceIdentifier)), 'button.show', true));
         $selectionButton->add(new TextLinkSelectionTile('edit', $this->generateUrl('tixiapi_management_user_edit', array('userId' => DataGridHandler::$dataGirdReplaceIdentifier)), 'button.edit', true));
         $selectionButton->add(new SelectionButtonDividerTile());
         $selectionButton->add(new TextLinkSelectionDeleteTile('delete', $this->generateUrl('tixiapi_management_user_delete', array('userId' => DataGridHandler::$dataGirdReplaceIdentifier)), 'button.delete', true));
@@ -38,7 +37,7 @@ class UserDataGridController extends DataGridAbstractController {
     }
 
     public function getDblClickPath() {
-        return $this->generateUrl('tixiapi_management_user_get', array('userId' => DataGridHandler::$dataGirdReplaceIdentifier));
+        return $this->generateUrl('tixiapi_management_user_edit', array('userId' => DataGridHandler::$dataGirdReplaceIdentifier));
     }
 
     public function getReferenceDTO() {

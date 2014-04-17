@@ -9,6 +9,7 @@ user.field.roles: Berechtigungen
 user.field.email: E-Mail
 user.list.name: Alle Benutzer
 user.button.new: Neuer Benutzer
+user.button.delete: Benutzer löschen
 user.panel.name: Benutzer
 user.panel.new: Neuer Benutzer
 user.panel.details: Benutzer Details

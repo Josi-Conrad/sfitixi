@@ -21,6 +21,7 @@ use Tixi\ApiBundle\Form\Management\BankHolidayType;
 use Tixi\ApiBundle\Interfaces\Management\BankHolidayRegisterDTO;
 use Tixi\ApiBundle\Menu\MenuService;
 use Tixi\ApiBundle\Tile\Core\FormTile;
+use Tixi\ApiBundle\Tile\Core\PanelDeleteFooterTile;
 use Tixi\ApiBundle\Tile\Core\RootPanel;
 use Tixi\CoreDomain\BankHoliday;
 
@@ -47,7 +48,7 @@ class BankHolidayController extends Controller {
      * @throws AccessDeniedException
      * @return Response
      */
-    public function getBankHolidayAction(Request $request, $embeddedState = false) {
+    public function getBankHolidaysAction(Request $request, $embeddedState = false) {
         if (false === $this->get('security.context')->isGranted('ROLE_MANAGER')) {
             throw new AccessDeniedException();
         }
@@ -70,25 +71,6 @@ class BankHolidayController extends Controller {
         }
 
         return new Response($tileRenderer->render($rootPanel));
-    }
-
-    /**
-     * @Route("/{bankHolidayId}/delete",name="tixiapi_management_bankholiday_delete")
-     * @Method({"GET","POST"})
-     * @param Request $request
-     * @param $bankHolidayId
-     * @throws AccessDeniedException
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
-     */
-    public function deleteBankHolidayAction(Request $request, $bankHolidayId) {
-        if (false === $this->get('security.context')->isGranted('ROLE_MANAGER')) {
-            throw new AccessDeniedException();
-        }
-        $bankHoliday = $this->getBankHoliday($bankHolidayId);
-        $bankHoliday->deleteLogically();
-        $this->get('entity_manager')->flush();
-
-        return $this->redirect($this->generateUrl('tixiapi_management_bankholidays_get'));
     }
 
     /**
@@ -151,8 +133,29 @@ class BankHolidayController extends Controller {
         }
         $rootPanel = new RootPanel($this->menuId, 'bankholiday.panel.edit');
         $rootPanel->add(new FormTile($form, true));
+        $rootPanel->add(new PanelDeleteFooterTile($this->generateUrl('tixiapi_management_bankholiday_delete',
+            array('bankHolidayId' => $bankHolidayId)),'bankholiday.button.delete'));
 
         return new Response($tileRenderer->render($rootPanel));
+    }
+
+    /**
+     * @Route("/{bankHolidayId}/delete",name="tixiapi_management_bankholiday_delete")
+     * @Method({"GET","POST"})
+     * @param Request $request
+     * @param $bankHolidayId
+     * @throws AccessDeniedException
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function deleteBankHolidayAction(Request $request, $bankHolidayId) {
+        if (false === $this->get('security.context')->isGranted('ROLE_MANAGER')) {
+            throw new AccessDeniedException();
+        }
+        $bankHoliday = $this->getBankHoliday($bankHolidayId);
+        $bankHoliday->deleteLogically();
+        $this->get('entity_manager')->flush();
+
+        return $this->redirect($this->generateUrl('tixiapi_management_bankholidays_get'));
     }
 
     /**
