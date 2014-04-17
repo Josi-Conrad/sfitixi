@@ -42,7 +42,7 @@ class UserAssembler {
             $userDTO->username,
             $userDTO->password,
             $userDTO->email);
-        $this->encodeUserPassword($user);
+        $this->encodeUserPassword($user, $userDTO->password);
         $this->assignRolesFromSelection($user, $userDTO->role, $roleRepository);
         return $user;
     }
@@ -58,8 +58,7 @@ class UserAssembler {
             $userDTO->username,
             $userDTO->email);
         if (!empty($userDTO->password)) {
-            $user->updatePassword($userDTO->password);
-            $this->encodeUserPassword($user);
+            $this->encodeUserPassword($user, $userDTO->password);
         }
         $this->assignRolesFromSelection($user, $userDTO->role, $roleRepository);
         return $user;
@@ -75,8 +74,7 @@ class UserAssembler {
             $userDTO->username,
             $userDTO->email);
         if (!empty($userDTO->new_password)) {
-            $user->updatePassword($userDTO->new_password);
-            $this->encodeUserPassword($user);
+            $this->encodeUserPassword($user, $userDTO->new_password);
         }
         return $user;
     }
@@ -136,10 +134,11 @@ class UserAssembler {
 
     /**
      * @param User $user
+     * @param $password
      */
-    private function encodeUserPassword(User $user) {
+    private function encodeUserPassword(User $user, $password) {
         $encoder = $this->encoderFactory->getEncoder($user);
-        $encPassword = $encoder->encodePassword($user->getPassword(), $user->getSalt());
+        $encPassword = $encoder->encodePassword($password, $user->getSalt());
         $user->setPassword($encPassword);
     }
 
