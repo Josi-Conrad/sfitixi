@@ -82,17 +82,6 @@ class User extends CommonBaseEntity implements AdvancedUserInterface, \Serializa
         }
     }
 
-    /**
-     * @param null $password
-     * @internal param null $username
-     * @internal param null $email
-     */
-    public function updatePassword($password) {
-        if (!empty($password)) {
-            $this->setPassword($password);
-        }
-    }
-
     public function deleteLogically() {
         parent::deleteLogically();
         $this->inactivate();
@@ -130,6 +119,7 @@ class User extends CommonBaseEntity implements AdvancedUserInterface, \Serializa
             $this->roles->removeElement($role);
         }
     }
+
     /**
      * @param mixed $email
      */

@@ -64,24 +64,14 @@ class UserProfileController extends Controller {
 
         if ($form->isValid()) {
             $userDTO = $form->getData();
-            $this->registerOrUpdateUser($userDTO);
+            $this->get('tixi_api.assembleruser')->registerProfileDTOtoUser($userDTO, $user);
             $this->get('entity_manager')->flush();
-            return $this->redirect($this->generateUrl('tixiapi_user_profile_get'));
+            return $this->redirect($this->generateUrl('tixi_logout'));
         }
         $rootPanel = new RootPanel($this->menuId, $user->getUserName());
         $rootPanel->add(new FormTile($form, true));
 
         return new Response($tileRenderer->render($rootPanel));
-    }
-
-    /**
-     * @param UserProfileDTO $userDTO
-     * @return null|object|\Tixi\SecurityBundle\Entity\User
-     */
-    protected function registerOrUpdateUser(UserProfileDTO $userDTO) {
-        $user = $this->get('tixi_user_repository')->find($userDTO->id);
-        $this->get('tixi_api.assembleruser')->registerProfileDTOtoUser($userDTO, $user);
-        return $user;
     }
 
     /**
@@ -101,50 +91,5 @@ class UserProfileController extends Controller {
             $options = array();
         }
         return $this->createForm(new UserProfileType(), $userDTO, $options);
-    }
-
-    /**
-     * @param User $user
-     */
-    protected function assignNormalUserRole(User $user) {
-        $user->assignRole($this->getUserRole('ROLE_USER'));
-    }
-
-    /**
-     * @param $roleName
-     * @return null|object
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
-     */
-    protected function getUserRole($roleName) {
-        $role = $this->get('tixi_role_repository')->findOneBy(array('role' => $roleName));
-        if (empty($role)) {
-            throw $this->createNotFoundException('This role does not exist');
-        }
-        return $role;
-    }
-
-    /**
-     * @param $username
-     * @return bool
-     */
-    protected function isUsernameAvailable($username) {
-        $duplicate = $this->get('tixi_user_repository')->findOneBy(array('username' => $username));
-        if (!empty($duplicate)) {
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     * @param $userId
-     * @return null|object
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
-     */
-    protected function getUserById($userId) {
-        $user = $this->get('tixi_user_repository')->find($userId);
-        if (null === $user) {
-            throw $this->createNotFoundException('The user with id ' . $userId . ' does not exist');
-        }
-        return $user;
     }
 }
