@@ -7,10 +7,12 @@ function RepeatedDrivingAssertion() {
     this._weeklyView = null;
     this._monthlyView = null;
 
+    this._formId = null;
+
     this.init = function(trans, frequency, formId) {
         _this._weeklyView = $('.weeklyPart');
         _this._monthlyView = $('.monthlyPart');
-
+        _this._formId = formId;
         _this._weeklyAssertionController = new ShiftSelectionController();
         _this._weeklyAssertionController.init('weeklyShiftSelections', trans, formId);
         _this._monthlyAssertionController = new ShiftSelectionController();
@@ -34,19 +36,19 @@ function RepeatedDrivingAssertion() {
     }
 
     this._initMonthlyListeners = function() {
-        $('#fpw_driver_repeatedassertions_monthlyFirstWeeklySelector input').on('change', function() {
+        $('#'+_this._formId+'_monthlyFirstWeeklySelector input').on('change', function() {
             _this._monthlyAssertionController.onSelectorChange(this, 'first');
         });
-        $('#fpw_driver_repeatedassertions_monthlySecondWeeklySelector input').on('change', function() {
+        $('#'+_this._formId+'_monthlySecondWeeklySelector input').on('change', function() {
             _this._monthlyAssertionController.onSelectorChange(this, 'second');
         });
-        $('#fpw_driver_repeatedassertions_monthlyThirdWeeklySelector input').on('change', function() {
+        $('#'+_this._formId+'_monthlyThirdWeeklySelector input').on('change', function() {
             _this._monthlyAssertionController.onSelectorChange(this, 'third');
         });
-        $('#fpw_driver_repeatedassertions_monthlyFourthWeeklySelector input').on('change', function() {
+        $('#'+_this._formId+'_monthlyFourthWeeklySelector input').on('change', function() {
             _this._monthlyAssertionController.onSelectorChange(this, 'fourth');
         });
-        $('#fpw_driver_repeatedassertions_monthlyLastWeeklySelector input').on('change', function() {
+        $('#'+_this._formId+'_monthlyLastWeeklySelector input').on('change', function() {
             _this._monthlyAssertionController.onSelectorChange(this, 'last');
         });
     }
