@@ -25,6 +25,7 @@ use Tixi\ApiBundle\Tile\Core\RootPanel;
 /**
  * Class PoiKeywordController
  * @package Tixi\ApiBundle\Controller\Management
+ * @Breadcrumb("management.breadcrumb.name")
  * @Breadcrumb("poikeyword.breadcrumb.name", route="tixiapi_management_poikeywords_get")
  * @Route("/management/poikeywords")
  */

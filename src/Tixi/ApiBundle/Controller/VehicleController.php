@@ -178,7 +178,7 @@ class VehicleController extends Controller {
 
         $rootPanel = new RootPanel($this->menuId, 'vehicle.panel.name', $vehicle->getName());
         $panelSplitter = $rootPanel->add(new PanelSplitterTile('1:1'));
-        $formPanel = $panelSplitter->addLeft(new PanelTile('vehicle.panel.details', PanelTile::$primaryType));
+        $formPanel = $panelSplitter->addLeft(new PanelTile('vehicle.panel.edit', PanelTile::$primaryType));
         $formPanel->add(new FormTile($form));
         $gridPanel = $panelSplitter->addRight(new PanelTile('vehicle.panel.serviceplans'));
         $gridPanel->add($gridTile);

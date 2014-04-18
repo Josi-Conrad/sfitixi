@@ -25,6 +25,7 @@ use Tixi\ApiBundle\Tile\Core\RootPanel;
 /**
  * Class HandicapController
  * @package Tixi\ApiBundle\Controller\Management
+ * @Breadcrumb("management.breadcrumb.name")
  * @Breadcrumb("handicap.breadcrumb.name", route="tixiapi_management_handicaps_get")
  * @Route("/management/handicaps")
  */
