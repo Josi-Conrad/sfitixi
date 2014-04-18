@@ -53,4 +53,15 @@ class HomeController extends Controller {
         $template = 'TixiApiBundle:Home:getSupport.html.twig';
         return $this->render($template);
     }
+
+    /**
+     * @Route("/about",name="tixiapi_about")
+     * @Method({"GET","POST"})
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function getAboutAction(Request $request) {
+        $template = 'TixiApiBundle:Home:getAbout.html.twig';
+        return $this->render($template);
+    }
 }

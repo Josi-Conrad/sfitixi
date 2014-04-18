@@ -1,6 +1,7 @@
 imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
+    - { resource: tixi.yml }
     - { resource: "@FOSOAuthServerBundle/Resources/config/security.xml" }
 
 framework:
@@ -27,12 +28,18 @@ framework:
 
 # Twig Configuration
 twig:
+    globals:
+      tixi_parameter_client: %tixi_parameter_client%
+      tixi_parameter_app: %tixi_parameter_app%
+      tixi_parameter_version: %tixi_parameter_version%
+
     debug:            "%kernel.debug%"
     strict_variables: "%kernel.debug%"
     exception_controller: 'FOS\RestBundle\Controller\ExceptionController::showAction'
     form:
         resources:
             - 'TixiApiBundle:Form:fieldsBootstrap.html.twig'
+
 
 # Assetic Configuration
 assetic:

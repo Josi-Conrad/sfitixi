@@ -29,7 +29,7 @@ class DateTimePickerType extends AbstractType {
             ))
             ->add('time', 'time', array(
                 'input' => 'datetime',
-                'widget' => 'choice',
+                'widget' => 'single_text',
                 'error_bubbling' => true
             ));
 

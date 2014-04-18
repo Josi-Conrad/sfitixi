@@ -1,0 +1,132 @@
+{% extends '::base.html.twig' %}
+{% set topNavigationActivePage = 'tixiapi_home' %}
+{% block body %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="col-md-6">
+                <h2 class="text-muted">{% trans %}about.tile.name{% endtrans %}</h2>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="container">
+            <div class="frame">
+                <div class="frame-table">
+                    <div class="frame-row">
+                        <div class="frame-logo">
+                            <img src="{{ asset('images/about/traffic_sign.png') }}" alt="Verkehrstafel 'Arbeit'"
+                                 height="37" width="44"/>
+                        </div>
+                        <div class="frame-left">
+                            <h3>iTixi Entwicklungsteam</h3>
+
+                            <p>Die iTixi Applikation wurde ermöglicht durch freiwilligen Beiträge von den
+                                folgenden Personen (Organisationen):<br>
+                                Yeldez Gwerder (TIXIZUG), Josef Conrad (ehemals UBS), Martin Jonasse (ehemals CS),
+                                Stefan Keller (HSR), Carmelo Schumacher (HSR), Reto Schelbert (HSR).
+                            </p>
+
+                            <p>Für Details, siehe Open Source Projekt in <a
+                                        href="http://sourceforge.net/projects/itixi/">SourceForge</a>.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="frame-row">
+                        <div class="frame-logo">
+                            <img src="{{ asset('images/logo44px.png') }}" alt="iTixi Logo"/>
+                        </div>
+                        <div class="frame-left">
+                            <h3>iTixi Lizenzbedingungen</h3>
+
+                            <p>
+                                Die Sourcen (Programme) des iTixi Projektes werden unter der OpenSource-Lizenz GPL
+                                veröffentlicht.
+                                Die iTixi Applikation untersteht der GNU General Public License Version 2.
+                                Dieser Lizenz kann unten (auf dieser Seite) eingesehen werden (Englisch, Originaltext).
+                            </p>
+
+                        </div>
+                    </div>
+
+                    <div class="frame-row">
+                        <div class="frame-logo">
+                            <img src="{{ asset('images/about/symfony_logo.png') }}" alt="Symfony Logo" height="44"
+                                 width="44"/>
+                        </div>
+                        <div class="frame-left">
+                            <h3>Symfony (MIT) Lizenzbedingungen</h3>
+
+                            <p>Siehe Symfony Webseite
+                                <a href="http://symfony.com/doc/current/contributing/code/license.html">
+                                    http://symfony.com/doc/current/contributing/code/license.html
+                                </a>
+                            </p>
+
+                            <p>Bemerkung:<br>The MIT license is also GPL-compatible, meaning that the GPL permits
+                                combination and redistribution with software that uses the MIT License.</p>
+                        </div>
+                    </div>
+
+                    <div class="frame-row">
+                        <div class="frame-logo">
+                            <img src="{{ asset('images/about/jquery-logo-official.jpg') }}" alt="jQuery Logo"
+                                 height="44" width="44"/>
+                        </div>
+                        <div class="frame-left">
+                            <h3>jQuery (MIT) Lizenzbedingungen</h3>
+
+                            <p>Siehe jQuery Webseite
+                                <a href="https://jquery.org/license/">
+                                    You may use any jQuery project under the terms of the MIT License.
+                                </a>
+                            </p>
+
+                            <p>Bemerkung:<br>The MIT license is also GPL-compatible, meaning that the GPL permits
+                                combination and redistribution with software that uses the MIT License.</p>
+                        </div>
+                    </div>
+
+
+                    <div class="frame-row">
+                        <div class="frame-logo">
+                            <img src="{{ asset('images/about/google_maps_logo.png') }}" alt="Google Maps Logo"
+                                 height="55" width="44"/>
+                        </div>
+                        <div class="frame-left">
+                            <h3>Google Maps Lizenzbestimmungen</h3>
+
+                            <p>
+                                Die iTixi Applikation verwendet den Google Maps API (ein kostenlose Google-Dienst mit
+                                dem
+                                Google Maps in unseren frei zugänglichen Webseiten einbettet werden kann). Die
+                                Lizenbedingungen sind
+                                <a href="https://developers.google.com/maps/licensing?hl=de">hier</a> ersichtlich.
+                            </p>
+
+                            <p>
+                                Die iTixi Applikation beschränkt die Anzahl Abfragen pro Tag bei Google Maps API. Wenn
+                                nötig
+                                wird das iTixi Projekt ein Antrag auf eine "Lizenzierung für das Google Maps API für
+                                Unternehmen für
+                                gemeinnützige Organisationen" stellen
+                                <a href="https://www.google.com/intl/de_ch/earth/outreach/grants/software/mapsapi.html">(link)</a>.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="frame-row">
+                        <div class="frame-logo">
+                            <img src="{{ asset('images/about/opensource_logo.gif') }}" alt="Open Source Logo"
+                                 height="38" width="44"/>
+                        </div>
+                        <div class="frame-left">
+                            {{ include(
+                            'TixiApiBundle:Home:gpl_license.html.twig'
+                            ) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
