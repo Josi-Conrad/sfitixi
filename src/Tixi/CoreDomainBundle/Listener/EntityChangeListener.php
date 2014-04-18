@@ -22,9 +22,9 @@ use Symfony\Component\Security\Core\SecurityContext;
  */
 class EntityChangeListener {
 
-    /** @var \Symfony\Bridge\Monolog\Logger  */
+    /** @var \Symfony\Bridge\Monolog\Logger */
     protected $logger;
-    /** @var \Symfony\Component\DependencyInjection\ContainerInterface  */
+    /** @var \Symfony\Component\DependencyInjection\ContainerInterface */
     protected $container;
 
     /**
@@ -70,12 +70,21 @@ class EntityChangeListener {
      * @param \Doctrine\ORM\Mapping\ClassMetadata $meta
      * @param $entity
      */
-    private function logEntityChange($action, \Doctrine\ORM\Mapping\ClassMetadata $meta, $entity){
-        $this->logger->info('Entity "'
-            . $meta->getTableName() . '" with id: '
-            . $meta->getFieldValue($entity, $meta->getSingleIdentifierFieldName()). ' '
-            . $action .' by: '
-            . $this->container->get('security.context')->getToken()->getUsername()
-        );
+    private function logEntityChange($action, \Doctrine\ORM\Mapping\ClassMetadata $meta, $entity) {
+        $userToken = $this->container->get('security.context')->getToken();
+        if (null !== $userToken) {
+            $this->logger->info('Entity "'
+                . $meta->getTableName() . '" with id: '
+                . $meta->getFieldValue($entity, $meta->getSingleIdentifierFieldName()) . ' '
+                . $action . ' by: '
+                . $this->container->get('security.context')->getToken()->getUsername()
+            );
+        } else {
+            $this->logger->info('Entity "'
+                . $meta->getTableName() . '" with id: '
+                . $meta->getFieldValue($entity, $meta->getSingleIdentifierFieldName()) . ' '
+                . $action . ' by: no logged in user'
+            );
+        }
     }
 }
