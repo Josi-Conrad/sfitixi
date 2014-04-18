@@ -10,9 +10,7 @@ namespace Tixi\CoreDomain;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Tixi\ApiBundle\Form\VehicleType;
 use Tixi\CoreDomain\Shared\CommonBaseEntity;
-use Tixi\CoreDomain\Shared\Entity;
 
 /**
  * Tixi\CoreDomain\Vehicle
@@ -20,7 +18,7 @@ use Tixi\CoreDomain\Shared\Entity;
  * @ORM\Entity(repositoryClass="Tixi\CoreDomainBundle\Repository\VehicleRepositoryDoctrine")
  * @ORM\Table(name="vehicle")
  */
-class Vehicle extends CommonBaseEntity implements Entity {
+class Vehicle extends CommonBaseEntity {
     /**
      * @ORM\Id
      * @ORM\Column(type="bigint", name="id")

@@ -10,7 +10,6 @@ namespace Tixi\CoreDomain\Dispo;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints\Time;
 
 /**
  * Tixi\CoreDomain\Dispo\ShiftType

@@ -10,14 +10,13 @@ namespace Tixi\CoreDomain;
 
 use Doctrine\ORM\Mapping as ORM;
 use Tixi\CoreDomain\Shared\CommonBaseEntity;
-use Tixi\CoreDomain\Shared\Entity;
 
 /**
  *
  * @ORM\Entity(repositoryClass="Tixi\CoreDomainBundle\Repository\ServicePlanRepositoryDoctrine")
  * @ORM\Table(name="serviceplan")
  */
-class ServicePlan extends CommonBaseEntity implements Entity {
+class ServicePlan extends CommonBaseEntity {
 
     /**
      * @ORM\Id

@@ -11,7 +11,6 @@ namespace Tixi\CoreDomain;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Tixi\CoreDomain\Shared\CommonBaseEntity;
-use Tixi\CoreDomain\Shared\Entity;
 
 /**
  * Tixi\CoreDomain\POI
@@ -19,7 +18,7 @@ use Tixi\CoreDomain\Shared\Entity;
  * @ORM\Entity(repositoryClass="Tixi\CoreDomainBundle\Repository\POIRepositoryDoctrine")
  * @ORM\Table(name="poi")
  */
-class POI extends CommonBaseEntity implements Entity{
+class POI extends CommonBaseEntity {
     /**
      * @ORM\Id
      * @ORM\Column(type="bigint", name="id")

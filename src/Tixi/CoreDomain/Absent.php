@@ -10,7 +10,6 @@ namespace Tixi\CoreDomain;
 
 use Doctrine\ORM\Mapping as ORM;
 use Tixi\CoreDomain\Shared\CommonBaseEntity;
-use Tixi\CoreDomain\Shared\Entity;
 
 /**
  * Tixi\CoreDomain\Absent
@@ -18,7 +17,7 @@ use Tixi\CoreDomain\Shared\Entity;
  * @ORM\Entity(repositoryClass="Tixi\CoreDomainBundle\Repository\AbsentRepositoryDoctrine")
  * @ORM\Table(name="absent")
  */
-class Absent extends CommonBaseEntity implements Entity {
+class Absent extends CommonBaseEntity {
     /**
      * @ORM\Id
      * @ORM\Column(type="bigint", name="id")

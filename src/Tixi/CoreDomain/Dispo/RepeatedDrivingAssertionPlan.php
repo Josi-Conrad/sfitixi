@@ -12,7 +12,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Tixi\CoreDomain\Driver;
 use Tixi\CoreDomain\Shared\CommonBaseEntity;
-use Tixi\CoreDomain\Shared\Entity;
 
 /**
  * Class DrivingAssertionPlan
@@ -21,7 +20,7 @@ use Tixi\CoreDomain\Shared\Entity;
  * @ORM\Entity(repositoryClass="Tixi\CoreDomainBundle\Repository\Dispo\RepeatedDrivingAssertionPlanRepositoryDoctrine")
  * @ORM\Table(name="repeated_driving_assertion_plan")
  */
-class RepeatedDrivingAssertionPlan extends CommonBaseEntity implements Entity{
+class RepeatedDrivingAssertionPlan extends CommonBaseEntity {
     /**
      * @ORM\Id
      * @ORM\Column(type="integer", name="id")

@@ -10,13 +10,12 @@ namespace Tixi\CoreDomain;
 
 use Doctrine\ORM\Mapping as ORM;
 use Tixi\CoreDomain\Shared\CommonBaseEntity;
-use Tixi\CoreDomain\Shared\Entity;
 
 /**
  * @ORM\Entity(repositoryClass="Tixi\CoreDomainBundle\Repository\VehicleCategoryRepositoryDoctrine")
  * @ORM\Table(name="vehicle_category")
  */
-class VehicleCategory extends CommonBaseEntity implements Entity{
+class VehicleCategory extends CommonBaseEntity {
     /**
      * @ORM\Id
      * @ORM\Column(name="id", type="integer")
