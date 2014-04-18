@@ -1,4 +1,4 @@
-iTIXI
+iTixi
 =====
 
 Symfony2-iTixi master repository
@@ -26,14 +26,14 @@ PHP Extensions must be enabled and configured (mostly in php.ini):
 
 `xdebug`
 
-`php_openssl` (probably to download via composer)
+`php_openssl`   (probably to download via composer)
 
 
 PHP Parameters shall be set to:
 
-`xdebug.max_nesting_level=200` 200 or more
+`xdebug.max_nesting_level=200`  200 or more
 
-`date.timezone` must be set to a valid Timezone
+`date.timezone`     must be set to a valid Timezone
 
 
 2) Build and Deploy

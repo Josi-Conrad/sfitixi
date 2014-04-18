@@ -12,7 +12,7 @@ vehicle.field.name: Fahrzeugbezeichnung
 vehicle.field.licencenumber: Kennzeichen
 vehicle.field.dateoffirstregistration: Inverkehrssetzung
 vehicle.field.parking: Parkplatz
-vehicle.field.category: Fehrzeugkategorie
+vehicle.field.category: Fahrzeugkategorie
 vehicle.field.category.amountofseats: Anzahl Sitzplätze
 vehicle.field.category.amountofwheelchairs: Anzahl Rollstühle
 vehicle.field.memo: Notizen
