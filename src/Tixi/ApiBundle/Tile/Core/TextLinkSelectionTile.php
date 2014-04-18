@@ -8,14 +8,22 @@
 
 namespace Tixi\ApiBundle\Tile\Core;
 
-
+/**
+ * Class TextLinkSelectionTile
+ * @package Tixi\ApiBundle\Tile\Core
+ */
 class TextLinkSelectionTile extends TextLinkTile{
-
+    /**
+     * @return string
+     */
     public function getTemplateName()
     {
         return 'TixiApiBundle:Tile:textlinkselection.html.twig';
     }
 
+    /**
+     * @return string
+     */
     public function getName()
     {
         return 'textlinkselection';

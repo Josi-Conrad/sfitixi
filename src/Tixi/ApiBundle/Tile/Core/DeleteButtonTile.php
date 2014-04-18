@@ -11,6 +11,10 @@ namespace Tixi\ApiBundle\Tile\Core;
 
 use Tixi\ApiBundle\Tile\AbstractTile;
 
+/**
+ * Class DeleteButtonTile
+ * @package Tixi\ApiBundle\Tile\Core
+ */
 class DeleteButtonTile extends AbstractTile{
 
     protected $buttonId;
@@ -18,6 +22,12 @@ class DeleteButtonTile extends AbstractTile{
     protected $targetSrc;
     protected $deleteConfirmText;
 
+    /**
+     * @param $buttonId
+     * @param $targetSrc
+     * @param $displayText
+     * @param string $deleteConfirmText
+     */
     public function __construct($buttonId, $targetSrc, $displayText, $deleteConfirmText='delete.logically.standardtext') {
         $this->buttonId = $buttonId;
         $this->targetSrc = $targetSrc;
@@ -25,16 +35,25 @@ class DeleteButtonTile extends AbstractTile{
         $this->deleteConfirmText = $deleteConfirmText;
     }
 
+    /**
+     * @return array
+     */
     public function getViewParameters()
     {
         return array('buttonId'=>$this->buttonId, 'targetSrc'=>$this->targetSrc, 'displayText'=>$this->displayText, 'deleteConfirmText'=>$this->deleteConfirmText);
     }
 
+    /**
+     * @return mixed|string
+     */
     public function getTemplateName()
     {
         return 'TixiApiBundle:Tile:deletebutton.html.twig';
     }
 
+    /**
+     * @return mixed|string
+     */
     public function getName()
     {
         return 'deletebutton';

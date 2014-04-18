@@ -12,6 +12,10 @@ use Symfony\Component\Validator\Constraints\DateTime;
 use Tixi\ApiBundle\Tile\Core\AbstractFormViewTile;
 use Tixi\ApiBundle\Tile\Core\FormRowView;
 
+/**
+ * Class DriverRegisterFormViewTile
+ * @package Tixi\ApiBundle\Tile\CustomFormView
+ */
 class DriverRegisterFormViewTile extends AbstractFormViewTile {
 
     public function createFormRows() {
