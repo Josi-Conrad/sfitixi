@@ -20,12 +20,21 @@ use Tixi\ApiBundle\Tile\Core\TextLinkSelectionDeleteTile;
 use Tixi\ApiBundle\Tile\Core\TextLinkSelectionTile;
 use Tixi\CoreDomain\Shared\GenericEntityFilter\GenericEntityFilter;
 
+/**
+ * Class UserDataGridController
+ * @package Tixi\ApiBundle\Shared\DataGrid\GridControllers\Management
+ */
 class UserDataGridController extends DataGridAbstractController {
-
+    /**
+     * @return mixed|string
+     */
     public function getGridIdentifier() {
         return 'users';
     }
 
+    /**
+     * @return mixed|DataGridCustomControlTile
+     */
     public function createCustomControlTile() {
         $customControlTile = new DataGridCustomControlTile();
         $selectionButton = $customControlTile->add(new SelectionButtonTile($this->getGridIdentifier().'_selection', 'button.with.selection'));
@@ -36,16 +45,26 @@ class UserDataGridController extends DataGridAbstractController {
         return $customControlTile;
     }
 
+    /**
+     * @return mixed|string
+     */
     public function getDblClickPath() {
         return $this->generateUrl('tixiapi_management_user_edit', array('userId' => DataGridHandler::$dataGirdReplaceIdentifier));
     }
 
+    /**
+     * @return mixed|UserListDTO
+     */
     public function getReferenceDTO() {
         if (!$this->isInEmbeddedState()) {
             return new UserListDTO();
         }
     }
 
+    /**
+     * @param GenericEntityFilter $filter
+     * @return array|mixed.
+     */
     public function constructDtosFromFgeaFilter(GenericEntityFilter $filter) {
         $assembler = $this->container->get('tixi_api.assembleruser');
         $users = $this->getEntitiesByFgeaFilter($filter);
@@ -56,6 +75,9 @@ class UserDataGridController extends DataGridAbstractController {
         return $dtos;
     }
 
+    /**
+     * @return mixed|null
+     */
     public function getDataSrcUrl() {
         return null;
     }

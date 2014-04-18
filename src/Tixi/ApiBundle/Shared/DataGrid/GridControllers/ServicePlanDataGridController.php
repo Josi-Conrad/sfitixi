@@ -20,18 +20,30 @@ use Tixi\ApiBundle\Tile\Core\TextLinkSelectionDeleteTile;
 use Tixi\ApiBundle\Tile\Core\TextLinkSelectionTile;
 use Tixi\CoreDomain\Shared\GenericEntityFilter\GenericEntityFilter;
 
+/**
+ * Class ServicePlanDataGridController
+ * @package Tixi\ApiBundle\Shared\DataGrid\GridControllers
+ */
 class ServicePlanDataGridController extends DataGridAbstractController{
-
+    /**
+     * @return mixed|string
+     */
     public function getGridIdentifier()
     {
         return 'serviceplans';
     }
 
+    /**
+     * @return string
+     */
     public function getGridDisplayTitel()
     {
         return 'serviceplan.list.name';
     }
 
+    /**
+     * @return mixed|DataGridCustomControlTile
+     */
     public function createCustomControlTile()
     {
         $customControlTile = new DataGridCustomControlTile();
@@ -44,11 +56,17 @@ class ServicePlanDataGridController extends DataGridAbstractController{
         return $customControlTile;
     }
 
+    /**
+     * @return mixed|string
+     */
     public function getDblClickPath()
     {
         return $this->generateUrl('tixiapi_serviceplan_get',array('vehicleId'=>$this->routeProperties['vehicleId'], 'servicePlanId'=>DataGridHandler::$dataGirdReplaceIdentifier));
     }
 
+    /**
+     * @return mixed|null|ServicePlanEmbeddedListDTO
+     */
     public function getReferenceDTO()
     {
         $referenceDTO = null;
@@ -60,6 +78,10 @@ class ServicePlanDataGridController extends DataGridAbstractController{
         return $referenceDTO;
     }
 
+    /**
+     * @param GenericEntityFilter $filter
+     * @return array|mixed
+     */
     public function constructDtosFromFgeaFilter(GenericEntityFilter $filter)
     {
         $assembler = $this->container->get('tixi_api.assemblerserviceplan');
@@ -73,11 +95,17 @@ class ServicePlanDataGridController extends DataGridAbstractController{
         return $dtos;
     }
 
+    /**
+     * @return mixed|string
+     */
     public function getDataSrcUrl()
     {
         return $this->generateUrl('tixiapi_serviceplans_get',array('vehicleId'=>$this->routeProperties['vehicleId']));
     }
 
+    /**
+     * @return string
+     */
     public function getMenuIdentifier()
     {
         return 'tixiapi_vehicles_get';

@@ -14,6 +14,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Tixi\ApiBundle\Shared\DataGrid\DataGridSourceClass;
 use Tixi\ApiBundle\Shared\Paginator;
 
+/**
+ * Class DataGridInputState
+ * @package Tixi\ApiBundle\Shared\DataGrid
+ */
 class DataGridInputState {
 
     protected $defaultStartPage = 1;
@@ -27,6 +31,15 @@ class DataGridInputState {
     protected $sourceDTO = null;
     protected $partial = null;
 
+    /**
+     * @param $sourceDTO
+     * @param null $orderByField
+     * @param null $orderByDirection
+     * @param null $page
+     * @param null $limit
+     * @param null $filterStr
+     * @param bool $partial
+     */
     public function __construct($sourceDTO, $orderByField=null, $orderByDirection=null, $page=null, $limit=null, $filterStr=null, $partial=false) {
         $this->sourceDTO = $sourceDTO;
         $this->orderByField = $orderByField;
@@ -37,26 +50,9 @@ class DataGridInputState {
         $this->partial = $partial;
     }
 
-//    public static function createByRequest(Request $request, DataGridSourceClass $sourceDTO) {
-//        $page = $request->get('page');
-//        $limit = $request->get('limit');
-//        $orderByField = $request->get('orderbyfield');
-//        $orderByDirection = $request->get('orderbydirection');
-//        $filterstr = $request->get('filterstr');
-//        $correctedPage = Paginator::adjustPageForPagination($page);
-//        return new DataGridInputState($sourceDTO, $orderByField, $orderByDirection, $correctedPage, $limit, $filterstr);
-//    }
-//
-//    public static function createByParamFetcher(ParamFetcherInterface $paramFetcher, DataGridSourceClass $sourceDTO) {
-//        $page = $paramFetcher->get('page');
-//        $limit = $paramFetcher->get('limit');
-//        $orderByField = $paramFetcher->get('orderbyfield');
-//        $orderByDirection = $paramFetcher->get('orderbydirection');
-//        $filterstr = $paramFetcher->get('filterstr');
-//        $correctedPage = Paginator::adjustPageForPagination($page);
-//        return new DataGridInputState($sourceDTO, $orderByField, $orderByDirection, $correctedPage, $limit, $filterstr);
-//    }
-
+    /**
+     * @return bool
+     */
     public function hasFilter() {
         return (!is_null($this->filterStr) && !is_null($this->sourceDTO));
     }
@@ -92,8 +88,6 @@ class DataGridInputState {
     {
         return $this->orderByField;
     }
-
-
 
     /**
      * @return int|null

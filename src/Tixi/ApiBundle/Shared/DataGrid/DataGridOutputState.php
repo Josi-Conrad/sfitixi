@@ -8,7 +8,10 @@
 
 namespace Tixi\ApiBundle\Shared\DataGrid;
 
-
+/**
+ * Class DataGridOutputState
+ * @package Tixi\ApiBundle\Shared\DataGrid
+ */
 class DataGridOutputState {
 
     protected $menuId;
@@ -18,10 +21,15 @@ class DataGridOutputState {
     protected $headers;
     protected $rows;
 
-    protected function __construct() {
-
-    }
-
+    /**
+     * @param $menuId
+     * @param $gridIdentifier
+     * @param array $gridHeaders
+     * @param array $gridRows
+     * @param $totalAmountOfRows
+     * @param null $dataSrcUrl
+     * @return DataGridOutputState
+     */
     public static function createOutputState($menuId, $gridIdentifier, array $gridHeaders, array $gridRows, $totalAmountOfRows, $dataSrcUrl=null) {
         $outputState = new DataGridOutputState();
         $outputState->setMenuId($menuId);
@@ -33,6 +41,13 @@ class DataGridOutputState {
         return $outputState;
     }
 
+    /**
+     * @param $menuId
+     * @param $gridIdentifier
+     * @param array $gridHeaders
+     * @param $dataSrcUrl
+     * @return DataGridOutputState
+     */
     public static function createEmbeddedOutputState($menuId, $gridIdentifier, array $gridHeaders, $dataSrcUrl) {
         $outputState = new DataGridOutputState();
         $outputState->setMenuId($menuId);
@@ -42,6 +57,13 @@ class DataGridOutputState {
         return $outputState;
     }
 
+    /**
+     * @param $menuId
+     * @param $gridIdentifier
+     * @param array $gridRows
+     * @param $totalAmountOfRows
+     * @return DataGridOutputState
+     */
     public static function createPartialOutputState($menuId, $gridIdentifier, array $gridRows, $totalAmountOfRows) {
         $outputState = new DataGridOutputState();
         $outputState->setMenuId($menuId);
@@ -147,10 +169,5 @@ class DataGridOutputState {
     {
         return $this->totalAmountOfRows;
     }
-
-
-
-
-
 
 }

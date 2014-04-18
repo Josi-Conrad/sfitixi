@@ -8,9 +8,14 @@
 
 namespace Tixi\ApiBundle\Shared\DataGrid;
 
-
+/**
+ * Interface DataGridSourceClass
+ * @package Tixi\ApiBundle\Shared\DataGrid
+ */
 interface DataGridSourceClass {
-
+    /**
+     * @return mixed
+     */
     public function getAccessQuery();
 
 } 

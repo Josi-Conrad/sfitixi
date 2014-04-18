@@ -20,12 +20,21 @@ use Tixi\ApiBundle\Tile\Core\SelectionButtonTile;
 use Tixi\ApiBundle\Tile\Core\TextLinkSelectionDeleteTile;
 use Tixi\ApiBundle\Tile\Core\TextLinkSelectionTile;
 
+/**
+ * Class BankHolidayDataGridController
+ * @package Tixi\ApiBundle\Shared\DataGrid\GridControllers\Management
+ */
 class BankHolidayDataGridController extends DataGridAbstractController {
-
+    /**
+     * @return mixed|string
+     */
     public function getGridIdentifier() {
         return 'bankholiday';
     }
 
+    /**
+     * @return mixed|DataGridCustomControlTile
+     */
     public function createCustomControlTile() {
         $customControlTile = new DataGridCustomControlTile();
         $selectionButton = $customControlTile->add(new SelectionButtonTile($this->getGridIdentifier() . '_selection', 'button.with.selection'));
@@ -36,16 +45,26 @@ class BankHolidayDataGridController extends DataGridAbstractController {
         return $customControlTile;
     }
 
+    /**
+     * @return mixed|string
+     */
     public function getDblClickPath() {
         return $this->generateUrl('tixiapi_management_bankholiday_edit', array('bankHolidayId' => DataGridHandler::$dataGirdReplaceIdentifier));
     }
 
+    /**
+     * @return mixed|BankHolidayListDTO
+     */
     public function getReferenceDTO() {
         if (!$this->isInEmbeddedState()) {
             return new BankHolidayListDTO();
         }
     }
 
+    /**
+     * @param GenericEntityFilter $filter
+     * @return array|mixed
+     */
     public function constructDtosFromFgeaFilter(GenericEntityFilter $filter) {
         $assembler = $this->container->get('tixi_api.assemblerBankHoliday');
         $bankHolidays = $this->getEntitiesByFgeaFilter($filter);
@@ -56,6 +75,9 @@ class BankHolidayDataGridController extends DataGridAbstractController {
         return $dtos;
     }
 
+    /**
+     * @return mixed|null
+     */
     public function getDataSrcUrl() {
         return null;
     }

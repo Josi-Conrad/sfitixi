@@ -20,12 +20,21 @@ use Tixi\ApiBundle\Tile\Core\TextLinkSelectionDeleteTile;
 use Tixi\ApiBundle\Tile\Core\TextLinkSelectionTile;
 use Tixi\CoreDomain\Shared\GenericEntityFilter\GenericEntityFilter;
 
+/**
+ * Class DriverDataGridController
+ * @package Tixi\ApiBundle\Shared\DataGrid\GridControllers
+ */
 class DriverDataGridController extends DataGridAbstractController {
-
+    /**
+     * @return mixed|string
+     */
     public function getGridIdentifier() {
         return 'drivers';
     }
 
+    /**
+     * @return mixed|DataGridCustomControlTile
+     */
     public function createCustomControlTile() {
         $customControlTile = new DataGridCustomControlTile();
         $selectionButton = $customControlTile->add(new SelectionButtonTile($this->getGridIdentifier().'_selection', 'button.with.selection'));
@@ -39,16 +48,26 @@ class DriverDataGridController extends DataGridAbstractController {
         return $customControlTile;
     }
 
+    /**
+     * @return mixed|string
+     */
     public function getDblClickPath() {
         return $this->generateUrl('tixiapi_driver_get', array('driverId' => DataGridHandler::$dataGirdReplaceIdentifier));
     }
 
+    /**
+     * @return mixed|DriverListDTO
+     */
     public function getReferenceDTO() {
         if (!$this->isInEmbeddedState()) {
             return new DriverListDTO();
         }
     }
 
+    /**
+     * @param GenericEntityFilter $filter
+     * @return array|mixed
+     */
     public function constructDtosFromFgeaFilter(GenericEntityFilter $filter) {
         $assembler = $this->container->get('tixi_api.assemblerdriver');
         $drivers = $this->getEntitiesByFgeaFilter($filter);
@@ -59,6 +78,9 @@ class DriverDataGridController extends DataGridAbstractController {
         return $dtos;
     }
 
+    /**
+     * @return mixed|null
+     */
     public function getDataSrcUrl() {
         return null;
     }

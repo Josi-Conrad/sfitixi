@@ -20,12 +20,21 @@ use Tixi\ApiBundle\Tile\Core\TextLinkSelectionDeleteTile;
 use Tixi\ApiBundle\Tile\Core\TextLinkSelectionTile;
 use Tixi\CoreDomain\Shared\GenericEntityFilter\GenericEntityFilter;
 
+/**
+ * Class POIDataGridController
+ * @package Tixi\ApiBundle\Shared\DataGrid\GridControllers
+ */
 class POIDataGridController extends DataGridAbstractController {
-
+    /**
+     * @return mixed|string
+     */
     public function getGridIdentifier() {
         return 'pois';
     }
 
+    /**
+     * @return mixed|DataGridCustomControlTile
+     */
     public function createCustomControlTile() {
         $customControlTile = new DataGridCustomControlTile();
         $selectionButton = $customControlTile->add(new SelectionButtonTile($this->getGridIdentifier().'_selection', 'button.with.selection'));
@@ -37,16 +46,26 @@ class POIDataGridController extends DataGridAbstractController {
         return $customControlTile;
     }
 
+    /**
+     * @return mixed|string
+     */
     public function getDblClickPath() {
         return $this->generateUrl('tixiapi_poi_get', array('poiId' => DataGridHandler::$dataGirdReplaceIdentifier));
     }
 
+    /**
+     * @return mixed|POIListDTO
+     */
     public function getReferenceDTO() {
         if (!$this->isInEmbeddedState()) {
             return new POIListDTO();
         }
     }
 
+    /**
+     * @param GenericEntityFilter $filter
+     * @return array|mixed
+     */
     public function constructDtosFromFgeaFilter(GenericEntityFilter $filter) {
         $assembler = $this->container->get('tixi_api.assemblerpoi');
         $pois = $this->getEntitiesByFgeaFilter($filter);
@@ -57,6 +76,9 @@ class POIDataGridController extends DataGridAbstractController {
         return $dtos;
     }
 
+    /**
+     * @return mixed|null
+     */
     public function getDataSrcUrl() {
         return null;
     }

@@ -9,6 +9,8 @@
 namespace Tixi\ApiBundle\Shared\DataGrid\Annotations;
 
 /**
+ * Class GridField
+ * @package Tixi\ApiBundle\Shared\DataGrid\Annotations
  * @Annotation
  * @Target({"PROPERTY"})
  */
@@ -41,7 +43,5 @@ class GridField {
      * @var int
      */
     public $order;
-
-
 
 } 

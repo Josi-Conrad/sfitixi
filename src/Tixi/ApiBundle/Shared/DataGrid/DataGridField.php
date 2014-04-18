@@ -8,12 +8,20 @@
 
 namespace Tixi\ApiBundle\Shared\DataGrid;
 
-
+/**
+ * Class DataGridField
+ * @package Tixi\ApiBundle\Shared\DataGrid
+ */
 class DataGridField {
     private $fieldPropertyName;
     private $fieldValue;
     private $fieldOrder;
 
+    /**
+     * @param $fieldPropertyName
+     * @param $fieldValue
+     * @param $fieldOrder
+     */
     public function __construct($fieldPropertyName, $fieldValue, $fieldOrder)
     {
         $this->fieldPropertyName = $fieldPropertyName;
@@ -22,10 +30,18 @@ class DataGridField {
 
     }
 
+    /**
+     * @param DataGridField $a
+     * @param DataGridField $b
+     * @return mixed
+     */
     public static function compare(DataGridField $a, DataGridField $b) {
         return $a->fieldOrder - $b->fieldOrder;
     }
 
+    /**
+     * @return mixed
+     */
     public function getFieldValue() {
         return $this->fieldValue;
     }

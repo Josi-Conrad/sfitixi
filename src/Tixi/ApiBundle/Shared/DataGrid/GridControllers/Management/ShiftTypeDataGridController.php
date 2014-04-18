@@ -20,13 +20,22 @@ use Tixi\ApiBundle\Tile\Core\SelectionButtonTile;
 use Tixi\ApiBundle\Tile\Core\TextLinkSelectionDeleteTile;
 use Tixi\ApiBundle\Tile\Core\TextLinkSelectionTile;
 
+/**
+ * Class ShiftTypeDataGridController
+ * @package Tixi\ApiBundle\Shared\DataGrid\GridControllers\Management
+ */
 class ShiftTypeDataGridController extends DataGridAbstractController{
-
+    /**
+     * @return mixed|string
+     */
     public function getGridIdentifier()
     {
         return 'shifttype';
     }
 
+    /**
+     * @return mixed|DataGridCustomControlTile
+     */
     public function createCustomControlTile()
     {
         $customControlTile = new DataGridCustomControlTile();
@@ -38,11 +47,17 @@ class ShiftTypeDataGridController extends DataGridAbstractController{
         return $customControlTile;
     }
 
+    /**
+     * @return mixed|string
+     */
     public function getDblClickPath()
     {
         return $this->generateUrl('tixiapi_management_shifttype_edit',array('shiftTypeId'=>DataGridHandler::$dataGirdReplaceIdentifier));
     }
 
+    /**
+     * @return mixed|ShiftTypeListDTO
+     */
     public function getReferenceDTO()
     {
         if (!$this->isInEmbeddedState()) {
@@ -50,6 +65,10 @@ class ShiftTypeDataGridController extends DataGridAbstractController{
         }
     }
 
+    /**
+     * @param GenericEntityFilter $filter
+     * @return array|mixed
+     */
     public function constructDtosFromFgeaFilter(GenericEntityFilter $filter)
     {
         $assembler = $this->container->get('tixi_api.assemblerShiftType');
@@ -61,6 +80,9 @@ class ShiftTypeDataGridController extends DataGridAbstractController{
         return $dtos;
     }
 
+    /**
+     * @return mixed|null
+     */
     public function getDataSrcUrl()
     {
         return null;

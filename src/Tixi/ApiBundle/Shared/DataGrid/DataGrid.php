@@ -17,6 +17,10 @@ use Tixi\CoreDomain\Shared\GenericEntityFilter\FilterProperties\Search;
 use Tixi\CoreDomain\Shared\GenericEntityFilter\GenericEntityFilter;
 use Tixi\CoreDomain\Shared\GenericEntityFilter\GenericEntityProperty;
 
+/**
+ * Class DataGrid
+ * @package Tixi\ApiBundle\Shared\DataGrid
+ */
 class DataGrid {
 
     protected $reader;
@@ -25,6 +29,11 @@ class DataGrid {
     protected $headerClass = 'Tixi\ApiBundle\Shared\DataGrid\DataGridHeader';
     protected $fieldClass = 'Tixi\ApiBundle\Shared\DataGrid\DataGridField';
 
+    /**
+     * @param DataGridInputState $state
+     * @return GenericEntityFilter
+     * @throws \Exception
+     */
     public function createGenericEntityFilterByState(DataGridInputState $state) {
         $filter = new GenericEntityFilter($state->getSourceDTO()->getAccessQuery());
         $properties = $this->createEntityPropertiesArray($state->getSourceDTO());
@@ -50,6 +59,11 @@ class DataGrid {
         return $filter;
     }
 
+    /**
+     * @param DataGridSourceClass $sourceClassInstance
+     * @return array
+     * @throws \Exception
+     */
     protected function createEntityPropertiesArray(DataGridSourceClass $sourceClassInstance) {
         $sourceReflectionObject = new \ReflectionClass($sourceClassInstance);
         $properties = array();
@@ -72,8 +86,11 @@ class DataGrid {
         return $properties;
     }
 
-
-
+    /**
+     * @param DataGridSourceClass $sourceClassInstance
+     * @return array
+     * @throws \Exception
+     */
     public function createHeaderArray(DataGridSourceClass $sourceClassInstance) {
         $sourceReflectionObject = new \ReflectionClass($sourceClassInstance);
         $headers = array();
@@ -92,6 +109,10 @@ class DataGrid {
         return $headers;
     }
 
+    /**
+     * @param array $sourceArray
+     * @return array
+     */
     public function createRowsArray(array $sourceArray) {
         $rowsArray = array();
         foreach($sourceArray as $rowSource) {
@@ -101,6 +122,11 @@ class DataGrid {
         return $rowsArray;
     }
 
+    /**
+     * @param DataGridSourceClass $source
+     * @return DataGridRow
+     * @throws \Exception
+     */
     protected function createRow(DataGridSourceClass $source) {
         $sourceReflectionObject = new \ReflectionClass($source);
         $rowId = null;
@@ -123,10 +149,11 @@ class DataGrid {
         return $row;
     }
 
+    /**
+     * @param FileCacheReader $reader
+     */
     public function setReader(FileCacheReader $reader) {
         $this->reader = $reader;
     }
-
-
 
 } 

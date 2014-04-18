@@ -20,13 +20,22 @@ use Tixi\ApiBundle\Tile\Core\TextLinkSelectionDeleteTile;
 use Tixi\ApiBundle\Tile\Core\TextLinkSelectionTile;
 use Tixi\CoreDomain\Shared\GenericEntityFilter\GenericEntityFilter;
 
+/**
+ * Class PassengerAbsentDataGridController
+ * @package Tixi\ApiBundle\Shared\DataGrid\GridControllers
+ */
 class PassengerAbsentDataGridController extends DataGridAbstractController{
-
+    /**
+     * @return mixed|string
+     */
     public function getGridIdentifier()
     {
         return 'absents';
     }
 
+    /**
+     * @return mixed|DataGridCustomControlTile
+     */
     public function createCustomControlTile()
     {
         $customControlTile = new DataGridCustomControlTile();
@@ -39,11 +48,17 @@ class PassengerAbsentDataGridController extends DataGridAbstractController{
         return $customControlTile;
     }
 
+    /**
+     * @return mixed|string
+     */
     public function getDblClickPath()
     {
         return $this->generateUrl('tixiapi_passenger_absent_get',array('passengerId'=>$this->routeProperties['passengerId'], 'absentId'=>DataGridHandler::$dataGirdReplaceIdentifier));
     }
 
+    /**
+     * @return mixed|null|AbsentEmbeddedListDTO
+     */
     public function getReferenceDTO()
     {
         $referenceDTO = null;
@@ -55,6 +70,10 @@ class PassengerAbsentDataGridController extends DataGridAbstractController{
         return $referenceDTO;
     }
 
+    /**
+     * @param GenericEntityFilter $filter
+     * @return array|mixed
+     */
     public function constructDtosFromFgeaFilter(GenericEntityFilter $filter)
     {
         $assembler = $this->container->get('tixi_api.assemblerabsent');
@@ -68,6 +87,9 @@ class PassengerAbsentDataGridController extends DataGridAbstractController{
         return $dtos;
     }
 
+    /**
+     * @return mixed|string
+     */
     public function getDataSrcUrl()
     {
         return $this->generateUrl('tixiapi_passenger_absents_get',array('passengerId'=>$this->routeProperties['passengerId']));

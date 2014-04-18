@@ -20,13 +20,22 @@ use Tixi\ApiBundle\Tile\Core\TextLinkSelectionDeleteTile;
 use Tixi\ApiBundle\Tile\Core\TextLinkSelectionTile;
 use Tixi\CoreDomain\Shared\GenericEntityFilter\GenericEntityFilter;
 
+/**
+ * Class RepeatedDrivingAssertionsDataGridController
+ * @package Tixi\ApiBundle\Shared\DataGrid\GridControllers
+ */
 class RepeatedDrivingAssertionsDataGridController extends DataGridAbstractController {
-
+    /**
+     * @return mixed|string
+     */
     public function getGridIdentifier()
     {
         return 'repeatedassertions';
     }
 
+    /**
+     * @return mixed|DataGridCustomControlTile
+     */
     public function createCustomControlTile()
     {
         $customControlTile = new DataGridCustomControlTile();
@@ -39,11 +48,17 @@ class RepeatedDrivingAssertionsDataGridController extends DataGridAbstractContro
         return $customControlTile;
     }
 
+    /**
+     * @return mixed|string
+     */
     public function getDblClickPath()
     {
         return $this->generateUrl('tixiapi_driver_repeatedassertionplan_edit',array('driverId'=>$this->routeProperties['driverId'],'assertionPlanId'=>DataGridHandler::$dataGirdReplaceIdentifier));
     }
 
+    /**
+     * @return mixed|null|RepeatedDrivingAssertionEmbeddedListDTO
+     */
     public function getReferenceDTO()
     {
         $referenceDTO = null;
@@ -55,6 +70,10 @@ class RepeatedDrivingAssertionsDataGridController extends DataGridAbstractContro
         return $referenceDTO;
     }
 
+    /**
+     * @param GenericEntityFilter $filter
+     * @return array|mixed
+     */
     public function constructDtosFromFgeaFilter(GenericEntityFilter $filter)
     {
         $assembler = $this->container->get('tixi_api.repeateddrivingassertionplanassembler');
@@ -69,6 +88,9 @@ class RepeatedDrivingAssertionsDataGridController extends DataGridAbstractContro
 
     }
 
+    /**
+     * @return mixed|string
+     */
     public function getDataSrcUrl()
     {
         return $this->generateUrl('tixiapi_driver_repeatedassertionplans_get',array('driverId'=>$this->routeProperties['driverId']));
