@@ -20,12 +20,14 @@ Doctrine 2.4
 
 
 ### Configuration Requirements
-
 PHP Extensions must be enabled and configured (mostly in php.ini):
 
 `php_mysqli`
 
 `xdebug`
+
+`php_openssl` (probably to download via composer)
+
 
 PHP Parameters shall be set to:
 
@@ -40,8 +42,9 @@ PHP Parameters shall be set to:
 ### Build iTixi
 Execute `run_build.sh` to run composer install for dependencies and
 doctrines database mapping, asset installation and test_data import.
+(For Windows you will need a Bash Console, for example install msysgit Git for Windows with bash and .sh link)
 For test_data import set the mysql_connection parameters in `build\mysql_connection.php`.
-Composer install (executed in the run_build.sh) will ask on the first time run for the Database connection and TimeZone.
+Composer install (executed in the run_build.sh) will ask on the first time run for the Database connection and Timezone.
 
 If `run_build.sh` doesn't work properly, make shure you can run the following command manually:
 
@@ -61,18 +64,18 @@ The last command updates a fulltext index, which is only possible in MySQL Versi
 
 Users for login tests with different ROLES are
 
-### ROLE_ADMIN
+#### ROLE_ADMIN
 User:       admin
 Password:   pass
 
-### ROLE_MANAGER
+#### ROLE_MANAGER
 User:       manager
 Password:   pass
 
-### ROLE_DISPO
+#### ROLE_DISPO
 User:       dispo
 Password:   pass
 
-### ROLE_USER
+#### ROLE_USER
 User:       user
 Password:   pass
