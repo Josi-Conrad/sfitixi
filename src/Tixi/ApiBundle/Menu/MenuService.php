@@ -8,16 +8,18 @@
 
 namespace Tixi\ApiBundle\Menu;
 
-
-
-
 use Symfony\Component\DependencyInjection\ContainerAware;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Tixi\ApiBundle\Tile\Core\MenuItemTile;
 use Tixi\ApiBundle\Tile\Core\MenuSelectionItemTile;
 use Tixi\ApiBundle\Tile\Core\MenuTile;
+use Tixi\ApiBundle\Tile\Core\SelectionButtonDividerTile;
 use Tixi\ApiBundle\Tile\TileRenderer;
 
+/**
+ * Class MenuService
+ * @package Tixi\ApiBundle\Menu
+ */
 class MenuService extends ContainerAware{
 
     public static $menuHomeId = 'home';
@@ -31,7 +33,9 @@ class MenuService extends ContainerAware{
     public static $menuDriverAbsentId = 'driver_absents';
     public static $menuDriverRepeatedAssertionId = 'driver_repeatedassertions';
     public static $menuPassengerAbsentId = 'passenger_absents';
-    public static $menuUserId = 'user';
+    public static $menuUserProfileId = 'user_profile';
+
+    public static $menuSelectionManagementId = 'management';
     public static $menuManagementUserId = 'management_users';
     public static $menuManagementVehicleCategoryId = 'management_vehiclecategories';
     public static $menuManagementPoiKeywordsId = 'management_poikeywords';
@@ -41,21 +45,25 @@ class MenuService extends ContainerAware{
     public static $menuManagementZoningPlanId = 'management_zoningplans';
     public static $menuManagementShiftTypeId = 'management_shifttypes';
 
-    public static $menuSelectionManagementId = 'management';
-
-
-
 
     public function __construct() {
         $this->activeMenuId = 'home';
     }
 
+    /**
+     * @param null $activeMenuItem
+     * @return mixed
+     */
     public function createMenu($activeMenuItem=null) {
         $tileRender = $this->container->get('tixi_api.tilerenderer');
         $activeItem = (null !== $activeMenuItem) ? $activeMenuItem : self::$menuHomeId;
         return $tileRender->render($this->constructMenuTile($activeItem));
     }
 
+    /**
+     * @param $activeItem
+     * @return MenuTile
+     */
     protected function constructMenuTile($activeItem) {
         $rootId = $this->extractRootId($activeItem);
         $menuTile = new MenuTile();
@@ -71,8 +79,12 @@ class MenuService extends ContainerAware{
          * render management functions only if user got manager role
          */
         if($this->container->get('security.context')->isGranted('ROLE_MANAGER')){
-            $managementSelectionTile = $menuTile->add(new MenuSelectionItemTile(self::$menuSelectionManagementId,
-                'management.panel.name',$this->checkSelectionRootActivity(self::$menuManagementUserId, $activeItem)));
+            $managementSelectionTile =
+                $menuTile->add(new MenuSelectionItemTile(self::$menuSelectionManagementId,
+                'management.panel.name',$this->checkSelectionRootActivity(self::$menuSelectionManagementId, $activeItem)));
+
+            $managementSelectionTile->add(new MenuItemTile(self::$menuManagementUserId,
+                $this->generateUrl('tixiapi_management_users_get'), 'user.panel.name', $this->checkSelectionChildActivity(self::$menuManagementUserId, $activeItem)));
             $managementSelectionTile->add(new MenuItemTile(self::$menuManagementVehicleCategoryId,
                 $this->generateUrl('tixiapi_management_vehiclecategories_get'), 'vehiclecategory.panel.name', $this->checkSelectionChildActivity(self::$menuManagementVehicleCategoryId, $activeItem)));
             $managementSelectionTile->add(new MenuItemTile(self::$menuManagementPoiKeywordsId,
@@ -85,21 +97,33 @@ class MenuService extends ContainerAware{
                 $this->generateUrl('tixiapi_management_shifttypes_get'), 'shifttype.panel.name', $this->checkSelectionChildActivity(self::$menuManagementShiftTypeId, $activeItem)));
             $managementSelectionTile->add(new MenuItemTile(self::$menuManagementBankHolidayId,
                 $this->generateUrl('tixiapi_management_bankholidays_get'), 'bankholiday.panel.name', $this->checkSelectionChildActivity(self::$menuManagementBankHolidayId, $activeItem)));
-            $managementSelectionTile->add(new MenuItemTile(self::$menuManagementUserId,
-                $this->generateUrl('tixiapi_management_users_get'), 'user.panel.name', $this->checkSelectionChildActivity(self::$menuManagementUserId, $activeItem)));
         }
 
         return $menuTile;
     }
 
+    /**
+     * @param $route
+     * @param array $parameters
+     * @param bool $referenceType
+     * @return string
+     */
     protected function generateUrl($route, $parameters = array(), $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH) {
         return $this->container->get('router')->generate($route, $parameters, $referenceType);
     }
 
+    /**
+     * @param $activeItem
+     * @return mixed
+     */
     protected function extractRootId($activeItem) {
         return explode('_', $activeItem)[0];
     }
 
+    /**
+     * @param $activeItem
+     * @return string
+     */
     protected function extractSelectionId($activeItem) {
         $exploded = explode('_', $activeItem);
         $toReturn = '';
@@ -109,10 +133,20 @@ class MenuService extends ContainerAware{
         return $toReturn;
     }
 
+    /**
+     * @param $menuId
+     * @param $activeItem
+     * @return bool
+     */
     protected function checkSelectionRootActivity($menuId, $activeItem) {
         return $this->extractRootId($menuId) === $this->extractRootId($activeItem);
     }
 
+    /**
+     * @param $menuId
+     * @param $activeItem
+     * @return bool
+     */
     protected function checkSelectionChildActivity($menuId, $activeItem) {
         return ($this->checkSelectionRootActivity($menuId, $activeItem) &&
             $this->extractSelectionId($menuId) === $this->extractSelectionId($activeItem));

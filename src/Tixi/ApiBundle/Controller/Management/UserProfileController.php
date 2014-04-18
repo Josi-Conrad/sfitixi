@@ -37,7 +37,7 @@ class UserProfileController extends Controller {
     protected $menuId;
 
     public function __construct() {
-        $this->menuId = MenuService::$menuUserId;
+        $this->menuId = MenuService::$menuUserProfileId;
     }
 
     /**

@@ -39,7 +39,7 @@ class UserController extends Controller {
     protected $menuId;
 
     public function __construct() {
-        $this->menuId = MenuService::$menuUserId;
+        $this->menuId = MenuService::$menuManagementUserId;
     }
 
     /**
