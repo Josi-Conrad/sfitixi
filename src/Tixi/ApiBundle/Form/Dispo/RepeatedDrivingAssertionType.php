@@ -15,8 +15,15 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Tixi\ApiBundle\Form\Shared\CommonAbstractType;
 use Tixi\ApiBundle\Form\Shared\DatePickerType;
 
+/**
+ * Class RepeatedDrivingAssertionType
+ * @package Tixi\ApiBundle\Form\Dispo
+ */
 class RepeatedDrivingAssertionType extends CommonAbstractType{
-
+    /**
+     * @param FormBuilderInterface $builder
+     * @param array $options
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('id', 'hidden');
@@ -92,6 +99,9 @@ class RepeatedDrivingAssertionType extends CommonAbstractType{
 
     }
 
+    /**
+     * @param OptionsResolverInterface $resolver
+     */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(

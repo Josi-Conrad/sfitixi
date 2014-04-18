@@ -116,11 +116,11 @@ monolog:
     main:
       type:   stream
       path:   %kernel.root_dir%/logs/main_%kernel.environment%.log
-      level:  warning
+      level:  error
     doctrine:
       type:   stream
       path:   %kernel.root_dir%/logs/doctrine_%kernel.environment%.log
-      level:  warning
+      level:  error
       channels: doctrine
     entity:
       type:   stream

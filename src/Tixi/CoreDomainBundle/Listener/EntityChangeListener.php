@@ -17,6 +17,7 @@ use Symfony\Component\Security\Core\SecurityContext;
 
 /**
  * Class EntityChangeListener
+ * Listens to DBAL Updates and logs changes
  * @package Tixi\CoreDomainBundle\Listener
  */
 class EntityChangeListener {
@@ -26,11 +27,17 @@ class EntityChangeListener {
     /** @var \Symfony\Component\DependencyInjection\ContainerInterface  */
     protected $container;
 
+    /**
+     * @param ContainerInterface $container
+     */
     public function __construct(ContainerInterface $container) {
         $this->container = $container;
         $this->logger = $this->container->get('monolog.logger.entity_channel');
     }
 
+    /**
+     * @param LifecycleEventArgs $args
+     */
     public function postUpdate(LifecycleEventArgs $args) {
         $entity = $args->getObject();
         $em = $args->getEntityManager();
@@ -38,6 +45,9 @@ class EntityChangeListener {
         $this->logEntityChange('updated', $meta, $entity);
     }
 
+    /**
+     * @param LifecycleEventArgs $args
+     */
     public function postPersist(LifecycleEventArgs $args) {
         $entity = $args->getObject();
         $em = $args->getEntityManager();
@@ -45,6 +55,9 @@ class EntityChangeListener {
         $this->logEntityChange('persisted', $meta, $entity);
     }
 
+    /**
+     * @param LifecycleEventArgs $args
+     */
     public function postRemove(LifecycleEventArgs $args) {
         $entity = $args->getObject();
         $em = $args->getEntityManager();
@@ -52,6 +65,11 @@ class EntityChangeListener {
         $this->logEntityChange('removed', $meta, $entity);
     }
 
+    /**
+     * @param $action
+     * @param \Doctrine\ORM\Mapping\ClassMetadata $meta
+     * @param $entity
+     */
     private function logEntityChange($action, \Doctrine\ORM\Mapping\ClassMetadata $meta, $entity){
         $this->logger->info('Entity "'
             . $meta->getTableName() . '" with id: '
