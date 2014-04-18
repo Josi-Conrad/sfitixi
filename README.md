@@ -19,6 +19,21 @@ MySQL Version 5.6
 Doctrine 2.4
 
 
+### Configuration Requirements
+
+PHP Extensions must be enabled and configured (mostly in php.ini):
+
+`php_mysqli`
+
+`xdebug`
+
+PHP Parameters shall be set to:
+
+`xdebug.max_nesting_level=200` 200 or more
+
+`date.timezone` must be set to a valid Timezone
+
+
 2) Build and Deploy
 --------------------
 
@@ -61,5 +76,3 @@ Password:   pass
 ### ROLE_USER
 User:       user
 Password:   pass
-
-[1]:  http://symfony.com/doc/2.3/book/installation.html
