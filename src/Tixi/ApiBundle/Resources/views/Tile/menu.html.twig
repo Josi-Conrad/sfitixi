@@ -1,7 +1,7 @@
-<ul class="nav nav-justified">
+<nav class="nav nav-justified" role="navigation">
     {% for resolvedElement in children %}
         {% if 'menuitem' in resolvedElement.viewIndentifiers %}
             {{ resolvedElement.rawData | raw }}
         {% endif %}
     {% endfor %}
-</ul>
+</nav>

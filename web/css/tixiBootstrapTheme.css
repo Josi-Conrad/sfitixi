@@ -1,6 +1,7 @@
-.container{
-    max-width: 1400px!important;
-    /*width: 1024px;*/
+@media (min-width: 1400px) {
+    .container {
+        width: 1400px;
+    }
 }
 
 .checkbox-inline label, .radio-inline label {
@@ -81,10 +82,6 @@ body {
 .panel-heading h2 {
     margin-top: 5px;
 }
-
-/*.customForm {*/
-    /*margin-top: 12px;*/
-/*}*/
 
 .nopadding {
     padding: 0 !important;
