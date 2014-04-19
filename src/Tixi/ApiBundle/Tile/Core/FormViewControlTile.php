@@ -20,7 +20,7 @@ class FormViewControlTile extends AbstractTile{
      * @param $editPath
      */
     public function __construct($editPath) {
-        $this->add(new LinkButtonTile('edit', $editPath, 'Editieren', LinkButtonTile::$primaryType));
+        $this->add(new LinkButtonTile('edit', $editPath, 'button.edit', LinkButtonTile::$primaryType));
     }
 
     /**
