@@ -1,7 +1,7 @@
-@media (min-width: 1400px) {
-    .container {
-        width: 1400px;
-    }
+.container {
+    min-width: 972px;
+    width: auto !important;
+    max-width: 1400px;
 }
 
 .checkbox-inline label, .radio-inline label {
