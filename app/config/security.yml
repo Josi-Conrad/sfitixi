@@ -18,11 +18,13 @@ security:
         dev:
             pattern:  ^/(_(profiler|wdt)|css|images|js)/
             security: false
+            anonymous: ~
         login_firewall:
             pattern:    ^/login$
             anonymous:  ~
         secured_area:
             pattern:    ^/
+            anonymous: ~
             form_login:
                   provider: main
                   login_path: tixi_login
@@ -46,4 +48,6 @@ security:
 
     access_control:
     - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-    - { path: ^/, roles: [ROLE_USER, ROLE_MANAGER, ROLE_ADMIN] }
+    - { path: ^/home, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: ^/, roles: IS_AUTHENTICATED_FULLY }
+
