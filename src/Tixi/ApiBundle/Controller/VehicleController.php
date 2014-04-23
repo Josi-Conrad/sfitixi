@@ -28,6 +28,7 @@ use Tixi\ApiBundle\Tile\Core\PanelTile;
 use Tixi\ApiBundle\Tile\Core\RootPanel;
 use Tixi\ApiBundle\Tile\CustomFormView\VehicleRegisterFormViewTile;
 use Tixi\CoreDomain\Vehicle;
+use Tixi\CoreDomainBundle\Repository\VehicleRepositoryDoctrine;
 
 
 /**
@@ -232,8 +233,11 @@ class VehicleController extends Controller {
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
     protected function getVehicle($vehicleId) {
+        /** @var VehicleRepositoryDoctrine $vehicleRepository */
         $vehicleRepository = $this->get('vehicle_repository');
+        /** @var Vehicle $vehicle */
         $vehicle = $vehicleRepository->find($vehicleId);
+        $test = $vehicleRepository->getAmountByVehicleCategory($vehicle->getCategory());
         if (null === $vehicle) {
             throw $this->createNotFoundException('The vehicle with id ' . $vehicleId . ' does not exist');
         }

@@ -1,0 +1,17 @@
+
+    <div class="row">
+        <div class="col-md-12">
+            {% for resolvedElement in children %}
+            {% if 'backbutton' in resolvedElement.viewIndentifiers %}
+                {{ resolvedElement.rawData | raw }}
+            {% endif %}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <br><br>{{ 'error.refintegrity.body.standard.main'|trans }}<br><br>
+            {{ 'error.refintegrity.body.standard.second'|trans }}
+            {{ amountOfObjects }}
+        </div>
+    </div>
+{% endfor %}

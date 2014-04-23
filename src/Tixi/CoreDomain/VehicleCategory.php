@@ -38,6 +38,7 @@ class VehicleCategory extends CommonBaseEntity {
      */
     protected $amountOfWheelChairs;
 
+
     /**
      * @ORM\OneToMany(targetEntity="Vehicle", mappedBy="category")
      */
@@ -47,11 +48,12 @@ class VehicleCategory extends CommonBaseEntity {
         parent::__construct();
     }
 
-    public static function registerVehicleCategory($name, $amountOfSeats, $amountOfWheelChairs = 0) {
+    public static function registerVehicleCategory($name, $amountOfSeats, $amountOfWheelChairs = null) {
         $vehicleCategory = new VehicleCategory();
 
         $vehicleCategory->setName($name);
         $vehicleCategory->setAmountOfSeats($amountOfSeats);
+        $amountOfWheelChairs = (null !== $amountOfWheelChairs) ? $amountOfWheelChairs : 0;
         $vehicleCategory->setAmountOfWheelChairs($amountOfWheelChairs);
 
         return $vehicleCategory;
