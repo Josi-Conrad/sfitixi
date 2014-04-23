@@ -32,9 +32,13 @@ class ShiftTypeType extends CommonAbstractType{
         ));
         $builder->add('start', 'time', array(
             'label' => 'shifttype.field.start',
+            'widget' => 'single_text',
+            'error_bubbling' => true
         ));
         $builder->add('end', 'time', array(
             'label' => 'shifttype.field.end',
+            'widget' => 'single_text',
+            'error_bubbling' => true
         ));
     }
 
