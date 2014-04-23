@@ -35,7 +35,7 @@ class ServicePlanEmbeddedListDTO implements DataGridSourceClass{
      */
     public $start;
     /**
-     * @GridField(propertyId="ServicePlan.end", headerName="serviceplan.field.end", order=2)
+     * @GridField(propertyId="ServicePlan.end", headerName="serviceplan.field.end", restrictive=true, comparingOperator=">", order=2)
      */
     public $end;
     /**
@@ -56,8 +56,11 @@ class ServicePlanEmbeddedListDTO implements DataGridSourceClass{
      * @return ServicePlanEmbeddedListDTO
      */
     public static function createReferenceDTOByVehicleId($vehicleId) {
+        $utcNow = new \DateTime('now', new \DateTimeZone('UTC'));
+
         $dto = new ServicePlanEmbeddedListDTO();
         $dto->vehicleId = $vehicleId;
+        $dto->end = $utcNow;
         return $dto;
     }
 }
