@@ -160,16 +160,16 @@ class FastGenericEntityAccessorRepositoryDoctrine implements FastGenericEntityAc
 
     protected function createParametersArray(GenericEntityFilter $filter) {
         $parameters = array();
-        $i=0;
-        foreach($filter->getRestrictiveProperties() as $property) {
-            $parameters['restrictiveProperty'.$i] = $property->getPropertyValue();
-            $i++;
+        if(null !== $filter->getRestrictiveProperties()) {
+            $i=0;
+            foreach($filter->getRestrictiveProperties() as $property) {
+                $parameters['restrictiveProperty'.$i] = $property->getPropertyValue();
+                $i++;
+            }
         }
         if($filter->getSearch()) {
             $parameters['searchStr']= $this->createLikedSerachString($filter->getSearch()->getSearchStr());
         }
-
-
         return $parameters;
     }
 
