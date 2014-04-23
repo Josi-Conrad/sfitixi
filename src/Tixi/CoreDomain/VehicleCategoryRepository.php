@@ -9,7 +9,6 @@
 namespace Tixi\CoreDomain;
 
 
-use Symfony\Component\Security\Core\User\User;
 use Tixi\CoreDomain\Shared\CommonBaseRepository;
 
 /**

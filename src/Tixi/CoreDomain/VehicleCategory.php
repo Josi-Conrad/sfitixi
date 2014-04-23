@@ -38,6 +38,11 @@ class VehicleCategory extends CommonBaseEntity {
      */
     protected $amountOfWheelChairs;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Vehicle", mappedBy="category")
+     */
+    protected $vehicles;
+
     protected  function __construct() {
         parent::__construct();
     }

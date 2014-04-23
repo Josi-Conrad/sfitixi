@@ -80,6 +80,18 @@ class VehicleType extends CommonAbstractType {
                         ->orderBy('s.firstname', 'ASC');
                 },
         ));
+        $builder->add('depot', 'entity', array(
+            'class' => 'Tixi\CoreDomain\VehicleDepot',
+            'property' => 'nameString',
+            'label' => 'vehicle.field.depot',
+            'required' => false,
+            'empty_data' => null,
+            'empty_value' => 'vehicle.field.depot.empty',
+            'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('d')
+                        ->orderBy('d.name', 'ASC');
+                },
+        ));
         $builder->add('parking', 'text', array(
             'required' => false,
             'label' => 'vehicle.field.parking'

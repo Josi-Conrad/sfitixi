@@ -21,8 +21,8 @@ class HandicapAssembler {
      * @return Handicap
      */
     public function registerDTOtoNewHandicap(HandicapRegisterDTO $dto) {
-        $poiKeyword = Handicap::registerHandicap($dto->name);
-        return $poiKeyword;
+        $handicap = Handicap::registerHandicap($dto->name);
+        return $handicap;
     }
 
     /**

@@ -33,6 +33,8 @@
         <parameter key="vehicle_repository.doctrine.class">Tixi\CoreDomainBundle\Repository\VehicleRepositoryDoctrine</parameter>
         <parameter key="vehiclecategory.doctrine.entity">Tixi\CoreDomain\VehicleCategory</parameter>
         <parameter key="vehiclecategory_repository.doctrine.class">Tixi\CoreDomainBundle\Repository\VehicleCategoryRepositoryDoctrine</parameter>
+        <parameter key="vehicledepot.doctrine.entity">Tixi\CoreDomain\VehicleDepot</parameter>
+        <parameter key="vehicledepot_repository.doctrine.class">Tixi\CoreDomainBundle\Repository\VehicleDepotRepositoryDoctrine</parameter>
         <parameter key="bankholiday.doctrine.entity">Tixi\CoreDomain\BankHoliday</parameter>
         <parameter key="bankholiday_repository.doctrine.class">Tixi\CoreDomainBundle\Repository\BankHolidayRepository</parameter>
         <parameter key="route.doctrine.entity">Tixi\CoreDomain\Dispo\Route</parameter>
@@ -128,6 +130,11 @@
         <service id="vehiclecategory_repository" alias="vehiclecategory_repository.doctrine"></service>
         <service id="vehiclecategory_repository.doctrine" class="%vehiclecategory_repository.doctrine.class%" factory-service="doctrine" factory-method="getrepository">
             <argument type="string">%vehiclecategory.doctrine.entity%</argument>
+        </service>
+
+        <service id="vehicledepot_repository" alias="vehicledepot_repository.doctrine"></service>
+        <service id="vehicledepot_repository.doctrine" class="%vehicledepot_repository.doctrine.class%" factory-service="doctrine" factory-method="getrepository">
+            <argument type="string">%vehicledepot.doctrine.entity%</argument>
         </service>
 
         <service id="route_repository" alias="route_repository.doctrine"></service>

@@ -48,11 +48,15 @@ class VehicleListDTO implements DataGridSourceClass {
      */
     public $amountOfWheelChairs;
     /**
-     * @GridField(propertyId="Vehicle.parking", headerName="vehicle.field.parking", order=7)
+     * @GridField(propertyId="VehicleDepot.name", headerName="vehicle.field.depot", order=7)
+     */
+    public $depot;
+    /**
+     * @GridField(propertyId="Vehicle.parking", headerName="vehicle.field.parking", order=8)
      */
     public $parking;
     /**
-     * @GridField(propertyId="Vehicle.dateOfFirstRegistration", headerName="vehicle.field.dateoffirstregistration", order=8)
+     * @GridField(propertyId="Vehicle.dateOfFirstRegistration", headerName="vehicle.field.dateoffirstregistration", order=9)
      */
     public $dateOfFirstRegistration;
 
@@ -60,6 +64,7 @@ class VehicleListDTO implements DataGridSourceClass {
      * @return GenericAccessQuery
      */
     public function getAccessQuery() {
-        return new GenericAccessQuery('Vehicle', 'Tixi\CoreDomain\Vehicle Vehicle JOIN Vehicle.category VehicleCategory', 'Vehicle.id');
+        return new GenericAccessQuery('Vehicle', 'Tixi\CoreDomain\Vehicle Vehicle JOIN Vehicle.category VehicleCategory
+        JOIN Vehicle.depot VehicleDepot', 'Vehicle.id');
     }
 }

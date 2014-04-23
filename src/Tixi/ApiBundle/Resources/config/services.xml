@@ -23,6 +23,7 @@
         <!-- Management -->
         <parameter key="tixi_api.userassembler.class">Tixi\ApiBundle\Interfaces\Management\UserAssembler</parameter>
         <parameter key="tixi_api.vehiclecategoryassembler.class">Tixi\ApiBundle\Interfaces\Management\VehicleCategoryAssembler</parameter>
+        <parameter key="tixi_api.vehicledepotassembler.class">Tixi\ApiBundle\Interfaces\Management\VehicleDepotAssembler</parameter>
         <parameter key="tixi_api.poikeywordassembler.class">Tixi\ApiBundle\Interfaces\Management\PoiKeywordAssembler</parameter>
         <parameter key="tixi_api.handicapassembler.class">Tixi\ApiBundle\Interfaces\Management\HandicapAssembler</parameter>
         <parameter key="tixi_api.insuranceassembler.class">Tixi\ApiBundle\Interfaces\Management\InsuranceAssembler</parameter>
@@ -105,6 +106,7 @@
         </service>
 
         <service id="tixi_api.assemblerVehicleCategory" class="%tixi_api.vehiclecategoryassembler.class%"/>
+        <service id="tixi_api.assemblerVehicleDepot" class="%tixi_api.vehicledepotassembler.class%"/>
         <service id="tixi_api.assemblerPoiKeyword" class="%tixi_api.poikeywordassembler.class%"/>
         <service id="tixi_api.assemblerHandicap" class="%tixi_api.handicapassembler.class%"/>
         <service id="tixi_api.assemblerInsurance" class="%tixi_api.insuranceassembler.class%"/>

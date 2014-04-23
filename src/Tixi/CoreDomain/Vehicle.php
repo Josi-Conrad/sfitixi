@@ -74,10 +74,16 @@ class Vehicle extends CommonBaseEntity {
     protected $supervisor;
 
     /**
-     * @ORM\ManyToOne(targetEntity="VehicleCategory")
+     * @ORM\ManyToOne(targetEntity="VehicleCategory", inversedBy="vehicles")
+     * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
      */
     protected $category;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="VehicleDepot", inversedBy="vehicles")
+     * @ORM\JoinColumn(name="depot_id", referencedColumnName="id")
+     */
+    protected $depot;
 
     protected function __construct() {
         $this->servicePlans = new ArrayCollection();
@@ -119,8 +125,8 @@ class Vehicle extends CommonBaseEntity {
      * @param null $managementDetails
      */
     public function updateVehicleData($name = null, $licenceNumber = null,
-                                    $dateOfFirstRegistration = null, $parkingLotNumber = null,
-                                    VehicleCategory $category = null, $memo = null, $managementDetails = null) {
+                                      $dateOfFirstRegistration = null, $parkingLotNumber = null,
+                                      VehicleCategory $category = null, $memo = null, $managementDetails = null) {
         if (!empty($name)) {
             $this->name = $name;
         }
@@ -164,6 +170,17 @@ class Vehicle extends CommonBaseEntity {
 
     public function removeSupervisor() {
         $this->supervisor = null;
+    }
+
+    /**
+     * @param VehicleDepot $vehicleDepot
+     */
+    public function assignDepot(VehicleDepot $vehicleDepot) {
+        $this->depot = $vehicleDepot;
+    }
+
+    public function removeDepot() {
+        $this->depot = null;
     }
 
     /**
@@ -321,5 +338,10 @@ class Vehicle extends CommonBaseEntity {
         return $this->servicePlans;
     }
 
-
+    /**
+     * @return VehicleDepot
+     */
+    public function getDepot() {
+        return $this->depot;
+    }
 }

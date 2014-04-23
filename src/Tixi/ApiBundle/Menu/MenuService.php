@@ -44,6 +44,7 @@ class MenuService extends ContainerAware{
     public static $menuManagementBankHolidayId = 'management_bankholidays';
     public static $menuManagementZoningPlanId = 'management_zoningplans';
     public static $menuManagementShiftTypeId = 'management_shifttypes';
+    public static $menuManagementVehicleDepotId = 'management_vehicledepots';
 
 
     public function __construct() {
@@ -87,6 +88,8 @@ class MenuService extends ContainerAware{
                 $this->generateUrl('tixiapi_management_users_get'), 'user.panel.name', $this->checkSelectionChildActivity(self::$menuManagementUserId, $activeItem)));
             $managementSelectionTile->add(new MenuItemTile(self::$menuManagementVehicleCategoryId,
                 $this->generateUrl('tixiapi_management_vehiclecategories_get'), 'vehiclecategory.panel.name', $this->checkSelectionChildActivity(self::$menuManagementVehicleCategoryId, $activeItem)));
+            $managementSelectionTile->add(new MenuItemTile(self::$menuManagementVehicleCategoryId,
+                $this->generateUrl('tixiapi_management_vehicledepots_get'), 'vehicledepot.panel.name', $this->checkSelectionChildActivity(self::$menuManagementVehicleDepotId, $activeItem)));
             $managementSelectionTile->add(new MenuItemTile(self::$menuManagementPoiKeywordsId,
                 $this->generateUrl('tixiapi_management_poikeywords_get'), 'poikeyword.panel.name', $this->checkSelectionChildActivity(self::$menuManagementPoiKeywordsId, $activeItem)));
             $managementSelectionTile->add(new MenuItemTile(self::$menuManagementHandicapId,

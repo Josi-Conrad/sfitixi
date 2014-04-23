@@ -17,6 +17,8 @@ vehicle.field.category.amountofseats: Anzahl Sitzplätze
 vehicle.field.category.amountofwheelchairs: Anzahl Rollstühle
 vehicle.field.memo: Notizen
 vehicle.field.managementdetails: Verwaltungsdetails
+vehicle.field.depot: Depot
+vehicle.field.depot.empty: Bitte ein Fahrzeugdepot auswählen
 vehicle.field.supervisor: Fahrzeugbetreuer
 vehicle.field.supervisor.empty: Bitte einen Betreuer auswählen
 
@@ -59,5 +61,18 @@ vehiclecategory.button.delete: Fahrzeugkategorie löschen
 vehiclecategory.field.name: Kategoriebezeichnung
 vehiclecategory.name.not_blank: Bitte einen Namen definieren
 
+#Management_VehicleDepot
+vehicledepot.breadcrumb.name: Fahrzeugdepot
+
+vehicledepot.list.name: Alle Fahrzeugdepots
+
+vehicledepot.panel.name: Fahrzeugdepot
+vehicledepot.panel.new: Neues Fahrzeugdepot
+vehicledepot.panel.edit: Fahrzeugdepot bearbeiten
+
+vehicledepot.button.new: Neues Fahrzeugdepot
+vehicledepot.button.delete: Fahrzeugdepot löschen
+
+vehicledepot.field.name: Depotname
 
 

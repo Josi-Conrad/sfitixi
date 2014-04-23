@@ -57,27 +57,38 @@ VALUES (1,'Karfreitag','2014-04-18','2014-04-18',0,'2014-04-16 19:17:02','2014-0
 (2,'Ostern','2014-04-20','2014-04-21',0,'2014-04-16 19:17:14','2014-04-16 19:17:14'),
 (3,'Test','2014-07-20','2014-07-27',0,'2014-04-16 19:17:14','2014-04-16 19:17:14');
 
+
+
+/*
+insert_vehicle_depot
+ */
+INSERT INTO `address` (`id`, `street`,`city`,`postalcode`,`country`,`lat`) VALUES (1, 'Haupt 12','Zug','6413','Schweiz','47.56879, 7.61633');
+INSERT INTO `address` (`id`, `street`,`city`,`postalcode`,`country`,`lat`) VALUES (2, 'Haupt 22','Baar','6414','Schweiz','47.536879, 7.621633');
+INSERT INTO `vehicle_depot` (`id`,`address_id`,`name`,`isDeleted`,`creationDateTime`,`modifiedDateTime`) VALUES (1,1,'Depot Zug',0,'2014-04-23 11:58:50','2014-04-23 11:58:50');
+INSERT INTO `vehicle_depot` (`id`,`address_id`,`name`,`isDeleted`,`creationDateTime`,`modifiedDateTime`) VALUES (2,2,'Depot Baar',0,'2014-04-23 11:58:50','2014-04-23 11:58:50');
+
 /*
 insert_vehicles
 */
-INSERT INTO `vehicle` (`category_id`,`isActive`,`name`,`licenceNumber`,`dateOfFirstRegistration`,`parking`,`memo`) VALUES (1,1,'VW Maxi 1','BS 122 346','2004-11-01','Laterne','Kiwanis Club');
-INSERT INTO `vehicle` (`category_id`,`isActive`,`name`,`licenceNumber`,`dateOfFirstRegistration`,`parking`,`memo`) VALUES (1,1,'VW Maxi 2','BS 123 556','2005-11-01','Laterne',NULL);
-INSERT INTO `vehicle` (`category_id`,`isActive`,`name`,`licenceNumber`,`dateOfFirstRegistration`,`parking`,`memo`) VALUES (1,1,'VW Maxi 3','BS 555 721','2005-01-03','Tiefgarage Platz 23',NULL);
-INSERT INTO `vehicle` (`category_id`,`isActive`,`name`,`licenceNumber`,`dateOfFirstRegistration`,`parking`,`memo`) VALUES (1,1,'VW Maxi 4','BL 223 446','2005-03-01','Tiefgarage Platz 24',NULL);
-INSERT INTO `vehicle` (`category_id`,`isActive`,`name`,`licenceNumber`,`dateOfFirstRegistration`,`parking`,`memo`) VALUES (1,1,'VW Maxi 5','BL 44 556','2008-07-28','Tiefgarage Platz 26',NULL);
-INSERT INTO `vehicle` (`category_id`,`isActive`,`name`,`licenceNumber`,`dateOfFirstRegistration`,`parking`,`memo`) VALUES (1,1,'VW Maxi 6','ZG 102','2013-12-02','Laterne','Notizen zum Fahrzeug ...');
-INSERT INTO `vehicle` (`category_id`,`isActive`,`name`,`licenceNumber`,`dateOfFirstRegistration`,`parking`,`memo`) VALUES (2,1,'VW Maxi 7','BS 122 346','2004-11-01','Laterne','Kiwanis Club');
-INSERT INTO `vehicle` (`category_id`,`isActive`,`name`,`licenceNumber`,`dateOfFirstRegistration`,`parking`,`memo`) VALUES (2,1,'VW Maxi 8','BS 123 556','2005-11-01','Laterne',NULL);
-INSERT INTO `vehicle` (`category_id`,`isActive`,`name`,`licenceNumber`,`dateOfFirstRegistration`,`parking`,`memo`) VALUES (2,1,'VW Movano 1','BS 555 721','2005-01-03','Tiefgarage Platz 23',NULL);
-INSERT INTO `vehicle` (`category_id`,`isActive`,`name`,`licenceNumber`,`dateOfFirstRegistration`,`parking`,`memo`) VALUES (2,1,'VW Movano 2','BL 223 446','2005-03-01','Tiefgarage Platz 24',NULL);
-INSERT INTO `vehicle` (`category_id`,`isActive`,`name`,`licenceNumber`,`dateOfFirstRegistration`,`parking`,`memo`) VALUES (2,1,'VW Movano 3','BL 44 556','2008-07-28','Tiefgarage Platz 26',NULL);
-INSERT INTO `vehicle` (`category_id`,`isActive`,`name`,`licenceNumber`,`dateOfFirstRegistration`,`parking`,`memo`) VALUES (2,1,'VW Movano 4','ZG 102','2013-12-02','Laterne','Notizen zum Fahrzeug ...');
-INSERT INTO `vehicle` (`category_id`,`isActive`,`name`,`licenceNumber`,`dateOfFirstRegistration`,`parking`,`memo`) VALUES (3,1,'VW Movano 5','BS 122 346','2004-11-01','Laterne','Kiwanis Club');
-INSERT INTO `vehicle` (`category_id`,`isActive`,`name`,`licenceNumber`,`dateOfFirstRegistration`,`parking`,`memo`) VALUES (3,1,'VW Movano 6','BS 123 556','2005-11-01','Laterne',NULL);
-INSERT INTO `vehicle` (`category_id`,`isActive`,`name`,`licenceNumber`,`dateOfFirstRegistration`,`parking`,`memo`) VALUES (3,1,'VW Caddy 1','BS 555 721','2005-01-03','Tiefgarage Platz 23',NULL);
-INSERT INTO `vehicle` (`category_id`,`isActive`,`name`,`licenceNumber`,`dateOfFirstRegistration`,`parking`,`memo`) VALUES (3,1,'VW Caddy 2','BL 223 446','2005-03-01','Tiefgarage Platz 24',NULL);
-INSERT INTO `vehicle` (`category_id`,`isActive`,`name`,`licenceNumber`,`dateOfFirstRegistration`,`parking`,`memo`) VALUES (3,1,'VW Caddy 3','BL 44 556','2008-07-28','Tiefgarage Platz 26',NULL);
-INSERT INTO `vehicle` (`category_id`,`isActive`,`name`,`licenceNumber`,`dateOfFirstRegistration`,`parking`,`memo`) VALUES (3,0,'Ferarri F1','ZG 102','2013-12-02','Laterne','Notizen zum Fahrzeug ...');
+INSERT INTO `vehicle` (`category_id`,`isActive`,`name`,`licenceNumber`,`dateOfFirstRegistration`,`parking`,`memo`, `depot_id`) VALUES (1,1,'VW Maxi 1','BS 122 346','2004-11-01','Laterne','Kiwanis Club', 1);
+INSERT INTO `vehicle` (`category_id`,`isActive`,`name`,`licenceNumber`,`dateOfFirstRegistration`,`parking`,`memo`, `depot_id`) VALUES (1,1,'VW Maxi 2','BS 123 556','2005-11-01','Laterne',NULL,1 );
+INSERT INTO `vehicle` (`category_id`,`isActive`,`name`,`licenceNumber`,`dateOfFirstRegistration`,`parking`,`memo`, `depot_id`) VALUES (1,1,'VW Maxi 3','BS 555 721','2005-01-03','Tiefgarage Platz 23',NULL,1 );
+INSERT INTO `vehicle` (`category_id`,`isActive`,`name`,`licenceNumber`,`dateOfFirstRegistration`,`parking`,`memo`, `depot_id`) VALUES (1,1,'VW Maxi 4','BL 223 446','2005-03-01','Tiefgarage Platz 24',NULL,2 );
+INSERT INTO `vehicle` (`category_id`,`isActive`,`name`,`licenceNumber`,`dateOfFirstRegistration`,`parking`,`memo`, `depot_id`) VALUES (1,1,'VW Maxi 5','BL 44 556','2008-07-28','Tiefgarage Platz 26',NULL,1 );
+INSERT INTO `vehicle` (`category_id`,`isActive`,`name`,`licenceNumber`,`dateOfFirstRegistration`,`parking`,`memo`, `depot_id`) VALUES (1,1,'VW Maxi 6','ZG 102','2013-12-02','Laterne','Notizen zum Fahrzeug ...',2);
+INSERT INTO `vehicle` (`category_id`,`isActive`,`name`,`licenceNumber`,`dateOfFirstRegistration`,`parking`,`memo`, `depot_id`) VALUES (2,1,'VW Maxi 7','BS 122 346','2004-11-01','Laterne','Kiwanis Club',1);
+INSERT INTO `vehicle` (`category_id`,`isActive`,`name`,`licenceNumber`,`dateOfFirstRegistration`,`parking`,`memo`, `depot_id`) VALUES (2,1,'VW Maxi 8','BS 123 556','2005-11-01','Laterne',NULL,1);
+INSERT INTO `vehicle` (`category_id`,`isActive`,`name`,`licenceNumber`,`dateOfFirstRegistration`,`parking`,`memo`, `depot_id`) VALUES (2,1,'VW Movano 1','BS 555 721','2005-01-03','Tiefgarage Platz 23',NULL,1);
+INSERT INTO `vehicle` (`category_id`,`isActive`,`name`,`licenceNumber`,`dateOfFirstRegistration`,`parking`,`memo`, `depot_id`) VALUES (2,1,'VW Movano 2','BL 223 446','2005-03-01','Tiefgarage Platz 24',NULL,2);
+INSERT INTO `vehicle` (`category_id`,`isActive`,`name`,`licenceNumber`,`dateOfFirstRegistration`,`parking`,`memo`, `depot_id`) VALUES (2,1,'VW Movano 3','BL 44 556','2008-07-28','Tiefgarage Platz 26',NULL,2);
+INSERT INTO `vehicle` (`category_id`,`isActive`,`name`,`licenceNumber`,`dateOfFirstRegistration`,`parking`,`memo`, `depot_id`) VALUES (2,1,'VW Movano 4','ZG 102','2013-12-02','Laterne','Notizen zum Fahrzeug ...',1);
+INSERT INTO `vehicle` (`category_id`,`isActive`,`name`,`licenceNumber`,`dateOfFirstRegistration`,`parking`,`memo`, `depot_id`) VALUES (3,1,'VW Movano 5','BS 122 346','2004-11-01','Laterne','Kiwanis Club',2);
+INSERT INTO `vehicle` (`category_id`,`isActive`,`name`,`licenceNumber`,`dateOfFirstRegistration`,`parking`,`memo`, `depot_id`) VALUES (3,1,'VW Movano 6','BS 123 556','2005-11-01','Laterne',NULL,1);
+INSERT INTO `vehicle` (`category_id`,`isActive`,`name`,`licenceNumber`,`dateOfFirstRegistration`,`parking`,`memo`, `depot_id`) VALUES (3,1,'VW Caddy 1','BS 555 721','2005-01-03','Tiefgarage Platz 23',NULL,2);
+INSERT INTO `vehicle` (`category_id`,`isActive`,`name`,`licenceNumber`,`dateOfFirstRegistration`,`parking`,`memo`, `depot_id`) VALUES (3,1,'VW Caddy 2','BL 223 446','2005-03-01','Tiefgarage Platz 24',NULL,1);
+INSERT INTO `vehicle` (`category_id`,`isActive`,`name`,`licenceNumber`,`dateOfFirstRegistration`,`parking`,`memo`, `depot_id`) VALUES (3,1,'VW Caddy 3','BL 44 556','2008-07-28','Tiefgarage Platz 26',NULL,1);
+INSERT INTO `vehicle` (`category_id`,`isActive`,`name`,`licenceNumber`,`dateOfFirstRegistration`,`parking`,`memo`, `depot_id`) VALUES (3,0,'Ferarri F1','ZG 102','2013-12-02','Laterne','Notizen zum Fahrzeug ...',1);
+
 
 /*
 insert_address

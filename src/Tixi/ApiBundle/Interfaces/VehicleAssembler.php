@@ -27,6 +27,9 @@ class VehicleAssembler {
         $vehicle = Vehicle::registerVehicle($vehicleDTO->name, $vehicleDTO->licenceNumber,
             $vehicleDTO->dateOfFirstRegistration, $vehicleDTO->parking, $vehicleDTO->category,
             $vehicleDTO->memo, $vehicleDTO->managementDetails);
+        if (!empty($vehicleDTO->depot)) {
+            $vehicle->assignDepot($vehicleDTO->depot);
+        }
         if (!empty($vehicleDTO->supervisor)) {
             $vehicle->assignSupervisor($vehicleDTO->supervisor);
         }
@@ -42,6 +45,11 @@ class VehicleAssembler {
         $vehicle->updateVehicleData($vehicleDTO->name, $vehicleDTO->licenceNumber,
             $vehicleDTO->dateOfFirstRegistration, $vehicleDTO->parking, $vehicleDTO->category,
             $vehicleDTO->memo, $vehicleDTO->managementDetails);
+        if (!empty($vehicleDTO->depot)) {
+            $vehicle->assignDepot($vehicleDTO->depot);
+        }else {
+            $vehicle->removeDepot();
+        }
         if (!empty($vehicleDTO->supervisor)) {
             $vehicle->assignSupervisor($vehicleDTO->supervisor);
         } else {
@@ -64,6 +72,7 @@ class VehicleAssembler {
         $vehicleDTO->memo = $vehicle->getMemo();
         $vehicleDTO->managementDetails = $vehicle->getManagementDetails();
         $vehicleDTO->supervisor = $vehicle->getSupervisor();
+        $vehicleDTO->depot = $vehicle->getDepot();
         return $vehicleDTO;
     }
 
@@ -89,6 +98,7 @@ class VehicleAssembler {
         $vehicleListDTO->name = $vehicle->getName();
         $vehicleListDTO->licenceNumber = $vehicle->getLicenceNumber();
         $vehicleListDTO->parking = $vehicle->getParking();
+        $vehicleListDTO->depot = $vehicle->getDepot()->getName();
         $vehicleListDTO->dateOfFirstRegistration = $vehicle->getDateOfFirstRegistration()->format('d.m.Y');
         $vehicleListDTO->category = $vehicle->getCategory()->getName();
         $vehicleListDTO->amountOfSeats = $vehicle->getCategory()->getAmountOfSeats();

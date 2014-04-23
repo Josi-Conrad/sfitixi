@@ -18,6 +18,7 @@ use Tixi\ApiBundle\Shared\DataGrid\GridControllers\Management\InsuranceDataGridC
 use Tixi\ApiBundle\Shared\DataGrid\GridControllers\Management\PoiKeywordDataGridController;
 use Tixi\ApiBundle\Shared\DataGrid\GridControllers\Management\ShiftTypeDataGridController;
 use Tixi\ApiBundle\Shared\DataGrid\GridControllers\Management\VehicleCategoryDataGridController;
+use Tixi\ApiBundle\Shared\DataGrid\GridControllers\Management\VehicleDepotDataGridController;
 use Tixi\ApiBundle\Shared\DataGrid\GridControllers\PassengerAbsentDataGridController;
 use Tixi\ApiBundle\Shared\DataGrid\GridControllers\PassengerDataGridController;
 use Tixi\ApiBundle\Shared\DataGrid\GridControllers\POIDataGridController;
@@ -166,5 +167,14 @@ class DataGridControllerFactory extends ContainerAware{
      */
     public function createManagementBankHolidayController($embeddedState=false, array $routeProperties=array()) {
         return new BankHolidayDataGridController($this->container, $embeddedState, $routeProperties);
+    }
+
+    /**
+     * @param bool $embeddedState
+     * @param array $routeProperties
+     * @return VehicleDepotDataGridController
+     */
+    public function createManagementVehicleDepotController($embeddedState=false, array $routeProperties=array()) {
+        return new VehicleDepotDataGridController($this->container, $embeddedState, $routeProperties);
     }
 } 

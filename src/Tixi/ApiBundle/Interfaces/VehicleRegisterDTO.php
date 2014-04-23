@@ -22,4 +22,5 @@ class VehicleRegisterDTO {
     public $memo;
     public $managementDetails;
     public $supervisor;
+    public $depot;
 }
