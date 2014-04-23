@@ -5,9 +5,13 @@
 {% endblock datePicker_widget %}
 
 {% block dateTimePicker_widget %}
-    <div>
-        {{ form_widget(form.date, {'id' : id ~ '_date'}) }}
-        {{ form_widget(form.time, {'id' : id ~ '_time'}) }}
+    <div class="row">
+        <div class="col-md-8">
+            {{ form_widget(form.date, {'id' : id ~ '_date'}) }}
+          </div>
+          <div class="col-md-4">
+            {{ form_widget(form.time, {'id' : id ~ '_time'}) }}
+        </div>
     </div>
 {% endblock dateTimePicker_widget %}
 

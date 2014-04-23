@@ -9,6 +9,7 @@
 namespace Tixi\ApiBundle\Tile\CustomFormView;
 
 
+use Tixi\ApiBundle\Helper\DateTimeService;
 use Tixi\ApiBundle\Tile\Core\AbstractFormViewTile;
 use Tixi\ApiBundle\Tile\Core\FormRowView;
 
@@ -18,10 +19,22 @@ use Tixi\ApiBundle\Tile\Core\FormRowView;
  */
 class ServicePlanRegisterFormViewTile extends AbstractFormViewTile{
 
+    /**
+     * @var \Tixi\ApiBundle\Helper\DateTimeService
+     */
+    protected $dateTimeService;
+
+    public function __construct(DateTimeService $dateTimeService, $formViewId, $dto, $editPath, $isStandalone=false) {
+        $this->dateTimeService = $dateTimeService;
+        parent::__construct($formViewId, $dto, $editPath, $isStandalone);
+    }
+
     public function createFormRows()
     {
-        $this->basicFormRows[] = new FormRowView('startDate','serviceplan.field.startdate',$this->dto->startDate->format('d.m.Y H:i'));
-        $this->basicFormRows[] = new FormRowView('endDate','serviceplan.field.enddate',$this->dto->endDate->format('d.m.Y H:i'));
+        $this->basicFormRows[] = new FormRowView('startDate','serviceplan.field.startdate',
+            $this->dateTimeService->convertDateTimeToDateTimeString($this->dto->startDate));
+        $this->basicFormRows[] = new FormRowView('endDate','serviceplan.field.enddate',
+            $this->dateTimeService->convertDateTimeToDateTimeString($this->dto->endDate));
         $this->basicFormRows[] = new FormRowView('memo','serviceplan.field.memo',$this->dto->memo);
     }
 }

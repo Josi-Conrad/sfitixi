@@ -15,6 +15,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Tixi\ApiBundle\Form\ServicePlanType;
+use Tixi\ApiBundle\Helper\DateTimeService;
 use Tixi\ApiBundle\Interfaces\ServicePlanRegisterDTO;
 use Tixi\ApiBundle\Menu\MenuService;
 use Tixi\ApiBundle\Tile\Core\FormTile;
@@ -80,12 +81,14 @@ class ServicePlanController extends Controller {
     public function getServiceplanAction(Request $request, $vehicleId, $servicePlanId) {
         $assembler = $this->get('tixi_api.assemblerserviceplan');
         $tileRenderer = $this->get('tixi_api.tilerenderer');
+        /** @var DateTimeService $dateTimeService */
+        $dateTimeService = $this->get('tixi_api.datetimeservice');
 
         $servicePlan = $this->getServicePlan($servicePlanId);
         $servicePlanDTO = $assembler->toServicePlanRegisterDTO($servicePlan);
         $rootPanel = new RootPanel($this->menuId, 'serviceplan.panel.details');
 
-        $rootPanel->add(new ServicePlanRegisterFormViewTile('servicePlanRequest', $servicePlanDTO,
+        $rootPanel->add(new ServicePlanRegisterFormViewTile($dateTimeService, 'servicePlanRequest', $servicePlanDTO,
             $this->generateUrl('tixiapi_serviceplan_edit',
                 array('vehicleId' => $vehicleId, 'servicePlanId' => $servicePlanId)),true));
         $rootPanel->add(new PanelDeleteFooterTile($this->generateUrl('tixiapi_serviceplan_delete',

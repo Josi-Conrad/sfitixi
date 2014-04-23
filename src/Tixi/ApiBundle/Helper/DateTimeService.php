@@ -49,8 +49,15 @@ class DateTimeService extends ContainerAware {
      */
     public function convertToLocalDateTimeString($utcDate) {
         if (null !== $utcDate) {
-            return $this->convertToLocalDateTime($utcDate)->format('d.m.Y H:i');
+            $localDateTime = $this->convertToLocalDateTime($utcDate);
+            return $this->convertDateTimeToDateTimeString($localDateTime);
         }
+    }
+
+    public function convertDateTimeToDateTimeString(\DateTime $dateTime) {
+        $formatedDate = $dateTime->format('d.m.Y');
+        $formatedTime = $dateTime->format('H:i');
+        return $formatedDate . ' - ' . $formatedTime;
     }
 
     /**
