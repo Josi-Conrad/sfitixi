@@ -1,5 +1,6 @@
 #Buttons
 button.back: Abbrechen
+button.back.regular: Zurück
 button.save: Speichern
 button.search: Suchen
 button.show: Anzeigen
@@ -33,3 +34,8 @@ prepare.panel.name: Bereitstellen
 #Management
 management.panel.name: Verwaltung
 management.breadcrumb.name: Verwaltung
+
+#Errors
+error.refintegrity.header.name: Referentielle Integritätsverletzung
+error.refintegrity.body.standard.main: Das ausgewählte Verwaltungsdokument kann nicht gelöscht werden, da es noch in Vewendung ist.
+error.refintegrity.body.standard.second: Das Dokument wird zur Zeit noch von der folgenden Anzahl Dokumente verwendet:

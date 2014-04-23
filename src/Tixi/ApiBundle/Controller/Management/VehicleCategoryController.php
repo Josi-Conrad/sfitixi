@@ -20,7 +20,9 @@ use Tixi\ApiBundle\Interfaces\Management\VehicleCategoryRegisterDTO;
 use Tixi\ApiBundle\Menu\MenuService;
 use Tixi\ApiBundle\Tile\Core\FormTile;
 use Tixi\ApiBundle\Tile\Core\PanelDeleteFooterTile;
+use Tixi\ApiBundle\Tile\Core\ReferentialConstraintErrorTile;
 use Tixi\ApiBundle\Tile\Core\RootPanel;
+use Tixi\CoreDomainBundle\Repository\VehicleRepositoryDoctrine;
 
 /**
  * Class VehicleTypeController
@@ -74,11 +76,22 @@ class VehicleCategoryController extends Controller{
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function deleteVehicleCategoryAction(Request $request, $vehicleCategoryId) {
-        $vehicle = $this->getVehicleCategory($vehicleCategoryId);
-        $vehicle->deleteLogically();
-        $this->get('entity_manager')->flush();
+        $tileRenderer = $this->get('tixi_api.tilerenderer');
+        /** @var VehicleRepositoryDoctrine $vehicleCategoryRepository */
+        $vehicleRepository = $this->get('vehicle_repository');
+        $vehicleCategory = $this->getVehicleCategory($vehicleCategoryId);
+        $usageAmount = $vehicleRepository->getAmountByVehicleCategory($vehicleCategory);
+        //it is not allowed to delete an enitity of this category that is still in use.
+        if($usageAmount>0) {
+            $rootPanel = new RootPanel($this->menuId, 'error.refintegrity.header.name');
+            $rootPanel->add(new ReferentialConstraintErrorTile($usageAmount));
+            return new Response($tileRenderer->render($rootPanel));
+        }else {
+            $vehicleCategory->deleteLogically();
+            $this->get('entity_manager')->flush();
 
-        return $this->redirect($this->generateUrl('tixiapi_management_vehiclecategories_get'));
+            return $this->redirect($this->generateUrl('tixiapi_management_vehiclecategories_get'));
+        }
     }
 
     /**

@@ -34,4 +34,12 @@ class VehicleRepositoryDoctrine extends CommonBaseRepositoryDoctrine implements 
     {
         $this->getEntityManager()->remove($vehicle);
     }
+
+    public function getAmountByVehicleCategory(VehicleCategory $category)
+    {
+        $qb = parent::createQueryBuilder('e')->select('count(e.id)');
+        $qb->add('where', 'e.category = :category');
+        $qb->setParameter('category', $category);
+        return $qb->getQuery()->getSingleScalarResult();
+    }
 }

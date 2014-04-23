@@ -27,7 +27,7 @@ class BackButtonTile extends AbstractTile{
      * @param $displayText
      * @param null $type
      */
-    public function __construct($displayText, $type=null) {
+    public function __construct($displayText='button.back.regular', $type=null) {
         $this->displayText = $displayText;
         $this->type = (null !== $type) ? $type : self::$defaultType;
     }
