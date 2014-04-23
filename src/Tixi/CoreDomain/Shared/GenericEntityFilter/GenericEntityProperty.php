@@ -44,6 +44,7 @@ class GenericEntityProperty {
      */
     public function getPropertyValue()
     {
+
         return $this->propertyValue;
     }
 

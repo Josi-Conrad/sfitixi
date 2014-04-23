@@ -27,9 +27,7 @@ class FastGenericEntityAccessorRepositoryDoctrine implements FastGenericEntityAc
         $dqlQueryString = $this->createQueryDQL($filter, self::$FINDBYTYPE);
         if('' !== $dqlQueryString) {
             $query = $this->entityManager->createQuery($dqlQueryString);
-            if(null !== $filter->getSearch()) {
-                $query->setParameter('searchStr', $this->createLikedSerachString($filter->getSearch()->getSearchStr()));
-            }
+            $query->setParameters($this->createParametersArray($filter));
             if(null !== $filter->getLimit()) {
                 $query->setMaxResults($filter->getLimit());
             }
@@ -46,9 +44,7 @@ class FastGenericEntityAccessorRepositoryDoctrine implements FastGenericEntityAc
         $dqlQueryString = $this->createQueryDQL($filter, self::$TOTALTYPE);
         if('' !== $dqlQueryString) {
             $query = $this->entityManager->createQuery($dqlQueryString);
-            if(null !== $filter->getSearch()) {
-                $query->setParameter('searchStr', $this->createLikedSerachString($filter->getSearch()->getSearchStr()));
-            }
+            $query->setParameters($this->createParametersArray($filter));
             $totalAmount=$query->getSingleScalarResult();
         }
         return $totalAmount;
@@ -117,11 +113,13 @@ class FastGenericEntityAccessorRepositoryDoctrine implements FastGenericEntityAc
         $dqlRestrictive = '';
         if(!empty($restrictiveProperties)) {
             $dqlRestrictive .= '(';
+            $i = 0;
             foreach($restrictiveProperties as $index=>$property) {
                 if($index>0) {
                     $dqlRestrictive .= ' AND ';
                 }
-                $dqlRestrictive .= $property->getEntityPropertyString().' '.$property->getComparingOperator().' '.$property->getPropertyValue();
+                $dqlRestrictive .= $property->getEntityPropertyString().' '.$property->getComparingOperator().' :restrictiveProperty'.$i;
+                $i++;
             }
             $dqlRestrictive .= ')';
         }
@@ -158,6 +156,21 @@ class FastGenericEntityAccessorRepositoryDoctrine implements FastGenericEntityAc
     protected function createLikedSerachString($searchString) {
         return '%'.$searchString.'%';
 
+    }
+
+    protected function createParametersArray(GenericEntityFilter $filter) {
+        $parameters = array();
+        $i=0;
+        foreach($filter->getRestrictiveProperties() as $property) {
+            $parameters['restrictiveProperty'.$i] = $property->getPropertyValue();
+            $i++;
+        }
+        if($filter->getSearch()) {
+            $parameters['searchStr']= $this->createLikedSerachString($filter->getSearch()->getSearchStr());
+        }
+
+
+        return $parameters;
     }
 
 
