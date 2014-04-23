@@ -25,6 +25,7 @@ use Tixi\ApiBundle\Tile\Core\RootPanel;
 /**
  * Class VehicleTypeController
  * @package Tixi\ApiBundle\Controller\Management
+ * @Breadcrumb("management.breadcrumb.name")
  * @Breadcrumb("vehiclecategory.breadcrumb.name", route="tixiapi_management_vehiclecategories_get")
  * @Route("/management/vehiclecategories")
  */

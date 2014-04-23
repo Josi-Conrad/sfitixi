@@ -6,33 +6,36 @@ function FormValidationController(formId) {
     this._submitButton = null;
     this._isInvalid = false;
 
-    this.init = function() {
+    this.init = function () {
         _this._formId = formId;
-        _this._form = $('#'+formId);
+        _this._form = $('#' + formId);
         _this._initCorrespondingSubmitButton();
         _this._initListeners();
+        _this._setConfirmUnload(true);
     }
 
-    this._initCorrespondingSubmitButton = function(){
-        $(':submit').each(function() {
-            if($(this).data('targetformid')===_this._formId) {
+    this._initCorrespondingSubmitButton = function () {
+        $(':submit').each(function () {
+            if ($(this).data('targetformid') === _this._formId) {
                 _this._submitButton = this;
             }
             return false;
         });
     }
 
-    this._initListeners = function() {
-        $(_this._submitButton).on('click', function(event) {
+    this._initListeners = function () {
+        $(_this._submitButton).on('click', function (event) {
             event.preventDefault();
-            if(_this._hasHtml5Validation()) {
-                $(_this._form).submit(function(event) {
-                    if(!this.checkValidity()) {
+            if (_this._hasHtml5Validation()) {
+                $(_this._form).submit(function (event) {
+                    if (!this.checkValidity()) {
                         event.preventDefault();
                         $(this).addClass('invalid');
+                        _this._setConfirmUnload(true);
                         _this._isInvalid = true;
-                    }else {
+                    } else {
                         $(this).removeClass('invalid');
+                        _this._setConfirmUnload(false);
                         _this._isInvalid = false;
                     }
                 });
@@ -41,11 +44,17 @@ function FormValidationController(formId) {
         });
     }
 
-    this._hasHtml5Validation = function() {
+    this._hasHtml5Validation = function () {
         return typeof document.createElement('input').checkValidity === 'function';
     }
 
+    this._setConfirmUnload = function (on) {
+        window.onbeforeunload = (on) ? _this._unloadMessage : null;
+    }
+
+    this._unloadMessage = function () {
+        return 'iTixi';
+    }
+
     _this.init();
-
-
 }

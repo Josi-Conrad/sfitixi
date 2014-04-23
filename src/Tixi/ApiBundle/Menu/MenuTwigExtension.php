@@ -9,7 +9,10 @@
 namespace Tixi\ApiBundle\Menu;
 
 
-
+/**
+ * Class MenuTwigExtension
+ * @package Tixi\ApiBundle\Menu
+ */
 class MenuTwigExtension extends \Twig_Extension {
 
     /**
@@ -17,6 +20,9 @@ class MenuTwigExtension extends \Twig_Extension {
      */
     protected $menuService;
 
+    /**
+     * @return array
+     */
     public function getFunctions() {
         return array(
            new \Twig_SimpleFunction('renderMenu',function($activeMenuItem=null) {
@@ -35,6 +41,9 @@ class MenuTwigExtension extends \Twig_Extension {
         'menuservice';
     }
 
+    /**
+     * @param MenuService $menuService
+     */
     public function setMenuService(MenuService $menuService)
     {
         $this->menuService = $menuService;

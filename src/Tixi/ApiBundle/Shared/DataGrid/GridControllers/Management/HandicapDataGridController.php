@@ -26,12 +26,17 @@ use Tixi\CoreDomain\Shared\GenericEntityFilter\GenericEntityFilter;
  * @package Tixi\ApiBundle\Shared\DataGrid\GridControllers\Management
  */
 class HandicapDataGridController extends DataGridAbstractController {
-
+    /**
+     * @return mixed|string
+     */
     public function getGridIdentifier()
     {
         return 'handicaps';
     }
 
+    /**
+     * @return mixed|DataGridCustomControlTile
+     */
     public function createCustomControlTile()
     {
         $customControlTile = new DataGridCustomControlTile();
@@ -39,15 +44,21 @@ class HandicapDataGridController extends DataGridAbstractController {
         $selectionButton->add(new TextLinkSelectionTile('edit', $this->generateUrl('tixiapi_management_handicap_edit',array('handicapId'=>DataGridHandler::$dataGirdReplaceIdentifier)),'button.edit',true));
         $selectionButton->add(new SelectionButtonDividerTile());
         $selectionButton->add(new TextLinkSelectionDeleteTile('delete', $this->generateUrl('tixiapi_management_handicap_delete',array('handicapId'=>DataGridHandler::$dataGirdReplaceIdentifier)),'button.delete',true));
-        $linkButton = $customControlTile->add(new LinkButtonTile($this->getGridIdentifier().'_new', $this->generateUrl('tixiapi_management_handicap_new'),'handicap.button.new', LinkButtonTile::$primaryType));
+        $customControlTile->add(new LinkButtonTile($this->getGridIdentifier().'_new', $this->generateUrl('tixiapi_management_handicap_new'),'handicap.button.new', LinkButtonTile::$primaryType));
         return $customControlTile;
     }
 
+    /**
+     * @return mixed|string
+     */
     public function getDblClickPath()
     {
         return $this->generateUrl('tixiapi_management_handicap_edit',array('handicapId'=>DataGridHandler::$dataGirdReplaceIdentifier));
     }
 
+    /**
+     * @return mixed|HandicapListDTO
+     */
     public function getReferenceDTO()
     {
         if(!$this->isInEmbeddedState()) {
@@ -55,6 +66,10 @@ class HandicapDataGridController extends DataGridAbstractController {
         }
     }
 
+    /**
+     * @param GenericEntityFilter $filter
+     * @return array|mixed
+     */
     public function constructDtosFromFgeaFilter(GenericEntityFilter $filter)
     {
         /** @var HandicapAssembler $assembler */
@@ -67,6 +82,9 @@ class HandicapDataGridController extends DataGridAbstractController {
         return $dtos;
     }
 
+    /**
+     * @return mixed|null
+     */
     public function getDataSrcUrl()
     {
         return null;

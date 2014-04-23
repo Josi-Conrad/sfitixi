@@ -21,13 +21,22 @@ use Tixi\ApiBundle\Tile\Core\TextLinkSelectionDeleteTile;
 use Tixi\ApiBundle\Tile\Core\TextLinkSelectionTile;
 use Tixi\CoreDomain\Shared\GenericEntityFilter\GenericEntityFilter;
 
+/**
+ * Class VehicleCategoryDataGridController
+ * @package Tixi\ApiBundle\Shared\DataGrid\GridControllers\Management
+ */
 class VehicleCategoryDataGridController extends DataGridAbstractController{
-
+    /**
+     * @return mixed|string
+     */
     public function getGridIdentifier()
     {
         return 'vehiclecategories';
     }
 
+    /**
+     * @return mixed|DataGridCustomControlTile
+     */
     public function createCustomControlTile()
     {
         $customControlTile = new DataGridCustomControlTile();
@@ -39,11 +48,17 @@ class VehicleCategoryDataGridController extends DataGridAbstractController{
         return $customControlTile;
     }
 
+    /**
+     * @return mixed|string
+     */
     public function getDblClickPath()
     {
         return $this->generateUrl('tixiapi_management_vehiclecategory_edit',array('vehicleCategoryId'=>DataGridHandler::$dataGirdReplaceIdentifier));
     }
 
+    /**
+     * @return mixed|VehicleCategoryListDTO
+     */
     public function getReferenceDTO()
     {
         if(!$this->isInEmbeddedState()) {
@@ -51,6 +66,10 @@ class VehicleCategoryDataGridController extends DataGridAbstractController{
         }
     }
 
+    /**
+     * @param GenericEntityFilter $filter
+     * @return array|mixed
+     */
     public function constructDtosFromFgeaFilter(GenericEntityFilter $filter)
     {
         /** @var VehicleCategoryAssembler $assembler */
@@ -63,6 +82,9 @@ class VehicleCategoryDataGridController extends DataGridAbstractController{
         return $dtos;
     }
 
+    /**
+     * @return mixed|null
+     */
     public function getDataSrcUrl()
     {
         return null;

@@ -11,16 +11,32 @@ namespace Tixi\ApiBundle\Interfaces\Management;
 
 use Tixi\CoreDomain\POIKeyword;
 
+/**
+ * Class PoiKeywordAssembler
+ * @package Tixi\ApiBundle\Interfaces\Management
+ */
 class PoiKeywordAssembler {
+    /**
+     * @param PoiKeywordRegisterDTO $dto
+     * @return POIKeyword
+     */
     public function registerDTOtoNewPoiKeyword(PoiKeywordRegisterDTO $dto) {
         $poiKeyword = POIKeyword::registerPOIKeyword($dto->name);
         return $poiKeyword;
     }
 
+    /**
+     * @param POIKeyword $poiKeyword
+     * @param PoiKeywordRegisterDTO $dto
+     */
     public function registerDTOtoPoiKeyword(POIKeyword $poiKeyword, PoiKeywordRegisterDTO $dto) {
         $poiKeyword->updateData($dto->name);
     }
 
+    /**
+     * @param POIKeyword $poiKeyword
+     * @return PoiKeywordRegisterDTO
+     */
     public function toPoiKeywordRegisterDTO(POIKeyword $poiKeyword) {
         $poiKeywordDTO = new PoiKeywordRegisterDTO();
         $poiKeywordDTO->id = $poiKeyword->getId();
@@ -28,6 +44,10 @@ class PoiKeywordAssembler {
         return $poiKeywordDTO;
     }
 
+    /**
+     * @param $poiKeywords
+     * @return array
+     */
     public function poiKeywordsToPoiKeywordListDTOs($poiKeywords) {
         $dtoArray = array();
         foreach($poiKeywords as $poiKeyword) {
@@ -36,6 +56,10 @@ class PoiKeywordAssembler {
         return $dtoArray;
     }
 
+    /**
+     * @param POIKeyword $poiKeyword
+     * @return VehicleCategoryListDTO
+     */
     public function toPoiKeywordListDTO(POIKeyword $poiKeyword) {
         $poiKeywordListDTO = new VehicleCategoryListDTO();
         $poiKeywordListDTO->id = $poiKeyword->getId();

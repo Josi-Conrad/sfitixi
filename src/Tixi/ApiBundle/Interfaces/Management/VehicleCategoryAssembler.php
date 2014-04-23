@@ -15,15 +15,27 @@ use Tixi\CoreDomain\VehicleCategory;
  * @package Tixi\ApiBundle\Interfaces\Management
  */
 class VehicleCategoryAssembler {
+    /**
+     * @param VehicleCategoryRegisterDTO $dto
+     * @return VehicleCategory
+     */
     public function registerDTOtoNewVehicleCategory(VehicleCategoryRegisterDTO $dto) {
         $vehicleCategory = VehicleCategory::registerVehicleCategory($dto->name, $dto->amountOfSeats, $dto->amountOfWheelChairs);
         return $vehicleCategory;
     }
 
+    /**
+     * @param VehicleCategory $vehicleCategory
+     * @param VehicleCategoryRegisterDTO $dto
+     */
     public function registerDTOtoVehicleCategory(VehicleCategory $vehicleCategory, VehicleCategoryRegisterDTO $dto) {
         $vehicleCategory->updateData($dto->name, $dto->amountOfSeats, $dto->amountOfWheelChairs);
     }
 
+    /**
+     * @param VehicleCategory $vehicleCategory
+     * @return VehicleCategoryRegisterDTO
+     */
     public function toVehicleCategoryRegisterDTO(VehicleCategory $vehicleCategory) {
         $vehicleCategoryDTO = new VehicleCategoryRegisterDTO();
         $vehicleCategoryDTO->id = $vehicleCategory->getId();
@@ -33,6 +45,10 @@ class VehicleCategoryAssembler {
         return $vehicleCategoryDTO;
     }
 
+    /**
+     * @param $vehicleCategories
+     * @return array
+     */
     public function vehicleCategoriesToVehicleCategoryListDTOs($vehicleCategories) {
         $dtoArray = array();
         foreach($vehicleCategories as $vehicleCategorie) {
@@ -41,6 +57,10 @@ class VehicleCategoryAssembler {
         return $dtoArray;
     }
 
+    /**
+     * @param VehicleCategory $vehicleCategory
+     * @return VehicleCategoryListDTO
+     */
     public function toVehicleCategoryListDTO(VehicleCategory $vehicleCategory) {
         $vehicleCategoryListDTO = new VehicleCategoryListDTO();
         $vehicleCategoryListDTO->id = $vehicleCategory->getId();

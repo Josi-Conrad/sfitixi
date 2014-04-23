@@ -47,6 +47,16 @@
     </parameters>
 
     <services>
+        <!-- Listeners -->
+        <service id="doctrine_flush_listener" class="Tixi\CoreDomainBundle\Listener\EntityChangeListener">
+            <argument type="service" id="service_container" />
+            <tag name="monolog.logger" channel="entity_channel" />
+            <tag name="doctrine.event_listener" event="postUpdate" connection="tixi" />
+            <tag name="doctrine.event_listener" event="postPersist" connection="tixi" />
+            <tag name="doctrine.event_listener" event="postRemove" connection="tixi" />
+        </service>
+
+        <!-- Repositories -->
         <service id="entity_manager" alias="doctrine.orm.entity_manager"></service>
 
         <service id="tixi_coredomain.fgea_repository" class="%tixi_coredomain.fgea_repository.doctrine.class%">

@@ -12,6 +12,10 @@ namespace Tixi\ApiBundle\Tile\CustomFormView;
 use Tixi\ApiBundle\Tile\Core\AbstractFormViewTile;
 use Tixi\ApiBundle\Tile\Core\FormRowView;
 
+/**
+ * Class ServicePlanRegisterFormViewTile
+ * @package Tixi\ApiBundle\Tile\CustomFormView
+ */
 class ServicePlanRegisterFormViewTile extends AbstractFormViewTile{
 
     public function createFormRows()

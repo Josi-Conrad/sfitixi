@@ -17,6 +17,10 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Tixi\CoreDomain\Shared\FastGenericEntityAccessorRepository;
 use Tixi\CoreDomain\Shared\GenericEntityFilter\GenericEntityFilter;
 
+/**
+ * Class DataGridAbstractController
+ * @package Tixi\ApiBundle\Shared\DataGrid
+ */
 abstract class DataGridAbstractController extends ContainerAware{
 
     protected $router;
@@ -24,6 +28,11 @@ abstract class DataGridAbstractController extends ContainerAware{
     protected $routeProperties;
     private $isEmbedded;
 
+    /**
+     * @param ContainerInterface $container
+     * @param bool $embeddedState
+     * @param array $routeProperties
+     */
     public function __construct(ContainerInterface $container, $embeddedState=false, array $routeProperties=array()) {
         $this->setContainer($container);
         $this->router = $container->get('router');
@@ -32,6 +41,9 @@ abstract class DataGridAbstractController extends ContainerAware{
         $this->routeProperties = $routeProperties;
     }
 
+    /**
+     * @return string
+     */
     public function createDataGridJsConf() {
         $embedded = $this->isInEmbeddedState() ? 'true' : 'false';
         $emptyDataText = $this->container->get('translator')->trans('datagrid.empty.defaulttext');
@@ -50,35 +62,65 @@ abstract class DataGridAbstractController extends ContainerAware{
                 }';
     }
 
+    /**
+     * @param GenericEntityFilter $filter
+     * @return int
+     */
     public function getTotalAmountOfRowsByFgeaFilter(GenericEntityFilter $filter) {
         return $this->fgeaRepository->findTotalAmountByFilter($filter);
     }
 
+    /**
+     * @return bool
+     */
     public function isInEmbeddedState() {
         return $this->isEmbedded;
     }
 
-//    public abstract function getMenuIdentifier();
-
+    /**
+     * @return mixed
+     */
     public abstract function getGridIdentifier();
 
-//    public abstract function getGridDisplayTitel();
-
+    /**
+     * @return mixed
+     */
     public abstract function createCustomControlTile();
 
+    /**
+     * @return mixed
+     */
     public abstract function getDblClickPath();
 
+    /**
+     * @return mixed
+     */
     public abstract function getReferenceDTO();
 
+    /**
+     * @param GenericEntityFilter $filter
+     * @return mixed
+     */
     public abstract function constructDtosFromFgeaFilter(GenericEntityFilter $filter);
 
+    /**
+     * @return mixed
+     */
     public abstract function getDataSrcUrl();
 
-
+    /**
+     * @param GenericEntityFilter $filter
+     * @return array
+     */
     protected function getEntitiesByFgeaFilter(GenericEntityFilter $filter) {
         return $this->fgeaRepository->findByFilter($filter);
     }
 
+    /**
+     * @param $route
+     * @param array $parameters
+     * @return string
+     */
     protected function generateUrl($route, $parameters = array()) {
         return $this->router->generate($route, $parameters, UrlGeneratorInterface::ABSOLUTE_PATH);
     }

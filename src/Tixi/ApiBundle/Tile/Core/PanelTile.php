@@ -11,6 +11,10 @@ namespace Tixi\ApiBundle\Tile\Core;
 
 use Tixi\ApiBundle\Tile\AbstractTile;
 
+/**
+ * Class PanelTile
+ * @package Tixi\ApiBundle\Tile\Core
+ */
 class PanelTile extends AbstractTile{
 
     public static $primaryType = 'primary';
@@ -19,21 +23,34 @@ class PanelTile extends AbstractTile{
     protected $headerDisplayText;
     protected $type;
 
+    /**
+     * @param $headerDisplayText
+     * @param null $type
+     */
     public function __construct($headerDisplayText, $type=null) {
         $this->type = (null !== $type) ? $type : self::$defaultType;
         $this->headerDisplayText = $headerDisplayText;
     }
 
+    /**
+     * @return array
+     */
     public function getViewParameters()
     {
         return array('headerDisplayText'=>$this->headerDisplayText, 'type'=>$this->type);
     }
 
+    /**
+     * @return mixed|string
+     */
     public function getTemplateName()
     {
         return 'TixiApiBundle:Tile:panel.html.twig';
     }
 
+    /**
+     * @return mixed|string
+     */
     public function getName()
     {
         return 'panel';

@@ -8,18 +8,29 @@
 
 namespace Tixi\ApiBundle\Tile\Core;
 
-
+/**
+ * Class FormRowView
+ * @package Tixi\ApiBundle\Tile\Core
+ */
 class FormRowView {
     protected $fieldId;
     protected $fieldLabelText;
     protected $fieldValue;
 
+    /**
+     * @param $fieldId
+     * @param $fieldLabel
+     * @param $fieldValue
+     */
     public function __construct($fieldId, $fieldLabel, $fieldValue) {
         $this->fieldId = $fieldId;
         $this->fieldLabelText = $fieldLabel;
         $this->fieldValue = $fieldValue;
     }
 
+    /**
+     * @return array
+     */
     public function getViewParameters() {
         return array('fieldId'=>$this->fieldId);
     }
@@ -31,8 +42,6 @@ class FormRowView {
     {
         return $this->fieldId;
     }
-
-
 
     /**
      * @return mixed

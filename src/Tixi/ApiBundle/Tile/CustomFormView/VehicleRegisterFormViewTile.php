@@ -12,6 +12,10 @@ namespace Tixi\ApiBundle\Tile\CustomFormView;
 use Tixi\ApiBundle\Tile\Core\AbstractFormViewTile;
 use Tixi\ApiBundle\Tile\Core\FormRowView;
 
+/**
+ * Class VehicleRegisterFormViewTile
+ * @package Tixi\ApiBundle\Tile\CustomFormView
+ */
 class VehicleRegisterFormViewTile extends AbstractFormViewTile{
 
     public function createFormRows()

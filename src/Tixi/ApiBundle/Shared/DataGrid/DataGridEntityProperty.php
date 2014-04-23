@@ -11,16 +11,32 @@ namespace Tixi\ApiBundle\Shared\DataGrid;
 
 use Tixi\CoreDomain\Shared\GenericEntityFilter\GenericEntityProperty;
 
+/**
+ * Class DataGridEntityProperty
+ * @package Tixi\ApiBundle\Shared\DataGrid
+ */
 class DataGridEntityProperty extends GenericEntityProperty{
     protected $isRestrictive;
     protected $isHeader;
 
+    /**
+     * @param $entityByName
+     * @param $propertyByName
+     * @param string $comparingOperator
+     * @param null $propertyValue
+     * @param bool $isRestrictive
+     * @param bool $isHeader
+     */
     public function __construct($entityByName, $propertyByName, $comparingOperator='=', $propertyValue=null, $isRestrictive=false, $isHeader=false) {
         parent::__construct($entityByName, $propertyByName, $propertyValue, $comparingOperator);
         $this->isRestrictive = $isRestrictive;
         $this->isHeader = $isHeader;
     }
 
+    /**
+     * @param array $properties
+     * @return array
+     */
     public static function getHeaderProperties(array $properties) {
         $headerProperties=array();
         foreach($properties as $property) {
@@ -31,6 +47,10 @@ class DataGridEntityProperty extends GenericEntityProperty{
         return $headerProperties;
     }
 
+    /**
+     * @param array $properties
+     * @return array
+     */
     public static function getRestrictiveProperties(array $properties) {
         $restrictiveProperties = array();
         foreach($properties as $property) {

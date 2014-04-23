@@ -16,6 +16,10 @@ use Symfony\Component\Form\DataTransformerInterface;
  * @package Tixi\ApiBundle\Form\Shared
  */
 class DateTimeArrayTransformer implements DataTransformerInterface {
+    /**
+     * @param mixed $datetime
+     * @return array|mixed
+     */
     public function transform($datetime) {
         if (null !== $datetime) {
             $date = clone $datetime;

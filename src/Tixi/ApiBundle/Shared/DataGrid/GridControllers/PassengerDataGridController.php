@@ -20,35 +20,53 @@ use Tixi\ApiBundle\Tile\Core\TextLinkSelectionDeleteTile;
 use Tixi\ApiBundle\Tile\Core\TextLinkSelectionTile;
 use Tixi\CoreDomain\Shared\GenericEntityFilter\GenericEntityFilter;
 
+/**
+ * Class PassengerDataGridController
+ * @package Tixi\ApiBundle\Shared\DataGrid\GridControllers
+ */
 class PassengerDataGridController extends DataGridAbstractController {
-
+    /**
+     * @return mixed|string
+     */
     public function getGridIdentifier() {
         return 'passengers';
     }
 
+    /**
+     * @return mixed|DataGridCustomControlTile
+     */
     public function createCustomControlTile() {
         $customControlTile = new DataGridCustomControlTile();
         $selectionButton = $customControlTile->add(new SelectionButtonTile($this->getGridIdentifier().'_selection', 'button.with.selection'));
         $selectionButton->add(new TextLinkSelectionTile('show', $this->generateUrl('tixiapi_passenger_get', array('passengerId' => DataGridHandler::$dataGirdReplaceIdentifier)), 'button.show', true));
         $selectionButton->add(new TextLinkSelectionTile('edit', $this->generateUrl('tixiapi_passenger_edit', array('passengerId' => DataGridHandler::$dataGirdReplaceIdentifier)), 'button.edit', true));
         $selectionButton->add(new TextLinkSelectionTile('new_absent', $this->generateUrl('tixiapi_passenger_absent_new', array('passengerId' => DataGridHandler::$dataGirdReplaceIdentifier)), 'absent.button.new', true));
-//        $selectionButton->add(new TextLinkSelectionTile($this->generateUrl('tixiapi_passenger_edit', array('passengerId' => DataGridHandler::$dataGirdReplaceIdentifier)), 'drivingorder.button.new', true));
         $selectionButton->add(new SelectionButtonDividerTile());
         $selectionButton->add(new TextLinkSelectionDeleteTile('delete', $this->generateUrl('tixiapi_passenger_delete', array('passengerId' => DataGridHandler::$dataGirdReplaceIdentifier)), 'button.delete', true));
         $customControlTile->add(new LinkButtonTile($this->getGridIdentifier().'_new', $this->generateUrl('tixiapi_passenger_new'), 'passenger.button.new', LinkButtonTile::$primaryType));
         return $customControlTile;
     }
 
+    /**
+     * @return mixed|string
+     */
     public function getDblClickPath() {
         return $this->generateUrl('tixiapi_passenger_get', array('passengerId' => DataGridHandler::$dataGirdReplaceIdentifier));
     }
 
+    /**
+     * @return mixed|PassengerListDTO
+     */
     public function getReferenceDTO() {
         if (!$this->isInEmbeddedState()) {
             return new PassengerListDTO();
         }
     }
 
+    /**
+     * @param GenericEntityFilter $filter
+     * @return array|mixed
+     */
     public function constructDtosFromFgeaFilter(GenericEntityFilter $filter) {
         $assembler = $this->container->get('tixi_api.assemblerpassenger');
         $passengers = $this->getEntitiesByFgeaFilter($filter);
@@ -59,6 +77,9 @@ class PassengerDataGridController extends DataGridAbstractController {
         return $dtos;
     }
 
+    /**
+     * @return mixed|null
+     */
     public function getDataSrcUrl() {
         return null;
     }

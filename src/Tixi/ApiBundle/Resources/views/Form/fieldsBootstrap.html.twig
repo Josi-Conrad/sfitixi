@@ -1,13 +1,13 @@
 {####### Own types #######}
 {% block datePicker_widget %}
-        {% set attr = attr|merge({'class': ((attr.class|default('') ~ ' jqueryDatePicker form-control')|trim)}) %}
-        <input type="text" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
+    {% set attr = attr|merge({'class': ((attr.class|default('') ~ ' jqueryDatePicker form-control')|trim)}) %}
+    <input type="text" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
 {% endblock datePicker_widget %}
 
 {% block dateTimePicker_widget %}
     <div>
-    {{ form_widget(form.date, {'id' : id ~ '_date'}) }}
-    {{ form_widget(form.time, {'id' : id ~ '_time'}) }}
+        {{ form_widget(form.date, {'id' : id ~ '_date'}) }}
+        {{ form_widget(form.time, {'id' : id ~ '_time'}) }}
     </div>
 {% endblock dateTimePicker_widget %}
 
@@ -15,14 +15,14 @@
 {% block form_widget_simple %}
     {% spaceless %}
         {% set type = type|default('text') %}
-        {%  set attr = attr|merge({'class': ((attr.class|default('') ~ ' form-control')|trim)}) %}
+        {% set attr = attr|merge({'class': ((attr.class|default('') ~ ' form-control')|trim)}) %}
         <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
     {% endspaceless %}
 {% endblock form_widget_simple %}
 
 {% block textarea_widget %}
     {% spaceless %}
-        {%  set attr = attr|merge({'class': ((attr.class|default('') ~ ' form-control')|trim)}) %}
+        {% set attr = attr|merge({'class': ((attr.class|default('') ~ ' form-control')|trim)}) %}
         <textarea {{ block('widget_attributes') }}>{{ value }}</textarea>
     {% endspaceless %}
 {% endblock textarea_widget %}
@@ -31,7 +31,7 @@
     {% spaceless %}
         <div class="row">
             <div class="form-group">
-                {{ form_label(form, null, {'label_attr': {'class':'col-md-4 control-label'}}) }}
+                {{ form_label(form, null, {'label_attr': {'class':'col-md-4 control-label' }}) }}
                 <div class="col-md-8">
                     {{ form_widget(form) }}
                     <p class="help-block">{{ form_errors(form) }}</p>
@@ -43,11 +43,11 @@
 
 {% block submit_widget %}
     <div class="row">
-    {% spaceless %}
-        {% set type = type|default('submit') %}
-        {%  set attr = attr|merge({'class': ((attr.class|default('') ~ ' btn btn-primary col-md-2 col-md-offset-10')|trim)}) %}
-        {{ block('button_widget') }}
-    {% endspaceless %}
+        {% spaceless %}
+            {% set type = type|default('submit') %}
+            {% set attr = attr|merge({'class': ((attr.class|default('') ~ ' btn btn-primary col-md-2 col-md-offset-10')|trim)}) %}
+            {{ block('button_widget') }}
+        {% endspaceless %}
     </div>
 {% endblock submit_widget %}
 
@@ -55,7 +55,7 @@
     {% spaceless %}
         <div {{ block('widget_container_attributes') }}>
             {% for child in form %}
-                <label class="{% if multiple %}checkbox-inline{% else  %}radio-inline{% endif %}">
+                <label class="{% if multiple %}checkbox-inline{% else %}radio-inline{% endif %}">
                     {{ form_widget(child) }}
                     {{ form_label(child) }}
                 </label>
@@ -64,3 +64,22 @@
     {% endspaceless %}
 {% endblock choice_widget_expanded %}
 
+{% block choice_widget_collapsed %}
+    {% spaceless %}
+        {% set attr = attr|merge({class: (attr.class|default('') ~ ' form-control')|trim}) %}
+        <select {{ block('widget_attributes') }}{% if multiple %} multiple="multiple"{% endif %}>
+            {% if empty_value is not none %}
+                <option value="">{{ empty_value|trans({}, translation_domain) }}</option>
+            {% endif %}
+            {% if preferred_choices|length > 0 %}
+                {% set options = preferred_choices %}
+                {{ block('choice_widget_options') }}
+                {% if choices|length > 0 and separator is not none %}
+                    <option disabled="disabled">{{ separator }}</option>
+                {% endif %}
+            {% endif %}
+            {% set options = choices %}
+            {{ block('choice_widget_options') }}
+        </select>
+    {% endspaceless %}
+{% endblock choice_widget_collapsed %}

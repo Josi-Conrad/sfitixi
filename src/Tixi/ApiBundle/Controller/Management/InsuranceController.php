@@ -25,6 +25,7 @@ use Tixi\ApiBundle\Tile\Core\RootPanel;
 /**
  * Class InsuranceController
  * @package Tixi\ApiBundle\Controller\Management
+ * @Breadcrumb("management.breadcrumb.name")
  * @Breadcrumb("insurance.breadcrumb.name", route="tixiapi_management_insurances_get")
  * @Route("/management/insurances")
  */

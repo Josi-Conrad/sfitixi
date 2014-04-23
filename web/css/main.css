@@ -29,7 +29,6 @@
 }
 
 /* Login Form */
-
 .login section {
     border: 1px solid #bababa;
     width: 300px;
@@ -84,10 +83,6 @@
     margin: 0!important;
     padding: 0!important;
 }
-
-/*.weeklyShiftSelections li {*/
-    /*list-style-type: none;*/
-/*}*/
 
 /*##### Global #####*/
 

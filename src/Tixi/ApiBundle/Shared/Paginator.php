@@ -8,9 +8,15 @@
 
 namespace Tixi\ApiBundle\Shared;
 
-
+/**
+ * Class Paginator
+ * @package Tixi\ApiBundle\Shared
+ */
 class Paginator {
-
+    /**
+     * @param $page
+     * @return int
+     */
     public static function adjustPageForPagination($page) {
         return (is_null($page) || $page < 0) ? 0 : $page - 1;
     }

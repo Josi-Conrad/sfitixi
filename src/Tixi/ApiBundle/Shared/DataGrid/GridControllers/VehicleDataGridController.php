@@ -22,13 +22,22 @@ use Tixi\ApiBundle\Tile\Core\TextLinkSelectionDeleteTile;
 use Tixi\ApiBundle\Tile\Core\TextLinkSelectionTile;
 use Tixi\CoreDomain\Shared\GenericEntityFilter\GenericEntityFilter;
 
+/**
+ * Class VehicleDataGridController
+ * @package Tixi\ApiBundle\Shared\DataGrid\GridControllers
+ */
 class VehicleDataGridController extends DataGridAbstractController{
-
+    /**
+     * @return mixed|string
+     */
     public function getGridIdentifier()
     {
         return 'vehicles';
     }
 
+    /**
+     * @return mixed|DataGridCustomControlTile
+     */
     public function createCustomControlTile()
     {
         $customControlTile = new DataGridCustomControlTile();
@@ -38,16 +47,21 @@ class VehicleDataGridController extends DataGridAbstractController{
         $selectionButton->add(new TextLinkSelectionTile('new_serviceplan', $this->generateUrl('tixiapi_serviceplan_new',array('vehicleId'=>DataGridHandler::$dataGirdReplaceIdentifier)),'serviceplan.button.new',true));
         $selectionButton->add(new SelectionButtonDividerTile());
         $selectionButton->add(new TextLinkSelectionDeleteTile('delete', $this->generateUrl('tixiapi_vehicle_delete',array('vehicleId'=>DataGridHandler::$dataGirdReplaceIdentifier)),'button.delete',true));
-        $linkButton = $customControlTile->add(new LinkButtonTile($this->getGridIdentifier().'_new', $this->generateUrl('tixiapi_vehicle_new'),'vehicle.button.new', LinkButtonTile::$primaryType));
+        $customControlTile->add(new LinkButtonTile($this->getGridIdentifier().'_new', $this->generateUrl('tixiapi_vehicle_new'),'vehicle.button.new', LinkButtonTile::$primaryType));
         return $customControlTile;
     }
 
+    /**
+     * @return mixed|string
+     */
     public function getDblClickPath()
     {
         return $this->generateUrl('tixiapi_vehicle_get',array('vehicleId'=>DataGridHandler::$dataGirdReplaceIdentifier));
     }
 
-
+    /**
+     * @return mixed|VehicleListDTO
+     */
     public function getReferenceDTO()
     {
         if(!$this->isInEmbeddedState()) {
@@ -55,6 +69,10 @@ class VehicleDataGridController extends DataGridAbstractController{
         }
     }
 
+    /**
+     * @param GenericEntityFilter $filter
+     * @return array|mixed
+     */
     public function constructDtosFromFgeaFilter(GenericEntityFilter $filter)
     {
         $assembler = $this->container->get('tixi_api.assemblervehicle');
@@ -66,6 +84,9 @@ class VehicleDataGridController extends DataGridAbstractController{
         return $dtos;
     }
 
+    /**
+     * @return mixed|null
+     */
     public function getDataSrcUrl()
     {
         return null;

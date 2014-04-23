@@ -10,7 +10,6 @@ namespace Tixi\CoreDomain;
 
 use Doctrine\ORM\Mapping as ORM;
 use Tixi\CoreDomain\Shared\CommonBaseEntity;
-use Tixi\CoreDomain\Shared\Entity;
 
 /**
  * Tixi\CoreDomain\Handicap
@@ -18,7 +17,7 @@ use Tixi\CoreDomain\Shared\Entity;
  * @ORM\Entity(repositoryClass="Tixi\CoreDomainBundle\Repository\HandicapRepositoryDoctrine")
  * @ORM\Table(name="handicap")
  */
-class Handicap extends CommonBaseEntity implements Entity{
+class Handicap extends CommonBaseEntity{
     /**
      * @ORM\Id
      * @ORM\Column(type="integer", name="id")

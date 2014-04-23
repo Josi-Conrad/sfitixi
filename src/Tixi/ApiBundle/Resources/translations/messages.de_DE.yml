@@ -22,6 +22,10 @@ datagrid.empty.defaulttext: Es wurden keine Dokumente gefunden.
 
 #Home
 home.panel.name: Home
+home.tile.name: Startseite - iTIXI Applikation
+support.tile.name: Support
+help.tile.name: Hilfe
+about.tile.name: Informationen zur iTixi App
 
 #Prepare
 prepare.panel.name: Bereitstellen

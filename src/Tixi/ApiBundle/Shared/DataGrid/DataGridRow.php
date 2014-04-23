@@ -8,23 +8,36 @@
 
 namespace Tixi\ApiBundle\Shared\DataGrid;
 
-
+/**
+ * Class DataGridRow
+ * @package Tixi\ApiBundle\Shared\DataGrid
+ */
 class DataGridRow {
 
     protected $rowId;
     protected $fields;
 
+    /**
+     * @param $rowId
+     */
     public function __construct($rowId) {
         $this->rowId = $rowId;
         $this->fields=array();
     }
 
+    /**
+     * @param array $fieldsArray
+     * @param $fieldsSortingCallable
+     */
     public function appendAndSortFields(array $fieldsArray, $fieldsSortingCallable) {
         $fieldsArrayCopy = $fieldsArray;
         usort($fieldsArrayCopy, $fieldsSortingCallable);
         $this->fields = $fieldsArrayCopy;
     }
 
+    /**
+     * @return mixed
+     */
     public function getRowId() {
         return $this->rowId;
     }
@@ -36,14 +49,4 @@ class DataGridRow {
     {
         return $this->fields;
     }
-
-//
-//    public function getFieldValues() {
-//        $fieldValues = array();
-//        foreach($this->fields as $field) {
-//            $fieldValues[] = $field->getFieldValue();
-//        }
-//        return $fieldValues;
-//    }
-
 } 

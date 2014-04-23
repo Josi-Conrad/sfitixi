@@ -15,8 +15,15 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Regex;
 use Tixi\ApiBundle\Form\Shared\CommonAbstractType;
 
+/**
+ * Class VehicleCategoryType
+ * @package Tixi\ApiBundle\Form\Management
+ */
 class VehicleCategoryType extends CommonAbstractType{
-
+    /**
+     * @param FormBuilderInterface $builder
+     * @param array $options
+     */
     public function buildForm(FormBuilderInterface $builder, array $options) {
         $builder->add('id', 'hidden');
         $builder->add('name', 'text', array(

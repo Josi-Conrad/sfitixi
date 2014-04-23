@@ -28,6 +28,10 @@ use Tixi\CoreDomain\Shared\GenericEntityFilter\FilterProperties\Search;
 use Tixi\CoreDomain\Shared\GenericEntityFilter\GenericEntityFilter;
 use Tixi\CoreDomain\Shared\GenericEntityFilter\GenericEntityProperty;
 
+/**
+ * Class DataGridHandler
+ * @package Tixi\ApiBundle\Shared\DataGrid
+ */
 class DataGridHandler {
 
     public static $dataGirdReplaceIdentifier = '__replaceId__';
@@ -39,6 +43,12 @@ class DataGridHandler {
     protected $annotationReader;
     protected $router;
 
+    /**
+     * @param Request $request
+     * @param $menuId
+     * @param DataGridAbstractController $gridController
+     * @return null|DataGridRowTableTile|DataGridTile
+     */
     public function createDataGridTileByRequest(Request $request, $menuId, DataGridAbstractController $gridController) {
         $dataGridInputState = $this->initStateByRequest($request, $gridController->getReferenceDTO());
         $fgeaFilter = $this->createFgeaFilter($dataGridInputState);
@@ -47,6 +57,11 @@ class DataGridHandler {
         return $this->createDataGridTile($menuId, $dataGridInputState, $sourceDTOs, $totalAmountOfRows, $gridController);
     }
 
+    /**
+     * @param $menuId
+     * @param DataGridAbstractController $gridController
+     * @return DataGridEmbeddedTile
+     */
     public function createEmbeddedDataGridTile($menuId, DataGridAbstractController $gridController) {
         $headers = $this->createHeaderArray($gridController->getReferenceDTO());
         $outputState = DataGridOutputState::createEmbeddedOutputState($menuId, $gridController->getGridIdentifier(), $headers, $gridController->getDataSrcUrl());
@@ -55,6 +70,11 @@ class DataGridHandler {
         return $embeddedTile;
     }
 
+    /**
+     * @param Request $request
+     * @param DataGridSourceClass $referenceDTO
+     * @return DataGridInputState
+     */
     protected function initStateByRequest(Request $request, DataGridSourceClass $referenceDTO) {
         $page = $request->get('page');
         $limit = $request->get('limit');
@@ -66,6 +86,14 @@ class DataGridHandler {
         return new DataGridInputState($referenceDTO, $orderByField, $orderByDirection, $correctedPage, $limit, $filterstr, $partial);
     }
 
+    /**
+     * @param $menuId
+     * @param DataGridInputState $state
+     * @param array $sourceDtos
+     * @param $totalAmountOfRows
+     * @param DataGridAbstractController $gridController
+     * @return null|DataGridRowTableTile|DataGridTile
+     */
     protected function createDataGridTile(
         $menuId, DataGridInputState $state, array $sourceDtos, $totalAmountOfRows, DataGridAbstractController $gridController) {
         $rows = $this->createRowsArray($sourceDtos);
@@ -84,6 +112,11 @@ class DataGridHandler {
         return $returnTile;
     }
 
+    /**
+     * @param DataGridInputState $state
+     * @return GenericEntityFilter
+     * @throws \Exception
+     */
     public function createFgeaFilter(DataGridInputState $state) {
         $filter = new GenericEntityFilter($state->getSourceDTO()->getAccessQuery());
         $properties = $this->createEntityPropertiesArray($state->getSourceDTO());
@@ -109,6 +142,11 @@ class DataGridHandler {
         return $filter;
     }
 
+    /**
+     * @param DataGridSourceClass $sourceClassInstance
+     * @return array
+     * @throws \Exception
+     */
     protected function createEntityPropertiesArray(DataGridSourceClass $sourceClassInstance) {
         $sourceReflectionObject = new \ReflectionClass($sourceClassInstance);
         $properties = array();
@@ -131,6 +169,11 @@ class DataGridHandler {
         return $properties;
     }
 
+    /**
+     * @param DataGridSourceClass $sourceClassInstance
+     * @return array
+     * @throws \Exception
+     */
     protected function createHeaderArray(DataGridSourceClass $sourceClassInstance) {
         $sourceReflectionObject = new \ReflectionClass($sourceClassInstance);
         $headers = array();
@@ -149,6 +192,10 @@ class DataGridHandler {
         return $headers;
     }
 
+    /**
+     * @param array $sourceArray
+     * @return array
+     */
     protected function createRowsArray(array $sourceArray) {
         $rowsArray = array();
         foreach($sourceArray as $rowSource) {
@@ -157,6 +204,11 @@ class DataGridHandler {
         return $rowsArray;
     }
 
+    /**
+     * @param DataGridSourceClass $source
+     * @return DataGridRow
+     * @throws \Exception
+     */
     protected function createRow(DataGridSourceClass $source) {
         $sourceReflectionObject = new \ReflectionClass($source);
         $rowId = null;
@@ -179,10 +231,16 @@ class DataGridHandler {
         return $row;
     }
 
+    /**
+     * @param FileCacheReader $reader
+     */
     public function setReader(FileCacheReader $reader) {
         $this->annotationReader = $reader;
     }
 
+    /**
+     * @param Router $router
+     */
     public function setRouter(Router $router) {
         $this->router = $router;
     }
