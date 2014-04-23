@@ -95,7 +95,7 @@ class PassengerType extends PersonType {
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver) {
         $resolver->setDefaults(array(
-            'data_class' => 'Tixi\ApiBundle\Interfaces\PassengerRegisterDTO'
+            'data_class' => 'Tixi\ApiBundle\Interfaces\PassengerRegisterDTO',
         ));
     }
 }

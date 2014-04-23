@@ -6,7 +6,7 @@
             {{ form_label(form, null, {'label_attr': {'class':'col-md-2 control-label'}}) }}
             <div class="col-md-10">
                 {{ form_widget(form) }}
-                <p class="help-block">{{ form_errors(form) }}</p>
+                <div class="error_message">{{ form_errors(form) }}</div>
             </div>
         </div>
     {% endspaceless %}

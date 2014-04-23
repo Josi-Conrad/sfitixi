@@ -29,8 +29,8 @@ class ServicePlanAssembler {
      */
     public function registerDTOtoNewServicePlan(ServicePlanRegisterDTO $servicePlanDTO) {
         $servicePlan = ServicePlan::registerServicePlan(
-            $servicePlanDTO->startDate,
-            $servicePlanDTO->endDate,
+            $servicePlanDTO->start,
+            $servicePlanDTO->end,
             $servicePlanDTO->memo
         );
         return $servicePlan;
@@ -43,8 +43,8 @@ class ServicePlanAssembler {
      */
     public function registerDTOtoServicePlan(ServicePlanRegisterDTO $servicePlanDTO, ServicePlan $servicePlan) {
         $servicePlan->updateServicePlanData(
-            $servicePlanDTO->startDate,
-            $servicePlanDTO->endDate,
+            $servicePlanDTO->start,
+            $servicePlanDTO->end,
             $servicePlanDTO->memo
         );
         return $servicePlan;
@@ -57,10 +57,10 @@ class ServicePlanAssembler {
     public function toServicePlanRegisterDTO(ServicePlan $servicePlan) {
         $servicePlanDTO = new ServicePlanRegisterDTO();
         $servicePlanDTO->id = $servicePlan->getId();
-        $servicePlanDTO->startDate =
-            $this->dateTimeService->convertToLocalDateTime($servicePlan->getStartDate());
-        $servicePlanDTO->endDate =
-            $this->dateTimeService->convertToLocalDateTime($servicePlan->getEndDate());
+        $servicePlanDTO->start =
+            $this->dateTimeService->convertToLocalDateTime($servicePlan->getStart());
+        $servicePlanDTO->end =
+            $this->dateTimeService->convertToLocalDateTime($servicePlan->getEnd());
         $servicePlanDTO->memo = $servicePlan->getMemo();
         return $servicePlanDTO;
     }
@@ -85,10 +85,10 @@ class ServicePlanAssembler {
         $servicePlanEmbeddedListDTO = new ServicePlanEmbeddedListDTO();
         $servicePlanEmbeddedListDTO->id = $servicePlan->getId();
         $servicePlanEmbeddedListDTO->vehicleId = $servicePlan->getVehicle()->getId();
-        $servicePlanEmbeddedListDTO->startDate =
-            $this->dateTimeService->convertToLocalDateTimeString($servicePlan->getStartDate());
-        $servicePlanEmbeddedListDTO->endDate =
-            $this->dateTimeService->convertToLocalDateTimeString($servicePlan->getEndDate());
+        $servicePlanEmbeddedListDTO->start =
+            $this->dateTimeService->convertToLocalDateTimeString($servicePlan->getStart());
+        $servicePlanEmbeddedListDTO->end =
+            $this->dateTimeService->convertToLocalDateTimeString($servicePlan->getEnd());
         $servicePlanEmbeddedListDTO->memo = $servicePlan->getMemo();
         return $servicePlanEmbeddedListDTO;
     }

@@ -31,10 +31,10 @@ class ServicePlanRegisterFormViewTile extends AbstractFormViewTile{
 
     public function createFormRows()
     {
-        $this->basicFormRows[] = new FormRowView('startDate','serviceplan.field.startdate',
-            $this->dateTimeService->convertDateTimeToDateTimeString($this->dto->startDate));
-        $this->basicFormRows[] = new FormRowView('endDate','serviceplan.field.enddate',
-            $this->dateTimeService->convertDateTimeToDateTimeString($this->dto->endDate));
+        $this->basicFormRows[] = new FormRowView('startDate','serviceplan.field.start',
+            $this->dateTimeService->convertDateTimeToDateTimeString($this->dto->start));
+        $this->basicFormRows[] = new FormRowView('endDate','serviceplan.field.end',
+            $this->dateTimeService->convertDateTimeToDateTimeString($this->dto->end));
         $this->basicFormRows[] = new FormRowView('memo','serviceplan.field.memo',$this->dto->memo);
     }
 }

@@ -8,11 +8,11 @@
 
 namespace Tixi\ApiBundle\Interfaces;
 
-use Symfony\Component\Validator\Constraints as Assert;
-
+use Tixi\ApiBundle\Interfaces\Validators as Valid;
 /**
  * Class PersonRegisterDTO
  * @package Tixi\ApiBundle\Interfaces
+ * @Valid\PersonRegisterConstraint
  */
 class PersonRegisterDTO extends AddressRegisterDTO {
     //Person

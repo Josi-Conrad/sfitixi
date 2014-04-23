@@ -8,14 +8,16 @@
 
 namespace Tixi\ApiBundle\Interfaces;
 
+use Tixi\ApiBundle\Interfaces\Validators as Valid;
 /**
  * Class ServicePlanRegisterDTO
  * @package Tixi\ApiBundle\Interfaces
+ * @Valid\ServicePlanRegisterConstraint
  */
 class ServicePlanRegisterDTO {
     public $id;
-    public $startDate;
-    public $endDate;
+    public $start;
+    public $end;
     public $memo;
 }
 

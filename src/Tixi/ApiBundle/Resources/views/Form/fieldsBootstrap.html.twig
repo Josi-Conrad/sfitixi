@@ -8,14 +8,28 @@
     <div class="row">
         <div class="col-md-8">
             {{ form_widget(form.date, {'id' : id ~ '_date'}) }}
-          </div>
-          <div class="col-md-4">
-            {{ form_widget(form.time, {'id' : id ~ '_time'}) }}
+        </div>
+        <div class="col-md-4">
+            {{ form_widget(form.time) }}
         </div>
     </div>
 {% endblock dateTimePicker_widget %}
 
 {####### Customized default types #######}
+{% block form_row %}
+    {% spaceless %}
+        <div class="row">
+            <div class="form-group">
+                {{ form_label(form, null, {'label_attr': {'class':'col-md-4 control-label' }}) }}
+                <div class="col-md-8">
+                    <div>{{ form_widget(form) }}</div>
+                    <div class="error_message">{{ form_errors(form) }}</div>
+                </div>
+            </div>
+        </div>
+    {% endspaceless %}
+{% endblock form_row %}
+
 {% block form_widget_simple %}
     {% spaceless %}
         {% set type = type|default('text') %}
@@ -30,20 +44,6 @@
         <textarea {{ block('widget_attributes') }}>{{ value }}</textarea>
     {% endspaceless %}
 {% endblock textarea_widget %}
-
-{% block form_row %}
-    {% spaceless %}
-        <div class="row">
-            <div class="form-group">
-                {{ form_label(form, null, {'label_attr': {'class':'col-md-4 control-label' }}) }}
-                <div class="col-md-8">
-                    {{ form_widget(form) }}
-                    <p class="help-block">{{ form_errors(form) }}</p>
-                </div>
-            </div>
-        </div>
-    {% endspaceless %}
-{% endblock form_row %}
 
 {% block submit_widget %}
     <div class="row">

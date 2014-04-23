@@ -17,7 +17,6 @@ use Tixi\CoreDomain\Shared\CommonBaseEntity;
  * @ORM\Table(name="serviceplan")
  */
 class ServicePlan extends CommonBaseEntity {
-
     /**
      * @ORM\Id
      * @ORM\Column(name="id", type="bigint")
@@ -32,11 +31,11 @@ class ServicePlan extends CommonBaseEntity {
     /**
      * @ORM\Column(type="utcdatetime")
      */
-    protected $startDate;
+    protected $start;
     /**
      * @ORM\Column(type="utcdatetime")
      */
-    protected $endDate;
+    protected $end;
     /**
      * @ORM\Column(type="text", nullable=true)
      */
@@ -47,25 +46,30 @@ class ServicePlan extends CommonBaseEntity {
     }
 
     /**
-     * @param $startDate
-     * @param $endDate
+     * @param $start
+     * @param $end
      * @param null $memo
      * @return ServicePlan
      */
-    public static function registerServicePlan($startDate, $endDate, $memo = null) {
+    public static function registerServicePlan($start, $end, $memo = null) {
         $servicePlan = new ServicePlan();
-        $servicePlan->setStartDate($startDate);
-        $servicePlan->setEndDate($endDate);
+        $servicePlan->setStart($start);
+        $servicePlan->setEnd($end);
         $servicePlan->setMemo($memo);
         return $servicePlan;
     }
 
-    public function updateServicePlanData($startDate = null, $endDate = null, $memo = null) {
-        if (!empty($startDate)) {
-            $this->setStartDate($startDate);
+    /**
+     * @param null $start
+     * @param null $end
+     * @param null $memo
+     */
+    public function updateServicePlanData($start = null, $end = null, $memo = null) {
+        if (!empty($start)) {
+            $this->setStart($start);
         }
-        if (!empty($endDate)) {
-            $this->setEndDate($endDate);
+        if (!empty($end)) {
+            $this->setEnd($end);
         }
         $this->setMemo($memo);
     }
@@ -82,17 +86,17 @@ class ServicePlan extends CommonBaseEntity {
     }
 
     /**
-     * @param mixed $endDate
+     * @param mixed $end
      */
-    public function setEndDate($endDate) {
-        $this->endDate = $endDate;
+    public function setEnd($end) {
+        $this->end = $end;
     }
 
     /**
      * @return mixed
      */
-    public function getEndDate() {
-        return $this->endDate;
+    public function getEnd() {
+        return $this->end;
     }
 
     /**
@@ -124,17 +128,17 @@ class ServicePlan extends CommonBaseEntity {
     }
 
     /**
-     * @param mixed $startDate
+     * @param mixed $start
      */
-    public function setStartDate($startDate) {
-        $this->startDate = $startDate;
+    public function setStart($start) {
+        $this->start = $start;
     }
 
     /**
      * @return \DateTime
      */
-    public function getStartDate() {
-        return $this->startDate;
+    public function getStart() {
+        return $this->start;
     }
 
     /**

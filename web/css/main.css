@@ -106,3 +106,14 @@ form .required::after {
     content: ' *';
 }
 
+.error_message{
+    color:#c9302c;
+}
+
+.offset-r{
+    padding-right: 0;
+}
+
+.offset-l{
+    padding-left: 0;
+}

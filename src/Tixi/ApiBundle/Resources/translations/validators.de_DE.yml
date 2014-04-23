@@ -10,3 +10,6 @@ field.not_digit: Bitte geben Sie eine Zahl ein
 field.not_selected: Auswahl erforderlich
 field.telephone: Bitte geben Sie eine gültige Telefonnummer ein
 
+valid.birthday_in_future: Das Geburtsdatum kann nicht in der Zukunft liegen
+valid.start_before_end: Start muss vor oder gleich dem Ende sein
+valid.startdate_before_enddate: Start Datum muss vor oder gleich dem End Datum sein

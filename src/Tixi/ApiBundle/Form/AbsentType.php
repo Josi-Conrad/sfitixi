@@ -47,7 +47,7 @@ class AbsentType extends CommonAbstractType{
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Tixi\ApiBundle\Interfaces\AbsentRegisterDTO'
+            'data_class' => 'Tixi\ApiBundle\Interfaces\AbsentRegisterDTO',
         ));
     }
 }

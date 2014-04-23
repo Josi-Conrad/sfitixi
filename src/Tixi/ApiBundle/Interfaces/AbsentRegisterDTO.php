@@ -8,9 +8,11 @@
 
 namespace Tixi\ApiBundle\Interfaces;
 
+use Tixi\ApiBundle\Interfaces\Validators as Valid;
 /**
  * Class AbsentRegisterDTO
  * @package Tixi\ApiBundle\Interfaces
+ * @Valid\AbsentRegisterConstraint
  */
 class AbsentRegisterDTO {
     public $id;

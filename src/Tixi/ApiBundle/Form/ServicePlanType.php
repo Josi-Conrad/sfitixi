@@ -29,16 +29,16 @@ class ServicePlanType extends CommonAbstractType{
     {
         $builder->add('id', 'hidden');
 
-        $builder->add('startDate', 'dateTimePicker', array(
-            'label' => 'serviceplan.field.startdate',
+        $builder->add('start', 'dateTimePicker', array(
+            'label' => 'serviceplan.field.start',
             'pattern' => '^(0[1-9]|[1|2][0-9]|3[0|1]).(0[1-9]|1[0|1|2]).(19|20)\d\d$',
             'constraints' => array(
                 new DateTime(),
                 new NotBlank(array('message'=>'serviceplan.date.not_blank'))
             ),
         ));
-        $builder->add('endDate', 'dateTimePicker', array(
-            'label' => 'serviceplan.field.enddate',
+        $builder->add('end', 'dateTimePicker', array(
+            'label' => 'serviceplan.field.end',
             'pattern' => '^(0[1-9]|[1|2][0-9]|3[0|1]).(0[1-9]|1[0|1|2]).(19|20)\d\d$',
             'constraints' => array(
                 new DateTime(),
@@ -67,7 +67,7 @@ class ServicePlanType extends CommonAbstractType{
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Tixi\ApiBundle\Interfaces\ServicePlanRegisterDTO'
+            'data_class' => 'Tixi\ApiBundle\Interfaces\ServicePlanRegisterDTO',
         ));
     }
 }

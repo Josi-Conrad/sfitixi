@@ -25,12 +25,10 @@ class DateTimePickerType extends AbstractType {
         $builder
             ->add('date', 'datePicker', array(
                 'input' => 'datetime',
-                'error_bubbling' => true
             ))
             ->add('time', 'time', array(
                 'input' => 'datetime',
                 'widget' => 'single_text',
-                'error_bubbling' => true
             ));
 
         $builder->addModelTransformer(new DateTimeArrayTransformer());

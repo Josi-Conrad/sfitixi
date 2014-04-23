@@ -2320,7 +2320,7 @@ INSERT INTO `person` (`discr`,`isActive`,`address_id`,`title`,`firstname`,`lastn
 /*
 insert_serviceplan
 */
-INSERT INTO `serviceplan` (`id`,`vehicle_id`,`startDate`,`endDate`,`memo`)
+INSERT INTO `serviceplan` (`id`,`vehicle_id`,`start`,`end`,`memo`)
 VALUES (1,1,'2014-04-16 22:00:00','2014-04-22 22:00:00','jährliche Service'),
 (2,1,'2014-07-04 22:00:00','2014-07-11 22:00:00','test2'),
 (3,1,'2013-12-31 23:00:00','2014-03-31 22:00:00','alter Service');
