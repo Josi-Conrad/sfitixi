@@ -11,7 +11,6 @@ function FormValidationController(formId) {
         _this._form = $('#' + formId);
         _this._initCorrespondingSubmitButton();
         _this._initListeners();
-        _this._setConfirmUnload(true);
     }
 
     this._initCorrespondingSubmitButton = function () {
@@ -31,16 +30,24 @@ function FormValidationController(formId) {
                     if (!this.checkValidity()) {
                         event.preventDefault();
                         $(this).addClass('invalid');
-                        _this._setConfirmUnload(true);
                         _this._isInvalid = true;
                     } else {
                         $(this).removeClass('invalid');
-                        _this._setConfirmUnload(false);
                         _this._isInvalid = false;
                     }
                 });
             }
             (_this._form).submit();
+        });
+        _this._initFormChangeListener();
+    }
+
+    //when a form value has changed, the user should be informed when leaving page without saving
+    this._initFormChangeListener = function() {
+        $(_this._form).find('input').each(function() {
+            $(this).change(function() {
+                _this._setConfirmUnload();
+            });
         });
     }
 
@@ -48,12 +55,10 @@ function FormValidationController(formId) {
         return typeof document.createElement('input').checkValidity === 'function';
     }
 
-    this._setConfirmUnload = function (on) {
-        window.onbeforeunload = (on) ? _this._unloadMessage : null;
-    }
-
-    this._unloadMessage = function () {
-        return 'iTixi';
+    this._setConfirmUnload = function () {
+        $(window).on('beforeunload', function() {
+            return '';
+        });
     }
 
     _this.init();
