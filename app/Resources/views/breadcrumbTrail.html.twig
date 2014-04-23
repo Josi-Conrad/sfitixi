@@ -5,7 +5,7 @@
 
             {% set class = (loop.first ? 'home' : (loop.last ? 'current' : '')) %}
 
-            <li {% if breadcrumb.url is null or loop.last %}id="fpr_breadcrumb_{{ breadcrumb.title }}"{% endif %} {% for attr,value in breadcrumb.attributes -%}
+            <li {% if breadcrumb.url is null or loop.last %}id="fpr_breadcrumb_{{breadcrumb.title|trans|replace({' ':''}) }}"{% endif %} {% for attr,value in breadcrumb.attributes -%}
             {%- if attr == 'class' %}{% set value = value ~ ' ' ~ class %}{% endif -%}
             {{ attr }}="{{ value }}"
         {%- endfor %}
@@ -13,7 +13,7 @@
             {%- if breadcrumb.url is null or loop.last -%}
                 {{ breadcrumb.title|trans }}
             {%- else -%}
-                <a id="fpx_breadcrumb_{{ breadcrumb.title }}" href="{{ breadcrumb.url }}">{{ breadcrumb.title|trans }}</a>
+                <a id="fpx_breadcrumb_{{breadcrumb.title|trans|replace({' ':''}) }}" href="{{ breadcrumb.url }}">{{ breadcrumb.title|trans }}</a>
             {%- endif -%}
             </li>
         {% endfor %}
