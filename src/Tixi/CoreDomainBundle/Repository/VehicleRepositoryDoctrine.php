@@ -10,6 +10,7 @@ namespace Tixi\CoreDomainBundle\Repository;
 
 use Tixi\CoreDomain\Vehicle;
 use Tixi\CoreDomain\VehicleCategory;
+use Tixi\CoreDomain\VehicleDepot;
 use Tixi\CoreDomain\VehicleRepository;
 
 /**
@@ -35,11 +36,27 @@ class VehicleRepositoryDoctrine extends CommonBaseRepositoryDoctrine implements 
         $this->getEntityManager()->remove($vehicle);
     }
 
+    /**
+     * @param VehicleCategory $category
+     * @return mixed
+     */
     public function getAmountByVehicleCategory(VehicleCategory $category)
     {
         $qb = parent::createQueryBuilder('e')->select('count(e.id)');
         $qb->add('where', 'e.category = :category');
         $qb->setParameter('category', $category);
+        return $qb->getQuery()->getSingleScalarResult();
+    }
+
+    /**
+     * @param VehicleDepot $depot
+     * @return mixed
+     */
+    public function getAmountByVehicleDepot(VehicleDepot $depot)
+    {
+        $qb = parent::createQueryBuilder('e')->select('count(e.id)');
+        $qb->add('where', 'e.depot = :depot');
+        $qb->setParameter('depot', $depot);
         return $qb->getQuery()->getSingleScalarResult();
     }
 }

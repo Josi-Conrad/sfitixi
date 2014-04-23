@@ -20,6 +20,7 @@ use Tixi\ApiBundle\Interfaces\Management\VehicleDepotRegisterDTO;
 use Tixi\ApiBundle\Menu\MenuService;
 use Tixi\ApiBundle\Tile\Core\FormTile;
 use Tixi\ApiBundle\Tile\Core\PanelDeleteFooterTile;
+use Tixi\ApiBundle\Tile\Core\ReferentialConstraintErrorTile;
 use Tixi\ApiBundle\Tile\Core\RootPanel;
 
 /**
@@ -56,10 +57,10 @@ class VehicleDepotController extends Controller {
         $dataGridTile = $dataGridHandler->createDataGridTileByRequest($request, $this->menuId, $gridController);
 
         $rootPanel = null;
-        if(!$embeddedState && !$isPartial) {
+        if (!$embeddedState && !$isPartial) {
             $rootPanel = new RootPanel($this->menuId, 'vehicledepot.list.name');
             $rootPanel->add($dataGridTile);
-        }else {
+        } else {
             $rootPanel = $dataGridTile;
         }
 
@@ -74,11 +75,20 @@ class VehicleDepotController extends Controller {
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function deleteVehicleDepotAction(Request $request, $vehicleDepotId) {
+        $tileRenderer = $this->get('tixi_api.tilerenderer');
         $vehicleDepot = $this->getVehicleDepot($vehicleDepotId);
-        $vehicleDepot->deleteLogically();
-        $this->get('entity_manager')->flush();
+        $vehicleRepository = $this->get('vehicle_repository');
+        $usageAmount = $vehicleRepository->getAmountByVehicleDepot($vehicleDepot);
+        if ($usageAmount > 0) {
+            $rootPanel = new RootPanel($this->menuId, 'error.refintegrity.header.name');
+            $rootPanel->add(new ReferentialConstraintErrorTile($usageAmount));
+            return new Response($tileRenderer->render($rootPanel));
+        } else {
+            $vehicleDepot->deleteLogically();
+            $this->get('entity_manager')->flush();
 
-        return $this->redirect($this->generateUrl('tixiapi_management_vehicledepots_get'));
+            return $this->redirect($this->generateUrl('tixiapi_management_vehicledepots_get'));
+        }
     }
 
     /**
@@ -131,7 +141,7 @@ class VehicleDepotController extends Controller {
         }
         $rootPanel = new RootPanel($this->menuId, 'vehicledepot.panel.edit');
         $rootPanel->add(new FormTile($form, true));
-        $rootPanel->add(new PanelDeleteFooterTile($this->generateUrl('tixiapi_management_vehicledepot_delete', array('vehicleDepotId' => $vehicleDepotId)),'vehicledepot.button.delete'));
+        $rootPanel->add(new PanelDeleteFooterTile($this->generateUrl('tixiapi_management_vehicledepot_delete', array('vehicleDepotId' => $vehicleDepotId)), 'vehicledepot.button.delete'));
 
         return new Response($tileRenderer->render($rootPanel));
     }
@@ -165,12 +175,12 @@ class VehicleDepotController extends Controller {
         $addressRepository = $this->get('address_repository');
         $vehicleDepotRepository = $this->get('vehicledepot_repository');
 
-        if(null === $dto->id) {
+        if (null === $dto->id) {
             $vehicleDepot = $assembler->registerDTOtoNewVehicleDepot($dto);
             $addressRepository->store($vehicleDepot->getAddress());
             $vehicleDepotRepository->store($vehicleDepot);
             return $vehicleDepot;
-        }else {
+        } else {
             $vehicleDepot = $this->getVehicleDepot($dto->id);
             $assembler->registerDTOtoVehicleDepot($vehicleDepot, $dto);
             return $vehicleDepot;

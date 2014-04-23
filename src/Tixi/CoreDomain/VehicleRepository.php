@@ -29,5 +29,15 @@ interface VehicleRepository extends CommonBaseRepository{
      */
     public function remove(Vehicle $vehicle);
 
+    /**
+     * @param VehicleCategory $category
+     * @return mixed
+     */
     public function getAmountByVehicleCategory(VehicleCategory $category);
-} 
+
+    /**
+     * @param VehicleDepot $depot
+     * @return mixed
+     */
+    public function getAmountByVehicleDepot(VehicleDepot $depot);
+}

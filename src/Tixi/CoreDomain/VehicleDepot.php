@@ -109,6 +109,9 @@ class VehicleDepot extends CommonBaseEntity {
         return $this->vehicles;
     }
 
+    /**
+     * @return mixed
+     */
     public function getNameString() {
         return $this->name;
     }
