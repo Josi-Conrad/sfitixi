@@ -31,11 +31,11 @@ class RepeatedDrivingAssertionType extends CommonAbstractType{
             'attr'=>array('title' => 'form.field.title.not_blank'),
             'label' => 'repeateddrivingmission.field.memo'
         ));
-        $builder->add('anchorDate', new DatePickerType(), array(
+        $builder->add('anchorDate', 'datePicker', array(
             'attr'=>array('title' => 'form.field.title.date'),
             'label' => 'repeateddrivingmission.field.anchordate'
         ));
-        $builder->add('endDate', new DatePickerType(), array(
+        $builder->add('endDate', 'datePicker', array(
             'required'  => false,
             'label' => 'repeateddrivingmission.field.endDate'
         ));

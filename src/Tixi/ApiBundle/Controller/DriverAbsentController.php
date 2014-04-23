@@ -119,7 +119,7 @@ class DriverAbsentController extends Controller {
         $tileRenderer = $this->get('tixi_api.tilerenderer');
 
         $driver = $this->getDriver($driverId);
-        $form = $this->getForm();
+        $form = $this->getForm(new AbsentRegisterDTO());
         $form->handleRequest($request);
         if ($form->isValid()) {
             $absentDTO = $form->getData();

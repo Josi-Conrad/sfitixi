@@ -8,6 +8,7 @@
 
 namespace Tixi\CoreDomain;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Tixi\CoreDomain\Shared\CommonBaseEntity;
 
@@ -38,7 +39,6 @@ class VehicleCategory extends CommonBaseEntity {
      */
     protected $amountOfWheelChairs;
 
-
     /**
      * @ORM\OneToMany(targetEntity="Vehicle", mappedBy="category")
      */
@@ -46,8 +46,15 @@ class VehicleCategory extends CommonBaseEntity {
 
     protected  function __construct() {
         parent::__construct();
+        $this->vehicles = new ArrayCollection();
     }
 
+    /**
+     * @param $name
+     * @param $amountOfSeats
+     * @param null $amountOfWheelChairs
+     * @return VehicleCategory
+     */
     public static function registerVehicleCategory($name, $amountOfSeats, $amountOfWheelChairs = null) {
         $vehicleCategory = new VehicleCategory();
 
@@ -131,5 +138,12 @@ class VehicleCategory extends CommonBaseEntity {
      */
     public function getName() {
         return $this->name;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getVehicles() {
+        return $this->vehicles;
     }
 }

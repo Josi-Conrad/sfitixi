@@ -59,9 +59,9 @@ class ServicePlanController extends Controller {
         $dataGridTile = $dataGridHandler->createDataGridTileByRequest($request, $this->menuId, $gridController);
 
         $rootPanel = null;
-        if(!$embeddedState && !$isPartial) {
+        if (!$embeddedState && !$isPartial) {
             // doesn't exist at the moment
-        }else {
+        } else {
             $rootPanel = $dataGridTile;
         }
 
@@ -90,9 +90,9 @@ class ServicePlanController extends Controller {
 
         $rootPanel->add(new ServicePlanRegisterFormViewTile($dateTimeService, 'servicePlanRequest', $servicePlanDTO,
             $this->generateUrl('tixiapi_serviceplan_edit',
-                array('vehicleId' => $vehicleId, 'servicePlanId' => $servicePlanId)),true));
+                array('vehicleId' => $vehicleId, 'servicePlanId' => $servicePlanId)), true));
         $rootPanel->add(new PanelDeleteFooterTile($this->generateUrl('tixiapi_serviceplan_delete',
-            array('vehicleId' => $vehicleId, 'servicePlanId'=>$servicePlanId)),'serviceplan.button.delete'));
+            array('vehicleId' => $vehicleId, 'servicePlanId' => $servicePlanId)), 'serviceplan.button.delete'));
 
         return new Response($tileRenderer->render($rootPanel));
     }
@@ -110,7 +110,7 @@ class ServicePlanController extends Controller {
         $servicePlan->deleteLogically();
         $this->get('entity_manager')->flush();
 
-        return $this->redirect($this->generateUrl('tixiapi_vehicle_get',array('vehicleId' => $vehicleId)));
+        return $this->redirect($this->generateUrl('tixiapi_vehicle_get', array('vehicleId' => $vehicleId)));
     }
 
     /**
@@ -126,7 +126,7 @@ class ServicePlanController extends Controller {
         $tileRenderer = $this->get('tixi_api.tilerenderer');
 
         $vehicle = $this->getVehicle($vehicleId);
-        $form = $this->getForm();
+        $form = $this->getForm(new ServicePlanRegisterDTO());
         $form->handleRequest($request);
         if ($form->isValid()) {
             $servicePlanDTO = $form->getData();
@@ -159,7 +159,7 @@ class ServicePlanController extends Controller {
         $vehicle = $this->getVehicle($vehicleId);
         $servicePlanDTO = $servicePlanAssembler->toServicePlanRegisterDTO($servicePlan);
 
-        $form = $this->getForm(null, $servicePlanDTO);
+        $form = $this->getForm($servicePlanDTO);
         $form->handleRequest($request);
         if ($form->isValid()) {
             $servicePlanDTO = $form->getData();
@@ -171,7 +171,7 @@ class ServicePlanController extends Controller {
         $rootPanel = new RootPanel('tixiapi_vehicles_get', 'serviceplan.panel.edit');
         $rootPanel->add(new FormTile($form, true));
         $rootPanel->add(new PanelDeleteFooterTile($this->generateUrl('tixiapi_serviceplan_delete',
-            array('vehicleId' => $vehicleId, 'servicePlanId'=>$servicePlanId)),'serviceplan.button.delete'));
+            array('vehicleId' => $vehicleId, 'servicePlanId' => $servicePlanId)), 'serviceplan.button.delete'));
         return new Response($tileRenderer->render($rootPanel));
     }
 
@@ -197,7 +197,7 @@ class ServicePlanController extends Controller {
      * @param string $method
      * @return \Symfony\Component\Form\Form
      */
-    protected function getForm($targetRoute = null, $servicePlanDTO = null, $parameters = array(), $method = 'POST') {
+    protected function getForm($servicePlanDTO = null, $targetRoute = null, $parameters = array(), $method = 'POST') {
         $options = array();
         if ($targetRoute) {
             $options['action'] = $this->generateUrl($targetRoute, $parameters);
@@ -219,6 +219,7 @@ class ServicePlanController extends Controller {
         }
         return $servicePlan;
     }
+
     /**
      * @param $vehicleId
      * @return null|object

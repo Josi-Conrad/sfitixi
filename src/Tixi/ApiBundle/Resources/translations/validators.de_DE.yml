@@ -12,4 +12,6 @@ field.telephone: Bitte geben Sie eine gültige Telefonnummer ein
 
 valid.birthday_in_future: Das Geburtsdatum kann nicht in der Zukunft liegen
 valid.start_before_end: Start muss vor oder gleich dem Ende sein
-valid.startdate_before_enddate: Start Datum muss vor oder gleich dem End Datum sein
+valid.startdate_before_enddate: Start-Datum muss vor dem End-Datum sein
+valid.anchordate_before_enddate: Ab-Datum muss vor dem Bis-Datum sein
+valid.enddate_weekly: Von - Bis muss mindestens eine Woche betreffen

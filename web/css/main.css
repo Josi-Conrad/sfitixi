@@ -107,7 +107,7 @@ form .required::after {
 }
 
 .error_message{
-    color:#c9302c;
+    color:#d9534f;
 }
 
 .offset-r{

@@ -1,105 +1,107 @@
 <div class="col-md-12">
-<div class="row text-right">
-    {% for resolvedElement in children %}
-        {% if 'formcontrol' in resolvedElement.viewIndentifiers %}
-            {{ resolvedElement.rawData | raw }}
-        {% endif %}
-    {% endfor %}
-</div>
+    <div class="row text-right">
+        {% for resolvedElement in children %}
+            {% if 'formcontrol' in resolvedElement.viewIndentifiers %}
+                {{ resolvedElement.rawData | raw }}
+            {% endif %}
+        {% endfor %}
+    </div>
 
+    {% form_theme form 'TixiApiBundle:Form:fieldsRepeatedDrivingAssertionBootstrap.html.twig' %}
 
-{% form_theme form 'TixiApiBundle:Form:fieldsRepeatedDrivingAssertionBootstrap.html.twig' %}
+    {{ form_start(form, {'attr':{'id':formId, 'class':'form-horizontal customForm'} }) }}
+    <div class="row">
+        <div class="error_message">{{ form_errors(form.memo) }}</div>
+        <div class="error_message">{{ form_errors(form.anchorDate) }}</div>
+        <div class="error_message">{{ form_errors(form.endDate) }}</div>
+        <div class="col-md-4">
+            <div class="row">
+                <div class="form-group">
+                    <div class="col-md-3">
+                        {{ form_label(form.memo, null, {'label_attr': {'style':'width:100%', 'class':'col-md-12 control-label' }}
+                        ) }}
+                    </div>
+                    <div class="col-md-8">
+                        {{ form_widget(form.memo, { 'attr': {'class': 'form-control'} }) }}
+                        <div class="error_message">{{ form_errors(form.memo) }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="row">
+                <div class="form-group">
+                    <div class="col-md-3">
+                        {{ form_label(form.anchorDate, null, {'label_attr': {'style':'width:100%', 'class':'control-label' }}
+                        ) }}
+                    </div>
+                    <div class="col-md-7">
+                        {{ form_widget(form.anchorDate, { 'attr': {'class': 'form-control'} }) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="row">
+                <div class="form-group">
+                    <div class="col-md-3">
+                        {{ form_label(form.endDate, null, {'label_attr': {'class':'control-label' }}) }}
+                    </div>
+                    <div class="col-md-7">
+                        {{ form_widget(form.endDate, { 'attr': {'class': 'form-control'} }) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="row">
+                <div class="col-md-10 col-lg-offset-2">
+                    {{ form_widget(form.frequency, { 'attr': {'class': 'form-control repeatedDrivingAssertionFrequencyControl'} }) }}
+                </div>
+            </div>
 
-{{ form_start(form, {'attr':{'id':formId, 'class':'form-horizontal customForm'} }) }}
-<div class="row">
-    <div class="col-md-4">
-        <div class="row">
-            <div class="form-group">
-                <div class="col-md-3">
-                    {{ form_label(form.memo, null, {'label_attr': {'style':'width:100%', 'class':'col-md-12 control-label'}}) }}
-                </div>
-                <div class="col-md-8">
-                    {{ form_widget(form.memo, { 'attr': {'class': 'form-control'} }) }}
-                    <p class="help-block">{{ form_errors(form.memo) }}</p>
-                </div>
+        </div>
+        <div class="col-md-2">
+            <div class="checkbox">
+                <label>
+                    {{ form_widget(form.withHolidays) }} {{ form_label(form.withHolidays) }}
+                </label>
             </div>
         </div>
     </div>
-    <div class="col-md-2">
-        <div class="row">
-            <div class="form-group">
-                <div class="col-md-3">
-                    {{ form_label(form.anchorDate, null, {'label_attr': {'style':'width:100%', 'class':'control-label'}}) }}
+    <div class="row weeklyPart">
+        <div class="col-md-4">
+            <div class="row">
+                <div class="col-md-12">
+                    <h4 class="text-muted">{{ 'repeateddrivingmission.weekdayselection.text' | trans }}</h4>
                 </div>
-                <div class="col-md-7">
-                    {{ form_widget(form.anchorDate, { 'attr': {'class': 'form-control'} }) }}
-                    <p class="help-block">{{ form_errors(form.anchorDate) }}</p>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-2">
-        <div class="row">
-            <div class="form-group">
-                <div class="col-md-3">
-                    {{ form_label(form.endDate, null, {'label_attr': {'class':'control-label'}}) }}
-                </div>
-                <div class="col-md-7">
-                    {{ form_widget(form.endDate, { 'attr': {'class': 'form-control'} }) }}
-                    <p class="help-block">{{ form_errors(form.endDate) }}</p>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-2">
-        <div class="row">
-            <div class="col-md-10 col-lg-offset-2">
-                {{ form_widget(form.frequency, { 'attr': {'class': 'form-control repeatedDrivingAssertionFrequencyControl'} }) }}
-            </div>
-        </div>
-
-    </div>
-    <div class="col-md-2">
-        <div class="checkbox">
-            <label>
-                {{ form_widget(form.withHolidays) }} {{ form_label(form.withHolidays) }}
-            </label>
-        </div>
-    </div>
-</div>
-<div class="row weeklyPart">
-    <div class="col-md-4">
-        <div class="row">
-            <div class="col-md-12">
-                <h4 class="text-muted">{{ 'repeateddrivingmission.weekdayselection.text' | trans }}</h4>
-            </div>
-            <div class="col-md-12">
-                <div class="weeklyDaySelection">
-                    {% for checkbox in form.weeklyDaysSelector %}
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="checkbox">
-                                    <label>
-                                        {{ form_widget(checkbox) }} {{ form_label(checkbox) }}
-                                    </label>
+                <div class="col-md-12">
+                    <div class="weeklyDaySelection">
+                        {% for checkbox in form.weeklyDaysSelector %}
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="checkbox">
+                                        <label>
+                                            {{ form_widget(checkbox) }} {{ form_label(checkbox) }}
+                                        </label>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    {% endfor %}
+                        {% endfor %}
+                    </div>
+                </div>
+
+                {#{{ form_row(form.weeklyDaysSelector) }}#}
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="row">
+                <div class="col-md-5">
+                    <h4 class="text-muted">{{ 'repeateddrivingmission.shiftselection.text' | trans }}</h4>
                 </div>
             </div>
-
-            {#{{ form_row(form.weeklyDaysSelector) }}#}
-        </div>
-    </div>
-    <div class="col-md-8">
-        <div class="row">
-            <div class="col-md-5">
-                <h4 class="text-muted">{{ 'repeateddrivingmission.shiftselection.text' | trans }}</h4>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-12">
                     <ul class="weeklyShiftSelections list-unstyled"
                         data-prototype="{{ form_widget(form.weeklyShiftSelections.vars.prototype)|e }}">
                         {% for selection in form.weeklyShiftSelections %}
@@ -111,86 +113,86 @@
                     </ul>
                     {{ form_widget(form.weeklyShiftSelections) }}
                 </div>
-        </div>
-        </div>
-    </div>
-<div class="row monthlyPart">
-    <div class="col-md-5">
-        <div class="row">
-            <div class="col-md-7">
-                <h4 class="text-muted">{{ 'repeateddrivingmission.weekdayselection.text' | trans }}</h4>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                {{ form_row(form.monthlyFirstWeeklySelector) }}
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                {{ form_row(form.monthlySecondWeeklySelector) }}
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                {{ form_row(form.monthlyThirdWeeklySelector) }}
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                {{ form_row(form.monthlyFourthWeeklySelector) }}
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                {{ form_row(form.monthlyLastWeeklySelector) }}
             </div>
         </div>
     </div>
-    <div class="col-md-7">
-        <div class="row">
-            <div class="col-md-5">
-                <h4 class="text-muted">{{ 'repeateddrivingmission.shiftselection.text' | trans }}</h4>
+    <div class="row monthlyPart">
+        <div class="col-md-5">
+            <div class="row">
+                <div class="col-md-7">
+                    <h4 class="text-muted">{{ 'repeateddrivingmission.weekdayselection.text' | trans }}</h4>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    {{ form_row(form.monthlyFirstWeeklySelector) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    {{ form_row(form.monthlySecondWeeklySelector) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    {{ form_row(form.monthlyThirdWeeklySelector) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    {{ form_row(form.monthlyFourthWeeklySelector) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    {{ form_row(form.monthlyLastWeeklySelector) }}
+                </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-12">
-                <ul class="monthlyShiftSelections list-unstyled"
-                    data-prototype="{{ form_widget(form.monthlyShiftSelections.vars.prototype)|e }}">
-                    {% for selection in form.monthlyShiftSelections %}
-                        <li>
-                            {{ form_errors(selection) }}
-                            {{ form_widget(selection) }}
-                        </li>
-                    {% endfor %}
-                </ul>
+        <div class="col-md-7">
+            <div class="row">
+                <div class="col-md-5">
+                    <h4 class="text-muted">{{ 'repeateddrivingmission.shiftselection.text' | trans }}</h4>
+                </div>
             </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <ul class="monthlyShiftSelections list-unstyled"
+                        data-prototype="{{ form_widget(form.monthlyShiftSelections.vars.prototype)|e }}">
+                        {% for selection in form.monthlyShiftSelections %}
+                            <li>
+                                {{ form_errors(selection) }}
+                                {{ form_widget(selection) }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            {{ form_widget(form.monthlyShiftSelections) }}
         </div>
-        {{ form_widget(form.monthlyShiftSelections) }}
     </div>
-</div>
-{{ form_end(form) }}
+    {{ form_end(form) }}
 </div>
 <script type="text/javascript" src="{{ asset('bundles/tixiapi/js/DrivingAssertion.js') }}"></script>
 <script type="text/javascript">
     jQuery(function ($) {
         var _repeatedDrivingController = new RepeatedDrivingAssertion(),
-            _trans = {
-                'monday': "{{ 'monday.name' | trans }}",
-                'tuesday': "{{ 'tuesday.name' | trans }}",
-                'wednesday': "{{ 'wednesday.name' | trans }}",
-                'thursday': "{{ 'thursday.name' | trans }}",
-                'friday': "{{ 'friday.name' | trans }}",
-                'saturday': "{{ 'saturday.name' | trans }}",
-                'sunday': "{{ 'sunday.name' | trans }}",
-                'firstweek.name': "{{ 'firstweek.name' | trans }}",
-                'secondweek.name': "{{ 'secondweek.name' | trans }}",
-                'thirdweek.name': "{{ 'thirdweek.name' | trans }}",
-                'fourthweek.name': "{{ 'fourthweek.name' | trans }}",
-                'lastweek.name': "{{ 'lastweek.name' | trans }}",
-                'repeateddrivingmission.everyweek.text': "{{ 'repeateddrivingmission.everyweek.text' | trans }}"
-            };
-        _repeatedDrivingController.init(_trans,'{{ frequency }}','{{ formId }}');
+                _trans = {
+                    'monday': "{{ 'monday.name' | trans }}",
+                    'tuesday': "{{ 'tuesday.name' | trans }}",
+                    'wednesday': "{{ 'wednesday.name' | trans }}",
+                    'thursday': "{{ 'thursday.name' | trans }}",
+                    'friday': "{{ 'friday.name' | trans }}",
+                    'saturday': "{{ 'saturday.name' | trans }}",
+                    'sunday': "{{ 'sunday.name' | trans }}",
+                    'firstweek.name': "{{ 'firstweek.name' | trans }}",
+                    'secondweek.name': "{{ 'secondweek.name' | trans }}",
+                    'thirdweek.name': "{{ 'thirdweek.name' | trans }}",
+                    'fourthweek.name': "{{ 'fourthweek.name' | trans }}",
+                    'lastweek.name': "{{ 'lastweek.name' | trans }}",
+                    'repeateddrivingmission.everyweek.text': "{{ 'repeateddrivingmission.everyweek.text' | trans }}"
+                };
+        _repeatedDrivingController.init(_trans, '{{ frequency }}', '{{ formId }}');
         new FormValidationController('{{ formId }}');
     });
 </script>

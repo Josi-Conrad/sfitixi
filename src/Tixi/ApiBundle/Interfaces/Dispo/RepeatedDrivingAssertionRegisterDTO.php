@@ -9,10 +9,12 @@
 namespace Tixi\ApiBundle\Interfaces\Dispo;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Tixi\ApiBundle\Interfaces\Validators as Valid;
 
 /**
  * Class RepeatedDrivingAssertionRegisterDTO
  * @package Tixi\ApiBundle\Interfaces\Dispo
+ * @Valid\RepeatedDrivingAssertionRegisterConstraint
  */
 class RepeatedDrivingAssertionRegisterDTO {
 
@@ -37,6 +39,7 @@ class RepeatedDrivingAssertionRegisterDTO {
     public $monthlyShiftSelections;
 
     public function __construct() {
+        $this->anchorDate = new \DateTime('today');
         $this->weeklyDaysSelector = array();
         $this->monthlyFirstWeeklySelector = array();
         $this->monthlySecondWeeklySelector = array();
