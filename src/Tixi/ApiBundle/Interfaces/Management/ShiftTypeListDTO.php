@@ -22,6 +22,10 @@ class ShiftTypeListDTO implements DataGridSourceClass{
      */
     public $id;
     /**
+     * @GridField(propertyId="ShiftType.isDeleted", restrictive=true)
+     */
+    public $isDeleted = 'false';
+    /**
      * @GridField(propertyId="ShiftType.name", headerName="shifttype.field.name", order=1)
      */
     public $name;

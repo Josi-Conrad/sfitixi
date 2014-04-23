@@ -10,6 +10,7 @@ namespace Tixi\CoreDomain\Dispo;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Tixi\CoreDomain\Shared\CommonBaseEntity;
 
 /**
  * Tixi\CoreDomain\Dispo\ShiftType
@@ -17,7 +18,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="Tixi\CoreDomainBundle\Repository\Dispo\ShiftTypeRepositoryDoctrine")
  * @ORM\Table(name="shift_type")
  */
-class ShiftType {
+class ShiftType extends CommonBaseEntity {
     /**
      * @ORM\Id
      * @ORM\Column(type="string", name="id")
@@ -39,6 +40,7 @@ class ShiftType {
 
     public function __construct() {
         $this->shifts = new ArrayCollection();
+        parent::__construct();
     }
 
     /**
