@@ -25,6 +25,7 @@ function FormValidationController(formId) {
     this._initListeners = function () {
         $(_this._submitButton).on('click', function (event) {
             event.preventDefault();
+            _this._resetConfirmUnload();
             if (_this._hasHtml5Validation()) {
                 $(_this._form).submit(function (event) {
                     if (!this.checkValidity()) {
@@ -59,6 +60,10 @@ function FormValidationController(formId) {
         $(window).on('beforeunload', function() {
             return '';
         });
+    }
+
+    this._resetConfirmUnload = function() {
+        $(window).off('beforeunload');
     }
 
     _this.init();
