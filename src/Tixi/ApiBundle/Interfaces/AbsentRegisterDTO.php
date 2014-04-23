@@ -20,5 +20,10 @@ class AbsentRegisterDTO {
     public $startDate;
     public $endDate;
     public $personId;
+
+    public function __construct() {
+        $this->startDate = new \DateTime('today');
+        $this->endDate = new \DateTime('today');
+    }
 }
 

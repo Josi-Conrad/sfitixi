@@ -19,5 +19,10 @@ class ServicePlanRegisterDTO {
     public $start;
     public $end;
     public $memo;
+
+    public function __construct() {
+        $this->start = new \DateTime('now');
+        $this->end = new \DateTime('now');
+    }
 }
 
