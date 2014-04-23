@@ -74,6 +74,10 @@
     display: none;
 }
 
+.monthlyPart .required::after {
+    content: '';
+}
+
 .weeklyPart, .monthlyPart {
     border-top: 1px solid #cccccc;
     padding-top: 16px;
