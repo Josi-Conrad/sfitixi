@@ -24,15 +24,12 @@ class VehicleRegisterFormViewTile extends AbstractFormViewTile{
         $this->basicFormRows[] = new FormRowView('category','vehicle.field.category',$this->dto->category->getName());
         $this->basicFormRows[] = new FormRowView('amountofseats','vehicle.field.category.amountofseats',$this->dto->category->getAmountOfSeats());
         $this->basicFormRows[] = new FormRowView('amountofwheelchairs','vehicle.field.category.amountofwheelchairs',$this->dto->category->getAmountOfWheelChairs());
-        $this->basicFormRows[] = new FormRowView('licencenumber','vehicle.field.licencenumber',$this->dto->licenceNumber);
-        $this->basicFormRows[] = new FormRowView('dateoffirstregistration','vehicle.field.dateoffirstregistration',$this->dto->dateOfFirstRegistration->format('d.m.Y'));
-
         if(!empty($this->dto->depot)){
             $this->basicFormRows[] = new FormRowView('depot','vehicle.field.depot',$this->dto->depot->getNameString());
         }
-
         $this->basicFormRows[] = new FormRowView('parking','vehicle.field.parking',$this->dto->parking);
-
+        $this->basicFormRows[] = new FormRowView('licencenumber','vehicle.field.licencenumber',$this->dto->licenceNumber);
+        $this->basicFormRows[] = new FormRowView('dateoffirstregistration','vehicle.field.dateoffirstregistration',$this->dto->dateOfFirstRegistration->format('d.m.Y'));
         if(!empty($this->dto->supervisor)){
             $this->basicFormRows[] = new FormRowView('supervisor','vehicle.field.supervisor',$this->dto->supervisor->getNameString());
         }
