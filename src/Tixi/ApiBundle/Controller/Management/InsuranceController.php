@@ -43,9 +43,13 @@ class InsuranceController extends Controller {
      * @Method({"GET","POST"})
      * @param Request $request
      * @param bool $embeddedState
+     * @throws AccessDeniedException
      * @return Response
      */
     public function getInsurancesAction(Request $request, $embeddedState = false) {
+        if (false === $this->get('security.context')->isGranted('ROLE_MANAGER')) {
+            throw new AccessDeniedException();
+        }
         $embeddedState = $embeddedState || $request->get('embedded') === "true";
         $isPartial = $request->get('partial') === "true";
 
@@ -72,9 +76,13 @@ class InsuranceController extends Controller {
      * @Method({"GET","POST"})
      * @param Request $request
      * @param $insuranceId
+     * @throws AccessDeniedException
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function deleteInsuranceAction(Request $request, $insuranceId) {
+        if (false === $this->get('security.context')->isGranted('ROLE_MANAGER')) {
+            throw new AccessDeniedException();
+        }
         $insurance = $this->getInsurance($insuranceId);
         $tileRenderer = $this->get('tixi_api.tilerenderer');
         $passengerRepository = $this->get('passenger_repository');
@@ -96,9 +104,13 @@ class InsuranceController extends Controller {
      * @Method({"GET","POST"})
      * @Breadcrumb("insurance.panel.new", route="tixiapi_management_insurance_new")
      * @param Request $request
+     * @throws AccessDeniedException
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      */
     public function newInsuranceAction(Request $request) {
+        if (false === $this->get('security.context')->isGranted('ROLE_MANAGER')) {
+            throw new AccessDeniedException();
+        }
         $tileRenderer = $this->get('tixi_api.tilerenderer');
 
         $form = $this->getForm();
@@ -122,9 +134,13 @@ class InsuranceController extends Controller {
      * @Breadcrumb("{insuranceId}", route={"name"="tixiapi_management_insurance_edit", "parameters"={"insuranceId"}})
      * @param Request $request
      * @param $insuranceId
+     * @throws AccessDeniedException
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      */
     public function editInsuranceAction(Request $request, $insuranceId) {
+        if (false === $this->get('security.context')->isGranted('ROLE_MANAGER')) {
+            throw new AccessDeniedException();
+        }
         $tileRenderer = $this->get('tixi_api.tilerenderer');
         /** @var InsuranceAssembler $assembler */
         $assembler = $this->get('tixi_api.assemblerinsurance');

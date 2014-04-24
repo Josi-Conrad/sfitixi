@@ -9,6 +9,7 @@
 namespace Tixi\ApiBundle\Form;
 
 
+use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints\DateTime;
@@ -67,6 +68,10 @@ class DriverType extends PersonType {
             'constraints' => array(
                 new NotBlank(array('message'=>'form.field.not_blank'))
             ),
+            'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('e')
+                        ->where('e.isDeleted = 0');
+                },
         ));
         $builder->add('entryDate', 'datePicker', array(
             'required' => false,

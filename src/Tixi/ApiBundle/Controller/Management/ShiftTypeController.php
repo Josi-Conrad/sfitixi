@@ -21,6 +21,7 @@ use Tixi\ApiBundle\Form\Management\ShiftTypeType;
 use Tixi\ApiBundle\Interfaces\Management\ShiftTypeRegisterDTO;
 use Tixi\ApiBundle\Menu\MenuService;
 use Tixi\ApiBundle\Tile\Core\FormTile;
+use Tixi\ApiBundle\Tile\Core\ReferentialConstraintErrorTile;
 use Tixi\ApiBundle\Tile\Core\RootPanel;
 use Tixi\CoreDomain\Dispo\ShiftType;
 
@@ -85,18 +86,23 @@ class ShiftTypeController extends Controller {
             throw new AccessDeniedException();
         }
         $shiftType = $this->getShiftType($shiftTypeId);
-        $this->get('entity_manager')->beginTransaction();
-        try {
-            $this->get('shifttype_repository')->remove($shiftType);
-        } catch (Exception $e) {
-            //SQLSTATE[23000]: Integrity constraint violation: 1451 Cannot delete
-            $this->get('entity_manager')->rollback();
-            return $this->redirect($this->generateUrl('tixiapi_management_shifttypes_get', array('error' => 'in use')));
-        }
-        $this->get('entity_manager')->commit();
-        $this->get('entity_manager')->flush();
+        $tileRenderer = $this->get('tixi_api.tilerenderer');
 
-        return $this->redirect($this->generateUrl('tixiapi_management_shifttypes_get'));
+        $shiftRepository = $this->get('shift_repository');
+        $repeatedDrivingAssertionRepository = $this->get('repeateddrivingassertion_repository');
+
+        $usageAmount = $shiftRepository->getAmountByShiftType($shiftType);
+        $usageAmount += $repeatedDrivingAssertionRepository->getAmountByShiftType($shiftType);
+
+        if ($usageAmount > 0) {
+            $rootPanel = new RootPanel($this->menuId, 'error.refintegrity.header.name');
+            $rootPanel->add(new ReferentialConstraintErrorTile($usageAmount));
+            return new Response($tileRenderer->render($rootPanel));
+        } else {
+            $shiftType->deleteLogically();
+            $this->get('entity_manager')->flush();
+            return $this->redirect($this->generateUrl('tixiapi_management_shifttypes_get'));
+        }
     }
 
     /**

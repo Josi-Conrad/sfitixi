@@ -2336,6 +2336,16 @@ VALUES (1,1,'Ferien','2014-07-04','2014-07-11'),
   (5,28,'Ferien alt','2014-01-02','2014-01-10');
 
 /*
+insert_passenger_to_handicap
+*/
+INSERT INTO `passenger_to_handicap` (`passenger_id`,`handicap_id`) VALUES (30,1), (28,2), (30,2), (30,3), (29,4), (30,4),(30,5);
+
+/*
+insert_passenger_to_insurance
+*/
+INSERT INTO `passenger_to_insurance` (`passenger_id`,`insurance_id`) VALUES (28,1), (29,1), (28,2);
+
+/*
 insert_poi_to_keywords
 */
 INSERT INTO `poi_to_keywords` (`poi_id`,`poikeyword_id`) VALUES (1,2), (1,4), (1,5);

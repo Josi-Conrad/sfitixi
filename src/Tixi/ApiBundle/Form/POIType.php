@@ -54,6 +54,7 @@ class POIType extends CommonAbstractType {
             'expanded' => true,
             'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('k')
+                        ->where('k.isDeleted = 0')
                         ->orderBy('k.name', 'ASC');
                 },
         ));

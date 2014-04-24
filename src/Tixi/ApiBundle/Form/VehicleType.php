@@ -77,6 +77,7 @@ class VehicleType extends CommonAbstractType {
             'empty_value' => 'vehicle.field.supervisor.empty',
             'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('s')
+                        ->where('s.isDeleted = 0')
                         ->orderBy('s.firstname', 'ASC');
                 },
         ));
@@ -89,6 +90,7 @@ class VehicleType extends CommonAbstractType {
             'empty_value' => 'vehicle.field.depot.empty',
             'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('d')
+                        ->where('d.isDeleted = 0')
                         ->orderBy('d.name', 'ASC');
                 },
         ));
