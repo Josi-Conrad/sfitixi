@@ -3,6 +3,7 @@
 namespace Tixi\CoreDomainBundle\Repository;
 
 use Tixi\CoreDomain\POI;
+use Tixi\CoreDomain\POIKeyword;
 use Tixi\CoreDomain\POIRepository;
 
 /**
@@ -24,5 +25,15 @@ class POIRepositoryDoctrine extends CommonBaseRepositoryDoctrine implements POIR
      */
     public function remove(POI $poi) {
         $this->getEntityManager()->remove($poi);
+    }
+
+    public function getAmountByPOIKeyword(POIKeyword $poiKeyword)
+    {
+        $qb = parent::createQueryBuilder('e');
+        $qb->select('count(e.id)');
+        $qb->join('e.keywords', 'k');
+        $qb->where('k = :keyword');
+        $qb->setParameter('keyword', $poiKeyword);
+        return $qb->getQuery()->getSingleScalarResult();
     }
 }
