@@ -43,6 +43,7 @@ class VehicleDepotController extends Controller {
      * @Method({"GET","POST"})
      * @param Request $request
      * @param bool $embeddedState
+     * @throws AccessDeniedException
      * @return Response
      */
     public function getVehicleDepotsAction(Request $request, $embeddedState = false) {
@@ -75,6 +76,7 @@ class VehicleDepotController extends Controller {
      * @Method({"GET","POST"})
      * @param Request $request
      * @param $vehicleDepotId
+     * @throws AccessDeniedException
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function deleteVehicleDepotAction(Request $request, $vehicleDepotId) {
@@ -102,6 +104,7 @@ class VehicleDepotController extends Controller {
      * @Method({"GET","POST"})
      * @Breadcrumb("vehicledepot.panel.new", route="tixiapi_management_vehicledepot_new")
      * @param Request $request
+     * @throws AccessDeniedException
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      */
     public function newVehicleDepotAction(Request $request) {
@@ -131,6 +134,7 @@ class VehicleDepotController extends Controller {
      * @Breadcrumb("{vehicleDepotId}", route={"name"="tixiapi_management_vehicledepot_edit", "parameters"={"vehicleDepotId"}})
      * @param Request $request
      * @param $vehicleDepotId
+     * @throws AccessDeniedException
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      */
     public function editVehicleDepotAction(Request $request, $vehicleDepotId) {
