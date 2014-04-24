@@ -8,6 +8,7 @@
 
 namespace Tixi\ApiBundle\Interfaces;
 
+use Tixi\ApiBundle\Helper\DateTimeService;
 use Tixi\ApiBundle\Shared\DataGrid\Annotations\GridField;
 use Tixi\ApiBundle\Shared\DataGrid\DataGridSourceClass;
 use Tixi\CoreDomain\Shared\GenericEntityFilter\GenericAccessQuery;
@@ -38,7 +39,7 @@ class AbsentEmbeddedListDTO implements DataGridSourceClass{
      */
     public $startDate;
     /**
-     * @GridField(propertyId="Absent.endDate", headerName="absent.field.enddate", order=3)
+     * @GridField(propertyId="Absent.endDate", headerName="absent.field.enddate", restrictive=true, comparingOperator=">", order=3)
      */
     public $endDate;
 
@@ -57,6 +58,7 @@ class AbsentEmbeddedListDTO implements DataGridSourceClass{
     public static function createReferenceDTOByPersonId($personId) {
         $dto = new AbsentEmbeddedListDTO();
         $dto->personId = $personId;
+        $dto->endDate = DateTimeService::getUTCnow();
         return $dto;
     }
 }
