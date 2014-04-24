@@ -11,6 +11,7 @@ namespace Tixi\ApiBundle\Tile\CustomFormView;
 use Symfony\Component\Validator\Constraints\DateTime;
 use Tixi\ApiBundle\Tile\Core\AbstractFormViewTile;
 use Tixi\ApiBundle\Tile\Core\FormRowView;
+use Tixi\CoreDomain\POI;
 
 /**
  * Class POIRegisterFormViewTile
@@ -28,6 +29,7 @@ class POIRegisterFormViewTile extends AbstractFormViewTile {
         $this->basicFormRows[] = new FormRowView('street', 'address.field.street', $dto->street);
         $this->basicFormRows[] = new FormRowView('postalcode', 'address.field.postalcode', $dto->postalCode);
         $this->basicFormRows[] = new FormRowView('city', 'address.field.city', $dto->city);
+        $this->basicFormRows[] = new FormRowView('keywords', 'poi.field.keywords', POI::constructKeywordsString($dto->keywords));
 
         $this->expandedFormRows[] = new FormRowView('memo', 'poi.field.memo', $dto->memo);
         $this->expandedFormRows[] = new FormRowView('comment', 'poi.field.comment', $dto->comment);

@@ -312,4 +312,27 @@ class POI extends CommonBaseEntity {
     public function getTelephone() {
         return $this->telephone;
     }
+
+    /**
+     * @return string
+     */
+    public function getKeywordsAsString() {
+        return self::constructKeywordsString($this->getKeywords());
+    }
+
+    /**
+     * @param $keywords
+     * @return string
+     */
+    public static function constructKeywordsString($keywords) {
+        $string = '';
+        foreach ($keywords as $key => $keyword) {
+            if ($key !== 0) {
+                $string .= ', ';
+            }
+            $string .= $keyword->getName();
+        }
+        return $string;
+    }
+
 }

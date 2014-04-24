@@ -105,12 +105,7 @@ class POIAssembler {
         $poiListDTO->telephone = $poi->getTelephone();
         $poiListDTO->street = $poi->getAddress()->getStreet();
         $poiListDTO->city = $poi->getAddress()->getCity();
-
-        $keywords_string = '';
-        foreach ($poi->getKeywords() as $keyword) {
-            $keywords_string .= ' ' . $keyword->getName();
-        }
-        $poiListDTO->keywords = $keywords_string;
+        $poiListDTO->keywords = $poi->getKeywordsAsString();
 
         return $poiListDTO;
     }
