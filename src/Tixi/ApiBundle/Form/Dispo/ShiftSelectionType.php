@@ -34,7 +34,11 @@ class ShiftSelectionType extends AbstractType{
             'expanded' => true,
             'multiple' => true,
             'label' => '__label__',
-            'required' => false
+            'required' => false,
+            'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('e')
+                        ->where('e.isDeleted = 0');
+                }
         ));
     }
 
