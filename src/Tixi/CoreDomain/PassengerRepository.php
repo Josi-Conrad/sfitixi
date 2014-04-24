@@ -21,4 +21,15 @@ interface PassengerRepository extends CommonBaseRepository{
      */
     public function remove(Passenger $passenger);
 
+    /**
+     * @param Insurance $insurance
+     * @return mixed
+     */
+    public function getAmountByInsurance(Insurance $insurance);
+
+    /**
+     * @param Handicap $handicap
+     * @return mixed
+     */
+    public function getAmountByHandicap(Handicap $handicap);
 }

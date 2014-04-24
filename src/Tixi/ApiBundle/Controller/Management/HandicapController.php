@@ -20,6 +20,7 @@ use Tixi\ApiBundle\Interfaces\Management\HandicapRegisterDTO;
 use Tixi\ApiBundle\Menu\MenuService;
 use Tixi\ApiBundle\Tile\Core\FormTile;
 use Tixi\ApiBundle\Tile\Core\PanelDeleteFooterTile;
+use Tixi\ApiBundle\Tile\Core\ReferentialConstraintErrorTile;
 use Tixi\ApiBundle\Tile\Core\RootPanel;
 
 /**
@@ -56,10 +57,10 @@ class HandicapController extends Controller {
         $dataGridTile = $dataGridHandler->createDataGridTileByRequest($request, $this->menuId, $gridController);
 
         $rootPanel = null;
-        if(!$embeddedState && !$isPartial) {
+        if (!$embeddedState && !$isPartial) {
             $rootPanel = new RootPanel($this->menuId, 'handicap.list.name');
             $rootPanel->add($dataGridTile);
-        }else {
+        } else {
             $rootPanel = $dataGridTile;
         }
 
@@ -75,10 +76,19 @@ class HandicapController extends Controller {
      */
     public function deleteHandicapAction(Request $request, $handicapId) {
         $handicap = $this->getHandicap($handicapId);
-        $handicap->deleteLogically();
-        $this->get('entity_manager')->flush();
+        $tileRenderer = $this->get('tixi_api.tilerenderer');
+        $passengerRepository = $this->get('passenger_repository');
+        $usageAmount = $passengerRepository->getAmountByHandicap($handicap);
+        if ($usageAmount > 0) {
+            $rootPanel = new RootPanel($this->menuId, 'error.refintegrity.header.name');
+            $rootPanel->add(new ReferentialConstraintErrorTile($usageAmount));
+            return new Response($tileRenderer->render($rootPanel));
+        } else {
+            $handicap->deleteLogically();
+            $this->get('entity_manager')->flush();
 
-        return $this->redirect($this->generateUrl('tixiapi_management_handicaps_get'));
+            return $this->redirect($this->generateUrl('tixiapi_management_handicaps_get'));
+        }
     }
 
     /**
@@ -131,7 +141,7 @@ class HandicapController extends Controller {
         }
         $rootPanel = new RootPanel($this->menuId, 'handicap.panel.edit');
         $rootPanel->add(new FormTile($form, true));
-        $rootPanel->add(new PanelDeleteFooterTile($this->generateUrl('tixiapi_management_handicap_delete', array('handicapId' => $handicapId)),'handicap.button.delete'));
+        $rootPanel->add(new PanelDeleteFooterTile($this->generateUrl('tixiapi_management_handicap_delete', array('handicapId' => $handicapId)), 'handicap.button.delete'));
 
         return new Response($tileRenderer->render($rootPanel));
     }
@@ -163,11 +173,11 @@ class HandicapController extends Controller {
         /** @var HandicapAssembler $assembler */
         $assembler = $this->get('tixi_api.assemblerhandicap');
         $repository = $this->get('handicap_repository');
-        if(null === $dto->id) {
+        if (null === $dto->id) {
             $handicap = $assembler->registerDTOtoNewHandicap($dto);
             $repository->store($handicap);
             return $handicap;
-        }else {
+        } else {
             $handicap = $this->getHandicap($dto->id);
             $assembler->registerDTOtoHandicap($handicap, $dto);
             return $handicap;

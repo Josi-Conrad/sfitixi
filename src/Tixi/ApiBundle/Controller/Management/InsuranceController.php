@@ -20,6 +20,7 @@ use Tixi\ApiBundle\Interfaces\Management\InsuranceRegisterDTO;
 use Tixi\ApiBundle\Menu\MenuService;
 use Tixi\ApiBundle\Tile\Core\FormTile;
 use Tixi\ApiBundle\Tile\Core\PanelDeleteFooterTile;
+use Tixi\ApiBundle\Tile\Core\ReferentialConstraintErrorTile;
 use Tixi\ApiBundle\Tile\Core\RootPanel;
 
 /**
@@ -29,7 +30,7 @@ use Tixi\ApiBundle\Tile\Core\RootPanel;
  * @Breadcrumb("insurance.breadcrumb.name", route="tixiapi_management_insurances_get")
  * @Route("/management/insurances")
  */
-class InsuranceController extends Controller{
+class InsuranceController extends Controller {
 
     protected $menuId;
 
@@ -56,10 +57,10 @@ class InsuranceController extends Controller{
         $dataGridTile = $dataGridHandler->createDataGridTileByRequest($request, $this->menuId, $gridController);
 
         $rootPanel = null;
-        if(!$embeddedState && !$isPartial) {
+        if (!$embeddedState && !$isPartial) {
             $rootPanel = new RootPanel($this->menuId, 'insurance.list.name');
             $rootPanel->add($dataGridTile);
-        }else {
+        } else {
             $rootPanel = $dataGridTile;
         }
 
@@ -74,11 +75,20 @@ class InsuranceController extends Controller{
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function deleteInsuranceAction(Request $request, $insuranceId) {
-        $handicap = $this->getInsurance($insuranceId);
-        $handicap->deleteLogically();
-        $this->get('entity_manager')->flush();
-
-        return $this->redirect($this->generateUrl('tixiapi_management_handicaps_get'));
+        $insurance = $this->getInsurance($insuranceId);
+        $tileRenderer = $this->get('tixi_api.tilerenderer');
+        $passengerRepository = $this->get('passenger_repository');
+        $usageAmount = $passengerRepository->getAmountByInsurance($insurance);
+        if ($usageAmount > 0) {
+            $rootPanel = new RootPanel($this->menuId, 'error.refintegrity.header.name');
+            $rootPanel->add(new ReferentialConstraintErrorTile($usageAmount));
+            return new Response($tileRenderer->render($rootPanel));
+        }
+        else {
+            $insurance->deleteLogically();
+            $this->get('entity_manager')->flush();
+            return $this->redirect($this->generateUrl('tixiapi_management_insurances_get'));
+        }
     }
 
     /**
@@ -100,7 +110,7 @@ class InsuranceController extends Controller{
             return $this->redirect($this->generateUrl('tixiapi_management_insurances_get'));
         }
 
-        $rootPanel = new RootPanel($this->menuId, 'handicap.panel.new');
+        $rootPanel = new RootPanel($this->menuId, 'insurance.panel.new');
         $rootPanel->add(new FormTile($form, true));
 
         return new Response($tileRenderer->render($rootPanel));
@@ -131,7 +141,7 @@ class InsuranceController extends Controller{
         }
         $rootPanel = new RootPanel($this->menuId, 'insurance.panel.edit');
         $rootPanel->add(new FormTile($form, true));
-        $rootPanel->add(new PanelDeleteFooterTile($this->generateUrl('tixiapi_management_insurance_delete', array('insuranceId' => $insuranceId)),'insurance.button.delete'));
+        $rootPanel->add(new PanelDeleteFooterTile($this->generateUrl('tixiapi_management_insurance_delete', array('insuranceId' => $insuranceId)), 'insurance.button.delete'));
 
         return new Response($tileRenderer->render($rootPanel));
     }
@@ -163,11 +173,11 @@ class InsuranceController extends Controller{
         /** @var InsuranceAssembler $assembler */
         $assembler = $this->get('tixi_api.assemblerinsurance');
         $repository = $this->get('insurance_repository');
-        if(null === $dto->id) {
+        if (null === $dto->id) {
             $insurance = $assembler->registerDTOtoNewInsurance($dto);
             $repository->store($insurance);
             return $insurance;
-        }else {
+        } else {
             $insurance = $this->getInsurance($dto->id);
             $assembler->registerDTOtoInsurance($insurance, $dto);
             return $insurance;

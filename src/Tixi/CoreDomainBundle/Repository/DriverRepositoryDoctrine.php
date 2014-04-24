@@ -3,6 +3,7 @@
 namespace Tixi\CoreDomainBundle\Repository;
 
 use Tixi\CoreDomain\Driver;
+use Tixi\CoreDomain\DriverCategory;
 use Tixi\CoreDomain\DriverRepository;
 
 /**
@@ -26,4 +27,15 @@ class DriverRepositoryDoctrine extends CommonBaseRepositoryDoctrine implements D
         $this->getEntityManager()->remove($driver);
     }
 
+    /**
+     * @param \Tixi\CoreDomain\DriverCategory $category
+     * @return mixed
+     */
+    public function getAmountByDriverCategory(DriverCategory $category)
+    {
+        $qb = parent::createQueryBuilder('e')->select('count(e.id)');
+        $qb->add('where', 'e.category = :category');
+        $qb->setParameter('category', $category);
+        return $qb->getQuery()->getSingleScalarResult();
+    }
 }

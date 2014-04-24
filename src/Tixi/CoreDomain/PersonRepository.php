@@ -20,4 +20,4 @@ interface PersonRepository extends CommonBaseRepository{
      * @return mixed
      */
     public function remove(Person $person);
-} 
+}
