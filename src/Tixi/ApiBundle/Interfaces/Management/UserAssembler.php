@@ -128,7 +128,7 @@ class UserAssembler {
         $userListDTO->id = $user->getId();
         $userListDTO->username = $user->getUsername();
         $userListDTO->email = $user->getEmail();
-        $userListDTO->roles = $this->rolesToString($user->getRolesEntity());
+        $userListDTO->roles = $user->getHighestRole()->getName();
         return $userListDTO;
     }
 
@@ -140,18 +140,6 @@ class UserAssembler {
         $encoder = $this->encoderFactory->getEncoder($user);
         $encPassword = $encoder->encodePassword($password, $user->getSalt());
         $user->setPassword($encPassword);
-    }
-
-    /**
-     * @param $roles
-     * @return string
-     */
-    private function rolesToString($roles) {
-        $string = '| ';
-        foreach ($roles as $role) {
-            $string .= $role->getRole() . ' | ';
-        }
-        return $string;
     }
 
     /**

@@ -46,10 +46,10 @@ class User extends CommonBaseEntity implements AdvancedUserInterface, \Serializa
     private $password;
 
     public function __construct() {
+        parent::__construct();
         $this->roles = new ArrayCollection();
         //$this->salt = sha1(uniqid(null, true)); //only without bcrypt necessary
         $this->activate();
-        parent::__construct();
     }
 
     /**
@@ -333,5 +333,27 @@ class User extends CommonBaseEntity implements AdvancedUserInterface, \Serializa
      */
     public function isEnabled() {
         return $this->isActive;
+    }
+
+    /**
+     *
+     */
+    public function getRolesAsString() {
+        return self::constructRolesString($this->getRolesEntity());
+    }
+
+    /**
+     * @param $roles
+     * @return string
+     */
+    public static function constructRolesString($roles) {
+        $string = '';
+        foreach ($roles as $key => $role) {
+            if ($key !== 0) {
+                $string .= ', ';
+            }
+            $string .= $role->getRole();
+        }
+        return $string;
     }
 }

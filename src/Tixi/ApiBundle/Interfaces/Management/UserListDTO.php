@@ -43,6 +43,6 @@ class UserListDTO implements DataGridSourceClass{
      */
     public function getAccessQuery()
     {
-        return new GenericAccessQuery('User', 'Tixi\SecurityBundle\Entity\User User JOIN User.roles Role', 'User.id');
+        return new GenericAccessQuery('User', 'Tixi\SecurityBundle\Entity\User User LEFT JOIN User.roles Role', 'User.id');
     }
 }
