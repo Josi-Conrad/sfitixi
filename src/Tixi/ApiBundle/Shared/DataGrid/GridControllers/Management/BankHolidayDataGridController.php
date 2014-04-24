@@ -56,9 +56,12 @@ class BankHolidayDataGridController extends DataGridAbstractController {
      * @return mixed|BankHolidayListDTO
      */
     public function getReferenceDTO() {
+        $referenceDTO = null;
         if (!$this->isInEmbeddedState()) {
-            return new BankHolidayListDTO();
+            $referenceDTO = BankHolidayListDTO::createReferenceDTOByBankHolidayId(DataGridHandler::$dataGirdReplaceIdentifier);
+        } else {
         }
+        return $referenceDTO;
     }
 
     /**

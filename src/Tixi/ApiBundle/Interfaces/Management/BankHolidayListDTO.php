@@ -8,6 +8,7 @@
 
 namespace Tixi\ApiBundle\Interfaces\Management;
 
+use Tixi\ApiBundle\Helper\DateTimeService;
 use Tixi\ApiBundle\Shared\DataGrid\Annotations\GridField;
 use Tixi\ApiBundle\Shared\DataGrid\DataGridSourceClass;
 use Tixi\CoreDomain\Shared\GenericEntityFilter\GenericAccessQuery;
@@ -30,11 +31,11 @@ class BankHolidayListDTO implements DataGridSourceClass{
      */
     public $name;
     /**
-     * @GridField(propertyId="BankHoliday.start", headerName="bankholiday.field.start", order=2)
+     * @GridField(propertyId="BankHoliday.startDate", headerName="bankholiday.field.start", order=2)
      */
     public $startDate;
     /**
-     * @GridField(propertyId="BankHoliday.end", headerName="bankholiday.field.end", order=3)
+     * @GridField(propertyId="BankHoliday.endDate", headerName="bankholiday.field.end", restrictive=true, comparingOperator=">", order=3)
      */
     public $endDate;
 
@@ -44,5 +45,16 @@ class BankHolidayListDTO implements DataGridSourceClass{
     public function getAccessQuery()
     {
         return new GenericAccessQuery('BankHoliday', 'Tixi\CoreDomain\BankHoliday BankHoliday', 'BankHoliday.id');
+    }
+
+    /**
+     * @param $bankHolidayId
+     * @return BankHolidayListDTO
+     */
+    public static function createReferenceDTOByBankHolidayId($bankHolidayId) {
+        $dto = new BankHolidayListDTO();
+        $dto->id = $bankHolidayId;
+        $dto->endDate = DateTimeService::getUTCnow();
+        return $dto;
     }
 }
