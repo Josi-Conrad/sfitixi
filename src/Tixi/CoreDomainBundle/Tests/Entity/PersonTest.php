@@ -94,8 +94,8 @@ class PersonTest extends WebTestCase {
         $this->addressRepo->store($address);
 
         $driver = Driver::registerDriver(
-            'Herr', 'Max', 'Mühlemann', '041 222 32 32',
-            $address, 'F3234141', $driverCategory, true, 'test@test.de', new \DateTime(), new \DateTime(),
+            'm', 'Max', 'Mühlemann', '041 222 32 32',
+            $address, 'F3234141', $driverCategory, true, 'Dr.', 'test@test.de', new \DateTime(), new \DateTime(),
             5, 'alles nur ein Test'
         );
 
@@ -110,8 +110,8 @@ class PersonTest extends WebTestCase {
         $this->addressRepo->store($address);
         $driverCategory = $this->createDriverCategory('Freiwillig');
         $driver->updateDriverData(
-            'm', 'Muni', 'Meier', '041 333 32 32',
-            $address, 'FEA12345', $driverCategory, false, 'test@test.de', $date, $date,
+            'f', 'Muni', 'Meier', '041 333 32 32',
+            $address, 'FEA12345', $driverCategory, false, 'Dr. med.', 'test@test.de', $date, $date,
             5, 'alles nur ein Test');
         $driver->assignBillingAddress($address);
         $driver->assignCorrespondenceAddress($address);
@@ -180,10 +180,7 @@ class PersonTest extends WebTestCase {
     }
 
     public function testPassengerCRUD() {
-        $handicap = $this->createHandicap('sehbehindert');
-        $handicap = $this->createHandicap('gehbehindert');
         $handicap = $this->createHandicap('hörbehindert');
-        $insurance = $this->createInsurance('IV');
         $insurance = $this->createInsurance('AHV');
 
         $address = Address::registerAddress('Teststrasse 142', '6360', 'Cham', 'Schweiz');
@@ -191,7 +188,7 @@ class PersonTest extends WebTestCase {
 
         $passenger = Passenger::registerPassenger(
             'f', 'Toranto', 'Testinger', '041 324 33 22',
-            $address, true, true, false, 'test@test.de', new \DateTime(), new \DateTime(),
+            $address, true, true, false, '', 'test@test.de', new \DateTime(), new \DateTime(),
             5, 'alles nur ein Test', 'und auch Notizen'
         );
         $passenger->assignHandicap($handicap);
@@ -204,7 +201,7 @@ class PersonTest extends WebTestCase {
 
         $passenger->updatePassengerData(
             'f', 'Mila', 'Tolina', '0293292323',
-            $address, true, true, false, 'der@test.de', new \DateTime(), new \DateTime(),
+            $address, true, true, false, '', 'der@test.de', new \DateTime(), new \DateTime(),
             2, 'goodies', 'notices');
         $passenger->assignBillingAddress($address);
         $passenger->assignCorrespondenceAddress($address);

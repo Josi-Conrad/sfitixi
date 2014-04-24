@@ -22,3 +22,6 @@ drivercategory.panel.edit: Fahrerkategorie editieren
 drivercategory.field.name: Name
 drivercategory.button.new: Neue Fahrerkategorie
 drivercategory.button.delete: Fahrerkategorie löschen
+
+m: Herr
+f: Frau
