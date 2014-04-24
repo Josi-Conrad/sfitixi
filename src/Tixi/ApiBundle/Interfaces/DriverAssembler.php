@@ -24,13 +24,13 @@ class DriverAssembler {
      * @return Driver
      */
     public function registerDTOtoNewDriver(DriverRegisterDTO $driverDTO) {
-        $driver = Driver::registerDriver($driverDTO->title, $driverDTO->firstname,
+        $driver = Driver::registerDriver($driverDTO->gender, $driverDTO->firstname,
             $driverDTO->lastname, $driverDTO->telephone,
             Address::registerAddress(
                 $driverDTO->street, $driverDTO->postalCode,
                 $driverDTO->city, $driverDTO->country),
             $driverDTO->licenceNumber, $driverDTO->driverCategory, $driverDTO->wheelChairAttendance,
-            $driverDTO->email, $driverDTO->entryDate, $driverDTO->birthday,
+            $driverDTO->title, $driverDTO->email, $driverDTO->entryDate, $driverDTO->birthday,
             $driverDTO->extraMinutes, $driverDTO->details
         );
         return $driver;
@@ -45,11 +45,11 @@ class DriverAssembler {
     public function registerDTOToDriver(DriverRegisterDTO $driverDTO, Driver $driver) {
         $address = $driver->getAddress();
         $address->updateAddressData($driverDTO->street, $driverDTO->postalCode,
-                $driverDTO->city, $driverDTO->country);
-        $driver->updateDriverData($driverDTO->title, $driverDTO->firstname,
+            $driverDTO->city, $driverDTO->country);
+        $driver->updateDriverData($driverDTO->gender, $driverDTO->firstname,
             $driverDTO->lastname, $driverDTO->telephone,
             $address, $driverDTO->licenceNumber, $driverDTO->driverCategory,
-            $driverDTO->wheelChairAttendance,
+            $driverDTO->wheelChairAttendance, $driverDTO->title,
             $driverDTO->email, $driverDTO->entryDate, $driverDTO->birthday,
             $driverDTO->extraMinutes, $driverDTO->details);
         return $driver;
@@ -63,6 +63,7 @@ class DriverAssembler {
         $driverDTO = new DriverRegisterDTO();
         $driverDTO->person_id = $driver->getId();
         $driverDTO->isActive = $driver->getIsActive();
+        $driverDTO->gender = $driver->getGender();
         $driverDTO->title = $driver->getTitle();
         $driverDTO->firstname = $driver->getFirstname();
         $driverDTO->lastname = $driver->getLastname();
@@ -108,6 +109,7 @@ class DriverAssembler {
         $driverListDTO = new DriverListDTO();
         $driverListDTO->id = $driver->getId();
         $driverListDTO->isActive = $driver->getIsActive();
+        $driverListDTO->gender = $driver->getGender();
         $driverListDTO->firstname = $driver->getFirstname();
         $driverListDTO->telephone = $driver->getTelephone();
         $driverListDTO->lastname = $driver->getLastname();

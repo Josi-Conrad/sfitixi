@@ -59,7 +59,7 @@ class Passenger extends Person {
      */
     protected $drivingOrders;
 
-    protected function __construct($title, $firstname, $lastname, $telephone, $address,
+    protected function __construct($gender, $firstname, $lastname, $telephone, $address, $title = null,
                                    $email = null, $entryDate = null, $birthday = null,
                                    $extraMinutes = null, $details = null, $correspondenceAddress = null,
                                    $billingAddress = null) {
@@ -68,16 +68,17 @@ class Passenger extends Person {
         $this->insurances = new ArrayCollection();
         $this->drivingOrders = new ArrayCollection();
 
-        parent::__construct($title, $firstname, $lastname, $telephone, $address,
+        parent::__construct($gender, $firstname, $lastname, $telephone, $address, $title,
             $email, $entryDate, $birthday, $extraMinutes, $details, $correspondenceAddress, $billingAddress);
     }
 
     /**
-     * @param $title
+     * @param $gender
      * @param $firstname
      * @param $lastname
      * @param $telephone
      * @param Address $address
+     * @param $title
      * @param bool $isInWheelChair
      * @param bool $gotMonthlyBilling
      * @param bool $isOverWeight
@@ -92,13 +93,13 @@ class Passenger extends Person {
      * @internal param \Tixi\CoreDomain\Handicap $handicap
      * @return Passenger
      */
-    public static function registerPassenger($title, $firstname, $lastname, $telephone, Address $address,
+    public static function registerPassenger($gender, $firstname, $lastname, $telephone, Address $address, $title = null,
                                              $isInWheelChair = false, $gotMonthlyBilling = false, $isOverWeight = false,
                                              $email = null, $entryDate = null, $birthday = null,
                                              $extraMinutes = null, $details = null, $notice = null, $correspondenceAddress = null,
                                              $billingAddress = null) {
 
-        $passenger = new Passenger($title, $firstname, $lastname, $telephone, $address,
+        $passenger = new Passenger($gender, $firstname, $lastname, $telephone, $address, $title,
             $email, $entryDate, $birthday, $extraMinutes, $details, $correspondenceAddress, $billingAddress
         );
 
@@ -111,11 +112,12 @@ class Passenger extends Person {
     }
 
     /**
-     * @param null $title
+     * @param null $gender
      * @param null $firstname
      * @param null $lastname
      * @param null $telephone
      * @param Address $address
+     * @param null $title
      * @param bool|null $isInWheelChair
      * @param bool|null $gotMonthlyBilling
      * @param bool|null $isOverWeight
@@ -129,14 +131,14 @@ class Passenger extends Person {
      * @param null $billingAddress
      * @internal param \Tixi\CoreDomain\Handicap $handicap
      */
-    public function updatePassengerData($title = null, $firstname = null, $lastname = null, $telephone = null,
-                                             Address $address, $isInWheelChair = false, $gotMonthlyBilling = null,
-                                             $isOverWeight = null, $email = null, $entryDate = null, $birthday = null,
-                                             $extraMinutes = null, $details = null, $notice = null, $correspondenceAddress = null,
-                                             $billingAddress = null) {
+    public function updatePassengerData($gender = null, $firstname = null, $lastname = null, $telephone = null,
+                                        Address $address, $title = null, $isInWheelChair = false, $gotMonthlyBilling = null,
+                                        $isOverWeight = null, $email = null, $entryDate = null, $birthday = null,
+                                        $extraMinutes = null, $details = null, $notice = null, $correspondenceAddress = null,
+                                        $billingAddress = null) {
 
         parent::updatePersonData(
-            $title, $firstname, $lastname, $telephone, $address, $email, $entryDate, $birthday,
+            $gender, $firstname, $lastname, $telephone, $address, $title, $email, $entryDate, $birthday,
             $extraMinutes, $details, $correspondenceAddress, $billingAddress
         );
 

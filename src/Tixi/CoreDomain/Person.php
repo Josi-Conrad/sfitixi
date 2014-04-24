@@ -66,6 +66,11 @@ class Person extends CommonBaseEntity {
     /**
      * @ORM\Column(type="string", length=50)
      */
+    protected $gender;
+
+    /**
+     * @ORM\Column(type="string", length=50)
+     */
     protected $firstname;
 
     /**
@@ -105,11 +110,12 @@ class Person extends CommonBaseEntity {
     protected $details;
 
     /**
-     * @param $title
+     * @param $gender
      * @param $firstname
      * @param $lastname
      * @param $telephone
      * @param $address
+     * @param $title
      * @param null $email
      * @param null $entryDate
      * @param null $birthday
@@ -118,18 +124,19 @@ class Person extends CommonBaseEntity {
      * @param null $correspondenceAddress
      * @param null $billingAddress
      */
-    protected function __construct($title, $firstname, $lastname, $telephone, $address,
+    protected function __construct($gender, $firstname, $lastname, $telephone, $address, $title = null,
                                    $email = null, $entryDate = null, $birthday = null,
                                    $extraMinutes = null, $details = null, $correspondenceAddress = null,
                                    $billingAddress = null) {
 
         $this->absents = new ArrayCollection();
 
-        $this->setTitle($title);
+        $this->setGender($gender);
         $this->setFirstname($firstname);
         $this->setLastname($lastname);
         $this->setTelephone($telephone);
         $this->setAddress($address);
+        $this->setTitle($title);
         $this->setEmail($email);
         $this->setEntryDate($entryDate);
         $this->setBirthday($birthday);
@@ -143,11 +150,12 @@ class Person extends CommonBaseEntity {
     }
 
     /**
-     * @param $title
+     * @param $gender
      * @param $firstname
      * @param $lastname
      * @param $telephone
      * @param $address
+     * @param $title
      * @param null $email
      * @param null $entryDate
      * @param null $birthday
@@ -157,23 +165,24 @@ class Person extends CommonBaseEntity {
      * @param null $billingAddress
      * @return Person
      */
-    public static function registerPerson($title, $firstname, $lastname, $telephone, $address,
+    public static function registerPerson($gender, $firstname, $lastname, $telephone, $address, $title = null,
                                           $email = null, $entryDate = null, $birthday = null,
                                           $extraMinutes = null, $details = null, $correspondenceAddress = null,
                                           $billingAddress = null) {
 
-        $person = new Person($title, $firstname, $lastname, $telephone, $address,
+        $person = new Person($gender, $firstname, $lastname, $telephone, $address, $title,
             $email, $entryDate, $birthday, $extraMinutes, $details, $correspondenceAddress, $billingAddress);
 
         return $person;
     }
 
     /**
-     * @param null $title
+     * @param null $gender
      * @param null $firstname
      * @param null $lastname
      * @param null $telephone
      * @param null $address
+     * @param null $title
      * @param null $email
      * @param null $entryDate
      * @param null $birthday
@@ -182,12 +191,12 @@ class Person extends CommonBaseEntity {
      * @param null $correspondenceAddress
      * @param null $billingAddress
      */
-    public function updatePersonData($title = null, $firstname = null, $lastname = null, $telephone = null,
-                                          $address = null, $email = null, $entryDate = null, $birthday = null,
-                                          $extraMinutes = null, $details = null, $correspondenceAddress = null, $billingAddress = null) {
+    public function updatePersonData($gender = null, $firstname = null, $lastname = null, $telephone = null,
+                                     $address = null, $title = null, $email = null, $entryDate = null, $birthday = null,
+                                     $extraMinutes = null, $details = null, $correspondenceAddress = null, $billingAddress = null) {
 
-        if (!empty($title)) {
-            $this->setTitle($title);
+        if (!empty($gender)) {
+            $this->setGender($gender);
         }
         if (!empty($firstname)) {
             $this->setFirstname($firstname);
@@ -201,6 +210,7 @@ class Person extends CommonBaseEntity {
         if (!empty($address)) {
             $this->setAddress($address);
         }
+        $this->setTitle($title);
         $this->setEmail($email);
         $this->setEntryDate($entryDate);
         $this->setBirthday($birthday);
@@ -479,6 +489,20 @@ class Person extends CommonBaseEntity {
 
     public function getNameStringWithID() {
         return $this->firstname . ' ' . $this->lastname . ' (ID: ' . $this->id . ')';
+    }
+
+    /**
+     * @param mixed $gender
+     */
+    public function setGender($gender) {
+        $this->gender = $gender;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getGender() {
+        return $this->gender;
     }
 
 }

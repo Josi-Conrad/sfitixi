@@ -27,14 +27,20 @@ class PersonType extends CommonAbstractType {
      */
     public function buildForm(FormBuilderInterface $builder, array $options) {
 
-        $builder->add('title', 'choice', array(
-            'label' => 'person.field.title',
+        $builder->add('gender', 'choice', array(
+            'label' => 'person.field.gender',
             'choices' => array(
                 'm' => 'person.title.male',
                 'f' => 'person.title.female'),
             'multiple' => false,
             'expanded' => true,
         ));
+
+        $builder->add('title', 'text', array(
+            'label' => 'person.field.title',
+            'required' => false,
+        ));
+
         $builder->add('firstname', 'text', array(
             'label' => 'person.field.firstname',
             'attr'=>array('title' => 'form.field.title.not_blank'),

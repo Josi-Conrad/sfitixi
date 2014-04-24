@@ -1,6 +1,7 @@
 #Person
 person.field.age: Alter
 person.field.isactive: Ist Aktiv
+person.field.gender: Geschlecht
 person.field.title: Anrede
 person.title.male: Herr
 person.title.female: Frau

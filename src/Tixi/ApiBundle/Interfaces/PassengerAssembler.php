@@ -24,11 +24,12 @@ class PassengerAssembler {
      * @return Passenger
      */
     public function registerDTOtoNewPassenger(PassengerRegisterDTO $passengerDTO) {
-        $passenger = Passenger::registerPassenger($passengerDTO->title, $passengerDTO->firstname,
+        $passenger = Passenger::registerPassenger($passengerDTO->gender, $passengerDTO->firstname,
             $passengerDTO->lastname, $passengerDTO->telephone,
             Address::registerAddress(
                 $passengerDTO->street, $passengerDTO->postalCode,
                 $passengerDTO->city, $passengerDTO->country),
+            $passengerDTO->title,
             $passengerDTO->isInWheelChair,
             $passengerDTO->gotMonthlyBilling, $passengerDTO->isOverweight,
             $passengerDTO->email, $passengerDTO->entryDate, $passengerDTO->birthday,
@@ -52,9 +53,9 @@ class PassengerAssembler {
         $address = $passenger->getAddress();
         $address->updateAddressData($passengerDTO->street, $passengerDTO->postalCode,
             $passengerDTO->city, $passengerDTO->country);
-        $passenger->updatePassengerData($passengerDTO->title, $passengerDTO->firstname,
+        $passenger->updatePassengerData($passengerDTO->gender, $passengerDTO->firstname,
             $passengerDTO->lastname, $passengerDTO->telephone,
-            $address, $passengerDTO->isInWheelChair,
+            $address, $passengerDTO->title, $passengerDTO->isInWheelChair,
             $passengerDTO->gotMonthlyBilling, $passengerDTO->isOverweight,
             $passengerDTO->email, $passengerDTO->entryDate, $passengerDTO->birthday,
             $passengerDTO->extraMinutes, $passengerDTO->details, $passengerDTO->notice);
@@ -71,6 +72,7 @@ class PassengerAssembler {
         $passengerDTO = new PassengerRegisterDTO();
         $passengerDTO->person_id = $passenger->getId();
         $passengerDTO->isActive = $passenger->getIsActive();
+        $passengerDTO->gender = $passenger->getGender();
         $passengerDTO->title = $passenger->getTitle();
         $passengerDTO->firstname = $passenger->getFirstname();
         $passengerDTO->lastname = $passenger->getLastname();
@@ -118,7 +120,7 @@ class PassengerAssembler {
         $passengerListDTO = new PassengerListDTO();
         $passengerListDTO->id = $passenger->getId();
         $passengerListDTO->isActive = $passenger->getIsActive();
-        $passengerListDTO->title = $passenger->getTitle();
+        $passengerListDTO->gender = $passenger->getGender();
         $passengerListDTO->firstname = $passenger->getFirstname();
         $passengerListDTO->telephone = $passenger->getTelephone();
         $passengerListDTO->lastname = $passenger->getLastname();

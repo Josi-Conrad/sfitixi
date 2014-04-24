@@ -89,8 +89,8 @@ class DriverAssignTest extends WebTestCase {
         $this->addressRepo->store($address);
 
         $driver = Driver::registerDriver(
-            'Herr', 'Max', 'Mühlemann', '041 222 32 32',
-            $address, 'F3234141', $driverCategory, true, 'test@test.de', new \DateTime(), new \DateTime(),
+            'm', 'Max', 'Mühlemann', '041 222 32 32',
+            $address, 'F3234141', $driverCategory, true, '', 'test@test.de', new \DateTime(), new \DateTime(),
             5, 'alles nur ein Test'
         );
         $this->driverRepo->store($driver);

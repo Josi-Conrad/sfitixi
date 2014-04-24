@@ -18,6 +18,7 @@ class PersonRegisterDTO extends AddressRegisterDTO {
     //Person
     public $person_id;
     public $isActive;
+    public $gender;
     public $title;
     public $firstname;
     public $lastname;
