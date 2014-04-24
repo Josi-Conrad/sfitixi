@@ -9,13 +9,13 @@
                   method="post" enctype="application/x-www-form-urlencoded">
                 <p>
                     <label for="fpw_username">{% trans %} login.form.username {% endtrans %}</label>
-                    <input type="text" id="username" name="_username" value="{{ last_username }}"
+                    <input type="text" id="fpw_login_username" name="_username" value="{{ last_username }}"
                            autocomplete="on" required autofocus/>
                 </p>
 
                 <p>
                     <label for="fpw_password">{% trans %} login.form.password {% endtrans %}</label>
-                    <input type="password" id="password" name="_password"
+                    <input type="password" id="fpw_login_password" name="_password"
                            required/>
                 </p>
 
@@ -24,7 +24,7 @@
                 </p>
 
                 <p>
-                    <button type="submit" id="login" class="btn btn-primary">
+                    <button type="submit" id="fpx_login_login" class="btn btn-primary">
                         {% trans %} login.button.login {% endtrans %}
                     </button>
                 </p>
