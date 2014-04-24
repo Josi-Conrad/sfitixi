@@ -1,19 +1,19 @@
 <div class="upperRightMargin">
     {% if is_granted('IS_AUTHENTICATED_FULLY') %}
         <div>
-            {{ app.user.username }} <a href="{{ path('tixi_logout') }}">{% trans %}button.logout{% endtrans %}</a>
+            {{ app.user.username }} <a id="fpx_topaction_logout" href="{{ path('tixi_logout') }}">{% trans %}button.logout{% endtrans %}</a>
         </div>
             <div>
-                <a href="{{ path('tixiapi_user_profile_get') }}">{% trans %}button.settings{% endtrans %}</a>
+                <a id="fpx_topaction_settings" href="{{ path('tixiapi_user_profile_get') }}">{% trans %}button.settings{% endtrans %}</a>
                 |
-                <a href="{{ path('tixiapi_help') }}">{% trans %}button.help{% endtrans %}</a>
+                <a id="fpx_topaction_help" href="{{ path('tixiapi_help') }}">{% trans %}button.help{% endtrans %}</a>
             </div>
     {% else %}
         <div>
-            <a href="{{ path('tixi_login') }}">{% trans %}button.login{% endtrans %}</a>
+            <a id="fpx_topaction_login" href="{{ path('tixi_login') }}">{% trans %}button.login{% endtrans %}</a>
         </div>
             <div>
-                <a href="{{ path('tixiapi_help') }}">{% trans %}button.help{% endtrans %}</a>
+                <a id="fpx_topaction_help" href="{{ path('tixiapi_help') }}">{% trans %}button.help{% endtrans %}</a>
             </div>
 
     {% endif %}
