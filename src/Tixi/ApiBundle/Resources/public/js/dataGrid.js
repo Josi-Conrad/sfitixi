@@ -95,12 +95,21 @@ function DataGrid(outline, gridId, dblClickCallback, isEmbedded, trans) {
     this._initFilterControl = function () {
         var _filterControlOutline = _this._outline.find('.filterControl'),
             _filterTextInput = $(_filterControlOutline).find('.gridFilterInput'),
-            _filterCommitButton = $(_filterControlOutline).find('.gridFilterCommit');
+            _filterCommitButton = $(_filterControlOutline).find('.gridFilterCommit'),
+            _searchExecutionTimeout;
         _filterTextInput.keypress(function (e) {
             if (e.which == 13) {
                 _this._onFilterControlActivation(_filterTextInput.val());
             }
-        })
+        });
+        _filterTextInput.on('keyup', function() {
+            if(_searchExecutionTimeout) {
+                clearTimeout(_searchExecutionTimeout);
+            }
+            _searchExecutionTimeout = setTimeout(function() {
+                _this._onFilterControlActivation(_filterTextInput.val())
+            },300);
+        });
         _filterCommitButton.on('click', function () {
             _this._onFilterControlActivation(_filterTextInput.val());
         });
