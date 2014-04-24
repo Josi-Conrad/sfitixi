@@ -89,7 +89,6 @@ class ServicePlanAssembler {
             $this->dateTimeService->convertToLocalDateTimeString($servicePlan->getStart());
         $servicePlanEmbeddedListDTO->end =
             $this->dateTimeService->convertToLocalDateTimeString($servicePlan->getEnd());
-        $servicePlanEmbeddedListDTO->memo = $servicePlan->getMemo();
         return $servicePlanEmbeddedListDTO;
     }
 

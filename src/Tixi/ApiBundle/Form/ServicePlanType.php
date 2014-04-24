@@ -45,7 +45,7 @@ class ServicePlanType extends CommonAbstractType{
                 new NotBlank(array('message'=>'serviceplan.date.not_blank'))
             ),
         ));
-        $builder->add('memo', 'text', array(
+        $builder->add('memo', 'textarea', array(
             'required'  => false,
             'label' => 'serviceplan.field.memo'
         ));
