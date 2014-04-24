@@ -13,6 +13,7 @@ use Symfony\Component\DependencyInjection\ContainerAware;
 use Tixi\ApiBundle\Shared\DataGrid\GridControllers\DriverAbsentDataGridController;
 use Tixi\ApiBundle\Shared\DataGrid\GridControllers\DriverDataGridController;
 use Tixi\ApiBundle\Shared\DataGrid\GridControllers\Management\BankHolidayDataGridController;
+use Tixi\ApiBundle\Shared\DataGrid\GridControllers\Management\DriverCategoryDataGridController;
 use Tixi\ApiBundle\Shared\DataGrid\GridControllers\Management\HandicapDataGridController;
 use Tixi\ApiBundle\Shared\DataGrid\GridControllers\Management\InsuranceDataGridController;
 use Tixi\ApiBundle\Shared\DataGrid\GridControllers\Management\PoiKeywordDataGridController;
@@ -176,5 +177,14 @@ class DataGridControllerFactory extends ContainerAware{
      */
     public function createManagementVehicleDepotController($embeddedState=false, array $routeProperties=array()) {
         return new VehicleDepotDataGridController($this->container, $embeddedState, $routeProperties);
+    }
+
+    /**
+     * @param bool $embeddedState
+     * @param array $routeProperties
+     * @return DriverCategoryDataGridController
+     */
+    public function createManagementDriverCategoryController($embeddedState=false, array $routeProperties=array()) {
+        return new DriverCategoryDataGridController($this->container, $embeddedState, $routeProperties);
     }
 } 

@@ -29,6 +29,7 @@
         <parameter key="tixi_api.insuranceassembler.class">Tixi\ApiBundle\Interfaces\Management\InsuranceAssembler</parameter>
         <parameter key="tixi_api.shifttypeassembler.class">Tixi\ApiBundle\Interfaces\Management\ShiftTypeAssembler</parameter>
         <parameter key="tixi_api.bankholidayassembler.class">Tixi\ApiBundle\Interfaces\Management\BankHolidayAssembler</parameter>
+        <parameter key="tixi_api.drivercategoryassembler.class">Tixi\ApiBundle\Interfaces\Management\DriverCategoryAssembler</parameter>
 
     </parameters>
 
@@ -116,6 +117,7 @@
             </call>
         </service>
         <service id="tixi_api.assemblerBankHoliday" class="%tixi_api.bankholidayassembler.class%"/>
+        <service id="tixi_api.assemblerDriverCategory" class="%tixi_api.drivercategoryassembler.class%"/>
 
     </services>
 

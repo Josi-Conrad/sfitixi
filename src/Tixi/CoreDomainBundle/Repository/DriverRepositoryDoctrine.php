@@ -34,7 +34,7 @@ class DriverRepositoryDoctrine extends CommonBaseRepositoryDoctrine implements D
     public function getAmountByDriverCategory(DriverCategory $category)
     {
         $qb = parent::createQueryBuilder('e')->select('count(e.id)');
-        $qb->add('where', 'e.category = :category');
+        $qb->add('where', 'e.driverCategory = :category');
         $qb->setParameter('category', $category);
         return $qb->getQuery()->getSingleScalarResult();
     }

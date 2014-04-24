@@ -10,6 +10,7 @@ namespace Tixi\CoreDomain;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Tixi\CoreDomain\Shared\CommonBaseEntity;
 
 /**
  * Tixi\CoreDomain\Address
@@ -17,7 +18,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="Tixi\CoreDomainBundle\Repository\AddressRepositoryDoctrine")
  * @ORM\Table(name="address")
  */
-class Address {
+class Address extends CommonBaseEntity{
     /**
      * @ORM\Id
      * @ORM\Column(type="bigint", name="id")
@@ -72,7 +73,8 @@ class Address {
      */
     protected $editFlag;
 
-    private function __construct() {
+    protected function __construct() {
+        parent::__construct();
         $this->pois = new ArrayCollection();
     }
 

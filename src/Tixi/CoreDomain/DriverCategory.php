@@ -9,6 +9,7 @@
 namespace Tixi\CoreDomain;
 
 use Doctrine\ORM\Mapping as ORM;
+use Tixi\CoreDomain\Shared\CommonBaseEntity;
 
 /**
  * Tixi\CoreDomain\DriverCategory
@@ -16,7 +17,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="Tixi\CoreDomainBundle\Repository\DriverCategoryRepositoryDoctrine")
  * @ORM\Table(name="driver_category")
  */
-class DriverCategory {
+class DriverCategory extends CommonBaseEntity {
     /**
      * @ORM\Id
      * @ORM\Column(type="integer", name="id")
@@ -33,7 +34,8 @@ class DriverCategory {
      * @param $name
      * @return DriverCategory
      */
-    private function __construct($name) {
+    protected function __construct($name) {
+        parent::__construct();
         $this->setName($name);
     }
 
@@ -41,8 +43,18 @@ class DriverCategory {
      * @param $name
      * @return DriverCategory
      */
-    public static function registerDriverCategory($name){
+    public static function registerDriverCategory($name) {
         return new DriverCategory($name);
+    }
+
+    /**
+     * @param $name
+     * @return DriverCategory
+     */
+    public function updateDriverCategoryData($name = null) {
+        if (!empty($name)) {
+            $this->setName($name);
+        }
     }
 
     /**
