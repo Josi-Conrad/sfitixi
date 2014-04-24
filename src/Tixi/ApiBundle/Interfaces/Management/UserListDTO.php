@@ -34,7 +34,7 @@ class UserListDTO implements DataGridSourceClass{
      */
     public $email;
     /**
-     * @GridField(propertyId="User.roles", headerName="user.field.roles", order=3)
+     * @GridField(propertyId="Role.name", headerName="user.field.roles", order=3)
      */
     public $roles;
 

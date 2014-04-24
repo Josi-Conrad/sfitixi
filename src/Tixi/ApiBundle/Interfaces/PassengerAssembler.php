@@ -99,7 +99,6 @@ class PassengerAssembler {
         return $passengerDTO;
     }
 
-
     /**
      * @param $passengers
      * @return array
@@ -127,6 +126,8 @@ class PassengerAssembler {
         $passengerListDTO->street = $passenger->getAddress()->getStreet();
         $passengerListDTO->city = $passenger->getAddress()->getCity();
         $passengerListDTO->isInWheelChair = $passenger->getIsInWheelChairAsString();
+        $passengerListDTO->gotMonthlyBilling = $passenger->getMonthlyBillingAsString();
+        $passengerListDTO->insurances = $passenger->getInsurancesAsString();
         return $passengerListDTO;
     }
 }

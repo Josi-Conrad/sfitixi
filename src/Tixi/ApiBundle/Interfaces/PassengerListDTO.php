@@ -58,8 +58,17 @@ class PassengerListDTO implements DataGridSourceClass {
      * @GridField(propertyId="Passenger.isInWheelChair", headerName="passenger.field.isinwheelchair", order=9)
      */
     public $isInWheelChair;
+    /**
+     * @GridField(propertyId="Passenger.gotMonthlyBilling", headerName="passenger.field.payment", order=10)
+     */
+    public $gotMonthlyBilling;
+    /**
+     * @GridField(propertyId="Insurance.name", headerName="passenger.field.insurance", order=11)
+     */
+    public $insurances;
 
     public function getAccessQuery() {
-        return new GenericAccessQuery('Passenger', 'Tixi\CoreDomain\Passenger Passenger JOIN Passenger.address Address', 'Passenger.id');
+        return new GenericAccessQuery('Passenger', 'Tixi\CoreDomain\Passenger Passenger JOIN Passenger.address Address
+        LEFT JOIN Passenger.insurances Insurance', 'Passenger.id');
     }
 }

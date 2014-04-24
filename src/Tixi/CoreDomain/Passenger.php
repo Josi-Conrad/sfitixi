@@ -302,4 +302,41 @@ class Passenger extends Person {
     public static function constructIsInWheelChairString($isInWheelChair) {
         return $isInWheelChair ? 'passenger.isinwheelchair.yes' : 'passenger.isinwheelchair.no';
     }
+
+    /**
+     * @return string
+     */
+    public function getMonthlyBillingAsString() {
+        return self::constructMonthlyBillingString($this->getGotMonthlyBilling());
+    }
+
+    /**
+     * @param $monthlyBilling
+     * @return string
+     */
+    public static function constructMonthlyBillingString($monthlyBilling) {
+        return $monthlyBilling ? 'passenger.monthlybilling.yes' : 'passenger.monthlybilling.no';
+    }
+
+    /**
+     * @return string
+     */
+    public function getInsurancesAsString() {
+        return self::constructInsurancesString($this->getInsurances());
+    }
+
+    /**
+     * @param $insurances
+     * @return string
+     */
+    public static function constructInsurancesString($insurances) {
+        $string = '';
+        foreach ($insurances as $key => $insurance) {
+            if ($key !== 0) {
+                $string .= ', ';
+            }
+            $string .= $insurance->getName();
+        }
+        return $string;
+    }
 }
