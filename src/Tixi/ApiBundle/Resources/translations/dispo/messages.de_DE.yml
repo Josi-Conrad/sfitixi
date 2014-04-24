@@ -33,6 +33,8 @@ repeateddrivingmission.weekdayselection.text: Wählen Sie bitte die Wochentage, 
 repeateddrivingmission.shiftselection.text: Wählen Sie bitte die Schichten, an denen gefahren werden soll:
 repeateddrivingmission.everyweek.text: jeden
 
+repeateddrivingmission.validtillrecalled: Auf Widerruf
+
 firstweek.name: 1. Woche
 secondweek.name: 2. Woche
 thirdweek.name: 3. Woche

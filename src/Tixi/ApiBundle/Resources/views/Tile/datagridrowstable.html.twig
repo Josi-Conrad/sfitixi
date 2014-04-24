@@ -2,7 +2,7 @@
 {% for row in gridState.getRows() %}
     <tr id="{{ 'fpr_' ~ gridState.getMenuId() ~ '_' ~ gridState.getGridIdentifier() ~ '_row_' ~ row.getRowId() }}" data-rowid="{{ gridState.getGridIdentifier() ~ '_' ~ row.getRowId() }}">
         {% for field in row.getFields() %}
-            <td id="{{ 'fpr_' ~ gridState.getMenuId() ~ '_' ~ gridState.getGridIdentifier() ~ '_row_' ~ row.getRowId() ~ '_' ~ field.getFieldPropertyName() }}">{{ field.getFieldValue() }}</td>
+            <td id="{{ 'fpr_' ~ gridState.getMenuId() ~ '_' ~ gridState.getGridIdentifier() ~ '_row_' ~ row.getRowId() ~ '_' ~ field.getFieldPropertyName() }}">{{ field.getFieldValue()|trans }}</td>
         {% endfor %}
     </tr>
 {% endfor %}

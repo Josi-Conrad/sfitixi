@@ -10,6 +10,7 @@ namespace Tixi\CoreDomain\Dispo;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Tixi\ApiBundle\Helper\DateTimeService;
 use Tixi\CoreDomain\Driver;
 use Tixi\CoreDomain\Shared\CommonBaseEntity;
 
@@ -63,6 +64,7 @@ class RepeatedDrivingAssertionPlan extends CommonBaseEntity {
     }
 
     public static function registerRepeatedAssertionPlan($memo, \DateTime $anchorDate, $frequency, $withHolidays, \DateTime $endingDate=null) {
+        $endingDate = (null!==$endingDate) ? $endingDate : DateTimeService::getMaxDateTime();
         $assertion = new RepeatedDrivingAssertionPlan();
         $assertion->setMemo($memo);
         $assertion->setAnchorDate($anchorDate);

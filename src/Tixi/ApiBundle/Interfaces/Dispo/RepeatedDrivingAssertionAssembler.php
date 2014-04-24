@@ -120,7 +120,7 @@ class RepeatedDrivingAssertionAssembler {
         $assertionDTO->id = $assertionPlan->getId();
         $assertionDTO->memo = $assertionPlan->getMemo();
         $assertionDTO->anchorDate = $assertionPlan->getAnchorDate();
-        $assertionDTO->endDate = $assertionPlan->getEndingDate();
+        $assertionDTO->endDate = ($assertionPlan->getEndingDate() != DateTimeService::getMaxDateTime()) ? $assertionPlan->getEndingDate() : null;
         $assertionDTO->frequency = $assertionPlan->getFrequency();
         $assertionDTO->withHolidays = $assertionPlan->getWithHolidays();
         if($assertionDTO->frequency === 'weekly') {
@@ -216,7 +216,7 @@ class RepeatedDrivingAssertionAssembler {
         $dto->id = $assertionPlan->getId();
         $dto->memo = $assertionPlan->getMemo();
         $dto->anchorDate = $assertionPlan->getAnchorDate()->format('d.m.Y');
-        $dto->endDate = $assertionPlan->getEndingDate() ? $assertionPlan->getEndingDate()->format('d.m.Y') : null;
+        $dto->endDate = ($assertionPlan->getEndingDate()!=DateTimeService::getMaxDateTime()) ? $assertionPlan->getEndingDate()->format('d.m.Y') : 'repeateddrivingmission.validtillrecalled';
         $dto->frequency= $assertionPlan->getFrequency();
         return $dto;
     }
