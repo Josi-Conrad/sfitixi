@@ -39,6 +39,8 @@
         <parameter key="bankholiday_repository.doctrine.class">Tixi\CoreDomainBundle\Repository\BankHolidayRepository</parameter>
         <parameter key="route.doctrine.entity">Tixi\CoreDomain\Dispo\Route</parameter>
         <parameter key="route_repository.doctrine.class">Tixi\CoreDomainBundle\Repository\Dispo\RouteRepositoryDoctrine</parameter>
+        <parameter key="shift.doctrine.entity">Tixi\CoreDomain\Dispo\Shift</parameter>
+        <parameter key="shift_repository.doctrine.class">Tixi\CoreDomainBundle\Repository\Dispo\ShiftRepositoryDoctrine</parameter>
         <parameter key="shifttype.doctrine.entity">Tixi\CoreDomain\Dispo\ShiftType</parameter>
         <parameter key="shifttype_repository.doctrine.class">Tixi\CoreDomainBundle\Repository\Dispo\ShiftTypeRepositoryDoctrine</parameter>
         <parameter key="repeateddrivingassertionplan.doctrine.entity">Tixi\CoreDomain\Dispo\RepeatedDrivingAssertionPlan</parameter>
@@ -140,6 +142,11 @@
         <service id="route_repository" alias="route_repository.doctrine"></service>
         <service id="route_repository.doctrine" class="%route_repository.doctrine.class%" factory-service="doctrine" factory-method="getrepository">
             <argument type="string">%route.doctrine.entity%</argument>
+        </service>
+
+        <service id="shift_repository" alias="shift_repository.doctrine"></service>
+        <service id="shift_repository.doctrine" class="%shift_repository.doctrine.class%" factory-service="doctrine" factory-method="getrepository">
+            <argument type="string">%shift.doctrine.entity%</argument>
         </service>
 
         <service id="shifttype_repository" alias="shifttype_repository.doctrine"></service>

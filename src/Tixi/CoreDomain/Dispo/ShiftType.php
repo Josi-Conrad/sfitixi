@@ -21,7 +21,7 @@ use Tixi\CoreDomain\Shared\CommonBaseEntity;
 class ShiftType extends CommonBaseEntity {
     /**
      * @ORM\Id
-     * @ORM\Column(type="string", name="id")
+     * @ORM\Column(name="id", type="integer")
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     protected $id;

@@ -9,6 +9,7 @@
 namespace Tixi\ApiBundle\Form;
 
 
+use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints\DateTime;
@@ -48,14 +49,22 @@ class PassengerType extends PersonType {
             'property' => 'name',
             'expanded' => true,
             'multiple' => true,
-            'label' => 'passenger.field.handicap'
+            'label' => 'passenger.field.handicap',
+            'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('e')
+                        ->where('e.isDeleted = 0');
+                },
         ));
         $builder->add('insurances', 'entity', array(
             'class' => 'Tixi\CoreDomain\Insurance',
             'property' => 'name',
             'expanded' => true,
             'multiple' => true,
-            'label' => 'passenger.field.insurance'
+            'label' => 'passenger.field.insurance',
+            'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('e')
+                        ->where('e.isDeleted = 0');
+                },
         ));
         $builder->add('gotMonthlyBilling', 'checkbox', array(
             'required' => false,

@@ -9,6 +9,7 @@
 namespace Tixi\ApiBundle\Form\Dispo;
 
 
+use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -32,7 +33,7 @@ class ShiftSelectionType extends AbstractType{
             'property' => 'name',
             'expanded' => true,
             'multiple' => true,
-            'label' => '__label__'
+            'label' => '__label__',
         ));
     }
 

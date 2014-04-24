@@ -43,9 +43,13 @@ class HandicapController extends Controller {
      * @Method({"GET","POST"})
      * @param Request $request
      * @param bool $embeddedState
+     * @throws AccessDeniedException
      * @return Response
      */
     public function getHandicapsAction(Request $request, $embeddedState = false) {
+        if (false === $this->get('security.context')->isGranted('ROLE_MANAGER')) {
+            throw new AccessDeniedException();
+        }
         $embeddedState = $embeddedState || $request->get('embedded') === "true";
         $isPartial = $request->get('partial') === "true";
 
@@ -72,9 +76,13 @@ class HandicapController extends Controller {
      * @Method({"GET","POST"})
      * @param Request $request
      * @param $handicapId
+     * @throws AccessDeniedException
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function deleteHandicapAction(Request $request, $handicapId) {
+        if (false === $this->get('security.context')->isGranted('ROLE_MANAGER')) {
+            throw new AccessDeniedException();
+        }
         $handicap = $this->getHandicap($handicapId);
         $tileRenderer = $this->get('tixi_api.tilerenderer');
         $passengerRepository = $this->get('passenger_repository');
@@ -96,9 +104,13 @@ class HandicapController extends Controller {
      * @Method({"GET","POST"})
      * @Breadcrumb("handicap.panel.new", route="tixiapi_management_handicap_new")
      * @param Request $request
+     * @throws AccessDeniedException
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      */
     public function newHandicapAction(Request $request) {
+        if (false === $this->get('security.context')->isGranted('ROLE_MANAGER')) {
+            throw new AccessDeniedException();
+        }
         $tileRenderer = $this->get('tixi_api.tilerenderer');
 
         $form = $this->getForm();
@@ -122,9 +134,13 @@ class HandicapController extends Controller {
      * @Breadcrumb("{handicapId}", route={"name"="tixiapi_management_handicap_edit", "parameters"={"handicapId"}})
      * @param Request $request
      * @param $handicapId
+     * @throws AccessDeniedException
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      */
     public function editHandicapAction(Request $request, $handicapId) {
+        if (false === $this->get('security.context')->isGranted('ROLE_MANAGER')) {
+            throw new AccessDeniedException();
+        }
         $tileRenderer = $this->get('tixi_api.tilerenderer');
         /** @var HandicapAssembler $assembler */
         $assembler = $this->get('tixi_api.assemblerhandicap');

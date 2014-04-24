@@ -46,6 +46,9 @@ class VehicleDepotController extends Controller {
      * @return Response
      */
     public function getVehicleDepotsAction(Request $request, $embeddedState = false) {
+        if (false === $this->get('security.context')->isGranted('ROLE_MANAGER')) {
+            throw new AccessDeniedException();
+        }
         $embeddedState = $embeddedState || $request->get('embedded') === "true";
         $isPartial = $request->get('partial') === "true";
 
@@ -75,6 +78,9 @@ class VehicleDepotController extends Controller {
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function deleteVehicleDepotAction(Request $request, $vehicleDepotId) {
+        if (false === $this->get('security.context')->isGranted('ROLE_MANAGER')) {
+            throw new AccessDeniedException();
+        }
         $tileRenderer = $this->get('tixi_api.tilerenderer');
         $vehicleDepot = $this->getVehicleDepot($vehicleDepotId);
         $vehicleRepository = $this->get('vehicle_repository');
@@ -99,6 +105,9 @@ class VehicleDepotController extends Controller {
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      */
     public function newVehicleDepotAction(Request $request) {
+        if (false === $this->get('security.context')->isGranted('ROLE_MANAGER')) {
+            throw new AccessDeniedException();
+        }
         $tileRenderer = $this->get('tixi_api.tilerenderer');
 
         $form = $this->getForm();
@@ -125,6 +134,9 @@ class VehicleDepotController extends Controller {
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      */
     public function editVehicleDepotAction(Request $request, $vehicleDepotId) {
+        if (false === $this->get('security.context')->isGranted('ROLE_MANAGER')) {
+            throw new AccessDeniedException();
+        }
         $tileRenderer = $this->get('tixi_api.tilerenderer');
         /** @var VehicleDepotAssembler $assembler */
         $assembler = $this->get('tixi_api.assemblervehicledepot');
