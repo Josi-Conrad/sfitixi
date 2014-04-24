@@ -8,6 +8,7 @@
 
 namespace Tixi\ApiBundle\Interfaces\Dispo;
 
+use Tixi\ApiBundle\Helper\DateTimeService;
 use Tixi\ApiBundle\Shared\DataGrid\Annotations\GridField;
 use Tixi\ApiBundle\Shared\DataGrid\DataGridSourceClass;
 use Tixi\CoreDomain\Shared\GenericEntityFilter\GenericAccessQuery;
@@ -38,7 +39,7 @@ class RepeatedDrivingAssertionEmbeddedListDTO implements DataGridSourceClass {
      */
     public $anchorDate;
     /**
-     * @GridField(propertyId="RepeatedDrivingAssertionPlan.endingDate", headerName="repeateddrivingmission.field.endDate", order=3)
+     * @GridField(propertyId="RepeatedDrivingAssertionPlan.endingDate", headerName="repeateddrivingmission.field.endDate", restrictive=true, comparingOperator=">", order=3)
      */
     public $endDate;
     /**
@@ -61,6 +62,7 @@ class RepeatedDrivingAssertionEmbeddedListDTO implements DataGridSourceClass {
     public static function createReferenceDTOByDriverId($driverId) {
         $dto = new RepeatedDrivingAssertionEmbeddedListDTO();
         $dto->driverId = $driverId;
+        $dto->endDate = DateTimeService::getUTCnow();
         return $dto;
     }
 }

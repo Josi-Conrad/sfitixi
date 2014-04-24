@@ -17,6 +17,15 @@ use Symfony\Component\Validator\Constraints\DateTime;
  * @package Tixi\ApiBundle\Helper
  */
 class DateTimeService extends ContainerAware {
+
+    public static function getUTCnow() {
+        return new \DateTime('now', new \DateTimeZone('UTC'));
+    }
+
+    public static function getMaxDateTime() {
+        return new \DateTime('2999-01-01');
+    }
+
     /**
      * @param \DateTime $utcDate
      * @return \DateTime

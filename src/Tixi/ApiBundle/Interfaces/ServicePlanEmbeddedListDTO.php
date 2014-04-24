@@ -8,6 +8,7 @@
 
 namespace Tixi\ApiBundle\Interfaces;
 
+use Tixi\ApiBundle\Helper\DateTimeService;
 use Tixi\ApiBundle\Shared\DataGrid\Annotations\GridField;
 use Tixi\ApiBundle\Shared\DataGrid\DataGridSourceClass;
 use Tixi\CoreDomain\Shared\GenericEntityFilter\GenericAccessQuery;
@@ -56,11 +57,11 @@ class ServicePlanEmbeddedListDTO implements DataGridSourceClass{
      * @return ServicePlanEmbeddedListDTO
      */
     public static function createReferenceDTOByVehicleId($vehicleId) {
-        $utcNow = new \DateTime('now', new \DateTimeZone('UTC'));
+
 
         $dto = new ServicePlanEmbeddedListDTO();
         $dto->vehicleId = $vehicleId;
-        $dto->end = $utcNow;
+        $dto->end = DateTimeService::getUTCnow();
         return $dto;
     }
 }
