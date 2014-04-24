@@ -109,7 +109,7 @@ class DriverAssembler {
         $driverListDTO = new DriverListDTO();
         $driverListDTO->id = $driver->getId();
         $driverListDTO->isActive = $driver->getIsActive();
-        $driverListDTO->gender = $driver->getGender();
+        $driverListDTO->gender = $this->getGenderString($driver->getGender());
         $driverListDTO->firstname = $driver->getFirstname();
         $driverListDTO->telephone = $driver->getTelephone();
         $driverListDTO->lastname = $driver->getLastname();
@@ -117,5 +117,19 @@ class DriverAssembler {
         $driverListDTO->city = $driver->getAddress()->getCity();
         $driverListDTO->driverCategory = $driver->getDriverCategory()->getName();
         return $driverListDTO;
+    }
+
+    /**
+     * @param $gender
+     * @return string
+     */
+    protected function getGenderString($gender) {
+        $genderString = '';
+        if ($gender == 'm') {
+            $genderString = 'person.gender.male';
+        } else {
+            $genderString = 'person.gender.female';
+        }
+        return $genderString;
     }
 }

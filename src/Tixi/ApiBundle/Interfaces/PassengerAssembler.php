@@ -35,10 +35,10 @@ class PassengerAssembler {
             $passengerDTO->email, $passengerDTO->entryDate, $passengerDTO->birthday,
             $passengerDTO->extraMinutes, $passengerDTO->details, $passengerDTO->notice
         );
-        foreach($passengerDTO->handicaps as $handicap){
+        foreach ($passengerDTO->handicaps as $handicap) {
             $passenger->assignHandicap($handicap);
         }
-        foreach($passengerDTO->insurances as $insurance){
+        foreach ($passengerDTO->insurances as $insurance) {
             $passenger->assignInsurance($insurance);
         }
         return $passenger;
@@ -120,12 +120,26 @@ class PassengerAssembler {
         $passengerListDTO = new PassengerListDTO();
         $passengerListDTO->id = $passenger->getId();
         $passengerListDTO->isActive = $passenger->getIsActive();
-        $passengerListDTO->gender = $passenger->getGender();
+        $passengerListDTO->gender = $this->getGenderString($passenger->getGender());
         $passengerListDTO->firstname = $passenger->getFirstname();
         $passengerListDTO->telephone = $passenger->getTelephone();
         $passengerListDTO->lastname = $passenger->getLastname();
         $passengerListDTO->street = $passenger->getAddress()->getStreet();
         $passengerListDTO->city = $passenger->getAddress()->getCity();
         return $passengerListDTO;
+    }
+
+    /**
+     * @param $gender
+     * @return string
+     */
+    protected function getGenderString($gender) {
+        $genderString = '';
+        if ($gender == 'm') {
+            $genderString = 'person.gender.male';
+        } else {
+            $genderString = 'person.gender.female';
+        }
+        return $genderString;
     }
 }

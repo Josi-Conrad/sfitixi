@@ -30,8 +30,8 @@ class PersonType extends CommonAbstractType {
         $builder->add('gender', 'choice', array(
             'label' => 'person.field.gender',
             'choices' => array(
-                'm' => 'person.title.male',
-                'f' => 'person.title.female'),
+                'm' => 'person.gender.male',
+                'f' => 'person.gender.female'),
             'multiple' => false,
             'expanded' => true,
         ));
