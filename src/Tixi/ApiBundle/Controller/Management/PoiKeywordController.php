@@ -20,6 +20,7 @@ use Tixi\ApiBundle\Interfaces\Management\PoiKeywordRegisterDTO;
 use Tixi\ApiBundle\Menu\MenuService;
 use Tixi\ApiBundle\Tile\Core\FormTile;
 use Tixi\ApiBundle\Tile\Core\PanelDeleteFooterTile;
+use Tixi\ApiBundle\Tile\Core\ReferentialConstraintErrorTile;
 use Tixi\ApiBundle\Tile\Core\RootPanel;
 
 /**
@@ -74,11 +75,20 @@ class PoiKeywordController extends Controller{
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function deletePoiKeywordAction(Request $request, $poiKeywordId) {
-        $vehicle = $this->getPoiKeyword($poiKeywordId);
-        $vehicle->deleteLogically();
-        $this->get('entity_manager')->flush();
-
-        return $this->redirect($this->generateUrl('tixiapi_management_poikeywords_get'));
+        $tileRenderer = $this->get('tixi_api.tilerenderer');
+        $poiRepo = $this->get('poi_repository');
+        $poiKeyword = $this->getPoiKeyword($poiKeywordId);
+        $usageAmount = $poiRepo->getAmountByPOIKeyword($poiKeyword);
+        //it is not allowed to delete an enitity of this category that is still in use.
+        if($usageAmount>0) {
+            $rootPanel = new RootPanel($this->menuId, 'error.refintegrity.header.name');
+            $rootPanel->add(new ReferentialConstraintErrorTile($usageAmount));
+            return new Response($tileRenderer->render($rootPanel));
+        }else {
+            $poiKeyword->deleteLogically();
+            $this->get('entity_manager')->flush();
+            return $this->redirect($this->generateUrl('tixiapi_management_poikeywords_get'));
+        }
     }
 
     /**
