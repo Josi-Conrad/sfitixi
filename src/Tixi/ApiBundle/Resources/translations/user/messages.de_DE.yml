@@ -29,3 +29,6 @@ user.role.admin: Administrator
 role.user: Benutzer
 role.manager: Manager
 role.admin: Administrator
+
+#User Profile (settings)
+user.profile.panel.name: Benutzerprofil von

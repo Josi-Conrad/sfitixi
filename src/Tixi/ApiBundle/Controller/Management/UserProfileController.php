@@ -30,7 +30,7 @@ use Tixi\SecurityBundle\Entity\User;
  * Class UserProfileController
  * @package Tixi\ApiBundle\Controller\Management
  * @Breadcrumb("management.breadcrumb.name")
- * @Route("/user_profile_edit")
+ * @Route("/profile")
  */
 class UserProfileController extends Controller {
 
@@ -41,7 +41,7 @@ class UserProfileController extends Controller {
     }
 
     /**
-     * @Route("", name="tixiapi_user_profile_get")
+     * @Route("/edit", name="tixiapi_user_profile_get")
      * @Method({"GET","POST"})
      * @param Request $request
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
@@ -68,7 +68,7 @@ class UserProfileController extends Controller {
             $this->get('entity_manager')->flush();
             return $this->redirect($this->generateUrl('tixi_logout'));
         }
-        $rootPanel = new RootPanel($this->menuId, $user->getUserName());
+        $rootPanel = new RootPanel($this->menuId, 'user.profile.panel.name', $user->getUserName());
         $rootPanel->add(new FormTile($form, true));
 
         return new Response($tileRenderer->render($rootPanel));

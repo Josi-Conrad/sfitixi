@@ -45,11 +45,9 @@ class UserProfileType extends AbstractType{
         $builder->add('new_password', 'repeated', array(
             'type' => 'password',
             'invalid_message' => 'user.password.not_match',
+            'required' => false,
             'first_options'  => array('label' => 'user.field.new_password'),
             'second_options' => array('label' => 'user.field.new_password_2'),
-            'constraints' => array(
-                new NotBlank(array('message'=>'user.password.not_blank'))
-            ),
         ));
     }
 
