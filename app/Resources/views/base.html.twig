@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     {% set titleDisplayText = titleDisplayText|default('App') %}
     {% set titleDisplaySubText = titleDisplaySubText|default('') %}
-    <title>iTixi - {{ titleDisplayText|trans }} {{ titleDisplaySubText|trans }}</title>
+    <title>{{ tixi_parameter_app }} - {{ titleDisplayText|trans }} {{ titleDisplaySubText|trans }}</title>
     <meta name="description" content="">
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}"/>
     <link rel="stylesheet" href="{{ asset('css/bootstrap.css') }}">
@@ -44,7 +44,7 @@
         <hr>
         <footer>
             <p>
-                &copy;{{ tixi_parameter_client }}
+                &copy; {{ tixi_parameter_app }} {{ tixi_parameter_client }}
                 |
                 <a id="fpx_footeraction_about" href="{{ path('tixiapi_about') }}">
                     {{ tixi_parameter_app }} {{ tixi_parameter_version }}
