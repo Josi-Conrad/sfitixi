@@ -14,6 +14,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Tixi\ApiBundle\Form\Management\PoiKeywordType;
 use Tixi\ApiBundle\Interfaces\Management\PoiKeywordAssembler;
 use Tixi\ApiBundle\Interfaces\Management\PoiKeywordRegisterDTO;
@@ -43,9 +44,13 @@ class PoiKeywordController extends Controller{
      * @Method({"GET","POST"})
      * @param Request $request
      * @param bool $embeddedState
+     * @throws AccessDeniedException
      * @return Response
      */
     public function getPoiKeywordsAction(Request $request, $embeddedState = false) {
+        if (false === $this->get('security.context')->isGranted('ROLE_MANAGER')) {
+            throw new AccessDeniedException();
+        }
         $embeddedState = $embeddedState || $request->get('embedded') === "true";
         $isPartial = $request->get('partial') === "true";
 
@@ -72,9 +77,13 @@ class PoiKeywordController extends Controller{
      * @Method({"GET","POST"})
      * @param Request $request
      * @param $poiKeywordId
+     * @throws AccessDeniedException
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function deletePoiKeywordAction(Request $request, $poiKeywordId) {
+        if (false === $this->get('security.context')->isGranted('ROLE_MANAGER')) {
+            throw new AccessDeniedException();
+        }
         $tileRenderer = $this->get('tixi_api.tilerenderer');
         $poiRepo = $this->get('poi_repository');
         $poiKeyword = $this->getPoiKeyword($poiKeywordId);
@@ -96,11 +105,14 @@ class PoiKeywordController extends Controller{
      * @Method({"GET","POST"})
      * @Breadcrumb("poikeyword.panel.new", route="tixiapi_management_poikeyword_new")
      * @param Request $request
+     * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      */
     public function newPoiKeywordAction(Request $request) {
+        if (false === $this->get('security.context')->isGranted('ROLE_MANAGER')) {
+            throw new AccessDeniedException();
+        }
         $tileRenderer = $this->get('tixi_api.tilerenderer');
-
         $form = $this->getForm();
         $form->handleRequest($request);
         if ($form->isValid()) {
@@ -122,9 +134,13 @@ class PoiKeywordController extends Controller{
      * @Breadcrumb("{poiKeywordId}", route={"name"="tixiapi_management_poikeyword_edit", "parameters"={"poiKeywordId"}})
      * @param Request $request
      * @param $poiKeywordId
+     * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      */
     public function editPoiKeywordAction(Request $request, $poiKeywordId) {
+        if (false === $this->get('security.context')->isGranted('ROLE_MANAGER')) {
+            throw new AccessDeniedException();
+        }
         $tileRenderer = $this->get('tixi_api.tilerenderer');
         /** @var PoiKeywordAssembler $assembler */
         $assembler = $this->get('tixi_api.assemblerpoikeyword');

@@ -14,6 +14,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Tixi\ApiBundle\Form\Management\VehicleCategoryType;
 use Tixi\ApiBundle\Interfaces\Management\VehicleCategoryAssembler;
 use Tixi\ApiBundle\Interfaces\Management\VehicleCategoryRegisterDTO;
@@ -44,9 +45,13 @@ class VehicleCategoryController extends Controller{
      * @Method({"GET","POST"})
      * @param Request $request
      * @param bool $embeddedState
+     * @throws AccessDeniedException
      * @return Response
      */
     public function getVehicleCategoriesAction(Request $request, $embeddedState = false) {
+        if (false === $this->get('security.context')->isGranted('ROLE_MANAGER')) {
+            throw new AccessDeniedException();
+        }
         $embeddedState = $embeddedState || $request->get('embedded') === "true";
         $isPartial = $request->get('partial') === "true";
 
@@ -73,9 +78,13 @@ class VehicleCategoryController extends Controller{
      * @Method({"GET","POST"})
      * @param Request $request
      * @param $vehicleCategoryId
+     * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function deleteVehicleCategoryAction(Request $request, $vehicleCategoryId) {
+        if (false === $this->get('security.context')->isGranted('ROLE_MANAGER')) {
+            throw new AccessDeniedException();
+        }
         $tileRenderer = $this->get('tixi_api.tilerenderer');
         /** @var VehicleRepositoryDoctrine $vehicleCategoryRepository */
         $vehicleRepository = $this->get('vehicle_repository');
@@ -99,9 +108,13 @@ class VehicleCategoryController extends Controller{
      * @Method({"GET","POST"})
      * @Breadcrumb("vehiclecategory.panel.new", route="tixiapi_management_vehiclecategory_new")
      * @param Request $request
+     * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      */
     public function newVehicleCategoryAction(Request $request) {
+        if (false === $this->get('security.context')->isGranted('ROLE_MANAGER')) {
+            throw new AccessDeniedException();
+        }
         $tileRenderer = $this->get('tixi_api.tilerenderer');
 
         $form = $this->getForm();
@@ -125,9 +138,13 @@ class VehicleCategoryController extends Controller{
      * @Breadcrumb("{vehicleCategoryId}", route={"name"="tixiapi_management_vehiclecategory_edit", "parameters"={"vehicleCategoryId"}})
      * @param Request $request
      * @param $vehicleCategoryId
+     * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      */
-    public function editPOIAction(Request $request, $vehicleCategoryId) {
+    public function editVehicleCategoryAction(Request $request, $vehicleCategoryId) {
+        if (false === $this->get('security.context')->isGranted('ROLE_MANAGER')) {
+            throw new AccessDeniedException();
+        }
         $tileRenderer = $this->get('tixi_api.tilerenderer');
         /** @var VehicleCategoryAssembler $assembler */
         $assembler = $this->get('tixi_api.assemblervehiclecategory');
