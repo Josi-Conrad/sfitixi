@@ -35,6 +35,9 @@ repeateddrivingmission.everyweek.text: jeden
 
 repeateddrivingmission.validtillrecalled: Auf Widerruf
 
+weekly: wöchentlich
+monthly: monatlich
+
 firstweek.name: 1. Woche
 secondweek.name: 2. Woche
 thirdweek.name: 3. Woche
