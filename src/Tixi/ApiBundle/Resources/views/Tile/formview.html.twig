@@ -20,7 +20,7 @@
 
                                     <div class="col-md-8">
                                         <p id="{{ 'fpr_' ~ menuId ~ '_' ~ row.getFieldId() }}"
-                                           class="form-control-static">{{ row.getFieldValue() }}</p>
+                                           class="form-control-static">{{ row.getFieldValue()|trans }}</p>
                                     </div>
                                 </div>
                             {% endfor %}
@@ -34,7 +34,7 @@
 
                                     <div class="col-md-8">
                                         <p id="'fpr_' ~ menuId ~ '_' ~ row.getFieldId()"
-                                           class="form-control-static">{{ row.getFieldValue() }}</p>
+                                           class="form-control-static">{{ row.getFieldValue()|trans }}</p>
                                     </div>
                                 </div>
                             {% endfor %}

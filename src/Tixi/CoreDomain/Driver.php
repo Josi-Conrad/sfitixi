@@ -233,4 +233,20 @@ class Driver extends Person {
     public function getRepeatedDrivingAssertionPlans() {
         return $this->repeatedDrivingAssertionPlans;
     }
+
+
+    /**
+     * @return string
+     */
+    public function getWheelChairAttendanceAsString() {
+        return self::constructWheelChairAttendanceString($this->getWheelChairAttendance());
+    }
+
+    /**
+     * @param $wheelChairAttendance
+     * @return string
+     */
+    public static function constructWheelChairAttendanceString($wheelChairAttendance) {
+        return $wheelChairAttendance ? 'driver.wheelchairattendance.yes' : 'driver.wheelchairattendance.no';
+    }
 }

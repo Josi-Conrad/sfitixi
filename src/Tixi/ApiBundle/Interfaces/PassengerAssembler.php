@@ -120,26 +120,12 @@ class PassengerAssembler {
         $passengerListDTO = new PassengerListDTO();
         $passengerListDTO->id = $passenger->getId();
         $passengerListDTO->isActive = $passenger->getIsActive();
-        $passengerListDTO->gender = $this->getGenderString($passenger->getGender());
+        $passengerListDTO->gender = $passenger->getGenderAsString();
         $passengerListDTO->firstname = $passenger->getFirstname();
         $passengerListDTO->telephone = $passenger->getTelephone();
         $passengerListDTO->lastname = $passenger->getLastname();
         $passengerListDTO->street = $passenger->getAddress()->getStreet();
         $passengerListDTO->city = $passenger->getAddress()->getCity();
         return $passengerListDTO;
-    }
-
-    /**
-     * @param $gender
-     * @return string
-     */
-    protected function getGenderString($gender) {
-        $genderString = '';
-        if ($gender == 'm') {
-            $genderString = 'person.gender.male';
-        } else {
-            $genderString = 'person.gender.female';
-        }
-        return $genderString;
     }
 }

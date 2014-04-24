@@ -505,4 +505,25 @@ class Person extends CommonBaseEntity {
         return $this->gender;
     }
 
+    /**
+     * @return string
+     */
+    public function getGenderAsString() {
+        return self::constructGenderString($this->getGender());
+    }
+
+
+    /**
+     * @param $gender
+     * @return string
+     */
+    public static function constructGenderString($gender) {
+        $genderString = '';
+        if ($gender == 'm') {
+            $genderString = 'person.gender.male';
+        } else {
+            $genderString = 'person.gender.female';
+        }
+        return $genderString;
+    }
 }

@@ -55,7 +55,11 @@ class DriverListDTO implements DataGridSourceClass {
      */
     public $city;
     /**
-     * @GridField(propertyId="DriverCategory.name", headerName="driver.field.category", order=9)
+     * @GridField(propertyId="Driver.wheelChairAttendance", headerName="driver.field.wheelchair", order=9)
+     */
+    public $wheelChairAttendance;
+    /**
+     * @GridField(propertyId="DriverCategory.name", headerName="driver.field.category", order=10)
      */
     public $driverCategory;
 
