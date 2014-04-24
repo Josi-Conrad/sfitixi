@@ -11,6 +11,8 @@ namespace Tixi\ApiBundle\Tile\CustomFormView;
 use Symfony\Component\Validator\Constraints\DateTime;
 use Tixi\ApiBundle\Tile\Core\AbstractFormViewTile;
 use Tixi\ApiBundle\Tile\Core\FormRowView;
+use Tixi\CoreDomain\Passenger;
+use Tixi\CoreDomain\Person;
 
 /**
  * Class PassengerRegisterFormViewTile
@@ -22,12 +24,12 @@ class PassengerRegisterFormViewTile extends AbstractFormViewTile {
         /**@var $dto \Tixi\ApiBundle\Interfaces\PassengerRegisterDTO */
         $dto = $this->dto;
         $this->basicFormRows[] = new FormRowView('id', 'passenger.field.id', $dto->person_id);
-        if (!empty($dto->birthday)) {
-            $this->basicFormRows[] = new FormRowView('age', 'person.field.age', $this->getAge($dto->birthday));
-        }
+        $this->basicFormRows[] = new FormRowView('gender', 'person.field.gender', Person::constructGenderString($dto->gender));
         $this->basicFormRows[] = new FormRowView('firstname', 'person.field.firstname', $dto->firstname);
         $this->basicFormRows[] = new FormRowView('lastname', 'person.field.lastname', $dto->lastname);
         $this->basicFormRows[] = new FormRowView('telephone', 'person.field.telephone', $dto->telephone);
+        $this->basicFormRows[] = new FormRowView('isInWheelChair', 'passenger.field.isinwheelchair',
+            Passenger::constructIsInWheelChairString($dto->isInWheelChair));
         $this->basicFormRows[] = new FormRowView('notice', 'passenger.field.notice', $dto->notice);
 
         $this->expandedFormRows[] = new FormRowView('street', 'address.field.street', $dto->street);
@@ -39,6 +41,9 @@ class PassengerRegisterFormViewTile extends AbstractFormViewTile {
         }
         if (!empty($dto->birthday)) {
             $this->expandedFormRows[] = new FormRowView('birthday', 'person.field.birthday', $dto->birthday->format('d.m.Y'));
+        }
+        if (!empty($dto->birthday)) {
+            $this->expandedFormRows[] = new FormRowView('age', 'person.field.age', $this->getAge($dto->birthday));
         }
         $this->expandedFormRows[] = new FormRowView('extraminutes', 'person.field.extraminutes', $dto->extraMinutes);
     }

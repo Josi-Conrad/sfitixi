@@ -44,7 +44,12 @@ class PassengerType extends PersonType {
 
         parent::buildForm($builder, $options);
 
+        $builder->add('isInWheelChair', 'checkbox', array(
+            'required' => false,
+            'label' => 'passenger.field.isinwheelchair'
+        ));
         $builder->add('handicaps', 'entity', array(
+            'required' => false,
             'class' => 'Tixi\CoreDomain\Handicap',
             'property' => 'name',
             'expanded' => true,
@@ -56,6 +61,7 @@ class PassengerType extends PersonType {
                 },
         ));
         $builder->add('insurances', 'entity', array(
+            'required' => false,
             'class' => 'Tixi\CoreDomain\Insurance',
             'property' => 'name',
             'expanded' => true,

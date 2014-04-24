@@ -287,4 +287,19 @@ class Passenger extends Person {
     public function setInsurances($insurances) {
         $this->insurances = $insurances;
     }
+
+    /**
+     * @return string
+     */
+    public function getIsInWheelChairAsString() {
+        return self::constructIsInWheelChairString($this->getIsInWheelChair());
+    }
+
+    /**
+     * @param $isInWheelChair
+     * @return string
+     */
+    public static function constructIsInWheelChairString($isInWheelChair) {
+        return $isInWheelChair ? 'passenger.isinwheelchair.yes' : 'passenger.isinwheelchair.no';
+    }
 }

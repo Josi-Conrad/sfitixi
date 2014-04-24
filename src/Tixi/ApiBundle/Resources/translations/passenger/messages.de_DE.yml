@@ -8,11 +8,15 @@ passenger.panel.details: Fahrgast Details
 passenger.panel.edit: Fahrgast editieren
 passenger.field.id:  Fahrgast-ID
 passenger.field.monthlybilling: Monatliche Rechnung
+passenger.field.isinwheelchair: Rollstuhl
 passenger.field.notice: Notizen zum Fahrgast
 passenger.field.handicap: Behinderungen
 passenger.field.insurance: Versichert über
 passenger.button.new: Neuer Fahrgast
 passenger.button.delete: Fahrgast löschen
+
+passenger.isinwheelchair.yes: Ja
+passenger.isinwheelchair.no: Nein
 
 #Handicap
 handicap.list.name: Alle Behinderungen

@@ -234,7 +234,6 @@ class Driver extends Person {
         return $this->repeatedDrivingAssertionPlans;
     }
 
-
     /**
      * @return string
      */

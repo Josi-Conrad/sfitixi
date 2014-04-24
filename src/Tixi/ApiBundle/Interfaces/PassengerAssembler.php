@@ -126,6 +126,7 @@ class PassengerAssembler {
         $passengerListDTO->lastname = $passenger->getLastname();
         $passengerListDTO->street = $passenger->getAddress()->getStreet();
         $passengerListDTO->city = $passenger->getAddress()->getCity();
+        $passengerListDTO->isInWheelChair = $passenger->getIsInWheelChairAsString();
         return $passengerListDTO;
     }
 }
