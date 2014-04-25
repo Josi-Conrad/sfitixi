@@ -19,11 +19,12 @@ use Tixi\CoreDomain\Country;
 class AddressManagementImplDoctrine extends Controller implements AddressManagement {
     /**
      * @param $addressString
+     * @param int $limit
      * @return AddressHandleDTO[]
      */
-    public function getAddressSuggestionsByString($addressString) {
+    public function getAddressSuggestionsByString($addressString, $limit = 5) {
 
-        $searchString = $this->tokenizeFulltextSearchString($addressString, $limit = 5);
+        $searchString = $this->tokenizeFulltextSearchString($addressString);
 
         //native query, no FTS function in DBAL
         $em = $this->get('entity_manager');
