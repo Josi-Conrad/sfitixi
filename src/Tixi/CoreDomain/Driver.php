@@ -47,6 +47,19 @@ class Driver extends Person {
      */
     protected $repeatedDrivingAssertionPlans;
 
+    /**
+     * @param $gender
+     * @param $firstname
+     * @param $lastname
+     * @param $telephone
+     * @param $address
+     * @param null $title
+     * @param null $email
+     * @param null $entryDate
+     * @param null $birthday
+     * @param null $extraMinutes
+     * @param null $details
+     */
     protected function __construct($gender, $firstname, $lastname, $telephone, $address, $title = null,
                                    $email = null, $entryDate = null, $birthday = null,
                                    $extraMinutes = null, $details = null) {
@@ -153,11 +166,17 @@ class Driver extends Person {
         $this->supervisedVehicles->removeElement($vehicle);
     }
 
+    /**
+     * @param RepeatedDrivingAssertionPlan $assertionPlan
+     */
     public function assignRepeatedDrivingAssertionPlan(RepeatedDrivingAssertionPlan $assertionPlan) {
         $this->repeatedDrivingAssertionPlans->add($assertionPlan);
         $assertionPlan->assignDriver($this);
     }
 
+    /**
+     * @param RepeatedDrivingAssertionPlan $assertionPlan
+     */
     public function removeRepeatedDrivingAssertionPlan(RepeatedDrivingAssertionPlan $assertionPlan) {
         $assertionPlan->removeDriver();
         $this->repeatedDrivingAssertionPlans->removeElement($assertionPlan);
@@ -169,7 +188,6 @@ class Driver extends Person {
     public function getSupervisedVehicles() {
         return $this->supervisedVehicles;
     }
-
 
     /**
      * @param mixed $driverCategory

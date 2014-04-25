@@ -63,6 +63,14 @@ class RepeatedDrivingAssertionPlan extends CommonBaseEntity {
         parent::__construct();
     }
 
+    /**
+     * @param $memo
+     * @param \DateTime $anchorDate
+     * @param $frequency
+     * @param $withHolidays
+     * @param \DateTime $endingDate
+     * @return RepeatedDrivingAssertionPlan
+     */
     public static function registerRepeatedAssertionPlan($memo, \DateTime $anchorDate, $frequency, $withHolidays, \DateTime $endingDate=null) {
         $endingDate = (null!==$endingDate) ? $endingDate : DateTimeService::getMaxDateTime();
         $assertion = new RepeatedDrivingAssertionPlan();
@@ -74,6 +82,9 @@ class RepeatedDrivingAssertionPlan extends CommonBaseEntity {
         return $assertion;
     }
 
+    /**
+     * @param ArrayCollection $assertions
+     */
     public function replaceRepeatedDrivingAssertions(ArrayCollection $assertions) {
         $this->repeatedDrivingAssertions->clear();
         foreach($assertions as $assertion) {
@@ -81,6 +92,9 @@ class RepeatedDrivingAssertionPlan extends CommonBaseEntity {
         }
     }
 
+    /**
+     * @param Driver $driver
+     */
     public function assignDriver(Driver $driver) {
         $this->driver = $driver;
     }
@@ -153,8 +167,6 @@ class RepeatedDrivingAssertionPlan extends CommonBaseEntity {
         return $this->memo;
     }
 
-
-
     /**
      * @return mixed
      */
@@ -194,11 +206,5 @@ class RepeatedDrivingAssertionPlan extends CommonBaseEntity {
     {
         return $this->withHolidays;
     }
-
-
-
-
-
-
 
 } 

@@ -34,7 +34,7 @@ abstract class RepeatedDrivingAssertion implements DrivingAssertionInterface {
     protected $assertionPlan;
     /**
      * @ORM\ManyToMany(targetEntity="ShiftType")
-     * @ORM\JoinTable(name="repeateddrivingassertion_to_shifttypes",
+     * @ORM\JoinTable(name="repeateddrivingassertion_to_shifttype",
      *      joinColumns={@ORM\JoinColumn(name="repeateddrivingassertion_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="shifttype_id", referencedColumnName="id")})
      */
@@ -44,6 +44,10 @@ abstract class RepeatedDrivingAssertion implements DrivingAssertionInterface {
         $this->shiftTypes = new ArrayCollection();
     }
 
+    /**
+     * @param Shift $shift
+     * @return mixed
+     */
     public abstract function matching(Shift $shift);
 
     /**

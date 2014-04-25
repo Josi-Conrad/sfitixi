@@ -8,8 +8,14 @@
 
 namespace Tixi\CoreDomain\Dispo;
 
-
+/**
+ * Interface DrivingAssertionInterface
+ * @package Tixi\CoreDomain\Dispo
+ */
 interface DrivingAssertionInterface {
-
+    /**
+     * @param Shift $shift
+     * @return mixed
+     */
     public function matching(Shift $shift);
 } 

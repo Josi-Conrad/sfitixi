@@ -64,7 +64,7 @@ class Person extends CommonBaseEntity {
     protected $title;
 
     /**
-     * @ORM\Column(type="string", length=50)
+     * @ORM\Column(type="string", length=10)
      */
     protected $gender;
 

@@ -59,6 +59,21 @@ class Passenger extends Person {
      */
     protected $drivingOrders;
 
+    /**
+     * @param $gender
+     * @param $firstname
+     * @param $lastname
+     * @param $telephone
+     * @param $address
+     * @param null $title
+     * @param null $email
+     * @param null $entryDate
+     * @param null $birthday
+     * @param null $extraMinutes
+     * @param null $details
+     * @param null $correspondenceAddress
+     * @param null $billingAddress
+     */
     protected function __construct($gender, $firstname, $lastname, $telephone, $address, $title = null,
                                    $email = null, $entryDate = null, $birthday = null,
                                    $extraMinutes = null, $details = null, $correspondenceAddress = null,
