@@ -23,7 +23,7 @@ class AddressManagementImplDoctrine extends Controller implements AddressManagem
      */
     public function getAddressSuggestionsByString($addressString) {
 
-        $searchString = $this->tokenizeFulltextSearchString($addressString);
+        $searchString = $this->tokenizeFulltextSearchString($addressString, $limit = 5);
 
         //native query, no FTS function in DBAL
         $em = $this->get('entity_manager');
@@ -32,8 +32,8 @@ class AddressManagementImplDoctrine extends Controller implements AddressManagem
 
         $sql = "SELECT a.id, a.street, a.postalCode, a.city, a.country, a.lat, a.lng, a.type FROM address a
         WHERE MATCH (name, street, postalCode, city, country, type)
-        AGAINST ('$searchString' IN BOOLEAN MODE)
-        LIMIT 0, 6";
+        AGAINST ('.$searchString.' IN BOOLEAN MODE)
+        LIMIT 0, " . $limit;
 
         $query = $em->createNativeQuery($sql, $rsm);
         $results = $query->getResult();
