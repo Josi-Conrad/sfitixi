@@ -34,7 +34,9 @@ class POI extends CommonBaseEntity {
 
     /**
      * @ORM\ManyToMany(targetEntity="POIKeyword", inversedBy="pois")
-     * @ORM\JoinTable(name="poi_to_keywords")
+     * @ORM\JoinTable(name="poi_to_keyword",
+     *      joinColumns={@ORM\JoinColumn(name="poi_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="keyword_id", referencedColumnName="id")})
      **/
     protected $keywords;
 
