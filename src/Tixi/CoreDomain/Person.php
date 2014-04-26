@@ -36,22 +36,16 @@ class Person extends CommonBaseEntity {
     protected $address;
 
     /**
-     * @ORM\OneToOne(targetEntity="Address")
-     * @ORM\JoinColumn(name="correspondence_address_id", referencedColumnName="id")
-     */
-    protected $correspondenceAddress;
-
-    /**
-     * @ORM\OneToOne(targetEntity="Address")
-     * @ORM\JoinColumn(name="billing_address_id", referencedColumnName="id")
-     */
-    protected $billingAddress;
-
-    /**
      * @ORM\OneToMany(targetEntity="Absent", mappedBy="person")
      * @ORM\JoinColumn(name="absent_id", referencedColumnName="id")
      */
     protected $absents;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="VehicleCategory")
+     * @ORM\JoinColumn(name="vehicle_category_id", referencedColumnName="id")
+     */
+    protected $preferredVehicleCategory;
 
     /**
      * @ORM\Column(type="boolean")
@@ -105,6 +99,21 @@ class Person extends CommonBaseEntity {
     protected $extraMinutes;
 
     /**
+     * @ORM\Column(type="text")
+     */
+    protected $correspondenceAddress;
+
+    /**
+     * @ORM\Column(type="text")
+     */
+    protected $billingAddress;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    protected $isBillingAddress;
+
+    /**
      * @ORM\Column(type="text", nullable=true)
      */
     protected $details;
@@ -123,11 +132,12 @@ class Person extends CommonBaseEntity {
      * @param null $details
      * @param null $correspondenceAddress
      * @param null $billingAddress
+     * @param bool $isBillingAddress
      */
     protected function __construct($gender, $firstname, $lastname, $telephone, $address, $title = null,
                                    $email = null, $entryDate = null, $birthday = null,
                                    $extraMinutes = null, $details = null, $correspondenceAddress = null,
-                                   $billingAddress = null) {
+                                   $billingAddress = null, $isBillingAddress = false) {
 
         $this->absents = new ArrayCollection();
 
@@ -144,6 +154,7 @@ class Person extends CommonBaseEntity {
         $this->setDetails($details);
         $this->setCorrespondenceAddress($correspondenceAddress);
         $this->setBillingAddress($billingAddress);
+        $this->setIsBillingAddress($isBillingAddress);
         $this->activate();
 
         parent::__construct();
@@ -193,7 +204,8 @@ class Person extends CommonBaseEntity {
      */
     public function updatePersonData($gender = null, $firstname = null, $lastname = null, $telephone = null,
                                      $address = null, $title = null, $email = null, $entryDate = null, $birthday = null,
-                                     $extraMinutes = null, $details = null, $correspondenceAddress = null, $billingAddress = null) {
+                                     $extraMinutes = null, $details = null, $correspondenceAddress = null,
+                                     $billingAddress = null, $isBillingAddress = false) {
 
         if (!empty($gender)) {
             $this->setGender($gender);
@@ -218,6 +230,7 @@ class Person extends CommonBaseEntity {
         $this->setDetails($details);
         $this->setCorrespondenceAddress($correspondenceAddress);
         $this->setBillingAddress($billingAddress);
+        $this->setIsBillingAddress($isBillingAddress);
 
         $this->updateModifiedDate();
     }
@@ -246,23 +259,19 @@ class Person extends CommonBaseEntity {
         $absent->setPerson($this);
     }
 
+    /**
+     * @param Absent $absent
+     */
     public function removeAbsent(Absent $absent) {
         $this->absents->removeElement($absent);
         $absent->setPerson(null);
     }
 
     /**
-     * @param Address $address
+     * @param VehicleCategory $vehicleCategory
      */
-    public function assignCorrespondenceAddress(Address $address) {
-        $this->correspondenceAddress = $address;
-    }
-
-    /**
-     * @param Address $address
-     */
-    public function assignBillingAddress(Address $address) {
-        $this->billingAddress = $address;
+    public function assignPreferredVehicleCategory($vehicleCategory) {
+        $this->preferredVehicleCategory = $vehicleCategory;
     }
 
     /**
@@ -298,20 +307,6 @@ class Person extends CommonBaseEntity {
      */
     public function getBillingAddress() {
         return $this->billingAddress;
-    }
-
-    /**
-     * @param mixed $compatibleVehicles
-     */
-    public function setCompatibleVehicles($compatibleVehicles) {
-        $this->compatibleVehicles = $compatibleVehicles;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getCompatibleVehicles() {
-        return $this->compatibleVehicles;
     }
 
     /**
@@ -506,12 +501,32 @@ class Person extends CommonBaseEntity {
     }
 
     /**
+     * @param mixed $isBillingAddress
+     */
+    public function setIsBillingAddress($isBillingAddress) {
+        $this->isBillingAddress = $isBillingAddress;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getIsBillingAddress() {
+        return $this->isBillingAddress;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPreferredVehicleCategory() {
+        return $this->preferredVehicleCategory;
+    }
+
+    /**
      * @return string
      */
     public function getGenderAsString() {
         return self::constructGenderString($this->getGender());
     }
-
 
     /**
      * @param $gender

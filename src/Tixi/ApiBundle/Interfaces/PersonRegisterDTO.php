@@ -28,4 +28,15 @@ class PersonRegisterDTO extends AddressRegisterDTO {
     public $birthday;
     public $extraMinutes;
     public $details;
+    public $preferredVehicleCategory;
+
+    public $correspondenceAddress;
+    public $billingAddress;
+    public $isBillingAddress;
+
+    public function __construct(){
+        $this->gender = 'm';
+        $this->isBillingAddress = true;
+    }
 }
+

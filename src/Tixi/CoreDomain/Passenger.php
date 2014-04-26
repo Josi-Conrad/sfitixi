@@ -73,18 +73,19 @@ class Passenger extends Person {
      * @param null $details
      * @param null $correspondenceAddress
      * @param null $billingAddress
+     * @param bool $isBillingAddress
      */
     protected function __construct($gender, $firstname, $lastname, $telephone, $address, $title = null,
                                    $email = null, $entryDate = null, $birthday = null,
                                    $extraMinutes = null, $details = null, $correspondenceAddress = null,
-                                   $billingAddress = null) {
+                                   $billingAddress = null, $isBillingAddress = false) {
 
         $this->handicaps = new ArrayCollection();
         $this->insurances = new ArrayCollection();
         $this->drivingOrders = new ArrayCollection();
 
         parent::__construct($gender, $firstname, $lastname, $telephone, $address, $title,
-            $email, $entryDate, $birthday, $extraMinutes, $details, $correspondenceAddress, $billingAddress);
+            $email, $entryDate, $birthday, $extraMinutes, $details, $correspondenceAddress, $billingAddress, $isBillingAddress);
     }
 
     /**
@@ -105,6 +106,7 @@ class Passenger extends Person {
      * @param null $notice
      * @param null $correspondenceAddress
      * @param null $billingAddress
+     * @param bool $isBillingAddress
      * @internal param \Tixi\CoreDomain\Handicap $handicap
      * @return Passenger
      */
@@ -112,10 +114,10 @@ class Passenger extends Person {
                                              $isInWheelChair = false, $gotMonthlyBilling = false, $isOverWeight = false,
                                              $email = null, $entryDate = null, $birthday = null,
                                              $extraMinutes = null, $details = null, $notice = null, $correspondenceAddress = null,
-                                             $billingAddress = null) {
+                                             $billingAddress = null, $isBillingAddress = false) {
 
         $passenger = new Passenger($gender, $firstname, $lastname, $telephone, $address, $title,
-            $email, $entryDate, $birthday, $extraMinutes, $details, $correspondenceAddress, $billingAddress
+            $email, $entryDate, $birthday, $extraMinutes, $details, $correspondenceAddress, $billingAddress, $isBillingAddress
         );
 
         $passenger->setIsInWheelChair($isInWheelChair);
@@ -144,17 +146,17 @@ class Passenger extends Person {
      * @param null $notice
      * @param null $correspondenceAddress
      * @param null $billingAddress
-     * @internal param \Tixi\CoreDomain\Handicap $handicap
+     * @param bool $isBillingAddress
      */
     public function updatePassengerData($gender = null, $firstname = null, $lastname = null, $telephone = null,
                                         Address $address, $title = null, $isInWheelChair = false, $gotMonthlyBilling = null,
                                         $isOverWeight = null, $email = null, $entryDate = null, $birthday = null,
                                         $extraMinutes = null, $details = null, $notice = null, $correspondenceAddress = null,
-                                        $billingAddress = null) {
+                                        $billingAddress = null, $isBillingAddress = false) {
 
         parent::updatePersonData(
             $gender, $firstname, $lastname, $telephone, $address, $title, $email, $entryDate, $birthday,
-            $extraMinutes, $details, $correspondenceAddress, $billingAddress
+            $extraMinutes, $details, $correspondenceAddress, $billingAddress, $isBillingAddress
         );
 
         $this->setIsInWheelChair($isInWheelChair);

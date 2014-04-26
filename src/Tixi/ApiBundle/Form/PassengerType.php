@@ -44,6 +44,31 @@ class PassengerType extends PersonType {
 
         parent::buildForm($builder, $options);
 
+        $builder->add('isBillingAddress', 'checkbox', array(
+            'required' => false,
+            'label' => 'passenger.field.isbillingaddress'
+        ));
+        $builder->add('billingAddress', 'textarea', array(
+            'required' => false,
+            'label' => 'person.field.billingaddress'
+        ));
+
+        $builder->add('gotMonthlyBilling', 'checkbox', array(
+            'required' => false,
+            'label' => 'passenger.field.monthlybilling'
+        ));
+        $builder->add('preferredVehicleCategory', 'entity', array(
+            'required' => false,
+            'class' => 'Tixi\CoreDomain\VehicleCategory',
+            'property' => 'name',
+            'empty_data' => null,
+            'empty_value' => 'person.field.preferredvehiclecategory.empty',
+            'label' => 'person.field.preferredvehiclecategory',
+            'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('e')
+                        ->where('e.isDeleted = 0');
+                },
+        ));
         $builder->add('isInWheelChair', 'checkbox', array(
             'required' => false,
             'label' => 'passenger.field.isinwheelchair'
@@ -72,10 +97,6 @@ class PassengerType extends PersonType {
                         ->where('e.isDeleted = 0');
                 },
         ));
-        $builder->add('gotMonthlyBilling', 'checkbox', array(
-            'required' => false,
-            'label' => 'passenger.field.monthlybilling'
-        ));
         $builder->add('entryDate', 'datePicker', array(
             'required' => false,
             'label' => 'person.field.entrydate',
@@ -95,6 +116,11 @@ class PassengerType extends PersonType {
         $builder->add('notice', 'textarea', array(
             'required' => false,
             'label' => 'passenger.field.notice'
+        ));
+
+        $builder->add('correspondenceAddress', 'textarea', array(
+            'required' => false,
+            'label' => 'person.field.correspondenceaddress'
         ));
 
         if ($this->user->hasRole('ROLE_MANAGER')) {

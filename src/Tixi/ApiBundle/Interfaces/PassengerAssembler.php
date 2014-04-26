@@ -33,7 +33,8 @@ class PassengerAssembler {
             $passengerDTO->isInWheelChair,
             $passengerDTO->gotMonthlyBilling, $passengerDTO->isOverweight,
             $passengerDTO->email, $passengerDTO->entryDate, $passengerDTO->birthday,
-            $passengerDTO->extraMinutes, $passengerDTO->details, $passengerDTO->notice
+            $passengerDTO->extraMinutes, $passengerDTO->details, $passengerDTO->notice,
+            $passengerDTO->correspondenceAddress, $passengerDTO->billingAddress, $passengerDTO->isBillingAddress
         );
         foreach ($passengerDTO->handicaps as $handicap) {
             $passenger->assignHandicap($handicap);
@@ -41,6 +42,7 @@ class PassengerAssembler {
         foreach ($passengerDTO->insurances as $insurance) {
             $passenger->assignInsurance($insurance);
         }
+        $passenger->assignPreferredVehicleCategory($passengerDTO->preferredVehicleCategory);
         return $passenger;
     }
 
@@ -58,9 +60,11 @@ class PassengerAssembler {
             $address, $passengerDTO->title, $passengerDTO->isInWheelChair,
             $passengerDTO->gotMonthlyBilling, $passengerDTO->isOverweight,
             $passengerDTO->email, $passengerDTO->entryDate, $passengerDTO->birthday,
-            $passengerDTO->extraMinutes, $passengerDTO->details, $passengerDTO->notice);
+            $passengerDTO->extraMinutes, $passengerDTO->details, $passengerDTO->notice,
+            $passengerDTO->correspondenceAddress, $passengerDTO->billingAddress, $passengerDTO->isBillingAddress);
         $passenger->setHandicaps($passengerDTO->handicaps);
         $passenger->setInsurances($passengerDTO->insurances);
+        $passenger->assignPreferredVehicleCategory($passengerDTO->preferredVehicleCategory);
         return $passenger;
     }
 
@@ -82,6 +86,7 @@ class PassengerAssembler {
         $passengerDTO->birthday = $passenger->getBirthday();
         $passengerDTO->extraMinutes = $passenger->getExtraMinutes();
         $passengerDTO->details = $passenger->getDetails();
+        $passengerDTO->preferredVehicleCategory = $passenger->getPreferredVehicleCategory();
 
         $passengerDTO->isInWheelChair = $passenger->getIsInWheelChair();
         $passengerDTO->isOverweight = $passenger->getIsOverweight();
@@ -90,6 +95,10 @@ class PassengerAssembler {
 
         $passengerDTO->handicaps = $passenger->getHandicaps();
         $passengerDTO->insurances = $passenger->getInsurances();
+
+        $passengerDTO->correspondenceAddress = $passenger->getCorrespondenceAddress();
+        $passengerDTO->billingAddress = $passenger->getBillingAddress();
+        $passengerDTO->isBillingAddress = $passenger->getIsBillingAddress();
 
         $passengerDTO->street = $passenger->getAddress()->getStreet();
         $passengerDTO->postalCode = $passenger->getAddress()->getPostalCode();

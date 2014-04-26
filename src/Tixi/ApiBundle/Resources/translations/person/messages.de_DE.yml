@@ -13,3 +13,10 @@ person.field.entrydate: Eintrittsdatum
 person.field.birthday: Geburtsdatum
 person.field.extraminutes: Extra-Minuten
 person.field.details: Details
+
+person.field.correspondenceaddress: Korrespondenz
+person.field.billingaddress: Rechnungsadresse
+passenger.field.isbillingaddress: Enstpricht Rechnungsadresse
+
+person.field.preferredvehiclecategory: Bevorzugte Fahrzeugkategorie
+person.field.preferredvehiclecategory.empty: ---

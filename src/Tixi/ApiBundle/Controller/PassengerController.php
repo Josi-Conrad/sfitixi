@@ -123,7 +123,7 @@ class PassengerController extends Controller {
     public function newPassengerAction(Request $request) {
         $tileRenderer = $this->get('tixi_api.tilerenderer');
 
-        $form = $this->getForm();
+        $form = $this->getForm(new PassengerRegisterDTO());
         $form->handleRequest($request);
         if ($form->isValid()) {
             $passengerDTO = $form->getData();
