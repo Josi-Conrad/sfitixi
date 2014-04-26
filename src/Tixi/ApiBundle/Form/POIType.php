@@ -41,7 +41,7 @@ class POIType extends CommonAbstractType {
             'required' => false,
             'label' => 'poi.field.department',
         ));
-        $builder->add('telephone', new TelephoneType(), array(
+        $builder->add('telephone', 'telephoneType', array(
             'required' => false,
             'label' => 'poi.field.telephone',
         ));

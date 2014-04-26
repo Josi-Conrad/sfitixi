@@ -43,48 +43,51 @@ class PersonType extends CommonAbstractType {
 
         $builder->add('firstname', 'text', array(
             'label' => 'person.field.firstname',
-            'attr'=>array('title' => 'form.field.title.not_blank'),
+            'attr' => array('title' => 'form.field.title.not_blank'),
             'constraints' => array(
-                new NotBlank(array('message'=>'field.not_blank'))
+                new NotBlank(array('message' => 'field.not_blank'))
             ),
         ));
         $builder->add('lastname', 'text', array(
             'label' => 'person.field.lastname',
-            'attr'=>array('title' => 'form.field.title.not_blank'),
+            'attr' => array('title' => 'form.field.title.not_blank'),
             'constraints' => array(
-                new NotBlank(array('message'=>'field.not_blank'))
+                new NotBlank(array('message' => 'field.not_blank'))
             ),
         ));
-        $builder->add('telephone', new TelephoneType(), array(
+        $builder->add('telephone', 'telephoneType', array(
             'label' => 'person.field.telephone',
+            'constraints' => array(
+                new NotBlank(array('message' => 'field.not_blank'))
+            ),
         ));
         $builder->add('street', 'text', array(
             'label' => 'address.field.street',
-            'attr'=>array('title' => 'form.field.title.not_blank'),
+            'attr' => array('title' => 'form.field.title.not_blank'),
             'constraints' => array(
-                new NotBlank(array('message'=>'field.not_blank'))
+                new NotBlank(array('message' => 'field.not_blank'))
             ),
         ));
         $builder->add('postalCode', 'text', array(
             'label' => 'address.field.postalcode',
             'pattern' => '^[\+0-9A-Z]{4,7}',
-            'attr'=>array('title' => 'form.field.title.postalcode'),
+            'attr' => array('title' => 'form.field.title.postalcode'),
             'constraints' => array(
-                new NotBlank(array('message'=>'field.not_blank'))
+                new NotBlank(array('message' => 'field.not_blank'))
             ),
         ));
         $builder->add('city', 'text', array(
             'label' => 'address.field.city',
-            'attr'=>array('title' => 'form.field.title.not_blank'),
+            'attr' => array('title' => 'form.field.title.not_blank'),
             'constraints' => array(
-                new NotBlank(array('message'=>'field.not_blank'))
+                new NotBlank(array('message' => 'field.not_blank'))
             ),
         ));
         $builder->add('country', 'text', array(
             'label' => 'address.field.country',
-            'attr'=>array('title' => 'form.field.title.not_blank'),
+            'attr' => array('title' => 'form.field.title.not_blank'),
             'constraints' => array(
-                new NotBlank(array('message'=>'field.not_blank'))
+                new NotBlank(array('message' => 'field.not_blank'))
             ),
         ));
     }

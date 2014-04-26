@@ -81,6 +81,9 @@
         <service id="form.type.dateTimePicker" class="Tixi\ApiBundle\Form\Shared\DateTimePickerType">
             <tag name="form.type" alias="dateTimePicker" />
         </service>
+        <service id="form.type.telephoneType" class="Tixi\ApiBundle\Form\Shared\TelephoneType">
+            <tag name="form.type" alias="telephoneType" />
+        </service>
 
         <!-- Assembers -->
         <service id="tixi_api.assemblerVehicle" class="%tixi_api.vehicleassembler.class%"/>

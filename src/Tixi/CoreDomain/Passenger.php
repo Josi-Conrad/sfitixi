@@ -78,7 +78,7 @@ class Passenger extends Person {
     protected function __construct($gender, $firstname, $lastname, $telephone, $address, $title = null,
                                    $email = null, $entryDate = null, $birthday = null,
                                    $extraMinutes = null, $details = null, $correspondenceAddress = null,
-                                   $billingAddress = null, $isBillingAddress = false) {
+                                   $billingAddress = null, $isBillingAddress = true) {
 
         $this->handicaps = new ArrayCollection();
         $this->insurances = new ArrayCollection();
@@ -114,7 +114,7 @@ class Passenger extends Person {
                                              $isInWheelChair = false, $gotMonthlyBilling = false, $isOverWeight = false,
                                              $email = null, $entryDate = null, $birthday = null,
                                              $extraMinutes = null, $details = null, $notice = null, $correspondenceAddress = null,
-                                             $billingAddress = null, $isBillingAddress = false) {
+                                             $billingAddress = null, $isBillingAddress = true) {
 
         $passenger = new Passenger($gender, $firstname, $lastname, $telephone, $address, $title,
             $email, $entryDate, $birthday, $extraMinutes, $details, $correspondenceAddress, $billingAddress, $isBillingAddress
@@ -152,7 +152,7 @@ class Passenger extends Person {
                                         Address $address, $title = null, $isInWheelChair = false, $gotMonthlyBilling = null,
                                         $isOverWeight = null, $email = null, $entryDate = null, $birthday = null,
                                         $extraMinutes = null, $details = null, $notice = null, $correspondenceAddress = null,
-                                        $billingAddress = null, $isBillingAddress = false) {
+                                        $billingAddress = null, $isBillingAddress = true) {
 
         parent::updatePersonData(
             $gender, $firstname, $lastname, $telephone, $address, $title, $email, $entryDate, $birthday,

@@ -99,12 +99,12 @@ class Person extends CommonBaseEntity {
     protected $extraMinutes;
 
     /**
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text", nullable=true)
      */
     protected $correspondenceAddress;
 
     /**
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text", nullable=true)
      */
     protected $billingAddress;
 
@@ -137,7 +137,7 @@ class Person extends CommonBaseEntity {
     protected function __construct($gender, $firstname, $lastname, $telephone, $address, $title = null,
                                    $email = null, $entryDate = null, $birthday = null,
                                    $extraMinutes = null, $details = null, $correspondenceAddress = null,
-                                   $billingAddress = null, $isBillingAddress = false) {
+                                   $billingAddress = null, $isBillingAddress = true) {
 
         $this->absents = new ArrayCollection();
 
@@ -201,11 +201,12 @@ class Person extends CommonBaseEntity {
      * @param null $details
      * @param null $correspondenceAddress
      * @param null $billingAddress
+     * @param bool $isBillingAddress
      */
     public function updatePersonData($gender = null, $firstname = null, $lastname = null, $telephone = null,
                                      $address = null, $title = null, $email = null, $entryDate = null, $birthday = null,
                                      $extraMinutes = null, $details = null, $correspondenceAddress = null,
-                                     $billingAddress = null, $isBillingAddress = false) {
+                                     $billingAddress = null, $isBillingAddress = true) {
 
         if (!empty($gender)) {
             $this->setGender($gender);

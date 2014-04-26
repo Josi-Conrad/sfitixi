@@ -113,8 +113,6 @@ class PersonTest extends WebTestCase {
             'f', 'Muni', 'Meier', '041 333 32 32',
             $address, 'FEA12345', $driverCategory, false, 'Dr. med.', 'test@test.de', $date, $date,
             5, 'alles nur ein Test');
-        $driver->assignBillingAddress($address);
-        $driver->assignCorrespondenceAddress($address);
         $this->driverRepo->store($driver);
         $this->em->flush();
 
@@ -123,7 +121,6 @@ class PersonTest extends WebTestCase {
          */
         $driverFind = $this->driverRepo->findOneBy(array('licenceNumber' => 'FEA12345'));
         $this->assertEquals($driver, $driverFind);
-        $this->assertEquals($driverFind->getAddress(), $driverFind->getBillingAddress());
 
         $this->driverCreateAbsent($driver);
         $this->driverSuperviseVehicle($driver);
@@ -203,15 +200,12 @@ class PersonTest extends WebTestCase {
             'f', 'Mila', 'Tolina', '0293292323',
             $address, true, true, false, '', 'der@test.de', new \DateTime(), new \DateTime(),
             2, 'goodies', 'notices');
-        $passenger->assignBillingAddress($address);
-        $passenger->assignCorrespondenceAddress($address);
 
         $this->passengerRepo->store($passenger);
         $this->em->flush();
 
         $passengerFind = $this->passengerRepo->find($passenger->getId());
         $this->assertEquals($passenger, $passengerFind);
-        $this->assertEquals($passengerFind->getCorrespondenceAddress(), $passengerFind->getAddress());
 
         $this->passengerCreateAbsent($passenger);
         $this->passengerRemove($passenger);

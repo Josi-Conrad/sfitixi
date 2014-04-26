@@ -19,17 +19,13 @@ use Symfony\Component\Validator\Constraints\Regex;
  * @package Tixi\ApiBundle\Form\Shared
  */
 class TelephoneType extends AbstractType {
-    protected $pattern = '^[\+0-9 -()]{3,19}';
     /**
-     * {@inheritdoc}
+     * @param OptionsResolverInterface $resolver
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver) {
         $resolver->setDefaults(array(
-//            'pattern' => $this->pattern,
+            'pattern' => '^[\+0-9 ()*-]{3,19}',
             'attr' => array('title' => 'form.field.title.telephone'),
-//            'constraints' => array(
-//                new Regex(array('message'=>'field.telephone','pattern'=> '/'.$this->pattern.'/'))
-//            ),
         ));
     }
 

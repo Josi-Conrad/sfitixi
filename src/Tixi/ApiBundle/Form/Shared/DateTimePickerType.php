@@ -12,6 +12,7 @@ namespace Tixi\ApiBundle\Form\Shared;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Validator\Constraints\Time;
 
 /**
  * Class DateTimePickerType
@@ -29,6 +30,13 @@ class DateTimePickerType extends AbstractType {
             ->add('time', 'time', array(
                 'input' => 'datetime',
                 'widget' => 'single_text',
+                'attr' => array(
+                    'title' => 'form.field.title.datetime',
+                ),
+                'pattern' => '^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$',
+                    'constraints' => array(
+                        new Time(),
+                    ),
             ));
 
         $builder->addModelTransformer(new DateTimeArrayTransformer());
