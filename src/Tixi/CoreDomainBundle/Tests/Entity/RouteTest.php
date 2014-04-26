@@ -8,36 +8,19 @@
 
 namespace Tixi\CoreDomainBundle\Tests\Entity;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Validator\Constraints\DateTime;
 use Tixi\CoreDomain\Address;
 use Tixi\CoreDomain\Dispo\Route;
+use Tixi\CoreDomainBundle\Tests\CommonBaseTest;
 
 /**
  * Class RouteTest
  * @package Tixi\CoreDomainBundle\Tests\Entity
  */
-class RouteTest extends WebTestCase {
-    /**
-     * @var \Doctrine\ORM\EntityManager
-     */
-    private $em;
-    /**
-     * @var \Tixi\CoreDomainBundle\Repository\AddressRepositoryDoctrine
-     */
-    private $addressRepo;
-    /**
-     * @var \Tixi\CoreDomainBundle\Repository\Dispo\RouteRepositoryDoctrine
-     */
-    private $routeRepo;
+class RouteTest extends CommonBaseTest {
 
     public function setUp() {
-        $kernel = static::createKernel();
-        $kernel->boot();
-        $this->em = $kernel->getContainer()->get('entity_manager');
-        $this->addressRepo = $kernel->getContainer()->get('address_repository');
-        $this->routeRepo = $kernel->getContainer()->get('route_repository');
-        $this->em->beginTransaction();
+        parent::setUp();
     }
 
     /**
@@ -70,11 +53,7 @@ class RouteTest extends WebTestCase {
 
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    protected function tearDown() {
-        $this->em->rollback();
+    public function tearDown() {
         parent::tearDown();
     }
 }

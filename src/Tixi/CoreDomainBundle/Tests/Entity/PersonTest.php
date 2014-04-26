@@ -8,7 +8,6 @@
 
 namespace Tixi\CoreDomainBundle\Tests\Entity;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Validator\Constraints\DateTime;
 use Tixi\CoreDomain\Absent;
 use Tixi\CoreDomain\Address;
@@ -17,75 +16,18 @@ use Tixi\CoreDomain\DriverCategory;
 use Tixi\CoreDomain\Insurance;
 use Tixi\CoreDomain\Passenger;
 use Tixi\CoreDomain\Handicap;
-use Tixi\CoreDomain\Contradict;
 use Tixi\CoreDomain\Vehicle;
 use Tixi\CoreDomain\VehicleCategory;
+use Tixi\CoreDomainBundle\Tests\CommonBaseTest;
 
 /**
  * Class PersonTest
  * @package Tixi\CoreDomainBundle\Tests\Entity
  */
-class PersonTest extends WebTestCase {
-    /**
-     * @var \Doctrine\ORM\EntityManager
-     */
-    private $em;
-    /**
-     * @var \Tixi\CoreDomainBundle\Repository\AddressRepositoryDoctrine
-     */
-    private $addressRepo;
-    /**
-     * @var \Tixi\CoreDomainBundle\Repository\PersonRepositoryDoctrine
-     */
-    private $personRepo;
-    /**
-     * @var \Tixi\CoreDomainBundle\Repository\DriverRepositoryDoctrine
-     */
-    private $driverRepo;
-    /**
-     * @var \Tixi\CoreDomainBundle\Repository\DriverCategoryRepositoryDoctrine
-     */
-    private $driverCategoryRepo;
-    /**
-     * @var \Tixi\CoreDomainBundle\Repository\PassengerRepositoryDoctrine
-     */
-    private $passengerRepo;
-    /**
-     * @var \Tixi\CoreDomainBundle\Repository\AbsentRepositoryDoctrine
-     */
-    private $absentRepo;
-    /**
-     * @var \Tixi\CoreDomainBundle\Repository\HandicapRepositoryDoctrine
-     */
-    private $handicapRepo;
-    /**
-     * @var \Tixi\CoreDomainBundle\Repository\InsuranceRepositoryDoctrine
-     */
-    private $insuranceRepo;
-    /**
-     * @var \Tixi\CoreDomainBundle\Repository\VehicleRepositoryDoctrine
-     */
-    private $vehicleRepo;
-    /**
-     * @var \Tixi\CoreDomainBundle\Repository\VehicleCategoryRepositoryDoctrine
-     */
-    private $vehicleCategoryRepo;
+class PersonTest extends CommonBaseTest {
 
     public function setUp() {
-        $kernel = static::createKernel();
-        $kernel->boot();
-        $this->em = $kernel->getContainer()->get('entity_manager');
-        $this->addressRepo = $kernel->getContainer()->get('address_repository');
-        $this->personRepo = $kernel->getContainer()->get('person_repository');
-        $this->driverRepo = $kernel->getContainer()->get('driver_repository');
-        $this->driverCategoryRepo = $kernel->getContainer()->get('drivercategory_repository');
-        $this->absentRepo = $kernel->getContainer()->get('absent_repository');
-        $this->passengerRepo = $kernel->getContainer()->get('passenger_repository');
-        $this->handicapRepo = $kernel->getContainer()->get('handicap_repository');
-        $this->insuranceRepo = $kernel->getContainer()->get('insurance_repository');
-        $this->vehicleRepo = $kernel->getContainer()->get('vehicle_repository');
-        $this->vehicleCategoryRepo = $kernel->getContainer()->get('vehiclecategory_repository');
-        $this->em->beginTransaction();
+        parent::setUp();
     }
 
     public function testDriverCRUD() {
@@ -266,11 +208,7 @@ class PersonTest extends WebTestCase {
         return $current;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    protected function tearDown() {
-        $this->em->rollback();
+    public function tearDown() {
         parent::tearDown();
     }
 }

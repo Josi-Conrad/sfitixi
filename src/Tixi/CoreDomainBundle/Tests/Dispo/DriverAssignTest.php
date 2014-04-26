@@ -8,7 +8,6 @@
 
 namespace Tixi\CoreDomainBundle\Tests\Entity;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Validator\Constraints\DateTime;
 use Tixi\CoreDomain\Dispo\ShiftType;
 use Tixi\CoreDomain\Dispo\RepeatedDrivingAssertionPlan;
@@ -16,75 +15,22 @@ use Tixi\CoreDomain\Dispo\RepeatedWeeklyDrivingAssertion;
 use Tixi\CoreDomain\Address;
 use Tixi\CoreDomain\Driver;
 use Tixi\CoreDomain\DriverCategory;
+use Tixi\CoreDomainBundle\Tests\CommonBaseTest;
 
 /**
  * Class DriverAssignTest
  * @package Tixi\CoreDomainBundle\Tests\Entity
  */
-class DriverAssignTest extends WebTestCase {
-    /**
-     * @var \Doctrine\ORM\EntityManager
-     */
-    private $em;
-    /**
-     * @var \Tixi\CoreDomainBundle\Repository\AddressRepositoryDoctrine
-     */
-    private $addressRepo;
-    /**
-     * @var \Tixi\CoreDomainBundle\Repository\DriverRepositoryDoctrine
-     */
-    private $driverRepo;
-    /**
-     * @var \Tixi\CoreDomainBundle\Repository\DriverCategoryRepositoryDoctrine
-     */
-    private $driverCategoryRepo;
-    /**
-     * @var \Tixi\CoreDomainBundle\Repository\Dispo\DrivingMissionRepositoryDoctrine
-     */
-    private $drivingMissionRepo;
-    /**
-     * @var \Tixi\CoreDomainBundle\Repository\Dispo\DrivingOrderRepositoryDoctrine
-     */
-    private $drivingOrderRepo;
-    /**
-     * @var \Tixi\CoreDomainBundle\Repository\Dispo\DrivingPoolRepositoryDoctrine
-     */
-    private $drivingPoolRepo;
-    /**
-     * @var \Tixi\CoreDomainBundle\Repository\Dispo\RepeatedDrivingAssertionPlanRepositoryDoctrine
-     */
-    private $repeatedDrivingAssertionPlanRepo;
-    /**
-     * @var \Tixi\CoreDomainBundle\Repository\Dispo\RepeatedDrivingAssertionRepositoryDoctrine
-     */
-    private $repeatedDrivingAssertionRepo;
-    /**
-     * @var \Tixi\CoreDomainBundle\Repository\Dispo\ShiftRepositoryDoctrine
-     */
-    private $shiftRepo;
-    /**
-     * @var \Tixi\CoreDomainBundle\Repository\Dispo\ShiftTypeRepositoryDoctrine
-     */
-    private $shiftTypeRepo;
+class DriverAssignTest extends CommonBaseTest {
 
     public function setUp() {
-        $kernel = static::createKernel();
-        $kernel->boot();
-        $this->em = $kernel->getContainer()->get('entity_manager');
-
-        $this->addressRepo = $kernel->getContainer()->get('address_repository');
-        $this->driverRepo = $kernel->getContainer()->get('driver_repository');
-        $this->driverCategoryRepo = $kernel->getContainer()->get('drivercategory_repository');
-        $this->shiftTypeRepo = $kernel->getContainer()->get('shifttype_repository');
-        $this->repeatedDrivingAssertionRepo = $kernel->getContainer()->get('repeateddrivingassertion_repository');
-        $this->repeatedDrivingAssertionPlanRepo = $kernel->getContainer()->get('repeateddrivingassertionplan_repository');
-
-        $this->em->beginTransaction();
+        parent::setUp();
     }
 
     public function testRepeatedDrivingAssertionCRUD() {
 
         $driverCategory = $this->createDriverCategory('Zivildienst');
+
         $address = Address::registerAddress('Burstrasse 22c', '6333', 'Baar', 'Schweiz');
         $this->addressRepo->store($address);
 
@@ -95,11 +41,7 @@ class DriverAssignTest extends WebTestCase {
         );
         $this->driverRepo->store($driver);
 
-        $shift = new ShiftType();
-        $shift->setStart(new \DateTime());
-        $shift->setEnd(new \DateTime());
-        $shift->setName('Test');
-        $this->shiftTypeRepo->store($shift);
+        $shiftType = $this->createShiftType('Shift 1');
 
         $repeatedDrivingAssertionWeekly = new RepeatedWeeklyDrivingAssertion();
         $repeatedDrivingAssertionWeekly->setWeekday(1);
@@ -126,11 +68,17 @@ class DriverAssignTest extends WebTestCase {
         return $current;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    protected function tearDown() {
-        $this->em->rollback();
+    private function createShiftType($name) {
+        $shiftType = ShiftType::registerShiftType($name, new \DateTime(), new \DateTime());
+        $current = $this->shiftTypeRepo->findOneBy(array('name' => $name));
+        if (empty($current)) {
+            $this->shiftTypeRepo->store($shiftType);
+            return $shiftType;
+        }
+        return $current;
+    }
+
+    public function tearDown() {
         parent::tearDown();
     }
 }

@@ -8,38 +8,14 @@
 
 namespace Tixi\SecurityBundle\Tests\Entity;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\Security\Core\Encoder\EncoderFactory;
+use Tixi\CoreDomainBundle\Tests\CommonBaseTest;
 use Tixi\SecurityBundle\Entity\Role;
 use Tixi\SecurityBundle\Entity\User;
 
-class UserTest extends WebTestCase {
-
-    /**
-     * @var \Doctrine\ORM\EntityManager
-     */
-    private $em;
-    /**
-     * @var \Tixi\SecurityBundle\Repository\UserRepositoryDoctrine
-     */
-    private $userRepo;
-    /**
-     * @var \Tixi\SecurityBundle\Repository\RoleRepositoryDoctrine
-     */
-    private $roleRepo;
-    /**
-     * @var \Symfony\Component\Security\Core\Encoder\EncoderFactory
-     */
-    private $encFactory;
+class UserTest extends CommonBaseTest {
 
     public function setUp() {
-        $kernel = static::createKernel();
-        $kernel->boot();
-        $this->em = $kernel->getContainer()->get('entity_manager');
-        $this->userRepo = $kernel->getContainer()->get('tixi_user_repository');
-        $this->roleRepo = $kernel->getContainer()->get('tixi_role_repository');
-        $this->encFactory = $kernel->getContainer()->get('security.encoder_factory');
-        $this->em->beginTransaction();
+        parent::setUp();
     }
 
     public function testUserCRUD() {
@@ -102,11 +78,7 @@ class UserTest extends WebTestCase {
         return $user;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    protected function tearDown() {
+    public function tearDown() {
         parent::tearDown();
-        $this->em->rollback();
     }
 }

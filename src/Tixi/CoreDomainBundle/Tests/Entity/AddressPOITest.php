@@ -8,46 +8,20 @@
 
 namespace Tixi\CoreDomainBundle\Tests\Entity;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Validator\Constraints\DateTime;
 use Tixi\CoreDomain\Address;
-use Tixi\CoreDomain\Driver;
-use Tixi\CoreDomain\DriverCategory;
-use Tixi\CoreDomain\Passenger;
-use Tixi\CoreDomain\Handicap;
 use Tixi\CoreDomain\POI;
 use Tixi\CoreDomain\POIKeyword;
+use Tixi\CoreDomainBundle\Tests\CommonBaseTest;
 
 /**
  * Class AddressPOITest
  * @package Tixi\CoreDomainBundle\Tests\Entity
  */
-class AddressPOITest extends WebTestCase {
-    /**
-     * @var \Doctrine\ORM\EntityManager
-     */
-    private $em;
-    /**
-     * @var \Tixi\CoreDomainBundle\Repository\AddressRepositoryDoctrine
-     */
-    private $addressRepo;
-    /**
-     * @var \Tixi\CoreDomainBundle\Repository\POIRepositoryDoctrine
-     */
-    private $poiRepo;
-    /**
-     * @var \Tixi\CoreDomainBundle\Repository\POIKeywordRepositoryDoctrine
-     */
-    private $poiKeywordRepo;
+class AddressPOITest extends CommonBaseTest{
 
     public function setUp() {
-        $kernel = static::createKernel();
-        $kernel->boot();
-        $this->em = $kernel->getContainer()->get('entity_manager');
-        $this->addressRepo = $kernel->getContainer()->get('address_repository');
-        $this->poiRepo = $kernel->getContainer()->get('poi_repository');
-        $this->poiKeywordRepo = $kernel->getContainer()->get('poikeyword_repository');
-        $this->em->beginTransaction();
+        parent::setUp();
     }
 
     public function testAddressCRUD() {
@@ -117,8 +91,7 @@ class AddressPOITest extends WebTestCase {
     /**
      * {@inheritDoc}
      */
-    protected function tearDown() {
-        $this->em->rollback();
+    public function tearDown() {
         parent::tearDown();
     }
 }

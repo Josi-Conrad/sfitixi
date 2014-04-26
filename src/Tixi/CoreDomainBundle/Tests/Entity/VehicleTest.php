@@ -8,42 +8,19 @@
 
 namespace Tixi\CoreDomainBundle\Tests\Entity;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Tixi\CoreDomain\ServicePlan;
 use Tixi\CoreDomain\Vehicle;
 use Tixi\CoreDomain\VehicleCategory;
+use Tixi\CoreDomainBundle\Tests\CommonBaseTest;
 
 /**
  * Class VehicleTest
  * @package Tixi\CoreDomainBundle\Tests\Entity
  */
-class VehicleTest extends WebTestCase {
-
-    /**
-     * @var \Doctrine\ORM\EntityManager
-     */
-    private $em;
-    /**
-     * @var \Tixi\CoreDomainBundle\Repository\VehicleRepositoryDoctrine
-     */
-    private $vehicleRepo;
-    /**
-     * @var \Tixi\CoreDomainBundle\Repository\VehicleCategoryRepositoryDoctrine
-     */
-    private $vehicleCategoryRepo;
-    /**
-     * @var \Tixi\CoreDomainBundle\Repository\ServicePlanRepositoryDoctrine
-     */
-    private $servicePlanRepo;
+class VehicleTest extends CommonBaseTest {
 
     public function setUp() {
-        $kernel = static::createKernel();
-        $kernel->boot();
-        $this->em = $kernel->getContainer()->get('entity_manager');
-        $this->vehicleRepo = $kernel->getContainer()->get('vehicle_repository');
-        $this->vehicleCategoryRepo = $kernel->getContainer()->get('vehiclecategory_repository');
-        $this->servicePlanRepo = $kernel->getContainer()->get('serviceplan_repository');
-        $this->em->beginTransaction();
+        parent::setUp();
     }
 
     public function testVehicleCRUD() {
@@ -118,8 +95,7 @@ class VehicleTest extends WebTestCase {
     /**
      * {@inheritDoc}
      */
-    protected function tearDown() {
-        $this->em->rollback();
+    public function tearDown() {
         parent::tearDown();
     }
 
