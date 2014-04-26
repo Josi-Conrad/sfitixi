@@ -13,6 +13,7 @@ use Tixi\CoreDomainBundle\Repository\CommonBaseRepositoryDoctrine;
 class WorkingDayRepositoryDoctrine  extends CommonBaseRepositoryDoctrine implements WorkingDayRepository {
     /**
      * @param WorkingDay $workingDay
+     * @return mixed|void
      */
     public function store(WorkingDay $workingDay) {
         $this->getEntityManager()->persist($workingDay);
@@ -20,6 +21,7 @@ class WorkingDayRepositoryDoctrine  extends CommonBaseRepositoryDoctrine impleme
 
     /**
      * @param WorkingDay $workingDay
+     * @return mixed|void
      */
     public function remove(WorkingDay $workingDay) {
         $this->getEntityManager()->remove($workingDay);

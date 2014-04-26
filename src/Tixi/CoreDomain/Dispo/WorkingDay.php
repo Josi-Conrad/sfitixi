@@ -21,25 +21,22 @@ use Tixi\CoreDomain\Driver;
 class WorkingDay {
     /**
      * @ORM\Id
-     * @ORM\Column(type="string", name="id")
+     * @ORM\Column(type="bigint", name="id")
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     protected $id;
     /**
-     * ShiftPerDay
+     * ShiftPerDay (amount of all shifttypes)
      * @ORM\OneToMany(targetEntity="Shift", mappedBy="workingDay")
      * @ORM\JoinColumn(name="shift_id", referencedColumnName="id")
      */
     protected $shifts;
-    /**
-     * @ORM\OneToMany(targetEntity="DrivingPool", mappedBy="workingDay")
-     * @ORM\JoinColumn(name="driving_pool_id", referencedColumnName="id")
-     */
-    protected $drivingPools;
+
     /**
      * @ORM\Column(type="date")
      */
     protected $date;
+
 
     protected function __construct() {
         $shiftTypes = array();
@@ -51,10 +48,17 @@ class WorkingDay {
         $this->drivingPools = new ArrayCollection();
     }
 
+    /**
+     * @param ShiftType $shiftTyp
+     * @param Driver $driver
+     */
     protected function assignDriver(ShiftType $shiftTyp, Driver $driver) {
         $this->shifts[$shiftTyp]->assignDriver($driver);
     }
 
+    /**
+     * @param DrivingMission $mission
+     */
     protected function getPossibleDrivingPoolForMission(DrivingMission $mission) {
         $responsibleShift = null;
         foreach ($this->shifts as $shift) {
@@ -76,14 +80,6 @@ class WorkingDay {
     /**
      * @return mixed
      */
-    public function getDrivingPools()
-    {
-        return $this->drivingPools;
-    }
-
-    /**
-     * @return mixed
-     */
     public function getId()
     {
         return $this->id;
@@ -97,7 +93,19 @@ class WorkingDay {
         return $this->shifts;
     }
 
+    /**
+     * @param \Doctrine\Common\Collections\ArrayCollection $drivingPools
+     */
+    public function setDrivingPools($drivingPools) {
+        $this->drivingPools = $drivingPools;
+    }
 
+    /**
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getDrivingPools() {
+        return $this->drivingPools;
+    }
 
 
 }

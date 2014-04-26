@@ -22,6 +22,10 @@ class RepeatedWeeklyDrivingAssertion extends RepeatedDrivingAssertion{
      */
     protected $weekday;
 
+    /**
+     * @param Shift $shift
+     * @return mixed|void
+     */
     public function matching(Shift $shift)
     {
         // TODO: Implement matching() method.

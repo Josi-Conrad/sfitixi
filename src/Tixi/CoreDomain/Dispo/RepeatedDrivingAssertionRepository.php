@@ -11,6 +11,10 @@ namespace Tixi\CoreDomain\Dispo;
 
 use Tixi\CoreDomain\Shared\CommonBaseRepository;
 
+/**
+ * Interface RepeatedDrivingAssertionRepository
+ * @package Tixi\CoreDomain\Dispo
+ */
 interface RepeatedDrivingAssertionRepository extends CommonBaseRepository {
 
     /**

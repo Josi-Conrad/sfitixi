@@ -60,6 +60,12 @@ class Passenger extends Person {
     protected $drivingOrders;
 
     /**
+     * @ORM\OneToMany(targetEntity="Tixi\CoreDomain\Dispo\RepeatedDrivingOrderPlan", mappedBy="passenger")
+     * @ORM\JoinColumn(name="repeated_driving_order_plan_id", referencedColumnName="id")
+     */
+    protected $repeatedDrivingOrderPlans;
+
+    /**
      * @param $gender
      * @param $firstname
      * @param $lastname

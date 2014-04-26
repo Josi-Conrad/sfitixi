@@ -13,6 +13,7 @@ use Tixi\CoreDomainBundle\Repository\CommonBaseRepositoryDoctrine;
 class DrivingPoolRepositoryDoctrine  extends CommonBaseRepositoryDoctrine implements DrivingPoolRepository {
     /**
      * @param DrivingPool $drivingPool
+     * @return mixed|void
      */
     public function store(DrivingPool $drivingPool) {
         $this->getEntityManager()->persist($drivingPool);
@@ -20,6 +21,7 @@ class DrivingPoolRepositoryDoctrine  extends CommonBaseRepositoryDoctrine implem
 
     /**
      * @param DrivingPool $drivingPool
+     * @return mixed|void
      */
     public function remove(DrivingPool $drivingPool) {
         $this->getEntityManager()->remove($drivingPool);

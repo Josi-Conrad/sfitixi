@@ -10,6 +10,7 @@ namespace Tixi\CoreDomain\Dispo;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Tixi\CoreDomain\Shared\CommonBaseEntity;
 
 /**
  * Tixi\CoreDomain\Dispo\Route
@@ -21,7 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
  * uniqueConstraints={@ORM\UniqueConstraint(name="search_idx", columns={"address_start_id", "address_target_id"})}
  * )
  */
-class Route {
+class Route extends CommonBaseEntity{
     /**
      * @ORM\Id
      * @ORM\Column(type="bigint", name="id")
@@ -48,8 +49,15 @@ class Route {
      * @ORM\Column(type="integer")
      */
     protected $distance;
+    /**
+     * additional time taken for this route
+     * This is a special case, if routing time is manually corrected by user
+     * @ORM\Column(type="integer")
+     */
+    protected $additionalTime;
 
-    private function __construct() {
+    public function __construct() {
+        parent::__construct();
     }
 
     /**
@@ -75,11 +83,11 @@ class Route {
      * @param null $distance
      */
     public function updateRouteData($startAddress = null, $targetAddress = null, $duration = null, $distance = null) {
-        $this->setChangeDate(new \DateTime('now'));
         $this->setStartAddress($startAddress);
         $this->setTargetAddress($targetAddress);
         $this->setDuration($duration);
         $this->setDistance($distance);
+        parent::updateModifiedDate();
     }
 
     /**
@@ -150,5 +158,19 @@ class Route {
      */
     public function getTargetAddress() {
         return $this->targetAddress;
+    }
+
+    /**
+     * @param mixed $additionalTime
+     */
+    public function setAdditionalTime($additionalTime) {
+        $this->additionalTime = $additionalTime;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAdditionalTime() {
+        return $this->additionalTime;
     }
 }

@@ -39,7 +39,6 @@ class ShiftType extends CommonBaseEntity {
     protected $end;
 
     public function __construct() {
-        $this->shifts = new ArrayCollection();
         parent::__construct();
     }
 

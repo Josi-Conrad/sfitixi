@@ -11,9 +11,20 @@ namespace Tixi\CoreDomain\Dispo;
 
 use Tixi\CoreDomain\Shared\CommonBaseRepository;
 
+/**
+ * Interface RepeatedDrivingAssertionPlanRepository
+ * @package Tixi\CoreDomain\Dispo
+ */
 interface RepeatedDrivingAssertionPlanRepository extends CommonBaseRepository {
-
+    /**
+     * @param RepeatedDrivingAssertionPlan $assertionPlan
+     * @return mixed
+     */
     public function store(RepeatedDrivingAssertionPlan $assertionPlan);
 
+    /**
+     * @param RepeatedDrivingAssertionPlan $assertionPlan
+     * @return mixed
+     */
     public function remove(RepeatedDrivingAssertionPlan $assertionPlan);
 } 

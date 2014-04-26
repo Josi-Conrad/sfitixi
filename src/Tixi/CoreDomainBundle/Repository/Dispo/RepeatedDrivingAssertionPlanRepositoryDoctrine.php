@@ -21,6 +21,7 @@ use Tixi\CoreDomainBundle\Repository\CommonBaseRepositoryDoctrine;
 class RepeatedDrivingAssertionPlanRepositoryDoctrine extends CommonBaseRepositoryDoctrine implements RepeatedDrivingAssertionPlanRepository{
     /**
      * @param RepeatedDrivingAssertionPlan $assertionPlan
+     * @return mixed|void
      */
     public function store(RepeatedDrivingAssertionPlan $assertionPlan)
     {
@@ -29,6 +30,7 @@ class RepeatedDrivingAssertionPlanRepositoryDoctrine extends CommonBaseRepositor
 
     /**
      * @param RepeatedDrivingAssertionPlan $assertionPlan
+     * @return mixed|void
      */
     public function remove(RepeatedDrivingAssertionPlan $assertionPlan)
     {

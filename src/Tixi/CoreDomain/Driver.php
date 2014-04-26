@@ -44,8 +44,15 @@ class Driver extends Person {
 
     /**
      * @ORM\OneToMany(targetEntity="Tixi\CoreDomain\Dispo\RepeatedDrivingAssertionPlan", mappedBy="driver")
+     * @ORM\JoinColumn(name="repeateddrivingassertionplan_id", referencedColumnName="id")
      */
     protected $repeatedDrivingAssertionPlans;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Tixi\CoreDomain\Dispo\DrivingPool", mappedBy="driver")
+     * @ORM\JoinColumn(name="driving_pool_id", referencedColumnName="id")
+     */
+    protected $drivingPools;
 
     /**
      * @param $gender

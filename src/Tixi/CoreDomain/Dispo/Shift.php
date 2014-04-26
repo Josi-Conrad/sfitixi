@@ -36,6 +36,7 @@ class Shift {
      */
     protected $drivingPools;
     /**
+     * @var $workingDay WorkingDay
      * @ORM\ManyToOne(targetEntity="WorkingDay", inversedBy="shifts")
      * @ORM\JoinColumn(name="working_day_id", referencedColumnName="id")
      */
@@ -91,17 +92,24 @@ class Shift {
         return $this->workingDay;
     }
 
+    /**
+     * @return mixed
+     */
     public function getDate() {
-        //mock date
-        return DateTime::createFromFormat('d.m.Y','06.05.2014');
-//        return $this->workingDay->getDate();
+        return $this->workingDay->getDate();
     }
 
+    /**
+     * @param Driver $driver
+     */
     protected function assignDriver(Driver $driver) {
         $this->drivingPools = new DrivingPool($driver, $this);
     }
 
+    /**
+     * @return mixed
+     */
     protected function amountOfDriversNeeded() {
-        return $this->amountOfDrivers - $this->count($this->drivingPools);
+        return $this->amountOfDrivers - count($this->drivingPools);
     }
 }

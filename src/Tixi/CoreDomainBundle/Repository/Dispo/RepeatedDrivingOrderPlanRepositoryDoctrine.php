@@ -13,15 +13,26 @@ use Tixi\CoreDomain\Dispo\RepeatedDrivingOrderPlan;
 use Tixi\CoreDomain\Dispo\RepeatedDrivingOrderPlanRepository;
 use Tixi\CoreDomainBundle\Repository\CommonBaseRepositoryDoctrine;
 
+/**
+ * Class RepeatedDrivingOrderPlanRepositoryDoctrine
+ * @package Tixi\CoreDomainBundle\Repository\Dispo
+ */
 class RepeatedDrivingOrderPlanRepositoryDoctrine extends CommonBaseRepositoryDoctrine implements RepeatedDrivingOrderPlanRepository{
-
-    public function store(RepeatedDrivingOrderPlan $drivingOrderPlan)
+    /**
+     * @param RepeatedDrivingOrderPlan $repeatedDrivingOrderPlan
+     * @return mixed|void
+     */
+    public function store(RepeatedDrivingOrderPlan $repeatedDrivingOrderPlan)
     {
-        $this->getEntityManager()->persist($drivingOrderPlan);
+        $this->getEntityManager()->persist($repeatedDrivingOrderPlan);
     }
 
-    public function remove(RepeatedDrivingOrderPlan $drivingOrderPlan)
+    /**
+     * @param RepeatedDrivingOrderPlan $repeatedDrivingOrderPlan
+     * @return mixed|void
+     */
+    public function remove(RepeatedDrivingOrderPlan $repeatedDrivingOrderPlan)
     {
-        $this->getEntityManager()->remove($drivingOrderPlan);
+        $this->getEntityManager()->remove($repeatedDrivingOrderPlan);
     }
 }

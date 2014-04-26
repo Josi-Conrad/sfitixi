@@ -18,10 +18,9 @@ use Tixi\CoreDomain\Shared\CommonBaseEntity;
  * @ORM\Entity
  * @ORM\Table(name="repeateddrivingorder")
  */
-
-class RepeatedDrivingOrder extends CommonBaseEntity implements DrivingOrderInterface{
-
+class RepeatedDrivingOrder implements DrivingOrderInterface {
     /**
+     * Repeated-Order Number
      * @ORM\Id
      * @ORM\Column(type="bigint", name="id")
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -29,10 +28,10 @@ class RepeatedDrivingOrder extends CommonBaseEntity implements DrivingOrderInter
     protected $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="RepeatedDrivingOrderPlan", inversedBy="repeatedOrders")
-     * @ORM\JoinColumn(name="passenger_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="RepeatedDrivingOrderPlan", inversedBy="repeatedDrivingOrders")
+     * @ORM\JoinColumn(name="repeated_driving_order_plan_id", referencedColumnName="id")
      */
-    protected $orderPlan;
+    protected $repeatedDrivingOrderPlan;
 
     /**
      * @ORM\Column(type="integer")
@@ -44,43 +43,61 @@ class RepeatedDrivingOrder extends CommonBaseEntity implements DrivingOrderInter
      */
     protected $pickUpTime;
 
-
-    public function matching(\DateTime $date)
-    {
-        // TODO: Implement matching() method.
-    }
-
     /**
-     * @param mixed $orderPlan
+     * @param \DateTime $date
+     * @return mixed|void
      */
-    public function setOrderPlan($orderPlan)
-    {
-        $this->orderPlan = $orderPlan;
+    public function matching(\DateTime $date) {
+        // TODO: Implement matching() method.
     }
 
     /**
      * @return mixed
      */
-    public function getOrderPlan()
-    {
-        return $this->orderPlan;
+    public function getId() {
+        return $this->id;
+    }
+
+    /**
+     * @param mixed $pickUpTime
+     */
+    public function setPickUpTime($pickUpTime) {
+        $this->pickUpTime = $pickUpTime;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPickUpTime() {
+        return $this->pickUpTime;
+    }
+
+    /**
+     * @param mixed $repeatedDrivingOrderPlan
+     */
+    public function setRepeatedDrivingOrderPlan($repeatedDrivingOrderPlan) {
+        $this->repeatedDrivingOrderPlan = $repeatedDrivingOrderPlan;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRepeatedDrivingOrderPlan() {
+        return $this->repeatedDrivingOrderPlan;
     }
 
     /**
      * @param mixed $weekday
      */
-    public function setWeekday($weekday)
-    {
+    public function setWeekday($weekday) {
         $this->weekday = $weekday;
     }
 
     /**
      * @return mixed
      */
-    public function getWeekday()
-    {
+    public function getWeekday() {
         return $this->weekday;
     }
-
 
 }

@@ -10,6 +10,7 @@ namespace Tixi\CoreDomain\Dispo;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Tixi\CoreDomain\Shared\CommonBaseEntity;
 
 /**
  * Tixi\CoreDomain\Dispo\DrivingMission
@@ -29,7 +30,13 @@ class DrivingMission {
      * @ORM\JoinColumn(name="driving_order_id", referencedColumnName="id")
      */
     protected $drivingOrders;
-
+    /**
+     * @ORM\ManyToMany(targetEntity="RepeatedDrivingOrder")
+     * @ORM\JoinTable(name="drivingmission_to_repeateddrivingorder",
+     *      joinColumns={@ORM\JoinColumn(name="divingmission_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="repeateddrivingorder_id", referencedColumnName="id")})
+     */
+    protected $repeatedDrivingOrders;
     /**
      * @ORM\ManyToOne(targetEntity="DrivingPool", inversedBy="drivingMissions")
      * @ORM\JoinColumn(name="driving_pool_id", referencedColumnName="id")
@@ -38,6 +45,7 @@ class DrivingMission {
 
     public function __construct() {
         $this->drivingOrders = new ArrayCollection();
+        $this->repeatedDrivingOrders = new ArrayCollection();
     }
 
     /**
@@ -52,6 +60,47 @@ class DrivingMission {
      * @return mixed
      */
     protected function getDuration() {
-
     }
-} 
+
+    /**
+     * @param mixed $drivingOrders
+     */
+    public function setDrivingOrders($drivingOrders) {
+        $this->drivingOrders = $drivingOrders;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDrivingOrders() {
+        return $this->drivingOrders;
+    }
+
+    /**
+     * @param mixed $drivingPool
+     */
+    public function setDrivingPool($drivingPool) {
+        $this->drivingPool = $drivingPool;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDrivingPool() {
+        return $this->drivingPool;
+    }
+
+    /**
+     * @param mixed $repeatedDrivingOrders
+     */
+    public function setRepeatedDrivingOrders($repeatedDrivingOrders) {
+        $this->repeatedDrivingOrders = $repeatedDrivingOrders;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRepeatedDrivingOrders() {
+        return $this->repeatedDrivingOrders;
+    }
+}

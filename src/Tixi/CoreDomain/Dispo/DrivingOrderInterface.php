@@ -8,7 +8,15 @@
 
 namespace Tixi\CoreDomain\Dispo;
 
-
+/**
+ * Interface DrivingOrderInterface
+ * @package Tixi\CoreDomain\Dispo
+ */
 interface DrivingOrderInterface {
+    /**
+     * This matches a DateTime and returns true if the Order is on that Date
+     * @param \DateTime $date
+     * @return mixed
+     */
     public function matching(\DateTime $date);
 } 

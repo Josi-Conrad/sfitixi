@@ -13,6 +13,7 @@ use Tixi\CoreDomainBundle\Repository\CommonBaseRepositoryDoctrine;
 class DrivingMissionRepositoryDoctrine  extends CommonBaseRepositoryDoctrine implements DrivingMissionRepository {
     /**
      * @param DrivingMission $drivingMission
+     * @return mixed|void
      */
     public function store(DrivingMission $drivingMission) {
         $this->getEntityManager()->persist($drivingMission);
@@ -20,6 +21,7 @@ class DrivingMissionRepositoryDoctrine  extends CommonBaseRepositoryDoctrine imp
 
     /**
      * @param DrivingMission $drivingMission
+     * @return mixed|void
      */
     public function remove(DrivingMission $drivingMission) {
         $this->getEntityManager()->remove($drivingMission);
