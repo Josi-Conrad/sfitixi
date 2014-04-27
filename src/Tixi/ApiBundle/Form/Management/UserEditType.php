@@ -33,8 +33,8 @@ class UserEditType extends AbstractType{
         ));
         $builder->add('username', 'text', array(
             'label' => 'user.field.username',
-            'attr'=>array('title' => 'form.field.title.letter_digit'),
-            'pattern' => '^[a-zA-Z\d]+$',
+            'attr'=>array('title' => 'form.field.title.username'),
+            'pattern' => '^[a-zA-Z\d.-_]+$',
             'constraints' => array(
                 new NotBlank(array('message'=>'user.name.not_blank'))
             ),

@@ -1,6 +1,7 @@
 #Form field titles
 form.field.title.postalcode: Wert muss einer PLZ entsprechen (6430)
 form.field.title.not_blank: Wert erforderlich
+form.field.title.username: Darf keine Sonderzeichen und Leerzeichen enthalten
 form.field.title.letter_digit: Darf nur aus Buchstaben und Zahlen bestehen
 form.field.title.gletter_digit: Darf nur aus Grossbuchstaben und Zahlen bestehen
 form.field.title.letter_digit_space: Darf nur aus Zahlen, Buchstaben und Leerzeichen bestehen
