@@ -22,7 +22,5 @@ class AddressHandleDTO {
     public $country;
     public $lat;
     public $lng;
-    public $type;
-
-    public $editFlag;
+    public $source;
 } 

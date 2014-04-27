@@ -33,7 +33,7 @@ class AddressHandleAssembler {
 
         $addressHandleDTO->lat = $address->getLat();
         $addressHandleDTO->lng = $address->getLng();
-        $addressHandleDTO->type = $address->getType();
+        $addressHandleDTO->source = $address->getSource();
 
         return $addressHandleDTO;
     }
