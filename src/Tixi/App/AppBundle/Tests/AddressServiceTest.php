@@ -42,7 +42,7 @@ class AddressServiceTest extends WebTestCase {
         $kernel->boot();
 
         $this->em = $kernel->getContainer()->get('entity_manager');
-        $this->aService = $kernel->getContainer()->get('tixi_app.address_management');
+        $this->aService = $kernel->getContainer()->get('tixi_app.addressmanagement');
         $this->addressRepo = $kernel->getContainer()->get('address_repository');
     }
 

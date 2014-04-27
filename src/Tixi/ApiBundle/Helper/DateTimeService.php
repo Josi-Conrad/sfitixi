@@ -27,6 +27,33 @@ class DateTimeService extends ContainerAware {
     }
 
     /**
+     * @param \DateTime $dateTime
+     * @return string
+     * returns four digit year
+     */
+    public static function getYear(\DateTime $dateTime) {
+        return $dateTime->format('Y');
+    }
+
+    /**
+     * @param \DateTime $dateTime
+     * @return string
+     * returns two digit month number (01-12)
+     */
+    public static function getMonth(\DateTime $dateTime) {
+        return $dateTime->format('m');
+    }
+
+    /**
+     * @param \DateTime $dateTime
+     * @return string
+     * returns two digit day of month (01-31)
+     */
+    public static function getDayOfMonth(\DateTime $dateTime) {
+        return $dateTime->format('d');
+    }
+
+    /**
      * @param \DateTime $utcDate
      * @return \DateTime
      */

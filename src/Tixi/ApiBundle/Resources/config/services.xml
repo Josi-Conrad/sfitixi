@@ -9,6 +9,7 @@
         <parameter key="tixi_api.twig.menurenderer.class">Tixi\ApiBundle\Menu\MenuTwigExtension</parameter>
         <parameter key="tixi_api.menuservice.class">Tixi\ApiBundle\Menu\MenuService</parameter>
         <parameter key="tixi_api.datetimeservice.class">Tixi\ApiBundle\Helper\DateTimeService</parameter>
+        <parameter key="tixi_api.clientidservice.class">Tixi\ApiBundle\Helper\ClientIdService</parameter>
         <parameter key="tixi_api.vehicleassembler.class">Tixi\ApiBundle\Interfaces\VehicleAssembler</parameter>
         <parameter key="tixi_api.serviceplanassembler.class">Tixi\ApiBundle\Interfaces\ServicePlanAssembler</parameter>
         <parameter key="tixi_api.driverassembler.class">Tixi\ApiBundle\Interfaces\DriverAssembler</parameter>
@@ -47,8 +48,15 @@
             </call>
         </service>
 
-        <!-- DateTimeServer -->
+        <!-- DateTimeService -->
         <service id="tixi_api.datetimeservice" class="%tixi_api.datetimeservice.class%">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
+
+        <!-- ClientIdService -->
+        <service id="tixi_api.clientidservice" class="%tixi_api.clientidservice.class%">
             <call method="setContainer">
                 <argument type="service" id="service_container" />
             </call>

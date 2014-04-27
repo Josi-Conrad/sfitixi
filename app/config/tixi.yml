@@ -2,3 +2,5 @@ parameters:
      tixi_parameter_client: Zug
      tixi_parameter_app: iTIXI
      tixi_parameter_version: v2.7
+
+     tixi_parameter_google_apikey: AIzaSyAj6w00ufayAcAv-A8zzLhQspEYflknr4E

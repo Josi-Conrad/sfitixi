@@ -71,6 +71,9 @@ class VehicleController extends Controller {
             $rootPanel = $dataGridTile;
         }
 
+
+
+
         return new Response($tileRenderer->render($rootPanel));
     }
 
