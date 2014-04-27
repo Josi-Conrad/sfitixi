@@ -90,12 +90,12 @@ INSERT INTO `poi_to_keyword` (`poi_id`,`keyword_id`) VALUES (1,2), (1,4), (1,5);
 /*
 insert_repeated_driving_assertion
 */
-INSERT INTO `repeated_driving_assertion_plan` (`id`,`driver_id`,`memo`,`anchorDate`,`endingDate`,`frequency`,`withHolidays`)
-VALUES (1,1,'Normaleinsatz','2014-04-01 00:00:00','2015-04-01 00:00:00','weekly',1);
+INSERT INTO `repeated_driving_assertion_plan` (`id`,`driver_id`,`memo`,`anchorDate`,`endingDate`,`frequency`,`withHolidays`,`isDeleted`,`creationDateTime`,`modifiedDateTime`)
+VALUES (1,1,'Normaleinsatz','2014-04-01 00:00:00','2015-04-01 00:00:00','weekly',1,0,'0000-00-00 00:00:00','0000-00-00 00:00:00');
 
 INSERT INTO `repeated_driving_assertion` (`id`,`repeatedassertionplan_id`,`discr`,`weekday`,`weekdayAsText`,`relativeWeekAsText`)
 VALUES (1,1,'weekly',3,NULL,NULL);
 
-INSERT INTO `repeateddrivingassertion_to_shifttypes` (`repeateddrivingassertion_id`,`shifttype_id`) 
+INSERT INTO `repeateddrivingassertion_to_shifttype` (`repeateddrivingassertion_id`,`shifttype_id`)
 VALUES (1,'1'), (1,'2');
 
