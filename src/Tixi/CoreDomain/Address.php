@@ -19,6 +19,10 @@ use Tixi\CoreDomain\Shared\CommonBaseEntity;
  * @ORM\Table(name="address")
  */
 class Address extends CommonBaseEntity{
+
+    const SOURCE_MANUAL = 'manual';
+    const SOURCE_GOOGLE = 'google';
+
     /**
      * @ORM\Id
      * @ORM\Column(type="bigint", name="id")
@@ -47,31 +51,23 @@ class Address extends CommonBaseEntity{
      * @ORM\Column(type="string", length=30)
      */
     protected $country;
-
+    /**
+     * @ORM\Column(type="string", length=30)
+     */
+    protected $source;
     /**
      * @ORM\Column(type="string", length=50, nullable=true)
      */
     protected $name;
-
     /**
-     * @ORM\Column(type="decimal", scale=6, precision=10, nullable=true)
+     * @ORM\Column(type="integer", nullable=true)
      */
     protected $lat;
-
     /**
-     * @ORM\Column(type="decimal", scale=6, precision=10, nullable=true)
+     * @ORM\Column(type="integer", nullable=true)
      */
     protected $lng;
 
-    /**
-     * @ORM\Column(type="string", length=30, nullable=true)
-     */
-    protected $type;
-
-    /**
-     * @ORM\Column(type="boolean", nullable=true)
-     */
-    protected $editFlag;
 
     protected function __construct() {
         parent::__construct();
@@ -83,16 +79,14 @@ class Address extends CommonBaseEntity{
      * @param $postalCode
      * @param $city
      * @param $country
-     * @param $name
+     * @param null $name
      * @param null $lat
      * @param null $lng
-     * @param null $type
-     * @param bool $editFlag
+     * @param string $source
      * @return Address
      */
     public static function registerAddress($street, $postalCode, $city, $country,
-                                           $name = null, $lat = null, $lng = null, $type = null,
-                                           $editFlag = false) {
+                                           $name = null, $lat = null, $lng = null, $source=self::SOURCE_MANUAL) {
         $address = new Address();
 
         $address->setStreet($street);
@@ -102,8 +96,7 @@ class Address extends CommonBaseEntity{
         $address->setName($name);
         $address->setLat($lat);
         $address->setLng($lng);
-        $address->setType($type);
-        $address->setEditFlag($editFlag);
+        $address->setSource($source);
 
         return $address;
     }
@@ -116,13 +109,11 @@ class Address extends CommonBaseEntity{
      * @param null $name
      * @param null $lat
      * @param null $lng
-     * @param null $type
-     * @param bool $editFlag
+     * @param string $source
      */
     public function updateAddressData($street = null, $postalCode = null,
                                            $city = null, $country = null,
-                                           $name = null, $lat = null, $lng = null, $type = null,
-                                           $editFlag = false) {
+                                           $name = null, $lat = null, $lng = null, $source=self::SOURCE_MANUAL) {
 
         if (!empty($street)) {
             $this->setStreet($street);
@@ -139,8 +130,7 @@ class Address extends CommonBaseEntity{
         $this->setName($name);
         $this->setLat($lat);
         $this->setLng($lng);
-        $this->setType($type);
-        $this->setEditFlag($editFlag);
+        $this->setSource($source);
     }
 
     public static function removeAddress(Address $address) {
@@ -171,20 +161,6 @@ class Address extends CommonBaseEntity{
             $this->getPostalCode() + ' ' +
             $this->getCity() + ' ' +
             $this->getCountry());
-    }
-
-    /**
-     * @param mixed $type
-     */
-    public function setType($type) {
-        $this->type = $type;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getType() {
-        return $this->type;
     }
 
     /**
@@ -307,16 +283,20 @@ class Address extends CommonBaseEntity{
     }
 
     /**
-     * @param mixed $editFlag
+     * @param mixed $source
      */
-    public function setEditFlag($editFlag) {
-        $this->editFlag = $editFlag;
+    public function setSource($source)
+    {
+        $this->source = $source;
     }
 
     /**
      * @return mixed
      */
-    public function getEditFlag() {
-        return $this->editFlag;
+    public function getSource()
+    {
+        return $this->source;
     }
+
+
 }

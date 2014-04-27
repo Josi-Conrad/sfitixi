@@ -32,7 +32,7 @@ class AddFullTextIndexCommand extends ContainerAwareCommand {
     public function execute(InputInterface $input, OutputInterface $output) {
         $connection = $this->getContainer()->get('entity_manager')->getConnection();
         $connection->query("
-        ALTER TABLE `address` ADD FULLTEXT `address_fts_idx` (`name`, `street`, `postalCode`, `city`, `country`, `type`);
+        ALTER TABLE `address` ADD FULLTEXT `address_fts_idx` (`name`, `street`, `postalCode`, `city`, `country`, `source`);
         ");
 
         $output->writeln('Alter address table for fulltext search executed');

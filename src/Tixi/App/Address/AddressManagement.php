@@ -6,7 +6,7 @@
  * Time: 13:12
  */
 
-namespace Tixi\App;
+namespace Tixi\App\Address;
 
 use Tixi\App\AppBundle\Interfaces\AddressHandleDTO;
 

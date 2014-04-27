@@ -18,6 +18,11 @@ tixi_api:
     type:     annotation
     prefix:   /
 
+tixi_app:
+    resource: "@TixiAppBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
 tixi_security:
     resource: "@TixiSecurityBundle/Resources/config/routing.yml"
     prefix:   /

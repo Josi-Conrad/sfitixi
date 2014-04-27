@@ -68,9 +68,10 @@ class RepeatedDrivingAssertionAssembler {
      * @return RepeatedDrivingAssertionPlan
      */
     public function repeatedRegisterDTOToDrivingAssertionPlan(RepeatedDrivingAssertionPlan $assertionPlan, RepeatedDrivingAssertionRegisterDTO $dto) {
+        $endingDate = (null!==$dto->endDate) ? $dto->endDate : DateTimeService::getMaxDateTime();
         $assertionPlan->setMemo($dto->memo);
         $assertionPlan->setAnchorDate($dto->anchorDate);
-        $assertionPlan->setEndingDate($dto->endDate);
+        $assertionPlan->setEndingDate($endingDate);
         $assertionPlan->setFrequency($dto->frequency);
         $assertionPlan->setWithHolidays($dto->withHolidays);
         return $assertionPlan;

@@ -6,11 +6,18 @@
 
 
     <parameters>
-        <parameter key="tixi_app.address_management.class">Tixi\App\AppBundle\Controller\AddressManagementImplDoctrine</parameter>
+        <parameter key="tixi_app.addressmanagement.class">Tixi\App\AppBundle\Address\AddressManagementImpl</parameter>
+        <parameter key="tixi_app.addresslookupfactory.class">Tixi\App\AppBundle\Address\AddressLookupFactory</parameter>
     </parameters>
 
     <services>
-        <service id="tixi_app.address_management" class="%tixi_app.address_management.class%">
+        <service id="tixi_app.addressmanagement" class="%tixi_app.addressmanagement.class%">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
+
+        <service id="tixi_app.addresslookupfactory" class="%tixi_app.addresslookupfactory.class%">
             <call method="setContainer">
                 <argument type="service" id="service_container" />
             </call>

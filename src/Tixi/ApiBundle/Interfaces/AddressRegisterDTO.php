@@ -24,5 +24,5 @@ class AddressRegisterDTO {
     public $country;
     public $lng;
     public $lat;
-    public $type;
+    public $source;
 }

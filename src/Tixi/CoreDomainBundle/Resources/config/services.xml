@@ -60,6 +60,9 @@
         <parameter key="zoneplan.doctrine.entity">Tixi\CoreDomain\Dispo\ZonePlan</parameter>
         <parameter key="zoneplan_repository.doctrine.class">Tixi\CoreDomainBundle\Repository\Dispo\ZonePlanRepositoryDoctrine</parameter>
 
+        <parameter key="addressquotahelper.doctrine.entity">Tixi\CoreDomain\App\AddressLookupQuotaHelper</parameter>
+        <parameter key="addressquotahelper_repository.doctrine.class">Tixi\CoreDomainBundle\Repository\App\AddressLookupQuotaHelperRepositoryDoctrine</parameter>
+
     </parameters>
 
     <services>
@@ -207,6 +210,16 @@
             <argument type="string">%zoneplan.doctrine.entity%</argument>
         </service>
 
+        <service id="bankholiday_repository" alias="bankholiday_repository.doctrine"></service>
+        <service id="bankholiday_repository.doctrine" class="%bankholiday_repository.doctrine.class%" factory-service="doctrine" factory-method="getrepository">
+            <argument type="string">%bankholiday.doctrine.entity%</argument>
+        </service>
+
+        <service id="addressquotahelper_repository" alias="addressquotahelper_repository.doctrine"></service>
+        <service id="addressquotahelper_repository.doctrine" class="%addressquotahelper_repository.doctrine.class%" factory-service="doctrine" factory-method="getrepository">
+            <argument type="string">%addressquotahelper.doctrine.entity%</argument>
+        </service>
+        
     </services>
 
 </container>

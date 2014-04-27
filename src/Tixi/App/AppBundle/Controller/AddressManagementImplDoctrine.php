@@ -4,7 +4,7 @@ namespace Tixi\App\AppBundle\Controller;
 
 use Doctrine\ORM\Query\ResultSetMappingBuilder;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Tixi\App\AddressManagement;
+use Tixi\App\Address\AddressManagement;
 use Tixi\App\AppBundle\Interfaces\AddressHandleDTO;
 use Tixi\App\AppBundle\Interfaces\AddressHandleAssembler;
 use Tixi\CoreDomain\Address;
