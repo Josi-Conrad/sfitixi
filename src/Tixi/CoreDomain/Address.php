@@ -60,11 +60,11 @@ class Address extends CommonBaseEntity{
      */
     protected $name;
     /**
-     * @ORM\Column(type="decimal", scale=6, precision=10, nullable=true)
+     * @ORM\Column(type="integer", nullable=true)
      */
     protected $lat;
     /**
-     * @ORM\Column(type="decimal", scale=6, precision=10, nullable=true)
+     * @ORM\Column(type="integer", nullable=true)
      */
     protected $lng;
 
