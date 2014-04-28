@@ -12,6 +12,15 @@ namespace Tixi\App\AppBundle\Address;
 use Doctrine\ORM\Query\ResultSetMappingBuilder;
 use Tixi\App\AppBundle\Interfaces\AddressHandleAssembler;
 
+/**
+ * Class AddressLookupServiceLocalDoctrineMysql
+ * @package Tixi\App\AppBundle\Address
+ *
+ * This class makes use of mysql fulltext index.
+ * Please make sure that the following defaults are set in the mysql config file:
+ * ft_min_word_len=1
+ * innodb_ft_min_token_size=1
+ */
 class AddressLookupServiceLocalDoctrineMysql extends AddressLookupService{
 
     public function hasLookupQuota()
