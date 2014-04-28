@@ -6,7 +6,7 @@
  * Time: 16:51
  */
 
-namespace Tixi\App\AppBundle\Util;
+namespace Tixi\App\AppBundle\ZonePlan;
 
 /**
  * Class Point

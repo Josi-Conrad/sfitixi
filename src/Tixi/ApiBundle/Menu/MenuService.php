@@ -20,7 +20,7 @@ use Tixi\ApiBundle\Tile\TileRenderer;
  * Class MenuService
  * @package Tixi\ApiBundle\Menu
  */
-class MenuService extends ContainerAware{
+class MenuService extends ContainerAware {
 
     public static $menuHomeId = 'home';
     public static $menuDispoId = 'dispo';
@@ -46,6 +46,7 @@ class MenuService extends ContainerAware{
     public static $menuManagementZoningPlanId = 'management_zoningplans';
     public static $menuManagementShiftTypeId = 'management_shifttypes';
     public static $menuManagementVehicleDepotId = 'management_vehicledepots';
+    public static $menuManagementZonePlanId = 'management_zoneplan';
 
 
     public function __construct() {
@@ -56,7 +57,7 @@ class MenuService extends ContainerAware{
      * @param null $activeMenuItem
      * @return mixed
      */
-    public function createMenu($activeMenuItem=null) {
+    public function createMenu($activeMenuItem = null) {
         $tileRender = $this->container->get('tixi_api.tilerenderer');
         $activeItem = (null !== $activeMenuItem) ? $activeMenuItem : self::$menuHomeId;
         return $tileRender->render($this->constructMenuTile($activeItem));
@@ -80,13 +81,17 @@ class MenuService extends ContainerAware{
         /**
          * render management functions only if user got manager role
          */
-        if($this->container->get('security.context')->isGranted('ROLE_MANAGER')){
+        if ($this->container->get('security.context')->isGranted('ROLE_MANAGER')) {
             $managementSelectionTile =
                 $menuTile->add(new MenuSelectionItemTile(self::$menuSelectionManagementId,
-                'management.panel.name',$this->checkSelectionRootActivity(self::$menuSelectionManagementId, $activeItem)));
+                    'management.panel.name', $this->checkSelectionRootActivity(self::$menuSelectionManagementId, $activeItem)));
 
-            $managementSelectionTile->add(new MenuItemTile(self::$menuManagementUserId,
-                $this->generateUrl('tixiapi_management_users_get'), 'user.panel.name', $this->checkSelectionChildActivity(self::$menuManagementUserId, $activeItem)));
+            if ($this->container->get('security.context')->isGranted('ROLE_ADMIN')) {
+                $managementSelectionTile->add(new MenuItemTile(self::$menuManagementUserId,
+                    $this->generateUrl('tixiapi_management_users_get'), 'user.panel.name', $this->checkSelectionChildActivity(self::$menuManagementUserId, $activeItem)));
+                $managementSelectionTile->add(new MenuItemTile(self::$menuManagementZonePlanId,
+                    $this->generateUrl('tixiapi_management_zoneplan_edit'), 'zoneplan.panel.name', $this->checkSelectionChildActivity(self::$menuManagementZonePlanId, $activeItem)));
+            }
             $managementSelectionTile->add(new MenuItemTile(self::$menuManagementVehicleCategoryId,
                 $this->generateUrl('tixiapi_management_vehiclecategories_get'), 'vehiclecategory.panel.name', $this->checkSelectionChildActivity(self::$menuManagementVehicleCategoryId, $activeItem)));
             $managementSelectionTile->add(new MenuItemTile(self::$menuManagementVehicleDepotId,
@@ -133,7 +138,7 @@ class MenuService extends ContainerAware{
     protected function extractSelectionId($activeItem) {
         $exploded = explode('_', $activeItem);
         $toReturn = '';
-        if(count($exploded)>1) {
+        if (count($exploded) > 1) {
             $toReturn = $exploded[1];
         }
         return $toReturn;

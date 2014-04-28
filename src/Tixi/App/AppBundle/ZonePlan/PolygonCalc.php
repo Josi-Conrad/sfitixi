@@ -6,7 +6,7 @@
  * Time: 16:54
  */
 
-namespace Tixi\App\AppBundle\Util;
+namespace Tixi\App\AppBundle\ZonePlan;
 
 /**
  * Includes several helping function to calc with points and polygons
