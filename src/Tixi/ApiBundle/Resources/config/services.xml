@@ -33,6 +33,9 @@
         <parameter key="tixi_api.drivercategoryassembler.class">Tixi\ApiBundle\Interfaces\Management\DriverCategoryAssembler</parameter>
         <parameter key="tixi_api.zoneplanassembler.class">Tixi\ApiBundle\Interfaces\Management\ZonePlanAssembler</parameter>
 
+        <!-- Formtype -->
+        <parameter key="tixi_api.form.type.lookahead.address.class">Tixi\ApiBundle\Form\Shared\Lookahead\AddressLookaheadType</parameter>
+
     </parameters>
 
     <services>
@@ -131,6 +134,15 @@
         <service id="tixi_api.assemblerBankHoliday" class="%tixi_api.bankholidayassembler.class%"/>
         <service id="tixi_api.assemblerDriverCategory" class="%tixi_api.drivercategoryassembler.class%"/>
         <service id="tixi_api.assemblerZonePlan" class="%tixi_api.zoneplanassembler.class%"/>
+
+        <!-- Formtypes -->
+        <service id="tixi_api.form.type.lookahead.address" class="%tixi_api.form.type.lookahead.address.class%">
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+            <tag name="form.type" alias="addresslookahead" />
+        </service>
+
 
     </services>
 

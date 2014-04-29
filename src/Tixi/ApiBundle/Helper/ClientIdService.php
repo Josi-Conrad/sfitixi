@@ -17,7 +17,7 @@ class ClientIdService extends ContainerAware{
     const DEFAULTID = self::ZUGID;
 
     protected $mappingArray = array(
-        'Zug' => self::ZUGID
+        'TIXIZUG' => self::ZUGID
     );
 
     public function getClientId() {

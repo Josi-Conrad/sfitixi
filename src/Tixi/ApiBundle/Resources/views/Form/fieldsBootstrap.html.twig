@@ -15,6 +15,35 @@
     </div>
 {% endblock dateTimePicker_widget %}
 
+{% block addresslookahead_widget %}
+    {% set lookaheadId = 'lookahead_' ~ form.vars.name %}
+    <div class="{{ lookaheadId }}" data-datasrc="{{ form.vars.dataSrc }}">
+        <div class="row">
+            {{ form_widget(form.addressDisplayName, { 'attr': {'class': 'lookaheadInput'} }) }}
+        </div>
+        <div class="row selectionsWrapper">
+            <div class="col-md-12">
+                <ul class="selections list-unstyled"
+                    data-prototype="{{ form_widget(form.addressHandles.vars.prototype)|e }}">
+                    {#{% for addressHandle in form.addressHandles %}#}
+                        {#<li>#}
+                            {#{{ form_errors(addressHandle) }}#}
+                            {#{{ form_widget(addressHandle) }}#}
+                        {#</li>#}
+                    {#{% endfor %}#}
+                </ul>
+                {{ form_widget(form.addressHandles) }}
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        jQuery(function ($) {
+            var lookahead = new Lookahead();
+            lookahead.init('{{ lookaheadId }}');
+        });
+    </script>
+{% endblock %}
+
 {####### Customized default types #######}
 {% block form_row %}
     {% spaceless %}

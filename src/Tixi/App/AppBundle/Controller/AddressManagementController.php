@@ -10,6 +10,7 @@ namespace Tixi\App\AppBundle\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Tixi\App\AppBundle\Address\AddressManagementImpl;
@@ -32,7 +33,9 @@ class AddressManagementController extends Controller{
         $searchStr = $request->get('searchstr');
         $addresses = $addressManager->getAddressSuggestionsByString($searchStr);
 
-        return new Response('ok');
+        $response = new JsonResponse();
+        $response->setData(array('addresses'=>$addresses));
+        return $response;
     }
 
 } 

@@ -218,7 +218,7 @@ class AddressLookupServiceGoogle extends AddressLookupService{
 
     protected function constructAdditionalSection() {
         //ToDo remove userIp from final version and add server-ip as allowed ip in google credentials
-        return 'sensor=false&userIp=0.0.0.0';
+        return 'sensor=false';
     }
 
     protected function constructApiKeySection($apiKey='') {
