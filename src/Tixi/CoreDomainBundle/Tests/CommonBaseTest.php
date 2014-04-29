@@ -10,11 +10,12 @@ namespace Tixi\CoreDomainBundle\Tests;
 
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Tixi\App\ZonePlan\ZonePlanManagement;
 use Tixi\CoreDomain\POI;
 use Tixi\CoreDomain\POIKeyword;
 use Tixi\CoreDomain\Address;
 
-class CommonBaseTest extends WebTestCase{
+class CommonBaseTest extends WebTestCase {
     /**
      * @var \Doctrine\ORM\EntityManager
      */
@@ -104,6 +105,10 @@ class CommonBaseTest extends WebTestCase{
      */
     protected $routeRepo;
     /**
+     * @var \Tixi\CoreDomainBundle\Repository\Dispo\ZonePlanRepositoryDoctrine
+     */
+    protected $zonePlan;
+    /**
      * @var \Tixi\SecurityBundle\Repository\UserRepositoryDoctrine
      */
     protected $userRepo;
@@ -115,6 +120,10 @@ class CommonBaseTest extends WebTestCase{
      * @var \Symfony\Component\Security\Core\Encoder\EncoderFactory
      */
     protected $encFactory;
+    /**
+     * @var \Tixi\App\AppBundle\ZonePlan\ZonePlanManagementImpl
+     */
+    protected $zonePlanManagement;
 
     public function setUp() {
         $kernel = static::createKernel();
@@ -145,21 +154,43 @@ class CommonBaseTest extends WebTestCase{
         $this->shiftTypeRepo = $kernel->getContainer()->get('shifttype_repository');
         $this->repeatedDrivingAssertionRepo = $kernel->getContainer()->get('repeateddrivingassertion_repository');
         $this->repeatedDrivingAssertionPlanRepo = $kernel->getContainer()->get('repeateddrivingassertionplan_repository');
+        $this->zonePlan = $kernel->getContainer()->get('zoneplan_repository');
 
         $this->userRepo = $kernel->getContainer()->get('tixi_user_repository');
         $this->roleRepo = $kernel->getContainer()->get('tixi_role_repository');
         $this->encFactory = $kernel->getContainer()->get('security.encoder_factory');
 
-        $this->em->beginTransaction();
+        $this->zonePlanManagement = $kernel->getContainer()->get('tixi_app.zoneplanmanagement');
 
-        $this->createTestData();
+        $this->em->beginTransaction();
     }
 
-    public function testBaseSetup(){
+    public function testBaseSetup() {
         $this->assertNotEmpty($this->em);
     }
 
-    protected function createTestData(){
+    protected function createTestAddressBaar() {
+        $address = Address::registerAddress('Rathausstrasse 1', '6340',
+            'Baar', 'Schweiz', 'Ganztagesschule mit Montessoriprofil', 47.194715, 8.526096);
+        $this->addressRepo->store($address);
+        $this->em->flush();
+        return $address;
+    }
+
+    protected function createTestAddressArth() {
+        $address = Address::registerAddress('Rigiweg 2A', '6415',
+            'Arth', 'Schweiz', 'Rigi Gliders', 47.062447, 8.522211);
+        $this->addressRepo->store($address);
+        $this->em->flush();
+        return $address;
+    }
+
+    protected function createTestAddressGoldau() {
+        $address = Address::registerAddress('Bahnhofstrasse 9', '6410',
+            'Arth', 'Schweiz', 'CSS', 47.049536, 8.547931);
+        $this->addressRepo->store($address);
+        $this->em->flush();
+        return $address;
     }
 
     public function tearDown() {

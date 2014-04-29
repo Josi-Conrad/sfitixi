@@ -1,3 +1,6 @@
+#Mandatory
+main.mandant: Mandant
+
 #Buttons
 button.back: Abbrechen
 button.back.regular: Zurück

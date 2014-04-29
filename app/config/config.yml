@@ -28,9 +28,10 @@ framework:
 # Twig Configuration
 twig:
     globals:
-      tixi_parameter_client: %tixi_parameter_client%
       tixi_parameter_app: %tixi_parameter_app%
       tixi_parameter_version: %tixi_parameter_version%
+      tixi_parameter_client: %tixi_parameter_client%
+      tixi_parameter_client_page: %tixi_parameter_client_page%
 
     debug:            "%kernel.debug%"
     strict_variables: "%kernel.debug%"
