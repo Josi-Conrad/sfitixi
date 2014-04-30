@@ -17,15 +17,15 @@ class AddressHandleType extends AbstractType{
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('id');
-        $builder->add('name');
+        $builder->add('id','hidden');
+        $builder->add('name', 'hidden');
         $builder->add('street');
         $builder->add('postalCode');
         $builder->add('city');
         $builder->add('country');
         $builder->add('lat');
         $builder->add('lng');
-        $builder->add('source');
+        $builder->add('source','hidden');
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)
