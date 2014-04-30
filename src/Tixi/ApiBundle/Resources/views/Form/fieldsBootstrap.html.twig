@@ -23,14 +23,11 @@
         </div>
         <div class="row selectionsWrapper">
             <div class="col-md-12">
-                <ul class="selections list-unstyled"
+                <ul class="selectionsDisplayContainer list-unstyled">
+
+                </ul>
+                <ul class="selectionsModelContainer"
                     data-prototype="{{ form_widget(form.addressHandles.vars.prototype)|e }}">
-                    {#{% for addressHandle in form.addressHandles %}#}
-                        {#<li>#}
-                            {#{{ form_errors(addressHandle) }}#}
-                            {#{{ form_widget(addressHandle) }}#}
-                        {#</li>#}
-                    {#{% endfor %}#}
                 </ul>
                 {{ form_widget(form.addressHandles) }}
             </div>
@@ -39,7 +36,7 @@
     <script type="text/javascript">
         jQuery(function ($) {
             var lookahead = new Lookahead();
-            lookahead.init('{{ lookaheadId }}');
+            lookahead.init('{{ lookaheadId }}','{{ 'addressHandles' }}');
         });
     </script>
 {% endblock %}

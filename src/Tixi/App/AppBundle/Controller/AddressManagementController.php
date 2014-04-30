@@ -34,7 +34,7 @@ class AddressManagementController extends Controller{
         $addresses = $addressManager->getAddressSuggestionsByString($searchStr);
 
         $response = new JsonResponse();
-        $response->setData(array('addresses'=>$addresses));
+        $response->setData(array('models'=>$addresses));
         return $response;
     }
 
