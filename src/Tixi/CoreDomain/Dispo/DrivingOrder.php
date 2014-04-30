@@ -14,7 +14,7 @@ use Tixi\CoreDomain\Shared\CommonBaseEntity;
 /**
  * Tixi\CoreDomain\Dispo\DrivingOrder
  *
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Tixi\CoreDomainBundle\Repository\Dispo\DrivingOrderRepositoryDoctrine")
  * @ORM\Table(name="driving_order")
  */
 
@@ -61,9 +61,26 @@ class DrivingOrder extends CommonBaseEntity implements DrivingOrderInterface{
      */
     protected $memo;
 
-    public function __construct(){
+    protected function __construct(){
         parent::__construct();
     }
+
+    /**
+     * @param $pickupDate
+     * @param $pickupTime
+     * @param int $companion
+     * @param null $memo
+     * @return DrivingOrder
+     */
+    public static function registerDrivingOrder($pickupDate, $pickupTime, $companion=0, $memo=null){
+        $drivingOrder = new DrivingOrder();
+        $drivingOrder->setPickUpDate($pickupDate);
+        $drivingOrder->setPickUpTime($pickupTime);
+        $drivingOrder->setCompanion($companion);
+        $drivingOrder->setMemo($memo);
+        return $drivingOrder;
+    }
+
     /**
      * @param \DateTime $date
      * @return mixed|void

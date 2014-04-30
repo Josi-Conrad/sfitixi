@@ -47,48 +47,79 @@ class Shift {
      */
     protected $amountOfDrivers;
 
-    public function __construct(ShiftType $shiftType) {
-        $this->shiftType = $shiftType;
+    protected function __construct() {
         $this->drivingPools = new ArrayCollection();
     }
 
     /**
-     * @return mixed
+     * Register new Shift from type ShiftType
+     * @param WorkingDay $workingDay
+     * @param ShiftType $shiftType
+     * @param int $amountOfDrivers
+     * @return Shift
      */
-    public function getAmountOfDrivers()
-    {
-        return $this->amountOfDrivers;
+    public static function registerShift(WorkingDay $workingDay, ShiftType $shiftType, $amountOfDrivers = 0) {
+        $shift = new Shift();
+        $shift->setWorkingDay($workingDay);
+        $shift->setShiftType($shiftType);
+        $shift->setAmountOfDrivers($amountOfDrivers);
+        return $shift;
+    }
+
+
+    /**
+     * @param Driver $driver
+     */
+    protected function assignDriver(Driver $driver) {
+        $this->assignDrivingPool(DrivingPool::registerDrivingPool($this, $driver));
     }
 
     /**
      * @return mixed
      */
-    public function getDrivingPools()
-    {
+    protected function amountOfDriversNeeded() {
+        return $this->amountOfDrivers - count($this->drivingPools);
+    }
+
+    /**
+     * @param mixed $drivingPool
+     */
+    public function assignDrivingPool($drivingPool) {
+        $this->drivingPools->add($drivingPool);
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getDrivingPools() {
         return $this->drivingPools;
     }
 
     /**
      * @return mixed
      */
-    public function getId()
-    {
+    public function getAmountOfDrivers() {
+        return $this->amountOfDrivers;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getId() {
         return $this->id;
     }
 
     /**
      * @return mixed
      */
-    public function getShiftType()
-    {
+    public function getShiftType() {
         return $this->shiftType;
     }
 
     /**
      * @return mixed
      */
-    public function getWorkingDay()
-    {
+    public function getWorkingDay() {
         return $this->workingDay;
     }
 
@@ -100,16 +131,31 @@ class Shift {
     }
 
     /**
-     * @param Driver $driver
+     * @param mixed $amountOfDrivers
      */
-    protected function assignDriver(Driver $driver) {
-        $this->drivingPools = new DrivingPool($driver, $this);
+    public function setAmountOfDrivers($amountOfDrivers) {
+        $this->amountOfDrivers = $amountOfDrivers;
     }
 
     /**
-     * @return mixed
+     * @param mixed $drivingPool
      */
-    protected function amountOfDriversNeeded() {
-        return $this->amountOfDrivers - count($this->drivingPools);
+    public function setDrivingPool($drivingPool) {
+        $this->drivingPool = $drivingPool;
     }
+
+    /**
+     * @param mixed $shiftType
+     */
+    public function setShiftType($shiftType) {
+        $this->shiftType = $shiftType;
+    }
+
+    /**
+     * @param \Tixi\CoreDomain\Dispo\WorkingDay $workingDay
+     */
+    public function setWorkingDay($workingDay) {
+        $this->workingDay = $workingDay;
+    }
+
 }

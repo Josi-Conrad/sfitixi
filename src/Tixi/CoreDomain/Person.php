@@ -134,7 +134,7 @@ class Person extends CommonBaseEntity {
      * @param null $billingAddress
      * @param bool $isBillingAddress
      */
-    protected function __construct($gender, $firstname, $lastname, $telephone, $address, $title = null,
+    protected function __construct($gender, $firstname, $lastname, $telephone, Address $address, $title = null,
                                    $email = null, $entryDate = null, $birthday = null,
                                    $extraMinutes = null, $details = null, $correspondenceAddress = null,
                                    $billingAddress = null, $isBillingAddress = true) {

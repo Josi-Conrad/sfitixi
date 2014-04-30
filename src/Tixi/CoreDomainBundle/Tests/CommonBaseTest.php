@@ -85,6 +85,14 @@ class CommonBaseTest extends WebTestCase {
      */
     protected $drivingPoolRepo;
     /**
+     * @var \Tixi\CoreDomainBundle\Repository\Dispo\WorkingDayRepositoryDoctrine
+     */
+    protected $workingDayRepo;
+    /**
+     * @var \Tixi\CoreDomainBundle\Repository\Dispo\WorkingMonthRepositoryDoctrine
+     */
+    protected $workingMonthRepo;
+    /**
      * @var \Tixi\CoreDomainBundle\Repository\Dispo\RepeatedDrivingAssertionPlanRepositoryDoctrine
      */
     protected $repeatedDrivingAssertionPlanRepo;
@@ -124,6 +132,10 @@ class CommonBaseTest extends WebTestCase {
      * @var \Tixi\App\AppBundle\ZonePlan\ZonePlanManagementImpl
      */
     protected $zonePlanManagement;
+    /**
+     * @var \Tixi\ApiBundle\Helper\DateTimeService
+     */
+    protected $dateTimeService;
 
     public function setUp() {
         $kernel = static::createKernel();
@@ -156,11 +168,18 @@ class CommonBaseTest extends WebTestCase {
         $this->repeatedDrivingAssertionPlanRepo = $kernel->getContainer()->get('repeateddrivingassertionplan_repository');
         $this->zonePlan = $kernel->getContainer()->get('zoneplan_repository');
 
+        $this->drivingOrderRepo = $kernel->getContainer()->get('drivingorder_repository');
+        $this->drivingMissionRepo = $kernel->getContainer()->get('drivingmission_repository');
+        $this->drivingPoolRepo = $kernel->getContainer()->get('drivingpool_repository');
+        $this->workingDayRepo =$kernel->getContainer()->get('workingday_repository');
+        $this->workingMonthRepo =$kernel->getContainer()->get('workingmonth_repository');
+
         $this->userRepo = $kernel->getContainer()->get('tixi_user_repository');
         $this->roleRepo = $kernel->getContainer()->get('tixi_role_repository');
         $this->encFactory = $kernel->getContainer()->get('security.encoder_factory');
 
         $this->zonePlanManagement = $kernel->getContainer()->get('tixi_app.zoneplanmanagement');
+        $this->dateTimeService = $kernel->getContainer()->get('tixi_api.datetimeservice');
 
         $this->em->beginTransaction();
     }

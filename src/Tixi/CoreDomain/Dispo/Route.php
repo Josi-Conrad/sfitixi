@@ -22,7 +22,7 @@ use Tixi\CoreDomain\Shared\CommonBaseEntity;
  * uniqueConstraints={@ORM\UniqueConstraint(name="search_idx", columns={"address_start_id", "address_target_id"})}
  * )
  */
-class Route extends CommonBaseEntity{
+class Route extends CommonBaseEntity {
     /**
      * @ORM\Id
      * @ORM\Column(type="bigint", name="id")
@@ -65,14 +65,16 @@ class Route extends CommonBaseEntity{
      * @param $targetAddress
      * @param null $duration
      * @param null $distance
+     * @param int $additionalTime
      * @return Route
      */
-    public static function registerRoute($startAddress, $targetAddress, $duration = null, $distance = null) {
+    public static function registerRoute($startAddress, $targetAddress, $duration = null, $distance = null, $additionalTime = 0) {
         $route = new Route();
         $route->setStartAddress($startAddress);
         $route->setTargetAddress($targetAddress);
         $route->setDuration($duration);
         $route->setDistance($distance);
+        $route->setAdditionalTime($additionalTime);
         return $route;
     }
 

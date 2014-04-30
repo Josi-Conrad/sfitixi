@@ -21,4 +21,9 @@ interface ShiftTypeRepository extends CommonBaseRepository {
      */
     public function remove(ShiftType $shiftType);
 
+    /**
+     * @return ShiftType[]
+     */
+    public function findAllNotDeleted();
+
 }

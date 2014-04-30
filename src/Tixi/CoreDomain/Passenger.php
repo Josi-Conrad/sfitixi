@@ -10,6 +10,8 @@ namespace Tixi\CoreDomain;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Tixi\CoreDomain\Dispo\DrivingOrder;
+use Tixi\CoreDomain\Dispo\RepeatedDrivingOrderPlan;
 
 /**
  * Tixi\CoreDomain\Passenger
@@ -179,6 +181,19 @@ class Passenger extends Person {
     }
 
     /**
+     * @param DrivingOrder $drivingOrder
+     */
+    public function assignDrivingOrder(DrivingOrder $drivingOrder){
+        $this->getDrivingOrders()->add($drivingOrder);
+    }
+
+    /**
+     * @param RepeatedDrivingOrderPlan $repeatedDrivingOrderPlan
+     */
+    public function assignRepeatedDrivingOrderPlan(RepeatedDrivingOrderPlan $repeatedDrivingOrderPlan){
+        $this->getRepeatedDrivingOrderPlans()->add($repeatedDrivingOrderPlan);
+    }
+    /**
      * @param Handicap $handicap
      */
     public function assignHandicap(Handicap $handicap) {
@@ -263,19 +278,18 @@ class Passenger extends Person {
     }
 
     /**
-     * @return mixed
-     */
-    public function getCreationDate() {
-        return $this->creationDate;
-    }
-
-    /**
-     * @return mixed
+     * @return ArrayCollection
      */
     public function getDrivingOrders() {
         return $this->drivingOrders;
     }
 
+    /**
+     * @return ArrayCollection
+     */
+    public function getRepeatedDrivingOrderPlans() {
+        return $this->repeatedDrivingOrderPlans;
+    }
     /**
      * @return mixed
      */
@@ -288,13 +302,6 @@ class Passenger extends Person {
      */
     public function getInsurances() {
         return $this->insurances;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getModifyDate() {
-        return $this->modifyDate;
     }
 
     /**

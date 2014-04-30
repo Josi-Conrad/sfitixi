@@ -13,6 +13,7 @@ use Tixi\CoreDomainBundle\Repository\CommonBaseRepositoryDoctrine;
 class DrivingOrderRepositoryDoctrine  extends CommonBaseRepositoryDoctrine implements DrivingOrderRepository {
     /**
      * @param DrivingOrder $drivingOrder
+     * @return mixed|void
      */
     public function store(DrivingOrder $drivingOrder) {
         $this->getEntityManager()->persist($drivingOrder);
@@ -20,6 +21,7 @@ class DrivingOrderRepositoryDoctrine  extends CommonBaseRepositoryDoctrine imple
 
     /**
      * @param DrivingOrder $drivingOrder
+     * @return mixed|void
      */
     public function remove(DrivingOrder $drivingOrder) {
         $this->getEntityManager()->remove($drivingOrder);

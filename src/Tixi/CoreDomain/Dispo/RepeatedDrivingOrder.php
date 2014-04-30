@@ -15,7 +15,7 @@ use Tixi\CoreDomain\Shared\CommonBaseEntity;
  * Class RepeatedDrivingOrder
  * @package Tixi\CoreDomain\Dispo
  *
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Tixi\CoreDomainBundle\Repository\Dispo\RepeatedDrivingOrderRepositoryDoctrine")
  * @ORM\Table(name="repeateddrivingorder")
  */
 class RepeatedDrivingOrder implements DrivingOrderInterface {

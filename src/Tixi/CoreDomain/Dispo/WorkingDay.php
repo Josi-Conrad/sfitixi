@@ -10,7 +10,6 @@ namespace Tixi\CoreDomain\Dispo;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Tixi\CoreDomain\Driver;
 
 /**
  * Tixi\CoreDomain\Dispo\WorkingDay
@@ -31,29 +30,46 @@ class WorkingDay {
      * @ORM\JoinColumn(name="shift_id", referencedColumnName="id")
      */
     protected $shifts;
-
+    /**
+     * @ORM\ManyToOne(targetEntity="WorkingMonth", inversedBy="workingDays")
+     * @ORM\JoinColumn(name="working_month_id", referencedColumnName="id")
+     */
+    protected $workingMonth;
     /**
      * @ORM\Column(type="date")
      */
     protected $date;
-
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $comment;
 
     protected function __construct() {
-        $shiftTypes = array();
-        foreach ($shiftTypes as $shiftType) {
-            $this->shifts[$shiftType] = new Shift($shiftType);
-        }
-
         $this->shifts = new ArrayCollection();
-        $this->drivingPools = new ArrayCollection();
     }
 
     /**
-     * @param ShiftType $shiftTyp
-     * @param Driver $driver
+     * @param \DateTime $date
+     * @return WorkingDay
      */
-    protected function assignDriver(ShiftType $shiftTyp, Driver $driver) {
-        $this->shifts[$shiftTyp]->assignDriver($driver);
+    public static function registerWorkingDay(\DateTime $date) {
+        $workingDay = new WorkingDay();
+        $workingDay->setDate($date);
+        return $workingDay;
+    }
+
+    /**
+     * @param WorkingMonth $workingMonth
+     */
+    public function assignWorkingMonth(WorkingMonth $workingMonth) {
+        $this->workingMonth = $workingMonth;
+    }
+
+    /**
+     * @param Shift $shift
+     */
+    public function assignShift(Shift $shift) {
+        $this->shifts->add($shift);
     }
 
     /**
@@ -72,24 +88,28 @@ class WorkingDay {
     /**
      * @return mixed
      */
-    public function getDate()
-    {
+    public function getDate() {
         return $this->date;
     }
 
     /**
-     * @return mixed
+     * @param mixed $date
      */
-    public function getId()
-    {
-        return $this->id;
+    public function setDate($date) {
+        $this->date = $date;
     }
 
     /**
      * @return mixed
      */
-    public function getShifts()
-    {
+    public function getId() {
+        return $this->id;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getShifts() {
         return $this->shifts;
     }
 
@@ -107,5 +127,18 @@ class WorkingDay {
         return $this->drivingPools;
     }
 
+    /**
+     * @param mixed $comment
+     */
+    public function setComment($comment) {
+        $this->comment = $comment;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getComment() {
+        return $this->comment;
+    }
 
 }

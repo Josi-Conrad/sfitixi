@@ -57,6 +57,8 @@
         <parameter key="shifttype_repository.doctrine.class">Tixi\CoreDomainBundle\Repository\Dispo\ShiftTypeRepositoryDoctrine</parameter>
         <parameter key="workingday.doctrine.entity">Tixi\CoreDomain\Dispo\WorkingDay</parameter>
         <parameter key="workingday_repository.doctrine.class">Tixi\CoreDomainBundle\Repository\Dispo\WorkingDayRepositoryDoctrine</parameter>
+        <parameter key="workingmonth.doctrine.entity">Tixi\CoreDomain\Dispo\WorkingMonth</parameter>
+        <parameter key="workingmonth_repository.doctrine.class">Tixi\CoreDomainBundle\Repository\Dispo\WorkingMonthRepositoryDoctrine</parameter>
         <parameter key="zoneplan.doctrine.entity">Tixi\CoreDomain\Dispo\ZonePlan</parameter>
         <parameter key="zoneplan_repository.doctrine.class">Tixi\CoreDomainBundle\Repository\Dispo\ZonePlanRepositoryDoctrine</parameter>
 
@@ -204,6 +206,11 @@
         <service id="workingday_repository" alias="workingday_repository.doctrine"></service>
         <service id="workingday_repository.doctrine" class="%workingday_repository.doctrine.class%" factory-service="doctrine" factory-method="getrepository">
             <argument type="string">%workingday.doctrine.entity%</argument>
+        </service>
+
+        <service id="workingmonth_repository" alias="workingmonth_repository.doctrine"></service>
+        <service id="workingmonth_repository.doctrine" class="%workingmonth_repository.doctrine.class%" factory-service="doctrine" factory-method="getrepository">
+            <argument type="string">%workingmonth.doctrine.entity%</argument>
         </service>
 
         <service id="zoneplan_repository" alias="zoneplan_repository.doctrine"></service>

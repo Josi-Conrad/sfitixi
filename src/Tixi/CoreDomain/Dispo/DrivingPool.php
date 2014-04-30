@@ -49,13 +49,22 @@ class DrivingPool {
      */
     protected $vehicle;
 
-    /**
-     * @param Shift $shift
-     */
-    public function __construct(Shift $shift) {
-        $this->shift = $shift;
+    public function __construct() {
         $this->drivingMissions = new ArrayCollection();
     }
+
+    /**
+     * @param Shift $shift
+     * @param \Tixi\CoreDomain\Driver $driver
+     * @return DrivingPool
+     */
+    public static function registerDrivingPool(Shift $shift, Driver $driver) {
+        $drivingPool = new DrivingPool();
+        $drivingPool->assignShift($shift);
+        $drivingPool->assignDriver($driver);
+        return $drivingPool;
+    }
+
 
     /**
      * @return bool
@@ -71,6 +80,12 @@ class DrivingPool {
         return ($this->hasAssociatedDriver() && isset($this->vehicle));
     }
 
+    /**
+     * @param mixed $shift
+     */
+    public function assignShift($shift) {
+        $this->shift = $shift;
+    }
     /**
      * @param Driver $driver
      */
@@ -93,13 +108,6 @@ class DrivingPool {
     }
 
     /**
-     * @param mixed $driver
-     */
-    public function setDriver($driver) {
-        $this->driver = $driver;
-    }
-
-    /**
      * @return mixed
      */
     public function getDriver() {
@@ -118,13 +126,6 @@ class DrivingPool {
      */
     public function getDrivingMissions() {
         return $this->drivingMissions;
-    }
-
-    /**
-     * @param mixed $shift
-     */
-    public function setShift($shift) {
-        $this->shift = $shift;
     }
 
     /**
