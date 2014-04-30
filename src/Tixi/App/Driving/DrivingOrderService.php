@@ -9,9 +9,23 @@
 namespace Tixi\App\Driving;
 
 
+use Tixi\CoreDomain\Address;
+
 interface DrivingOrderService {
 
+    /**
+     * @param \DateTime $date
+     * @return DrivingOrder[]
+     */
+    public function getAllDrivingOrdersForDate(\DateTime $date);
+
+    /**
+     * @return ShiftType[]
+     */
     public function getAvailableShiftTypes();
 
+    public function getRouteForDrivingOrder();
 
-} 
+    public function getZoneForAddressTo(Address $addressTo);
+
+}

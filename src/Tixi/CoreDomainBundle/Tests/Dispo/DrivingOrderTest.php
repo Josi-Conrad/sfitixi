@@ -51,10 +51,10 @@ class DrivingOrderTest extends CommonBaseTest {
         $this->routeRepo->store($route);
 
         $drivingOrder = DrivingOrder::registerDrivingOrder($date,$time,2,'möchte nicht hinten sitzen');
-        $drivingOrder->setRoute($route);
-        $this->drivingOrderRepo->store($drivingOrder);
+        $drivingOrder->assignRoute($route);
         $passenger->assignDrivingOrder($drivingOrder);
-        $drivingOrder->setPassenger($passenger);
+        $drivingOrder->assignPassenger($passenger);
+        $this->drivingOrderRepo->store($drivingOrder);
 
 
         //TimePeriod from start day of month to next start day of month

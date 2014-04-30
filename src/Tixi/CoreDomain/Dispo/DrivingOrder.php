@@ -9,6 +9,7 @@
 namespace Tixi\CoreDomain\Dispo;
 
 use Doctrine\ORM\Mapping as ORM;
+use Tixi\CoreDomain\Passenger;
 use Tixi\CoreDomain\Shared\CommonBaseEntity;
 
 /**
@@ -91,6 +92,27 @@ class DrivingOrder extends CommonBaseEntity implements DrivingOrderInterface{
     }
 
     /**
+     * @param Route $route
+     */
+    public function assignRoute(Route $route){
+        $this->route = $route;
+    }
+
+    /**
+     * @param Passenger $passenger
+     */
+    public function assignPassenger(Passenger $passenger){
+        $this->passenger = $passenger;
+    }
+
+    /**
+     * @param DrivingMission $drivingMission
+     */
+    public function assignDrivingMission(DrivingMission $drivingMission) {
+        $this->drivingMission = $drivingMission;
+    }
+
+    /**
      * @return mixed
      */
     public function getId()
@@ -99,27 +121,11 @@ class DrivingOrder extends CommonBaseEntity implements DrivingOrderInterface{
     }
 
     /**
-     * @param mixed $passenger
-     */
-    public function setPassenger($passenger)
-    {
-        $this->passenger = $passenger;
-    }
-
-    /**
      * @return mixed
      */
     public function getPassenger()
     {
         return $this->passenger;
-    }
-
-    /**
-     * @param mixed $route
-     */
-    public function setRoute($route)
-    {
-        $this->route = $route;
     }
 
     /**
@@ -184,13 +190,6 @@ class DrivingOrder extends CommonBaseEntity implements DrivingOrderInterface{
      */
     public function getPickUpTime() {
         return $this->pickUpTime;
-    }
-
-    /**
-     * @param mixed $drivingMission
-     */
-    public function setDrivingMission($drivingMission) {
-        $this->drivingMission = $drivingMission;
     }
 
     /**

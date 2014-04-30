@@ -70,6 +70,7 @@ class ZonePlanManagementImpl extends ContainerAware implements ZonePlanManagemen
     public function createOrUpdateZonePlan(ZonePlan $zonePlan) {
         $em = $this->container->get('entity_manager');
         $zonePlanRepo = $this->container->get('zoneplan_repository');
+        /**@var $zonePlanDB ZonePlan*/
         $zonePlanDB = $zonePlanRepo->find(self::ZONEPLAN_ID);
         if ($zonePlanDB !== null) {
             $zonePlanDB->updateZonePlan($zonePlan->getInnerZone(), $zonePlan->getAdjacentZone());

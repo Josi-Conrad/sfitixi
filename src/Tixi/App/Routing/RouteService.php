@@ -6,7 +6,7 @@
  * Time: 09:58
  */
 
-namespace Tixi\App\Route;
+namespace Tixi\App\Routing;
 
 
 use Tixi\CoreDomain\Address;
