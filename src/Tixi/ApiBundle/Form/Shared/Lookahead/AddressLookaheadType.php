@@ -19,9 +19,7 @@ use Tixi\ApiBundle\Form\Shared\AddressHandleType;
 class AddressLookaheadType extends AbstractLookaheadType {
 
     public function buildForm(FormBuilderInterface $builder, array $options) {
-        $builder->add('addressSelectionId','hidden', array(
-            'attr' => array('class'=>'selectionId')
-        ));
+        $builder->add('addressSelectionId','hidden');
         $builder->add('addressDisplayName','text');
         $builder->add('addressHandles', 'collection', array(
             'attr' => array('class'=>'addressHandle'),

@@ -12,6 +12,8 @@ namespace Tixi\App\AppBundle\Address;
 use Symfony\Component\DependencyInjection\ContainerAware;
 use Tixi\App\Address\AddressManagement;
 use Tixi\App\AppBundle\Interfaces\AddressHandleDTO;
+use Tixi\CoreDomain\Address;
+use Tixi\CoreDomainBundle\Repository\AddressRepositoryDoctrine;
 
 class AddressManagementImpl extends ContainerAware implements AddressManagement{
 
@@ -52,10 +54,46 @@ class AddressManagementImpl extends ContainerAware implements AddressManagement{
      * Handles a new Address object if register new one or get an existing one
      *
      * @param AddressHandleDTO $addressHandleDTO
-     * @return mixed
+     * @return mixed|void
+     * @throws \Exception
      */
     public function handleAddress(AddressHandleDTO $addressHandleDTO)
     {
-        // TODO: Implement handleAddress() method.
+        /** @var AddressRepositoryDoctrine $addressRepository */
+        $addressRepository = $this->get('address_repository');
+        if(null === $addressHandleDTO->id) {
+            //create new address
+            $address = Address::registerAddress(
+                $addressHandleDTO->street,
+                $addressHandleDTO->postalCode,
+                $addressHandleDTO->city,
+                $addressHandleDTO->country,
+                $addressHandleDTO->name,
+                $addressHandleDTO->lat,
+                $addressHandleDTO->lng,
+                $addressHandleDTO->source
+            );
+            $addressRepository->store($address);
+        }else {
+            if($addressHandleDTO->source===Address::SOURCE_MANUAL) {
+                /** @var Address $address */
+                $address = $addressRepository->find($addressHandleDTO->id);
+                if(null !== $address) {
+                    $address->updateAddressData(
+                        $addressHandleDTO->street,
+                        $addressHandleDTO->postalCode,
+                        $addressHandleDTO->city,
+                        $addressHandleDTO->country,
+                        $addressHandleDTO->name,
+                        $addressHandleDTO->lat,
+                        $addressHandleDTO->lng,
+                        $addressHandleDTO->source
+                    );
+                }else {
+                    throw new \Exception('The address with id ' . $addressHandleDTO->id . ' does not exist');
+                }
+
+            }
+        }
     }
 }

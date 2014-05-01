@@ -7,17 +7,19 @@ function Lookahead() {
     this._selectionsModelContainer = null;
     this._selectionsDisplayContainer = null;
     this._selectionsModelPrototype = null;
+    this._selectionsIdContainer = null;
 
+    this._modelPrototype = null;
     this._modelIdPrefix = null;
 
     this._dataUrl = null;
 
-    this.init = function(lookaheadId, modelIdPrefix) {
+    this.init = function(lookaheadId, modelIdPrefix, modelPrototype) {
         _this._modelIdPrefix = modelIdPrefix;
+        _this._modelPrototype = modelPrototype;
         _this._initElements(lookaheadId);
         _this._initDataSrcUrl();
         _this._initListeners();
-        console.log(modelIdPrefix);
     }
 
     this._initElements = function(lookaheadId) {
@@ -26,7 +28,8 @@ function Lookahead() {
             _selectionsModelContainer = $(_selectionsWrapper).find('.selectionsModelContainer'),
             _selectionsModelPrototype = $(_selectionsModelContainer).data('prototype'),
             _selectionsDisplay = $(_selectionsWrapper).find('.selectionsDisplayContainer'),
-            _inputField = $(_wrapper).find('.lookaheadInput');
+            _inputField = $(_wrapper).find('.lookaheadInput'),
+            _selectionsIdContainer = $(_wrapper).find('.lookaheadSelectionId');
 
         _this._wrapper = _wrapper;
         _this._selectionsWrapper = _selectionsWrapper;
@@ -34,6 +37,7 @@ function Lookahead() {
         _this._selectionsModelPrototype = _selectionsModelPrototype;
         _this._selectionsDisplayContainer = _selectionsDisplay;
         _this._inputField = _inputField;
+        _this._selectionsIdContainer = _selectionsIdContainer;
     }
 
     this._initDataSrcUrl = function() {
@@ -52,16 +56,26 @@ function Lookahead() {
 
     this._updateSelections = function() {
         var _model,
-            _domSelection;
+            _domSelectionModel,
+            _domSelectionDisplay;
         _this._pollDataFromSource(_this._constructParams()).done(function(data) {
             $(_this._selectionsModelContainer).empty();
-            console.log(data.models);
+            $(_this._selectionsDisplayContainer).empty();
             if(data.models.length>0) {
-                $.each(data.models, function(index, jsonModel) {
-                    _model = _this._constructNewModel(jsonModel, index);
-                    _domSelection = _this._constructDomSelectionModel(_model);
-                    $(_this._selectionsModelContainer).append(_domSelection);
-                });
+                if($(_this._inputField).val().length>0) {
+                    $.each(data.models, function(index, jsonModel) {
+                        _model = _this._constructNewModel(jsonModel, index);
+                        console.log(_model.getDisplayName());
+                        _domSelectionModel = _this._constructDomSelectionModel(_model);
+                        $(_this._selectionsModelContainer).append(_domSelectionModel);
+                        _domSelectionDisplay = _this._constructDomSelectionDisplay(_model);
+                        console.log(_domSelectionDisplay);
+                        $(_this._selectionsDisplayContainer).append(_domSelectionDisplay);
+                    });
+                    _this._showSelectionDisplay();
+                }else {
+                    _this._hideSelectionDisplay();
+                }
             }
 
         }).fail(function() {
@@ -70,7 +84,7 @@ function Lookahead() {
     }
 
     this._constructNewModel = function(jsonModel, index) {
-        return new Address(jsonModel, index);
+        return new _this._modelPrototype.constructor(jsonModel, index);
     }
 
     this._constructDomSelectionModel = function(model) {
@@ -82,6 +96,16 @@ function Lookahead() {
             _domSelection.find('[id*='+_this._modelIdPrefix+'_'+model.index+'_'+_field+']').val(model.fields[_field]);
         }
         return _domSelection;
+    }
+
+    this._constructDomSelectionDisplay = function(model) {
+        var _selectionDisplay = $('<li></li>').append(model.getDisplayName());
+        _selectionDisplay.on('click', function() {
+            $(_this._inputField).val(model.getDisplayName());
+            $(_this._selectionsIdContainer).val(model.index);
+            _this._hideSelectionDisplay();
+        });
+        return _selectionDisplay;
     }
 
     this._constructParams = function() {
@@ -97,13 +121,31 @@ function Lookahead() {
             dataType: 'json'
         });
     }
+
+    this._showSelectionDisplay = function() {
+        $(_this._selectionsDisplayContainer).show();
+    }
+
+    this._hideSelectionDisplay = function() {
+        $(_this._selectionsDisplayContainer).hide();
+    }
+}
+
+function LookaheadModel(modelJson, index) {
+    var _this = this;
+
+    _this.index = index;
+    _this.fields = {};
+    _this.getDisplayName = function() {};
+
 }
 
 function Address(address, index) {
     var _this = this;
 
-    this.index = index;
-    this.fields = {
+    LookaheadModel.apply(this,arguments);
+
+    _this.fields = {
         id : address.id,
         name : address.name,
         street : address.street,
@@ -115,5 +157,12 @@ function Address(address, index) {
         source : address.source
     };
 
+    _this.getDisplayName = function() {
+        return _this.fields.name ? _this.fields.name :  _this._constructAlternativeDisplayName();
+    }
 
+    _this._constructAlternativeDisplayName = function() {
+        return _this.fields.street+', '+_this.fields.postalCode+' '+_this.fields.city+', '+_this.fields.country;
+
+    }
 }

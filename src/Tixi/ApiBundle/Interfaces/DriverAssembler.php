@@ -10,6 +10,7 @@ namespace Tixi\ApiBundle\Interfaces;
 
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Tixi\App\Address\AddressManagement;
 use Tixi\CoreDomain\Driver;
 use Tixi\CoreDomain\Address;
 
@@ -18,6 +19,9 @@ use Tixi\CoreDomain\Address;
  * @package Tixi\ApiBundle\Interfaces
  */
 class DriverAssembler {
+
+    protected $addressService;
+
     /**
      * @param DriverRegisterDTO $driverDTO
      * @throws \Exception
@@ -118,5 +122,9 @@ class DriverAssembler {
         $driverListDTO->driverCategory = $driver->getDriverCategory()->getName();
         $driverListDTO->wheelChairAttendance = $driver->getWheelChairAttendanceAsString();
         return $driverListDTO;
+    }
+
+    public function setAddressService(AddressManagement $addressManagement) {
+        $this->addressService = $addressManagement;
     }
 }
