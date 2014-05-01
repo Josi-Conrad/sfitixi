@@ -10,9 +10,19 @@ namespace Tixi\App\Routing;
 
 
 abstract class RoutingInformation {
-    public abstract function getStatus();
 
+    protected $totalTime;
+    protected $totalDistance;
+
+    /**
+     * get total route trip time in seconds
+     * @return mixed
+     */
     public abstract function getTotalTime();
 
+    /**
+     * get total route distance in meters
+     * @return mixed
+     */
     public abstract function getTotalDistance();
 } 

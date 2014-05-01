@@ -11,14 +11,14 @@ namespace Tixi\App\Routing;
 
 use Tixi\CoreDomain\Address;
 
-interface RouteService {
+interface RouteManagement {
 
     /**
      * @param Address $from
      * @param Address $to
      * @return mixed
      */
-    public function getRoute(Address $from, Address $to);
+    public function getRouteFromAddresses(Address $from, Address $to);
 
     public function createRouteFromDrivingOrder();
 

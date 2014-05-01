@@ -25,6 +25,7 @@ security:
         secured_area:
             pattern:    ^/
             anonymous: ~
+            http_basic: ~
             form_login:
                   provider: main
                   login_path: tixi_login
