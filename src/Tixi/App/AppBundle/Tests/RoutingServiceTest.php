@@ -41,6 +41,19 @@ class RoutingServiceTest extends CommonBaseTest {
 
     }
 
+    public function testGetRouteJSON(){
+        $client = $this->createClient();
+        $client->request('GET', '/service/routing?latFrom=47.498796&lngFrom=7.760499&latTo=47.049796&lngTo=8.548057',
+            array(), array(), array(
+                'PHP_AUTH_USER' => 'admin',
+                'PHP_AUTH_PW'   => 'pass',
+            ));
+        $response = $client->getResponse();
+        $json = json_decode($response->getContent());
+        $rd = $json->routeDuration;
+        $this->assertNotEmpty($rd);
+    }
+
     public function tearDown() {
         parent::tearDown();
     }
