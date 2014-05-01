@@ -197,6 +197,10 @@ class CommonBaseTest extends WebTestCase {
         $this->em->beginTransaction();
     }
 
+    public function testBase(){
+
+    }
+
     protected function createTestAddressBaar() {
         $address = Address::registerAddress('Rathausstrasse 1', '6340',
             'Baar', 'Schweiz', 'Ganztagesschule mit Montessoriprofil', 47.194715, 8.526096);
