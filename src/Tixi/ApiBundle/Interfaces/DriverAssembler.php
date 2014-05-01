@@ -20,7 +20,8 @@ use Tixi\CoreDomain\Address;
  */
 class DriverAssembler {
 
-    protected $addressService;
+    /** @var  AddressAssembler $addressAssembler */
+    protected $addressAssembler;
 
     /**
      * @param DriverRegisterDTO $driverDTO
@@ -30,9 +31,7 @@ class DriverAssembler {
     public function registerDTOtoNewDriver(DriverRegisterDTO $driverDTO) {
         $driver = Driver::registerDriver($driverDTO->gender, $driverDTO->firstname,
             $driverDTO->lastname, $driverDTO->telephone,
-            Address::registerAddress(
-                $driverDTO->street, $driverDTO->postalCode,
-                $driverDTO->city, $driverDTO->country),
+            $this->addressAssembler->addressLookaheadDTOtoAddress($driverDTO->lookaheadaddress),
             $driverDTO->licenceNumber, $driverDTO->driverCategory, $driverDTO->wheelChairAttendance,
             $driverDTO->title, $driverDTO->email, $driverDTO->entryDate, $driverDTO->birthday,
             $driverDTO->extraMinutes, $driverDTO->details
@@ -47,12 +46,9 @@ class DriverAssembler {
      * @return Driver
      */
     public function registerDTOToDriver(DriverRegisterDTO $driverDTO, Driver $driver) {
-        $address = $driver->getAddress();
-        $address->updateAddressData($driverDTO->street, $driverDTO->postalCode,
-            $driverDTO->city, $driverDTO->country);
         $driver->updateDriverData($driverDTO->gender, $driverDTO->firstname,
             $driverDTO->lastname, $driverDTO->telephone,
-            $address, $driverDTO->licenceNumber, $driverDTO->driverCategory,
+            $this->addressAssembler->addressLookaheadDTOtoAddress($driverDTO->lookaheadaddress), $driverDTO->licenceNumber, $driverDTO->driverCategory,
             $driverDTO->wheelChairAttendance, $driverDTO->title,
             $driverDTO->email, $driverDTO->entryDate, $driverDTO->birthday,
             $driverDTO->extraMinutes, $driverDTO->details);
@@ -83,11 +79,7 @@ class DriverAssembler {
 
         $driverDTO->driverCategory = $driver->getDriverCategory()->getName();
 
-        $driverDTO->address_id = $driver->getAddress()->getId();
-        $driverDTO->street = $driver->getAddress()->getStreet();
-        $driverDTO->postalCode = $driver->getAddress()->getPostalCode();
-        $driverDTO->city = $driver->getAddress()->getCity();
-        $driverDTO->country = $driver->getAddress()->getCountry();
+        $driverDTO->lookaheadaddress = $this->addressAssembler->addressToAddressLookaheadDTO($driver->getAddress());
 
         return $driverDTO;
     }
@@ -124,7 +116,9 @@ class DriverAssembler {
         return $driverListDTO;
     }
 
-    public function setAddressService(AddressManagement $addressManagement) {
-        $this->addressService = $addressManagement;
+    public function setAddressAssembler(AddressAssembler $assembler) {
+        $this->addressAssembler = $assembler;
     }
+
+
 }

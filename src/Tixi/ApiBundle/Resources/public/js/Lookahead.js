@@ -46,11 +46,17 @@ function Lookahead() {
 
     this._initListeners = function() {
         var _updateTimeout = null;
-        $(_this._inputField).on('keyup', function() {
+        $(_this._inputField).on('keydown', function() {
             if(_updateTimeout) {
+                console.log('clear timeout');
                 clearTimeout(_updateTimeout);
             }
-            _updateTimeout = setTimeout(_this._updateSelections, 300);
+            _updateTimeout = setTimeout(function() {
+                _this._updateSelections();
+                console.log('update');
+
+            },300);
+
         })
     }
 
@@ -61,15 +67,14 @@ function Lookahead() {
         _this._pollDataFromSource(_this._constructParams()).done(function(data) {
             $(_this._selectionsModelContainer).empty();
             $(_this._selectionsDisplayContainer).empty();
+            console.log('selection update with '+data.models.length);
             if(data.models.length>0) {
                 if($(_this._inputField).val().length>0) {
                     $.each(data.models, function(index, jsonModel) {
                         _model = _this._constructNewModel(jsonModel, index);
-                        console.log(_model.getDisplayName());
                         _domSelectionModel = _this._constructDomSelectionModel(_model);
                         $(_this._selectionsModelContainer).append(_domSelectionModel);
-                        _domSelectionDisplay = _this._constructDomSelectionDisplay(_model);
-                        console.log(_domSelectionDisplay);
+                        _domSelectionDisplay =  _this._constructDomSelectionDisplay(_model);
                         $(_this._selectionsDisplayContainer).append(_domSelectionDisplay);
                     });
                     _this._showSelectionDisplay();

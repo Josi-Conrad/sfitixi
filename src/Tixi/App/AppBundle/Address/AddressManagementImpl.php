@@ -60,7 +60,8 @@ class AddressManagementImpl extends ContainerAware implements AddressManagement{
     public function handleAddress(AddressHandleDTO $addressHandleDTO)
     {
         /** @var AddressRepositoryDoctrine $addressRepository */
-        $addressRepository = $this->get('address_repository');
+        $addressRepository = $this->container->get('address_repository');
+        $address = null;
         if(null === $addressHandleDTO->id) {
             //create new address
             $address = Address::registerAddress(
@@ -75,25 +76,24 @@ class AddressManagementImpl extends ContainerAware implements AddressManagement{
             );
             $addressRepository->store($address);
         }else {
+            /** @var Address $address */
+            $address = $addressRepository->find($addressHandleDTO->id);
+            if(null === $address) {
+                throw new \Exception('The address with id ' . $addressHandleDTO->id . ' does not exist');
+            }
             if($addressHandleDTO->source===Address::SOURCE_MANUAL) {
-                /** @var Address $address */
-                $address = $addressRepository->find($addressHandleDTO->id);
-                if(null !== $address) {
-                    $address->updateAddressData(
-                        $addressHandleDTO->street,
-                        $addressHandleDTO->postalCode,
-                        $addressHandleDTO->city,
-                        $addressHandleDTO->country,
-                        $addressHandleDTO->name,
-                        $addressHandleDTO->lat,
-                        $addressHandleDTO->lng,
-                        $addressHandleDTO->source
-                    );
-                }else {
-                    throw new \Exception('The address with id ' . $addressHandleDTO->id . ' does not exist');
-                }
-
+                $address->updateAddressData(
+                    $addressHandleDTO->street,
+                    $addressHandleDTO->postalCode,
+                    $addressHandleDTO->city,
+                    $addressHandleDTO->country,
+                    $addressHandleDTO->name,
+                    $addressHandleDTO->lat,
+                    $addressHandleDTO->lng,
+                    $addressHandleDTO->source
+                );
             }
         }
+        return $address;
     }
 }

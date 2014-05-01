@@ -20,6 +20,7 @@
         <parameter key="tixi_api.datagridhandler.class">Tixi\ApiBundle\Shared\DataGrid\DataGridHandler</parameter>
         <parameter key="tixi_api.datagridcontrollerfactory.class">Tixi\ApiBundle\Shared\DataGrid\DataGridControllerFactory</parameter>
         <parameter key="tixi_api.poiassembler.class">Tixi\ApiBundle\Interfaces\POIAssembler</parameter>
+        <parameter key="tixi_api.addressassembler.class">Tixi\ApiBundle\Interfaces\AddressAssembler</parameter>
 
         <!-- Management -->
         <parameter key="tixi_api.userassembler.class">Tixi\ApiBundle\Interfaces\Management\UserAssembler</parameter>
@@ -97,15 +98,18 @@
             <tag name="form.type" alias="telephoneType" />
         </service>
 
-        <!-- Assembers -->
+        <!-- Assemblers -->
         <service id="tixi_api.assemblerVehicle" class="%tixi_api.vehicleassembler.class%"/>
         <service id="tixi_api.assemblerDriver" class="%tixi_api.driverassembler.class%">
-            <call method="setAddressService">
-                <argument type="service" id="tixi_app.addressmanagement" />
+            <call method="setAddressAssembler">
+                <argument type="service" id="tixi_api.assemblerAddress" />
             </call>
-
         </service>
-        <service id="tixi_api.assemblerPassenger" class="%tixi_api.passengerassembler.class%"/>
+        <service id="tixi_api.assemblerPassenger" class="%tixi_api.passengerassembler.class%">
+            <call method="setAddressAssembler">
+                <argument type="service" id="tixi_api.assemblerAddress" />
+            </call>
+        </service>
         <service id="tixi_api.assemblerAbsent" class="%tixi_api.absentassembler.class%"/>
         <service id="tixi_api.assemblerUser" class="%tixi_api.userassembler.class%"/>
         <service id="tixi_api.assemblerPOI" class="%tixi_api.poiassembler.class%"/>
@@ -117,6 +121,11 @@
         <service id="tixi_api.repeatedDrivingAssertionPlanAssembler" class="%tixi_api.repeateddrivingassertionassembler.class%">
             <call method="setDateTimeService">
                 <argument type="service" id="tixi_api.datetimeservice" />
+            </call>
+        </service>
+        <service id="tixi_api.assemblerAddress" class="%tixi_api.addressassembler.class%">
+            <call method="setAddressService">
+                <argument type="service" id="tixi_app.addressmanagement" />
             </call>
         </service>
         <!-- Management -->
@@ -139,6 +148,7 @@
         <service id="tixi_api.assemblerBankHoliday" class="%tixi_api.bankholidayassembler.class%"/>
         <service id="tixi_api.assemblerDriverCategory" class="%tixi_api.drivercategoryassembler.class%"/>
         <service id="tixi_api.assemblerZonePlan" class="%tixi_api.zoneplanassembler.class%"/>
+
 
         <!-- Formtypes -->
         <service id="tixi_api.form.type.lookahead.address" class="%tixi_api.form.type.lookahead.address.class%">

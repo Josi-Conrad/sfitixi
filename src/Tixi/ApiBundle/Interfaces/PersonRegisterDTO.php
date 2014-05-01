@@ -14,7 +14,7 @@ use Tixi\ApiBundle\Interfaces\Validators as Valid;
  * @package Tixi\ApiBundle\Interfaces
  * @Valid\PersonRegisterConstraint
  */
-class PersonRegisterDTO extends AddressRegisterDTO {
+class PersonRegisterDTO {
     //Person
     public $person_id;
     public $isActive;
@@ -33,6 +33,8 @@ class PersonRegisterDTO extends AddressRegisterDTO {
     public $correspondenceAddress;
     public $billingAddress;
     public $isBillingAddress;
+
+    public $lookaheadaddress;
 
     public function __construct(){
         $this->gender = 'm';

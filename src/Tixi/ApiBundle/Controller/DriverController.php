@@ -192,7 +192,6 @@ class DriverController extends Controller {
     protected function registerOrUpdateDriver(DriverRegisterDTO $driverDTO) {
         if (empty($driverDTO->person_id)) {
             $driver = $this->get('tixi_api.assemblerdriver')->registerDTOtoNewDriver($driverDTO);
-            $this->get('address_repository')->store($driver->getAddress());
             $this->get('driver_repository')->store($driver);
             return $driver;
         } else {
