@@ -9,10 +9,12 @@
         <parameter key="tixi_app.addressmanagement.class">Tixi\App\AppBundle\Address\AddressManagementImpl</parameter>
         <parameter key="tixi_app.addresslookupfactory.class">Tixi\App\AppBundle\Address\AddressLookupFactory</parameter>
         <parameter key="tixi_app.zoneplanmanagement.class">Tixi\App\AppBundle\ZonePlan\ZonePlanManagementImpl</parameter>
+        <parameter key="tixi_app.routingmachineosrm.class">Tixi\App\AppBundle\Routing\RoutingMachineOSRM</parameter>
+        <parameter key="tixi_app.routemanagement.class">Tixi\App\AppBundle\Routing\RouteManagementImpl</parameter>
+
     </parameters>
 
     <services>
-
         <service id="tixi_app.addressmanagement" class="%tixi_app.addressmanagement.class%">
             <call method="setContainer">
                 <argument type="service" id="service_container"/>
@@ -24,6 +26,16 @@
             </call>
         </service>
         <service id="tixi_app.zoneplanmanagement" class="%tixi_app.zoneplanmanagement.class%">
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
+        </service>
+        <service id="tixi_app.routingmachine" class="%tixi_app.routingmachineosrm.class%">
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
+        </service>
+        <service id="tixi_app.routemanagement" class="%tixi_app.routemanagement.class%">
             <call method="setContainer">
                 <argument type="service" id="service_container"/>
             </call>

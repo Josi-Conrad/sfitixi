@@ -10,6 +10,8 @@ namespace Tixi\CoreDomainBundle\Tests;
 
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Tixi\App\AppBundle\Routing\RoutingMachineOSRM;
+use Tixi\App\Routing\RouteManagement;
 use Tixi\App\ZonePlan\ZonePlanManagement;
 use Tixi\CoreDomain\POI;
 use Tixi\CoreDomain\POIKeyword;
@@ -136,11 +138,18 @@ class CommonBaseTest extends WebTestCase {
      * @var \Tixi\ApiBundle\Helper\DateTimeService
      */
     protected $dateTimeService;
+    /**
+     * @var RoutingMachineOSRM
+     */
+    protected $routingMachine;
+    /**
+     * @var RouteManagement
+     */
+    protected $routeManagement;
 
     public function setUp() {
         $kernel = static::createKernel();
         $kernel->boot();
-
         $this->em = $kernel->getContainer()->get('entity_manager');
 
         $this->personRepo = $kernel->getContainer()->get('person_repository');
@@ -171,8 +180,8 @@ class CommonBaseTest extends WebTestCase {
         $this->drivingOrderRepo = $kernel->getContainer()->get('drivingorder_repository');
         $this->drivingMissionRepo = $kernel->getContainer()->get('drivingmission_repository');
         $this->drivingPoolRepo = $kernel->getContainer()->get('drivingpool_repository');
-        $this->workingDayRepo =$kernel->getContainer()->get('workingday_repository');
-        $this->workingMonthRepo =$kernel->getContainer()->get('workingmonth_repository');
+        $this->workingDayRepo = $kernel->getContainer()->get('workingday_repository');
+        $this->workingMonthRepo = $kernel->getContainer()->get('workingmonth_repository');
 
         $this->userRepo = $kernel->getContainer()->get('tixi_user_repository');
         $this->roleRepo = $kernel->getContainer()->get('tixi_role_repository');
@@ -181,11 +190,11 @@ class CommonBaseTest extends WebTestCase {
         $this->zonePlanManagement = $kernel->getContainer()->get('tixi_app.zoneplanmanagement');
         $this->dateTimeService = $kernel->getContainer()->get('tixi_api.datetimeservice');
 
-        $this->em->beginTransaction();
-    }
+        $this->routingMachine = $kernel->getContainer()->get('tixi_app.routingmachine');
+        $this->routeManagement = $kernel->getContainer()->get('tixi_app.routemanagement');
 
-    public function testBaseSetup() {
-        $this->assertNotEmpty($this->em);
+        $this->singleToni = 1;
+        $this->em->beginTransaction();
     }
 
     protected function createTestAddressBaar() {

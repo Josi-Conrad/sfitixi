@@ -38,7 +38,7 @@ class DrivingOrderTest extends CommonBaseTest {
     public function testDrivingOrderCRUD() {
         $addressFrom = $this->createTestAddressBaar();
         $addressTo = $this->createTestAddressGoldau();
-        $passenger = Passenger::registerPassenger('m','Arthuro','Benatone','+418182930',$addressFrom);
+        $passenger = Passenger::registerPassenger('m', 'Arthuro', 'Benatone', '+418182930', $addressFrom);
         $this->passengerRepo->store($passenger);
 
         $date = $this->dateTimeService->convertDateTimeStringToUTCDateTime('20.05.2014 00:00');
@@ -50,7 +50,7 @@ class DrivingOrderTest extends CommonBaseTest {
 
         $this->routeRepo->store($route);
 
-        $drivingOrder = DrivingOrder::registerDrivingOrder($date,$time,2,'möchte nicht hinten sitzen');
+        $drivingOrder = DrivingOrder::registerDrivingOrder($date, $time, 2, 'möchte nicht hinten sitzen');
         $drivingOrder->assignRoute($route);
         $passenger->assignDrivingOrder($drivingOrder);
         $drivingOrder->assignPassenger($passenger);
@@ -64,26 +64,26 @@ class DrivingOrderTest extends CommonBaseTest {
 
         $monthsAgo = 3;
         $monthDate = new \DateTime('today');
-        $monthDate->modify('+'.$monthsAgo.' month');
+        $monthDate->modify('+' . $monthsAgo . ' month');
         $monthDate->format('first day of this month');
         $workingMonth = WorkingMonth::registerWorkingMonth($monthDate);
-        foreach($workingMonth->getWorkingDays() as $wd){
+        foreach ($workingMonth->getWorkingDays() as $wd) {
             $this->workingDayRepo->store($wd);
         }
         $this->workingMonthRepo->store($workingMonth);
 
         $workingDays = $workingMonth->getWorkingDays()->toArray();
-        echo('Workingdays:'. count($workingMonth->getWorkingDays()->toArray()));
+        echo('Workingdays:' . count($workingMonth->getWorkingDays()->toArray()) . "\n");
 
-        /**@var $shiftTypes ShiftType[]*/
+        /**@var $shiftTypes ShiftType[] */
         $shiftTypes = $this->shiftTypeRepo->findAllNotDeleted();
-        echo(' | ShiftTypes: ' . count($shiftTypes));
+        echo('ShiftTypes: ' . count($shiftTypes) . "\n");
 
         //create workingDays shifts, assign them drivingpools, get amount of needed drivers
-        /** @var $workingDay WorkingDay*/
-        foreach($workingDays as $workingDay){
-            /** @var $shiftType ShiftType*/
-            foreach($shiftTypes as $shiftType){
+        /** @var $workingDay WorkingDay */
+        foreach ($workingDays as $workingDay) {
+            /** @var $shiftType ShiftType */
+            foreach ($shiftTypes as $shiftType) {
                 $shift = Shift::registerShift($workingDay, $shiftType);
                 $shift->setAmountOfDrivers(18);
                 $workingDay->assignShift($shift);

@@ -26,6 +26,6 @@ interface DrivingOrderService {
 
     public function getRouteForDrivingOrder();
 
-    public function getZoneForAddressTo(Address $addressTo);
+    public function getZoneForAddress(Address $addressTo);
 
 }

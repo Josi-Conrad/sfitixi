@@ -9,7 +9,7 @@
 namespace Tixi\App\Routing;
 
 
-interface RoutingMachineService {
+interface RoutingMachine {
 
     /**
      * @param $latFrom

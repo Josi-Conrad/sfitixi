@@ -5,4 +5,4 @@ parameters:
      tixi_parameter_client_page: http://www.tixizug.ch
 
      tixi_parameter_google_apikey: AIzaSyAj6w00ufayAcAv-A8zzLhQspEYflknr4E
-     tixi_osrm_server: http://seiout.ch:5555/
+     tixi_parameter_osrm_server: http://seiout.ch:8080
