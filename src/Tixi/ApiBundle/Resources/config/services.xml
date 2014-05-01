@@ -99,7 +99,12 @@
 
         <!-- Assembers -->
         <service id="tixi_api.assemblerVehicle" class="%tixi_api.vehicleassembler.class%"/>
-        <service id="tixi_api.assemblerDriver" class="%tixi_api.driverassembler.class%"/>
+        <service id="tixi_api.assemblerDriver" class="%tixi_api.driverassembler.class%">
+            <call method="setAddressService">
+                <argument type="service" id="tixi_app.addressmanagement" />
+            </call>
+
+        </service>
         <service id="tixi_api.assemblerPassenger" class="%tixi_api.passengerassembler.class%"/>
         <service id="tixi_api.assemblerAbsent" class="%tixi_api.absentassembler.class%"/>
         <service id="tixi_api.assemblerUser" class="%tixi_api.userassembler.class%"/>

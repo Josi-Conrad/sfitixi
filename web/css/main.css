@@ -17,6 +17,15 @@
     display: none;
 }
 
+/* Lookahead */
+.selectionsModelContainer {
+    display: none;
+}
+
+.selectionsDisplayContainer {
+    display: none;
+}
+
 /* Top Action */
 .upperRightMargin{
     margin-top: 15px;
