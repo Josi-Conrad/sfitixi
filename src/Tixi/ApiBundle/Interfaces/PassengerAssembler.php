@@ -19,6 +19,10 @@ use Tixi\CoreDomain\Address;
  * @package Tixi\ApiBundle\Interfaces
  */
 class PassengerAssembler {
+
+    /** @var  AddressAssembler $addressAssembler */
+    protected $addressAssembler;
+
     /**
      * @param PassengerRegisterDTO $passengerDTO
      * @return Passenger
@@ -26,9 +30,7 @@ class PassengerAssembler {
     public function registerDTOtoNewPassenger(PassengerRegisterDTO $passengerDTO) {
         $passenger = Passenger::registerPassenger($passengerDTO->gender, $passengerDTO->firstname,
             $passengerDTO->lastname, $passengerDTO->telephone,
-            Address::registerAddress(
-                $passengerDTO->street, $passengerDTO->postalCode,
-                $passengerDTO->city, $passengerDTO->country),
+            $this->addressAssembler->addressLookaheadDTOtoAddress($passengerDTO->lookaheadaddress),
             $passengerDTO->title,
             $passengerDTO->isInWheelChair,
             $passengerDTO->gotMonthlyBilling, $passengerDTO->isOverweight,
@@ -52,12 +54,9 @@ class PassengerAssembler {
      * @return Passenger
      */
     public function registerDTOToPassenger(Passenger $passenger, PassengerRegisterDTO $passengerDTO) {
-        $address = $passenger->getAddress();
-        $address->updateAddressData($passengerDTO->street, $passengerDTO->postalCode,
-            $passengerDTO->city, $passengerDTO->country);
         $passenger->updatePassengerData($passengerDTO->gender, $passengerDTO->firstname,
             $passengerDTO->lastname, $passengerDTO->telephone,
-            $address, $passengerDTO->title, $passengerDTO->isInWheelChair,
+            $this->addressAssembler->addressLookaheadDTOtoAddress($passengerDTO->lookaheadaddress), $passengerDTO->title, $passengerDTO->isInWheelChair,
             $passengerDTO->gotMonthlyBilling, $passengerDTO->isOverweight,
             $passengerDTO->email, $passengerDTO->entryDate, $passengerDTO->birthday,
             $passengerDTO->extraMinutes, $passengerDTO->details, $passengerDTO->notice,
@@ -100,10 +99,7 @@ class PassengerAssembler {
         $passengerDTO->billingAddress = $passenger->getBillingAddress();
         $passengerDTO->isBillingAddress = $passenger->getIsBillingAddress();
 
-        $passengerDTO->street = $passenger->getAddress()->getStreet();
-        $passengerDTO->postalCode = $passenger->getAddress()->getPostalCode();
-        $passengerDTO->city = $passenger->getAddress()->getCity();
-        $passengerDTO->country = $passenger->getAddress()->getCountry();
+        $passengerDTO->lookaheadaddress = $this->addressAssembler->addressToAddressLookaheadDTO($passenger->getAddress());
 
         return $passengerDTO;
     }
@@ -138,5 +134,9 @@ class PassengerAssembler {
         $passengerListDTO->gotMonthlyBilling = $passenger->getMonthlyBillingAsString();
         $passengerListDTO->insurances = $passenger->getInsurancesAsString();
         return $passengerListDTO;
+    }
+
+    public function setAddressAssembler(AddressAssembler $assembler) {
+        $this->addressAssembler = $assembler;
     }
 }

@@ -183,19 +183,15 @@ class PassengerController extends Controller {
      * @return null|object|\Tixi\CoreDomain\Passenger
      */
     protected function registerOrUpdatePassenger(PassengerRegisterDTO $passengerDTO) {
-        $addressRepository = $this->get('address_repository');
         $passengerRepository = $this->get('passenger_repository');
         $assembler = $this->get('tixi_api.assemblerpassenger');
         if (empty($passengerDTO->person_id)) {
             $passenger = $assembler->registerDTOtoNewPassenger($passengerDTO);
-            $addressRepository->store($passenger->getAddress());
             $passengerRepository->store($passenger);
             return $passenger;
         } else {
             $passenger = $passengerRepository->find($passengerDTO->person_id);
             $assembler->registerDTOtoPassenger($passenger, $passengerDTO);
-            $addressRepository->store($passenger->getAddress());
-            $passengerRepository->store($passenger);
             return $passenger;
         }
     }

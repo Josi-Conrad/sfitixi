@@ -14,6 +14,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\NotNull;
 use Tixi\ApiBundle\Form\Shared\CommonAbstractType;
+use Tixi\ApiBundle\Form\Shared\Lookahead\AddressLookaheadType;
 use Tixi\ApiBundle\Form\Shared\TelephoneType;
 
 /**
@@ -61,34 +62,38 @@ class PersonType extends CommonAbstractType {
                 new NotBlank(array('message' => 'field.not_blank'))
             ),
         ));
-        $builder->add('street', 'text', array(
-            'label' => 'address.field.street',
-            'attr' => array('title' => 'form.field.title.not_blank'),
-            'constraints' => array(
-                new NotBlank(array('message' => 'field.not_blank'))
-            ),
-        ));
-        $builder->add('postalCode', 'text', array(
-            'label' => 'address.field.postalcode',
-            'pattern' => '^[\+0-9A-Z]{4,7}',
-            'attr' => array('title' => 'form.field.title.postalcode'),
-            'constraints' => array(
-                new NotBlank(array('message' => 'field.not_blank'))
-            ),
-        ));
-        $builder->add('city', 'text', array(
-            'label' => 'address.field.city',
-            'attr' => array('title' => 'form.field.title.not_blank'),
-            'constraints' => array(
-                new NotBlank(array('message' => 'field.not_blank'))
-            ),
-        ));
-        $builder->add('country', 'text', array(
-            'label' => 'address.field.country',
-            'attr' => array('title' => 'form.field.title.not_blank'),
-            'constraints' => array(
-                new NotBlank(array('message' => 'field.not_blank'))
-            ),
-        ));
+        $builder->add('lookaheadaddress','addresslookahead',array(
+            'label' => 'address.field.lookahead'
+            )
+        );
+//        $builder->add('street', 'text', array(
+//            'label' => 'address.field.street',
+//            'attr' => array('title' => 'form.field.title.not_blank'),
+//            'constraints' => array(
+//                new NotBlank(array('message' => 'field.not_blank'))
+//            ),
+//        ));
+//        $builder->add('postalCode', 'text', array(
+//            'label' => 'address.field.postalcode',
+//            'pattern' => '^[\+0-9A-Z]{4,7}',
+//            'attr' => array('title' => 'form.field.title.postalcode'),
+//            'constraints' => array(
+//                new NotBlank(array('message' => 'field.not_blank'))
+//            ),
+//        ));
+//        $builder->add('city', 'text', array(
+//            'label' => 'address.field.city',
+//            'attr' => array('title' => 'form.field.title.not_blank'),
+//            'constraints' => array(
+//                new NotBlank(array('message' => 'field.not_blank'))
+//            ),
+//        ));
+//        $builder->add('country', 'text', array(
+//            'label' => 'address.field.country',
+//            'attr' => array('title' => 'form.field.title.not_blank'),
+//            'constraints' => array(
+//                new NotBlank(array('message' => 'field.not_blank'))
+//            ),
+//        ));
     }
 }

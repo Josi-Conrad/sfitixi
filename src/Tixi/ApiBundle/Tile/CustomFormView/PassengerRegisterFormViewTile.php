@@ -28,6 +28,7 @@ class PassengerRegisterFormViewTile extends AbstractFormViewTile {
         $this->basicFormRows[] = new FormRowView('firstname', 'person.field.firstname', $dto->firstname);
         $this->basicFormRows[] = new FormRowView('lastname', 'person.field.lastname', $dto->lastname);
         $this->basicFormRows[] = new FormRowView('telephone', 'person.field.telephone', $dto->telephone);
+        $this->basicFormRows[] = new FormRowView('address','address.field.lookahead',$dto->lookaheadaddress->addressDisplayName);
         $this->basicFormRows[] = new FormRowView('isInWheelChair', 'passenger.field.isinwheelchair',
             Passenger::constructIsInWheelChairString($dto->isInWheelChair));
         $this->basicFormRows[] = new FormRowView('gotMonthlyBilling', 'passenger.field.payment',
@@ -35,10 +36,6 @@ class PassengerRegisterFormViewTile extends AbstractFormViewTile {
         $this->basicFormRows[] = new FormRowView('insurances', 'passenger.field.insurance',
             Passenger::constructInsurancesString($dto->insurances));
         $this->basicFormRows[] = new FormRowView('notice', 'passenger.field.notice', $dto->notice);
-
-        $this->expandedFormRows[] = new FormRowView('street', 'address.field.street', $dto->street);
-        $this->expandedFormRows[] = new FormRowView('postalcode', 'address.field.postalcode', $dto->postalCode);
-        $this->expandedFormRows[] = new FormRowView('city', 'address.field.city', $dto->city);
 
         if (!empty($dto->entryDate)) {
             $this->expandedFormRows[] = new FormRowView('entrydate', 'person.field.entrydate', $dto->entryDate->format('d.m.Y'));

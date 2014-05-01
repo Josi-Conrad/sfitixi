@@ -156,11 +156,11 @@ class Address extends CommonBaseEntity{
     }
 
     public function toString() {
-        return ($this->getName() + ' ' +
-            $this->getStreet() + ' ' +
-            $this->getPostalCode() + ' ' +
-            $this->getCity() + ' ' +
-            $this->getCountry());
+        return (null !== $this->getName()) ? $this->getName() : $this->constructAlternativeName();
+    }
+
+    protected function constructAlternativeName() {
+        return $this->getStreet().', '.$this->getPostalCode().' '.$this->getCity().', '.$this->getCountry();
     }
 
     /**

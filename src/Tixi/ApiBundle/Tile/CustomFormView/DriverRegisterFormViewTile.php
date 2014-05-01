@@ -31,11 +31,7 @@ class DriverRegisterFormViewTile extends AbstractFormViewTile {
         $this->basicFormRows[] = new FormRowView('email', 'person.field.email', $dto->email);
         $this->basicFormRows[] = new FormRowView('wheelChairAttendance', 'driver.field.wheelchair',
             Driver::constructWheelChairAttendanceString($dto->wheelChairAttendance));
-
-        $this->expandedFormRows[] = new FormRowView('street', 'address.field.street', $dto->street);
-        $this->expandedFormRows[] = new FormRowView('postalcode', 'address.field.postalcode', $dto->postalCode);
-        $this->expandedFormRows[] = new FormRowView('city', 'address.field.city', $dto->city);
-
+        $this->expandedFormRows[] = new FormRowView('address','address.field.lookahead',$dto->lookaheadaddress->addressDisplayName);
         if (!empty($dto->entryDate)) {
             $this->expandedFormRows[] = new FormRowView('entrydate', 'person.field.entrydate', $dto->entryDate->format('d.m.Y'));
         }
