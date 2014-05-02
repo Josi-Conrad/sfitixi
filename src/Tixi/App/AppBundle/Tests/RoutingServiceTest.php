@@ -14,6 +14,7 @@ use Tixi\App\AppBundle\Controller\AddressManagementImplDoctrine;
 use Tixi\App\AppBundle\Routing\RoutingMachineOSRM;
 use Tixi\App\Routing\RouteManagement;
 use Tixi\CoreDomain\Address;
+use Tixi\CoreDomain\Dispo\Route;
 use Tixi\CoreDomainBundle\Tests\CommonBaseTest;
 
 /**
@@ -26,27 +27,41 @@ class RoutingServiceTest extends CommonBaseTest {
         parent::setUp();
     }
 
-    public function testGetRouteInformation() {
+    public function testGetSingleRouteInformation() {
         $address1 = $this->createTestAddressBaar();
         $address2 = $this->createTestAddressGoldau();
 
-        //for ($i = 0; $i < 100; $i++){
+//        for ($i = 0; $i < 10; $i++) {
             /**@var $route \Tixi\CoreDomain\Dispo\Route */
             $route = $this->routeManagement->getRouteFromAddresses($address1, $address2);
-        //}
-        $min = gmdate("H:i:s", $route->getDuration());
-        $km = round($route->getDistance() / 1000, 2, PHP_ROUND_HALF_UP);
-        echo 'RouteInformation get: ' . "\n";
-        echo $km . 'km | ' . $min . "\n";
+//        }
+        $this->assertNotEmpty($route->getDuration());
+    }
+
+    public function testGetMultipleRouteInformations() {
+        $address1 = $this->createTestAddressBaar();
+        $address2 = $this->createTestAddressGoldau();
+
+        $routes = array();
+        for ($i = 0; $i < 1000; $i++) {
+            array_push($routes, Route::registerRoute($address1, $address2));
+        }
+
+        $this->routingMachine->fillRoutingInformationsForMultipleRoutes($routes);
+
+        /**@var $route Route */
+        foreach ($routes as $route) {
+            $this->assertNotEmpty($route->getDuration());
+        }
 
     }
 
-    public function testGetRouteJSON(){
+    public function testGetRouteJSON() {
         $client = $this->createClient();
         $client->request('GET', '/service/routing?latFrom=47.498796&lngFrom=7.760499&latTo=47.049796&lngTo=8.548057',
             array(), array(), array(
                 'PHP_AUTH_USER' => 'admin',
-                'PHP_AUTH_PW'   => 'pass',
+                'PHP_AUTH_PW' => 'pass',
             ));
         $response = $client->getResponse();
         $json = json_decode($response->getContent());

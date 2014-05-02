@@ -9,6 +9,7 @@
 namespace Tixi\App\AppBundle\Routing;
 
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\DependencyInjection\ContainerAware;
 use Tixi\App\Routing\RouteManagement;
@@ -17,7 +18,6 @@ use Tixi\CoreDomain\Dispo\Route;
 use Tixi\CoreDomain\Dispo\RouteRepository;
 
 class RouteManagementImpl extends ContainerAware implements RouteManagement {
-
     /**
      * @param Address $from
      * @param Address $to
@@ -43,4 +43,5 @@ class RouteManagementImpl extends ContainerAware implements RouteManagement {
     public function createRouteFromDrivingOrder() {
         // TODO: Implement createRouteFromDrivingOrder() method.
     }
+
 }
