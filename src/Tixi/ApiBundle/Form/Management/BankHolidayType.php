@@ -30,11 +30,8 @@ class BankHolidayType extends CommonAbstractType{
         $builder->add('name', 'text', array(
             'label' => 'bankholiday.field.name'
         ));
-        $builder->add('startDate', 'datePicker', array(
-            'label' => 'bankholiday.field.start',
-        ));
-        $builder->add('endDate', 'datePicker', array(
-            'label' => 'bankholiday.field.end',
+        $builder->add('date', 'datePicker', array(
+            'label' => 'bankholiday.field.date',
         ));
     }
 

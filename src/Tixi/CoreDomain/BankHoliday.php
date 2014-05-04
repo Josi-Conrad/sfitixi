@@ -30,11 +30,7 @@ class BankHoliday extends CommonBaseEntity {
     /**
      * @ORM\Column(type="date")
      */
-    protected $startDate;
-    /**
-     * @ORM\Column(type="date")
-     */
-    protected $endDate;
+    protected $date;
 
     protected function __construct() {
         parent::__construct();
@@ -42,27 +38,22 @@ class BankHoliday extends CommonBaseEntity {
 
     /**
      * @param $name
-     * @param $startDate
-     * @param $endDate
+     * @param $date
      * @return BankHoliday
      */
-    public static function registerBankHoliday($name, $startDate, $endDate) {
+    public static function registerBankHoliday($name, $date) {
         $bankHoliday = new BankHoliday();
         $bankHoliday->setName($name);
-        $bankHoliday->setStartDate($startDate);
-        $bankHoliday->setEndDate($endDate);
+        $bankHoliday->setDate($date);
         return $bankHoliday;
     }
 
-    public function updateBankHolidayData($name = null, $startDate = null, $endDate = null) {
+    public function updateBankHolidayData($name = null, $date = null) {
         if (!empty($name)) {
             $this->setName($name);
         }
-        if (!empty($startDate)) {
-            $this->setStartDate($startDate);
-        }
-        if (!empty($endDate)) {
-            $this->setEndDate($endDate);
+        if (!empty($date)) {
+            $this->setDate($date);
         }
     }
 
@@ -96,30 +87,16 @@ class BankHoliday extends CommonBaseEntity {
     }
 
     /**
-     * @param mixed $endDate
+     * @param mixed $date
      */
-    public function setEndDate($endDate) {
-        $this->endDate = $endDate;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getEndDate() {
-        return $this->endDate;
-    }
-
-    /**
-     * @param mixed $startDate
-     */
-    public function setStartDate($startDate) {
-        $this->startDate = $startDate;
+    public function setDate($date) {
+        $this->date = $date;
     }
 
     /**
      * @return \DateTime
      */
-    public function getStartDate() {
-        return $this->startDate;
+    public function getDate() {
+        return $this->date;
     }
 } 

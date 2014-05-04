@@ -15,7 +15,6 @@ namespace Tixi\ApiBundle\Interfaces\Management;
 class BankHolidayRegisterDTO {
     public $id;
     public $name;
-    public $startDate;
-    public $endDate;
+    public $date;
 }
 

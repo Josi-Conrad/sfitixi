@@ -23,8 +23,7 @@ class BankHolidayAssembler {
     public function registerDTOtoNewBankHoliday(BankHolidayRegisterDTO $bankHolidayDTO) {
         $bankHoliday = BankHoliday::registerBankHoliday(
             $bankHolidayDTO->name,
-            $bankHolidayDTO->startDate,
-            $bankHolidayDTO->endDate);
+            $bankHolidayDTO->date);
         return $bankHoliday;
     }
 
@@ -36,8 +35,7 @@ class BankHolidayAssembler {
     public function registerDTOtoBankHoliday(BankHolidayRegisterDTO $bankHolidayDTO, BankHoliday $bankHoliday) {
         $bankHoliday->updateBankHolidayData(
             $bankHolidayDTO->name,
-            $bankHolidayDTO->startDate,
-            $bankHolidayDTO->endDate);
+            $bankHolidayDTO->date);
         return $bankHoliday;
     }
 
@@ -49,8 +47,7 @@ class BankHolidayAssembler {
         $bankHolidayDTO = new BankHolidayRegisterDTO();
         $bankHolidayDTO->id = $bankHoliday->getId();
         $bankHolidayDTO->name = $bankHoliday->getName();
-        $bankHolidayDTO->startDate = $bankHoliday->getStartDate();
-        $bankHolidayDTO->endDate = $bankHoliday->getEndDate();
+        $bankHolidayDTO->date = $bankHoliday->getDate();
         return $bankHolidayDTO;
     }
 
@@ -68,14 +65,13 @@ class BankHolidayAssembler {
 
     /**
      * @param BankHoliday $bankHoliday
-     * @return BankHolidayEmbeddedListDTO
+     * @return BankHolidayListDTO
      */
     public function bankHolidaysToBankHolidayListDTO(BankHoliday $bankHoliday) {
         $bankHolidayEmbeddedListDTO = new BankHolidayListDTO();
         $bankHolidayEmbeddedListDTO->id = $bankHoliday->getId();
         $bankHolidayEmbeddedListDTO->name = $bankHoliday->getName();
-        $bankHolidayEmbeddedListDTO->startDate = $bankHoliday->getStartDate()->format('d.m.Y');
-        $bankHolidayEmbeddedListDTO->endDate = $bankHoliday->getEndDate()->format('d.m.Y');
+        $bankHolidayEmbeddedListDTO->date = $bankHoliday->getDate()->format('d.m.Y');
         return $bankHolidayEmbeddedListDTO;
     }
 

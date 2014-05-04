@@ -31,13 +31,9 @@ class BankHolidayListDTO implements DataGridSourceClass{
      */
     public $name;
     /**
-     * @GridField(propertyId="BankHoliday.startDate", headerName="bankholiday.field.start", order=2)
+     * @GridField(propertyId="BankHoliday.date", headerName="bankholiday.field.date", restrictive=true, comparingOperator=">", order=2)
      */
-    public $startDate;
-    /**
-     * @GridField(propertyId="BankHoliday.endDate", headerName="bankholiday.field.end", restrictive=true, comparingOperator=">", order=3)
-     */
-    public $endDate;
+    public $date;
 
     /**
      * @return GenericAccessQuery
@@ -54,7 +50,7 @@ class BankHolidayListDTO implements DataGridSourceClass{
     public static function createReferenceDTOByBankHolidayId($bankHolidayId) {
         $dto = new BankHolidayListDTO();
         $dto->id = $bankHolidayId;
-        $dto->endDate = DateTimeService::getUTCnow();
+        $dto->date = new \DateTime('yesterday');
         return $dto;
     }
 }
