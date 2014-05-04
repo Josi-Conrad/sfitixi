@@ -43,7 +43,7 @@ class RoutingServiceTest extends CommonBaseTest {
         $address2 = $this->createTestAddressGoldau();
 
         $routes = array();
-        for ($i = 0; $i < 1000; $i++) {
+        for ($i = 0; $i < 21; $i++) {
             array_push($routes, Route::registerRoute($address1, $address2));
         }
 

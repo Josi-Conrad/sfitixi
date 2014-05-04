@@ -28,16 +28,6 @@ class DriverAssignTest extends CommonBaseTest {
         parent::setUp();
     }
 
-    public function testDateFunction(){
-        $date = new \DateTime('2014-05');
-        echo $date->format('Y-m-d');
-        $workingMonth = WorkingMonth::registerWorkingMonth($date);
-        $this->workingMonthRepo->store($workingMonth);
-        $this->em->flush();
-        $workingMonth = $this->workingMonthRepo->findWorkingMonthByDate($date);
-        $this->assertNotNull($workingMonth);
-    }
-
     public function testRepeatedDrivingAssertionCRUD() {
 
         $driverCategory = $this->createDriverCategory('Zivildienst');
