@@ -21,6 +21,7 @@
         <parameter key="tixi_api.datagridcontrollerfactory.class">Tixi\ApiBundle\Shared\DataGrid\DataGridControllerFactory</parameter>
         <parameter key="tixi_api.poiassembler.class">Tixi\ApiBundle\Interfaces\POIAssembler</parameter>
         <parameter key="tixi_api.addressassembler.class">Tixi\ApiBundle\Interfaces\AddressAssembler</parameter>
+        <parameter key="tixi_api.workingmonthassembler.class">Tixi\ApiBundle\Interfaces\Dispo\WorkingMonthAssembler</parameter>
 
         <!-- Management -->
         <parameter key="tixi_api.userassembler.class">Tixi\ApiBundle\Interfaces\Management\UserAssembler</parameter>
@@ -97,6 +98,12 @@
         <service id="form.type.telephoneType" class="Tixi\ApiBundle\Form\Shared\TelephoneType">
             <tag name="form.type" alias="telephoneType" />
         </service>
+        <service id="form.type.textOnly" class="Tixi\ApiBundle\Form\Shared\TextOnlyType">
+            <tag name="form.type" alias="textOnly" />
+        </service>
+        <service id="form.type.textOnlyTranslated" class="Tixi\ApiBundle\Form\Shared\TextOnlyTranslatedType">
+            <tag name="form.type" alias="textOnlyTranslated" />
+        </service>
 
         <!-- Assemblers -->
         <service id="tixi_api.assemblerVehicle" class="%tixi_api.vehicleassembler.class%"/>
@@ -128,6 +135,7 @@
                 <argument type="service" id="tixi_app.addressmanagement" />
             </call>
         </service>
+        <service id="tixi_api.assemblerWorkingMonth" class="%tixi_api.workingmonthassembler.class%"/>
         <!-- Management -->
         <service id="tixi_api.assemblerUser" class="%tixi_api.userassembler.class%">
             <call method="setEncoderFactory">

@@ -42,3 +42,21 @@ management.breadcrumb.name: Verwaltung
 error.refintegrity.header.name: Referentielle Integritätsverletzung
 error.refintegrity.body.standard.main: Das ausgewählte Verwaltungsdokument kann nicht gelöscht werden, da es noch in Vewendung ist.
 error.refintegrity.body.standard.second: Das Dokument wird zur Zeit noch von der folgenden Anzahl Dokumente verwendet:
+
+
+#Weekdays
+monday.name: Montag
+tuesday.name: Dienstag
+wednesday.name: Mittwoch
+thursday.name: Donnerstag
+friday.name: Freitag
+saturday.name: Samstag
+sunday.name: Sonntag
+
+monday.abbreviation.name: Mo
+tuesday.abbreviation.name: Di
+wednesday.abbreviation.name: Mi
+thursday.abbreviation.name: Do
+friday.abbreviation.name: Fr
+saturday.abbreviation.name: Sa
+sunday.abbreviation.name: So

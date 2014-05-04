@@ -34,6 +34,8 @@ class MenuService extends ContainerAware {
     public static $menuDriverRepeatedAssertionId = 'driver_repeatedassertions';
     public static $menuPassengerAbsentId = 'passenger_absents';
     public static $menuUserProfileId = 'user_profile';
+    public static $menuWorkingMonthId = 'working_month';
+
 
     public static $menuSelectionManagementId = 'management';
     public static $menuManagementUserId = 'management_users';
@@ -71,8 +73,21 @@ class MenuService extends ContainerAware {
         $rootId = $this->extractRootId($activeItem);
         $menuTile = new MenuTile();
         $menuTile->add(new MenuItemTile(self::$menuHomeId, $this->generateUrl('tixiapi_home'), 'home.panel.name', $rootId === self::$menuHomeId));
-        $menuTile->add(new MenuItemTile(self::$menuDispoId, '#', 'disposition.panel.name', $rootId === self::$menuDispoId));
+
+
+        /**Disposition*/
+        $managementSelectionTile =
+            $menuTile->add(new MenuSelectionItemTile(self::$menuDispoId,
+                'disposition.panel.name', $this->checkSelectionRootActivity(self::$menuDispoId, $activeItem)));
+        if ($this->container->get('security.context')->isGranted('ROLE_ADMIN')) {
+            $managementSelectionTile->add(new MenuItemTile(self::$menuWorkingMonthId,
+                $this->generateUrl('tixiapi_dispo_workingmonths_get'), 'workingmonth.panel.name', $this->checkSelectionChildActivity(self::$menuWorkingMonthId, $activeItem)));
+        }
+//        $menuTile->add(new MenuItemTile(self::$menuDispoId, '#', 'disposition.panel.name', $rootId === self::$menuDispoId));
+
+        /**Prepare*/
         $menuTile->add(new MenuItemTile(self::$menuPrepareId, '#', 'prepare.panel.name', $rootId === self::$menuPrepareId));
+
         $menuTile->add(new MenuItemTile(self::$menuPassengerId, $this->generateUrl('tixiapi_passengers_get'), 'passenger.panel.name', $rootId === self::$menuPassengerId));
         $menuTile->add(new MenuItemTile(self::$menuPoiId, $this->generateUrl('tixiapi_pois_get'), 'poi.panel.name', $rootId === self::$menuPoiId));
         $menuTile->add(new MenuItemTile(self::$menuDriverId, $this->generateUrl('tixiapi_drivers_get'), 'driver.panel.name', $rootId === self::$menuDriverId));

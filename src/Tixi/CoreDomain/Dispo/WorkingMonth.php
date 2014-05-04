@@ -59,9 +59,9 @@ class WorkingMonth extends CommonBaseEntity{
      */
     public static function registerWorkingMonth(\DateTime $date, $status = 0) {
         $workingMonth = new WorkingMonth();
+        $date->modify('first day of this month');
         $workingMonth->setDate($date);
         $workingMonth->setStatus($status);
-        $workingMonth->createWorkingDaysForThisMonth();
         return $workingMonth;
     }
 

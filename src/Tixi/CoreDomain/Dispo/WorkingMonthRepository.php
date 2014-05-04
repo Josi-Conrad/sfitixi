@@ -21,4 +21,9 @@ interface WorkingMonthRepository extends CommonBaseRepository {
      */
     public function remove(WorkingMonth $workingMonth);
 
+    /**
+     * @param \DateTime $date
+     * @return mixed
+     */
+    public function findWorkingMonthByDate(\DateTime $date);
 }

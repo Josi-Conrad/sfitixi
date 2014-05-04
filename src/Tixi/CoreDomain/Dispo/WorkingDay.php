@@ -114,20 +114,6 @@ class WorkingDay {
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection $drivingPools
-     */
-    public function setDrivingPools($drivingPools) {
-        $this->drivingPools = $drivingPools;
-    }
-
-    /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
-     */
-    public function getDrivingPools() {
-        return $this->drivingPools;
-    }
-
-    /**
      * @param mixed $comment
      */
     public function setComment($comment) {

@@ -10,6 +10,7 @@ namespace Tixi\CoreDomain\Dispo;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use JsonSchema\Constraints\String;
 use Tixi\CoreDomain\Shared\CommonBaseEntity;
 
 /**
@@ -132,4 +133,10 @@ class ShiftType extends CommonBaseEntity {
         $this->end = $end;
     }
 
+    /**
+     * @return String
+     */
+    public function __toString() {
+        return $this->name;
+    }
 } 

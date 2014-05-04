@@ -13,6 +13,7 @@ use Tixi\CoreDomain\Dispo\ShiftType;
 use Tixi\CoreDomain\Dispo\RepeatedDrivingAssertionPlan;
 use Tixi\CoreDomain\Dispo\RepeatedWeeklyDrivingAssertion;
 use Tixi\CoreDomain\Address;
+use Tixi\CoreDomain\Dispo\WorkingMonth;
 use Tixi\CoreDomain\Driver;
 use Tixi\CoreDomain\DriverCategory;
 use Tixi\CoreDomainBundle\Tests\CommonBaseTest;
@@ -25,6 +26,16 @@ class DriverAssignTest extends CommonBaseTest {
 
     public function setUp() {
         parent::setUp();
+    }
+
+    public function testDateFunction(){
+        $date = new \DateTime('2014-05');
+        echo $date->format('Y-m-d');
+        $workingMonth = WorkingMonth::registerWorkingMonth($date);
+        $this->workingMonthRepo->store($workingMonth);
+        $this->em->flush();
+        $workingMonth = $this->workingMonthRepo->findWorkingMonthByDate($date);
+        $this->assertNotNull($workingMonth);
     }
 
     public function testRepeatedDrivingAssertionCRUD() {

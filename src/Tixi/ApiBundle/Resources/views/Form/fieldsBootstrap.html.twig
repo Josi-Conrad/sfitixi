@@ -38,11 +38,33 @@
         <script type="text/javascript">
             jQuery(function ($) {
                 var lookahead = new Lookahead();
-                lookahead.init('{{ lookaheadId }}','{{ 'addressHandles' }}', Address.prototype);
+                lookahead.init('{{ lookaheadId }}', '{{ 'addressHandles' }}', Address.prototype);
             });
         </script>
     </div>
 {% endblock %}
+
+{% block textOnly_widget %}
+    {% spaceless %}
+        {% set attr = attr|merge({'class': ((attr.class|default(''))|trim)}) %}
+        <span {{ block('widget_attributes') }}>
+        {% if value is not empty %}
+            {{ value }}
+        {% endif %}
+    </span>
+    {% endspaceless %}
+{% endblock textOnly_widget %}
+
+{% block textOnlyTranslated_widget %}
+    {% spaceless %}
+        {% set attr = attr|merge({'class': ((attr.class|default(''))|trim)}) %}
+        <span {{ block('widget_attributes') }}>
+        {% if value is not empty %}
+            {{ value|trans }}
+        {% endif %}
+    </span>
+    {% endspaceless %}
+{% endblock textOnlyTranslated_widget %}
 
 {####### Customized default types #######}
 {% block form_row %}

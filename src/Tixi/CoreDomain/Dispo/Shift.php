@@ -26,7 +26,7 @@ class Shift {
      */
     protected $id;
     /**
-     * @ORM\ManyToOne(targetEntity="ShiftType", inversedBy="shifts")
+     * @ORM\ManyToOne(targetEntity="ShiftType")
      * @ORM\JoinColumn(name="shift_type_id", referencedColumnName="id")
      */
     protected $shiftType;
@@ -110,7 +110,7 @@ class Shift {
     }
 
     /**
-     * @return mixed
+     * @return ShiftType
      */
     public function getShiftType() {
         return $this->shiftType;

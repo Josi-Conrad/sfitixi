@@ -14,6 +14,24 @@ shifttype.field.start: Startzeit
 shifttype.field.end: Endzeit
 shifttype.button.new: Neue Schicht
 
+#WorkingMonth
+workingmonth.th.date: Datum
+workingmonth.th.weekday: Tag
+workingmonth.th.comment: Kommentar
+
+workingmonth.button.new: Produktionsplan Erstellen
+
+workingmonth.panel.name: Produktionsplan
+workingmonth.panel.edit: Produktionsplan editieren
+
+workingmonth.field.memo: Memo
+workingmonth.field.date: Monat - Jahr
+workingmonth.field.status: Status
+workingmonth.field.year: Jahr
+workingmonth.field.month: Monat
+
+workingmonth.list.name: Aktuelle Produktionspläne
+workingmonth.panel.new: Produktionsplan erstellen
 
 #RepeatedDrivingMission
 repeateddrivingmission.panel.new: Neuer Dauereinsatz
@@ -43,21 +61,3 @@ secondweek.name: 2. Woche
 thirdweek.name: 3. Woche
 fourthweek.name: 4. Woche
 lastweek.name: 5. Woche
-
-
-#Weekdays
-monday.name: Montag
-tuesday.name: Dienstag
-wednesday.name: Mittwoch
-thursday.name: Donnerstag
-friday.name: Freitag
-saturday.name: Samstag
-sunday.name: Sonntag
-
-monday.abbreviation.name: Mo
-tuesday.abbreviation.name: Di
-wednesday.abbreviation.name: Mi
-thursday.abbreviation.name: Do
-friday.abbreviation.name: Fr
-saturday.abbreviation.name: Sa
-sunday.abbreviation.name: So
