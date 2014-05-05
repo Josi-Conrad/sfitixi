@@ -150,6 +150,8 @@ class CommonBaseTest extends WebTestCase {
     public function setUp() {
         $kernel = static::createKernel();
         $kernel->boot();
+        set_time_limit(600);
+
         $this->em = $kernel->getContainer()->get('entity_manager');
 
         $this->personRepo = $kernel->getContainer()->get('person_repository');
