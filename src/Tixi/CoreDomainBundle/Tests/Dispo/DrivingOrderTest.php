@@ -55,7 +55,8 @@ class DrivingOrderTest extends CommonBaseTest {
         $passenger->assignDrivingOrder($drivingOrder);
         $drivingOrder->assignPassenger($passenger);
         $this->drivingOrderRepo->store($drivingOrder);
-
+        $this->em->flush();
+        $this->assertNotNull($this->drivingOrderRepo->find($drivingOrder->getId()));
 
         //TimePeriod from start day of month to next start day of month
         //(amount of days = amount of days in this month)
@@ -67,17 +68,16 @@ class DrivingOrderTest extends CommonBaseTest {
         $monthDate->modify('+' . $monthsAgo . ' month');
         $monthDate->format('first day of this month');
         $workingMonth = WorkingMonth::registerWorkingMonth($monthDate);
+        $workingMonth->createWorkingDaysForThisMonth();
         foreach ($workingMonth->getWorkingDays() as $wd) {
             $this->workingDayRepo->store($wd);
         }
         $this->workingMonthRepo->store($workingMonth);
 
-        $workingDays = $workingMonth->getWorkingDays()->toArray();
-        echo('Workingdays:' . count($workingMonth->getWorkingDays()->toArray()) . "\n");
+        $workingDays = $workingMonth->getWorkingDays();
 
         /**@var $shiftTypes ShiftType[] */
         $shiftTypes = $this->shiftTypeRepo->findAllNotDeleted();
-        echo('ShiftTypes: ' . count($shiftTypes) . "\n");
 
         //create workingDays shifts, assign them drivingpools, get amount of needed drivers
         /** @var $workingDay WorkingDay */
@@ -93,7 +93,7 @@ class DrivingOrderTest extends CommonBaseTest {
         }
 
         $this->em->flush();
-
+        $this->assertNotNull($this->workingMonthRepo->find($workingMonth->getId()));
     }
 
 
