@@ -194,7 +194,7 @@ class CommonBaseTest extends WebTestCase {
         $this->routeManagement = $kernel->getContainer()->get('tixi_app.routemanagement');
 
         $this->singleToni = 1;
-        //$this->em->beginTransaction();
+        $this->em->beginTransaction();
     }
 
     public function testBase(){
@@ -226,7 +226,7 @@ class CommonBaseTest extends WebTestCase {
     }
 
     public function tearDown() {
-        //$this->em->rollback();
+        $this->em->rollback();
         parent::tearDown();
     }
 } 
