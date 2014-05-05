@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<phpdoc>
+    <title>iTIXI Project</title>
+    <parser>
+        <target>../docs/phpdoc</target>
+        <markers>
+            <item>TODO</item>
+            <item>FIXME</item>
+        </markers>
+        <extensions>
+            <extension>php</extension>
+        </extensions>
+        <visibility></visibility>
+    </parser>
+    <transformer>
+        <target>../docs/phpdoc</target>
+    </transformer>
+    <transformations>
+        <template name="responsive" />
+    </transformations>
+    <files>
+        <directory>../src/Tixi</directory>
+        <ignore>Tests/*</ignore>
+        <ignore>Resources/*</ignore>
+        <ignore>DependencyInjection/*</ignore>
+    </files>
+</phpdoc>
