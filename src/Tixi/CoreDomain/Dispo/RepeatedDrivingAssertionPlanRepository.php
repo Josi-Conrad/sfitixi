@@ -27,4 +27,12 @@ interface RepeatedDrivingAssertionPlanRepository extends CommonBaseRepository {
      * @return mixed
      */
     public function remove(RepeatedDrivingAssertionPlan $assertionPlan);
-} 
+
+    /**
+     * Gives all active repeatedDrivingAssertionPlans for given date/day
+     * @param \DateTime $date
+     * @return array
+     */
+    public function findPlanForDate(\DateTime $date);
+
+}

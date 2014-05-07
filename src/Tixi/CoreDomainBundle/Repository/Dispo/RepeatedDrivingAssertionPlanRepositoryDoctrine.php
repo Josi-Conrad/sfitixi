@@ -36,4 +36,15 @@ class RepeatedDrivingAssertionPlanRepositoryDoctrine extends CommonBaseRepositor
     {
         $this->getEntityManager()->remove($assertionPlan);
     }
+
+    /**
+     * @param \DateTime $date
+     * @return RepeatedDrivingAssertionPlan[]
+     */
+    public function findPlanForDate(\DateTime $date) {
+        $qb = parent::createQueryBuilder('p');
+        $qb->where('p.anchorDate <= :date')->andWhere('p.endingDate >= :date');
+        $qb->setParameter('date', $date->format('Y-m-d'));
+        return $qb->getQuery()->getResult();
+    }
 }

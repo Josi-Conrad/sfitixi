@@ -95,7 +95,17 @@ class DrivingOrderTest extends CommonBaseTest {
         $this->em->flush();
         $this->assertNotNull($this->workingMonthRepo->find($workingMonth->getId()));
 
+        $drivingAssertionPlans = $this->repeatedDrivingAssertionPlanRepo->findPlanForDate(new \DateTime());
+        $this->assertNotNull($drivingAssertionPlans);
 
+        foreach($drivingAssertionPlans as $drivingAssertionPlan){
+            echo $drivingAssertionPlan->getDriver()->getNameString() . "\n";
+            $assertions = $drivingAssertionPlan->getRepeatedDrivingAssertions();
+            foreach($assertions as $assertion){
+                $shift->getWorkingDay()->getDate();
+                $assertion->matching($shift);
+            }
+        }
     }
 
 

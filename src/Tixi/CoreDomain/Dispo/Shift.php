@@ -117,7 +117,7 @@ class Shift {
     }
 
     /**
-     * @return mixed
+     * @return WorkingDay
      */
     public function getWorkingDay() {
         return $this->workingDay;

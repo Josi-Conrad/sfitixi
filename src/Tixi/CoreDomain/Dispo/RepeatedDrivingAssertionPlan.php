@@ -104,6 +104,13 @@ class RepeatedDrivingAssertionPlan extends CommonBaseEntity {
     }
 
     /**
+     * @return Driver
+     */
+    public function getDriver() {
+        return $this->driver;
+    }
+
+    /**
      * @param mixed $anchorDate
      */
     public function setAnchorDate($anchorDate)
@@ -168,7 +175,7 @@ class RepeatedDrivingAssertionPlan extends CommonBaseEntity {
     }
 
     /**
-     * @return mixed
+     * @return RepeatedDrivingAssertion[]
      */
     public function getRepeatedDrivingAssertions()
     {
