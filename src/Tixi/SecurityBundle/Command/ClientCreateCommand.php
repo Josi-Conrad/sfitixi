@@ -25,7 +25,7 @@ class ClientCreateCommand extends ContainerAwareCommand {
      */
     protected function configure() {
         $this
-            ->setName('tixi:oauth-server:client:create')
+            ->setName('project:oauth-server:client-create')
             ->setDescription('Creates a new client')
             ->addArgument('name', InputArgument::REQUIRED, 'Sets the client name', null)
             ->addOption('redirect-uri', null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Sets redirect uri for client. Use this option multiple times to set multiple redirect URIs.', null)
