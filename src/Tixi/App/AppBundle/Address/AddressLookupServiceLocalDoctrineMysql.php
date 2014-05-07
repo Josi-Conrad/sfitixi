@@ -21,16 +21,20 @@ use Tixi\App\AppBundle\Interfaces\AddressHandleAssembler;
  * ft_min_word_len=1
  * innodb_ft_min_token_size=1
  */
-class AddressLookupServiceLocalDoctrineMysql extends AddressLookupService{
-
-    public function hasLookupQuota()
-    {
+class AddressLookupServiceLocalDoctrineMysql extends AddressLookupService {
+    /**
+     * @return bool|mixed
+     */
+    public function hasLookupQuota() {
         return false;
     }
 
-    protected function getAddressHandlingDTOs($lookupStr)
-    {
-        $searchString = $this->constructFulltextSeachString($lookupStr);
+    /**
+     * @param $lookupStr
+     * @return array|mixed
+     */
+    protected function getAddressHandlingDTOs($lookupStr) {
+        $searchString = $this->constructFulltextSearchString($lookupStr);
 
         $rsm = new ResultSetMappingBuilder($this->getEntityManager());
         $rsm->addRootEntityFromClassMetadata('Tixi\CoreDomain\Address', 'a');
@@ -51,11 +55,24 @@ class AddressLookupServiceLocalDoctrineMysql extends AddressLookupService{
         return $addresses;
     }
 
-    protected function constructFulltextSeachString($lookupStr) {
-        $words = explode(' ',$lookupStr);
-        array_walk($words, function(&$word, $key) {
+    /**
+     * @param $lookupStr
+     * @return string
+     */
+    protected function constructFulltextSearchString($lookupStr) {
+        $words = explode(' ', $lookupStr);
+        array_walk($words, function (&$word, $key) {
             $word = '+' . $word . '* ';
         });
-        return implode(' ',$words);
+        return implode(' ', $words);
+    }
+
+    /**
+     * not implemented on local lookup service
+     * @param $lookupStr
+     * @return mixed
+     */
+    protected function getSingleAddressHandleDTO($lookupStr) {
+        return null;
     }
 }

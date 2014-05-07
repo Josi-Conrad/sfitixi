@@ -8,9 +8,14 @@
 
 namespace Tixi\App\AppBundle\Address;
 
-
+/**
+ * Class AddressLookupQuotaExceededException
+ * @package Tixi\App\AppBundle\Address
+ */
 class AddressLookupQuotaExceededException extends \Exception{
-
+    /**
+     * @var string
+     */
     protected $errorMessage = "Lookup quota for this service reached";
 
     public function __construct() {

@@ -17,12 +17,22 @@ use Tixi\App\AppBundle\Interfaces\AddressHandleDTO;
 interface AddressManagement {
 
     /**
-     * Returns Address Object Suggestions from a string input (like google search)
+     * This function supports fuzzy search by fulltext search engine on DB or lookup services like google.
+     * Returns Suggestions in an array of AddressHandleDTOs.
+     *
+     * @param $addressString
+     * @return AddressHandleDTO[]
+     */
+    public function getAddressSuggestionsByString($addressString);
+
+    /**
+     * Will query  AddressString on a lookup service like google and takes first best suggestion given.
+     * Addresstring should be valid for exact queries. Returns Suggestion as an AddressHandleDTO
      *
      * @param $addressString
      * @return AddressHandleDTO
      */
-    public function getAddressSuggestionsByString($addressString);
+    public function getAddressInformationByString($addressString);
 
     /**
      * Handles a new Address object if register new one or get an existing one

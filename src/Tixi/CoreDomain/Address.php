@@ -155,10 +155,17 @@ class Address extends CommonBaseEntity{
         $this->pois->removeElement($poi);
     }
 
+    /**
+     * Returns constructed string from address fields
+     * @return mixed|string
+     */
     public function toString() {
         return (null !== $this->getName()) ? $this->getName() : $this->constructAlternativeName();
     }
 
+    /**
+     * @return string
+     */
     protected function constructAlternativeName() {
         return $this->getStreet().', '.$this->getPostalCode().' '.$this->getCity().', '.$this->getCountry();
     }
@@ -206,28 +213,32 @@ class Address extends CommonBaseEntity{
     }
 
     /**
-     * @param mixed $lat
+     * Set Latitude as integer - use GeometryService to set integer<->float precision
+     * @param integer $lat
      */
     public function setLat($lat) {
         $this->lat = $lat;
     }
 
     /**
-     * @return mixed
+     * Returns Latitude as integer - use GeometryService to set integer<->float precision
+     * @return integer
      */
     public function getLat() {
         return $this->lat;
     }
 
     /**
-     * @param mixed $lng
+     * Set Longitude as integer - use GeometryService to set integer<->float precision
+     * @param integer $lng
      */
     public function setLng($lng) {
         $this->lng = $lng;
     }
 
     /**
-     * @return mixed
+     * Return Longitude as integer - use GeometryService to set integer<->float precision
+     * @return integer
      */
     public function getLng() {
         return $this->lng;

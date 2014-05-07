@@ -8,9 +8,16 @@
 
 namespace Tixi\ApiBundle\Helper;
 
-
+/**
+ * Class StringService
+ * @package Tixi\ApiBundle\Helper
+ */
 class StringService {
 
+    /**
+     * @param $string
+     * @return string
+     */
     public static function convertStringToASCII($string) {
         return strtr(utf8_decode($string),
             utf8_decode('ŠŒŽšœžŸ¥µÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýÿ'),

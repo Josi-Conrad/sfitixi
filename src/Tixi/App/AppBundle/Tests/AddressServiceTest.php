@@ -10,40 +10,46 @@ namespace Tixi\App\AppBundle\Tests;
 
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Tixi\App\AppBundle\Address\GeometryService;
 use Tixi\App\AppBundle\Controller\AddressManagementImplDoctrine;
 use Tixi\CoreDomain\Address;
+use Tixi\CoreDomainBundle\Tests\CommonBaseTest;
 
 /**
  * Class AddressServiceTest
  * @package Tixi\App\AppBundle\Tests
  */
-class AddressServiceTest extends WebTestCase {
-    /**
-     * @var \Doctrine\ORM\EntityManager
-     */
-    private $em;
-
-    /**
-     * @var AddressManagementImplDoctrine
-     */
-    private $aService;
-
-    /**
-     * @var \Tixi\CoreDomainBundle\Repository\AddressRepositoryDoctrine
-     */
-    private $addressRepo;
-
+class AddressServiceTest extends CommonBaseTest {
     /**
      * Fulltext index only creates on a committed flush on database.
      * For testing purposes we can't use transactions with rollbacks.
      */
     public function setUp() {
-        $kernel = static::createKernel();
-        $kernel->boot();
+        parent::setUp();
+    }
 
-        $this->em = $kernel->getContainer()->get('entity_manager');
-        $this->aService = $kernel->getContainer()->get('tixi_app.addressmanagement');
-        $this->addressRepo = $kernel->getContainer()->get('address_repository');
+    public function testAddressLookup() {
+        $addresses = $this->addressRepo->findAddressesWithoutCoordinates();
+
+        $addressService = $this->addressManagement;
+        $add = null;
+        $count = 0;
+        if (count($addresses)) {
+            /**@var $address Address */
+            foreach ($addresses as $address) {
+                $count++;
+                echo $address->toString() . ": ";
+                $add = $addressService->getAddressInformationByString($address->toString());
+                if ($add !== null) {
+                    echo GeometryService::deserialize($add->lat) . " " . GeometryService::deserialize($add->lng) . "\n";
+                }
+                if ($count == 5) {
+                    break;
+                }
+            }
+            $this->assertNotNull($add);
+            $this->assertNotEmpty($add->lat);
+        }
     }
 
     public function testSearchAddress() {

@@ -15,32 +15,35 @@ use Tixi\App\AppBundle\Interfaces\AddressHandleDTO;
 use Tixi\CoreDomain\Address;
 use Tixi\CoreDomainBundle\Repository\AddressRepositoryDoctrine;
 
-class AddressManagementImpl extends ContainerAware implements AddressManagement{
+class AddressManagementImpl extends ContainerAware implements AddressManagement {
 
     /**
      * Returns Address Object Suggestions from a string input (like google search)
      *
      * @param $addressString
-     * @return AddressHandleDTO
+     * @return AddressHandleDTO[]
      */
-    public function getAddressSuggestionsByString($addressString)
-    {
+    public function getAddressSuggestionsByString($addressString) {
         $serviceTrail = $this->createServiceTrail();
         $addressSuggestions = array();
         /** @var AddressLookupService $service */
-        foreach($serviceTrail as $service) {
-            try{
+        foreach ($serviceTrail as $service) {
+            try {
                 $addressSuggestions = $service->lookup($addressString);
-                if(count($addressSuggestions) !== 0) {
+                if (count($addressSuggestions) !== 0) {
                     break;
                 }
-            }catch (\Exception $e) {
+            } catch (\Exception $e) {
 
             }
         }
         return $addressSuggestions;
     }
 
+    /**
+     * creates serviceTrail according to registered lookup services
+     * @return array
+     */
     protected function createServiceTrail() {
         $lookupServiceFactory = $this->container->get('tixi_app.addresslookupfactory');
         $serviceTrail = array();
@@ -51,18 +54,36 @@ class AddressManagementImpl extends ContainerAware implements AddressManagement{
     }
 
     /**
+     * Will query  AddressString on a lookup service like google and takes first best suggestion given.
+     * Addresstring should be valid for exact queries. Returns Suggestion as an AddressHandleDTO
+     *
+     * @param $addressString
+     * @return AddressHandleDTO
+     */
+    public function getAddressInformationByString($addressString) {
+        //set lookup service, could possibly be another implementation
+        $service = $this->container->get('tixi_app.addresslookupfactory')->get(AddressLookupFactory::$googleServiceId);
+        $addressInformation = null;
+        try {
+            $addressInformation = $service->lookupSingleAddress($addressString);
+        } catch (\Exception $e) {
+
+        }
+        return $addressInformation;
+    }
+
+    /**
      * Handles a new Address object if register new one or get an existing one
      *
      * @param AddressHandleDTO $addressHandleDTO
      * @return mixed|void
      * @throws \Exception
      */
-    public function handleAddress(AddressHandleDTO $addressHandleDTO)
-    {
+    public function handleAddress(AddressHandleDTO $addressHandleDTO) {
         /** @var AddressRepositoryDoctrine $addressRepository */
         $addressRepository = $this->container->get('address_repository');
         $address = null;
-        if(null === $addressHandleDTO->id) {
+        if (null === $addressHandleDTO->id) {
             //create new address
             $address = Address::registerAddress(
                 $addressHandleDTO->street,
@@ -75,13 +96,13 @@ class AddressManagementImpl extends ContainerAware implements AddressManagement{
                 $addressHandleDTO->source
             );
             $addressRepository->store($address);
-        }else {
+        } else {
             /** @var Address $address */
             $address = $addressRepository->find($addressHandleDTO->id);
-            if(null === $address) {
+            if (null === $address) {
                 throw new \Exception('The address with id ' . $addressHandleDTO->id . ' does not exist');
             }
-            if($addressHandleDTO->source===Address::SOURCE_MANUAL) {
+            if ($addressHandleDTO->source === Address::SOURCE_MANUAL) {
                 $address->updateAddressData(
                     $addressHandleDTO->street,
                     $addressHandleDTO->postalCode,
@@ -96,4 +117,5 @@ class AddressManagementImpl extends ContainerAware implements AddressManagement{
         }
         return $address;
     }
+
 }

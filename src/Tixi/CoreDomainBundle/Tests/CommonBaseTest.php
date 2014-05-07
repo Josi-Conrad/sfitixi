@@ -10,6 +10,7 @@ namespace Tixi\CoreDomainBundle\Tests;
 
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Tixi\App\Address\AddressManagement;
 use Tixi\App\AppBundle\Routing\RoutingMachineOSRM;
 use Tixi\App\Routing\RouteManagement;
 use Tixi\App\ZonePlan\ZonePlanManagement;
@@ -147,6 +148,11 @@ class CommonBaseTest extends WebTestCase {
      */
     protected $routeManagement;
 
+    /**
+     * @var AddressManagement
+     */
+    protected $addressManagement;
+
     public function setUp() {
         $kernel = static::createKernel();
         $kernel->boot();
@@ -194,6 +200,7 @@ class CommonBaseTest extends WebTestCase {
 
         $this->routingMachine = $kernel->getContainer()->get('tixi_app.routingmachine');
         $this->routeManagement = $kernel->getContainer()->get('tixi_app.routemanagement');
+        $this->addressManagement = $kernel->getContainer()->get('tixi_app.addressmanagement');
 
         $this->em->beginTransaction();
     }

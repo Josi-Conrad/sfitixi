@@ -21,4 +21,8 @@ interface AddressRepository extends CommonBaseRepository{
      */
     public function remove(Address $address);
 
+    /**
+     * @return Address[]
+     */
+    public function findAddressesWithoutCoordinates();
 }

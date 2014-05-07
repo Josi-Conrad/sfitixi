@@ -33,6 +33,8 @@ class RunOSRMTestCommand extends ContainerAwareCommand {
      * @return int|null|void
      */
     public function execute(InputInterface $input, OutputInterface $output) {
+        $n = $input->getArgument('n');
+
         $routingMachine = $this->getContainer()->get('tixi_app.routingmachine');
 
         $address1 = Address::registerAddress('Rathausstrasse 1', '6340',
@@ -41,7 +43,6 @@ class RunOSRMTestCommand extends ContainerAwareCommand {
             'Arth', 'Schweiz', 'CSS', 47.049536, 8.547931);
 
         $routes = array();
-        $n = $input->getArgument('n');
 
         for ($i = 0; $i < $n; $i++) {
             array_push($routes, Route::registerRoute($address1, $address2));

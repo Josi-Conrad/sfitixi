@@ -111,4 +111,15 @@ class AddressManagementImplDoctrine extends Controller implements AddressManagem
 
         return $searchString;
     }
+
+    /**
+     * Will query  AddressString on a lookup service like google and takes first best suggestion given.
+     * Addresstring should be valid for exact queries. Returns Suggestion as an AddressHandleDTO
+     *
+     * @param $addressString
+     * @return AddressHandleDTO
+     */
+    public function getAddressInformationByString($addressString) {
+        return null;
+    }
 }

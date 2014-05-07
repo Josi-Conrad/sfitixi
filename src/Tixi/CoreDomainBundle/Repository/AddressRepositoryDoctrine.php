@@ -25,4 +25,13 @@ class AddressRepositoryDoctrine extends CommonBaseRepositoryDoctrine implements 
     public function remove(Address $address) {
         $this->getEntityManager()->remove($address);
     }
+
+    /**
+     * @return Address[]
+     */
+    public function findAddressesWithoutCoordinates() {
+        $qb = parent::createQueryBuilder('a');
+        $qb->where('a.lat = 0');
+        return $qb->getQuery()->getResult();
+    }
 }
