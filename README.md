@@ -75,7 +75,3 @@ Password:   pass
 #### ROLE_DISPO
 User:       dispo
 Password:   pass
-
-#### ROLE_USER
-User:       user
-Password:   pass
