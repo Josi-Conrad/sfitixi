@@ -8,6 +8,7 @@
 
 namespace Tixi\ApiBundle\Interfaces\Dispo;
 
+use Tixi\ApiBundle\Helper\WeekdayService;
 use Tixi\CoreDomain\Dispo\ShiftRepository;
 use Tixi\CoreDomain\Dispo\WorkingDayRepository;
 use Tixi\CoreDomain\Dispo\WorkingMonth;
@@ -18,20 +19,6 @@ use Tixi\CoreDomain\Dispo\WorkingMonthRepository;
  * @package Tixi\ApiBundle\Interfaces
  */
 class WorkingMonthAssembler {
-
-    /**
-     * @var array
-     * ISO-8601 numeric representation of the day of the week -> php dayname
-     */
-    protected $numericToWeekdayConverter = array(
-        1 => 'monday',
-        2 => 'tuesday',
-        3 => 'wednesday',
-        4 => 'thursday',
-        5 => 'friday',
-        6 => 'saturday',
-        7 => 'sunday'
-    );
 
     /**
      * @param WorkingMonth $workingMonth
@@ -60,7 +47,7 @@ class WorkingMonthAssembler {
             $workingDayDTO->workingDayDate = $workingDay->getDate();
             $workingDayDTO->workingDayDateString = $workingDay->getDate()->format('d.m.Y');
             $workingDayDTO->workingDayWeekDayString =
-                $this->numericToWeekdayConverter[$workingDay->getDate()->format('N')] . '.name';
+                WeekdayService::$numericToWeekdayConverter[$workingDay->getDate()->format('N')] . '.name';
 
             /**@var $shift \Tixi\CoreDomain\Dispo\Shift */
             foreach ($workingDay->getShifts() as $shift) {

@@ -14,6 +14,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Validator\Constraints\Regex;
 use Tixi\ApiBundle\Interfaces\Dispo\WorkingShiftDTO;
 
 /**
@@ -29,7 +30,11 @@ class WorkingShiftType extends AbstractType {
 
         $builder->add('workingShiftAmountOfDrivers', 'integer', array(
             'label' => false,
+            'required' => true,
             'pattern' => '\d+',
+            'constraints' => array(
+                new Regex(array('message' => 'form.field.title.digit', 'pattern' => '/\d+/')),
+            ),
         ));
 
     }

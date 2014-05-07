@@ -99,7 +99,7 @@ abstract class RepeatedDrivingAssertion implements DrivingAssertionInterface {
     }
 
     /**
-     * @return mixed
+     * @return ShiftType[]
      */
     public function getShiftTypes()
     {

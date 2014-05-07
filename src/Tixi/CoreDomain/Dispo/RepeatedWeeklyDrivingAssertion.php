@@ -16,7 +16,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\Table(name="weekly")
  */
-class RepeatedWeeklyDrivingAssertion extends RepeatedDrivingAssertion{
+class RepeatedWeeklyDrivingAssertion extends RepeatedDrivingAssertion {
     /**
      * @ORM\Column(type="integer")
      */
@@ -26,24 +26,49 @@ class RepeatedWeeklyDrivingAssertion extends RepeatedDrivingAssertion{
      * @param Shift $shift
      * @return mixed|void
      */
-    public function matching(Shift $shift)
-    {
-        // TODO: Implement matching() method.
+    public function matching(Shift $shift) {
+        $startDate = $this->getAssertionPlan()->getAnchorDate();
+        $endDate = $this->getAssertionPlan()->getEndingDate();
+        /**@var $shiftDate \DateTime */
+        $shiftDate = $shift->getDate();
+
+        $wd = $shiftDate->format('N');
+
+        if ($shiftDate >= $startDate && $shiftDate <= $endDate) {
+            if ($wd == $this->getWeekday()) {
+                if ($this->matchShiftType($shift->getShiftType())) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+
+    /**
+     * @param ShiftType $match
+     * @return bool
+     */
+    protected function matchShiftType(ShiftType $match) {
+        foreach ($this->getShiftTypes() as $shiftType) {
+            if ($shiftType->getId() == $match->getId()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
      * @param mixed $weekday
      */
-    public function setWeekday($weekday)
-    {
+    public function setWeekday($weekday) {
         $this->weekday = $weekday;
     }
 
     /**
-     * @return mixed
+     * @return integer
      */
-    public function getWeekday()
-    {
+    public function getWeekday() {
         return $this->weekday;
     }
 

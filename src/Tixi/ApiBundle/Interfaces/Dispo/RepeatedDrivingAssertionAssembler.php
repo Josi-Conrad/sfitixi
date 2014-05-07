@@ -11,6 +11,7 @@ namespace Tixi\ApiBundle\Interfaces\Dispo;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Tixi\ApiBundle\Helper\DateTimeService;
+use Tixi\ApiBundle\Helper\WeekdayService;
 use Tixi\CoreDomain\Dispo\RepeatedDrivingAssertionPlan;
 use Tixi\CoreDomain\Dispo\RepeatedMonthlyDrivingAssertion;
 use Tixi\CoreDomain\Dispo\RepeatedWeeklyDrivingAssertion;
@@ -23,34 +24,6 @@ class RepeatedDrivingAssertionAssembler {
 
     //injected by service container via setter method
     private $dateTimeService;
-
-    /**
-     * @var array
-     * php dayname -> ISO-8601 numeric representation of the day of the week
-     */
-    protected $weekdayToNumericConverter = array(
-        'monday'=>1,
-        'tuesday'=>2,
-        'wednesday'=>3,
-        'thursday'=>4,
-        'friday'=>5,
-        'saturday'=>6,
-        'sunday'=>7,
-    );
-
-    /**
-     * @var array
-     * ISO-8601 numeric representation of the day of the week -> php dayname
-     */
-    protected $numericToWeekdayConverter = array(
-        1=>'monday',
-        2=>'tuesday',
-        3=>'wednesday',
-        4=>'thursday',
-        5=>'friday',
-        6=>'saturday',
-        7=>'sunday'
-    );
 
     /**
      * @param RepeatedDrivingAssertionRegisterDTO $dto
@@ -105,7 +78,7 @@ class RepeatedDrivingAssertionAssembler {
         foreach($dto->getWeeklyShiftSelections() as $shiftSelectionDTO) {
             $weekday = $this->explodeWeeklySelectionId($shiftSelectionDTO->getSelectionId());
             $weeklyDrivingAssertion = new RepeatedWeeklyDrivingAssertion();
-            $weeklyDrivingAssertion->setWeekday($this->weekdayToNumericConverter[$weekday]);
+            $weeklyDrivingAssertion->setWeekday(WeekdayService::$weekdayToNumericConverter[$weekday]);
             $weeklyDrivingAssertion->setShiftTypes($shiftSelectionDTO->getShiftSelection());
             $weeklyDrivingAssertions->add($weeklyDrivingAssertion);
         }
@@ -127,11 +100,11 @@ class RepeatedDrivingAssertionAssembler {
         if($assertionDTO->frequency === 'weekly') {
             /** @var RepeatedWeeklyDrivingAssertion $weeklyAssertion */
             foreach($assertionPlan->getRepeatedDrivingAssertions() as $weeklyAssertion) {
-                $assertionDTO->weeklyDaysSelector[] = $this->numericToWeekdayConverter[$weeklyAssertion->getWeekday()];
+                $assertionDTO->weeklyDaysSelector[] = WeekdayService::$numericToWeekdayConverter[$weeklyAssertion->getWeekday()];
                 $assertionDTO->weeklyShiftSelections->add(
                     $this->createShiftSelectionDTO(
                         'day',
-                        $this->numericToWeekdayConverter[$weeklyAssertion->getWeekday()],
+                        WeekdayService::$numericToWeekdayConverter[$weeklyAssertion->getWeekday()],
                         $weeklyAssertion->getShiftTypes()->toArray()
                     )
                 );

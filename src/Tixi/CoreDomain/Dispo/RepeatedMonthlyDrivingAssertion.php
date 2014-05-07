@@ -33,12 +33,32 @@ class RepeatedMonthlyDrivingAssertion extends RepeatedDrivingAssertion {
     public function matching(Shift $shift) {
         $startDate = $this->getAssertionPlan()->getAnchorDate();
         $endDate = $this->getAssertionPlan()->getEndingDate();
+        /**@var $shiftDate \DateTime */
         $shiftDate = $shift->getDate();
-        if ($shiftDate >= $startDate && $shiftDate <= $endDate) {
-            //TODO check weekdays and shiftTypes
-            return true;
-        }
+        $checkDate = clone $shiftDate;
+        $checkDate->modify($this->getRelativeWeekAsText() . ' ' . $this->getWeekdayAsText() . ' of this month');
 
+        if ($shiftDate >= $startDate && $shiftDate <= $endDate) {
+            if ($shiftDate->format('Ymd') === $checkDate->format('Ymd')) {
+                if ($this->matchShiftType($shift->getShiftType())) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @param ShiftType $match
+     * @return bool
+     */
+    protected function matchShiftType(ShiftType $match) {
+        foreach ($this->getShiftTypes() as $shiftType) {
+            if ($shiftType->getId() == $match->getId()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

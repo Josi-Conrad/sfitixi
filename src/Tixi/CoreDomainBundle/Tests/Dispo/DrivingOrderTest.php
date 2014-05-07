@@ -59,10 +59,6 @@ class DrivingOrderTest extends CommonBaseTest {
         $this->assertNotNull($this->drivingOrderRepo->find($drivingOrder->getId()));
 
         //TimePeriod from start day of month to next start day of month
-        //(amount of days = amount of days in this month)
-        $start = new \DateTime('now');
-        $start->modify('first day of next month');
-
         $monthsAgo = 3;
         $monthDate = new \DateTime('today');
         $monthDate->modify('+' . $monthsAgo . ' month');
@@ -98,16 +94,22 @@ class DrivingOrderTest extends CommonBaseTest {
         $drivingAssertionPlans = $this->repeatedDrivingAssertionPlanRepo->findPlanForDate(new \DateTime());
         $this->assertNotNull($drivingAssertionPlans);
 
-        foreach($drivingAssertionPlans as $drivingAssertionPlan){
-            echo $drivingAssertionPlan->getDriver()->getNameString() . "\n";
+        foreach ($drivingAssertionPlans as $drivingAssertionPlan) {
             $assertions = $drivingAssertionPlan->getRepeatedDrivingAssertions();
-            foreach($assertions as $assertion){
-                $shift->getWorkingDay()->getDate();
-                $assertion->matching($shift);
+            foreach ($assertions as $assertion) {
+                if($assertion->matching($shift)){
+                    echo "\nmatches\n";
+                }
             }
         }
     }
 
+    public function testDateFunctions() {
+        $date = new \DateTime('first monday of this month');
+        if ($date->format('w') == 1) {
+            echo $date->format('w') . " weekday " . $date->format('d.m');
+        }
+    }
 
     public function tearDown() {
         parent::tearDown();
