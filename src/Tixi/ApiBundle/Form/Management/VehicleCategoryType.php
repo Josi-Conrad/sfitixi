@@ -27,22 +27,21 @@ class VehicleCategoryType extends CommonAbstractType{
     public function buildForm(FormBuilderInterface $builder, array $options) {
         $builder->add('id', 'hidden');
         $builder->add('name', 'text', array(
-            'label' => 'vehicle.field.name',
+            'label' => 'vehiclecategory.field.name',
             'attr' => array('title' => 'form.field.title.not_blank'),
             'constraints' => array(
                 new NotBlank(array('message' => 'vehicle.name.not_blank'))
             ),
         ));
         $builder->add('amountOfSeats', 'integer', array(
-            'label' => 'vehicle.field.category.amountofseats',
+            'label' => 'vehiclecategory.field.amountofseats',
             'attr'=>array('title' => 'form.field.title.digit'),
             'constraints' => array(
                 new Regex(array('message'=>'form.field.title.digit','pattern'=>'/\d+/'))
             ),
         ));
         $builder->add('amountOfWheelChairs', 'integer', array(
-            'required' => false,
-            'label' => 'vehicle.field.category.amountofwheelchairs',
+            'label' => 'vehiclecategory.field.amountofwheelchairs',
             'attr'=>array('title' => 'form.field.title.digit'),
             'constraints' => array(
                 new Regex(array('message'=>'form.field.title.digit','pattern'=>'/\d+/'))

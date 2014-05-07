@@ -22,8 +22,8 @@ class VehicleRegisterFormViewTile extends AbstractFormViewTile{
     {
         $this->basicFormRows[] = new FormRowView('name','vehicle.field.name',$this->dto->name);
         $this->basicFormRows[] = new FormRowView('category','vehicle.field.category',$this->dto->category->getName());
-        $this->basicFormRows[] = new FormRowView('amountofseats','vehicle.field.category.amountofseats',$this->dto->category->getAmountOfSeats());
-        $this->basicFormRows[] = new FormRowView('amountofwheelchairs','vehicle.field.category.amountofwheelchairs',$this->dto->category->getAmountOfWheelChairs());
+        $this->basicFormRows[] = new FormRowView('amountofseats','vehiclecategory.field.amountofseats',$this->dto->category->getAmountOfSeats());
+        $this->basicFormRows[] = new FormRowView('amountofwheelchairs','vehiclecategory.field.amountofwheelchairs',$this->dto->category->getAmountOfWheelChairs());
         if(!empty($this->dto->depot)){
             $this->basicFormRows[] = new FormRowView('depot','vehicle.field.depot',$this->dto->depot->getNameString());
         }

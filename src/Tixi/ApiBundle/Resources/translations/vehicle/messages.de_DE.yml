@@ -13,8 +13,6 @@ vehicle.field.licencenumber: Kennzeichen
 vehicle.field.dateoffirstregistration: Inverkehrssetzung
 vehicle.field.parking: Parkplatz
 vehicle.field.category: Fahrzeugkategorie
-vehicle.field.category.amountofseats: Anzahl Sitzplätze
-vehicle.field.category.amountofwheelchairs: Anzahl Rollstühle
 vehicle.field.memo: Notizen
 vehicle.field.managementdetails: Verwaltungsdetails
 vehicle.field.depot: Depot
@@ -59,6 +57,8 @@ vehiclecategory.button.new: Neue Fahrzeugkategorie
 vehiclecategory.button.delete: Fahrzeugkategorie löschen
 
 vehiclecategory.field.name: Kategoriebezeichnung
+vehiclecategory.field.amountofseats: Anzahl Sitzplätze
+vehiclecategory.field.amountofwheelchairs: Anzahl Rollstühle
 vehiclecategory.name.not_blank: Bitte einen Namen definieren
 
 #Management_VehicleDepot
