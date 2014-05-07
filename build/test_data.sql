@@ -9,11 +9,11 @@ Test Data Import
 /*
 insert_users_roles
 */
-INSERT INTO `role` VALUES (1,'user.role.user','ROLE_USER'),(2,'user.role.dispo','ROLE_DISPO'),(3,'user.role.manager','ROLE_MANAGER'),(4,'user.role.admin','ROLE_ADMIN');
+INSERT INTO `role` VALUES (2,'user.role.dispo','ROLE_DISPO'),(3,'user.role.manager','ROLE_MANAGER'),(4,'user.role.admin','ROLE_ADMIN');
 
-INSERT INTO `user` VALUES (1,1,'admin','rschelbe@hsr.ch','$2y$12$d1lUQkXSUK/6YKJz59Kkbep1egTCJfyCLu7oIrspFBlhcxkXMPgGa',0,'0000-00-00 00:00:00','0000-00-00 00:00:00'),(2,1,'manager','manager@tixi.ch','$2y$12$yRvd9NQEtkBKMXFkG68wleAFVppdJvtk24601QysAB/WqObfhxrVu',0,'0000-00-00 00:00:00','0000-00-00 00:00:00'),(3,1,'dispo','test@tixi.ch','$2y$12$uythl5SYahaKi9v06WJPpOHosK/pNHTja0/q4iVtVoDpa29vJ9Bl2',0,'0000-00-00 00:00:00','0000-00-00 00:00:00'),(4,1,'user','test@tixi.ch','$2y$12$uythl5SYahaKi9v06WJPpOHosK/pNHTja0/q4iVtVoDpa29vJ9Bl2',0,'0000-00-00 00:00:00','0000-00-00 00:00:00');
+INSERT INTO `user` VALUES (1,1,'admin','rschelbe@hsr.ch','$2y$12$d1lUQkXSUK/6YKJz59Kkbep1egTCJfyCLu7oIrspFBlhcxkXMPgGa',0,'0000-00-00 00:00:00','0000-00-00 00:00:00'),(2,1,'manager','manager@tixi.ch','$2y$12$yRvd9NQEtkBKMXFkG68wleAFVppdJvtk24601QysAB/WqObfhxrVu',0,'0000-00-00 00:00:00','0000-00-00 00:00:00'),(3,1,'dispo','test@tixi.ch','$2y$12$uythl5SYahaKi9v06WJPpOHosK/pNHTja0/q4iVtVoDpa29vJ9Bl2',0,'0000-00-00 00:00:00','0000-00-00 00:00:00');
 
-INSERT INTO `user_to_role` VALUES (1,1),(1,2),(1,3),(1,4),(2,1),(2,2),(2,3),(3,1),(3,2),(4,1);
+INSERT INTO `user_to_role` VALUES (1,2),(1,3),(1,4),(2,2),(2,3),(3,2);
 
 /*
 insert_categories_management

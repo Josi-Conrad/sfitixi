@@ -19,12 +19,12 @@ class UserTest extends CommonBaseTest {
     }
 
     public function testUserCRUD() {
-        $role_user = $this->createRole('Benutzer', 'ROLE_USER');
+        $role_dispo = $this->createRole('Dispo', 'ROLE_DISPO');
         $role_manager = $this->createRole('Manager', 'ROLE_MANAGER');
         $role_admin = $this->createRole('Admin', 'ROLE_ADMIN');
-        $user1 = $this->createUser('admin', 'pass', array($role_user, $role_manager, $role_admin));
-        $user2 = $this->createUser('manager', 'pass', array($role_user, $role_manager));
-        $user3 = $this->createUser('user', 'pass', array($role_user));
+        $user1 = $this->createUser('admin', 'pass', array($role_dispo, $role_manager, $role_admin));
+        $user2 = $this->createUser('manager', 'pass', array($role_dispo, $role_manager));
+        $user3 = $this->createUser('user', 'pass', array($role_dispo));
         $this->em->flush();
         $user_find = $this->userRepo->find($user1->getId());
         $this->assertEquals($user1, $user_find);
