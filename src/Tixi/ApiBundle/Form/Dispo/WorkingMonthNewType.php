@@ -26,15 +26,17 @@ class WorkingMonthNewType extends CommonAbstractType {
      */
     public function buildForm(FormBuilderInterface $builder, array $options) {
 
+        $yearRange = range(date('Y'), date('Y') + 5);
         $builder->add('workingMonthDateYear', 'choice', array(
                 'label' => 'workingmonth.field.year',
-                'choices' => range(date('Y'), date('Y') + 10)
+                'choices' => array_combine($yearRange, $yearRange),
             )
         );
 
+        $months = array('01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12');
         $builder->add('workingMonthDateMonth', 'choice', array(
                 'label' => 'workingmonth.field.month',
-                'choices' => array('01','02','03','04','05','06','07','08','09','10','11','12'),
+                'choices' => array_combine($months, $months),
             )
         );
 

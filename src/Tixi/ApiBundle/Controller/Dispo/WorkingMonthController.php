@@ -23,6 +23,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Tixi\ApiBundle\Interfaces\Dispo\WorkingMonthAssembler;
 use Tixi\ApiBundle\Interfaces\Dispo\WorkingMonthDTO;
+use Tixi\ApiBundle\Interfaces\Dispo\WorkingMonthNewDTO;
 use Tixi\ApiBundle\Menu\MenuService;
 use Tixi\ApiBundle\Tile\Core\FormTile;
 use Tixi\ApiBundle\Tile\Core\RootPanel;
@@ -140,10 +141,11 @@ class WorkingMonthController extends Controller {
 
         $form->handleRequest($request);
         if ($form->isValid()) {
+            /**@var $workingMonthNewDTO WorkingMonthNewDTO */
             $workingMonthNewDTO = $form->getData();
-            $workingMonth = $this->createWorkingMonthFromDate(
-                '2014-07',
-                $workingMonthNewDTO->workingMonthMemo);
+            $yearMonth = $workingMonthNewDTO->workingMonthDateYear . '-' . $workingMonthNewDTO->workingMonthDateMonth;
+            $workingMonth = $this->createWorkingMonthFromDateString(
+                $yearMonth, $workingMonthNewDTO->workingMonthMemo);
             return $this->redirect($this->generateUrl('tixiapi_dispo_workingmonth_edit', array('workingMonthId' => $workingMonth->getId())));
         }
         $rootPanel = new RootPanel($this->menuId, 'workingmonth.panel.new');
@@ -153,12 +155,12 @@ class WorkingMonthController extends Controller {
     }
 
     /**
-     * @param $year_month
+     * @param $yearMonth
      * @param $memo
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      * @return mixed|null|\Tixi\CoreDomain\Dispo\WorkingMonth
      */
-    private function createWorkingMonthFromDate($year_month, $memo) {
+    private function createWorkingMonthFromDateString($yearMonth, $memo) {
         $workingMonthRepository = $this->get('workingmonth_repository');
         $workingDayRepository = $this->get('workingday_repository');
         $shiftRepository = $this->get('shift_repository');
@@ -167,15 +169,15 @@ class WorkingMonthController extends Controller {
         $workingMonth = null;
 
         try {
-            $dateMonth = new \DateTime($year_month);
+            $dateMonth = new \DateTime($yearMonth);
         } catch (\Exception $e) {
-            throw $this->createNotFoundException('Problems with date:  ' . $year_month . '.
+            throw $this->createNotFoundException('Problems with date:  ' . $yearMonth . '.
             Message:' . $e->getMessage());
         }
         try {
             $workingMonth = $workingMonthRepository->findWorkingMonthByDate($dateMonth);
         } catch (\Exception $e) {
-            throw $this->createNotFoundException('Problems to find/create workingMonth with date:  ' . $year_month . '.
+            throw $this->createNotFoundException('Problems to find/create workingMonth with date:  ' . $yearMonth . '.
             Message:' . $e->getMessage());
         }
 
