@@ -81,10 +81,14 @@ class RoutingMachineOSRM extends ContainerAware implements RoutingMachine {
             }
             array_push($routings, new RoutingClassOSRM($route));
         }
-        echo 'Creating RoutingClasses done' . "\n";
+        $s = microtime(true);
         $this->fillNearestPoints($routings);
-        echo 'Fill NearestPoints done' . "\n";
+        $e = microtime(true);
+        echo "filled nearest points in: " . ($e-$s) . "s\n";
+        $s = microtime(true);
         $this->setRoutingInformations($routings);
+        $e = microtime(true);
+        echo "filled routings in: " . ($e-$s) . "s\n";
     }
 
     /**
@@ -252,16 +256,19 @@ class RoutingMachineOSRM extends ContainerAware implements RoutingMachine {
      */
     private function createCurlRequest($requestUrl) {
         $curl = curl_init();
-        curl_setopt($curl, CURLOPT_POST, 0);
-        curl_setopt($curl, CURLOPT_TIMEOUT, 30);
-        curl_setopt($curl, CURLOPT_HEADER, 0);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($curl, CURLOPT_DNS_USE_GLOBAL_CACHE, 1);
-        curl_setopt($curl, CURLOPT_DNS_CACHE_TIMEOUT, 3600);
-        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
-        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
-        curl_setopt($curl, CURLOPT_FOLLOWLOCATION, 0);
-        curl_setopt($curl, CURLOPT_URL, $requestUrl);
+        $options = array(
+            CURLOPT_URL => $requestUrl,
+            CURLOPT_POST => 0,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_HEADER => 0,
+            CURLOPT_RETURNTRANSFER => 1,
+            CURLOPT_DNS_USE_GLOBAL_CACHE => 1,
+            CURLOPT_DNS_CACHE_TIMEOUT => 3600,
+            CURLOPT_SSL_VERIFYPEER => 0,
+            CURLOPT_SSL_VERIFYHOST => 0,
+            CURLOPT_FOLLOWLOCATION => 0,
+        );
+        curl_setopt_array($curl, $options);
         return $curl;
     }
 
@@ -270,11 +277,14 @@ class RoutingMachineOSRM extends ContainerAware implements RoutingMachine {
      */
     private function checkConnectivity() {
         $curl = curl_init($this->osrm_server);
-        curl_setopt($curl, CURLOPT_POST, 0);
-        curl_setopt($curl, CURLOPT_TIMEOUT, 30);
-        curl_setopt($curl, CURLOPT_HEADER, 1);
-        curl_setopt($curl, CURLOPT_NOBODY, 1);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        $options = array(
+            CURLOPT_POST => 0,
+            CURLOPT_TIMEOUT => 5,
+            CURLOPT_HEADER => 1,
+            CURLOPT_NOBODY => 1,
+            CURLOPT_RETURNTRANSFER => 1
+        );
+        curl_setopt_array($curl, $options);
         $response = curl_exec($curl);
         curl_close($curl);
         if ($response) return true;
@@ -290,7 +300,8 @@ class RoutingMachineOSRM extends ContainerAware implements RoutingMachine {
     private function runMultiCurlsBlockWise($indicator, $curlHandles) {
         //here comes the tricky part, we run curl_multi only on a BLOCKSIZE so we don't generate a flood
         $curlMultiHandle = curl_multi_init();
-
+        curl_multi_setopt($curlMultiHandle, CURLMOPT_PIPELINING, 1);
+        curl_multi_setopt($curlMultiHandle, CURLMOPT_MAXCONNECTS, self::BLOCK_SIZE);
         $responses = array();
 
         $blockCount = 0; // count where we are in the list so we can break up the runs into smaller blocks

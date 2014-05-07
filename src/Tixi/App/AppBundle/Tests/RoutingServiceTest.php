@@ -32,21 +32,21 @@ class RoutingServiceTest extends CommonBaseTest {
         $address2 = $this->createTestAddressGoldau();
 
 //        for ($i = 0; $i < 10; $i++) {
-            /**@var $route \Tixi\CoreDomain\Dispo\Route */
-            $route = $this->routeManagement->getRouteFromAddresses($address1, $address2);
+        /**@var $route \Tixi\CoreDomain\Dispo\Route */
+        $route = $this->routeManagement->getRouteFromAddresses($address1, $address2);
 //        }
         $this->assertNotEmpty($route->getDuration());
     }
 
     public function testGetMultipleRouteInformations() {
+        $s = microtime(true);
         $address1 = $this->createTestAddressBaar();
         $address2 = $this->createTestAddressGoldau();
 
         $routes = array();
-        for ($i = 0; $i < 21; $i++) {
+        for ($i = 0; $i < 1000; $i++) {
             array_push($routes, Route::registerRoute($address1, $address2));
         }
-
         $this->routingMachine->fillRoutingInformationsForMultipleRoutes($routes);
 
         /**@var $route Route */
@@ -54,6 +54,8 @@ class RoutingServiceTest extends CommonBaseTest {
             $this->assertNotEmpty($route->getDuration());
         }
 
+        $e = microtime(true);
+        echo "test executed in: " . ($e - $s) . "s\n";
     }
 
     public function testGetRouteJSON() {
