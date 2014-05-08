@@ -9,6 +9,7 @@
 namespace Tixi\CoreDomainBundle\Tests\Entity;
 
 use Symfony\Component\Validator\Constraints\DateTime;
+use Tixi\App\AppBundle\Address\GeometryService;
 use Tixi\CoreDomain\Dispo\DrivingOrder;
 use Tixi\CoreDomain\Dispo\DrivingPool;
 use Tixi\CoreDomain\Dispo\Route;
@@ -23,6 +24,7 @@ use Tixi\CoreDomain\Driver;
 use Tixi\CoreDomain\DriverCategory;
 use Tixi\CoreDomain\Passenger;
 use Tixi\CoreDomain\Person;
+use Tixi\CoreDomain\Vehicle;
 use Tixi\CoreDomainBundle\Tests\CommonBaseTest;
 
 /**
@@ -76,30 +78,61 @@ class DrivingOrderTest extends CommonBaseTest {
         $shiftTypes = $this->shiftTypeRepo->findAllNotDeleted();
 
         //create workingDays shifts, assign them drivingpools, get amount of needed drivers
+        $start = microtime(true);
         /** @var $workingDay WorkingDay */
         foreach ($workingDays as $workingDay) {
             /** @var $shiftType ShiftType */
             foreach ($shiftTypes as $shiftType) {
                 $shift = Shift::registerShift($workingDay, $shiftType);
-                $shift->setAmountOfDrivers(18);
+                $shift->setAmountOfDrivers(16);
                 $workingDay->assignShift($shift);
+                for ($i = 1; $i <= $shift->getAmountOfDrivers(); $i++) {
+                    $drivingPool = DrivingPool::registerDrivingPool($shift);
+                    $shift->assignDrivingPool($drivingPool);
+                    $this->drivingPoolRepo->store($drivingPool);
+                }
                 $this->shiftRepo->store($shift);
             }
             $this->workingDayRepo->store($workingDay);
         }
-
         $this->em->flush();
+        $end = microtime(true);
+        echo "Time store/flush all drivingPools: " . ($end - $start) . "s\n";
+
+
         $this->assertNotNull($this->workingMonthRepo->find($workingMonth->getId()));
 
         $drivingAssertionPlans = $this->repeatedDrivingAssertionPlanRepo->findPlanForDate(new \DateTime());
         $this->assertNotNull($drivingAssertionPlans);
 
+        $start = microtime(true);
+        $drivingPools = array();
+        foreach ($workingMonth->getWorkingDays() as $wd) {
+            foreach ($wd->getShifts() as $s) {
+                foreach ($s->getDrivingPools() as $dp) {
+                    array_push($drivingPools, $dp);
+                }
+            }
+        }
+        $end = microtime(true);
+        echo "Time get all drivingPools: " . ($end - $start) . "s\n";
+
+
         foreach ($drivingAssertionPlans as $drivingAssertionPlan) {
             $assertions = $drivingAssertionPlan->getRepeatedDrivingAssertions();
             foreach ($assertions as $assertion) {
-                if($assertion->matching($shift)){
+                if ($assertion->matching($shift)) {
                     echo "\nmatches\n";
+                    $drivingPool = DrivingPool::registerDrivingPool($shift);
+                    $this->drivingPoolRepo->store($drivingPool);
                 }
+            }
+        }
+
+        $vehicles = $this->vehicleRepo->findAll();
+        /**@var $vehicle Vehicle */
+        foreach ($vehicles as $vehicle) {
+            foreach ($vehicle->getServicePlans() as $sp) {
             }
         }
     }
@@ -109,6 +142,10 @@ class DrivingOrderTest extends CommonBaseTest {
         if ($date->format('w') == 1) {
             echo $date->format('w') . " weekday " . $date->format('d.m');
         }
+        $f = GeometryService::serialize(47.096560);
+        $i = GeometryService::deserialize($f);
+        echo "\n" . $f;
+        echo "\n" . $i;
     }
 
     public function tearDown() {

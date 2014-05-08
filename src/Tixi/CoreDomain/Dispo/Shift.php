@@ -26,6 +26,7 @@ class Shift {
      */
     protected $id;
     /**
+     * @var $shiftType ShiftType
      * @ORM\ManyToOne(targetEntity="ShiftType")
      * @ORM\JoinColumn(name="shift_type_id", referencedColumnName="id")
      */
@@ -89,7 +90,7 @@ class Shift {
     }
 
     /**
-     * @return ArrayCollection
+     * @return DrivingPool[]
      */
     public function getDrivingPools() {
         return $this->drivingPools;
@@ -124,10 +125,26 @@ class Shift {
     }
 
     /**
-     * @return mixed
+     * @return \DateTime
      */
     public function getDate() {
         return $this->workingDay->getDate();
+    }
+
+    /**
+     * returns startDate (workday) with Time (shiftType)
+     */
+    public function getStart() {
+        $returnDate = clone $this->workingDay->getDate();
+        return $returnDate->setTime($this->getShiftType()->getStart()->format('H'), $this->getShiftType()->getStart()->format('i'));
+    }
+
+    /**
+     * returns endDate (workDay) with Time (shiftType)
+     */
+    public function getEnd() {
+        $returnDate = clone $this->workingDay->getDate();
+        return $returnDate->setTimestamp($this->getShiftType()->getEnd()->getTimestamp());
     }
 
     /**

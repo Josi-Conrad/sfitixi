@@ -121,7 +121,7 @@ class WorkingMonth extends CommonBaseEntity{
     }
 
     /**
-     * @return ArrayCollection
+     * @return WorkingDay[]
      */
     public function getWorkingDays() {
         return $this->workingDays;

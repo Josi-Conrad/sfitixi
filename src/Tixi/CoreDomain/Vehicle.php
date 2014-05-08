@@ -10,6 +10,7 @@ namespace Tixi\CoreDomain;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Tixi\CoreDomain\Dispo\Shift;
 use Tixi\CoreDomain\Shared\CommonBaseEntity;
 
 /**
@@ -159,6 +160,17 @@ class Vehicle extends CommonBaseEntity {
 
     public function inactivate() {
         $this->isActive = false;
+    }
+
+    /**
+     * @param Shift $shift
+     */
+    public function matching(Shift $shift){
+        foreach($this->getServicePlans() as $servicePlan){
+            if($servicePlan->matchDate($shift->getDate())){
+
+            }
+        }
     }
 
     /**
@@ -332,7 +344,7 @@ class Vehicle extends CommonBaseEntity {
     }
 
     /**
-     * @return mixed
+     * @return ServicePlan[]
      */
     public function getServicePlans() {
         return $this->servicePlans;

@@ -75,6 +75,17 @@ class ServicePlan extends CommonBaseEntity {
     }
 
     /**
+     * @param \DateTime $date
+     * @return bool
+     */
+    public function matchDate(\DateTime $date) {
+        if ($this->getStart() <= $date || $this->getEnd() >= $date) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * @param mixed $vehicle
      */
     public function assignVehicle($vehicle) {

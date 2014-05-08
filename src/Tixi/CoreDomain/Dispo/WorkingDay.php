@@ -40,6 +40,10 @@ class WorkingDay {
      */
     protected $date;
     /**
+     * @ORM\Column(type="integer")
+     */
+    protected $status;
+    /**
      * @ORM\Column(type="text", nullable=true)
      */
     protected $comment;
@@ -49,12 +53,15 @@ class WorkingDay {
     }
 
     /**
+     * Create workingDay - use \DateTime('today') to create Date with Time 00:00:00
      * @param \DateTime $date
+     * @param int $status
      * @return WorkingDay
      */
-    public static function registerWorkingDay(\DateTime $date) {
+    public static function registerWorkingDay(\DateTime $date, $status = 0) {
         $workingDay = new WorkingDay();
         $workingDay->setDate($date);
+        $workingDay->setStatus($status);
         return $workingDay;
     }
 
@@ -86,17 +93,32 @@ class WorkingDay {
     }
 
     /**
+     * @param mixed $status
+     */
+    public function setStatus($status) {
+        $this->status = $status;
+    }
+
+    /**
      * @return mixed
+     */
+    public function getStatus() {
+        return $this->status;
+    }
+
+    /**
+     * @return \DateTime
      */
     public function getDate() {
         return $this->date;
     }
 
     /**
-     * @param mixed $date
+     * Set DateTime with Time 00:00:00
+     * @param \DateTime $date
      */
-    public function setDate($date) {
-        $this->date = $date;
+    public function setDate(\DateTime $date) {
+        $this->date = $date->setTime(0, 0);
     }
 
     /**
@@ -107,7 +129,7 @@ class WorkingDay {
     }
 
     /**
-     * @return ArrayCollection
+     * @return Shift[]
      */
     public function getShifts() {
         return $this->shifts;

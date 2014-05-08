@@ -55,13 +55,11 @@ class DrivingPool {
 
     /**
      * @param Shift $shift
-     * @param \Tixi\CoreDomain\Driver $driver
      * @return DrivingPool
      */
-    public static function registerDrivingPool(Shift $shift, Driver $driver) {
+    public static function registerDrivingPool(Shift $shift) {
         $drivingPool = new DrivingPool();
         $drivingPool->assignShift($shift);
-        $drivingPool->assignDriver($driver);
         return $drivingPool;
     }
 
@@ -76,8 +74,15 @@ class DrivingPool {
     /**
      * @return bool
      */
+    public function hasAssociatedVehicle() {
+        return isset($this->vehicle);
+    }
+
+    /**
+     * @return bool
+     */
     public function isCompleted() {
-        return ($this->hasAssociatedDriver() && isset($this->vehicle));
+        return ($this->hasAssociatedDriver() && $this->hasAssociatedVehicle());
     }
 
     /**
