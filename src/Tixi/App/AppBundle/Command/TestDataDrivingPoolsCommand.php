@@ -53,6 +53,10 @@ class TestDataDrivingPoolsCommand extends ContainerAwareCommand {
         $monthDate = new \DateTime('today');
         $monthDate->modify('+' . $month . ' month');
         $monthDate->format('first day of this month');
+        if($workingMonthRepo->findWorkingMonthByDate($monthDate)){
+            $output->writeln("WorkingMonth " . $monthDate->format('m') . " already exists");
+            exit;
+        }
         $workingMonth = WorkingMonth::registerWorkingMonth($monthDate);
         $workingMonth->createWorkingDaysForThisMonth();
         foreach ($workingMonth->getWorkingDays() as $wd) {
