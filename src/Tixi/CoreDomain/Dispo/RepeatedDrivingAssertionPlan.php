@@ -29,7 +29,11 @@ class RepeatedDrivingAssertionPlan extends CommonBaseEntity {
      */
     protected $id;
     /**
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="string", length=50)
+     */
+    protected $subject;
+    /**
+     * @ORM\Column(type="text", nullable=true)
      */
     protected $memo;
     /**
@@ -64,16 +68,18 @@ class RepeatedDrivingAssertionPlan extends CommonBaseEntity {
     }
 
     /**
-     * @param $memo
+     * @param $subject
      * @param \DateTime $anchorDate
      * @param $frequency
      * @param $withHolidays
      * @param \DateTime $endingDate
+     * @param $memo
      * @return RepeatedDrivingAssertionPlan
      */
-    public static function registerRepeatedAssertionPlan($memo, \DateTime $anchorDate, $frequency, $withHolidays, \DateTime $endingDate=null) {
+    public static function registerRepeatedAssertionPlan($subject, \DateTime $anchorDate, $frequency, $withHolidays, \DateTime $endingDate=null, $memo=null) {
         $endingDate = (null!==$endingDate) ? $endingDate : DateTimeService::getMaxDateTime();
         $assertion = new RepeatedDrivingAssertionPlan();
+        $assertion->setSubject($subject);
         $assertion->setMemo($memo);
         $assertion->setAnchorDate($anchorDate);
         $assertion->setEndingDate($endingDate);
@@ -214,4 +220,18 @@ class RepeatedDrivingAssertionPlan extends CommonBaseEntity {
         return $this->withHolidays;
     }
 
-} 
+    /**
+     * @param mixed $subject
+     */
+    public function setSubject($subject) {
+        $this->subject = $subject;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSubject() {
+        return $this->subject;
+    }
+
+}

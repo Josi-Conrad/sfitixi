@@ -21,7 +21,7 @@ class HandicapAssembler {
      * @return Handicap
      */
     public function registerDTOtoNewHandicap(HandicapRegisterDTO $dto) {
-        $handicap = Handicap::registerHandicap($dto->name);
+        $handicap = Handicap::registerHandicap($dto->name, $dto->memo);
         return $handicap;
     }
 
@@ -30,7 +30,7 @@ class HandicapAssembler {
      * @param HandicapRegisterDTO $dto
      */
     public function registerDTOtoHandicap(Handicap $handicap, HandicapRegisterDTO $dto) {
-        $handicap->updateData($dto->name);
+        $handicap->updateData($dto->name, $dto->memo);
     }
 
     /**
@@ -41,6 +41,7 @@ class HandicapAssembler {
         $handicapDTO = new HandicapRegisterDTO();
         $handicapDTO->id = $handicap->getId();
         $handicapDTO->name = $handicap->getName();
+        $handicapDTO->memo = $handicap->getMemo();
         return $handicapDTO;
     }
 

@@ -30,7 +30,8 @@ class ShiftTypeAssembler {
         $shiftType = ShiftType::registerShiftType(
             $shiftTypeDTO->name,
             $shiftTypeDTO->start,
-            $shiftTypeDTO->end);
+            $shiftTypeDTO->end,
+            $shiftTypeDTO->memo);
         return $shiftType;
     }
 
@@ -43,7 +44,8 @@ class ShiftTypeAssembler {
         $shiftType->updateShiftTypeData(
             $shiftTypeDTO->name,
             $shiftTypeDTO->start,
-            $shiftTypeDTO->end);
+            $shiftTypeDTO->end,
+            $shiftTypeDTO->memo);
         return $shiftType;
     }
 
@@ -59,6 +61,7 @@ class ShiftTypeAssembler {
             $this->dateTimeService->convertToLocalDateTime($shiftType->getStart());
         $shiftTypeDTO->end =
             $this->dateTimeService->convertToLocalDateTime($shiftType->getEnd());
+        $shiftTypeDTO->memo = $shiftType->getMemo();
         return $shiftTypeDTO;
     }
 

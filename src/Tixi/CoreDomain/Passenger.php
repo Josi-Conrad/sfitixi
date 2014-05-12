@@ -43,11 +43,6 @@ class Passenger extends Person {
     /**
      * @ORM\Column(type="boolean")
      */
-    protected $isOverweight;
-
-    /**
-     * @ORM\Column(type="boolean")
-     */
     protected $gotMonthlyBilling;
 
     /**
@@ -105,7 +100,6 @@ class Passenger extends Person {
      * @param $title
      * @param bool $isInWheelChair
      * @param bool $gotMonthlyBilling
-     * @param bool $isOverWeight
      * @param null $email
      * @param null $entryDate
      * @param null $birthday
@@ -115,11 +109,10 @@ class Passenger extends Person {
      * @param null $correspondenceAddress
      * @param null $billingAddress
      * @param bool $isBillingAddress
-     * @internal param \Tixi\CoreDomain\Handicap $handicap
      * @return Passenger
      */
     public static function registerPassenger($gender, $firstname, $lastname, $telephone, Address $address, $title = null,
-                                             $isInWheelChair = false, $gotMonthlyBilling = false, $isOverWeight = false,
+                                             $isInWheelChair = false, $gotMonthlyBilling = false,
                                              $email = null, $entryDate = null, $birthday = null,
                                              $extraMinutes = null, $details = null, $notice = null, $correspondenceAddress = null,
                                              $billingAddress = null, $isBillingAddress = true) {
@@ -130,7 +123,6 @@ class Passenger extends Person {
 
         $passenger->setIsInWheelChair($isInWheelChair);
         $passenger->setGotMonthlyBilling($gotMonthlyBilling);
-        $passenger->setIsOverweight($isOverWeight);
         $passenger->setNotice($notice);
 
         return $passenger;
@@ -145,7 +137,6 @@ class Passenger extends Person {
      * @param null $title
      * @param bool|null $isInWheelChair
      * @param bool|null $gotMonthlyBilling
-     * @param bool|null $isOverWeight
      * @param null $email
      * @param null $entryDate
      * @param null $birthday
@@ -158,7 +149,7 @@ class Passenger extends Person {
      */
     public function updatePassengerData($gender = null, $firstname = null, $lastname = null, $telephone = null,
                                         Address $address, $title = null, $isInWheelChair = false, $gotMonthlyBilling = null,
-                                        $isOverWeight = null, $email = null, $entryDate = null, $birthday = null,
+                                        $email = null, $entryDate = null, $birthday = null,
                                         $extraMinutes = null, $details = null, $notice = null, $correspondenceAddress = null,
                                         $billingAddress = null, $isBillingAddress = true) {
 
@@ -169,7 +160,6 @@ class Passenger extends Person {
 
         $this->setIsInWheelChair($isInWheelChair);
         $this->setGotMonthlyBilling($gotMonthlyBilling);
-        $this->setIsOverweight($isOverWeight);
         $this->setNotice($notice);
     }
 
@@ -183,16 +173,17 @@ class Passenger extends Person {
     /**
      * @param DrivingOrder $drivingOrder
      */
-    public function assignDrivingOrder(DrivingOrder $drivingOrder){
+    public function assignDrivingOrder(DrivingOrder $drivingOrder) {
         $this->getDrivingOrders()->add($drivingOrder);
     }
 
     /**
      * @param RepeatedDrivingOrderPlan $repeatedDrivingOrderPlan
      */
-    public function assignRepeatedDrivingOrderPlan(RepeatedDrivingOrderPlan $repeatedDrivingOrderPlan){
+    public function assignRepeatedDrivingOrderPlan(RepeatedDrivingOrderPlan $repeatedDrivingOrderPlan) {
         $this->getRepeatedDrivingOrderPlans()->add($repeatedDrivingOrderPlan);
     }
+
     /**
      * @param Handicap $handicap
      */
@@ -236,20 +227,6 @@ class Passenger extends Person {
     }
 
     /**
-     * @param mixed $isOverweight
-     */
-    public function setIsOverweight($isOverweight) {
-        $this->isOverweight = $isOverweight;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getIsOverweight() {
-        return $this->isOverweight;
-    }
-
-    /**
      * @param mixed $isInWheelChair
      */
     public function setIsInWheelChair($isInWheelChair) {
@@ -290,6 +267,7 @@ class Passenger extends Person {
     public function getRepeatedDrivingOrderPlans() {
         return $this->repeatedDrivingOrderPlans;
     }
+
     /**
      * @return mixed
      */
@@ -305,14 +283,14 @@ class Passenger extends Person {
     }
 
     /**
-     * @param mixed $handicaps
+     * @param  $handicaps
      */
     public function setHandicaps($handicaps) {
         $this->handicaps = $handicaps;
     }
 
     /**
-     * @param mixed $insurances
+     * @param  $insurances
      */
     public function setInsurances($insurances) {
         $this->insurances = $insurances;

@@ -7,7 +7,7 @@ absent.panel.details: Abwesenheit Details
 absent.panel.name: Abwesenheit
 absent.panel.new: Neue Abwesenheit
 absent.panel.edit: Abwesenheit editieren
-absent.field.subject: Beschreibung
+absent.field.subject: Betreff
 absent.field.startdate: Start Datum
 absent.field.enddate: End Datum
 absent.button.new: Neue Abwesenheit

@@ -16,7 +16,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 class PassengerRegisterDTO extends PersonRegisterDTO {
     //Passenger
     public $isInWheelChair;
-    public $isOverweight;
     public $gotMonthlyBilling;
     public $notice;
 

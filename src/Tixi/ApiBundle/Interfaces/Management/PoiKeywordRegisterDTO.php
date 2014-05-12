@@ -15,4 +15,5 @@ namespace Tixi\ApiBundle\Interfaces\Management;
 class PoiKeywordRegisterDTO {
     public $id;
     public $name;
-} 
+    public $memo;
+}

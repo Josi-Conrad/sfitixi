@@ -37,6 +37,10 @@ class ServicePlan extends CommonBaseEntity {
      */
     protected $end;
     /**
+     * @ORM\Column(type="string", length=50, nullable=true)
+     */
+    protected $subject;
+    /**
      * @ORM\Column(type="text", nullable=true)
      */
     protected $memo;
@@ -48,13 +52,15 @@ class ServicePlan extends CommonBaseEntity {
     /**
      * @param $start
      * @param $end
+     * @param null $subject
      * @param null $memo
      * @return ServicePlan
      */
-    public static function registerServicePlan($start, $end, $memo = null) {
+    public static function registerServicePlan($start, $end, $subject = null, $memo = null) {
         $servicePlan = new ServicePlan();
         $servicePlan->setStart($start);
         $servicePlan->setEnd($end);
+        $servicePlan->setSubject($subject);
         $servicePlan->setMemo($memo);
         return $servicePlan;
     }
@@ -62,15 +68,17 @@ class ServicePlan extends CommonBaseEntity {
     /**
      * @param null $start
      * @param null $end
+     * @param null $subject
      * @param null $memo
      */
-    public function updateServicePlanData($start = null, $end = null, $memo = null) {
+    public function updateServicePlanData($start = null, $end = null, $subject = null, $memo = null) {
         if (!empty($start)) {
             $this->setStart($start);
         }
         if (!empty($end)) {
             $this->setEnd($end);
         }
+        $this->setSubject($subject);
         $this->setMemo($memo);
     }
 
@@ -123,6 +131,21 @@ class ServicePlan extends CommonBaseEntity {
     public function getId() {
         return $this->id;
     }
+
+    /**
+     * @param mixed $subject
+     */
+    public function setSubject($subject) {
+        $this->subject = $subject;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSubject() {
+        return $this->subject;
+    }
+
 
     /**
      * @param mixed $memo

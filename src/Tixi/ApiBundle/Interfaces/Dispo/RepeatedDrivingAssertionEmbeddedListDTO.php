@@ -31,9 +31,9 @@ class RepeatedDrivingAssertionEmbeddedListDTO implements DataGridSourceClass {
      */
     public $driverId;
     /**
-     * @GridField(propertyId="RepeatedDrivingAssertionPlan.memo", headerName="repeateddrivingmission.field.memo", order=1)
+     * @GridField(propertyId="RepeatedDrivingAssertionPlan.subject", headerName="repeateddrivingmission.field.subject", order=1)
      */
-    public $memo;
+    public $subject;
     /**
      * @GridField(propertyId="RepeatedDrivingAssertionPlan.anchorDate", headerName="repeateddrivingmission.field.anchordate", order=2)
      */

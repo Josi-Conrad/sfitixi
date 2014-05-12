@@ -31,7 +31,7 @@ class RepeatedDrivingAssertionAssembler {
      */
     public function repeatedRegisterDTOToNewDrivingAssertionPlan(RepeatedDrivingAssertionRegisterDTO $dto) {
         $drivingAssertionPlan = RepeatedDrivingAssertionPlan::registerRepeatedAssertionPlan(
-            $dto->memo, $dto->anchorDate, $dto->frequency, $dto->withHolidays, $dto->endDate);
+            $dto->subject, $dto->anchorDate, $dto->frequency, $dto->withHolidays, $dto->endDate, $dto->memo);
         return $drivingAssertionPlan;
     }
 
@@ -42,6 +42,7 @@ class RepeatedDrivingAssertionAssembler {
      */
     public function repeatedRegisterDTOToDrivingAssertionPlan(RepeatedDrivingAssertionPlan $assertionPlan, RepeatedDrivingAssertionRegisterDTO $dto) {
         $endingDate = (null!==$dto->endDate) ? $dto->endDate : DateTimeService::getMaxDateTime();
+        $assertionPlan->setSubject($dto->subject);
         $assertionPlan->setMemo($dto->memo);
         $assertionPlan->setAnchorDate($dto->anchorDate);
         $assertionPlan->setEndingDate($endingDate);
@@ -92,6 +93,7 @@ class RepeatedDrivingAssertionAssembler {
     public function toRepeatedRegisterDTO(RepeatedDrivingAssertionPlan $assertionPlan) {
         $assertionDTO = new RepeatedDrivingAssertionRegisterDTO();
         $assertionDTO->id = $assertionPlan->getId();
+        $assertionDTO->subject = $assertionPlan->getSubject();
         $assertionDTO->memo = $assertionPlan->getMemo();
         $assertionDTO->anchorDate = $assertionPlan->getAnchorDate();
         $assertionDTO->endDate = ($assertionPlan->getEndingDate() != DateTimeService::getMaxDateTime()) ? $assertionPlan->getEndingDate() : null;
@@ -188,7 +190,7 @@ class RepeatedDrivingAssertionAssembler {
     protected function assertionPlanToEmbeddedListDTO(RepeatedDrivingAssertionPlan $assertionPlan) {
         $dto = new RepeatedDrivingAssertionEmbeddedListDTO();
         $dto->id = $assertionPlan->getId();
-        $dto->memo = $assertionPlan->getMemo();
+        $dto->subject = $assertionPlan->getSubject();
         $dto->anchorDate = $assertionPlan->getAnchorDate()->format('d.m.Y');
         $dto->endDate = ($assertionPlan->getEndingDate()!=DateTimeService::getMaxDateTime()) ? $assertionPlan->getEndingDate()->format('d.m.Y') : 'repeateddrivingmission.validtillrecalled';
         $dto->frequency= $assertionPlan->getFrequency();

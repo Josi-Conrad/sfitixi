@@ -17,5 +17,6 @@ class ShiftTypeRegisterDTO {
     public $name;
     public $start;
     public $end;
+    public $memo;
 }
 

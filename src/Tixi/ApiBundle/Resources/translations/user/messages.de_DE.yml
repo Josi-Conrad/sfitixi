@@ -7,7 +7,7 @@ user.field.actual_password: Aktuelles Passwort
 user.field.new_password: Neues Passwort
 user.field.new_password_2: Passwort bestätigen
 user.field.roles: Berechtigung
-user.field.email: E-Mail
+user.field.email: E-Mail (geschäftlich)
 user.field.role: Berechtigung
 
 user.list.name: Alle Benutzer

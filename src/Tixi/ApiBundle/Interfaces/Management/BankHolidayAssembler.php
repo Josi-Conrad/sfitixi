@@ -23,7 +23,8 @@ class BankHolidayAssembler {
     public function registerDTOtoNewBankHoliday(BankHolidayRegisterDTO $bankHolidayDTO) {
         $bankHoliday = BankHoliday::registerBankHoliday(
             $bankHolidayDTO->name,
-            $bankHolidayDTO->date);
+            $bankHolidayDTO->date,
+            $bankHolidayDTO->memo);
         return $bankHoliday;
     }
 
@@ -35,7 +36,8 @@ class BankHolidayAssembler {
     public function registerDTOtoBankHoliday(BankHolidayRegisterDTO $bankHolidayDTO, BankHoliday $bankHoliday) {
         $bankHoliday->updateBankHolidayData(
             $bankHolidayDTO->name,
-            $bankHolidayDTO->date);
+            $bankHolidayDTO->date,
+            $bankHolidayDTO->memo);
         return $bankHoliday;
     }
 
@@ -48,6 +50,7 @@ class BankHolidayAssembler {
         $bankHolidayDTO->id = $bankHoliday->getId();
         $bankHolidayDTO->name = $bankHoliday->getName();
         $bankHolidayDTO->date = $bankHoliday->getDate();
+        $bankHolidayDTO->memo = $bankHoliday->getMemo();
         return $bankHolidayDTO;
     }
 

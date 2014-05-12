@@ -19,6 +19,7 @@ use Tixi\ApiBundle\Interfaces\Validators as Valid;
 class RepeatedDrivingAssertionRegisterDTO {
 
     public $id;
+    public $subject;
     public $memo;
     public $anchorDate;
     public $endDate;

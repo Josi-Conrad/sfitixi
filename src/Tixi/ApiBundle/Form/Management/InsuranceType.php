@@ -32,6 +32,10 @@ class InsuranceType extends CommonAbstractType{
                 new NotBlank(array('message' => 'insurance.name.not_blank'))
             ),
         ));
+        $builder->add('memo', 'textarea', array(
+            'required'  => false,
+            'label' => 'insurance.field.memo'
+        ));
     }
 
     /**

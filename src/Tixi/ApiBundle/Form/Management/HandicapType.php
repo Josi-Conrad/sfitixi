@@ -32,6 +32,10 @@ class HandicapType extends CommonAbstractType{
                 new NotBlank(array('message' => 'handicap.name.not_blank'))
             ),
         ));
+        $builder->add('memo', 'textarea', array(
+            'required'  => false,
+            'label' => 'handicap.field.memo'
+        ));
     }
 
     /**

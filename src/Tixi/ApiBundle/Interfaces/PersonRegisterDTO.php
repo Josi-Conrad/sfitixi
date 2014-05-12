@@ -17,18 +17,18 @@ use Tixi\ApiBundle\Interfaces\Validators as Valid;
 class PersonRegisterDTO {
     //Person
     public $person_id;
-    public $isActive;
     public $gender;
     public $title;
     public $firstname;
     public $lastname;
     public $telephone;
+    public $fax;
     public $email;
     public $entryDate;
     public $birthday;
     public $extraMinutes;
     public $details;
-    public $preferredVehicleCategory;
+    public $contradictVehicleCategories;
 
     public $correspondenceAddress;
     public $billingAddress;

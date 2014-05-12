@@ -19,38 +19,41 @@ use Tixi\ApiBundle\Form\Shared\DatePickerType;
  * Class RepeatedDrivingAssertionType
  * @package Tixi\ApiBundle\Form\Dispo
  */
-class RepeatedDrivingAssertionType extends CommonAbstractType{
+class RepeatedDrivingAssertionType extends CommonAbstractType {
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
      */
-    public function buildForm(FormBuilderInterface $builder, array $options)
-    {
+    public function buildForm(FormBuilderInterface $builder, array $options) {
         $builder->add('id', 'hidden');
-        $builder->add('memo', 'text', array(
-            'attr'=>array('title' => 'form.field.title.not_blank'),
+        $builder->add('subject', 'text', array(
+            'attr' => array('title' => 'form.field.title.not_blank'),
+            'label' => 'repeateddrivingmission.field.subject'
+        ));
+        $builder->add('memo', 'textarea', array(
+            'required' => false,
             'label' => 'repeateddrivingmission.field.memo'
         ));
         $builder->add('anchorDate', 'datePicker', array(
-            'attr'=>array('title' => 'form.field.title.date'),
+            'attr' => array('title' => 'form.field.title.date'),
             'label' => 'repeateddrivingmission.field.anchordate'
         ));
         $builder->add('endDate', 'datePicker', array(
-            'required'  => false,
+            'required' => false,
             'label' => 'repeateddrivingmission.field.endDate'
         ));
         $builder->add('frequency', 'choice', array(
-            'choices' => array('weekly'=>'repeateddrivingmission.field.frequency.weekly','monthly'=>'repeateddrivingmission.field.frequency.monthly'),
+            'choices' => array('weekly' => 'repeateddrivingmission.field.frequency.weekly', 'monthly' => 'repeateddrivingmission.field.frequency.monthly'),
             'label' => ' '
         ));
-        $builder->add('withHolidays','checkbox',array(
-            'required'  => false,
+        $builder->add('withHolidays', 'checkbox', array(
+            'required' => false,
             'label' => 'repeateddrivingmission.field.withHolidays'
         ));
 
         //weekly part
         $builder->add('weeklyDaysSelector', 'choice', array(
-            'choices' => array('monday'=>'monday.name','tuesday'=>'tuesday.name','wednesday'=>'wednesday.name','thursday'=>'thursday.name','friday'=>'friday.name','saturday'=>'saturday.name','sunday'=>'sunday.name'),
+            'choices' => array('monday' => 'monday.name', 'tuesday' => 'tuesday.name', 'wednesday' => 'wednesday.name', 'thursday' => 'thursday.name', 'friday' => 'friday.name', 'saturday' => 'saturday.name', 'sunday' => 'sunday.name'),
             'multiple' => true,
             'expanded' => true
         ));
@@ -62,31 +65,31 @@ class RepeatedDrivingAssertionType extends CommonAbstractType{
 
         //monthly part
         $builder->add('monthlyFirstWeeklySelector', 'choice', array(
-            'choices' => array('monday'=>'monday.abbreviation.name','tuesday'=>'tuesday.abbreviation.name','wednesday'=>'wednesday.abbreviation.name','thursday'=>'thursday.abbreviation.name','friday'=>'friday.abbreviation.name','saturday'=>'saturday.abbreviation.name','sunday'=>'sunday.abbreviation.name'),
+            'choices' => array('monday' => 'monday.abbreviation.name', 'tuesday' => 'tuesday.abbreviation.name', 'wednesday' => 'wednesday.abbreviation.name', 'thursday' => 'thursday.abbreviation.name', 'friday' => 'friday.abbreviation.name', 'saturday' => 'saturday.abbreviation.name', 'sunday' => 'sunday.abbreviation.name'),
             'multiple' => true,
             'expanded' => true,
             'label' => 'firstweek.name'
         ));
         $builder->add('monthlySecondWeeklySelector', 'choice', array(
-            'choices' => array('monday'=>'monday.abbreviation.name','tuesday'=>'tuesday.abbreviation.name','wednesday'=>'wednesday.abbreviation.name','thursday'=>'thursday.abbreviation.name','friday'=>'friday.abbreviation.name','saturday'=>'saturday.abbreviation.name','sunday'=>'sunday.abbreviation.name'),
+            'choices' => array('monday' => 'monday.abbreviation.name', 'tuesday' => 'tuesday.abbreviation.name', 'wednesday' => 'wednesday.abbreviation.name', 'thursday' => 'thursday.abbreviation.name', 'friday' => 'friday.abbreviation.name', 'saturday' => 'saturday.abbreviation.name', 'sunday' => 'sunday.abbreviation.name'),
             'multiple' => true,
             'expanded' => true,
             'label' => 'secondweek.name'
         ));
         $builder->add('monthlyThirdWeeklySelector', 'choice', array(
-            'choices' => array('monday'=>'monday.abbreviation.name','tuesday'=>'tuesday.abbreviation.name','wednesday'=>'wednesday.abbreviation.name','thursday'=>'thursday.abbreviation.name','friday'=>'friday.abbreviation.name','saturday'=>'saturday.abbreviation.name','sunday'=>'sunday.abbreviation.name'),
+            'choices' => array('monday' => 'monday.abbreviation.name', 'tuesday' => 'tuesday.abbreviation.name', 'wednesday' => 'wednesday.abbreviation.name', 'thursday' => 'thursday.abbreviation.name', 'friday' => 'friday.abbreviation.name', 'saturday' => 'saturday.abbreviation.name', 'sunday' => 'sunday.abbreviation.name'),
             'multiple' => true,
             'expanded' => true,
             'label' => 'thirdweek.name'
         ));
         $builder->add('monthlyFourthWeeklySelector', 'choice', array(
-            'choices' => array('monday'=>'monday.abbreviation.name','tuesday'=>'tuesday.abbreviation.name','wednesday'=>'wednesday.abbreviation.name','thursday'=>'thursday.abbreviation.name','friday'=>'friday.abbreviation.name','saturday'=>'saturday.abbreviation.name','sunday'=>'sunday.abbreviation.name'),
+            'choices' => array('monday' => 'monday.abbreviation.name', 'tuesday' => 'tuesday.abbreviation.name', 'wednesday' => 'wednesday.abbreviation.name', 'thursday' => 'thursday.abbreviation.name', 'friday' => 'friday.abbreviation.name', 'saturday' => 'saturday.abbreviation.name', 'sunday' => 'sunday.abbreviation.name'),
             'multiple' => true,
             'expanded' => true,
             'label' => 'fourthweek.name'
         ));
         $builder->add('monthlyLastWeeklySelector', 'choice', array(
-            'choices' => array('monday'=>'monday.abbreviation.name','tuesday'=>'tuesday.abbreviation.name','wednesday'=>'wednesday.abbreviation.name','thursday'=>'thursday.abbreviation.name','friday'=>'friday.abbreviation.name','saturday'=>'saturday.abbreviation.name','sunday'=>'sunday.abbreviation.name'),
+            'choices' => array('monday' => 'monday.abbreviation.name', 'tuesday' => 'tuesday.abbreviation.name', 'wednesday' => 'wednesday.abbreviation.name', 'thursday' => 'thursday.abbreviation.name', 'friday' => 'friday.abbreviation.name', 'saturday' => 'saturday.abbreviation.name', 'sunday' => 'sunday.abbreviation.name'),
             'multiple' => true,
             'expanded' => true,
             'label' => 'lastweek.name'
@@ -102,8 +105,7 @@ class RepeatedDrivingAssertionType extends CommonAbstractType{
     /**
      * @param OptionsResolverInterface $resolver
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
-    {
+    public function setDefaultOptions(OptionsResolverInterface $resolver) {
         $resolver->setDefaults(array(
             'data_class' => 'Tixi\ApiBundle\Interfaces\Dispo\RepeatedDrivingAssertionRegisterDTO'
         ));

@@ -10,6 +10,7 @@ driver.field.id: Fahrer-ID
 driver.field.licence: Fahrausweis-Nr
 driver.field.wheelchair: Rollstuhlfahrten
 driver.field.category: Fahrerkategorie
+driver.field.operationwish: Einsatzwunsch
 
 driver.button.new: Neuer Fahrer
 driver.button.delete: Fahrer löschen
@@ -18,10 +19,11 @@ driver.wheelchairattendance.yes: Ja
 driver.wheelchairattendance.no: Nein
 
 #DriverCategory
+drivercategory.button.new: Neue Fahrerkategorie
+drivercategory.button.delete: Fahrerkategorie löschen
 drivercategory.list.name: Alle Fahrerkategorien
 drivercategory.panel.name: Fahrerkategorie
 drivercategory.panel.new: Neue Fahrerkategorie
 drivercategory.panel.edit: Fahrerkategorie editieren
 drivercategory.field.name: Name
-drivercategory.button.new: Neue Fahrerkategorie
-drivercategory.button.delete: Fahrerkategorie löschen
+drivercategory.field.memo: Memo (für Disposition)

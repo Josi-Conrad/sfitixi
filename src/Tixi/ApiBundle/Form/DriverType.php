@@ -45,6 +45,11 @@ class DriverType extends PersonType {
 
         parent::buildForm($builder,$options);
 
+        $builder->add('fax', 'telephoneType', array(
+            'required' => false,
+            'label' => 'person.field.fax',
+        ));
+
         $builder->add('email', 'email', array(
             'required' => false,
             'label' => 'person.field.email'
@@ -88,6 +93,24 @@ class DriverType extends PersonType {
             'constraints' => array(
                 new Regex(array('message'=>'form.field.title.digit','pattern'=>'/\d+/'))
             ),
+        ));
+
+        $builder->add('contradictVehicleCategories', 'entity', array(
+            'required' => false,
+            'class' => 'Tixi\CoreDomain\VehicleCategory',
+            'property' => 'name',
+            'expanded' => true,
+            'multiple' => true,
+            'label' => 'person.field.contradict_vehicle_category',
+            'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('e')
+                        ->where('e.isDeleted = 0');
+                },
+        ));
+
+        $builder->add('operationWish', 'textarea', array(
+            'required' => false,
+            'label' => 'driver.field.operationwish'
         ));
 
         if($this->user->hasRole('ROLE_MANAGER')){

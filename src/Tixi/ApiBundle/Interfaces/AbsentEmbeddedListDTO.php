@@ -58,7 +58,7 @@ class AbsentEmbeddedListDTO implements DataGridSourceClass{
     public static function createReferenceDTOByPersonId($personId) {
         $dto = new AbsentEmbeddedListDTO();
         $dto->personId = $personId;
-        $dto->endDate = DateTimeService::getUTCnow();
+        $dto->endDate = new \DateTime('yesterday');
         return $dto;
     }
 }

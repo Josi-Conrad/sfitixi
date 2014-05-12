@@ -39,6 +39,11 @@ class ShiftType extends CommonBaseEntity {
      */
     protected $end;
 
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $memo;
+
     public function __construct() {
         parent::__construct();
     }
@@ -47,13 +52,15 @@ class ShiftType extends CommonBaseEntity {
      * @param $name
      * @param $start
      * @param $end
+     * @param null $memo
      * @return ShiftType
      */
-    public static function registerShiftType($name, $start, $end) {
+    public static function registerShiftType($name, $start, $end, $memo = null) {
         $shiftType = new ShiftType();
         $shiftType->setName($name);
         $shiftType->setStart($start);
         $shiftType->setEnd($end);
+        $shiftType->setMemo($memo);
         return $shiftType;
     }
 
@@ -61,8 +68,9 @@ class ShiftType extends CommonBaseEntity {
      * @param null $name
      * @param null $start
      * @param null $end
+     * @param null $memo
      */
-    public function updateShiftTypeData($name = null, $start = null, $end = null) {
+    public function updateShiftTypeData($name = null, $start = null, $end = null, $memo = null) {
         if (!empty($name)) {
             $this->setName($name);
         }
@@ -72,6 +80,7 @@ class ShiftType extends CommonBaseEntity {
         if (!empty($end)) {
             $this->setEnd($end);
         }
+        $this->setMemo($memo);
     }
 
     /**
@@ -131,6 +140,20 @@ class ShiftType extends CommonBaseEntity {
      */
     public function setEnd(\DateTime $end) {
         $this->end = $end;
+    }
+
+    /**
+     * @param mixed $memo
+     */
+    public function setMemo($memo) {
+        $this->memo = $memo;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMemo() {
+        return $this->memo;
     }
 
     /**

@@ -32,6 +32,11 @@ class BankHoliday extends CommonBaseEntity {
      */
     protected $date;
 
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $memo;
+
     protected function __construct() {
         parent::__construct();
     }
@@ -39,22 +44,30 @@ class BankHoliday extends CommonBaseEntity {
     /**
      * @param $name
      * @param $date
+     * @param null $memo
      * @return BankHoliday
      */
-    public static function registerBankHoliday($name, $date) {
+    public static function registerBankHoliday($name, $date, $memo = null) {
         $bankHoliday = new BankHoliday();
         $bankHoliday->setName($name);
         $bankHoliday->setDate($date);
+        $bankHoliday->setMemo($memo);
         return $bankHoliday;
     }
 
-    public function updateBankHolidayData($name = null, $date = null) {
+    /**
+     * @param null $name
+     * @param null $date
+     * @param null $memo
+     */
+    public function updateBankHolidayData($name = null, $date = null, $memo = null) {
         if (!empty($name)) {
             $this->setName($name);
         }
         if (!empty($date)) {
             $this->setDate($date);
         }
+        $this->setMemo($memo);
     }
 
 
@@ -99,4 +112,19 @@ class BankHoliday extends CommonBaseEntity {
     public function getDate() {
         return $this->date;
     }
+
+    /**
+     * @param mixed $memo
+     */
+    public function setMemo($memo) {
+        $this->memo = $memo;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMemo() {
+        return $this->memo;
+    }
+
 } 

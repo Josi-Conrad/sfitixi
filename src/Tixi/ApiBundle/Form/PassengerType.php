@@ -57,18 +57,6 @@ class PassengerType extends PersonType {
             'required' => false,
             'label' => 'passenger.field.monthlybilling'
         ));
-        $builder->add('preferredVehicleCategory', 'entity', array(
-            'required' => false,
-            'class' => 'Tixi\CoreDomain\VehicleCategory',
-            'property' => 'name',
-            'empty_data' => null,
-            'empty_value' => 'person.field.preferredvehiclecategory.empty',
-            'label' => 'person.field.preferredvehiclecategory',
-            'query_builder' => function (EntityRepository $er) {
-                    return $er->createQueryBuilder('e')
-                        ->where('e.isDeleted = 0');
-                },
-        ));
         $builder->add('isInWheelChair', 'checkbox', array(
             'required' => false,
             'label' => 'passenger.field.isinwheelchair'
@@ -121,6 +109,19 @@ class PassengerType extends PersonType {
         $builder->add('correspondenceAddress', 'textarea', array(
             'required' => false,
             'label' => 'person.field.correspondenceaddress'
+        ));
+
+        $builder->add('contradictVehicleCategories', 'entity', array(
+            'required' => false,
+            'class' => 'Tixi\CoreDomain\VehicleCategory',
+            'property' => 'name',
+            'expanded' => true,
+            'multiple' => true,
+            'label' => 'person.field.contradict_vehicle_category',
+            'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('e')
+                        ->where('e.isDeleted = 0');
+                },
         ));
 
         if ($this->user->hasRole('ROLE_MANAGER')) {

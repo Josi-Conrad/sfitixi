@@ -18,6 +18,7 @@ class DriverRegisterDTO extends PersonRegisterDTO {
     //Driver
     public $licenceNumber;
     public $wheelChairAttendance;
+    public $operationWish;
 
     //DriverCategory
     public $driverCategory;

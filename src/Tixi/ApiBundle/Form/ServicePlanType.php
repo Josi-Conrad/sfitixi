@@ -20,21 +20,25 @@ use Tixi\ApiBundle\Form\Shared\CommonAbstractType;
  * Class ServicePlanType
  * @package Tixi\ApiBundle\Form
  */
-class ServicePlanType extends CommonAbstractType{
+class ServicePlanType extends CommonAbstractType {
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
      */
-    public function buildForm(FormBuilderInterface $builder, array $options)
-    {
+    public function buildForm(FormBuilderInterface $builder, array $options) {
         $builder->add('id', 'hidden');
+
+        $builder->add('subject', 'text', array(
+            'required' => false,
+            'label' => 'serviceplan.field.subject',
+        ));
 
         $builder->add('start', 'dateTimePicker', array(
             'label' => 'serviceplan.field.start',
             'pattern' => '^(0[1-9]|[1|2][0-9]|3[0|1]).(0[1-9]|1[0|1|2]).(19|20)\d\d$',
             'constraints' => array(
                 new DateTime(),
-                new NotBlank(array('message'=>'serviceplan.date.not_blank'))
+                new NotBlank(array('message' => 'serviceplan.date.not_blank'))
             ),
         ));
         $builder->add('end', 'dateTimePicker', array(
@@ -42,11 +46,11 @@ class ServicePlanType extends CommonAbstractType{
             'pattern' => '^(0[1-9]|[1|2][0-9]|3[0|1]).(0[1-9]|1[0|1|2]).(19|20)\d\d$',
             'constraints' => array(
                 new DateTime(),
-                new NotBlank(array('message'=>'serviceplan.date.not_blank'))
+                new NotBlank(array('message' => 'serviceplan.date.not_blank'))
             ),
         ));
         $builder->add('memo', 'textarea', array(
-            'required'  => false,
+            'required' => false,
             'label' => 'serviceplan.field.memo'
         ));
     }
@@ -56,16 +60,14 @@ class ServicePlanType extends CommonAbstractType{
      *
      * @return string The name of this type
      */
-    public function getName()
-    {
+    public function getName() {
         return 'fpw_vehicle_serviceplan';
     }
 
     /**
      * @param OptionsResolverInterface $resolver
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
-    {
+    public function setDefaultOptions(OptionsResolverInterface $resolver) {
         $resolver->setDefaults(array(
             'data_class' => 'Tixi\ApiBundle\Interfaces\ServicePlanRegisterDTO',
         ));

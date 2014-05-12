@@ -33,6 +33,10 @@ class BankHolidayType extends CommonAbstractType{
         $builder->add('date', 'datePicker', array(
             'label' => 'bankholiday.field.date',
         ));
+        $builder->add('memo', 'textarea', array(
+            'required'  => false,
+            'label' => 'bankholiday.field.memo'
+        ));
     }
 
     /**

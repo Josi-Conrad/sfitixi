@@ -30,6 +30,10 @@ class DriverCategoryType extends CommonAbstractType{
         $builder->add('name', 'text', array(
             'label' => 'drivercategory.field.name'
         ));
+        $builder->add('memo', 'textarea', array(
+            'required'  => false,
+            'label' => 'drivercategory.field.memo'
+        ));
     }
 
     /**

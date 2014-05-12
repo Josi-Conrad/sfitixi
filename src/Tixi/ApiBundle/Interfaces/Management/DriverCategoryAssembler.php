@@ -22,7 +22,7 @@ class DriverCategoryAssembler {
      */
     public function registerDTOtoNewDriverCategory(DriverCategoryRegisterDTO $driverCategoryDTO) {
         $driverCategory = DriverCategory::registerDriverCategory(
-            $driverCategoryDTO->name);
+            $driverCategoryDTO->name, $driverCategoryDTO->memo);
         return $driverCategory;
     }
 
@@ -33,7 +33,7 @@ class DriverCategoryAssembler {
      */
     public function registerDTOtoDriverCategory(DriverCategoryRegisterDTO $driverCategoryDTO, DriverCategory $driverCategory) {
         $driverCategory->updateDriverCategoryData(
-            $driverCategoryDTO->name);
+            $driverCategoryDTO->name, $driverCategoryDTO->memo);
         return $driverCategory;
     }
 
@@ -45,6 +45,7 @@ class DriverCategoryAssembler {
         $driverCategoryDTO = new DriverCategoryRegisterDTO();
         $driverCategoryDTO->id = $driverCategory->getId();
         $driverCategoryDTO->name = $driverCategory->getName();
+        $driverCategoryDTO->memo = $driverCategory->getMemo();
         return $driverCategoryDTO;
     }
 
@@ -62,7 +63,7 @@ class DriverCategoryAssembler {
 
     /**
      * @param DriverCategory $driverCategory
-     * @return DriverCategoryEmbeddedListDTO
+     * @return DriverCategoryListDTO
      */
     public function driverCategorysToDriverCategoryListDTO(DriverCategory $driverCategory) {
         $driverCategoryEmbeddedListDTO = new DriverCategoryListDTO();

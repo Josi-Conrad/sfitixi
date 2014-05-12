@@ -55,26 +55,32 @@ class Driver extends Person {
     protected $drivingPools;
 
     /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $operationWish;
+
+    /**
      * @param $gender
      * @param $firstname
      * @param $lastname
      * @param $telephone
-     * @param $address
+     * @param \Tixi\CoreDomain\Address $address
      * @param null $title
      * @param null $email
      * @param null $entryDate
      * @param null $birthday
      * @param null $extraMinutes
      * @param null $details
+     * @param null $fax
      */
     protected function __construct($gender, $firstname, $lastname, $telephone, $address, $title = null,
                                    $email = null, $entryDate = null, $birthday = null,
-                                   $extraMinutes = null, $details = null) {
+                                   $extraMinutes = null, $details = null, $fax = null) {
 
         $this->supervisedVehicles = new ArrayCollection();
         $this->repeatedDrivingAssertionPlans = new ArrayCollection();
         parent::__construct($gender, $firstname, $lastname, $telephone, $address, $title,
-            $email, $entryDate, $birthday, $extraMinutes, $details);
+            $email, $entryDate, $birthday, $extraMinutes, $details, null, null, null, $fax);
     }
 
     /**
@@ -83,27 +89,30 @@ class Driver extends Person {
      * @param $lastname
      * @param $telephone
      * @param Address $address
-     * @param $title
      * @param $licenceNumber
      * @param DriverCategory $driverCategory
      * @param bool $wheelChairAttendance
+     * @param $title
      * @param null $email
      * @param null $entryDate
      * @param null $birthday
      * @param null $extraMinutes
      * @param null $details
+     * @param null $operationWish
+     * @param null $fax
      * @return Driver
      */
     public static function registerDriver($gender, $firstname, $lastname, $telephone, Address $address, $licenceNumber,
                                           DriverCategory $driverCategory, $wheelChairAttendance = true, $title = null, $email = null,
-                                          $entryDate = null, $birthday = null, $extraMinutes = null, $details = null) {
+                                          $entryDate = null, $birthday = null, $extraMinutes = null, $details = null, $operationWish = null, $fax = null) {
 
         $driver = new Driver($gender, $firstname, $lastname, $telephone, $address, $title,
-            $email, $entryDate, $birthday, $extraMinutes, $details);
+            $email, $entryDate, $birthday, $extraMinutes, $details, $fax);
 
         $driver->setLicenceNumber($licenceNumber);
         $driver->setDriverCategory($driverCategory);
         $driver->setWheelChairAttendance($wheelChairAttendance);
+        $driver->setOperationWish($operationWish);
 
         return $driver;
     }
@@ -114,23 +123,26 @@ class Driver extends Person {
      * @param null $lastname
      * @param null $telephone
      * @param Address $address
-     * @param null $title
      * @param null $licenceNumber
      * @param DriverCategory $driverCategory
      * @param null $wheelChairAttendance
+     * @param null $title
      * @param null $email
      * @param null $entryDate
      * @param null $birthday
      * @param null $extraMinutes
      * @param null $details
+     * @param null $operationWish
+     * @param null $fax
      */
     public function updateDriverData($gender = null, $firstname = null, $lastname = null, $telephone = null,
                                      Address $address = null, $licenceNumber = null, DriverCategory $driverCategory = null,
                                      $wheelChairAttendance = null, $title = null, $email = null, $entryDate = null, $birthday = null,
-                                     $extraMinutes = null, $details = null) {
+                                     $extraMinutes = null, $details = null, $operationWish = null, $fax = null) {
 
         parent::updatePersonData(
-            $gender, $firstname, $lastname, $telephone, $address, $title, $email, $entryDate, $birthday, $extraMinutes, $details
+            $gender, $firstname, $lastname, $telephone, $address, $title, $email, $entryDate, $birthday,
+            $extraMinutes, $details, null, null, null, $fax
         );
 
         if (!empty($licenceNumber)) {
@@ -140,6 +152,7 @@ class Driver extends Person {
             $this->setDriverCategory($driverCategory);
         }
         $this->setWheelChairAttendance($wheelChairAttendance);
+        $this->setOperationWish($operationWish);
     }
 
     /**

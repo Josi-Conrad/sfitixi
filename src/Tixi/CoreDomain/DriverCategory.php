@@ -31,30 +31,39 @@ class DriverCategory extends CommonBaseEntity {
     protected $name;
 
     /**
-     * @param $name
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $memo;
+
+    /**
      * @return DriverCategory
      */
-    protected function __construct($name) {
+    protected function __construct() {
         parent::__construct();
-        $this->setName($name);
     }
 
     /**
      * @param $name
+     * @param null $memo
      * @return DriverCategory
      */
-    public static function registerDriverCategory($name) {
-        return new DriverCategory($name);
+    public static function registerDriverCategory($name, $memo = null) {
+        $driverCategory = new DriverCategory();
+        $driverCategory->setName($name);
+        $driverCategory->setMemo($memo);
+        return $driverCategory;
     }
 
     /**
      * @param $name
+     * @param null $memo
      * @return DriverCategory
      */
-    public function updateDriverCategoryData($name = null) {
+    public function updateDriverCategoryData($name = null, $memo = null) {
         if (!empty($name)) {
             $this->setName($name);
         }
+        $this->setMemo($memo);
     }
 
     /**
@@ -85,5 +94,18 @@ class DriverCategory extends CommonBaseEntity {
         return $this->name;
     }
 
+    /**
+     * @param mixed $memo
+     */
+    public function setMemo($memo) {
+        $this->memo = $memo;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMemo() {
+        return $this->memo;
+    }
 
 }

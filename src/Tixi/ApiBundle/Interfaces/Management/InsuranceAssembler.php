@@ -21,7 +21,7 @@ class InsuranceAssembler {
      * @return Insurance
      */
     public function registerDTOtoNewInsurance(InsuranceRegisterDTO $dto) {
-        $insurance = Insurance::registerInsurance($dto->name);
+        $insurance = Insurance::registerInsurance($dto->name, $dto->memo);
         return $insurance;
     }
 
@@ -30,7 +30,7 @@ class InsuranceAssembler {
      * @param InsuranceRegisterDTO $dto
      */
     public function registerDTOtoInsurance(Insurance $insurance, InsuranceRegisterDTO $dto) {
-        $insurance->updateData($dto->name);
+        $insurance->updateData($dto->name, $dto->memo);
     }
 
     /**
@@ -41,6 +41,7 @@ class InsuranceAssembler {
         $insuranceDTO = new InsuranceRegisterDTO();
         $insuranceDTO->id = $insurance->getId();
         $insuranceDTO->name = $insurance->getName();
+        $insuranceDTO->memo = $insurance->getMemo();
         return $insuranceDTO;
     }
 

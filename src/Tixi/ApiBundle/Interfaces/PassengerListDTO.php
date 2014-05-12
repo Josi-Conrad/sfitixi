@@ -19,10 +19,6 @@ use Tixi\CoreDomain\Shared\GenericEntityFilter\GenericAccessQuery;
  */
 class PassengerListDTO implements DataGridSourceClass {
     /**
-     * @GridField(propertyId="Passenger.isActive")
-     */
-    public $isActive;
-    /**
      * @GridField(rowIdentifier=true, propertyId="Passenger.id", headerName="passenger.field.id", order=1)
      */
     public $id;

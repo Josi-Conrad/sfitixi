@@ -30,24 +30,36 @@ class Insurance extends CommonBaseEntity {
      */
     protected $name;
 
-    protected  function __construct() {
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $memo;
+
+    protected function __construct() {
         parent::__construct();
     }
 
     /**
      * @param $name
+     * @param null $memo
      * @return Insurance
      */
-    public static function registerInsurance($name){
+    public static function registerInsurance($name, $memo = null) {
         $insurance = new Insurance();
         $insurance->setName($name);
+        $insurance->setMemo($memo);
         return $insurance;
     }
 
-    public function updateData($name=null) {
-        if(null !== $name) {
+    /**
+     * @param null $name
+     * @param null $memo
+     */
+    public function updateData($name = null, $memo = null) {
+        if (!empty($name)) {
             $this->setName($name);
         }
+        $this->setMemo($memo);
     }
 
     /**
@@ -76,6 +88,20 @@ class Insurance extends CommonBaseEntity {
      */
     public function getName() {
         return $this->name;
+    }
+
+    /**
+     * @param mixed $memo
+     */
+    public function setMemo($memo) {
+        $this->memo = $memo;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMemo() {
+        return $this->memo;
     }
 
 }

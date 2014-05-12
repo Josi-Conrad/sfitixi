@@ -31,37 +31,42 @@ class POIKeyword extends CommonBaseEntity {
      */
     protected $name;
 
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $memo;
 
     /**
      * @ORM\ManyToMany(targetEntity="POI", mappedBy="keywords")
      */
     protected $pois;
 
-    /**
-     *
-     */
-    protected  function __construct() {
+    protected function __construct() {
         $this->pois = new ArrayCollection();
         parent::__construct();
     }
 
     /**
      * @param $name
+     * @param null $memo
      * @return POIKeyword
      */
-    public static function registerPOIKeyword($name){
-        $poiKeyword =  new POIKeyword();
+    public static function registerPOIKeyword($name, $memo = null) {
+        $poiKeyword = new POIKeyword();
         $poiKeyword->setName($name);
+        $poiKeyword->setMemo($memo);
         return $poiKeyword;
     }
 
     /**
      * @param null $name
+     * @param null $memo
      */
-    public function updateData($name=null) {
-        if(null !== $name) {
+    public function updateData($name = null, $memo = null) {
+        if (null !== $name) {
             $this->setName($name);
         }
+        $this->setMemo($memo);
     }
 
     public function assignPOI($poi) {
@@ -113,4 +118,20 @@ class POIKeyword extends CommonBaseEntity {
     public function getPois() {
         return $this->pois;
     }
+
+    /**
+     * @param mixed $memo
+     */
+    public function setMemo($memo) {
+        $this->memo = $memo;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMemo() {
+        return $this->memo;
+    }
+
+
 }

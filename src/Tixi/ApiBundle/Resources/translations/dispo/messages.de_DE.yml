@@ -12,6 +12,7 @@ shifttype.panel.edit: Schicht editieren
 shifttype.field.name: Schicht-Name
 shifttype.field.start: Startzeit
 shifttype.field.end: Endzeit
+shifttype.field.memo: Memo (für Disposition)
 shifttype.button.new: Neue Schicht
 
 #WorkingMonth
@@ -40,7 +41,8 @@ repeateddrivingmission.panel.embedded: Dauereinsätze
 repeateddrivingmission.button.new: Neuer Dauereinsatz
 repeateddrivingmission.button.delete: Dauereinsatz löschen
 repeateddrivingmission.list.name: Dauereinsätze
-repeateddrivingmission.field.memo: Memo
+repeateddrivingmission.field.subject: Betreff
+repeateddrivingmission.field.memo: Memo (für Disposition)
 repeateddrivingmission.field.anchordate: Ab
 repeateddrivingmission.field.endDate: Bis
 repeateddrivingmission.field.frequency: Frequenz

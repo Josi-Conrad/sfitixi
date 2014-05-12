@@ -29,7 +29,7 @@ class AddressAssembler {
 
     public function addressLookaheadDTOtoAddress(AddressLookaheadDTO $dto) {
         $address = null;
-        if(!empty($dto->addressSelectionId) && !empty($dto->addressHandles)) {
+        if(isset($dto->addressSelectionId) && isset($dto->addressHandles)) {
             try {
                 $address = $this->addressService->handleAddress($dto->addressHandles[$dto->addressSelectionId]);
             }catch (\Exception $e) {

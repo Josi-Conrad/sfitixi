@@ -13,8 +13,8 @@ vehicle.field.licencenumber: Kennzeichen
 vehicle.field.dateoffirstregistration: Inverkehrssetzung
 vehicle.field.parking: Parkplatz
 vehicle.field.category: Fahrzeugkategorie
-vehicle.field.memo: Notizen
-vehicle.field.managementdetails: Verwaltungsdetails
+vehicle.field.memo: Memo (für Disposition)
+vehicle.field.managementdetails: Details (vertraulich, für Manager)
 vehicle.field.depot: Depot
 vehicle.field.depot.empty: Bitte ein Fahrzeugdepot auswählen
 vehicle.field.supervisor: Fahrzeugbetreuer
@@ -31,9 +31,10 @@ vehicle.date.not_blank: Bitte ein Datum wählen
 serviceplan.list.name: Servicepläne
 serviceplan.breadcrumb.name: Servicepläne
 
+serviceplan.field.subject: Betreff
 serviceplan.field.start: Start
 serviceplan.field.end: Ende
-serviceplan.field.memo: Notizen
+serviceplan.field.memo: Memo (für Disposition)
 
 serviceplan.panel.embedded: Servicepläne
 serviceplan.panel.name: Serviceplan

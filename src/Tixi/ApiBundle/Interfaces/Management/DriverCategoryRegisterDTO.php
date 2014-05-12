@@ -15,5 +15,6 @@ namespace Tixi\ApiBundle\Interfaces\Management;
 class DriverCategoryRegisterDTO {
     public $id;
     public $name;
+    public $memo;
 }
 

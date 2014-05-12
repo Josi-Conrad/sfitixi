@@ -16,5 +16,6 @@ class BankHolidayRegisterDTO {
     public $id;
     public $name;
     public $date;
+    public $memo;
 }
 

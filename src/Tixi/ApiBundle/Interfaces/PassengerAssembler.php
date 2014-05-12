@@ -33,7 +33,7 @@ class PassengerAssembler {
             $this->addressAssembler->addressLookaheadDTOtoAddress($passengerDTO->lookaheadaddress),
             $passengerDTO->title,
             $passengerDTO->isInWheelChair,
-            $passengerDTO->gotMonthlyBilling, $passengerDTO->isOverweight,
+            $passengerDTO->gotMonthlyBilling,
             $passengerDTO->email, $passengerDTO->entryDate, $passengerDTO->birthday,
             $passengerDTO->extraMinutes, $passengerDTO->details, $passengerDTO->notice,
             $passengerDTO->correspondenceAddress, $passengerDTO->billingAddress, $passengerDTO->isBillingAddress
@@ -44,7 +44,9 @@ class PassengerAssembler {
         foreach ($passengerDTO->insurances as $insurance) {
             $passenger->assignInsurance($insurance);
         }
-        $passenger->assignPreferredVehicleCategory($passengerDTO->preferredVehicleCategory);
+        foreach ($passengerDTO->contradictVehicleCategories as $category) {
+            $passenger->assignContradictVehicleCategory($category);
+        }
         return $passenger;
     }
 
@@ -57,13 +59,13 @@ class PassengerAssembler {
         $passenger->updatePassengerData($passengerDTO->gender, $passengerDTO->firstname,
             $passengerDTO->lastname, $passengerDTO->telephone,
             $this->addressAssembler->addressLookaheadDTOtoAddress($passengerDTO->lookaheadaddress), $passengerDTO->title, $passengerDTO->isInWheelChair,
-            $passengerDTO->gotMonthlyBilling, $passengerDTO->isOverweight,
+            $passengerDTO->gotMonthlyBilling,
             $passengerDTO->email, $passengerDTO->entryDate, $passengerDTO->birthday,
             $passengerDTO->extraMinutes, $passengerDTO->details, $passengerDTO->notice,
             $passengerDTO->correspondenceAddress, $passengerDTO->billingAddress, $passengerDTO->isBillingAddress);
         $passenger->setHandicaps($passengerDTO->handicaps);
         $passenger->setInsurances($passengerDTO->insurances);
-        $passenger->assignPreferredVehicleCategory($passengerDTO->preferredVehicleCategory);
+        $passenger->setContradictVehicleCategories($passengerDTO->contradictVehicleCategories);
         return $passenger;
     }
 
@@ -74,7 +76,6 @@ class PassengerAssembler {
     public function passengerToPassengerRegisterDTO(Passenger $passenger) {
         $passengerDTO = new PassengerRegisterDTO();
         $passengerDTO->person_id = $passenger->getId();
-        $passengerDTO->isActive = $passenger->getIsActive();
         $passengerDTO->gender = $passenger->getGender();
         $passengerDTO->title = $passenger->getTitle();
         $passengerDTO->firstname = $passenger->getFirstname();
@@ -85,10 +86,9 @@ class PassengerAssembler {
         $passengerDTO->birthday = $passenger->getBirthday();
         $passengerDTO->extraMinutes = $passenger->getExtraMinutes();
         $passengerDTO->details = $passenger->getDetails();
-        $passengerDTO->preferredVehicleCategory = $passenger->getPreferredVehicleCategory();
+        $passengerDTO->contradictVehicleCategories = $passenger->getContradictVehicleCategories();
 
         $passengerDTO->isInWheelChair = $passenger->getIsInWheelChair();
-        $passengerDTO->isOverweight = $passenger->getIsOverweight();
         $passengerDTO->gotMonthlyBilling = $passenger->getGotMonthlyBilling();
         $passengerDTO->notice = $passenger->getNotice();
 
@@ -123,7 +123,6 @@ class PassengerAssembler {
     public function passengerToPassengerListDTO(Passenger $passenger) {
         $passengerListDTO = new PassengerListDTO();
         $passengerListDTO->id = $passenger->getId();
-        $passengerListDTO->isActive = $passenger->getIsActive();
         $passengerListDTO->gender = $passenger->getGenderAsString();
         $passengerListDTO->firstname = $passenger->getFirstname();
         $passengerListDTO->telephone = $passenger->getTelephone();

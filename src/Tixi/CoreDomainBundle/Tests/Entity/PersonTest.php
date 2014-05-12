@@ -127,7 +127,7 @@ class PersonTest extends CommonBaseTest {
 
         $passenger = Passenger::registerPassenger(
             'f', 'Toranto', 'Testinger', '041 324 33 22',
-            $address, true, true, false, '', 'test@test.de', new \DateTime(), new \DateTime(),
+            $address, 'Herro', true, false, 'test@test.de', new \DateTime(), new \DateTime(),
             5, 'alles nur ein Test', 'und auch Notizen'
         );
         $passenger->assignHandicap($handicap);
@@ -140,7 +140,7 @@ class PersonTest extends CommonBaseTest {
 
         $passenger->updatePassengerData(
             'f', 'Mila', 'Tolina', '0293292323',
-            $address, true, true, false, '', 'der@test.de', new \DateTime(), new \DateTime(),
+            $address, 'Lady', true, false, 'der@test.de', new \DateTime(), new \DateTime(),
             2, 'goodies', 'notices');
 
         $this->passengerRepo->store($passenger);

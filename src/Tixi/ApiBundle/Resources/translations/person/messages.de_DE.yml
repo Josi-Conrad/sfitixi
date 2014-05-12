@@ -3,19 +3,19 @@ person.field.age: Alter
 person.field.isactive: Ist Aktiv
 person.field.gender: Geschlecht
 person.field.title: Anrede
-person.gender.male: Herr
-person.gender.female: Frau
+person.gender.male: männlich
+person.gender.female: weiblich
 person.field.firstname: Vorname
 person.field.lastname: Nachname
 person.field.telephone: Telefon-Nr.
+person.field.fax: Fax-Nr.
 person.field.email: E-Mail
 person.field.entrydate: Eintrittsdatum
 person.field.birthday: Geburtsdatum
 person.field.extraminutes: Extra-Minuten
-person.field.details: Details
+person.field.details: Details (vertraulich, für Manager)
 
 person.field.correspondenceaddress: Korrespondenz
 person.field.billingaddress: Rechnungsadresse
 
-person.field.preferredvehiclecategory: Bevorzugte Fahrzeugkategorie
-person.field.preferredvehiclecategory.empty: ---
+person.field.contradict_vehicle_category: Nicht bevorzugte Fahrzeugkategorien

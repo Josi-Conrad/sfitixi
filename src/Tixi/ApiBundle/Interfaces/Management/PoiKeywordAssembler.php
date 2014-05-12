@@ -21,7 +21,7 @@ class PoiKeywordAssembler {
      * @return POIKeyword
      */
     public function registerDTOtoNewPoiKeyword(PoiKeywordRegisterDTO $dto) {
-        $poiKeyword = POIKeyword::registerPOIKeyword($dto->name);
+        $poiKeyword = POIKeyword::registerPOIKeyword($dto->name, $dto->memo);
         return $poiKeyword;
     }
 
@@ -30,7 +30,7 @@ class PoiKeywordAssembler {
      * @param PoiKeywordRegisterDTO $dto
      */
     public function registerDTOtoPoiKeyword(POIKeyword $poiKeyword, PoiKeywordRegisterDTO $dto) {
-        $poiKeyword->updateData($dto->name);
+        $poiKeyword->updateData($dto->name, $dto->memo);
     }
 
     /**
@@ -41,6 +41,7 @@ class PoiKeywordAssembler {
         $poiKeywordDTO = new PoiKeywordRegisterDTO();
         $poiKeywordDTO->id = $poiKeyword->getId();
         $poiKeywordDTO->name = $poiKeyword->getName();
+        $poiKeywordDTO->memo = $poiKeyword->getMemo();
         return $poiKeywordDTO;
     }
 

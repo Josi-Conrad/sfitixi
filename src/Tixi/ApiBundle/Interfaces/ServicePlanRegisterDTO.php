@@ -18,6 +18,7 @@ class ServicePlanRegisterDTO {
     public $id;
     public $start;
     public $end;
+    public $subject;
     public $memo;
 
     public function __construct() {

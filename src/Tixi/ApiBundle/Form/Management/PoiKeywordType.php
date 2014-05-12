@@ -32,6 +32,10 @@ class PoiKeywordType extends CommonAbstractType{
                 new NotBlank(array('message' => 'poikeyword.name.not_blank'))
             ),
         ));
+        $builder->add('memo', 'textarea', array(
+            'required'  => false,
+            'label' => 'poikeyword.field.memo'
+        ));
     }
 
     /**

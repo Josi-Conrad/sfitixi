@@ -5,5 +5,6 @@ bankholiday.panel.new: Neuer Feiertag
 bankholiday.panel.edit: Feiertag editieren
 bankholiday.field.name: Feiertags-Name
 bankholiday.field.date: Datum
+bankholiday.field.memo: Memo (für Disposition)
 bankholiday.button.new: Neuer Feiertag
 bankholiday.button.delete: Feiertag löschen

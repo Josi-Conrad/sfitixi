@@ -30,27 +30,36 @@ class Handicap extends CommonBaseEntity{
      */
     protected $name;
 
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $memo;
+
     protected function __construct() {
         parent::__construct();
     }
 
     /**
      * @param $name
+     * @param null $memo
      * @return Handicap
      */
-    public static function registerHandicap($name){
+    public static function registerHandicap($name, $memo = null){
         $handicap = new Handicap();
         $handicap->setName($name);
+        $handicap->setMemo($memo);
         return $handicap;
     }
 
     /**
      * @param null $name
+     * @param null $memo
      */
-    public function updateData($name=null) {
-        if(null !== $name) {
+    public function updateData($name=null,$memo = null) {
+        if(!empty($name)) {
             $this->setName($name);
         }
+        $this->setMemo($memo);
     }
 
     /**
@@ -79,6 +88,20 @@ class Handicap extends CommonBaseEntity{
      */
     public function getName() {
         return $this->name;
+    }
+
+    /**
+     * @param mixed $memo
+     */
+    public function setMemo($memo) {
+        $this->memo = $memo;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMemo() {
+        return $this->memo;
     }
 
 }

@@ -10,7 +10,7 @@ passenger.field.id:  Fahrgast-ID
 passenger.field.monthlybilling: Monatliche Rechnung
 passenger.field.payment: Bezahlung
 passenger.field.isinwheelchair: Rollstuhl
-passenger.field.notice: Notizen zum Fahrgast
+passenger.field.notice: Bemerkung (für Fahrauftrag)
 passenger.field.handicap: Behinderungen
 passenger.field.insurance: Versichert über
 passenger.button.new: Neuer Fahrgast
@@ -36,6 +36,7 @@ handicap.button.delete: Behinderung löschen
 
 handicap.name.not_blank: Bitte ein Name definieren
 handicap.field.name: Behinderung
+handicap.field.memo: Memo (für Disposition)
 
 #Insurance
 insurance.list.name: Alle Versicherungen
@@ -50,3 +51,4 @@ insurance.button.delete: Versicherung löschen
 
 insurance.name.not_blank: Bitte einen Namen definieren
 insurance.field.name: Versicherung
+insurance.field.memo: Memo (für Disposition)

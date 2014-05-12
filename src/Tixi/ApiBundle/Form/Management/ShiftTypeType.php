@@ -40,6 +40,10 @@ class ShiftTypeType extends CommonAbstractType{
             'widget' => 'single_text',
             'error_bubbling' => true
         ));
+        $builder->add('memo', 'textarea', array(
+            'required'  => false,
+            'label' => 'shifttype.field.memo'
+        ));
     }
 
     /**

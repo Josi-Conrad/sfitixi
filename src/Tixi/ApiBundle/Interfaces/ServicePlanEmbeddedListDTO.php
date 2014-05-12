@@ -32,11 +32,15 @@ class ServicePlanEmbeddedListDTO implements DataGridSourceClass{
      */
     public $vehicleId;
     /**
-     * @GridField(propertyId="ServicePlan.start", headerName="serviceplan.field.start", order=1)
+     * @GridField(propertyId="ServicePlan.subject", headerName="serviceplan.field.subject", order=1)
+     */
+    public $subject;
+    /**
+     * @GridField(propertyId="ServicePlan.start", headerName="serviceplan.field.start", order=2)
      */
     public $start;
     /**
-     * @GridField(propertyId="ServicePlan.end", headerName="serviceplan.field.end", restrictive=true, comparingOperator=">", order=2)
+     * @GridField(propertyId="ServicePlan.end", headerName="serviceplan.field.end", restrictive=true, comparingOperator=">", order=3)
      */
     public $end;
 

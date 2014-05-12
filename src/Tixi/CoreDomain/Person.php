@@ -42,15 +42,13 @@ class Person extends CommonBaseEntity {
     protected $absents;
 
     /**
-     * @ORM\ManyToOne(targetEntity="VehicleCategory")
-     * @ORM\JoinColumn(name="vehicle_category_id", referencedColumnName="id")
+     * @ORM\ManyToMany(targetEntity="VehicleCategory")
+     * @ORM\JoinTable(name="person_contradicts_vehiclecategory",
+     *      joinColumns={@ORM\JoinColumn(name="person_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="vehicle_category_id", referencedColumnName="id")}
+     *      )
      */
-    protected $preferredVehicleCategory;
-
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    protected $isActive;
+    protected $contradictVehicleCategories;
 
     /**
      * @ORM\Column(type="string", length=50, nullable=true)
@@ -76,6 +74,11 @@ class Person extends CommonBaseEntity {
      * @ORM\Column(type="string", length=50)
      */
     protected $telephone;
+
+    /**
+     * @ORM\Column(type="string", length=50, nullable=true)
+     */
+    protected $fax;
 
     /**
      * @ORM\Column(type="string", length=50, nullable=true)
@@ -109,7 +112,7 @@ class Person extends CommonBaseEntity {
     protected $billingAddress;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="boolean", nullable=true)
      */
     protected $isBillingAddress;
 
@@ -123,7 +126,7 @@ class Person extends CommonBaseEntity {
      * @param $firstname
      * @param $lastname
      * @param $telephone
-     * @param $address
+     * @param \Tixi\CoreDomain\Address $address
      * @param $title
      * @param null $email
      * @param null $entryDate
@@ -133,13 +136,15 @@ class Person extends CommonBaseEntity {
      * @param null $correspondenceAddress
      * @param null $billingAddress
      * @param bool $isBillingAddress
+     * @param null $fax
      */
     protected function __construct($gender, $firstname, $lastname, $telephone, Address $address, $title = null,
                                    $email = null, $entryDate = null, $birthday = null,
                                    $extraMinutes = null, $details = null, $correspondenceAddress = null,
-                                   $billingAddress = null, $isBillingAddress = true) {
+                                   $billingAddress = null, $isBillingAddress = true, $fax = null) {
 
         $this->absents = new ArrayCollection();
+        $this->contradictVehicleCategories = new ArrayCollection();
 
         $this->setGender($gender);
         $this->setFirstname($firstname);
@@ -155,7 +160,7 @@ class Person extends CommonBaseEntity {
         $this->setCorrespondenceAddress($correspondenceAddress);
         $this->setBillingAddress($billingAddress);
         $this->setIsBillingAddress($isBillingAddress);
-        $this->activate();
+        $this->setFax($fax);
 
         parent::__construct();
     }
@@ -174,15 +179,16 @@ class Person extends CommonBaseEntity {
      * @param null $details
      * @param null $correspondenceAddress
      * @param null $billingAddress
+     * @param null $fax
      * @return Person
      */
     public static function registerPerson($gender, $firstname, $lastname, $telephone, $address, $title = null,
                                           $email = null, $entryDate = null, $birthday = null,
                                           $extraMinutes = null, $details = null, $correspondenceAddress = null,
-                                          $billingAddress = null) {
+                                          $billingAddress = null, $fax = null) {
 
         $person = new Person($gender, $firstname, $lastname, $telephone, $address, $title,
-            $email, $entryDate, $birthday, $extraMinutes, $details, $correspondenceAddress, $billingAddress);
+            $email, $entryDate, $birthday, $extraMinutes, $details, $correspondenceAddress, $billingAddress, $fax);
 
         return $person;
     }
@@ -202,11 +208,12 @@ class Person extends CommonBaseEntity {
      * @param null $correspondenceAddress
      * @param null $billingAddress
      * @param bool $isBillingAddress
+     * @param null $fax
      */
     public function updatePersonData($gender = null, $firstname = null, $lastname = null, $telephone = null,
                                      $address = null, $title = null, $email = null, $entryDate = null, $birthday = null,
                                      $extraMinutes = null, $details = null, $correspondenceAddress = null,
-                                     $billingAddress = null, $isBillingAddress = true) {
+                                     $billingAddress = null, $isBillingAddress = true, $fax = null) {
 
         if (!empty($gender)) {
             $this->setGender($gender);
@@ -232,6 +239,7 @@ class Person extends CommonBaseEntity {
         $this->setCorrespondenceAddress($correspondenceAddress);
         $this->setBillingAddress($billingAddress);
         $this->setIsBillingAddress($isBillingAddress);
+        $this->setFax($fax);
 
         $this->updateModifiedDate();
     }
@@ -241,15 +249,6 @@ class Person extends CommonBaseEntity {
             $this->removeAbsent($a);
         }
     }
-
-    public function activate() {
-        $this->isActive = true;
-    }
-
-    public function inactivate() {
-        $this->isActive = false;
-    }
-
 
     /**
      * Assigns Absent to Person and OneToMany $person in Absent
@@ -271,8 +270,22 @@ class Person extends CommonBaseEntity {
     /**
      * @param VehicleCategory $vehicleCategory
      */
-    public function assignPreferredVehicleCategory($vehicleCategory) {
-        $this->preferredVehicleCategory = $vehicleCategory;
+    public function assignContradictVehicleCategory($vehicleCategory) {
+        $this->contradictVehicleCategories->add($vehicleCategory);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getContradictVehicleCategories() {
+        return $this->contradictVehicleCategories;
+    }
+
+    /**
+     * @param ArrayCollection $contradictVehicleCategories
+     */
+    public function setContradictVehicleCategories(ArrayCollection $contradictVehicleCategories) {
+        $this->contradictVehicleCategories = $contradictVehicleCategories;
     }
 
     /**
@@ -424,20 +437,6 @@ class Person extends CommonBaseEntity {
     }
 
     /**
-     * @param mixed $isActive
-     */
-    public function setIsActive($isActive) {
-        $this->isActive = $isActive;
-    }
-
-    /**
-     * @return Boolean
-     */
-    public function getIsActive() {
-        return $this->isActive;
-    }
-
-    /**
      * @param mixed $lastname
      */
     public function setLastname($lastname) {
@@ -516,10 +515,17 @@ class Person extends CommonBaseEntity {
     }
 
     /**
+     * @param mixed $fax
+     */
+    public function setFax($fax) {
+        $this->fax = $fax;
+    }
+
+    /**
      * @return mixed
      */
-    public function getPreferredVehicleCategory() {
-        return $this->preferredVehicleCategory;
+    public function getFax() {
+        return $this->fax;
     }
 
     /**

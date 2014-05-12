@@ -31,6 +31,7 @@ class ServicePlanAssembler {
         $servicePlan = ServicePlan::registerServicePlan(
             $servicePlanDTO->start,
             $servicePlanDTO->end,
+            $servicePlanDTO->subject,
             $servicePlanDTO->memo
         );
         return $servicePlan;
@@ -45,6 +46,7 @@ class ServicePlanAssembler {
         $servicePlan->updateServicePlanData(
             $servicePlanDTO->start,
             $servicePlanDTO->end,
+            $servicePlanDTO->subject,
             $servicePlanDTO->memo
         );
         return $servicePlan;
@@ -61,6 +63,7 @@ class ServicePlanAssembler {
             $this->dateTimeService->convertToLocalDateTime($servicePlan->getStart());
         $servicePlanDTO->end =
             $this->dateTimeService->convertToLocalDateTime($servicePlan->getEnd());
+        $servicePlanDTO->subject = $servicePlan->getSubject();
         $servicePlanDTO->memo = $servicePlan->getMemo();
         return $servicePlanDTO;
     }
@@ -85,6 +88,7 @@ class ServicePlanAssembler {
         $servicePlanEmbeddedListDTO = new ServicePlanEmbeddedListDTO();
         $servicePlanEmbeddedListDTO->id = $servicePlan->getId();
         $servicePlanEmbeddedListDTO->vehicleId = $servicePlan->getVehicle()->getId();
+        $servicePlanEmbeddedListDTO->subject = $servicePlan->getSubject();
         $servicePlanEmbeddedListDTO->start =
             $this->dateTimeService->convertToLocalDateTimeString($servicePlan->getStart());
         $servicePlanEmbeddedListDTO->end =

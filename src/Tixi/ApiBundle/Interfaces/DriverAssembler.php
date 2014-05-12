@@ -34,7 +34,7 @@ class DriverAssembler {
             $this->addressAssembler->addressLookaheadDTOtoAddress($driverDTO->lookaheadaddress),
             $driverDTO->licenceNumber, $driverDTO->driverCategory, $driverDTO->wheelChairAttendance,
             $driverDTO->title, $driverDTO->email, $driverDTO->entryDate, $driverDTO->birthday,
-            $driverDTO->extraMinutes, $driverDTO->details
+            $driverDTO->extraMinutes, $driverDTO->details, $driverDTO->operationWish, $driverDTO->fax
         );
         return $driver;
     }
@@ -51,7 +51,7 @@ class DriverAssembler {
             $this->addressAssembler->addressLookaheadDTOtoAddress($driverDTO->lookaheadaddress), $driverDTO->licenceNumber, $driverDTO->driverCategory,
             $driverDTO->wheelChairAttendance, $driverDTO->title,
             $driverDTO->email, $driverDTO->entryDate, $driverDTO->birthday,
-            $driverDTO->extraMinutes, $driverDTO->details);
+            $driverDTO->extraMinutes, $driverDTO->details, $driverDTO->operationWish, $driverDTO->fax);
         return $driver;
     }
 
@@ -62,12 +62,12 @@ class DriverAssembler {
     public function driverToDriverRegisterDTO(Driver $driver) {
         $driverDTO = new DriverRegisterDTO();
         $driverDTO->person_id = $driver->getId();
-        $driverDTO->isActive = $driver->getIsActive();
         $driverDTO->gender = $driver->getGender();
         $driverDTO->title = $driver->getTitle();
         $driverDTO->firstname = $driver->getFirstname();
         $driverDTO->lastname = $driver->getLastname();
         $driverDTO->telephone = $driver->getTelephone();
+        $driverDTO->fax = $driver->getFax();
         $driverDTO->email = $driver->getEmail();
         $driverDTO->entryDate = $driver->getEntryDate();
         $driverDTO->birthday = $driver->getBirthday();
@@ -76,6 +76,7 @@ class DriverAssembler {
 
         $driverDTO->licenceNumber = $driver->getLicenceNumber();
         $driverDTO->wheelChairAttendance = $driver->getWheelChairAttendance();
+        $driverDTO->operationWish = $driver->getOperationWish();
 
         $driverDTO->driverCategory = $driver->getDriverCategory()->getName();
 
@@ -104,7 +105,6 @@ class DriverAssembler {
     public function driverToDriverListDTO(Driver $driver) {
         $driverListDTO = new DriverListDTO();
         $driverListDTO->id = $driver->getId();
-        $driverListDTO->isActive = $driver->getIsActive();
         $driverListDTO->gender = $driver->getGenderAsString();
         $driverListDTO->firstname = $driver->getFirstname();
         $driverListDTO->telephone = $driver->getTelephone();
