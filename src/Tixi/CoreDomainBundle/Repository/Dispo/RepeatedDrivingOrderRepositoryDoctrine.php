@@ -11,6 +11,7 @@ namespace Tixi\CoreDomainBundle\Repository\Dispo;
 
 use Tixi\CoreDomain\Dispo\RepeatedDrivingOrder;
 use Tixi\CoreDomain\Dispo\RepeatedDrivingOrderRepository;
+use Tixi\CoreDomain\Dispo\Shift;
 use Tixi\CoreDomainBundle\Repository\CommonBaseRepositoryDoctrine;
 
 /**
@@ -18,8 +19,10 @@ use Tixi\CoreDomainBundle\Repository\CommonBaseRepositoryDoctrine;
  * @package Tixi\CoreDomainBundle\Repository\Dispo
  */
 class RepeatedDrivingOrderRepositoryDoctrine extends CommonBaseRepositoryDoctrine implements RepeatedDrivingOrderRepository {
+
     /**
      * @param RepeatedDrivingOrder $repeatedDrivingOrder
+     * @return mixed|void
      */
     public function store(RepeatedDrivingOrder $repeatedDrivingOrder) {
         $this->getEntityManager()->persist($repeatedDrivingOrder);
@@ -27,8 +30,14 @@ class RepeatedDrivingOrderRepositoryDoctrine extends CommonBaseRepositoryDoctrin
 
     /**
      * @param RepeatedDrivingOrder $repeatedDrivingOrder
+     * @return mixed|void
      */
     public function remove(RepeatedDrivingOrder $repeatedDrivingOrder) {
         $this->getEntityManager()->remove($repeatedDrivingOrder);
+    }
+
+    public function findAllOrdersForShift(Shift $shift)
+    {
+        // TODO: Implement findAllOrdersForShift() method.
     }
 }
