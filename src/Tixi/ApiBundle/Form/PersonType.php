@@ -62,10 +62,6 @@ class PersonType extends CommonAbstractType {
                 new NotBlank(array('message' => 'field.not_blank'))
             ),
         ));
-        $builder->add('lookaheadaddress','addresslookahead',array(
-            'label' => 'address.field.lookahead'
-            )
-        );
 //        $builder->add('street', 'text', array(
 //            'label' => 'address.field.street',
 //            'attr' => array('title' => 'form.field.title.not_blank'),

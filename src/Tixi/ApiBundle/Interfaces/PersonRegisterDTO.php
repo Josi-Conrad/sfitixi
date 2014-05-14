@@ -34,6 +34,7 @@ class PersonRegisterDTO {
     public $billingAddress;
     public $isBillingAddress;
 
+    public $house;
     public $lookaheadaddress;
 
     public function __construct(){

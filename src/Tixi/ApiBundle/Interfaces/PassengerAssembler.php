@@ -28,10 +28,11 @@ class PassengerAssembler {
      * @return Passenger
      */
     public function registerDTOtoNewPassenger(PassengerRegisterDTO $passengerDTO) {
+        $address = $this->addressAssembler->addressLookaheadDTOtoAddress($passengerDTO->lookaheadaddress);
+        $address->setHouse($passengerDTO->house);
         $passenger = Passenger::registerPassenger($passengerDTO->gender, $passengerDTO->firstname,
             $passengerDTO->lastname, $passengerDTO->telephone,
-            $this->addressAssembler->addressLookaheadDTOtoAddress($passengerDTO->lookaheadaddress),
-            $passengerDTO->title,
+            $address, $passengerDTO->title,
             $passengerDTO->isInWheelChair,
             $passengerDTO->gotMonthlyBilling,
             $passengerDTO->email, $passengerDTO->entryDate, $passengerDTO->birthday,
@@ -56,9 +57,12 @@ class PassengerAssembler {
      * @return Passenger
      */
     public function registerDTOToPassenger(Passenger $passenger, PassengerRegisterDTO $passengerDTO) {
+        $address = $this->addressAssembler->addressLookaheadDTOtoAddress($passengerDTO->lookaheadaddress);
+        $address->setHouse($passengerDTO->house);
         $passenger->updatePassengerData($passengerDTO->gender, $passengerDTO->firstname,
             $passengerDTO->lastname, $passengerDTO->telephone,
-            $this->addressAssembler->addressLookaheadDTOtoAddress($passengerDTO->lookaheadaddress), $passengerDTO->title, $passengerDTO->isInWheelChair,
+            $address, $passengerDTO->title,
+            $passengerDTO->isInWheelChair,
             $passengerDTO->gotMonthlyBilling,
             $passengerDTO->email, $passengerDTO->entryDate, $passengerDTO->birthday,
             $passengerDTO->extraMinutes, $passengerDTO->details, $passengerDTO->notice,
@@ -99,6 +103,7 @@ class PassengerAssembler {
         $passengerDTO->billingAddress = $passenger->getBillingAddress();
         $passengerDTO->isBillingAddress = $passenger->getIsBillingAddress();
 
+        $passengerDTO->house = $passenger->getAddress()->getHouse();
         $passengerDTO->lookaheadaddress = $this->addressAssembler->addressToAddressLookaheadDTO($passenger->getAddress());
 
         return $passengerDTO;

@@ -28,7 +28,7 @@ class POIAssembler {
             Address::registerAddress(
                 $poiDTO->street, $poiDTO->postalCode,
                 $poiDTO->city, $poiDTO->country, $poiDTO->address_name, $poiDTO->lat, $poiDTO->lng, $poiDTO->type),
-            $poiDTO->department, $poiDTO->telephone, $poiDTO->comment, $poiDTO->memo, $poiDTO->details);
+            $poiDTO->department, $poiDTO->telephone, $poiDTO->comment, $poiDTO->details);
         foreach ($poiDTO->keywords as $keyword) {
             $poi->assignKeyword($keyword);
         }
@@ -46,7 +46,7 @@ class POIAssembler {
         $address->updateAddressData($poiDTO->street, $poiDTO->postalCode,
             $poiDTO->city, $poiDTO->country, $poiDTO->address_name, $poiDTO->lat, $poiDTO->lng, $poiDTO->type);
         $poi->updatePOIData($poiDTO->name, $address, $poiDTO->department,
-            $poiDTO->telephone, $poiDTO->comment, $poiDTO->memo, $poiDTO->details);
+            $poiDTO->telephone, $poiDTO->comment, $poiDTO->details);
         $poi->setKeywords($poiDTO->keywords);
         return $poi;
     }
@@ -63,7 +63,6 @@ class POIAssembler {
         $poiDTO->department = $poi->getDepartment();
         $poiDTO->telephone = $poi->getTelephone();
         $poiDTO->comment = $poi->getComment();
-        $poiDTO->memo = $poi->getMemo();
         $poiDTO->details = $poi->getDetails();
 
         $poiDTO->keywords = $poi->getKeywords();

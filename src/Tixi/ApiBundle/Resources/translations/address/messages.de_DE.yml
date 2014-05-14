@@ -4,5 +4,5 @@ address.field.street: Strasse / Nummer
 address.field.postalcode: PLZ
 address.field.city: Ort
 address.field.country: Land
-address.field.lat: Latitude
-address.field.lng: Longitude
+address.field.lat: Breite
+address.field.lng: Länge

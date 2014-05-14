@@ -282,9 +282,9 @@ class Person extends CommonBaseEntity {
     }
 
     /**
-     * @param ArrayCollection $contradictVehicleCategories
+     * @param $contradictVehicleCategories
      */
-    public function setContradictVehicleCategories(ArrayCollection $contradictVehicleCategories) {
+    public function setContradictVehicleCategories($contradictVehicleCategories) {
         $this->contradictVehicleCategories = $contradictVehicleCategories;
     }
 
