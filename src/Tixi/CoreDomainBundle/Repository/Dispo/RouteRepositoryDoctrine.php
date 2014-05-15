@@ -2,6 +2,7 @@
 
 namespace Tixi\CoreDomainBundle\Repository\Dispo;
 
+use Tixi\CoreDomain\Address;
 use Tixi\CoreDomain\Dispo\Route;
 use Tixi\CoreDomain\Dispo\RouteRepository;
 use Tixi\CoreDomainBundle\Repository\CommonBaseRepositoryDoctrine;
@@ -25,5 +26,19 @@ class RouteRepositoryDoctrine  extends CommonBaseRepositoryDoctrine implements R
      */
     public function remove(Route $route) {
         $this->getEntityManager()->remove($route);
+    }
+
+    /**
+     * @param Address $from
+     * @param Address $to
+     * @return Route
+     */
+    public function findRouteWithAddresses(Address $from, Address $to) {
+        $qb = $this->createQueryBuilder('e')
+            ->where('e.startAddress = :startAddressId')
+            ->andWhere('e.targetAddress = :targetAddressId')
+            ->setParameter('startAddressId', $from->getId())
+            ->setParameter('targetAddressId', $to->getId());
+        return $qb->getQuery()->getOneOrNullResult();
     }
 }

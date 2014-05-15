@@ -11,6 +11,7 @@ namespace Tixi\CoreDomain;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Tixi\CoreDomain\Shared\CommonBaseEntity;
+use Tixi\CoreDomainBundle\Util\GeometryService;
 
 /**
  * Tixi\CoreDomain\Address
@@ -18,7 +19,7 @@ use Tixi\CoreDomain\Shared\CommonBaseEntity;
  * @ORM\Entity(repositoryClass="Tixi\CoreDomainBundle\Repository\AddressRepositoryDoctrine")
  * @ORM\Table(name="address")
  */
-class Address extends CommonBaseEntity{
+class Address extends CommonBaseEntity {
 
     const SOURCE_MANUAL = 'manual';
     const SOURCE_GOOGLE = 'google';
@@ -97,7 +98,7 @@ class Address extends CommonBaseEntity{
      * @return Address
      */
     public static function registerAddress($street, $postalCode, $city, $country,
-                                           $name = null, $lat = null, $lng = null, $source=self::SOURCE_MANUAL) {
+                                           $name = null, $lat = null, $lng = null, $source = self::SOURCE_MANUAL) {
         $address = new Address();
 
         $address->setStreet($street);
@@ -123,8 +124,8 @@ class Address extends CommonBaseEntity{
      * @param string $source
      */
     public function updateAddressData($street = null, $postalCode = null,
-                                           $city = null, $country = null,
-                                           $name = null, $lat = null, $lng = null, $source=self::SOURCE_MANUAL) {
+                                      $city = null, $country = null,
+                                      $name = null, $lat = null, $lng = null, $source = self::SOURCE_MANUAL) {
 
         if (!empty($street)) {
             $this->setStreet($street);
@@ -178,7 +179,7 @@ class Address extends CommonBaseEntity{
      * @return string
      */
     protected function constructAlternativeName() {
-        return $this->getStreet().', '.$this->getPostalCode().' '.$this->getCity().', '.$this->getCountry();
+        return $this->getStreet() . ', ' . $this->getPostalCode() . ' ' . $this->getCity() . ', ' . $this->getCountry();
     }
 
     /**
@@ -224,35 +225,67 @@ class Address extends CommonBaseEntity{
     }
 
     /**
-     * Set Latitude as integer - use GeometryService to set integer<->float precision
-     * @param integer $lat
+     * Set Latitude from float - use GeometryService to set integer<->float precision
+     * @param float $lat
      */
     public function setLat($lat) {
-        $this->lat = $lat;
+        $this->lat = GeometryService::serialize($lat);
     }
 
     /**
-     * Returns Latitude as integer - use GeometryService to set integer<->float precision
-     * @return integer
+     * Returns Latitude as float - use GeometryService to set integer<->float precision
+     * @return float
      */
     public function getLat() {
-        return $this->lat;
+        return GeometryService::deserialize($this->lat);
     }
 
     /**
-     * Set Longitude as integer - use GeometryService to set integer<->float precision
-     * @param integer $lng
+     * Set Longitude from float - use GeometryService to set integer<->float precision
+     * @param float $lng
      */
     public function setLng($lng) {
-        $this->lng = $lng;
+        $this->lng = GeometryService::serialize($lng);
     }
 
     /**
-     * Return Longitude as integer - use GeometryService to set integer<->float precision
-     * @return integer
+     * Returns Longitude as float - use GeometryService to set integer<->float precision
+     * @return float
      */
     public function getLng() {
-        return $this->lng;
+        return GeometryService::deserialize($this->lng);
+    }
+
+    /**
+     * Set the nearest waypoint Latitude from float - use GeometryService to set integer<->float precision
+     * @param mixed $nearestLat
+     */
+    public function setNearestLat($nearestLat) {
+        $this->nearestLat = GeometryService::serialize($nearestLat);
+    }
+
+    /**
+     * Returns the nearest waypoint Latitude as float - use GeometryService to set integer<->float precision
+     * @return mixed
+     */
+    public function getNearestLat() {
+        return GeometryService::deserialize($this->nearestLat);
+    }
+
+    /**
+     * Set the nearest waypoint Longitude from float - use GeometryService to set integer<->float precision
+     * @param mixed $nearestLng
+     */
+    public function setNearestLng($nearestLng) {
+        $this->nearestLng = GeometryService::serialize($nearestLng);
+    }
+
+    /**
+     * Returns the nearest waypoint Latitude as float - use GeometryService to set integer<->float precision
+     * @return mixed
+     */
+    public function getNearestLng() {
+        return GeometryService::deserialize($this->nearestLng);
     }
 
     /**
@@ -307,16 +340,14 @@ class Address extends CommonBaseEntity{
     /**
      * @param mixed $source
      */
-    public function setSource($source)
-    {
+    public function setSource($source) {
         $this->source = $source;
     }
 
     /**
      * @return mixed
      */
-    public function getSource()
-    {
+    public function getSource() {
         return $this->source;
     }
 
@@ -334,5 +365,17 @@ class Address extends CommonBaseEntity{
         return $this->house;
     }
 
+    /**
+     * @return bool
+     */
+    public function gotCoordinates() {
+        return (!empty($this->getLat()) && !empty($this->getLng()));
+    }
 
+    /**
+     * @return bool
+     */
+    public function gotNearestCoordinates() {
+        return (!empty($this->getNearestLat()) && !empty($this->getNearestLng()));
+    }
 }

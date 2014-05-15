@@ -31,7 +31,18 @@ class AddressRepositoryDoctrine extends CommonBaseRepositoryDoctrine implements 
      */
     public function findAddressesWithoutCoordinates() {
         $qb = parent::createQueryBuilder('a');
-        $qb->where('a.lat = 0');
+        $qb->where('a.lat = 0')->orWhere('a.lat is NULL')
+        ->orWhere('a.lng = 0')->orWhere('a.lng is NULL');
+        return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * @return Address[]
+     */
+    public function findAddressesWithoutNearestCoordinates() {
+        $qb = parent::createQueryBuilder('a');
+        $qb->where('a.nearestLat = 0')->orWhere('a.nearestLat is NULL')
+            ->orWhere('a.nearestLng = 0')->orWhere('a.nearestLng is NULL');
         return $qb->getQuery()->getResult();
     }
 }

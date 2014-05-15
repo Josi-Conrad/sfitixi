@@ -8,7 +8,7 @@ use Tixi\CoreDomain\Shared\CommonBaseRepository;
  * Interface AddressRepository
  * @package Tixi\CoreDomain
  */
-interface AddressRepository extends CommonBaseRepository{
+interface AddressRepository extends CommonBaseRepository {
     /**
      * @param Address $address
      * @return mixed
@@ -25,4 +25,9 @@ interface AddressRepository extends CommonBaseRepository{
      * @return Address[]
      */
     public function findAddressesWithoutCoordinates();
+
+    /**
+     * @return Address[]
+     */
+    public function findAddressesWithoutNearestCoordinates();
 }

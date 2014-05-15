@@ -2,6 +2,7 @@
 
 namespace Tixi\CoreDomain\Dispo;
 
+use Tixi\CoreDomain\Address;
 use Tixi\CoreDomain\Shared\CommonBaseRepository;
 
 /**
@@ -21,4 +22,10 @@ interface RouteRepository extends CommonBaseRepository {
      */
     public function remove(Route $route);
 
+    /**
+     * @param Address $from
+     * @param Address $to
+     * @return Route
+     */
+    public function findRouteWithAddresses(Address $from, Address $to);
 }

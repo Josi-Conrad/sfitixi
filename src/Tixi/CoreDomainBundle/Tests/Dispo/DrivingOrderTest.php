@@ -9,7 +9,7 @@
 namespace Tixi\CoreDomainBundle\Tests\Entity;
 
 use Symfony\Component\Validator\Constraints\DateTime;
-use Tixi\App\AppBundle\Address\GeometryService;
+use Tixi\CoreDomainBundle\Util\GeometryService;
 use Tixi\CoreDomain\Dispo\DrivingOrder;
 use Tixi\CoreDomain\Dispo\DrivingPool;
 use Tixi\CoreDomain\Dispo\Route;
@@ -46,7 +46,7 @@ class DrivingOrderTest extends CommonBaseTest {
         $date = $this->dateTimeService->convertDateTimeStringToUTCDateTime('20.05.2014 00:00');
         $time = $this->dateTimeService->convertDateTimeStringToUTCDateTime('20.05.2014 15:05');
 
-        $route = Route::registerRoute($addressFrom, $addressTo);
+        $route = Route::registerRoute($addressFrom, $addressTo, 0, 0);
         $route->setDuration(15);
         $route->setDistance(6);
 
@@ -135,17 +135,6 @@ class DrivingOrderTest extends CommonBaseTest {
             foreach ($vehicle->getServicePlans() as $sp) {
             }
         }
-    }
-
-    public function testDateFunctions() {
-        $date = new \DateTime('first monday of this month');
-        if ($date->format('w') == 1) {
-            echo $date->format('w') . " weekday " . $date->format('d.m');
-        }
-        $f = GeometryService::serialize(47.096560);
-        $i = GeometryService::deserialize($f);
-        echo "\n" . $f;
-        echo "\n" . $i;
     }
 
     public function tearDown() {

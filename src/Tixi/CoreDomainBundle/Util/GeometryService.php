@@ -6,7 +6,7 @@
  * Time: 21:56
  */
 
-namespace Tixi\App\AppBundle\Address;
+namespace Tixi\CoreDomainBundle\Util;
 
 
 class GeometryService {

@@ -10,7 +10,6 @@ namespace Tixi\App\AppBundle\Tests;
 
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Tixi\App\AppBundle\Address\GeometryService;
 use Tixi\App\AppBundle\Controller\AddressManagementImplDoctrine;
 use Tixi\CoreDomain\Address;
 use Tixi\CoreDomainBundle\Tests\CommonBaseTest;
@@ -41,14 +40,13 @@ class AddressServiceTest extends CommonBaseTest {
                 echo $address->toString() . ": ";
                 $add = $addressService->getAddressInformationByString($address->toString());
                 if ($add !== null) {
-                    echo GeometryService::deserialize($add->lat) . " " . GeometryService::deserialize($add->lng) . "\n";
+                    $this->assertNotEmpty($add->lat);
+                    echo $add->lat . " " . $add->lng . "\n";
                 }
                 if ($count == 5) {
                     break;
                 }
             }
-            $this->assertNotNull($add);
-            $this->assertNotEmpty($add->lat);
         }
     }
 

@@ -86,10 +86,7 @@ class AddressLookupServiceGoogle extends AddressLookupService {
     protected function getSingleAddressHandleDTO($lookupStr) {
         $url = $this->constructApiURL($lookupStr, false);
 //        $jsonResponseString = file_get_contents($url);
-        $s = microtime(true);
         $jsonResponseString = $this->getJSONResponse($url);
-        $e = microtime(true);
-        echo "\nTime to get repsonse: " . ($e-$s) . "s\n";
         $responseObject = json_decode($jsonResponseString);
         $statusCode = $this->googleStatusCodeMapper[$responseObject->status];
         $dto = null;
@@ -129,8 +126,8 @@ class AddressLookupServiceGoogle extends AddressLookupService {
         $long = null;
 
         $name = $responseObject->formatted_address;
-        $lat = GeometryService::serialize($responseObject->geometry->location->lat);
-        $lng = GeometryService::serialize($responseObject->geometry->location->lng);
+        $lat = $responseObject->geometry->location->lat;
+        $lng = $responseObject->geometry->location->lng;
 
         $addressComponents = $responseObject->address_components;
         foreach ($addressComponents as $addressComponent) {

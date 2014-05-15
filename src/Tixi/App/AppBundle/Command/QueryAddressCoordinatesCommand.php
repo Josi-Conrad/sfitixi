@@ -35,12 +35,13 @@ class QueryAddressCoordinatesCommand extends ContainerAwareCommand {
     public function execute(InputInterface $input, OutputInterface $output) {
         $limit = $input->getArgument('limit');
         if (!$limit) {
-            $limit = 100;
+            $limit = 1000;
         }
 
         $em = $this->getContainer()->get('entity_manager');
         $addressRep = $this->getContainer()->get('address_repository');
         $addressService = $this->getContainer()->get('tixi_app.addressmanagement');
+        $routingMachine = $this->getContainer()->get('tixi_app.routingmachine');
 
         $addresses = $addressRep->findAddressesWithoutCoordinates();
         $count = 0;
@@ -55,17 +56,48 @@ class QueryAddressCoordinatesCommand extends ContainerAwareCommand {
                 echo $addressDTO->lat . " " . $addressDTO->lng . "\n";
                 $address->setLat($addressDTO->lat);
                 $address->setLng($addressDTO->lng);
-                $changed++;
+
+                $cord = $routingMachine->getNearestPointsFromCoordinates($address->getLat(), $address->getLng());
+                if ($cord !== null) {
+                    $address->setNearestLat($cord->getLatitude());
+                    $address->setNearestLng($cord->getLongitude());
+                    $changed++;
+                }
+            } else {
+                echo " no valid address found\n";
             }
 
             if ($count == $limit) {
                 break;
             }
         }
+        $em->flush();
 
+        $addressNearest = $addressRep->findAddressesWithoutNearestCoordinates();
+        $countNearest = 0;
+        $changedNearest = 0;
+        /**@var $address Address */
+        foreach ($addressNearest as $address) {
+            $countNearest++;
+            echo $address->toString() . " nearest points: ";
+            if ($address->gotCoordinates()) {
+                /**@var $cord \Tixi\App\AppBundle\Routing\RoutingCoordinate */
+                $cord = $routingMachine->getNearestPointsFromCoordinates($address->getLat(), $address->getLng());
+                if ($cord !== null) {
+                    echo $cord->getLatitude() . " " . $cord->getLongitude() . "\n";
+                    $address->setNearestLat($cord->getLatitude());
+                    $address->setNearestLng($cord->getLongitude());
+                    $changedNearest++;
+                }
+            }
+            if ($countNearest == $limit) {
+                break;
+            }
+        }
         $em->flush();
 
         $output->writeln("\n--------------------------------------------\n" .
-            "Addresses without coordinates: " . $count . "\n" . "Addresses Updated: " . $changed . "\n");
+            "Addresses without coordinates: " . $count . "\n" . "Addresses Updated: " . $changed . "\n" .
+            "Addresses only without nearest coordinates: " . $countNearest . "\n" . "Addresses Updated: " . $changedNearest . "\n");
     }
 }

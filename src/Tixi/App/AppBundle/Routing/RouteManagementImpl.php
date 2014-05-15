@@ -10,6 +10,7 @@ namespace Tixi\App\AppBundle\Routing;
 
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\EntityManager;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\DependencyInjection\ContainerAware;
 use Tixi\App\Routing\RouteManagement;
@@ -19,29 +20,55 @@ use Tixi\CoreDomain\Dispo\RouteRepository;
 
 class RouteManagementImpl extends ContainerAware implements RouteManagement {
     /**
+     * checks if existing route in database is available or query new routing informations from an routing machine
+     * and return an Route object
      * @param Address $from
      * @param Address $to
-     * @return mixed
+     * @return Route
      */
     public function getRouteFromAddresses(Address $from, Address $to) {
-        /**@var $routeRepo RouteRepository*/
+        /**@var EntityManager */
+        $em = $this->container->get('entity_manager');
+        /**@var $routeRepo RouteRepository */
         $routeRepo = $this->container->get('route_repository');
         /**@var $routingMachine \Tixi\App\Routing\RoutingMachine */
         $routingMachine = $this->container->get('tixi_app.routingmachine');
-        try{
-            $routingInformation = $routingMachine->getRoutingInformationFromCoordinates(
-                $from->getLat(), $from->getLng(), $to->getLat(), $to->getLng());
+
+        // search for existing route in DB, else create a new one with querying routing machine
+        $route = $routeRepo->findRouteWithAddresses($from, $to);
+        if ($route !== null) {
+            return $route;
+        }
+
+        // to get route from routing machine, make shure we have routable coordinates available
+        $cordFrom = null;
+        if (empty($from->getNearestLat()) || empty($from->getNearestLng())) {
+            $cordFrom = $routingMachine->getNearestPointsFromCoordinates($from->getLat(), $from->getLng());
+            $from->setNearestLat(($cordFrom->getLatitude()));
+            $from->setNearestLng(($cordFrom->getLongitude()));
+        } else {
+            $cordFrom = new RoutingCoordinate($from->getNearestLat(), $from->getNearestLng());
+        }
+
+        $cordTo = null;
+        if (empty($to->getNearestLat()) || empty($to->getNearestLng())) {
+            $cordTo = $routingMachine->getNearestPointsFromCoordinates($to->getLat(), $to->getLng());
+            $to->setNearestLat(($cordTo->getLatitude()));
+            $to->setNearestLng(($cordTo->getLongitude()));
+        } else {
+            $cordTo = new RoutingCoordinate($to->getNearestLat(), $to->getNearestLng());
+        }
+
+        try {
+            $routingInformation = $routingMachine->getRoutingInformationFromRoutingCoordinates($cordFrom, $cordTo);
             $route = Route::registerRoute($from, $to,
                 $routingInformation->getTotalTime(), $routingInformation->getTotalDistance());
+            $routeRepo->store($route);
+            $em->flush();
             return $route;
-
-        }catch (Exception $e){
+        } catch (Exception $e) {
             return null;
         }
-    }
-
-    public function createRouteFromDrivingOrder() {
-        // TODO: Implement createRouteFromDrivingOrder() method.
     }
 
 }

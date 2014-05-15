@@ -39,6 +39,20 @@ class RoutingMachineOSRM extends ContainerAware implements RoutingMachine {
     protected $osrm_server;
 
     /**
+     * @param $lat
+     * @param $lng
+     * @return RoutingCoordinate
+     * @throws RoutingMachineException
+     */
+    public function getNearestPointsFromCoordinates($lat, $lng) {
+        $this->prepareServerUrl();
+        if (!$this->checkConnectivity()) {
+            throw new RoutingMachineException('OSRM connection failed');
+        }
+        return $this->getNearestPoint(new RoutingCoordinate($lat, $lng));
+    }
+
+    /**
      * @param $latFrom
      * @param $lngFrom
      * @param $latTo
@@ -56,6 +70,20 @@ class RoutingMachineOSRM extends ContainerAware implements RoutingMachine {
         $cordFrom = $this->getNearestPoint(new RoutingCoordinate($latFrom, $lngFrom));
         $cordTo = $this->getNearestPoint(new RoutingCoordinate($latTo, $lngTo));
 
+        return $this->getRouteInformation($cordFrom, $cordTo);
+    }
+
+    /**
+     * @param RoutingCoordinate $cordFrom
+     * @param RoutingCoordinate $cordTo
+     * @return mixed|null|RoutingInformationOSRM
+     * @throws RoutingMachineException
+     */
+    public function getRoutingInformationFromRoutingCoordinates(RoutingCoordinate $cordFrom, RoutingCoordinate $cordTo) {
+        $this->prepareServerUrl();
+        if (!$this->checkConnectivity()) {
+            throw new RoutingMachineException('OSRM connection failed');
+        }
         return $this->getRouteInformation($cordFrom, $cordTo);
     }
 
@@ -84,11 +112,11 @@ class RoutingMachineOSRM extends ContainerAware implements RoutingMachine {
         $s = microtime(true);
         $this->fillNearestPoints($routings);
         $e = microtime(true);
-        echo "filled nearest points in: " . ($e-$s) . "s\n";
+        echo "filled nearest points in: " . ($e - $s) . "s\n";
         $s = microtime(true);
         $this->setRoutingInformations($routings);
         $e = microtime(true);
-        echo "filled routings in: " . ($e-$s) . "s\n";
+        echo "filled routings in: " . ($e - $s) . "s\n";
     }
 
     /**
@@ -164,6 +192,7 @@ class RoutingMachineOSRM extends ContainerAware implements RoutingMachine {
 
         //generate curl requests
         for ($i = 0; $i < $indicator; $i++) {
+            /**@var $route Route */
             $route = $routings[$i]->getRoute();
 
             //set all from start coordinates

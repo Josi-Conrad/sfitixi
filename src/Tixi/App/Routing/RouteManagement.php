@@ -20,6 +20,4 @@ interface RouteManagement {
      */
     public function getRouteFromAddresses(Address $from, Address $to);
 
-    public function createRouteFromDrivingOrder();
-
-} 
+}

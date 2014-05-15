@@ -68,7 +68,7 @@ class Route extends CommonBaseEntity {
      * @param int $additionalTime
      * @return Route
      */
-    public static function registerRoute($startAddress, $targetAddress, $duration = null, $distance = null, $additionalTime = 0) {
+    public static function registerRoute($startAddress, $targetAddress, $duration, $distance, $additionalTime = 0) {
         $route = new Route();
         $route->setStartAddress($startAddress);
         $route->setTargetAddress($targetAddress);
