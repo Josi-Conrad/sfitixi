@@ -96,10 +96,6 @@ class POIType extends CommonAbstractType {
             'label' => 'address.field.lng'
         ));
 
-        $builder->add('memo', 'textarea', array(
-            'required' => false,
-            'label' => 'poi.field.memo',
-        ));
         $builder->add('comment', 'textarea', array(
             'required' => false,
             'label' => 'poi.field.comment',

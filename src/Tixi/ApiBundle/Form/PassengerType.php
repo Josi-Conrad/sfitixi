@@ -44,6 +44,14 @@ class PassengerType extends PersonType {
 
         parent::buildForm($builder, $options);
 
+        $builder->add('house', 'text', array(
+            'required' => false,
+            'label' => 'person.field.house',
+        ));
+        $builder->add('lookaheadaddress','addresslookahead',array(
+                'label' => 'address.field.lookahead'
+            )
+        );
         $builder->add('isBillingAddress', 'checkbox', array(
             'required' => false,
             'label' => 'passenger.field.isbillingaddress'
@@ -52,7 +60,6 @@ class PassengerType extends PersonType {
             'required' => false,
             'label' => 'person.field.billingaddress'
         ));
-
         $builder->add('gotMonthlyBilling', 'checkbox', array(
             'required' => false,
             'label' => 'passenger.field.monthlybilling'
@@ -105,12 +112,10 @@ class PassengerType extends PersonType {
             'required' => false,
             'label' => 'passenger.field.notice'
         ));
-
         $builder->add('correspondenceAddress', 'textarea', array(
             'required' => false,
             'label' => 'person.field.correspondenceaddress'
         ));
-
         $builder->add('contradictVehicleCategories', 'entity', array(
             'required' => false,
             'class' => 'Tixi\CoreDomain\VehicleCategory',

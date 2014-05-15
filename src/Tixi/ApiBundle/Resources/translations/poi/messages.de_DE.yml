@@ -12,9 +12,8 @@ poi.field.keyword: Keyword
 poi.field.keywords: Keywords
 poi.field.department: Abteilung
 poi.field.telephone: Telefon
-poi.field.memo: Notizen
-poi.field.comment: Kommentare
-poi.field.details: Details
+poi.field.comment: Bemerkung (für Fahrauftrag)
+poi.field.details: Details (vertraulich, für Manager)
 poi.button.new: Neuer OVI
 poi.button.delete: OVI löschen
 

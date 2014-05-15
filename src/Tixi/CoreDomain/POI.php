@@ -70,11 +70,6 @@ class POI extends CommonBaseEntity {
     /**
      * @ORM\Column(type="text", nullable=true)
      */
-    protected $memo;
-
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
     protected $details;
 
     protected  function __construct() {
@@ -88,12 +83,11 @@ class POI extends CommonBaseEntity {
      * @param Address $address
      * @param null $telephone
      * @param null $comment
-     * @param null $memo
      * @param null $details
      * @return POI
      */
     public static function registerPoi($name, Address $address, $department = null,
-                                       $telephone = null, $comment = null, $memo = null, $details = null) {
+                                       $telephone = null, $comment = null, $details = null) {
         $poi = new POI();
 
         if (!empty($name)) {
@@ -106,7 +100,6 @@ class POI extends CommonBaseEntity {
         $poi->setDepartment($department);
         $poi->setTelephone($telephone);
         $poi->setComment($comment);
-        $poi->setMemo($memo);
         $poi->setDetails($details);
 
         $poi->activate();
@@ -120,11 +113,10 @@ class POI extends CommonBaseEntity {
      * @param Address $address
      * @param null $telephone
      * @param null $comment
-     * @param null $memo
      * @param null $details
      */
     public function updatePOIData($name = null, Address $address = null, $department = null,
-                                    $telephone = null, $comment = null, $memo = null, $details = null) {
+                                    $telephone = null, $comment = null, $details = null) {
         if (!empty($name)) {
             $this->setName($name);
         }
@@ -134,7 +126,6 @@ class POI extends CommonBaseEntity {
         $this->setDepartment($department);
         $this->setTelephone($telephone);
         $this->setComment($comment);
-        $this->setMemo($memo);
         $this->setDetails($details);
     }
 
@@ -274,20 +265,6 @@ class POI extends CommonBaseEntity {
     }
 
     /**
-     * @param mixed $memo
-     */
-    public function setMemo($memo) {
-        $this->memo = $memo;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getMemo() {
-        return $this->memo;
-    }
-
-    /**
      * @param mixed $name
      */
     public function setName($name) {
@@ -323,7 +300,7 @@ class POI extends CommonBaseEntity {
     }
 
     /**
-     * @param $keywords
+     * @param POIKeyword[] $keywords
      * @return string
      */
     public static function constructKeywordsString($keywords) {

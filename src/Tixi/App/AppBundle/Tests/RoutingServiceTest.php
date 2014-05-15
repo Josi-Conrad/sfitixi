@@ -30,11 +30,7 @@ class RoutingServiceTest extends CommonBaseTest {
     public function testGetSingleRouteInformation() {
         $address1 = $this->createTestAddressBaar();
         $address2 = $this->createTestAddressGoldau();
-
-//        for ($i = 0; $i < 10; $i++) {
-        /**@var $route \Tixi\CoreDomain\Dispo\Route */
         $route = $this->routeManagement->getRouteFromAddresses($address1, $address2);
-//        }
         $this->assertNotEmpty($route->getDuration());
     }
 
@@ -44,7 +40,7 @@ class RoutingServiceTest extends CommonBaseTest {
         $address2 = $this->createTestAddressGoldau();
 
         $routes = array();
-        for ($i = 0; $i < 1000; $i++) {
+        for ($i = 0; $i < 10; $i++) {
             array_push($routes, Route::registerRoute($address1, $address2));
         }
         $this->routingMachine->fillRoutingInformationsForMultipleRoutes($routes);

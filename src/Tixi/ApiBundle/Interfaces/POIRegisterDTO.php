@@ -22,7 +22,6 @@ class POIRegisterDTO extends AddressRegisterDTO {
     public $department;
     public $telephone;
     public $comment;
-    public $memo;
     public $details;
 
     //POIKeywords

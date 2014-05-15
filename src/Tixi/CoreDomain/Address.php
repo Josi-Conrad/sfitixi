@@ -60,6 +60,10 @@ class Address extends CommonBaseEntity{
      */
     protected $name;
     /**
+     * @ORM\Column(type="string", length=50, nullable=true)
+     */
+    protected $house;
+    /**
      * @ORM\Column(type="integer", nullable=true)
      */
     protected $lat;
@@ -67,7 +71,14 @@ class Address extends CommonBaseEntity{
      * @ORM\Column(type="integer", nullable=true)
      */
     protected $lng;
-
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $nearestLat;
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $nearestLng;
 
     protected function __construct() {
         parent::__construct();
@@ -307,6 +318,20 @@ class Address extends CommonBaseEntity{
     public function getSource()
     {
         return $this->source;
+    }
+
+    /**
+     * @param mixed $house
+     */
+    public function setHouse($house) {
+        $this->house = $house;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getHouse() {
+        return $this->house;
     }
 
 

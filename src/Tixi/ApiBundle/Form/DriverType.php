@@ -54,6 +54,12 @@ class DriverType extends PersonType {
             'required' => false,
             'label' => 'person.field.email'
         ));
+
+        $builder->add('lookaheadaddress','addresslookahead',array(
+                'label' => 'address.field.lookahead'
+            )
+        );
+
         $builder->add('licenceNumber', 'text', array(
             'label' => 'driver.field.licence',
             'attr'=>array('title' => 'form.field.title.not_blank'),
