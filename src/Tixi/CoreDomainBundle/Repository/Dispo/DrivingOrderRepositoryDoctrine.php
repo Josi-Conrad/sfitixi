@@ -4,6 +4,7 @@ namespace Tixi\CoreDomainBundle\Repository\Dispo;
 
 use Tixi\CoreDomain\Dispo\DrivingOrder;
 use Tixi\CoreDomain\Dispo\DrivingOrderRepository;
+use Tixi\CoreDomain\Dispo\Shift;
 use Tixi\CoreDomainBundle\Repository\CommonBaseRepositoryDoctrine;
 
 /**
@@ -25,5 +26,10 @@ class DrivingOrderRepositoryDoctrine  extends CommonBaseRepositoryDoctrine imple
      */
     public function remove(DrivingOrder $drivingOrder) {
         $this->getEntityManager()->remove($drivingOrder);
+    }
+
+    public function findAllOrdersForShift(Shift $shift)
+    {
+        // TODO: Implement findAllOrdersForShift() method.
     }
 }
