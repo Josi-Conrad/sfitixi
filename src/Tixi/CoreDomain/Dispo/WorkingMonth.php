@@ -18,7 +18,11 @@ use Tixi\CoreDomain\Shared\CommonBaseEntity;
  * @ORM\Entity(repositoryClass="Tixi\CoreDomainBundle\Repository\Dispo\WorkingMonthRepositoryDoctrine")
  * @ORM\Table(name="working_month")
  */
-class WorkingMonth extends CommonBaseEntity{
+class WorkingMonth extends CommonBaseEntity {
+    /** status of workingMonth (plan) */
+    const OPEN = 0;
+    const SENT = 1;
+
     /**
      * @ORM\Id
      * @ORM\Column(type="bigint", name="id")
@@ -57,7 +61,7 @@ class WorkingMonth extends CommonBaseEntity{
      * @param int $status
      * @return WorkingMonth
      */
-    public static function registerWorkingMonth(\DateTime $date, $status = 0) {
+    public static function registerWorkingMonth(\DateTime $date, $status = self::OPEN) {
         $workingMonth = new WorkingMonth();
         $date->modify('first day of this month');
         $workingMonth->setDate($date);

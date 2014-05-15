@@ -172,7 +172,6 @@ class User extends CommonBaseEntity implements AdvancedUserInterface, \Serializa
         $roleAdmin = null;
         $roleManager = null;
         $roleDispo = null;
-        $roleUser = null;
 
         foreach ($this->getRolesEntity() as $role) {
             if ($role->getRole() == Role::$roleAdmin) {
@@ -184,14 +183,8 @@ class User extends CommonBaseEntity implements AdvancedUserInterface, \Serializa
             if ($role->getRole() == Role::$roleDispo) {
                 $roleDispo = $role;
             }
-            if ($role->getRole() == Role::$roleUser) {
-                $roleUser = $role;
-            }
         }
 
-        if (null !== $roleUser) {
-            $highest = $roleUser;
-        }
         if (null !== $roleDispo) {
             $highest = $roleDispo;
         }

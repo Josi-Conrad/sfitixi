@@ -83,7 +83,6 @@ class MenuService extends ContainerAware {
             $managementSelectionTile->add(new MenuItemTile(self::$menuWorkingMonthId,
                 $this->generateUrl('tixiapi_dispo_workingmonths_get'), 'workingmonth.panel.name', $this->checkSelectionChildActivity(self::$menuWorkingMonthId, $activeItem)));
         }
-//        $menuTile->add(new MenuItemTile(self::$menuDispoId, '#', 'disposition.panel.name', $rootId === self::$menuDispoId));
 
         /**Prepare*/
         $menuTile->add(new MenuItemTile(self::$menuPrepareId, '#', 'prepare.panel.name', $rootId === self::$menuPrepareId));
@@ -100,10 +99,10 @@ class MenuService extends ContainerAware {
             $managementSelectionTile =
                 $menuTile->add(new MenuSelectionItemTile(self::$menuSelectionManagementId,
                     'management.panel.name', $this->checkSelectionRootActivity(self::$menuSelectionManagementId, $activeItem)));
+            $managementSelectionTile->add(new MenuItemTile(self::$menuManagementUserId,
+                $this->generateUrl('tixiapi_management_users_get'), 'user.panel.name', $this->checkSelectionChildActivity(self::$menuManagementUserId, $activeItem)));
 
             if ($this->container->get('security.context')->isGranted('ROLE_ADMIN')) {
-                $managementSelectionTile->add(new MenuItemTile(self::$menuManagementUserId,
-                    $this->generateUrl('tixiapi_management_users_get'), 'user.panel.name', $this->checkSelectionChildActivity(self::$menuManagementUserId, $activeItem)));
                 $managementSelectionTile->add(new MenuItemTile(self::$menuManagementZonePlanId,
                     $this->generateUrl('tixiapi_management_zoneplan_edit'), 'zoneplan.panel.name', $this->checkSelectionChildActivity(self::$menuManagementZonePlanId, $activeItem)));
             }

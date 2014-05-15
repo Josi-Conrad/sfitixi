@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/hertus/sfitixi.svg?branch=master)](https://travis-ci.org/hertus/sfitixi)
+
 iTixi
 =====
 
