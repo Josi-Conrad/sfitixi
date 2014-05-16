@@ -45,11 +45,8 @@
         </div>
         <script type="text/javascript">
             jQuery(function ($) {
-                var lookahead = new Lookahead(),
-                    googleMapsWarapper = new GoogleMapWrapper();
-                lookahead.init('{{ lookaheadId }}', '{{ 'addressHandles' }}', Address.prototype);
-//                googleMapsWarapper.init('googleMapCanvas');
-
+                var lookahead = new AddressLookahead();
+                lookahead.init('{{ lookaheadId }}', '{{ 'addressHandles' }}', Address.prototype, 'googleMapCanvas');
             });
         </script>
     </div>

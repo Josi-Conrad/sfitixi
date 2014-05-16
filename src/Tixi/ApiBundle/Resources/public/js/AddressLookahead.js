@@ -1,4 +1,4 @@
-function Lookahead() {
+function AddressLookahead() {
     var _this = this;
 
     this._wrapper = null;
@@ -23,12 +23,16 @@ function Lookahead() {
 
     this._dataUrl = null;
 
-    this.init = function(lookaheadId, modelIdPrefix, modelPrototype) {
+    this._googleMapWrapper = null;
+    this._mapCanvasIsVisible = false;
+
+    this.init = function(lookaheadId, modelIdPrefix, modelPrototype, mapCanvasId) {
         _this._modelIdPrefix = modelIdPrefix;
         _this._modelPrototype = modelPrototype;
         _this._initElements(lookaheadId);
         _this._initDataSrcUrl();
         _this._initListeners();
+        _this._initGoogleMapWrapper(mapCanvasId);
         _this._switchToLookaheadState();
     }
 
@@ -65,6 +69,12 @@ function Lookahead() {
             _this._onInputKeyDown(event);
         });
         $(_this._inputField).on('focusout', _this._onInputOut);
+    }
+
+    this._initGoogleMapWrapper = function(mapCanvasId) {
+        var _wrapper =  new GoogleMapWrapper();
+        _wrapper.init(mapCanvasId)
+        _this._googleMapWrapper = _wrapper;
     }
 
     this._switchToManualAddState = function() {
@@ -123,11 +133,14 @@ function Lookahead() {
     this._constructDomSelectionDisplay = function(model) {
         var _selectionDisplay = $('<li></li>').append(model.getDisplayName());
         _selectionDisplay.on('mousedown', function() {
+            _this._selectedIndex = model.index;
             $(_this._inputField).val(model.getDisplayName());
             $(_this._selectionsIdContainer).val(model.index);
-            _this._selectedIndex = model.index;
             _this._hideSelectionDisplay();
         });
+        _selectionDisplay.on('mouseover', function() {
+            _this._onSelectionDisplayMouseOver(model);
+        })
         return _selectionDisplay;
     }
 
@@ -180,12 +193,17 @@ function Lookahead() {
     }
 
     this._onInputOut = function() {
-        if(!_this._selectedIndex) {
-            $(_this._inputField).val('');
-            setTimeout(function() {
+        setTimeout(function() {
+            if(null === _this._selectedIndex) {
+                $(_this._inputField).val('');
                 _this._hideSelectionDisplay();
-            },500)
-        }
+            }
+        },100)
+        _this._googleMapWrapper.hideCanvas();
+    }
+
+    this._onSelectionDisplayMouseOver = function(model) {
+        _this._googleMapWrapper.showAddress(model.fields.lat, model.fields.lng);
     }
 
     this._resetLookahead = function() {
