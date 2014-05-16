@@ -19,11 +19,14 @@ use Tixi\CoreDomainBundle\Tests\CommonBaseTest;
 class DispositionTest extends CommonBaseTest {
 
     public function setUp() {
-        parent::setUp(false);
+        parent::setUp();
     }
 
     public function testDispo() {
 
+        $testDate = new \DateTime('2014-06-01');
+        $testDateTime = new \DateTime('2014-06-01 7:15:00');
+        $this->dispoManagement->checkFeasibility(DrivingOrder::registerDrivingOrder($testDate, $testDateTime));
 
 
     }

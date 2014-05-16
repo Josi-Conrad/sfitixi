@@ -9,6 +9,7 @@
 namespace Tixi\App\AppBundle\Tests;
 
 
+use Tixi\ApiBundle\Helper\DateTimeService;
 use Tixi\CoreDomainBundle\Tests\CommonBaseTest;
 use Tixi\CoreDomainBundle\Util\GeometryService;
 
@@ -26,6 +27,7 @@ class GeometryTest extends CommonBaseTest{
         $t2 = $t/60;
         echo round($t2, 0);
 
+        echo "\nMinutes: " . DateTimeService::getMinutesOfDay(new \DateTime('2000-02-01 23:55:00'));
     }
 
     public function tearDown() {

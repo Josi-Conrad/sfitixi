@@ -8,7 +8,7 @@ use Tixi\CoreDomain\Shared\CommonBaseRepository;
  * Interface DrivingOrderRepository
  * @package Tixi\CoreDomain\Dispo
  */
-interface DrivingOrderRepository extends CommonBaseRepository, DrivingOrderRepositoryInterface {
+interface DrivingOrderRepository extends CommonBaseRepository {
     /**
      * @param DrivingOrder $drivingOrder
      * @return mixed
@@ -20,5 +20,12 @@ interface DrivingOrderRepository extends CommonBaseRepository, DrivingOrderRepos
      * @return mixed
      */
     public function remove(DrivingOrder $drivingOrder);
+
+    /**
+     * @param \DateTime $day
+     * @return DrivingOrder[]
+     */
+    public function findAllOrdersForDay(\DateTime $day);
+
 
 }

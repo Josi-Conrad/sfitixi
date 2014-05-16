@@ -26,4 +26,17 @@ class DrivingMissionRepositoryDoctrine  extends CommonBaseRepositoryDoctrine imp
     public function remove(DrivingMission $drivingMission) {
         $this->getEntityManager()->remove($drivingMission);
     }
+
+    /**
+     * @param \DateTime $day
+     * @return DrivingMission[]
+     */
+    public function findDrivingMissionsForDay(\DateTime $day) {
+        $qb = parent::createQueryBuilder('e');
+        $qb->innerJoin('Tixi\CoreDomain\Dispo\DrivingOrder', 'o')
+            ->where('e.id = o.drivingMission')
+            ->andWhere('o.pickUpDate = :day')
+            ->setParameter('day', $day->format('Y-m-d'));
+        return $qb->getQuery()->getResult();
+    }
 }

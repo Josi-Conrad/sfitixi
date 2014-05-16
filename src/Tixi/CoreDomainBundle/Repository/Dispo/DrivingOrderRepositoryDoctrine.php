@@ -28,8 +28,15 @@ class DrivingOrderRepositoryDoctrine  extends CommonBaseRepositoryDoctrine imple
         $this->getEntityManager()->remove($drivingOrder);
     }
 
-    public function findAllOrdersForShift(Shift $shift)
-    {
-        // TODO: Implement findAllOrdersForShift() method.
+    /**
+     * @param \DateTime $day
+     * @return DrivingOrder[]
+     */
+    public function findAllOrdersForDay(\DateTime $day){
+        $qb = parent::createQueryBuilder('e');
+        $qb->where('e.pickUpDate = :day')
+            ->andWhere('e.isDeleted = 0')
+            ->setParameter('day', $day->format('Y-m-d'));
+        return $qb->getQuery()->getResult();
     }
 }

@@ -19,6 +19,10 @@ use Tixi\CoreDomain\Shared\CommonBaseEntity;
  * @ORM\Table(name="driving_mission")
  */
 class DrivingMission {
+    /** direction hint */
+    const SAME_START = 0;
+    const SAME_TARGET = 1;
+
     /**
      * @ORM\Id
      * @ORM\Column(type="bigint", name="id")
@@ -220,7 +224,7 @@ class DrivingMission {
     }
 
     /**
-     * @return mixed
+     * @return array
      */
     public function getServiceOrder() {
         return $this->serviceOrder;
