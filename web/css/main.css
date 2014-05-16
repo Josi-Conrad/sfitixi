@@ -1,3 +1,12 @@
+/* Address overlay*/
+#googleMapCanvas {
+    z-index: 3000;
+    position: absolute;
+    width: 654px;
+    height: 300px;
+    display: none;
+}
+
 /* Data Grid */
 .dataGrid table .selected td {
     color: #ffffff;
@@ -17,13 +26,30 @@
     display: none;
 }
 
-/* Lookahead */
+/* AddressLookahead */
+.lookaheadWrapper {
+    display: none;
+}
+
+.manualAddWrapper {
+    display: none;
+}
+
+
 .selectionsModelContainer {
     display: none;
 }
 
 .selectionsDisplayContainer {
     display: none;
+}
+
+.lookaheadSelection {
+    cursor: pointer;
+}
+
+.lookaheadSelection:hover {
+    color: #428bca;
 }
 
 /* Top Action */

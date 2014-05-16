@@ -84,7 +84,7 @@ class AddressLookupServiceGoogle extends AddressLookupService {
      * @return mixed
      */
     protected function getSingleAddressHandleDTO($lookupStr) {
-        $url = $this->constructApiURL($lookupStr, false);
+        $url = $this->constructApiURL($lookupStr);
 //        $jsonResponseString = file_get_contents($url);
         $jsonResponseString = $this->getJSONResponse($url);
         $responseObject = json_decode($jsonResponseString);
@@ -176,44 +176,23 @@ class AddressLookupServiceGoogle extends AddressLookupService {
 
     /**
      * @param $lookupStr
-     * @param bool $withRegion
      * @return string
      */
-    protected function constructApiURL($lookupStr, $withRegion = true) {
-        /** @var ClientIdService $clientIdService */
-        $clientIdService = $this->container->get('tixi_api.clientidservice');
-        $uncheckedClientId = $this->container->getParameter('tixi_parameter_client');
+    protected function constructApiURL($lookupStr) {
         $googleApiKey = $this->container->getParameter('tixi_parameter_google_apikey');
+        $translator = $this->container->get('translator');
 
-        $clientId = $clientIdService->getClientId($uncheckedClientId);
         $keywords = $this->constructKeywordArray($lookupStr);
-        $region = $this->constructRegion($clientId);
-        $components = $this->constructComponents($clientId, $region, $keywords);
-
         $url = self::APIBASEURL . '?';
         $urlParameters = array();
         $keywordSection = $this->constructKeywordSection($keywords);
         if ('' !== $keywordSection) {
             $urlParameters[] = $keywordSection;
         }
-
-        if ($withRegion) {
-            $componentSection = $this->constructComponentsSection($components);
-            if ('' !== $componentSection) {
-                $urlParameters[] = $componentSection;
-            }
-
-            $regionSection = $this->constructRegionSection($region);
-            if ('' !== $regionSection) {
-                $urlParameters[] = $regionSection;
-            }
-        }
-
-        $languageSection = $this->constructLanguageSection($region);
+        $languageSection = $this->constructLanguageSection($translator->getLocale());
         if ('' !== $languageSection) {
             $urlParameters[] = $languageSection;
         }
-
         $apiKeySection = $this->constructApiKeySection($googleApiKey);
         if ('' !== $apiKeySection) {
             $urlParameters[] = $apiKeySection;
@@ -222,8 +201,6 @@ class AddressLookupServiceGoogle extends AddressLookupService {
         $urlParameterString = implode('&', $urlParameters);
         $urlParameterString = StringService::convertStringToASCII($urlParameterString);
         $url .= $urlParameterString;
-
-//        $url = StringService::convertStringToASCII($url);
         return $url;
     }
 
@@ -277,23 +254,6 @@ class AddressLookupServiceGoogle extends AddressLookupService {
     }
 
     /**
-     * @param $clientId
-     * @param $region
-     * @param $keywords
-     * @return array
-     */
-    protected
-    function constructComponents($clientId, $region, $keywords) {
-        $componentArray = array();
-        if ($clientId === ClientIdService::ZUGID) {
-            if (!$this->containsRegionInformation($region, $keywords)) {
-                $componentArray[] = 'administrative_area:ZG';
-            }
-        }
-        return $componentArray;
-    }
-
-    /**
      * @param array $componentsArray
      * @return string
      */
@@ -312,7 +272,6 @@ class AddressLookupServiceGoogle extends AddressLookupService {
      */
     protected
     function constructAdditionalSection() {
-        //ToDo remove userIp from final version and add server-ip as allowed ip in google credentials
         return 'sensor=false';
     }
 
@@ -330,53 +289,17 @@ class AddressLookupServiceGoogle extends AddressLookupService {
     }
 
     /**
-     * @param string $region
-     * @return string
+     * @param $localStr
+     * @return mixed
      */
-    protected
-    function constructLanguageSection($region = '') {
+    protected function constructLanguageSection($localStr) {
         $languageString = '';
-        if ($region === 'CH') {
-            $languageString .= 'language=de';
+        //the localStr can be in the format languageCode_countryCode. To use the google service we only need the languageCode
+        $lang = explode('_',$localStr)[0];
+        if('' !== $lang) {
+            $languageString .= 'language='.$lang;
         }
         return $languageString;
-    }
-
-    /**
-     * @param $region
-     * @param $keywords
-     * @return bool
-     */
-    protected
-    function containsRegionInformation($region, $keywords) {
-        $compareArray = array();
-        if ($region === 'CH') {
-            $compareArray[] = 'zürich';
-            $compareArray[] = 'bern';
-            $compareArray[] = 'luzern';
-            $compareArray[] = 'uri';
-            $compareArray[] = 'schwyz';
-            $compareArray[] = 'obwalden';
-            $compareArray[] = 'nidwalden';
-            $compareArray[] = 'glarus';
-            $compareArray[] = 'zug';
-            $compareArray[] = 'freiburg';
-            $compareArray[] = 'solothurn';
-            $compareArray[] = 'basel';
-            $compareArray[] = 'schaffhausen';
-            $compareArray[] = 'appenzell';
-            $compareArray[] = 'stgallen';
-            $compareArray[] = 'graubünden';
-            $compareArray[] = 'aargau';
-            $compareArray[] = 'thurgau';
-            $compareArray[] = 'tessin';
-            $compareArray[] = 'waadt';
-            $compareArray[] = 'wallis';
-            $compareArray[] = 'neuenburg';
-            $compareArray[] = 'genf';
-            $compareArray[] = 'jura';
-        }
-        return (count(array_intersect($keywords, $compareArray)) > 0);
     }
 
     /**

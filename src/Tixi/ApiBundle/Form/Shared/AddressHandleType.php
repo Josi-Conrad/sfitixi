@@ -12,6 +12,7 @@ namespace Tixi\ApiBundle\Form\Shared;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class AddressHandleType extends AbstractType{
 
@@ -19,13 +20,52 @@ class AddressHandleType extends AbstractType{
     {
         $builder->add('id','hidden');
         $builder->add('name', 'hidden');
-        $builder->add('street');
-        $builder->add('postalCode');
-        $builder->add('city');
-        $builder->add('country');
-        $builder->add('lat');
-        $builder->add('lng');
+        $builder->add('street', 'text', array(
+            'label' => 'address.field.street',
+            'attr' => array('title' => 'form.field.title.not_blank'),
+            'constraints' => array(
+                new NotBlank(array('message' => 'field.not_blank'))
+            ),
+        ));
+        $builder->add('postalCode', 'text', array(
+            'label' => 'address.field.postalcode',
+            'pattern' => '^[\+0-9A-Z]{4,7}',
+            'attr' => array('title' => 'form.field.title.postalcode'),
+            'constraints' => array(
+                new NotBlank(array('message' => 'field.not_blank'))
+            ),
+        ));
+        $builder->add('city', 'text', array(
+            'label' => 'address.field.city',
+            'attr' => array('title' => 'form.field.title.not_blank'),
+            'constraints' => array(
+                new NotBlank(array('message' => 'field.not_blank'))
+            ),
+        ));
+        $builder->add('country', 'text', array(
+            'label' => 'address.field.country',
+            'attr' => array('title' => 'form.field.title.not_blank'),
+            'constraints' => array(
+                new NotBlank(array('message' => 'field.not_blank'))
+            ),
+        ));
+        $builder->add('lat', 'text', array(
+            'label' => 'address.field.lat',
+            'attr' => array('title' => 'form.field.title.not_blank'),
+            'constraints' => array(
+                new NotBlank(array('message' => 'field.not_blank'))
+            )
+        ));
+        $builder->add('lng', 'text', array(
+            'label' => 'address.field.lng',
+            'attr' => array('title' => 'form.field.title.not_blank'),
+            'constraints' => array(
+                new NotBlank(array('message' => 'field.not_blank'))
+            )
+        ));
         $builder->add('source','hidden');
+
+
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)
