@@ -43,6 +43,12 @@
         <parameter key="drivingmission_repository.doctrine.class">Tixi\CoreDomainBundle\Repository\Dispo\DrivingMissionRepositoryDoctrine</parameter>
         <parameter key="drivingorder.doctrine.entity">Tixi\CoreDomain\Dispo\DrivingOrder</parameter>
         <parameter key="drivingorder_repository.doctrine.class">Tixi\CoreDomainBundle\Repository\Dispo\DrivingOrderRepositoryDoctrine</parameter>
+
+        <parameter key="repeateddrivingorder.doctrine.entity">Tixi\CoreDomain\Dispo\RepeatedDrivingOrder</parameter>
+        <parameter key="repeateddrivingorder_repository.doctrine.class">Tixi\CoreDomainBundle\Repository\Dispo\RepeatedDrivingOrderRepositoryDoctrine</parameter>
+        <parameter key="repeateddrivingorderplan.doctrine.entity">Tixi\CoreDomain\Dispo\RepeatedDrivingOrderPlan</parameter>
+        <parameter key="repeateddrivingorderplan_repository.doctrine.class">Tixi\CoreDomainBundle\Repository\Dispo\RepeatedDrivingOrderPlanRepositoryDoctrine</parameter>
+
         <parameter key="drivingpool.doctrine.entity">Tixi\CoreDomain\Dispo\DrivingPool</parameter>
         <parameter key="drivingpool_repository.doctrine.class">Tixi\CoreDomainBundle\Repository\Dispo\DrivingPoolRepositoryDoctrine</parameter>
         <parameter key="repeateddrivingassertionplan.doctrine.entity">Tixi\CoreDomain\Dispo\RepeatedDrivingAssertionPlan</parameter>
@@ -171,6 +177,16 @@
         <service id="drivingorder_repository" alias="drivingorder_repository.doctrine"></service>
         <service id="drivingorder_repository.doctrine" class="%drivingorder_repository.doctrine.class%" factory-service="doctrine" factory-method="getrepository">
             <argument type="string">%drivingorder.doctrine.entity%</argument>
+        </service>
+
+        <service id="repeateddrivingorder_repository" alias="repeateddrivingorder_repository.doctrine"></service>
+        <service id="repeateddrivingorder_repository.doctrine" class="%repeateddrivingorder_repository.doctrine.class%" factory-service="doctrine" factory-method="getrepository">
+            <argument type="string">%repeateddrivingorder.doctrine.entity%</argument>
+        </service>
+
+        <service id="repeateddrivingorderplan_repository" alias="repeateddrivingorderplan_repository.doctrine"></service>
+        <service id="repeateddrivingorderplan_repository.doctrine" class="%repeateddrivingorderplan_repository.doctrine.class%" factory-service="doctrine" factory-method="getrepository">
+            <argument type="string">%repeateddrivingorderplan.doctrine.entity%</argument>
         </service>
 
         <service id="drivingpool_repository" alias="drivingpool_repository.doctrine"></service>
