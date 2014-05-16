@@ -13,11 +13,17 @@ use Symfony\Component\Console\Helper\DialogHelper;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Tixi\App\Disposition\DispositionVariables;
+use Tixi\CoreDomain\Dispo\DrivingMission;
+use Tixi\CoreDomain\Dispo\DrivingOrder;
 use Tixi\CoreDomain\Dispo\DrivingPool;
+use Tixi\CoreDomain\Dispo\Route;
 use Tixi\CoreDomain\Dispo\Shift;
 use Tixi\CoreDomain\Dispo\ShiftType;
 use Tixi\CoreDomain\Dispo\WorkingDay;
 use Tixi\CoreDomain\Dispo\WorkingMonth;
+use Tixi\CoreDomain\Passenger;
+use Tixi\CoreDomain\POI;
 
 /**
  * Class TestDataDrivingPoolsCommand
@@ -25,7 +31,7 @@ use Tixi\CoreDomain\Dispo\WorkingMonth;
  */
 class TestDataDrivingPoolsCommand extends ContainerAwareCommand {
     public function configure() {
-        $this->setName('project:testdata-drivingpools')
+        $this->setName('project:testdata')
             ->setDescription('Creates test data for drivingPools, Missions')
             ->addArgument('month', InputArgument::OPTIONAL, 'Set Months ago from today to create DrivingPools in workingMonth');
     }
@@ -49,57 +55,114 @@ class TestDataDrivingPoolsCommand extends ContainerAwareCommand {
         $shiftRepo = $this->getContainer()->get('shift_repository');
         $shiftTypeRepo = $this->getContainer()->get('shifttype_repository');
         $drivingPoolRepo = $this->getContainer()->get('drivingpool_repository');
+        $passengerRepo = $this->getContainer()->get('passenger_repository');
+        $driverRepo = $this->getContainer()->get('driver_repository');
+        $vehicleRepo = $this->getContainer()->get('vehicle_repository');
+        $addressRepo = $this->getContainer()->get('address_repository');
+        $poiRepo = $this->getContainer()->get('poi_repository');
+        $routeRepo = $this->getContainer()->get('route_repository');
+        $drivingMissionRepo = $this->getContainer()->get('drivingmission_repository');
+        $drivingOrderRepo = $this->getContainer()->get('drivingorder_repository');
+        $reDrivingOrderRepo = $this->getContainer()->get('repeateddrivingorder_repository.doctrine');
+        $reDrivingOrderPlanRepo = $this->getContainer()->get('repeateddrivingorderplan_repository.doctrine');
+
+        $routeManagement = $this->getContainer()->get('tixi_app.routemanagement');
 
         $monthDate = new \DateTime('today');
         $monthDate->modify('+' . $month . ' month');
-        $monthDate->format('first day of this month');
-        if($workingMonthRepo->findWorkingMonthByDate($monthDate)){
-            $output->writeln("WorkingMonth " . $monthDate->format('m') . " already exists");
-            exit;
-        }
-        $workingMonth = WorkingMonth::registerWorkingMonth($monthDate);
-        $workingMonth->createWorkingDaysForThisMonth();
-        foreach ($workingMonth->getWorkingDays() as $wd) {
-            $workingDayRepo->store($wd);
-        }
-        $workingMonthRepo->store($workingMonth);
+        $monthDate->modify('first day of this month');
 
-        $workingDays = $workingMonth->getWorkingDays();
         $shiftTypes = $shiftTypeRepo->findAllNotDeleted();
 
-        //create workingDays shifts, assign them drivingpools, get amount of needed drivers
-        /** @var $workingDay WorkingDay */
-        foreach ($workingDays as $workingDay) {
-            /** @var $shiftType ShiftType */
-            foreach ($shiftTypes as $shiftType) {
-                $shift = Shift::registerShift($workingDay, $shiftType);
-                $shift->setAmountOfDrivers(rand(8, 18));
-                $workingDay->assignShift($shift);
-                for ($i = 1; $i <= $shift->getAmountOfDrivers(); $i++) {
-                    $drivingPool = DrivingPool::registerDrivingPool($shift);
-                    $shift->assignDrivingPool($drivingPool);
-                    $drivingPoolRepo->store($drivingPool);
-                }
-                $shiftRepo->store($shift);
+        $workingMonth = $workingMonthRepo->findWorkingMonthByDate($monthDate);
+        if ($workingMonth !== null) {
+            $output->writeln("WorkingMonth " . $monthDate->format('m') . " already exists");
+        } else {
+            $workingMonth = WorkingMonth::registerWorkingMonth($monthDate);
+            $workingMonth->createWorkingDaysForThisMonth();
+            foreach ($workingMonth->getWorkingDays() as $wd) {
+                $workingDayRepo->store($wd);
             }
-            $workingDayRepo->store($workingDay);
-        }
-        $em->flush();
+            $workingMonthRepo->store($workingMonth);
 
+            $workingDays = $workingMonth->getWorkingDays();
+
+            //create workingDays shifts, assign them drivingpools, get amount of needed drivers
+            /** @var $workingDay WorkingDay */
+            foreach ($workingDays as $workingDay) {
+                /** @var $shiftType ShiftType */
+                foreach ($shiftTypes as $shiftType) {
+                    $shift = Shift::registerShift($workingDay, $shiftType);
+                    $shift->setAmountOfDrivers(rand(12, 20));
+                    $workingDay->assignShift($shift);
+                    for ($i = 1; $i <= $shift->getAmountOfDrivers(); $i++) {
+                        $drivingPool = DrivingPool::registerDrivingPool($shift);
+                        $shift->assignDrivingPool($drivingPool);
+                        $drivingPoolRepo->store($drivingPool);
+                    }
+                    $shiftRepo->store($shift);
+                }
+                $workingDayRepo->store($workingDay);
+            }
+            $em->flush();
+        }
         $drivingPools = array();
         foreach ($workingMonth->getWorkingDays() as $wd) {
             foreach ($wd->getShifts() as $s) {
                 foreach ($s->getDrivingPools() as $dp) {
-
                     array_push($drivingPools, $dp);
                 }
             }
         }
 
+        //create Driving Orders
+        $countOrders = 0;
+        foreach ($shiftTypes as $shiftType) {
+            $approxOrdersPerShift = rand(40, 60);
+            for ($i = 0; $i < $approxOrdersPerShift; $i++) {
+                /**@var $passenger Passenger */
+                $passenger = $passengerRepo->find(rand(100, 500));
+                $passenger->setIsInWheelChair(rand(0,1));
 
+                $st = clone $shiftType->getStart();
+                $se = clone $shiftType->getEnd();
+                $minDiff = (int)$se->format('m') - (int)$st->format('m');
+                $st->add(new \DateInterval('PT' . rand(5, 180) . 'M'));
+
+                //DrivingOrder <-> Passenger + Route
+                $order = DrivingOrder::registerDrivingOrder($monthDate, $st, rand(0, 1));
+
+                $start = $passenger->getAddress();
+                $target = $addressRepo->find(rand(10, 1000));
+                $route = $routeManagement->getRouteFromAddresses($start, $target);
+
+                $order->assignRoute($route);
+                $order->assignPassenger($passenger);
+                $passenger->assignDrivingOrder($order);
+                $drivingOrderRepo->store($order);
+
+                $wMin = DispositionVariables::BOARDING_TIME + DispositionVariables::DEBOARDING_TIME;
+                $eMin = $passenger->getExtraMinutes();
+                $sMinDur = $route->getDurationInMinutes() + $wMin + $eMin;
+
+                $dMin = (int)$st->format('i');
+                $sMinDay = $dMin + $sMinDur - DispositionVariables::ARRIVAL_BEFORE_PICKUP;
+
+                //DrivingMission <-> Order
+                $drivingMission = DrivingMission::registerDrivingMission(rand(0, 1), $sMinDay, $sMinDur, $route->getDistanceInMeters());
+                $drivingMission->assignDrivingOrder($order);
+                $order->assignDrivingMission($drivingMission);
+                $drivingMissionRepo->store($drivingMission);
+
+                $countOrders++;
+            }
+        }
 
         $end = microtime(true);
-        $output->writeln("\n--------------------------------------------\n" .
-            "Time to store and flush " . count($drivingPools) . " drivingPools: " . ($end - $start) . "s\n");
+        $output->writeln(
+            "\n--------------------------------------------\n" .
+            "Testdata created for: " . $monthDate->format('d.m.Y') . "\n" .
+            "with " . $countOrders . " DrivingOrders \n"
+        );
     }
 }

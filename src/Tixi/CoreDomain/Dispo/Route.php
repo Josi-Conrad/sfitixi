@@ -40,7 +40,7 @@ class Route extends CommonBaseEntity {
      */
     protected $targetAddress;
     /**
-     * route duration in minutes
+     * route duration in seconds
      * @ORM\Column(type="integer")
      */
     protected $duration;
@@ -63,12 +63,12 @@ class Route extends CommonBaseEntity {
     /**
      * @param $startAddress
      * @param $targetAddress
-     * @param null $duration
-     * @param null $distance
+     * @param int|null $duration
+     * @param int|null $distance
      * @param int $additionalTime
      * @return Route
      */
-    public static function registerRoute($startAddress, $targetAddress, $duration, $distance, $additionalTime = 0) {
+    public static function registerRoute($startAddress, $targetAddress, $duration = 0, $distance = 0, $additionalTime = 0) {
         $route = new Route();
         $route->setStartAddress($startAddress);
         $route->setTargetAddress($targetAddress);
@@ -100,10 +100,20 @@ class Route extends CommonBaseEntity {
     }
 
     /**
+     * gets route distance in meters
      * @return mixed
      */
-    public function getDistance() {
+    public function getDistanceInMeters() {
         return $this->distance;
+    }
+
+    /**
+     * gets route distance in kilometers, rounded to
+     * @return mixed
+     */
+    public function getDistanceInKiloMeters() {
+        $km = round($this->distance / 1000, 2);
+        return $km;
     }
 
     /**
@@ -114,10 +124,20 @@ class Route extends CommonBaseEntity {
     }
 
     /**
+     * gets route duration in seconds
      * @return mixed
      */
-    public function getDuration() {
+    public function getDurationInSeconds() {
         return $this->duration;
+    }
+
+    /**
+     * gets route duration in minutes, rounded half up
+     * @return mixed
+     */
+    public function getDurationInMinutes() {
+        $min = round($this->duration / 60, 0);
+        return $min;
     }
 
     /**

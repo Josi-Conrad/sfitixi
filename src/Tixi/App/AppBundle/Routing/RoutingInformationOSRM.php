@@ -13,6 +13,8 @@ use Tixi\App\Routing\RoutingInformation;
 
 class RoutingInformationOSRM extends RoutingInformation{
 
+    private $hintLat;
+    private $hintLng;
     private $checksum;
 
     /**
@@ -30,6 +32,7 @@ class RoutingInformationOSRM extends RoutingInformation{
     }
 
     /**
+     * gets total time in seconds (OSRM response)
      * @return mixed
      */
     public function getTotalTime() {
@@ -37,9 +40,9 @@ class RoutingInformationOSRM extends RoutingInformation{
     }
 
     /**
+     * gets total distance in meters (OSRM response)
      * @return mixed
      */
-
     public function getTotalDistance() {
         return $this->totalDistance;
     }
@@ -56,6 +59,34 @@ class RoutingInformationOSRM extends RoutingInformation{
      */
     public function getChecksum() {
         return $this->checksum;
+    }
+
+    /**
+     * @param mixed $hintLat
+     */
+    public function setHintLat($hintLat) {
+        $this->hintLat = $hintLat;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getHintLat() {
+        return $this->hintLat;
+    }
+
+    /**
+     * @param mixed $hintLng
+     */
+    public function setHintLng($hintLng) {
+        $this->hintLng = $hintLng;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getHintLng() {
+        return $this->hintLng;
     }
 
 }

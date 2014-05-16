@@ -84,6 +84,14 @@ class CommonBaseTest extends WebTestCase {
      */
     protected $drivingOrderRepo;
     /**
+     * @var \Tixi\CoreDomainBundle\Repository\Dispo\RepeatedDrivingOrderRepositoryDoctrine
+     */
+    protected $repeatedDrivingOrderRepo;
+    /**
+     * @var \Tixi\CoreDomainBundle\Repository\Dispo\RepeatedDrivingOrderPlanRepositoryDoctrine
+     */
+    protected $repeatedDrivingOrderPlanRepo;
+    /**
      * @var \Tixi\CoreDomainBundle\Repository\Dispo\DrivingPoolRepositoryDoctrine
      */
     protected $drivingPoolRepo;
@@ -186,6 +194,8 @@ class CommonBaseTest extends WebTestCase {
         $this->zonePlan = $kernel->getContainer()->get('zoneplan_repository');
 
         $this->drivingOrderRepo = $kernel->getContainer()->get('drivingorder_repository');
+        $this->repeatedDrivingOrderRepo = $kernel->getContainer()->get('repeateddrivingorder_repository');
+        $this->repeatedDrivingOrderPlanRepo = $kernel->getContainer()->get('repeateddrivingorderplan_repository');
         $this->drivingMissionRepo = $kernel->getContainer()->get('drivingmission_repository');
         $this->drivingPoolRepo = $kernel->getContainer()->get('drivingpool_repository');
         $this->workingDayRepo = $kernel->getContainer()->get('workingday_repository');
