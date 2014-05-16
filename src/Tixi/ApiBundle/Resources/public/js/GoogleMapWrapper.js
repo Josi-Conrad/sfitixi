@@ -60,7 +60,7 @@ function GoogleMapWrapper() {
             _paddedWitdh = _width+30,
             _height = canvas.height();
         canvas.css('right','-'+_paddedWitdh+'px');
-        canvas.css('top','-'+_height/2+'px');
+//        canvas.css('top','-'+_height/2+'px');
         return canvas;
     }
 
