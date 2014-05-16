@@ -8,7 +8,10 @@
 
 namespace Tixi\CoreDomain\Dispo;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Tixi\ApiBundle\Helper\DateTimeService;
+use Tixi\CoreDomain\Passenger;
 use Tixi\CoreDomain\Shared\CommonBaseEntity;
 
 /**
@@ -63,8 +66,63 @@ class RepeatedDrivingOrderPlan extends CommonBaseEntity {
      */
     protected $memo;
 
-    public function __construct(){
+    protected function __construct() {
+        $this->repeatedDrivingOrders = new ArrayCollection();
         parent::__construct();
+    }
+
+    /**
+     * @param $anchorDate
+     * @param $endingDate
+     * @param $withHolidays
+     * @param int $companion
+     * @param null $memo
+     * @return RepeatedDrivingOrderPlan
+     */
+    public static function registerRepeatedDrivingOrderPlan(\DateTime $anchorDate, $withHolidays, $companion = 0, \DateTime $endingDate, $memo = null) {
+        $endingDate = ($endingDate !== null) ? $endingDate : DateTimeService::getMaxDateTime();
+        $rdPlan = new RepeatedDrivingOrderPlan();
+        $rdPlan->setAnchorDate($anchorDate);
+        $rdPlan->setEndingDate($endingDate);
+        $rdPlan->setWithHolidays($withHolidays);
+        $rdPlan->setCompanion($companion);
+        $rdPlan->setMemo($memo);
+        return $rdPlan;
+    }
+
+    /**
+     * @param \Doctrine\Common\Collections\ArrayCollection $orders
+     */
+    public function replaceRepeatedDrivingOrders(ArrayCollection $orders) {
+        $this->getRepeatedDrivingOrders()->clear();
+        foreach($orders as $order) {
+            $this->getRepeatedDrivingOrders()->add($order);
+        }
+    }
+
+    /**
+     * @param Passenger $passenger
+     */
+    public function assignPassenger(Passenger $passenger) {
+        $this->setPassenger($passenger);
+    }
+
+    public function removePassenger() {
+        $this->setPassenger(null);
+    }
+
+    /**
+     * @param RepeatedDrivingOrder $drivingOrder
+     */
+    public function assignRepeatedDrivingOrder(RepeatedDrivingOrder $drivingOrder){
+        $this->getRepeatedDrivingOrders()->add($drivingOrder);
+    }
+
+    /**
+     * @param Route $route
+     */
+    public function assignRoute(Route $route) {
+        $this->setRoute($route);
     }
 
     /**
@@ -96,7 +154,7 @@ class RepeatedDrivingOrderPlan extends CommonBaseEntity {
     }
 
     /**
-     * @return mixed
+     * @return ArrayCollection
      */
     public function getRepeatedDrivingOrders() {
         return $this->repeatedDrivingOrders;
@@ -148,7 +206,7 @@ class RepeatedDrivingOrderPlan extends CommonBaseEntity {
     /**
      * @param mixed $passenger
      */
-    public function setPassenger($passenger) {
+    protected function setPassenger($passenger) {
         $this->passenger = $passenger;
     }
 
@@ -162,7 +220,7 @@ class RepeatedDrivingOrderPlan extends CommonBaseEntity {
     /**
      * @param mixed $route
      */
-    public function setRoute($route) {
+    protected function setRoute($route) {
         $this->route = $route;
     }
 

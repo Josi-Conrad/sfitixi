@@ -36,18 +36,6 @@ class ZonePlan {
      * @ORM\Column(type="text")
      */
     protected $adjacentZone;
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    protected $innerTarif;
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    protected $outerTarif;
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    protected $adjacentTarif;
 
     protected function __construct() {
 

@@ -15,8 +15,6 @@ class Role implements RoleInterface, \Serializable {
      * All valid Roles, with highest Role at last place
      * @var string
      */
-    public static $roleUser = 'ROLE_USER';
-    public static $roleUserName = 'user.role.user';
     public static $roleDispo = 'ROLE_DISPO';
     public static $roleDispoName = 'user.role.dispo';
     public static $roleManager = 'ROLE_MANAGER';

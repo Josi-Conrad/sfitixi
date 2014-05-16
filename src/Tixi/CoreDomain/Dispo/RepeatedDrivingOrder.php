@@ -8,6 +8,7 @@
 
 namespace Tixi\CoreDomain\Dispo;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Tixi\CoreDomain\Shared\CommonBaseEntity;
 
@@ -34,6 +35,12 @@ class RepeatedDrivingOrder implements DrivingOrderInterface {
     protected $repeatedDrivingOrderPlan;
 
     /**
+     * @ORM\OneToMany(targetEntity="DrivingOrder", mappedBy="repeatedDrivingOrder")
+     * @ORM\JoinColumn(name="driving_order_id", referencedColumnName="id")
+     */
+    protected $drivingOrders;
+
+    /**
      * @ORM\Column(type="integer")
      */
     protected $weekday;
@@ -42,6 +49,47 @@ class RepeatedDrivingOrder implements DrivingOrderInterface {
      * @ORM\Column(type="utcdatetime")
      */
     protected $pickUpTime;
+
+
+    protected function __construct() {
+        $this->drivingOrders = new ArrayCollection();
+    }
+
+    /**
+     * @param $weekday
+     * @param \DateTime $pickUpTime
+     * @return RepeatedDrivingOrder
+     */
+    public static function registerRepeatedDrivingOrder($weekday, \DateTime $pickUpTime) {
+        $rdOrder = new RepeatedDrivingOrder();
+        $rdOrder->setWeekday($weekday);
+        $rdOrder->setPickUpTime($pickUpTime);
+        return $rdOrder;
+    }
+
+    /**
+     * @param \Doctrine\Common\Collections\ArrayCollection $orders
+     */
+    public function replaceDrivingOrders(ArrayCollection $orders) {
+        $this->getDrivingOrders()->clear();
+        foreach ($orders as $order) {
+            $this->assignDrivingOrder($order);
+        }
+    }
+
+    /**
+     * @param mixed $repeatedDrivingOrderPlan
+     */
+    public function assignRepeatedDrivingOrderPlan($repeatedDrivingOrderPlan) {
+        $this->repeatedDrivingOrderPlan = $repeatedDrivingOrderPlan;
+    }
+
+    /**
+     * @param DrivingOrder $drivingOrder
+     */
+    public function assignDrivingOrder(DrivingOrder $drivingOrder) {
+        $this->getDrivingOrders()->add($drivingOrder);
+    }
 
     /**
      * @param \DateTime $date
@@ -59,9 +107,9 @@ class RepeatedDrivingOrder implements DrivingOrderInterface {
     }
 
     /**
-     * @param mixed $pickUpTime
+     * @param \DateTime $pickUpTime
      */
-    public function setPickUpTime($pickUpTime) {
+    public function setPickUpTime(\DateTime $pickUpTime) {
         $this->pickUpTime = $pickUpTime;
     }
 
@@ -70,13 +118,6 @@ class RepeatedDrivingOrder implements DrivingOrderInterface {
      */
     public function getPickUpTime() {
         return $this->pickUpTime;
-    }
-
-    /**
-     * @param mixed $repeatedDrivingOrderPlan
-     */
-    public function setRepeatedDrivingOrderPlan($repeatedDrivingOrderPlan) {
-        $this->repeatedDrivingOrderPlan = $repeatedDrivingOrderPlan;
     }
 
     /**
@@ -98,6 +139,20 @@ class RepeatedDrivingOrder implements DrivingOrderInterface {
      */
     public function getWeekday() {
         return $this->weekday;
+    }
+
+    /**
+     * @param mixed $drivingOrders
+     */
+    protected function setDrivingOrders($drivingOrders) {
+        $this->drivingOrders = $drivingOrders;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getDrivingOrders() {
+        return $this->drivingOrders;
     }
 
 }

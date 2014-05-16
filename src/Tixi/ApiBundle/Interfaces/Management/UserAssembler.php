@@ -148,32 +148,22 @@ class UserAssembler {
      * @param RoleRepository $roleRepository
      */
     private function assignRolesFromSelection(User $user, Role $role, RoleRepository $roleRepository) {
-        $roleUser = $roleRepository->findOneBy(array('role' => Role::$roleUser));
         $roleDispo = $roleRepository->findOneBy(array('role' => Role::$roleDispo));
         $roleManager = $roleRepository->findOneBy(array('role' => Role::$roleManager));
         $roleAdmin = $roleRepository->findOneBy(array('role' => Role::$roleAdmin));
 
         switch ($role->getName()) {
-            case Role::$roleUserName:
-                $user->assignRole($roleUser);
-                $user->unsignRole($roleDispo);
-                $user->unsignRole($roleManager);
-                $user->unsignRole($roleAdmin);
-                break;
             case Role::$roleDispoName:
-                $user->assignRole($roleUser);
                 $user->assignRole($roleDispo);
                 $user->unsignRole($roleManager);
                 $user->unsignRole($roleAdmin);
                 break;
             case Role::$roleManagerName:
-                $user->assignRole($roleUser);
                 $user->assignRole($roleDispo);
                 $user->assignRole($roleManager);
                 $user->unsignRole($roleAdmin);
                 break;
             case Role::$roleAdminName:
-                $user->assignRole($roleUser);
                 $user->assignRole($roleDispo);
                 $user->assignRole($roleManager);
                 $user->assignRole($roleAdmin);

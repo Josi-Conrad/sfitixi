@@ -51,7 +51,7 @@ class UserController extends Controller {
      * @return Response
      */
     public function getUsersAction(Request $request, $embeddedState = false) {
-        if (false === $this->get('security.context')->isGranted('ROLE_ADMIN')) {
+        if (false === $this->get('security.context')->isGranted('ROLE_MANAGER')) {
             throw new AccessDeniedException();
         }
         $embeddedState = $embeddedState || $request->get('embedded') === "true";
@@ -84,7 +84,7 @@ class UserController extends Controller {
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      */
     public function newUserAction(Request $request) {
-        if (false === $this->get('security.context')->isGranted('ROLE_ADMIN')) {
+        if (false === $this->get('security.context')->isGranted('ROLE_MANAGER')) {
             throw new AccessDeniedException();
         }
         $tileRenderer = $this->get('tixi_api.tilerenderer');
@@ -116,7 +116,7 @@ class UserController extends Controller {
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      */
     public function editUserAction(Request $request, $userId) {
-        if (false === $this->get('security.context')->isGranted('ROLE_ADMIN')) {
+        if (false === $this->get('security.context')->isGranted('ROLE_MANAGER')) {
             throw new AccessDeniedException();
         }
         $tileRenderer = $this->get('tixi_api.tilerenderer');
@@ -151,7 +151,7 @@ class UserController extends Controller {
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function deleteUserAction(Request $request, $userId) {
-        if (false === $this->get('security.context')->isGranted('ROLE_ADMIN')) {
+        if (false === $this->get('security.context')->isGranted('ROLE_MANAGER')) {
             throw new AccessDeniedException();
         }
         $user = $this->getUserById($userId);

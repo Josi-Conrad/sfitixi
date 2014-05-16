@@ -25,27 +25,84 @@ class DrivingMission {
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     protected $id;
+
     /**
      * @ORM\OneToMany(targetEntity="DrivingOrder", mappedBy="drivingMission")
      * @ORM\JoinColumn(name="driving_order_id", referencedColumnName="id")
      */
     protected $drivingOrders;
-    /**
-     * @ORM\ManyToMany(targetEntity="RepeatedDrivingOrder")
-     * @ORM\JoinTable(name="drivingmission_to_repeateddrivingorder",
-     *      joinColumns={@ORM\JoinColumn(name="divingmission_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="repeateddrivingorder_id", referencedColumnName="id")})
-     */
-    protected $repeatedDrivingOrders;
+
     /**
      * @ORM\ManyToOne(targetEntity="DrivingPool", inversedBy="drivingMissions")
      * @ORM\JoinColumn(name="driving_pool_id", referencedColumnName="id")
      */
     protected $drivingPool;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    protected $direction;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    protected $serviceMinuteOfDay;
+
+    /**
+     * @ORM\Column(type="array", nullable=true)
+     */
+    protected $serviceOrder;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    protected $serviceDuration;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    protected $serviceDistance;
+
+
     public function __construct() {
         $this->drivingOrders = new ArrayCollection();
-        $this->repeatedDrivingOrders = new ArrayCollection();
+    }
+
+    /**
+     * @param $direction
+     * @param int $serviceMinuteOfDay
+     * @param int $serviceDuration
+     * @param int $serviceDistance
+     * @return DrivingMission
+     */
+    public static function registerDrivingMission($direction, $serviceMinuteOfDay = 0, $serviceDuration = 0, $serviceDistance = 0) {
+        $drivingMission = new DrivingMission();
+        $drivingMission->setDirection($direction);
+        $drivingMission->setServiceMinuteOfDay($serviceMinuteOfDay);
+        $drivingMission->setServiceDuration($serviceDuration);
+        $drivingMission->setServiceDistance($serviceDistance);
+        return $drivingMission;
+    }
+
+    /**
+     * @param DrivingPool $drivingPool
+     */
+    public function assignDrivingPool(DrivingPool $drivingPool) {
+        $this->setDrivingPool($drivingPool);
+    }
+
+    /**
+     * @param DrivingOrder $drivingOrder
+     */
+    public function assignDrivingOrder(DrivingOrder $drivingOrder) {
+        $this->getDrivingOrders()->add($drivingOrder);
+    }
+
+    /**
+     * @param DrivingOrder $drivingOrder
+     */
+    public function removeDrivingOrder(DrivingOrder $drivingOrder) {
+        $this->getDrivingOrders()->removeElement($drivingOrder);
     }
 
     /**
@@ -70,7 +127,7 @@ class DrivingMission {
     }
 
     /**
-     * @return mixed
+     * @return ArrayCollection
      */
     public function getDrivingOrders() {
         return $this->drivingOrders;
@@ -79,7 +136,7 @@ class DrivingMission {
     /**
      * @param mixed $drivingPool
      */
-    public function setDrivingPool($drivingPool) {
+    protected function setDrivingPool($drivingPool) {
         $this->drivingPool = $drivingPool;
     }
 
@@ -91,16 +148,80 @@ class DrivingMission {
     }
 
     /**
-     * @param mixed $repeatedDrivingOrders
+     * @param mixed $direction
      */
-    public function setRepeatedDrivingOrders($repeatedDrivingOrders) {
-        $this->repeatedDrivingOrders = $repeatedDrivingOrders;
+    public function setDirection($direction) {
+        $this->direction = $direction;
     }
 
     /**
      * @return mixed
      */
-    public function getRepeatedDrivingOrders() {
-        return $this->repeatedDrivingOrders;
+    public function getDirection() {
+        return $this->direction;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getId() {
+        return $this->id;
+    }
+
+    /**
+     * @param mixed $serviceDistance
+     */
+    public function setServiceDistance($serviceDistance) {
+        $this->serviceDistance = $serviceDistance;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getServiceDistance() {
+        return $this->serviceDistance;
+    }
+
+    /**
+     * @param mixed $serviceDuration
+     */
+    public function setServiceDuration($serviceDuration) {
+        $this->serviceDuration = $serviceDuration;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getServiceDuration() {
+        return $this->serviceDuration;
+    }
+
+    /**
+     * @param mixed $serviceMinuteOfDay
+     */
+    public function setServiceMinuteOfDay($serviceMinuteOfDay) {
+        $this->serviceMinuteOfDay = $serviceMinuteOfDay;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getServiceMinuteOfDay() {
+        return $this->serviceMinuteOfDay;
+    }
+
+    /**
+     * @param mixed $serviceOrder
+     */
+    public function setServiceOrder($serviceOrder) {
+        $this->serviceOrder = $serviceOrder;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getServiceOrder() {
+        return $this->serviceOrder;
+    }
+
 }

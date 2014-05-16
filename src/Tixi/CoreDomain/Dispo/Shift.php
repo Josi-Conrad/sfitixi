@@ -19,6 +19,10 @@ use Tixi\CoreDomain\Driver;
  * @ORM\Table(name="shift")
  */
 class Shift {
+    /** status on the shift */
+    const OPEN = 0;
+    const FREEZED = 1;
+
     /**
      * @ORM\Id
      * @ORM\Column(type="bigint", name="id")
@@ -48,6 +52,15 @@ class Shift {
      */
     protected $amountOfDrivers;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    protected $status;
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    protected $manuallyEdited;
+
     protected function __construct() {
         $this->drivingPools = new ArrayCollection();
     }
@@ -57,13 +70,18 @@ class Shift {
      * @param WorkingDay $workingDay
      * @param ShiftType $shiftType
      * @param int $amountOfDrivers
+     * @param int $status
+     * @param bool $manuallyEdited
      * @return Shift
      */
-    public static function registerShift(WorkingDay $workingDay, ShiftType $shiftType, $amountOfDrivers = 0) {
+    public static function registerShift(WorkingDay $workingDay, ShiftType $shiftType, $amountOfDrivers = 0,
+                                         $status = self::OPEN, $manuallyEdited = false) {
         $shift = new Shift();
         $shift->setWorkingDay($workingDay);
         $shift->setShiftType($shiftType);
         $shift->setAmountOfDrivers($amountOfDrivers);
+        $shift->setStatus($status);
+        $shift->setManuallyEdited($manuallyEdited);
         return $shift;
     }
 
@@ -174,5 +192,34 @@ class Shift {
     public function setWorkingDay($workingDay) {
         $this->workingDay = $workingDay;
     }
+
+    /**
+     * @param mixed $manuallyEditet
+     */
+    public function setManuallyEdited($manuallyEditet) {
+        $this->manuallyEdited = $manuallyEditet;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getManuallyEdited() {
+        return $this->manuallyEdited;
+    }
+
+    /**
+     * @param mixed $status
+     */
+    public function setStatus($status) {
+        $this->status = $status;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getStatus() {
+        return $this->status;
+    }
+
 
 }

@@ -22,6 +22,11 @@ use Tixi\CoreDomain\Vehicle;
  * @ORM\Table(name="driving_pool")
  */
 class DrivingPool {
+    /** status on the drivingPool */
+    const CREATED = 0;
+    const WAITING_FOR_CONFIRMATION = 1;
+    const CONFIRMED = 2;
+
     /**
      * @ORM\Id
      * @ORM\Column(type="bigint", name="id")
@@ -48,6 +53,10 @@ class DrivingPool {
      * @ORM\JoinColumn(name="vehicle_id", referencedColumnName="id")
      */
     protected $vehicle;
+    /**
+     * @ORM\Column(type="integer")
+     */
+    protected $status;
 
     public function __construct() {
         $this->drivingMissions = new ArrayCollection();
@@ -55,11 +64,13 @@ class DrivingPool {
 
     /**
      * @param Shift $shift
+     * @param int $status
      * @return DrivingPool
      */
-    public static function registerDrivingPool(Shift $shift) {
+    public static function registerDrivingPool(Shift $shift, $status = self::CREATED) {
         $drivingPool = new DrivingPool();
         $drivingPool->assignShift($shift);
+        $drivingPool->setStatus($status);
         return $drivingPool;
     }
 
@@ -152,6 +163,20 @@ class DrivingPool {
      */
     public function getVehicle() {
         return $this->vehicle;
+    }
+
+    /**
+     * @param mixed $status
+     */
+    public function setStatus($status) {
+        $this->status = $status;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getStatus() {
+        return $this->status;
     }
 
 }
