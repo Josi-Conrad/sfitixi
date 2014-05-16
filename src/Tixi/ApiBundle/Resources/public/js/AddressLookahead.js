@@ -131,7 +131,7 @@ function AddressLookahead() {
     }
 
     this._constructDomSelectionDisplay = function(model) {
-        var _selectionDisplay = $('<li></li>').append(model.getDisplayName());
+        var _selectionDisplay = $('<li class="lookaheadSelection"></li>').append(model.getDisplayName());
         _selectionDisplay.on('mousedown', function() {
             _this._selectedIndex = model.index;
             $(_this._inputField).val(model.getDisplayName());

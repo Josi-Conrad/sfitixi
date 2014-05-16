@@ -44,6 +44,14 @@
     display: none;
 }
 
+.lookaheadSelection {
+    cursor: pointer;
+}
+
+.lookaheadSelection:hover {
+    color: #428bca;
+}
+
 /* Top Action */
 .upperRightMargin{
     margin-top: 15px;
