@@ -37,7 +37,7 @@ class RoutingServiceTest extends CommonBaseTest {
             $address2 = $this->createTestAddressGoldau();
         }
         $route = $this->routeManagement->getRouteFromAddresses($address1, $address2);
-        $this->assertNotEmpty($route->getDuration());
+        $this->assertNotEmpty($route->getDurationInMinutes());
     }
 /*
     public function testGetMultipleRouteInformations() {

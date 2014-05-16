@@ -32,6 +32,19 @@ class RoutingMachineOSRM extends ContainerAware implements RoutingMachine {
      */
     const NEAREST = 'nearest?';
     const VIAROUTE = 'viaroute?';
+    const HINT = 'hint=';
+    const CHECKSUM = 'checksum=';
+
+    /**
+     * OSM ZoomLevel as largest editable area
+     * (see: http://wiki.openstreetmap.org/wiki/Zoom_levels)
+     */
+    const ZOOMLEVEL = 'z=14';
+
+    /**
+     * no alternative routes
+     */
+    const ALT = 'alt=false';
 
     /**
      * @var $osrm_server parameter from osrm_server (tixi_parameter_osrm_server)
@@ -135,19 +148,20 @@ class RoutingMachineOSRM extends ContainerAware implements RoutingMachine {
         $response = curl_exec($curl);
         curl_close($curl);
         if ($response === false) {
-            throw new RoutingMachineException("OSRM connection failed");
+            throw new RoutingMachineException("OSRM getting response failed");
         }
         $json = json_decode($response);
         if ($json === null) {
             throw new RoutingMachineException("OSRM answer parsing failed");
         }
-        if ($json->status === self::SUCCESS) {
+        $status = $json->status;
+        if ($status === self::SUCCESS) {
             $lat = $json->mapped_coordinate[0];
             $lng = $json->mapped_coordinate[1];
             $nearestCoordinate = new RoutingCoordinate($lat, $lng);
             return $nearestCoordinate;
         } else {
-            throw new RoutingMachineException("OSRM status error", $json->{'status'});
+            throw new RoutingMachineException("OSRM status error", $status . ': ' . $json->status_message);
         }
     }
 
@@ -161,25 +175,70 @@ class RoutingMachineOSRM extends ContainerAware implements RoutingMachine {
      * @return null|RoutingInformationOSRM
      */
     private function getRouteInformation(RoutingCoordinate $coordinateFrom, RoutingCoordinate $coordinateTo) {
-        $requestUrl = $this->osrm_server . self::VIAROUTE . $coordinateFrom . '&' . $coordinateTo;
+        $requestUrl = $this->osrm_server . self::VIAROUTE . self::ZOOMLEVEL . '&' .
+            $coordinateFrom . '&' . $coordinateTo . '&' . self::ALT;
 
         $curl = $this->createCurlRequest($requestUrl);
 
-        $resp = curl_exec($curl);
+        $response = curl_exec($curl);
         curl_close($curl);
+        if ($response === false) {
+            throw new RoutingMachineException("OSRM getting response failed");
+        }
+        $json = json_decode($response);
+        if ($json === null) {
+            throw new RoutingMachineException("OSRM answer parsing failed");
+        }
+        $status = $json->status;
+        if ($status === self::SUCCESS) {
+            $route = new RoutingInformationOSRM();
+            $route->setTotalTime($json->route_summary->total_time);
+            $route->setTotalDistance($json->route_summary->total_distance);
+            $route->setChecksum($json->hint_data->checksum);
+            $route->setChecksum($json->hint_data->locations[0]);
+            $route->setChecksum($json->hint_data->locations[1]);
+            return $route;
+        } else if ($status === self::NO_ROUTE) {
+            return $this->getRouteInformationWithHinting($coordinateFrom, $coordinateTo, $json->hint_data->checksum);
+        } else {
+            throw new RoutingMachineException("OSRM status error", $status . ': ' . $json->status_message);
+        }
+    }
 
-        $json = json_decode($resp);
+    /**
+     * @param RoutingCoordinate $coordinateFrom
+     * @param RoutingCoordinate $coordinateTo
+     * @param $checksum
+     * @return RoutingInformationOSRM
+     * @throws RoutingMachineException
+     */
+    private function getRouteInformationWithHinting(RoutingCoordinate $coordinateFrom, RoutingCoordinate $coordinateTo, $checksum) {
+        $requestUrl = $this->osrm_server . self::VIAROUTE . self::ZOOMLEVEL . '&' . self::CHECKSUM . $checksum . '&' .
+            $coordinateFrom . '&' . $coordinateTo . '&' . self::ALT;
 
-        if ($json->status === self::SUCCESS) {
+        $curl = $this->createCurlRequest($requestUrl);
+
+        $response = curl_exec($curl);
+        curl_close($curl);
+        if ($response === false) {
+            throw new RoutingMachineException("OSRM getting response failed");
+        }
+        $json = json_decode($response);
+        if ($json === null) {
+            throw new RoutingMachineException("OSRM answer parsing failed");
+        }
+        $status = $json->status;
+        if ($status === self::SUCCESS) {
             $route = new RoutingInformationOSRM();
             $route->setTotalTime($json->route_summary->total_time);
             $route->setTotalDistance($json->route_summary->total_distance);
             $route->setChecksum($json->hint_data->checksum);
             return $route;
         } else {
-            throw new RoutingMachineException("OSRM status error", $json->{'status'});
+            throw new RoutingMachineException("OSRM status error", $status . ': ' . $json->status_message);
         }
     }
+
 
     /**
      * @param array $routings
@@ -251,7 +310,10 @@ class RoutingMachineOSRM extends ContainerAware implements RoutingMachine {
                 $route->getTargetAddress()->getLat(),
                 $route->getTargetAddress()->getLng());
 
-            $curlRequest = $this->createCurlRequest($this->osrm_server . self::VIAROUTE . $coordinateFrom . '&' . $coordinateTo);
+            $requestUrl = $this->osrm_server . self::VIAROUTE . self::ZOOMLEVEL . '&' .
+                $coordinateFrom . '&' . $coordinateTo . '&' . self::ALT;
+
+            $curlRequest = $this->createCurlRequest($requestUrl);
             $curlHandles[] = $curlRequest;
         }
 
@@ -277,47 +339,6 @@ class RoutingMachineOSRM extends ContainerAware implements RoutingMachine {
         if (substr($this->osrm_server, -1) !== '/') {
             $this->osrm_server = $this->osrm_server . '/';
         }
-    }
-
-    /**
-     * @param $requestUrl
-     * @return resource
-     */
-    private function createCurlRequest($requestUrl) {
-        $curl = curl_init();
-        $options = array(
-            CURLOPT_URL => $requestUrl,
-            CURLOPT_POST => 0,
-            CURLOPT_TIMEOUT => 30,
-            CURLOPT_HEADER => 0,
-            CURLOPT_RETURNTRANSFER => 1,
-            CURLOPT_DNS_USE_GLOBAL_CACHE => 1,
-            CURLOPT_DNS_CACHE_TIMEOUT => 3600,
-            CURLOPT_SSL_VERIFYPEER => 0,
-            CURLOPT_SSL_VERIFYHOST => 0,
-            CURLOPT_FOLLOWLOCATION => 0,
-        );
-        curl_setopt_array($curl, $options);
-        return $curl;
-    }
-
-    /**
-     * @return bool
-     */
-    private function checkConnectivity() {
-        $curl = curl_init($this->osrm_server);
-        $options = array(
-            CURLOPT_POST => 0,
-            CURLOPT_TIMEOUT => 5,
-            CURLOPT_HEADER => 1,
-            CURLOPT_NOBODY => 1,
-            CURLOPT_RETURNTRANSFER => 1
-        );
-        curl_setopt_array($curl, $options);
-        $response = curl_exec($curl);
-        curl_close($curl);
-        if ($response) return true;
-        return false;
     }
 
     /**
@@ -387,5 +408,49 @@ class RoutingMachineOSRM extends ContainerAware implements RoutingMachine {
         // close the curl_multi_handle once we're done
         curl_multi_close($curlMultiHandle);
         return $responses;
+    }
+
+
+    /**
+     * @param $requestUrl
+     * @return resource
+     */
+    private function createCurlRequest($requestUrl) {
+        $curl = curl_init();
+        $options = array(
+            CURLOPT_URL => $requestUrl,
+            CURLOPT_POST => 0,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_HEADER => 0,
+            CURLOPT_RETURNTRANSFER => 1,
+            CURLOPT_DNS_USE_GLOBAL_CACHE => 1,
+            CURLOPT_DNS_CACHE_TIMEOUT => 3600,
+            CURLOPT_SSL_VERIFYPEER => 0,
+            CURLOPT_SSL_VERIFYHOST => 0,
+            CURLOPT_FOLLOWLOCATION => 0,
+            CURLOPT_IPRESOLVE => CURL_IPRESOLVE_V4,
+        );
+        curl_setopt_array($curl, $options);
+        return $curl;
+    }
+
+    /**
+     * @return bool
+     */
+    private function checkConnectivity() {
+        $curl = curl_init($this->osrm_server);
+        $options = array(
+            CURLOPT_POST => 0,
+            CURLOPT_TIMEOUT => 5,
+            CURLOPT_HEADER => 1,
+            CURLOPT_NOBODY => 1,
+            CURLOPT_RETURNTRANSFER => 1,
+            CURLOPT_IPRESOLVE => CURL_IPRESOLVE_V4,
+        );
+        curl_setopt_array($curl, $options);
+        $response = curl_exec($curl);
+        curl_close($curl);
+        if ($response) return true;
+        return false;
     }
 }

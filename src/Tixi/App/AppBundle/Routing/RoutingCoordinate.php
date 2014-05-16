@@ -12,7 +12,7 @@ namespace Tixi\App\AppBundle\Routing;
 class RoutingCoordinate {
     private $longitude = 0.0;
     private $latitude = 0.0;
-    private $hintLocation;
+    private $checksum;
 
     /**
      * @param $lat
@@ -26,15 +26,15 @@ class RoutingCoordinate {
     /**
      * @param mixed $hintLocation
      */
-    public function setHintLocation($hintLocation) {
-        $this->hintLocation = $hintLocation;
+    public function setChecksum($hintLocation) {
+        $this->checksum = $hintLocation;
     }
 
     /**
      * @return mixed
      */
-    public function getHintLocation() {
-        return $this->hintLocation;
+    public function getChecksum() {
+        return $this->checksum;
     }
 
     /**
@@ -84,8 +84,8 @@ class RoutingCoordinate {
     public function __toString() {
         $ret = "loc=" . $this->latitude . "," . $this->longitude;
 
-        if ($this->hintLocation != null) {
-            $ret = $ret . "&hint=" . $this->hintLocation;
+        if ($this->checksum != null) {
+            $ret = $ret . "&hint=" . $this->checksum;
         }
         return $ret;
     }

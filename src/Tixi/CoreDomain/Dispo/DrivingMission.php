@@ -54,11 +54,13 @@ class DrivingMission {
     protected $serviceOrder;
 
     /**
+     * duration in minutes
      * @ORM\Column(type="integer")
      */
     protected $serviceDuration;
 
     /**
+     * distance in meters
      * @ORM\Column(type="integer")
      */
     protected $serviceDistance;
