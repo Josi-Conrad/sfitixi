@@ -13,6 +13,8 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Tixi\ApiBundle\Form\Shared\AddressHandleType;
 
@@ -27,7 +29,6 @@ class AddressLookaheadType extends AbstractLookaheadType {
             'allow_add' => true,
             'allow_delete' => true
         ));
-        $builder->setAttribute('dataSrc',$this->generateUrl('tixiapp_service_address'));
     }
 
     /**
@@ -37,6 +38,16 @@ class AddressLookaheadType extends AbstractLookaheadType {
         $resolver->setDefaults(array(
             'data_class' => 'Tixi\ApiBundle\Interfaces\AddressLookaheadDTO'
         ));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function buildView(FormView $view, FormInterface $form, array $options)
+    {
+        $view->vars['googleMapsApiKey'] = $this->getGoogleMapsApiKey();
+        parent::buildView($view, $form, $options);
+
     }
 
     /**
@@ -52,5 +63,9 @@ class AddressLookaheadType extends AbstractLookaheadType {
     protected function getDataSrc()
     {
         return $this->generateUrl('tixiapp_service_address');
+    }
+
+    protected function getGoogleMapsApiKey() {
+        return $this->container->getParameter('tixi_parameter_google_apikey');
     }
 }

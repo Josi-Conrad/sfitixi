@@ -1,6 +1,6 @@
 #Address
 address.field.lookahead: Adresse
-address.field.street: Strasse / Nummer
+address.field.street: Strasse, Nr.
 address.field.postalcode: PLZ
 address.field.city: Ort
 address.field.country: Land

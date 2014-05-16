@@ -17,28 +17,39 @@
 
 {% block addresslookahead_widget %}
     {% set lookaheadId = 'lookahead_' ~ form.vars.name %}
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key={{ form.vars.googleMapsApiKey }}&sensor=false"></script>
+    <script src="{{ asset('bundles/tixiapi/js/GoogleMapWrapper.js') }}"></script>
+    <div id="googleMapCanvas"></div>
     <div class="col-md-12">
         <div class="{{ lookaheadId }}" data-datasrc="{{ form.vars.dataSrc }}">
-            <div class="row">
-                {{ form_widget(form.addressDisplayName, { 'attr': {'class': 'lookaheadInput','autocomplete' : 'off'} }) }}
-                {{ form_widget(form.addressSelectionId, { 'attr': {'class': 'lookaheadSelectionId'} }) }}
-            </div>
-            <div class="row selectionsWrapper">
-                <div class="col-md-12">
-                    <ul class="selectionsDisplayContainer list-unstyled">
-
-                    </ul>
-                    <ul class="selectionsModelContainer"
-                        data-prototype="{{ form_widget(form.addressHandles.vars.prototype)|e }}">
-                    </ul>
-                    {#{{ form_widget(form.addressHandles) }}#}
+            <div class="lookaheadWrapper">
+                <div class="row">
+                    {{ form_widget(form.addressDisplayName, { 'attr': {'class': 'lookaheadInput','autocomplete' : 'off'} }) }}
+                    {{ form_widget(form.addressSelectionId, { 'attr': {'class': 'lookaheadSelectionId'} }) }}
                 </div>
+                <div class="row selectionsWrapper">
+                    <div class="col-md-12">
+                        <ul class="selectionsDisplayContainer list-unstyled">
+
+                        </ul>
+                        <ul class="selectionsModelContainer"
+                            data-prototype="{{ form_widget(form.addressHandles.vars.prototype)|e }}">
+                        </ul>
+                        {#{{ form_widget(form.addressHandles) }}#}
+                    </div>
+                </div>
+            </div>
+            <div class="manualAddWrapper">
+                <div class="manualAddFieldContainer"></div>
             </div>
         </div>
         <script type="text/javascript">
             jQuery(function ($) {
-                var lookahead = new Lookahead();
+                var lookahead = new Lookahead(),
+                    googleMapsWarapper = new GoogleMapWrapper();
                 lookahead.init('{{ lookaheadId }}', '{{ 'addressHandles' }}', Address.prototype);
+//                googleMapsWarapper.init('googleMapCanvas');
+
             });
         </script>
     </div>

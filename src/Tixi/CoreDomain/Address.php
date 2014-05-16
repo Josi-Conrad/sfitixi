@@ -98,7 +98,8 @@ class Address extends CommonBaseEntity {
      * @return Address
      */
     public static function registerAddress($street, $postalCode, $city, $country,
-                                           $name = null, $lat = null, $lng = null, $source = self::SOURCE_MANUAL) {
+                                           $name = null, $lat = null, $lng = null, $source = null) {
+        $source = (null !== $source) ? $source : self::SOURCE_MANUAL;
         $address = new Address();
 
         $address->setStreet($street);
@@ -125,7 +126,9 @@ class Address extends CommonBaseEntity {
      */
     public function updateAddressData($street = null, $postalCode = null,
                                       $city = null, $country = null,
-                                      $name = null, $lat = null, $lng = null, $source = self::SOURCE_MANUAL) {
+                                      $name = null, $lat = null, $lng = null, $source = null) {
+
+        $source = (null !== $source) ? $source : self::SOURCE_MANUAL;
 
         if (!empty($street)) {
             $this->setStreet($street);
