@@ -36,4 +36,5 @@ class ShiftTypeRepositoryDoctrine extends CommonBaseRepositoryDoctrine implement
             ->where('s.isDeleted = 0');
         return $qb->getQuery()->getResult();
     }
+
 }

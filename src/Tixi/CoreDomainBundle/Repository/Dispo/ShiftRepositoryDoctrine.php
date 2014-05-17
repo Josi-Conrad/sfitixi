@@ -38,4 +38,16 @@ class ShiftRepositoryDoctrine extends CommonBaseRepositoryDoctrine implements Sh
         $qb->setParameter('shiftType', $shiftType);
         return $qb->getQuery()->getSingleScalarResult();
     }
+
+    /**
+     * @param \DateTime $day
+     * @return Shift[]
+     */
+    public function findShiftsForDay(\DateTime $day) {
+        $qb = parent::createQueryBuilder('e');
+        $qb->innerJoin('e.workingDay', 'w')
+            ->where('w.date = :day')
+            ->setParameter('day', $day->format('Y-m-d'));
+        return $qb->getQuery()->getResult();
+    }
 }

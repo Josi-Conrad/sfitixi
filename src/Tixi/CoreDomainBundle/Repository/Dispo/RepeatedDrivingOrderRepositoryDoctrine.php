@@ -36,8 +36,4 @@ class RepeatedDrivingOrderRepositoryDoctrine extends CommonBaseRepositoryDoctrin
         $this->getEntityManager()->remove($repeatedDrivingOrder);
     }
 
-    public function findAllOrdersForShift(Shift $shift)
-    {
-        // TODO: Implement findAllOrdersForShift() method.
-    }
 }

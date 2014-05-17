@@ -28,6 +28,17 @@ class DateTimeService extends ContainerAware {
 
     /**
      * @param \DateTime $dateTime
+     * @return float
+     */
+    public static function getMinutesOfDay(\DateTime $dateTime){
+        $midnight = clone $dateTime;
+        $midnight->setTime(0,0);
+        $diff = $midnight->diff($dateTime);
+        return ($diff->h * 60) + $diff->i;
+    }
+
+    /**
+     * @param \DateTime $dateTime
      * @return string
      * returns four digit year
      */

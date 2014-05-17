@@ -18,7 +18,7 @@ use Tixi\CoreDomain\Shared\CommonBaseEntity;
  * @ORM\Entity(repositoryClass="Tixi\CoreDomainBundle\Repository\Dispo\DrivingOrderRepositoryDoctrine")
  * @ORM\Table(name="driving_order")
  */
-class DrivingOrder extends CommonBaseEntity implements DrivingOrderInterface {
+class DrivingOrder extends CommonBaseEntity {
     /** status of a drivingOrder */
     const PENDENT = 0;
     const COMPLETED = 1;
@@ -189,7 +189,7 @@ class DrivingOrder extends CommonBaseEntity implements DrivingOrderInterface {
     }
 
     /**
-     * @return mixed
+     * @return Route
      */
     public function getRoute() {
         return $this->route;
@@ -245,7 +245,7 @@ class DrivingOrder extends CommonBaseEntity implements DrivingOrderInterface {
     }
 
     /**
-     * @return mixed
+     * @return \DateTime
      */
     public function getPickUpTime() {
         return $this->pickUpTime;

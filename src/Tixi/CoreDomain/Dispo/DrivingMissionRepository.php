@@ -21,4 +21,9 @@ interface DrivingMissionRepository extends CommonBaseRepository {
      */
     public function remove(DrivingMission $drivingMission);
 
+    /**
+     * @param \DateTime $day
+     * @return DrivingMission[]
+     */
+    public function findDrivingMissionsForDay(\DateTime $day);
 }

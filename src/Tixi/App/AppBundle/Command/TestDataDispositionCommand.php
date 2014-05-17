@@ -26,13 +26,13 @@ use Tixi\CoreDomain\Passenger;
 use Tixi\CoreDomain\POI;
 
 /**
- * Class TestDataDrivingPoolsCommand
+ * Class TestDataDispositionCommand
  * @package Tixi\App\AppBundle\Command
  */
-class TestDataDrivingPoolsCommand extends ContainerAwareCommand {
+class TestDataDispositionCommand extends ContainerAwareCommand {
     public function configure() {
         $this->setName('project:testdata')
-            ->setDescription('Creates test data for drivingPools, Missions')
+            ->setDescription('Creates test data for Pools, Orders, Missions')
             ->addArgument('month', InputArgument::OPTIONAL, 'Set Months ago from today to create DrivingPools in workingMonth');
     }
 
@@ -66,6 +66,7 @@ class TestDataDrivingPoolsCommand extends ContainerAwareCommand {
         $reDrivingOrderRepo = $this->getContainer()->get('repeateddrivingorder_repository.doctrine');
         $reDrivingOrderPlanRepo = $this->getContainer()->get('repeateddrivingorderplan_repository.doctrine');
 
+        $time = $this->getContainer()->get('tixi_api.datetimeservice');
         $routeManagement = $this->getContainer()->get('tixi_app.routemanagement');
 
         $monthDate = new \DateTime('today');
@@ -124,13 +125,20 @@ class TestDataDrivingPoolsCommand extends ContainerAwareCommand {
                 $passenger = $passengerRepo->find(rand(100, 500));
                 $passenger->setIsInWheelChair(rand(0,1));
 
-                $st = clone $shiftType->getStart();
-                $se = clone $shiftType->getEnd();
-                $minDiff = (int)$se->format('m') - (int)$st->format('m');
-                $st->add(new \DateInterval('PT' . rand(5, 180) . 'M'));
+                /**  WARNING: saving times in UTC on database, but minutesOfDay are from midnight, causing
+                 * wrong data if a time is UTC 23:30 but CET 00:30 (= 30 minutesOfDay)
+                 */
+                $stStart = $time->convertToLocalDateTime($shiftType->getStart());
+                $stEnd = $time->convertToLocalDateTime($shiftType->getEnd());
+
+                $stDuration = $stStart->diff($stEnd);
+                $minutes = ($stDuration->h * 60 + $stDuration->i);
+
+                $pickupTime = clone $stStart;
+                $pickupTime->add(new \DateInterval('PT' . rand(1, $minutes) . 'M'));
 
                 //DrivingOrder <-> Passenger + Route
-                $order = DrivingOrder::registerDrivingOrder($monthDate, $st, rand(0, 1));
+                $order = DrivingOrder::registerDrivingOrder($monthDate, $pickupTime, rand(0, 1));
 
                 $start = $passenger->getAddress();
                 $target = $addressRepo->find(rand(10, 1000));
@@ -143,13 +151,13 @@ class TestDataDrivingPoolsCommand extends ContainerAwareCommand {
 
                 $wMin = DispositionVariables::BOARDING_TIME + DispositionVariables::DEBOARDING_TIME;
                 $eMin = $passenger->getExtraMinutes();
-                $sMinDur = $route->getDurationInMinutes() + $wMin + $eMin;
+                $rMin = $route->getAdditionalTime();
+                $serviceDuration = $route->getDurationInMinutes() + $wMin + $eMin + $rMin;
 
-                $dMin = (int)$st->format('i');
-                $sMinDay = $dMin + $sMinDur - DispositionVariables::ARRIVAL_BEFORE_PICKUP;
+                $serviceMinuteOfDay = $time->getMinutesOfDay($pickupTime);
 
                 //DrivingMission <-> Order
-                $drivingMission = DrivingMission::registerDrivingMission(rand(0, 1), $sMinDay, $sMinDur, $route->getDistanceInMeters());
+                $drivingMission = DrivingMission::registerDrivingMission(rand(0, 1), $serviceMinuteOfDay, $serviceDuration, $route->getDistanceInMeters());
                 $drivingMission->assignDrivingOrder($order);
                 $order->assignDrivingMission($drivingMission);
                 $drivingMissionRepo->store($drivingMission);

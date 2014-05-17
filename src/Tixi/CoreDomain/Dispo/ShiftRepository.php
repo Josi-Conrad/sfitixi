@@ -22,4 +22,11 @@ interface ShiftRepository extends CommonBaseRepository {
      * @return mixed
      */
     public function getAmountByShiftType(ShiftType $shiftType);
+
+    /**
+     * @param \DateTime $day
+     * @return Shift[]
+     */
+    public function findShiftsForDay(\DateTime $day);
+
 }

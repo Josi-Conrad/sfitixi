@@ -8,7 +8,7 @@ use Tixi\CoreDomain\Shared\CommonBaseRepository;
  * Interface RepeatedDrivingOrderRepository
  * @package Tixi\CoreDomain\Dispo
  */
-interface RepeatedDrivingOrderRepository extends CommonBaseRepository, DrivingOrderRepositoryInterface {
+interface RepeatedDrivingOrderRepository extends CommonBaseRepository {
     /**
      * @param RepeatedDrivingOrder $repeatedDrivingOrder
      * @return mixed
