@@ -6,6 +6,7 @@ function GoogleMapWrapper() {
 
     this.DISPLAYSTATE = 1;
     this.EDITSTATE = 2;
+    this.GEOCODEEDITSTATE = 3;
 
     this._canvasWrapper = null;
     this._canvas = null;
@@ -14,39 +15,80 @@ function GoogleMapWrapper() {
     this._map = null;
     this._marker = null;
 
+    this._geocoder = null;
+
+    this._geocodeInputWrapper = null;
+    this._geocodeInput = null;
+    this._geocodeInputButton = null;
+
     this._state = null;
 
     this.init = function(canvasWrapper, canvas) {
         _this._canvasWrapper = canvasWrapper;
-        _this._canvas = canvas
+        _this._canvas = canvas;
+        _this._initElements();
+        _this._initGeocoder();
+    }
+
+    this._initElements = function() {
+        var _geocodeInputWrapper = $(_this._canvasWrapper).find('.geocodeInputWrapper'),
+            _geocodeInput = $(_geocodeInputWrapper).find('.geocodeInput'),
+            _geocodeInputButton = $(_geocodeInputWrapper).find('.geocodeInputButton');
+        $(_geocodeInputButton).on('click', _this._onGeocodeInputButtonClick);
+        _this._geocodeInputWrapper = _geocodeInputWrapper;
+        _this._geocodeInput = _geocodeInput;
+        _this._geocodeInputButton = _geocodeInputButton;
+
     }
 
     this.displayAddress = function(lat, lng) {
+        var _latLng = _this._createLatLng(lat, lng);
         if(!_this._isCanvasVisible) {
             _this.showCanvas();
         }
         if(_this._state !== _this.DISPLAYSTATE) {
             _this._switchToDisplayState();
         }
-        _this._moveMarker(_this._createLatLng(lat,lng));
+        _this._setMapCenter(_latLng);
+        _this._moveMarker(_latLng);
     }
 
     this.displayEditableAddress = function(lat, lng, eventCallback) {
 
     }
 
+    this.displayGeocodeEditableCanvas = function(eventCallback) {
+        if(!_this._isCanvasVisible) {
+            _this.showCanvas();
+        }
+        if(_this._state !== _this.GEOCODEEDITSTATE) {
+            _this._switchToGeocodeEditState(eventCallback);
+        }
+    }
+
     this._switchToDisplayState = function() {
+        _this._hideGeocodeInput();
         _this._initDisplayMap();
         _this._initDisplayMarker();
         _this._state = _this.DISPLAYSTATE;
     }
 
     this._switchToEditState = function() {
+        _this._hideGeocodeInput();
         _this._state = _this.EDITSTATE;
     }
 
-    this._moveMarker = function(latLng) {
+    this._switchToGeocodeEditState = function(eventCallback) {
+        _this._initGeocodeEditMap();
+        _this._initEditMarker(eventCallback);
+        _this._showGeocodeInput();
+    }
+
+    this._setMapCenter = function(latLng) {
         _this._map.setCenter(latLng);
+    }
+
+    this._moveMarker = function(latLng) {
         _this._marker.setPosition(latLng);
     }
 
@@ -64,25 +106,36 @@ function GoogleMapWrapper() {
         return new google.maps.LatLng(lat, lng);
     }
 
-//    this._createMarker = function(latLng, draggable, title) {
-//        var _draggable = (undefined !== draggable) ? draggable : false,
-//            _marker = new google.maps.Marker({
-//                position: latLng,
-//                map: _this._map,
-//                draggable:_draggable,
-//                title:"Drag me!"
-//            });
-//        _this._marker = _marker;
-//    }
+    this._showGeocodeInput = function() {
+        $(_this._geocodeInputWrapper).show();
+    }
 
-//    this._adjustCanvas = function(canvas) {
-//        var _width = canvas.width(),
-//            _paddedWitdh = _width+30,
-//            _height = canvas.height();
-////        canvas.css('right','-'+_paddedWitdh+'px');
-////        canvas.css('top','-'+_height/2+'px');
-//        return canvas;
-//    }
+    this._hideGeocodeInput = function() {
+        $(_this._geocodeInputWrapper).hide();
+    }
+
+    this._onGeocodeInputButtonClick = function() {
+        var _geocodeInput = $(_this._geocodeInput).val();
+        if(_geocodeInput) {
+            _this._geocoder.geocode( { 'address': _geocodeInput}, function(results, status) {
+                if (status == google.maps.GeocoderStatus.OK) {
+                    _this._setMapCenter(results[0].geometry.location);
+                    _this._moveMarker(results[0].geometry.location);
+                } else {
+                    //ToDo geocoder fail state
+                }
+            });
+        }
+    }
+
+    this._onMarkerDrop = function(eventCallback) {
+        var _markerLatLng = _this._marker.getPosition();
+        eventCallback(_markerLatLng.lat(), _markerLatLng.lng());
+    }
+
+    this._initGeocoder = function() {
+        _this._geocoder = new google.maps.Geocoder();
+    }
 
     this._initDisplayMap = function() {
         _this._map = new google.maps.Map(_this._canvas, {
@@ -99,6 +152,14 @@ function GoogleMapWrapper() {
         });
     }
 
+    this._initGeocodeEditMap = function() {
+        _this._map = new google.maps.Map(_this._canvas, {
+            zoom: 15,
+            streetViewControl: false,
+            mapTypeId: google.maps.MapTypeId.HYBRID
+        });
+    }
+
     this._initDisplayMarker = function() {
         var _marker = new google.maps.Marker({
             map: _this._map
@@ -106,10 +167,13 @@ function GoogleMapWrapper() {
         _this._marker = _marker;
     }
 
-    this._initEditMarker = function() {
+    this._initEditMarker = function(eventCallback) {
         var _marker = new google.maps.Marker({
             map: _this._map,
             draggable: true
+        });
+        google.maps.event.addListener(_marker, 'dragend', function() {
+            _this._onMarkerDrop(eventCallback);
         });
         _this._marker = _marker;
     }

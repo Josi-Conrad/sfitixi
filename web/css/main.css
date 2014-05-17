@@ -5,15 +5,24 @@
     width: 600px;
     height: 500px;
     right: -660px;
-    top: -220px;
+    top: -120px;
     display: none;
 }
 
 .googleMapCanvas {
+    z-index: 3001;
     width: 570px;
     height: 470px;
-    position: relative;
     padding: 0px;
+}
+
+.geocodeInputWrapper {
+    z-index: 3002;
+    position: absolute;
+    top: 30px;
+    left: 160px;
+    width: 250px;
+    display: none;
 }
 
 /* Data Grid */

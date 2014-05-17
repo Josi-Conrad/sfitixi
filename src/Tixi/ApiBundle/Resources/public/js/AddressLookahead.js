@@ -1,11 +1,15 @@
 function AddressLookahead() {
     var _this = this;
 
+    this.MANUALADDSTATE = 1;
+    this.LOOKAHEADSTATE = 2;
+
     this._wrapper = null;
     this._inputField = null;
 
     this._lookaheadWrapper = null;
     this._manualAddWrapper = null;
+    this._state = null;
 
     this._selectionsWrapper = null;
     this._selectionsModelContainer = null;
@@ -23,9 +27,7 @@ function AddressLookahead() {
 
     this._dataUrl = null;
 
-    this._googleMapCanvasWrapper = null;
-    this._googleMapCanvas = null;
-    this._mapCanvasIsVisible = false;
+    this._googleMapWrapper = null;
 
     this.init = function(lookaheadId, modelIdPrefix, modelPrototype) {
         _this._modelIdPrefix = modelIdPrefix;
@@ -47,9 +49,7 @@ function AddressLookahead() {
             _selectionsDisplay = $(_selectionsWrapper).find('.selectionsDisplayContainer'),
             _inputField = $(_wrapper).find('.lookaheadInput'),
             _selectionsIdContainer = $(_wrapper).find('.lookaheadSelectionId'),
-            _manualAddFieldContainer = $(_manualAddWrapper).find('.manualAddFieldContainer'),
-            _googleMapCanvasWrapper = $(_wrapper).find('.googleMapCanvasWrapper'),
-            _googleMapCanvas = $(_googleMapCanvasWrapper).find('.googleMapCanvas').get(0);
+            _manualAddFieldContainer = $(_manualAddWrapper).find('.manualAddFieldContainer');
 
         _this._wrapper = _wrapper;
         _this._lookaheadWrapper = _lookaheadWrapper;
@@ -61,8 +61,6 @@ function AddressLookahead() {
         _this._inputField = _inputField;
         _this._selectionsIdContainer = _selectionsIdContainer;
         _this._manualAddFieldContainer = _manualAddFieldContainer;
-        _this._googleMapCanvasWrapper = _googleMapCanvasWrapper;
-        _this._googleMapCanvas = _googleMapCanvas;
     }
 
     this._initDataSrcUrl = function() {
@@ -77,8 +75,10 @@ function AddressLookahead() {
     }
 
     this._initGoogleMapWrapper = function(mapCanvasId) {
-        var _wrapper =  new GoogleMapWrapper();
-        _wrapper.init(_this._googleMapCanvasWrapper, _this._googleMapCanvas);
+        var _wrapper =  new GoogleMapWrapper(),
+            _googleMapCanvasWrapper = $(_this._wrapper).find('.googleMapCanvasWrapper'),
+            _googleMapCanvas = $(_googleMapCanvasWrapper).find('.googleMapCanvas').get(0);
+        _wrapper.init(_googleMapCanvasWrapper, _googleMapCanvas);
         _this._googleMapWrapper = _wrapper;
     }
 
@@ -87,12 +87,15 @@ function AddressLookahead() {
         _this._constructManualAddContainer();
         $(_this._lookaheadWrapper).hide();
         $(_this._manualAddWrapper).show();
+        _this._googleMapWrapper.displayGeocodeEditableCanvas(_this._onGoogleMapMarkerDrop);
+        _this._state = _this.MANUALADDSTATE;
     }
 
     this._switchToLookaheadState = function() {
         _this._removeManualAddContainer();
         $(_this._manualAddWrapper).hide();
         $(_this._lookaheadWrapper).show();
+        _this._state = _this.LOOKAHEADSTATE;
     }
 
 
@@ -173,6 +176,16 @@ function AddressLookahead() {
         return _prototype;
     }
 
+    this._fillLatLng = function(lat, lng) {
+        var _index = (_this._state === _this.MANUALADDSTATE) ? 0 : 0;
+        _this._setAddressFieldValue(_index, 'lat', lat);
+        _this._setAddressFieldValue(_index, 'lng', lng);
+    }
+
+    this._setAddressFieldValue = function(index, fieldName, value) {
+        $(_this._wrapper).find('[id*='+_this._modelIdPrefix+'_'+index+'_'+fieldName+']').val(value);
+    }
+
     this._onAddManuallyClicked = function(event) {
         event.preventDefault();
         _this._switchToManualAddState();
@@ -180,6 +193,7 @@ function AddressLookahead() {
 
     this._onGoBackToLookahead = function(event) {
         event.preventDefault();
+        _this._googleMapWrapper.hideCanvas();
         _this._switchToLookaheadState();
     }
 
@@ -209,6 +223,10 @@ function AddressLookahead() {
 
     this._onSelectionDisplayMouseOver = function(model) {
         _this._googleMapWrapper.displayAddress(model.fields.lat, model.fields.lng);
+    }
+
+    this._onGoogleMapMarkerDrop = function(lat, lng) {
+        _this._fillLatLng(lat, lng);
     }
 
     this._resetLookahead = function() {
