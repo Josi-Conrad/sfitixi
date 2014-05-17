@@ -39,6 +39,7 @@
             <div class="lookaheadWrapper">
                 <div class="row">
                     {{ form_widget(form.addressDisplayName, { 'attr': {'class': 'lookaheadInput','autocomplete' : 'off'} }) }}
+                    <a href="#" class="editManually">Adresse manuell editieren</a>
                 </div>
                 <div class="row addressSelectionsWrapper">
                     <div class="col-md-12">
@@ -51,10 +52,6 @@
                 <div class="row">
                     <a href="#" class="cancelManualAdd">Abbrechen</a>
                 </div>
-            </div>
-
-            <div class="manualAddWrapper">
-                <div class="manualAddFieldContainer"></div>
             </div>
         </div>
         <script type="text/javascript">

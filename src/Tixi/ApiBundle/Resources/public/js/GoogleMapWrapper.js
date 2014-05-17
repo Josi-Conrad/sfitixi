@@ -54,7 +54,15 @@ function GoogleMapWrapper() {
     }
 
     this.displayEditableAddress = function(lat, lng, eventCallback) {
-
+        var _latLng = _this._createLatLng(lat, lng);
+        if(!_this._isCanvasVisible) {
+            _this.showCanvas();
+        }
+        if(_this._state !== _this.EDITSTATE) {
+            _this._switchToEditState(eventCallback);
+        }
+        _this._setMapCenter(_latLng);
+        _this._moveMarker(_latLng);
     }
 
     this.displayGeocodeEditableCanvas = function(eventCallback) {
@@ -73,8 +81,10 @@ function GoogleMapWrapper() {
         _this._state = _this.DISPLAYSTATE;
     }
 
-    this._switchToEditState = function() {
+    this._switchToEditState = function(eventCallback) {
         _this._hideGeocodeInput();
+        _this._initEditMap();
+        _this._initEditMarker(eventCallback);
         _this._state = _this.EDITSTATE;
     }
 
@@ -82,6 +92,7 @@ function GoogleMapWrapper() {
         _this._initGeocodeEditMap();
         _this._initEditMarker(eventCallback);
         _this._showGeocodeInput();
+        _this._state = _this.GEOCODEEDITSTATE;
     }
 
     this._setMapCenter = function(latLng) {
@@ -148,6 +159,7 @@ function GoogleMapWrapper() {
     this._initEditMap = function() {
         _this._map = new google.maps.Map(_this._canvas, {
             zoom: 17,
+            streetViewControl: false,
             mapTypeId: google.maps.MapTypeId.HYBRID
         });
     }

@@ -24,6 +24,7 @@ function AddressLookahead() {
 
     this._updateTimeout = null;
     this._cancelManualAddLink = null;
+    this._editManuallyLink = null;
 
     this.init = function(lookaheadId) {
         _this._initElements(lookaheadId);
@@ -43,7 +44,8 @@ function AddressLookahead() {
             _addressContainerWrapper = $(_wrapper).find('.addressContainerWrapper'),
             _addressContainer = $(_addressContainerWrapper).find('.addressContainer'),
             _cancelManualAddLink = $(_addressContainerWrapper).find('.cancelManualAdd'),
-            _inputField = $(_wrapper).find('.lookaheadInput');
+            _inputField = $(_wrapper).find('.lookaheadInput'),
+            _editManuallyLink = $(_lookaheadWrapper).find('.editManually');
 
         _this._wrapper = _wrapper;
         _this._lookaheadWrapper = _lookaheadWrapper;
@@ -54,6 +56,7 @@ function AddressLookahead() {
         _this._addressContainer = _addressContainer;
         _this._cancelManualAddLink = _cancelManualAddLink;
         _this._inputField = _inputField;
+        _this._editManuallyLink = _editManuallyLink;
     }
 
     this._initDataSrcUrl = function() {
@@ -64,8 +67,10 @@ function AddressLookahead() {
         $(_this._inputField).on('keydown', function(event) {
             _this._onInputKeyDown(event);
         });
+        $(_this._inputField).on('focusin', _this._onInputIn);
         $(_this._inputField).on('focusout', _this._onInputOut);
         $(_this._cancelManualAddLink).on('click', _this._onGoBackToLookahead);
+        $(_this._editManuallyLink).on('click', _this._onEditManuallyClicked);
     }
 
     this._initGoogleMapWrapper = function(mapCanvasId) {
@@ -82,12 +87,20 @@ function AddressLookahead() {
         }
     }
 
-    this._switchToManualAddState = function() {
-        _this._resetAddressContainer();
-        _this._resetInputField();
+    this._switchToManualAddState = function(edit) {
+        var _edit = (undefined === edit) ? false : true;
+        if(!_edit) {
+            _this._resetAddressContainer();
+            _this._resetInputField();
+        }
         $(_this._lookaheadWrapper).hide();
         $(_this._addressContainerWrapper).show();
-        _this._googleMapWrapper.displayGeocodeEditableCanvas(_this._onGoogleMapMarkerDrop);
+        if(edit) {
+            _this._googleMapWrapper.displayEditableAddress(
+                _this._selectedAddress.fields.lat, _this._selectedAddress.fields.lng, _this._onGoogleMapMarkerDrop);
+        }else {
+            _this._googleMapWrapper.displayGeocodeEditableCanvas(_this._onGoogleMapMarkerDrop);
+        }
         _this._state = _this.MANUALADDSTATE;
     }
 
@@ -98,6 +111,7 @@ function AddressLookahead() {
     }
 
     this._showAddressSelections = function() {
+        $(_this._editManuallyLink).hide();
         $(_this._addressSelectionsWrapper).show();
     }
 
@@ -209,6 +223,14 @@ function AddressLookahead() {
         $(_this._inputField).val(model.getDisplayName());
         _this._updateAddressContainer(model);
         _this._hideAddressSelections();
+        setTimeout(function() {
+            $(_this._inputField).focus();
+        },300);
+    }
+
+    this._onEditManuallyClicked = function(event) {
+        event.preventDefault();
+        _this._switchToManualAddState(true);
     }
 
     this._onAddManuallyClicked = function(event) {
@@ -235,16 +257,22 @@ function AddressLookahead() {
         }
     }
 
-    this._onInputOut = function() {
-        if($(_this._inputField).val()==='' || _this._selectedAddress === null) {
-            _this._selectedAddress = null;
-        }else {
-            $(_this._inputField).val(_this._selectedAddress.getDisplayName());
+    this._onInputIn = function() {
+        if(_this._selectedAddress) {
+            $(_this._editManuallyLink).show();
         }
-        setTimeout(function() {
-            _this._hideAddressSelections();
-        },200);
+    }
 
+    this._onInputOut = function() {
+        setTimeout(function() {
+            if($(_this._inputField).val()==='' || _this._selectedAddress === null) {
+                _this._selectedAddress = null;
+            }else {
+                $(_this._inputField).val(_this._selectedAddress.getDisplayName());
+            }
+            _this._hideAddressSelections();
+            $(_this._editManuallyLink).hide();
+        },100);
         _this._googleMapWrapper.hideCanvas();
     }
 
@@ -261,7 +289,6 @@ function AddressLookahead() {
     }
 
 }
-
 
 
 function Address(address, index) {

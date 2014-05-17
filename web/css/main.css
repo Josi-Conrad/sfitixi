@@ -49,6 +49,10 @@
     display: none;
 }
 
+.lookaheadWrapper .editManually {
+    display: none;
+}
+
 .addressContainerWrapper {
     display: none;
 }
