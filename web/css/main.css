@@ -1,10 +1,19 @@
 /* Address overlay*/
-#googleMapCanvas {
+.googleMapCanvasWrapper {
     z-index: 3000;
     position: absolute;
-    width: 654px;
-    height: 300px;
+    width: 600px;
+    height: 500px;
+    right: -660px;
+    top: -220px;
     display: none;
+}
+
+.googleMapCanvas {
+    width: 570px;
+    height: 470px;
+    position: relative;
+    padding: 0px;
 }
 
 /* Data Grid */

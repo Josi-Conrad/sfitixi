@@ -23,16 +23,17 @@ function AddressLookahead() {
 
     this._dataUrl = null;
 
-    this._googleMapWrapper = null;
+    this._googleMapCanvasWrapper = null;
+    this._googleMapCanvas = null;
     this._mapCanvasIsVisible = false;
 
-    this.init = function(lookaheadId, modelIdPrefix, modelPrototype, mapCanvasId) {
+    this.init = function(lookaheadId, modelIdPrefix, modelPrototype) {
         _this._modelIdPrefix = modelIdPrefix;
         _this._modelPrototype = modelPrototype;
         _this._initElements(lookaheadId);
         _this._initDataSrcUrl();
         _this._initListeners();
-        _this._initGoogleMapWrapper(mapCanvasId);
+        _this._initGoogleMapWrapper();
         _this._switchToLookaheadState();
     }
 
@@ -46,7 +47,9 @@ function AddressLookahead() {
             _selectionsDisplay = $(_selectionsWrapper).find('.selectionsDisplayContainer'),
             _inputField = $(_wrapper).find('.lookaheadInput'),
             _selectionsIdContainer = $(_wrapper).find('.lookaheadSelectionId'),
-            _manualAddFieldContainer = $(_manualAddWrapper).find('.manualAddFieldContainer');
+            _manualAddFieldContainer = $(_manualAddWrapper).find('.manualAddFieldContainer'),
+            _googleMapCanvasWrapper = $(_wrapper).find('.googleMapCanvasWrapper'),
+            _googleMapCanvas = $(_googleMapCanvasWrapper).find('.googleMapCanvas').get(0);
 
         _this._wrapper = _wrapper;
         _this._lookaheadWrapper = _lookaheadWrapper;
@@ -58,6 +61,8 @@ function AddressLookahead() {
         _this._inputField = _inputField;
         _this._selectionsIdContainer = _selectionsIdContainer;
         _this._manualAddFieldContainer = _manualAddFieldContainer;
+        _this._googleMapCanvasWrapper = _googleMapCanvasWrapper;
+        _this._googleMapCanvas = _googleMapCanvas;
     }
 
     this._initDataSrcUrl = function() {
@@ -73,7 +78,7 @@ function AddressLookahead() {
 
     this._initGoogleMapWrapper = function(mapCanvasId) {
         var _wrapper =  new GoogleMapWrapper();
-        _wrapper.init(mapCanvasId)
+        _wrapper.init(_this._googleMapCanvasWrapper, _this._googleMapCanvas);
         _this._googleMapWrapper = _wrapper;
     }
 
@@ -203,7 +208,7 @@ function AddressLookahead() {
     }
 
     this._onSelectionDisplayMouseOver = function(model) {
-        _this._googleMapWrapper.showAddress(model.fields.lat, model.fields.lng);
+        _this._googleMapWrapper.displayAddress(model.fields.lat, model.fields.lng);
     }
 
     this._resetLookahead = function() {

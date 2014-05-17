@@ -19,10 +19,18 @@
     {% set lookaheadId = 'lookahead_' ~ form.vars.name %}
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key={{ form.vars.googleMapsApiKey }}&sensor=false"></script>
     <script src="{{ asset('bundles/tixiapi/js/GoogleMapWrapper.js') }}"></script>
-    <div id="googleMapCanvas"></div>
+
+
     <div class="col-md-12">
         <div class="{{ lookaheadId }}" data-datasrc="{{ form.vars.dataSrc }}">
             <div class="lookaheadWrapper">
+                <div class="googleMapCanvasWrapper">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="googleMapCanvas"></div>
+                        </div>
+                    </div>
+                </div>
                 <div class="row">
                     {{ form_widget(form.addressDisplayName, { 'attr': {'class': 'lookaheadInput','autocomplete' : 'off'} }) }}
                     {{ form_widget(form.addressSelectionId, { 'attr': {'class': 'lookaheadSelectionId'} }) }}
