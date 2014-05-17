@@ -39,20 +39,20 @@
             <div class="lookaheadWrapper">
                 <div class="row">
                     {{ form_widget(form.addressDisplayName, { 'attr': {'class': 'lookaheadInput','autocomplete' : 'off'} }) }}
-                    {{ form_widget(form.addressSelectionId, { 'attr': {'class': 'lookaheadSelectionId'} }) }}
                 </div>
-                <div class="row selectionsWrapper">
+                <div class="row addressSelectionsWrapper">
                     <div class="col-md-12">
-                        <ul class="selectionsDisplayContainer list-unstyled">
-
-                        </ul>
-                        <ul class="selectionsModelContainer"
-                            data-prototype="{{ form_widget(form.addressHandles.vars.prototype)|e }}">
-                        </ul>
-                        {#{{ form_widget(form.addressHandles) }}#}
+                        <ul class="addressSelectionsContainer list-unstyled" />
                     </div>
                 </div>
             </div>
+            <div class="addressContainerWrapper">
+                {{ form_widget(form.addressHandle, { 'attr': {'class': 'addressContainer'} }) }}
+                <div class="row">
+                    <a href="#" class="cancelManualAdd">Abbrechen</a>
+                </div>
+            </div>
+
             <div class="manualAddWrapper">
                 <div class="manualAddFieldContainer"></div>
             </div>

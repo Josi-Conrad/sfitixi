@@ -20,18 +20,16 @@ class AddressAssembler {
 
     public function addressToAddressLookaheadDTO(Address $address) {
         $lookahaedDTO = new AddressLookaheadDTO();
-        $lookahaedDTO->addressSelectionId = 0;
         $lookahaedDTO->addressDisplayName = $address->toString();
-        $lookahaedDTO->addressHandles = array();
-        $lookahaedDTO->addressHandles[] = $this->createAddressHandleDTO($address);
+        $lookahaedDTO->addressHandle = $this->createAddressHandleDTO($address);
         return $lookahaedDTO;
     }
 
     public function addressLookaheadDTOtoAddress(AddressLookaheadDTO $dto) {
         $address = null;
-        if(isset($dto->addressSelectionId) && isset($dto->addressHandles)) {
+        if(isset($dto->addressHandle)) {
             try {
-                $address = $this->addressService->handleAddress($dto->addressHandles[$dto->addressSelectionId]);
+                $address = $this->addressService->handleAddress($dto->addressHandle);
             }catch (\Exception $e) {
 
             }

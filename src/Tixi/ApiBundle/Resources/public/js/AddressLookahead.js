@@ -4,38 +4,33 @@ function AddressLookahead() {
     this.MANUALADDSTATE = 1;
     this.LOOKAHEADSTATE = 2;
 
+    this._state = null;
+
     this._wrapper = null;
     this._inputField = null;
 
     this._lookaheadWrapper = null;
-    this._manualAddWrapper = null;
-    this._state = null;
 
-    this._selectionsWrapper = null;
-    this._selectionsModelContainer = null;
-    this._selectionsDisplayContainer = null;
-    this._selectionsModelPrototype = null;
-    this._selectionsIdContainer = null;
+    this._addressSelectionsWrapper = null;
+    this._addressSelectionsContainer = null;
+    this._addressContainerWrapper = null;
+    this._addressContainer = null;
 
-    this._manualAddFieldContainer = null;
-
-    this._modelPrototype = null;
-    this._modelIdPrefix = null;
-
-    this._updateTimeout = null;
-    this._selectedIndex = 1;
+    this._selectedAddress = null;
 
     this._dataUrl = null;
 
     this._googleMapWrapper = null;
 
-    this.init = function(lookaheadId, modelIdPrefix, modelPrototype) {
-        _this._modelIdPrefix = modelIdPrefix;
-        _this._modelPrototype = modelPrototype;
+    this._updateTimeout = null;
+    this._cancelManualAddLink = null;
+
+    this.init = function(lookaheadId) {
         _this._initElements(lookaheadId);
         _this._initDataSrcUrl();
         _this._initListeners();
         _this._initGoogleMapWrapper();
+        _this._initSelectedAddress();
         _this._switchToLookaheadState();
     }
 
@@ -43,24 +38,22 @@ function AddressLookahead() {
         var _wrapper = $('.'+lookaheadId),
             _lookaheadWrapper = $(_wrapper).find('.lookaheadWrapper'),
             _manualAddWrapper = $(_wrapper).find('.manualAddWrapper'),
-            _selectionsWrapper = $(_wrapper).find('.selectionsWrapper'),
-            _selectionsModelContainer = $(_selectionsWrapper).find('.selectionsModelContainer'),
-            _selectionsModelPrototype = $(_selectionsModelContainer).data('prototype'),
-            _selectionsDisplay = $(_selectionsWrapper).find('.selectionsDisplayContainer'),
-            _inputField = $(_wrapper).find('.lookaheadInput'),
-            _selectionsIdContainer = $(_wrapper).find('.lookaheadSelectionId'),
-            _manualAddFieldContainer = $(_manualAddWrapper).find('.manualAddFieldContainer');
+            _addressSelectionsWrapper = $(_wrapper).find('.addressSelectionsWrapper'),
+            _addressSelectionsContainer = $(_addressSelectionsWrapper).find('.addressSelectionsContainer'),
+            _addressContainerWrapper = $(_wrapper).find('.addressContainerWrapper'),
+            _addressContainer = $(_addressContainerWrapper).find('.addressContainer'),
+            _cancelManualAddLink = $(_addressContainerWrapper).find('.cancelManualAdd'),
+            _inputField = $(_wrapper).find('.lookaheadInput');
 
         _this._wrapper = _wrapper;
         _this._lookaheadWrapper = _lookaheadWrapper;
         _this._manualAddWrapper = _manualAddWrapper;
-        _this._selectionsWrapper = _selectionsWrapper;
-        _this._selectionsModelContainer = _selectionsModelContainer;
-        _this._selectionsModelPrototype = _selectionsModelPrototype;
-        _this._selectionsDisplayContainer = _selectionsDisplay;
+        _this._addressSelectionsWrapper = _addressSelectionsWrapper;
+        _this._addressSelectionsContainer = _addressSelectionsContainer;
+        _this._addressContainerWrapper = _addressContainerWrapper;
+        _this._addressContainer = _addressContainer;
+        _this._cancelManualAddLink = _cancelManualAddLink;
         _this._inputField = _inputField;
-        _this._selectionsIdContainer = _selectionsIdContainer;
-        _this._manualAddFieldContainer = _manualAddFieldContainer;
     }
 
     this._initDataSrcUrl = function() {
@@ -72,6 +65,7 @@ function AddressLookahead() {
             _this._onInputKeyDown(event);
         });
         $(_this._inputField).on('focusout', _this._onInputOut);
+        $(_this._cancelManualAddLink).on('click', _this._onGoBackToLookahead);
     }
 
     this._initGoogleMapWrapper = function(mapCanvasId) {
@@ -82,69 +76,94 @@ function AddressLookahead() {
         _this._googleMapWrapper = _wrapper;
     }
 
+    this._initSelectedAddress = function() {
+        if(_this._getAddressFieldValue('id') !== '') {
+            _this._selectedAddress = _this._createAddressFromAddressContainerValues();
+        }
+    }
+
     this._switchToManualAddState = function() {
-        _this._resetLookahead();
-        _this._constructManualAddContainer();
+        _this._resetAddressContainer();
+        _this._resetInputField();
         $(_this._lookaheadWrapper).hide();
-        $(_this._manualAddWrapper).show();
+        $(_this._addressContainerWrapper).show();
         _this._googleMapWrapper.displayGeocodeEditableCanvas(_this._onGoogleMapMarkerDrop);
         _this._state = _this.MANUALADDSTATE;
     }
 
     this._switchToLookaheadState = function() {
-        _this._removeManualAddContainer();
-        $(_this._manualAddWrapper).hide();
+        $(_this._addressContainerWrapper).hide();
         $(_this._lookaheadWrapper).show();
         _this._state = _this.LOOKAHEADSTATE;
     }
 
+    this._showAddressSelections = function() {
+        $(_this._addressSelectionsWrapper).show();
+    }
 
-    this._updateSelections = function() {
+    this._hideAddressSelections = function() {
+        $(_this._addressSelectionsWrapper).hide();
+    }
+
+    this._updateAddressSelections = function() {
         var _model,
-            _domSelectionModel,
             _domSelectionDisplay;
         if($(_this._inputField).val().length>0) {
             _this._pollDataFromSource(_this._constructParams()).done(function(data) {
                 _this._resetLookahead();
                 $.each(data.models, function(index, jsonModel) {
-                    _model = _this._constructNewModel(jsonModel, index);
-                    _domSelectionModel = _this._constructDomSelectionModel(_model);
-                    $(_this._selectionsModelContainer).append(_domSelectionModel);
-                    _domSelectionDisplay =  _this._constructDomSelectionDisplay(_model);
-                    $(_this._selectionsDisplayContainer).append(_domSelectionDisplay);
+                    _model = new Address(jsonModel, index);
+                    _domSelectionDisplay =  _this._constructAddressSelections(_model);
+                    $(_this._addressSelectionsContainer).append(_domSelectionDisplay);
                 });
-                $(_this._selectionsDisplayContainer).append(_this._constructAddManuallyLink());
-                _this._showSelectionDisplay();
+                $(_this._addressSelectionsContainer).append(_this._constructAddManuallyLink());
+                _this._showAddressSelections();
             }).fail(function() {
                 //ToDo Exception handling
             })
         }else {
-            _this._hideSelectionDisplay();
+            _this._hideAddressSelections();
         }
     }
 
-    this._constructNewModel = function(jsonModel, index) {
-        return new _this._modelPrototype.constructor(jsonModel, index);
+    this._constructParams = function() {
+        var _jsonToReturn = {};
+        _jsonToReturn['searchstr'] = $(_this._inputField).val();
+        return _jsonToReturn;
     }
 
-    this._constructDomSelectionModel = function(model) {
-        var _selectionPrototype = _this._selectionsModelPrototype,
-            _domSelection = $('<li></li>');
-        _selectionPrototype = _selectionPrototype.replace(/__name__/g, model.index);
-        _domSelection.append(_selectionPrototype);
+    this._pollDataFromSource = function (params) {
+        return $.ajax({
+            type: 'GET',
+            url: _this._dataUrl + '?' + $.param(params, true),
+            dataType: 'json'
+        });
+    }
+
+    this._updateAddressContainer = function(model) {
+        console.log('container updated')
         for(var _field in model.fields) {
-            _domSelection.find('[id*='+_this._modelIdPrefix+'_'+model.index+'_'+_field+']').val(model.fields[_field]);
+            _this._setAddressFieldValue(_field, model.fields[_field]);
         }
-        return _domSelection;
     }
 
-    this._constructDomSelectionDisplay = function(model) {
+    this._resetAddressContainer = function() {
+        var _dummyAddress = new Address();
+        _this._selectedAddress = null;
+        for(var _field in _dummyAddress.fields) {
+            console.log(_field)
+            _this._setAddressFieldValue(_field, '');
+        }
+    }
+
+    this._resetInputField = function() {
+        $(_this._inputField).val('');
+    }
+
+    this._constructAddressSelections = function(model) {
         var _selectionDisplay = $('<li class="lookaheadSelection"></li>').append(model.getDisplayName());
         _selectionDisplay.on('mousedown', function() {
-            _this._selectedIndex = model.index;
-            $(_this._inputField).val(model.getDisplayName());
-            $(_this._selectionsIdContainer).val(model.index);
-            _this._hideSelectionDisplay();
+            _this._onAddressSelectionClick(model);
         });
         _selectionDisplay.on('mouseover', function() {
             _this._onSelectionDisplayMouseOver(model);
@@ -162,28 +181,34 @@ function AddressLookahead() {
         return _selection;
     }
 
-    this._constructGoBackToLookaheadLink = function() {
-        var _link = $('<a href="#">Abbrechen</a>');
-        _link.on('click', function(event) {
-            _this._onGoBackToLookahead(event);
-        });
-        return _link;
-    }
-
-    this._constructFieldsForManualAdd = function() {
-        var _prototype = _this._selectionsModelPrototype;
-        _prototype = _prototype.replace(/__name__/g, 0);
-        return _prototype;
+    this._createAddressFromAddressContainerValues = function() {
+        var _dummyAddress = new Address(),
+            _address = {},
+            _field;
+        for(_field in _dummyAddress.fields) {
+            _address[_field] = _this._getAddressFieldValue(_field);
+        }
+        return new Address(_address, 0);
     }
 
     this._fillLatLng = function(lat, lng) {
-        var _index = (_this._state === _this.MANUALADDSTATE) ? 0 : 0;
-        _this._setAddressFieldValue(_index, 'lat', lat);
-        _this._setAddressFieldValue(_index, 'lng', lng);
+        _this._setAddressFieldValue('lat', lat);
+        _this._setAddressFieldValue('lng', lng);
     }
 
-    this._setAddressFieldValue = function(index, fieldName, value) {
-        $(_this._wrapper).find('[id*='+_this._modelIdPrefix+'_'+index+'_'+fieldName+']').val(value);
+    this._setAddressFieldValue = function(fieldName, value) {
+        $(_this._addressContainer).find('[id*='+fieldName+']').val(value);
+    }
+
+    this._getAddressFieldValue = function(fieldName) {
+        return $(_this._addressContainer).find('[id*='+fieldName+']').val();
+    }
+
+    this._onAddressSelectionClick = function(model) {
+        _this._selectedAddress = model;
+        $(_this._inputField).val(model.getDisplayName());
+        _this._updateAddressContainer(model);
+        _this._hideAddressSelections();
     }
 
     this._onAddManuallyClicked = function(event) {
@@ -203,21 +228,23 @@ function AddressLookahead() {
             _this._selectedIndex = null;
             if(_this._updateTimeout) {
                 clearTimeout(_this._updateTimeout);
-                _this._updateTimeout = null;
             }
             _this._updateTimeout = setTimeout(function() {
-                _this._updateSelections();
+                _this._updateAddressSelections();
             },300);
         }
     }
 
     this._onInputOut = function() {
+        if($(_this._inputField).val()==='' || _this._selectedAddress === null) {
+            _this._selectedAddress = null;
+        }else {
+            $(_this._inputField).val(_this._selectedAddress.getDisplayName());
+        }
         setTimeout(function() {
-            if(null === _this._selectedIndex) {
-                $(_this._inputField).val('');
-                _this._hideSelectionDisplay();
-            }
-        },100)
+            _this._hideAddressSelections();
+        },200);
+
         _this._googleMapWrapper.hideCanvas();
     }
 
@@ -230,70 +257,27 @@ function AddressLookahead() {
     }
 
     this._resetLookahead = function() {
-        $(_this._selectionsModelContainer).empty();
-        $(_this._selectionsDisplayContainer).empty();
-        _this._selectedIndex = null;
+        $(_this._addressSelectionsContainer).empty();
     }
 
-    this._constructManualAddContainer = function() {
-        var _fields = _this._constructFieldsForManualAdd(),
-            _backLink = $('<div class="row"></div>').append(_this._constructGoBackToLookaheadLink());
-        _this._removeManualAddContainer();
-        _this._manualAddFieldContainer.append(_fields);
-        _this._manualAddFieldContainer.append(_backLink);
-    }
-
-    this._removeManualAddContainer = function() {
-        $(_this._manualAddFieldContainer).empty();
-    }
-
-    this._constructParams = function() {
-        var _jsonToReturn = {};
-        _jsonToReturn['searchstr'] = $(_this._inputField).val();
-        return _jsonToReturn;
-    }
-
-    this._pollDataFromSource = function (params) {
-        return $.ajax({
-            type: 'GET',
-            url: _this._dataUrl + '?' + $.param(params, true),
-            dataType: 'json'
-        });
-    }
-
-    this._showSelectionDisplay = function() {
-        $(_this._selectionsDisplayContainer).show();
-    }
-
-    this._hideSelectionDisplay = function() {
-        $(_this._selectionsDisplayContainer).hide();
-    }
 }
 
-function LookaheadModel(modelJson, index) {
-    var _this = this;
 
-    _this.index = index;
-    _this.fields = {};
-    _this.getDisplayName = function() {};
-
-}
 
 function Address(address, index) {
     var _this = this;
 
-    LookaheadModel.apply(this,arguments);
-
+    _this.index = (undefined !== index) ? index : 0;
     _this.fields = {
-        id : address.id,
-        name : address.name,
-        street : address.street,
-        postalCode : address.postalCode,
-        city : address.city,
-        country : address.country,
-        lat : address.lat,
-        lng : address.lng,
-        source : address.source
+        id : (undefined !== address) ? address.id : '',
+        name : (undefined !== address) ? address.name : '',
+        street : (undefined !== address) ? address.street : '',
+        postalCode : (undefined !== address) ? address.postalCode : '',
+        city : (undefined !== address) ? address.city : '',
+        country : (undefined !== address) ? address.country : '',
+        lat : (undefined !== address) ? address.lat : '',
+        lng : (undefined !== address) ? address.lng : '',
+        source : (undefined !== address) ? address.source : ''
     };
 
     _this.getDisplayName = function() {
@@ -302,6 +286,5 @@ function Address(address, index) {
 
     _this._constructAlternativeDisplayName = function() {
         return _this.fields.street+', '+_this.fields.postalCode+' '+_this.fields.city+', '+_this.fields.country;
-
     }
 }

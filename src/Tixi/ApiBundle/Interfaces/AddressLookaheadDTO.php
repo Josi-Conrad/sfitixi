@@ -11,7 +11,6 @@ namespace Tixi\ApiBundle\Interfaces;
 
 class AddressLookaheadDTO {
 
-    public $addressSelectionId;
     public $addressDisplayName;
-    public $addressHandles;
+    public $addressHandle;
 } 
