@@ -163,7 +163,7 @@ function AddressLookahead() {
     }
 
     this._constructGoBackToLookaheadLink = function() {
-        var _link = $('<a href="#">Zurück zur unterstützen Eingabe</a>');
+        var _link = $('<a href="#">Abbrechen</a>');
         _link.on('click', function(event) {
             _this._onGoBackToLookahead(event);
         });

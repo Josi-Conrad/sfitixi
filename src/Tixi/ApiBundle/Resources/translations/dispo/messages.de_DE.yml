@@ -63,3 +63,9 @@ secondweek.name: 2. Woche
 thirdweek.name: 3. Woche
 fourthweek.name: 4. Woche
 lastweek.name: 5. Woche
+
+#DrivingOrder
+drivingorder.panel.new: Neuer Fahrauftrag
+drivingorder.field.anchordate: Datum
+drivingorder.field.lookaheadaddressFrom: Von
+drivingorder.field.lookaheadaddressTo: Nach

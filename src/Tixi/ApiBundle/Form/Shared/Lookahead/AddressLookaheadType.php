@@ -38,6 +38,7 @@ class AddressLookaheadType extends AbstractLookaheadType {
         $resolver->setDefaults(array(
             'data_class' => 'Tixi\ApiBundle\Interfaces\AddressLookaheadDTO'
         ));
+        parent::setDefaultOptions($resolver);
     }
 
     /**
