@@ -24,6 +24,7 @@ function AddressLookahead() {
 
     this._updateTimeout = null;
     this._cancelManualAddLink = null;
+    this._saveManualAddLink = null;
     this._editManuallyLink = null;
 
     this.init = function(lookaheadId) {
@@ -44,6 +45,7 @@ function AddressLookahead() {
             _addressContainerWrapper = $(_wrapper).find('.addressContainerWrapper'),
             _addressContainer = $(_addressContainerWrapper).find('.addressContainer'),
             _cancelManualAddLink = $(_addressContainerWrapper).find('.cancelManualAdd'),
+            _saveManualAddLink = $(_addressContainerWrapper).find('.saveManualAdd'),
             _inputField = $(_wrapper).find('.lookaheadInput'),
             _editManuallyLink = $(_lookaheadWrapper).find('.editManually');
 
@@ -55,6 +57,7 @@ function AddressLookahead() {
         _this._addressContainerWrapper = _addressContainerWrapper;
         _this._addressContainer = _addressContainer;
         _this._cancelManualAddLink = _cancelManualAddLink;
+        _this._saveManualAddLink = _saveManualAddLink;
         _this._inputField = _inputField;
         _this._editManuallyLink = _editManuallyLink;
     }
@@ -69,7 +72,8 @@ function AddressLookahead() {
         });
         $(_this._inputField).on('focusin', _this._onInputIn);
         $(_this._inputField).on('focusout', _this._onInputOut);
-        $(_this._cancelManualAddLink).on('click', _this._onGoBackToLookahead);
+        $(_this._cancelManualAddLink).on('click', _this._onCancelManualAddClicked);
+        $(_this._saveManualAddLink).on('click', _this._onSaveManualAddClicked);
         $(_this._editManuallyLink).on('click', _this._onEditManuallyClicked);
     }
 
@@ -238,8 +242,19 @@ function AddressLookahead() {
         _this._switchToManualAddState();
     }
 
-    this._onGoBackToLookahead = function(event) {
+    this._onCancelManualAddClicked = function(event) {
         event.preventDefault();
+        if(_this._selectedAddress !== null) {
+            _this._updateAddressContainer(_this._selectedAddress);
+        }
+        _this._googleMapWrapper.hideCanvas();
+        _this._switchToLookaheadState();
+    }
+
+    this._onSaveManualAddClicked = function(event) {
+        event.preventDefault();
+        _this._selectedAddress = _this._createAddressFromAddressContainerValues();
+        $(_this._inputField).val(_this._selectedAddress.getDisplayName());
         _this._googleMapWrapper.hideCanvas();
         _this._switchToLookaheadState();
     }
@@ -259,6 +274,8 @@ function AddressLookahead() {
 
     this._onInputIn = function() {
         if(_this._selectedAddress) {
+            _this._googleMapWrapper.displayAddress(
+                _this._selectedAddress.fields.lat, _this._selectedAddress.fields.lng, true);
             $(_this._editManuallyLink).show();
         }
     }

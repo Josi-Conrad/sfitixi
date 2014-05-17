@@ -4,9 +4,10 @@
 function GoogleMapWrapper() {
     var _this = this;
 
-    this.DISPLAYSTATE = 1;
-    this.EDITSTATE = 2;
-    this.GEOCODEEDITSTATE = 3;
+    this.DISPLAYSTATENOCONTROLS = 1;
+    this.DISPLAYSTATECONTROLS = 2;
+    this.EDITSTATE = 3;
+    this.GEOCODEEDITSTATE = 4;
 
     this._canvasWrapper = null;
     this._canvas = null;
@@ -41,13 +42,20 @@ function GoogleMapWrapper() {
 
     }
 
-    this.displayAddress = function(lat, lng) {
-        var _latLng = _this._createLatLng(lat, lng);
+    this.displayAddress = function(lat, lng, controls) {
+        var _latLng = _this._createLatLng(lat, lng),
+            _controls = (undefined === controls) ? false : controls;
         if(!_this._isCanvasVisible) {
             _this.showCanvas();
         }
-        if(_this._state !== _this.DISPLAYSTATE) {
-            _this._switchToDisplayState();
+        if(controls) {
+            if(_this._state !== _this.DISPLAYSTATECONTROLS) {
+                _this._switchToDisplayStateWithControls();
+            }
+        }else {
+            if(_this._state !== _this.DISPLAYSTATENOCONTROLS) {
+                _this._switchToDisplayStateWithoutControls();
+            }
         }
         _this._setMapCenter(_latLng);
         _this._moveMarker(_latLng);
@@ -74,11 +82,18 @@ function GoogleMapWrapper() {
         }
     }
 
-    this._switchToDisplayState = function() {
+    this._switchToDisplayStateWithControls = function() {
         _this._hideGeocodeInput();
-        _this._initDisplayMap();
+        _this._initDisplayMap(true);
         _this._initDisplayMarker();
-        _this._state = _this.DISPLAYSTATE;
+        _this._state = _this.DISPLAYSTATECONTROLS;
+    }
+
+    this._switchToDisplayStateWithoutControls = function() {
+        _this._hideGeocodeInput();
+        _this._initDisplayMap(false);
+        _this._initDisplayMarker();
+        _this._state = _this.DISPLAYSTATENOCONTROLS;
     }
 
     this._switchToEditState = function(eventCallback) {
@@ -148,10 +163,10 @@ function GoogleMapWrapper() {
         _this._geocoder = new google.maps.Geocoder();
     }
 
-    this._initDisplayMap = function() {
+    this._initDisplayMap = function(_controls) {
         _this._map = new google.maps.Map(_this._canvas, {
             zoom: 17,
-            disableDefaultUI: true,
+            disableDefaultUI: !_controls,
             mapTypeId: google.maps.MapTypeId.HYBRID
         });
     }
