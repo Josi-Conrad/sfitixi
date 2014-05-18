@@ -12,6 +12,7 @@
         <parameter key="tixi_app.routingmachineosrm.class">Tixi\App\AppBundle\Routing\RoutingMachineOSRM</parameter>
         <parameter key="tixi_app.routemanagement.class">Tixi\App\AppBundle\Routing\RouteManagementImpl</parameter>
         <parameter key="tixi_app.dispomanagement.class">Tixi\App\AppBundle\Disposition\DispositionManagementImpl</parameter>
+        <parameter key="tixi_app.workingmonthmanagement.class">Tixi\App\AppBundle\Disposition\WorkingMonthManagementImpl</parameter>
 
     </parameters>
 
@@ -42,6 +43,11 @@
             </call>
         </service>
         <service id="tixi_app.dispomanagement" class="%tixi_app.dispomanagement.class%">
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
+        </service>
+        <service id="tixi_app.workingmonthmanagement" class="%tixi_app.workingmonthmanagement.class%">
             <call method="setContainer">
                 <argument type="service" id="service_container"/>
             </call>

@@ -13,10 +13,13 @@ use Symfony\Component\Console\Helper\DialogHelper;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Tixi\ApiBundle\Helper\WeekdayService;
 use Tixi\App\Disposition\DispositionVariables;
 use Tixi\CoreDomain\Dispo\DrivingMission;
 use Tixi\CoreDomain\Dispo\DrivingOrder;
 use Tixi\CoreDomain\Dispo\DrivingPool;
+use Tixi\CoreDomain\Dispo\RepeatedDrivingAssertionPlan;
+use Tixi\CoreDomain\Dispo\RepeatedWeeklyDrivingAssertion;
 use Tixi\CoreDomain\Dispo\Route;
 use Tixi\CoreDomain\Dispo\Shift;
 use Tixi\CoreDomain\Dispo\ShiftType;
@@ -42,7 +45,6 @@ class TestDataDispositionCommand extends ContainerAwareCommand {
      * @return int|null|void
      */
     public function execute(InputInterface $input, OutputInterface $output) {
-        $start = microtime(true);
 
         $month = $input->getArgument('month');
         if (!$month) {
@@ -59,15 +61,17 @@ class TestDataDispositionCommand extends ContainerAwareCommand {
         $driverRepo = $this->getContainer()->get('driver_repository');
         $vehicleRepo = $this->getContainer()->get('vehicle_repository');
         $addressRepo = $this->getContainer()->get('address_repository');
-        $poiRepo = $this->getContainer()->get('poi_repository');
         $routeRepo = $this->getContainer()->get('route_repository');
         $drivingMissionRepo = $this->getContainer()->get('drivingmission_repository');
         $drivingOrderRepo = $this->getContainer()->get('drivingorder_repository');
-        $reDrivingOrderRepo = $this->getContainer()->get('repeateddrivingorder_repository.doctrine');
-        $reDrivingOrderPlanRepo = $this->getContainer()->get('repeateddrivingorderplan_repository.doctrine');
+        $repeatedDrivingAssertionRepo = $this->getContainer()->get('repeateddrivingassertion_repository');
+        $repeatedDrivingAssertionPlanRepo = $this->getContainer()->get('repeateddrivingassertionplan_repository');
+        $repeatedDrivingOrderRepo = $this->getContainer()->get('repeateddrivingorder_repository.doctrine');
+        $repeatedDrivingOrderPlanRepo = $this->getContainer()->get('repeateddrivingorderplan_repository.doctrine');
 
         $time = $this->getContainer()->get('tixi_api.datetimeservice');
         $routeManagement = $this->getContainer()->get('tixi_app.routemanagement');
+        $workingMonthManagement = $this->getContainer()->get('tixi_app.workingmonthmanagement');
 
         $monthDate = new \DateTime('today');
         $monthDate->modify('+' . $month . ' month');
@@ -75,6 +79,27 @@ class TestDataDispositionCommand extends ContainerAwareCommand {
 
         $shiftTypes = $shiftTypeRepo->findAllNotDeleted();
 
+        $drivers = $driverRepo->findAllActive();
+        foreach ($drivers as $driver) {
+            $reDrivingAssertionPlan = RepeatedDrivingAssertionPlan::registerRepeatedAssertionPlan(
+                'test', new \DateTime('today'), 'weekly', 0);
+            $repeatedDrivingAssertionPlanRepo->store($reDrivingAssertionPlan);
+            for ($i = 1; $i <= 7; $i++) {
+//                if (rand(0, 1)) {
+                $reDrivingWeeklyAssertion = new RepeatedWeeklyDrivingAssertion();
+                $repeatedDrivingAssertionRepo->store($reDrivingWeeklyAssertion);
+                $reDrivingWeeklyAssertion->addShiftType($shiftTypes[rand(0, count($shiftTypes) - 1)]);
+                $reDrivingWeeklyAssertion->addShiftType($shiftTypes[rand(0, count($shiftTypes) - 1)]);
+                $reDrivingWeeklyAssertion->addShiftType($shiftTypes[rand(0, count($shiftTypes) - 1)]);
+                $reDrivingWeeklyAssertion->setAssertionPlan($reDrivingAssertionPlan);
+                $reDrivingWeeklyAssertion->setWeekday($i);
+                $reDrivingAssertionPlan->assignDriver($driver);
+//                }
+            }
+        }
+        $em->flush();
+
+        $drivingPools = 0;
         $workingMonth = $workingMonthRepo->findWorkingMonthByDate($monthDate);
         if ($workingMonth !== null) {
             $output->writeln("WorkingMonth " . $monthDate->format('m') . " already exists");
@@ -100,30 +125,23 @@ class TestDataDispositionCommand extends ContainerAwareCommand {
                         $drivingPool = DrivingPool::registerDrivingPool($shift);
                         $shift->assignDrivingPool($drivingPool);
                         $drivingPoolRepo->store($drivingPool);
+                        $drivingPools++;
                     }
                     $shiftRepo->store($shift);
                 }
                 $workingDayRepo->store($workingDay);
             }
-            $em->flush();
         }
-        $drivingPools = array();
-        foreach ($workingMonth->getWorkingDays() as $wd) {
-            foreach ($wd->getShifts() as $s) {
-                foreach ($s->getDrivingPools() as $dp) {
-                    array_push($drivingPools, $dp);
-                }
-            }
-        }
+        $em->flush();
 
         //create Driving Orders
         $countOrders = 0;
         foreach ($shiftTypes as $shiftType) {
-            $approxOrdersPerShift = rand(40, 60);
+            $approxOrdersPerShift = rand(40, 80);
             for ($i = 0; $i < $approxOrdersPerShift; $i++) {
                 /**@var $passenger Passenger */
                 $passenger = $passengerRepo->find(rand(100, 500));
-                $passenger->setIsInWheelChair(rand(0,1));
+                $passenger->setIsInWheelChair(rand(0, 1));
 
                 /**  WARNING: saving times in UTC on database, but minutesOfDay are from midnight, causing
                  * wrong data if a time is UTC 23:30 but CET 00:30 (= 30 minutesOfDay)
@@ -142,6 +160,8 @@ class TestDataDispositionCommand extends ContainerAwareCommand {
 
                 $start = $passenger->getAddress();
                 $target = $addressRepo->find(rand(10, 1000));
+
+                //TODO: improve by multiple requests at one
                 $route = $routeManagement->getRouteFromAddresses($start, $target);
 
                 $order->assignRoute($route);
@@ -149,15 +169,17 @@ class TestDataDispositionCommand extends ContainerAwareCommand {
                 $passenger->assignDrivingOrder($order);
                 $drivingOrderRepo->store($order);
 
-                $wMin = DispositionVariables::BOARDING_TIME + DispositionVariables::DEBOARDING_TIME;
-                $eMin = $passenger->getExtraMinutes();
-                $rMin = $route->getAdditionalTime();
-                $serviceDuration = $route->getDurationInMinutes() + $wMin + $eMin + $rMin;
+                $boardingTime = DispositionVariables::BOARDING_TIME + DispositionVariables::DEBOARDING_TIME;
+                $extraMinutesPassenger = $passenger->getExtraMinutes();
+                $additionRouteTime = $route->getAdditionalTime();
+                $additionalTimesOnRide = $boardingTime + $extraMinutesPassenger + $additionRouteTime;
 
                 $serviceMinuteOfDay = $time->getMinutesOfDay($pickupTime);
+                $serviceDuration = $route->getDurationInMinutes() + $additionalTimesOnRide;
+                $serviceDistance = $route->getDistanceInMeters();
 
                 //DrivingMission <-> Order
-                $drivingMission = DrivingMission::registerDrivingMission(rand(0, 1), $serviceMinuteOfDay, $serviceDuration, $route->getDistanceInMeters());
+                $drivingMission = DrivingMission::registerDrivingMission(rand(0, 1), $serviceMinuteOfDay, $serviceDuration, $serviceDistance);
                 $drivingMission->assignDrivingOrder($order);
                 $order->assignDrivingMission($drivingMission);
                 $drivingMissionRepo->store($drivingMission);
@@ -165,12 +187,19 @@ class TestDataDispositionCommand extends ContainerAwareCommand {
                 $countOrders++;
             }
         }
+        $em->flush();
 
-        $end = microtime(true);
+        //assign available Drivers to drivingPools
+        $workingMonthManagement->assignAvailableDriversToDrivingPools($workingMonth);
+        $unassignedDrivingPools = count($workingMonthManagement->getAllUnassignedDrivingPoolsForMonth($workingMonth));
+
         $output->writeln(
             "\n--------------------------------------------\n" .
-            "Testdata created for: " . $monthDate->format('d.m.Y') . "\n" .
-            "with " . $countOrders . " DrivingOrders \n"
+            "Testdata created for month: " . $monthDate->format('m.Y') . " with:\n"
+            . $drivingPools . " DrivingPools and "
+            . $unassignedDrivingPools . " unassigned DrivingPools.\n" .
+            "And orders for one day: " . $monthDate->format('d.m.Y') . " with:\n"
+            . $countOrders . " DrivingOrders and Routes \n"
         );
     }
 }

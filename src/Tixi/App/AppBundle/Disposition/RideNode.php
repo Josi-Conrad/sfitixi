@@ -9,6 +9,7 @@
 namespace Tixi\App\AppBundle\Disposition;
 
 use Tixi\CoreDomain\Address;
+use Tixi\CoreDomain\Dispo\DrivingMission;
 
 /**
  * Simple Node DTO to save relevant Information for routeConfiguration calculation
@@ -24,6 +25,12 @@ class RideNode {
      * @var int
      */
     public $type;
+
+    /**
+     * persist the mission too for possible configuration buildings with pools
+     * @var DrivingMission
+     */
+    public $drivingMission;
 
     /**
      * @var int
@@ -44,17 +51,31 @@ class RideNode {
 
     /**
      * @param $type
-     * @param $startMinute
-     * @param $endMinute
-     * @param $startAddress
-     * @param $endAddress
      */
-    public function __construct($type, $startMinute, $endMinute, $startAddress, $endAddress) {
+    protected function __construct($type) {
         $this->type = $type;
-        $this->startMinute = $startMinute;
-        $this->endMinute = $endMinute;
-        $this->startAddress = $startAddress;
-        $this->endAddress = $endAddress;
+    }
+
+    public static function registerPassengerRide(DrivingMission $drivingMission, Address $startAddress, Address $endAddress) {
+        $ride = new RideNode(self::RIDE_PASSENGER);
+        $ride->drivingMission = $drivingMission;
+
+        $ride->startMinute = $drivingMission->getServiceMinuteOfDay();
+        $ride->endMinute = $drivingMission->getServiceMinuteOfDay() + $drivingMission->getServiceDuration();
+
+        $ride->startAddress = $startAddress;
+        $ride->endAddress = $endAddress;
+
+        return $ride;
+    }
+
+    public static function registerEmptyRide(Address $startAddress, Address $endAddress) {
+        $ride = new RideNode(self::RIDE_EMPTY);
+
+        $ride->startAddress = $startAddress;
+        $ride->endAddress = $endAddress;
+
+        return $ride;
     }
 
     /**

@@ -1,6 +1,6 @@
 parameters:
      tixi_parameter_app: iTIXI
-     tixi_parameter_version: v2.0.2.9
+     tixi_parameter_version: v2.0.3.0
      tixi_parameter_client: TIXIZUG
      tixi_parameter_client_page: http://www.tixizug.ch
 

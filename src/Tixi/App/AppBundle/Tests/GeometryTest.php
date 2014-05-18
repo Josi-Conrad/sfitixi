@@ -27,6 +27,7 @@ class GeometryTest extends CommonBaseTest{
         $t2 = $t/60;
         echo round($t2, 0);
 
+        echo "\n " . (new \DateTime('today'))->format('Y-m-d H-i-s');
         echo "\nMinutes: " . DateTimeService::getMinutesOfDay(new \DateTime('2000-02-01 23:55:00'));
     }
 
