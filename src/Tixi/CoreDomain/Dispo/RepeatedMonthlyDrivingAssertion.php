@@ -49,19 +49,6 @@ class RepeatedMonthlyDrivingAssertion extends RepeatedDrivingAssertion {
     }
 
     /**
-     * @param ShiftType $match
-     * @return bool
-     */
-    protected function matchShiftType(ShiftType $match) {
-        foreach ($this->getShiftTypes() as $shiftType) {
-            if ($shiftType->getId() == $match->getId()) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
      * @param mixed $relativeWeekAsText
      */
     public function setRelativeWeekAsText($relativeWeekAsText) {

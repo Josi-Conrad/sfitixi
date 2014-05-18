@@ -40,4 +40,10 @@ interface VehicleRepository extends CommonBaseRepository{
      * @return mixed
      */
     public function getAmountByVehicleDepot(VehicleDepot $depot);
+
+    /**
+     * @return Vehicle[]
+     */
+    public function findAllNotDeleted();
+
 }

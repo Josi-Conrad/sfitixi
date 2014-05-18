@@ -68,16 +68,16 @@ class RepeatedDrivingAssertionPlan extends CommonBaseEntity {
     }
 
     /**
-     * @param $subject
+     * @param string $subject
      * @param \DateTime $anchorDate
-     * @param $frequency
-     * @param $withHolidays
+     * @param string $frequency
+     * @param boolean $withHolidays
      * @param \DateTime $endingDate
-     * @param $memo
+     * @param string $memo
      * @return RepeatedDrivingAssertionPlan
      */
-    public static function registerRepeatedAssertionPlan($subject, \DateTime $anchorDate, $frequency, $withHolidays, \DateTime $endingDate=null, $memo=null) {
-        $endingDate = (null!==$endingDate) ? $endingDate : DateTimeService::getMaxDateTime();
+    public static function registerRepeatedAssertionPlan($subject, \DateTime $anchorDate, $frequency, $withHolidays, \DateTime $endingDate = null, $memo = null) {
+        $endingDate = (null !== $endingDate) ? $endingDate : DateTimeService::getMaxDateTime();
         $assertion = new RepeatedDrivingAssertionPlan();
         $assertion->setSubject($subject);
         $assertion->setMemo($memo);
@@ -93,7 +93,7 @@ class RepeatedDrivingAssertionPlan extends CommonBaseEntity {
      */
     public function replaceRepeatedDrivingAssertions(ArrayCollection $assertions) {
         $this->repeatedDrivingAssertions->clear();
-        foreach($assertions as $assertion) {
+        foreach ($assertions as $assertion) {
             $this->repeatedDrivingAssertions->add($assertion);
         }
     }
@@ -119,104 +119,91 @@ class RepeatedDrivingAssertionPlan extends CommonBaseEntity {
     /**
      * @param mixed $anchorDate
      */
-    public function setAnchorDate($anchorDate)
-    {
+    public function setAnchorDate($anchorDate) {
         $this->anchorDate = $anchorDate;
     }
 
     /**
      * @return mixed
      */
-    public function getAnchorDate()
-    {
+    public function getAnchorDate() {
         return $this->anchorDate;
     }
 
     /**
      * @param mixed $endingDate
      */
-    public function setEndingDate($endingDate)
-    {
+    public function setEndingDate($endingDate) {
         $this->endingDate = $endingDate;
     }
 
     /**
      * @return mixed
      */
-    public function getEndingDate()
-    {
+    public function getEndingDate() {
         return $this->endingDate;
     }
 
     /**
      * @param mixed $id
      */
-    public function setId($id)
-    {
+    public function setId($id) {
         $this->id = $id;
     }
 
     /**
      * @return mixed
      */
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
     }
 
     /**
      * @param mixed $memo
      */
-    public function setMemo($memo)
-    {
+    public function setMemo($memo) {
         $this->memo = $memo;
     }
 
     /**
      * @return mixed
      */
-    public function getMemo()
-    {
+    public function getMemo() {
         return $this->memo;
     }
 
     /**
      * @return RepeatedDrivingAssertion[]
      */
-    public function getRepeatedDrivingAssertions()
-    {
+    public function getRepeatedDrivingAssertions() {
         return $this->repeatedDrivingAssertions;
     }
 
     /**
      * @param mixed $frequency
      */
-    public function setFrequency($frequency)
-    {
+    public function setFrequency($frequency) {
         $this->frequency = $frequency;
     }
 
     /**
      * @return mixed
      */
-    public function getFrequency()
-    {
+    public function getFrequency() {
         return $this->frequency;
     }
 
     /**
      * @param mixed $withHolidays
      */
-    public function setWithHolidays($withHolidays)
-    {
+    public function setWithHolidays($withHolidays) {
         $this->withHolidays = $withHolidays;
     }
 
     /**
-     * @return mixed
+     * @return boolean
      */
-    public function getWithHolidays()
-    {
+    public function getWithHolidays() {
         return $this->withHolidays;
     }
 

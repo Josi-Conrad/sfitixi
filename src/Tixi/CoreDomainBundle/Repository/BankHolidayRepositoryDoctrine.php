@@ -10,6 +10,7 @@ namespace Tixi\CoreDomainBundle\Repository;
 
 use Tixi\CoreDomain\BankHoliday;
 use Tixi\CoreDomain\BankHolidayRepository;
+use Tixi\CoreDomain\Dispo\WorkingDay;
 
 /**
  * Class BankHolidayRepositoryDoctrine
@@ -30,6 +31,23 @@ class BankHolidayRepositoryDoctrine extends CommonBaseRepositoryDoctrine impleme
      */
     public function remove(BankHoliday $bankHoliday) {
         $this->getEntityManager()->remove($bankHoliday);
+    }
+
+    /**
+     * @param WorkingDay $workingDay
+     * @return bool
+     */
+    public function checkIfWorkingDayIsBankHoliday(WorkingDay $workingDay) {
+        $day = $workingDay->getDate();
+        $qb = parent::createQueryBuilder('e');
+        $qb->where('e.date = :day')
+            ->andWhere('e.isDeleted = 0')
+            ->setParameter('day', $day->format('Y-m-d'));
+        if ($qb->getQuery()->getResult()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }

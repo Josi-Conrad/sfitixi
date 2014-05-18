@@ -10,6 +10,8 @@ namespace Tixi\CoreDomain\Dispo;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Tixi\ApiBundle\Helper\DateTimeService;
+use Tixi\App\Disposition\DispositionVariables;
 use Tixi\CoreDomain\Shared\CommonBaseEntity;
 
 /**
@@ -81,12 +83,36 @@ class DrivingMission {
      * @param int $serviceDistance
      * @return DrivingMission
      */
-    public static function registerDrivingMission($direction, $serviceMinuteOfDay = 0, $serviceDuration = 0, $serviceDistance = 0) {
+    public static function registerDrivingMission($direction = self::SAME_START, $serviceMinuteOfDay = 0, $serviceDuration = 0, $serviceDistance = 0) {
         $drivingMission = new DrivingMission();
         $drivingMission->setDirection($direction);
         $drivingMission->setServiceMinuteOfDay($serviceMinuteOfDay);
         $drivingMission->setServiceDuration($serviceDuration);
         $drivingMission->setServiceDistance($serviceDistance);
+        return $drivingMission;
+    }
+
+    public static function registerDrivingMissionFromOrder(DrivingOrder $drivingOrder) {
+        $drivingMission = new DrivingMission();
+        $drivingMission->setDirection(self::SAME_START);
+
+        $boardingTime = DispositionVariables::BOARDING_TIME + DispositionVariables::DEBOARDING_TIME;
+        $extraMinutesPassenger = $drivingOrder->getPassenger()->getExtraMinutes();
+        $additionRouteTime = $drivingOrder->getRoute()->getAdditionalTime();
+        $additionalTimesOnRide = $boardingTime + $extraMinutesPassenger + $additionRouteTime;
+
+        $serviceMinuteOfDay = DateTimeService::getMinutesOfDay($drivingOrder->getPickUpTime());
+        $serviceDuration = $drivingOrder->getRoute()->getDurationInMinutes() + $additionalTimesOnRide;
+        $serviceDistance = $drivingOrder->getRoute()->getDistanceInMeters();
+
+        $drivingMission->setServiceMinuteOfDay($serviceMinuteOfDay);
+        $drivingMission->setServiceDuration($serviceDuration);
+        $drivingMission->setServiceDistance($serviceDistance);
+
+        //DrivingMission <-> Order
+        $drivingMission->assignDrivingOrder($drivingOrder);
+        $drivingOrder->assignDrivingMission($drivingMission);
+
         return $drivingMission;
     }
 

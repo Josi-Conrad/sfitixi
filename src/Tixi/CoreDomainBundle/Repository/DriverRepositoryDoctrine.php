@@ -31,11 +31,20 @@ class DriverRepositoryDoctrine extends CommonBaseRepositoryDoctrine implements D
      * @param \Tixi\CoreDomain\DriverCategory $category
      * @return mixed
      */
-    public function getAmountByDriverCategory(DriverCategory $category)
-    {
+    public function getAmountByDriverCategory(DriverCategory $category) {
         $qb = parent::createQueryBuilder('e')->select('count(e.id)');
         $qb->add('where', 'e.driverCategory = :category');
         $qb->setParameter('category', $category);
         return $qb->getQuery()->getSingleScalarResult();
+    }
+
+    /**
+     * @return Driver[]
+     */
+    public function findAllActive() {
+        $qb = parent::createQueryBuilder('e');
+        $qb->select()
+            ->where('e.isDeleted = 0');
+        return $qb->getQuery()->getResult();
     }
 }

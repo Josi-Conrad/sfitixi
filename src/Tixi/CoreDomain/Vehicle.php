@@ -165,9 +165,9 @@ class Vehicle extends CommonBaseEntity {
     /**
      * @param Shift $shift
      */
-    public function matching(Shift $shift){
-        foreach($this->getServicePlans() as $servicePlan){
-            if($servicePlan->matchDate($shift->getDate())){
+    public function matching(Shift $shift) {
+        foreach ($this->getServicePlans() as $servicePlan) {
+            if ($servicePlan->matchDate($shift->getDate())) {
 
             }
         }
@@ -348,6 +348,25 @@ class Vehicle extends CommonBaseEntity {
      */
     public function getServicePlans() {
         return $this->servicePlans;
+    }
+
+    /**
+     * gives servicePlan in future
+     * @return ServicePlan[]
+     */
+    public function getActualServicePlans() {
+        $actualServicePlans = array();
+        foreach ($this->getServicePlans() as $servicePlan) {
+            if ($servicePlan->isDeleted) {
+                continue;
+            }
+            $today = new \DateTime('today', new \DateTimeZone('UTC'));
+            if ($servicePlan->getEnd() < $today) {
+                continue;
+            }
+            array_push($actualServicePlans, $servicePlan);
+        }
+        return $actualServicePlans;
     }
 
     /**

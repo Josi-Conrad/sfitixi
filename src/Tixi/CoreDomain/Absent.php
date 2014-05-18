@@ -46,7 +46,7 @@ class Absent extends CommonBaseEntity {
      */
     protected $person;
 
-    protected  function __construct() {
+    protected function __construct() {
         parent::__construct();
     }
 
@@ -81,6 +81,18 @@ class Absent extends CommonBaseEntity {
         if (!empty($endDate)) {
             $this->setendDate($endDate);
         }
+        $this->updateModifiedDate();
+    }
+
+    /**
+     * @param \DateTime $date
+     * @return bool
+     */
+    public function matchDate(\DateTime $date) {
+        if ($date >= $this->startDate && $date <= $this->endDate) {
+            return true;
+        }
+        return false;
     }
 
     /**

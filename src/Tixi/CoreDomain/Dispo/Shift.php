@@ -85,6 +85,48 @@ class Shift {
         return $shift;
     }
 
+    /**
+     * @return DrivingPool
+     */
+    public function getFirstDrivingPoolWithoutDriver() {
+        /**@var $drivingPool DrivingPool */
+        foreach ($this->getDrivingPools() as $drivingPool) {
+            if (!$drivingPool->hasAssociatedDriver()) {
+                return $drivingPool;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * @return DrivingPool[]
+     */
+    public function getDrivingPoolsWithoutDriver() {
+        $pools = array();
+        /**@var $drivingPool DrivingPool */
+        foreach ($this->getDrivingPools() as $drivingPool) {
+            if (!$drivingPool->hasAssociatedDriver()) {
+                array_push($pools, $drivingPool);
+            }
+        }
+        return $pools;
+    }
+
+    /**
+     * @param Driver $driver
+     * @return bool
+     */
+    public function isDriverAssociatedToThisShift(Driver $driver) {
+        foreach ($this->getDrivingPools() as $drivingPool) {
+            $poolDriver = $drivingPool->getDriver();
+            if ($poolDriver !== null) {
+                if ($poolDriver->getId() === $driver->getId()) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
     /**
      * @param Driver $driver
@@ -108,7 +150,7 @@ class Shift {
     }
 
     /**
-     * @return DrivingPool[]
+     * @return ArrayCollection
      */
     public function getDrivingPools() {
         return $this->drivingPools;

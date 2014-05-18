@@ -124,7 +124,7 @@ class DrivingPool {
     }
 
     /**
-     * @return mixed
+     * @return Driver
      */
     public function getDriver() {
         return $this->driver;
@@ -145,7 +145,7 @@ class DrivingPool {
     }
 
     /**
-     * @return mixed
+     * @return Shift
      */
     public function getShift() {
         return $this->shift;

@@ -67,6 +67,7 @@ class POIKeyword extends CommonBaseEntity {
             $this->setName($name);
         }
         $this->setMemo($memo);
+        $this->updateModifiedDate();
     }
 
     public function assignPOI($poi) {

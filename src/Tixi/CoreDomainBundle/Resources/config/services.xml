@@ -13,7 +13,7 @@
         <parameter key="address.doctrine.entity">Tixi\CoreDomain\Address</parameter>
         <parameter key="address_repository.doctrine.class">Tixi\CoreDomainBundle\Repository\AddressRepositoryDoctrine</parameter>
         <parameter key="bankholiday.doctrine.entity">Tixi\CoreDomain\BankHoliday</parameter>
-        <parameter key="bankholiday_repository.doctrine.class">Tixi\CoreDomainBundle\Repository\BankHolidayRepository</parameter>
+        <parameter key="bankholiday_repository.doctrine.class">Tixi\CoreDomainBundle\Repository\BankHolidayRepositoryDoctrine</parameter>
         <parameter key="driver.doctrine.entity">Tixi\CoreDomain\Driver</parameter>
         <parameter key="driver_repository.doctrine.class">Tixi\CoreDomainBundle\Repository\DriverRepositoryDoctrine</parameter>
         <parameter key="drivercategory.doctrine.entity">Tixi\CoreDomain\DriverCategory</parameter>

@@ -44,7 +44,7 @@ class VehicleCategory extends CommonBaseEntity {
      */
     protected $vehicles;
 
-    protected  function __construct() {
+    protected function __construct() {
         parent::__construct();
         $this->vehicles = new ArrayCollection();
     }
@@ -71,14 +71,14 @@ class VehicleCategory extends CommonBaseEntity {
      * @param null $amountOfSeats
      * @param null $amountOfWheelChairs
      */
-    public function updateData($name=null, $amountOfSeats=null, $amountOfWheelChairs=null) {
-        if(null!==$name) {
-            $this->name=$name;
+    public function updateData($name = null, $amountOfSeats = null, $amountOfWheelChairs = null) {
+        if (null !== $name) {
+            $this->name = $name;
         }
-        if(null !== $amountOfSeats) {
+        if (null !== $amountOfSeats) {
             $this->amountOfSeats = $amountOfSeats;
         }
-        if(null !== $amountOfWheelChairs) {
+        if (null !== $amountOfWheelChairs) {
             $this->amountOfWheelChairs = $amountOfWheelChairs;
         }
         $this->updateModifiedDate();

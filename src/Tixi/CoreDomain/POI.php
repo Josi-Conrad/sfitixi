@@ -127,6 +127,7 @@ class POI extends CommonBaseEntity {
         $this->setTelephone($telephone);
         $this->setComment($comment);
         $this->setDetails($details);
+        $this->updateModifiedDate();
     }
 
     /**
