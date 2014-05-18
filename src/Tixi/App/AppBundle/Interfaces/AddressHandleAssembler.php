@@ -19,14 +19,13 @@ class AddressHandleAssembler {
 
     /**
      * @param Address $address
-     * @param null $displayName
      * @return AddressHandleDTO
      */
-    public static function toAddressHandleDTO(Address $address, $displayName=null){
+    public static function toAddressHandleDTO(Address $address){
         $addressHandleDTO = new AddressHandleDTO();
 
         $addressHandleDTO->id = $address->getId();
-        $addressHandleDTO->displayName = (null !== $displayName) ? $displayName : $address->getName();
+        $addressHandleDTO->displayName = $address->toString();
         $addressHandleDTO->street = $address->getStreet();
         $addressHandleDTO->postalCode = $address->getPostalCode();
         $addressHandleDTO->city = $address->getCity();

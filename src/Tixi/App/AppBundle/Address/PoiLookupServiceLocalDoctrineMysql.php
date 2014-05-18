@@ -50,7 +50,7 @@ class PoiLookupServiceLocalDoctrineMysql extends AddressLookupService{
             $this->getEntityManager()->close();
             $poi = $poiRepository->find($id);
             $address = $poi->getAddress();
-            $addresses[] = AddressHandleAssembler::toAddressHandleDTO($address, $result->getName());
+            $addresses[] = AddressHandleAssembler::toAddressHandleDTO($address);
         }
 
         return $addresses;

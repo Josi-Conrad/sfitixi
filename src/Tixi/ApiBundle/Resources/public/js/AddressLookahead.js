@@ -206,7 +206,7 @@ function AddressLookahead() {
         for(_field in _dummyAddress.fields) {
             _address[_field] = _this._getAddressFieldValue(_field);
         }
-        _address['name'] = $(_this._inputField).val();
+        _address['displayName'] = $(_this._inputField).val();
         return new Address(_address, 0);
     }
 
