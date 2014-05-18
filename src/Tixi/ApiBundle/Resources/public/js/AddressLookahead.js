@@ -206,6 +206,7 @@ function AddressLookahead() {
         for(_field in _dummyAddress.fields) {
             _address[_field] = _this._getAddressFieldValue(_field);
         }
+        _address['name'] = $(_this._inputField).val();
         return new Address(_address, 0);
     }
 
@@ -224,6 +225,7 @@ function AddressLookahead() {
 
     this._onAddressSelectionClick = function(model) {
         _this._selectedAddress = model;
+
         $(_this._inputField).val(model.getDisplayName());
         _this._updateAddressContainer(model);
         _this._hideAddressSelections();
@@ -283,6 +285,7 @@ function AddressLookahead() {
     this._onInputOut = function() {
         setTimeout(function() {
             if($(_this._inputField).val()==='' || _this._selectedAddress === null) {
+                $(_this._inputField).val('');
                 _this._selectedAddress = null;
             }else {
                 $(_this._inputField).val(_this._selectedAddress.getDisplayName());
@@ -314,7 +317,7 @@ function Address(address, index) {
     _this.index = (undefined !== index) ? index : 0;
     _this.fields = {
         id : (undefined !== address) ? address.id : '',
-        name : (undefined !== address) ? address.name : '',
+        displayName : (undefined !== address) ? address.displayName : '',
         street : (undefined !== address) ? address.street : '',
         postalCode : (undefined !== address) ? address.postalCode : '',
         city : (undefined !== address) ? address.city : '',
@@ -325,7 +328,8 @@ function Address(address, index) {
     };
 
     _this.getDisplayName = function() {
-        return _this.fields.name ? _this.fields.name :  _this._constructAlternativeDisplayName();
+        console.log(_this.fields.displayName)
+        return _this.fields.displayName ? _this.fields.displayName :  _this._constructAlternativeDisplayName();
     }
 
     _this._constructAlternativeDisplayName = function() {

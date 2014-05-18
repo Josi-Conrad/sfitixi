@@ -19,7 +19,7 @@ class AddressHandleType extends AbstractType{
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('id','hidden');
-        $builder->add('name', 'hidden');
+        $builder->add('displayName', 'hidden');
         $builder->add('street', 'text', array(
             'label' => 'address.field.street',
             'attr' => array('title' => 'form.field.title.not_blank'),

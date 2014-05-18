@@ -19,7 +19,8 @@ use Tixi\CoreDomainBundle\Repository\App\AddressLookupQuotaHelperRepositoryDoctr
  */
 class AddressLookupFactory extends ContainerAware {
 
-    public static $localServiceId = 'localmysql';
+    public static $localAddressServiceId = 'localaddressmysql';
+    public static $localPoiServiceId = 'localpoimysql';
     public static $googleServiceId = 'google';
 
     /**
@@ -29,9 +30,12 @@ class AddressLookupFactory extends ContainerAware {
      */
     public function get($serviceId) {
         $service = null;
-        if ($serviceId === self::$localServiceId) {
+        if ($serviceId === self::$localAddressServiceId) {
             $service = new AddressLookupServiceLocalDoctrineMysql();
-        } elseif ($serviceId === self::$googleServiceId) {
+        } elseif ($serviceId === self::$localPoiServiceId) {
+            $service = new PoiLookupServiceLocalDoctrineMysql();
+        }
+        elseif ($serviceId === self::$googleServiceId) {
             $service = new AddressLookupServiceGoogle();
         } else {
             throw new \Exception('no service with servicid ' . $serviceId . ' found');
