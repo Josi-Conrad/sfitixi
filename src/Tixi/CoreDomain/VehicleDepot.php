@@ -63,10 +63,14 @@ class VehicleDepot extends CommonBaseEntity {
 
     /**
      * @param null $name
+     * @param Address $address
      */
-    public function updateVehicleDepotData($name = null) {
+    public function updateVehicleDepotData($name = null, Address $address = null) {
         if (!empty($name)) {
             $this->setName($name);
+        }
+        if(!empty($address)) {
+            $this->assignAddress($address);
         }
     }
 
