@@ -36,7 +36,7 @@ class PoiLookupServiceLocalDoctrineMysql extends AddressLookupService{
 
         $sql = "SELECT p.id, p.name FROM poi p
         WHERE MATCH (p.name)
-        AGAINST ('.$searchString.' IN BOOLEAN MODE)
+        AGAINST ('.$searchString.' IN BOOLEAN MODE) AND p.isDeleted = 0
         LIMIT 0, " . $this->getLookupLimit();
 
         $query = $this->getEntityManager()->createNativeQuery($sql, $rsm);

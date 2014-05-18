@@ -41,7 +41,7 @@ class AddressLookupServiceLocalDoctrineMysql extends AddressLookupService {
 
         $sql = "SELECT a.id, a.street, a.postalCode, a.city, a.country, a.lat, a.lng, a.source FROM address a
         WHERE MATCH (name, street, postalCode, city, country, source)
-        AGAINST ('.$searchString.' IN BOOLEAN MODE)
+        AGAINST ('.$searchString.' IN BOOLEAN MODE) AND a.isDeleted = 0
         LIMIT 0, " . $this->getLookupLimit();
 
         $query = $this->getEntityManager()->createNativeQuery($sql, $rsm);
