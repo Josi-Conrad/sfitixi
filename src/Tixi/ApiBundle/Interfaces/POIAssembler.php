@@ -18,17 +18,19 @@ use Tixi\CoreDomain\Address;
  * @package Tixi\ApiBundle\Interfaces
  */
 class POIAssembler {
+
+    /** @var  AddressAssembler $addressAssembler */
+    protected $addressAssembler;
+
     /**
      * @param POIRegisterDTO $poiDTO
      * @throws \Exception
      * @return POI
      */
     public function registerDTOtoNewPOI(POIRegisterDTO $poiDTO) {
-        $poi = POI::registerPOI($poiDTO->name,
-            Address::registerAddress(
-                $poiDTO->street, $poiDTO->postalCode,
-                $poiDTO->city, $poiDTO->country, $poiDTO->address_name, $poiDTO->lat, $poiDTO->lng, $poiDTO->type),
-            $poiDTO->department, $poiDTO->telephone, $poiDTO->comment, $poiDTO->details);
+        $address = $this->addressAssembler->addressLookaheadDTOtoAddress($poiDTO->address);
+        $poi = POI::registerPOI($poiDTO->name, $address, $poiDTO->department, $poiDTO->telephone,
+            $poiDTO->comment, $poiDTO->details);
         foreach ($poiDTO->keywords as $keyword) {
             $poi->assignKeyword($keyword);
         }
@@ -42,9 +44,7 @@ class POIAssembler {
      * @return POI
      */
     public function registerDTOToPOI(POIRegisterDTO $poiDTO, POI $poi) {
-        $address = $poi->getAddress();
-        $address->updateAddressData($poiDTO->street, $poiDTO->postalCode,
-            $poiDTO->city, $poiDTO->country, $poiDTO->address_name, $poiDTO->lat, $poiDTO->lng, $poiDTO->type);
+        $address = $this->addressAssembler->addressLookaheadDTOtoAddress($poiDTO->address);
         $poi->updatePOIData($poiDTO->name, $address, $poiDTO->department,
             $poiDTO->telephone, $poiDTO->comment, $poiDTO->details);
         $poi->setKeywords($poiDTO->keywords);
@@ -67,13 +67,7 @@ class POIAssembler {
 
         $poiDTO->keywords = $poi->getKeywords();
 
-        $poiDTO->address_id = $poi->getAddress()->getId();
-        $poiDTO->street = $poi->getAddress()->getStreet();
-        $poiDTO->postalCode = $poi->getAddress()->getPostalCode();
-        $poiDTO->city = $poi->getAddress()->getCity();
-        $poiDTO->country = $poi->getAddress()->getCountry();
-        $poiDTO->lat = $poi->getAddress()->getLat();
-        $poiDTO->lng = $poi->getAddress()->getLng();
+        $poiDTO->address = $this->addressAssembler->addressToAddressLookaheadDTO($poi->getAddress());
 
         return $poiDTO;
     }
@@ -107,5 +101,9 @@ class POIAssembler {
         $poiListDTO->keywords = $poi->getKeywordsAsString();
 
         return $poiListDTO;
+    }
+
+    public function setAddressAssembler(AddressAssembler $assembler) {
+        $this->addressAssembler = $assembler;
     }
 }

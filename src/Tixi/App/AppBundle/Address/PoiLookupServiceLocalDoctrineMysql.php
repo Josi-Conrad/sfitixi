@@ -12,6 +12,8 @@ namespace Tixi\App\AppBundle\Address;
 use Doctrine\ORM\Query\ResultSetMappingBuilder;
 use Tixi\App\AppBundle\Interfaces\AddressHandleAssembler;
 use Tixi\CoreDomain\AddressRepository;
+use Tixi\CoreDomain\POI;
+use Tixi\CoreDomain\POIRepository;
 use Tixi\CoreDomainBundle\Repository\AddressRepositoryDoctrine;
 
 class PoiLookupServiceLocalDoctrineMysql extends AddressLookupService{
@@ -39,12 +41,15 @@ class PoiLookupServiceLocalDoctrineMysql extends AddressLookupService{
 
         $query = $this->getEntityManager()->createNativeQuery($sql, $rsm);
         $results = $query->getResult();
-
-        /** @var AddressRepository $addressRepository */
-        $addressRepository = $this->container->get('address_repository');
         $addresses = array();
+        /** @var POIRepository $poiRepository */
+        $poiRepository = $this->container->get('poi_repository');
         foreach($results as $result) {
-            $address = $addressRepository->find($result->getId());
+            /** @var POI $poi */
+            $id = $result->getId();
+            $this->getEntityManager()->close();
+            $poi = $poiRepository->find($id);
+            $address = $poi->getAddress();
             $addresses[] = AddressHandleAssembler::toAddressHandleDTO($address, $result->getName());
         }
 

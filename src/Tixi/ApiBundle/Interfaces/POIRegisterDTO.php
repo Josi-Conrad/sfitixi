@@ -14,7 +14,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Class POIRegisterDTO
  * @package Tixi\ApiBundle\Interfaces
  */
-class POIRegisterDTO extends AddressRegisterDTO {
+class POIRegisterDTO {
     //POI
     public $id;
     public $isActive;
@@ -23,6 +23,8 @@ class POIRegisterDTO extends AddressRegisterDTO {
     public $telephone;
     public $comment;
     public $details;
+
+    public $address;
 
     //POIKeywords
     public $keywords;

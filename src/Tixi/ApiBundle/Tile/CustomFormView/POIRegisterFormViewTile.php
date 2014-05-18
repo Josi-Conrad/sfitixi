@@ -26,9 +26,7 @@ class POIRegisterFormViewTile extends AbstractFormViewTile {
         $this->basicFormRows[] = new FormRowView('name', 'poi.field.name', $dto->name);
         $this->basicFormRows[] = new FormRowView('department', 'poi.field.department', $dto->department);
         $this->basicFormRows[] = new FormRowView('telephone', 'poi.field.telephone', $dto->telephone);
-        $this->basicFormRows[] = new FormRowView('street', 'address.field.street', $dto->street);
-        $this->basicFormRows[] = new FormRowView('postalcode', 'address.field.postalcode', $dto->postalCode);
-        $this->basicFormRows[] = new FormRowView('city', 'address.field.city', $dto->city);
+        $this->basicFormRows[] = new FormRowView('address','address.field.lookahead',$dto->address->addressDisplayName);
         $this->basicFormRows[] = new FormRowView('keywords', 'poi.field.keywords', POI::constructKeywordsString($dto->keywords));
 
         $this->expandedFormRows[] = new FormRowView('comment', 'poi.field.comment', $dto->comment);

@@ -58,43 +58,10 @@ class POIType extends CommonAbstractType {
                         ->orderBy('k.name', 'ASC');
                 },
         ));
-        $builder->add('street', 'text', array(
-            'label' => 'address.field.street',
-            'attr' => array('title' => 'form.field.title.not_blank'),
-            'constraints' => array(
-                new NotBlank(array('message' => 'field.not_blank'))
-            ),
-        ));
-        $builder->add('postalCode', 'text', array(
-            'label' => 'address.field.postalcode',
-            'pattern' => '^[\+0-9A-Z]{4,7}',
-            'attr' => array('title' => 'form.field.title.postalcode'),
-            'constraints' => array(
-                new NotBlank(array('message' => 'field.not_blank'))
-            ),
-        ));
-        $builder->add('city', 'text', array(
-            'label' => 'address.field.city',
-            'attr' => array('title' => 'form.field.title.not_blank'),
-            'constraints' => array(
-                new NotBlank(array('message' => 'field.not_blank'))
-            ),
-        ));
-        $builder->add('country', 'text', array(
-            'label' => 'address.field.country',
-            'attr' => array('title' => 'form.field.title.not_blank'),
-            'constraints' => array(
-                new NotBlank(array('message' => 'field.not_blank'))
-            ),
-        ));
-        $builder->add('lat', 'text', array(
-            'required' => false,
-            'label' => 'address.field.lat'
-        ));
-        $builder->add('lng', 'text', array(
-            'required' => false,
-            'label' => 'address.field.lng'
-        ));
+        $builder->add('address','addresslookahead',array(
+                'label' => 'address.field.lookahead'
+            )
+        );
 
         $builder->add('comment', 'textarea', array(
             'required' => false,

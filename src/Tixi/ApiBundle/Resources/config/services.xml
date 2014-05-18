@@ -119,7 +119,11 @@
         </service>
         <service id="tixi_api.assemblerAbsent" class="%tixi_api.absentassembler.class%"/>
         <service id="tixi_api.assemblerUser" class="%tixi_api.userassembler.class%"/>
-        <service id="tixi_api.assemblerPOI" class="%tixi_api.poiassembler.class%"/>
+        <service id="tixi_api.assemblerPOI" class="%tixi_api.poiassembler.class%">
+            <call method="setAddressAssembler">
+                <argument type="service" id="tixi_api.assemblerAddress" />
+            </call>
+        </service>
         <service id="tixi_api.assemblerServicePlan" class="%tixi_api.serviceplanassembler.class%">
             <call method="setDateTimeService">
                 <argument type="service" id="tixi_api.datetimeservice" />
