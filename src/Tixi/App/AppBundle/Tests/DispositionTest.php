@@ -53,20 +53,10 @@ class DispositionTest extends CommonBaseTest {
             $workingMonth->setMemo('Test');
             $workingMonth->createWorkingDaysForThisMonth();
 
-            $shiftTypes = $this->shiftTypeRepo->findAllNotDeleted();
-
-            /**@var $workingDay WorkingDay */
-            foreach ($workingMonth->getWorkingDays() as $workingDay) {
-                $this->workingDayRepo->store($workingDay);
-                foreach ($shiftTypes as $shiftType) {
-                    $shift = Shift::registerShift($workingDay, $shiftType);
-                    $workingDay->assignShift($shift);
-                    $this->shiftRepo->store($shift);
-                }
-            }
-
             $this->workingMonthRepo->store($workingMonth);
             $workingDays = $workingMonth->getWorkingDays();
+
+            $shiftTypes = $this->shiftTypeRepo->findAllNotDeleted();
 
             //create workingDays shifts, assign them drivingpools, get amount of needed drivers
             /** @var $workingDay WorkingDay */
@@ -85,7 +75,6 @@ class DispositionTest extends CommonBaseTest {
                 }
                 $this->workingDayRepo->store($workingDay);
             }
-
             $this->em->flush();
         }
 
