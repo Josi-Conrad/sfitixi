@@ -119,7 +119,11 @@
         </service>
         <service id="tixi_api.assemblerAbsent" class="%tixi_api.absentassembler.class%"/>
         <service id="tixi_api.assemblerUser" class="%tixi_api.userassembler.class%"/>
-        <service id="tixi_api.assemblerPOI" class="%tixi_api.poiassembler.class%"/>
+        <service id="tixi_api.assemblerPOI" class="%tixi_api.poiassembler.class%">
+            <call method="setAddressAssembler">
+                <argument type="service" id="tixi_api.assemblerAddress" />
+            </call>
+        </service>
         <service id="tixi_api.assemblerServicePlan" class="%tixi_api.serviceplanassembler.class%">
             <call method="setDateTimeService">
                 <argument type="service" id="tixi_api.datetimeservice" />
@@ -142,9 +146,12 @@
                 <argument type="service" id="security.encoder_factory" />
             </call>
         </service>
-
         <service id="tixi_api.assemblerVehicleCategory" class="%tixi_api.vehiclecategoryassembler.class%"/>
-        <service id="tixi_api.assemblerVehicleDepot" class="%tixi_api.vehicledepotassembler.class%"/>
+        <service id="tixi_api.assemblerVehicleDepot" class="%tixi_api.vehicledepotassembler.class%">
+            <call method="setAddressAssembler">
+                <argument type="service" id="tixi_api.assemblerAddress" />
+            </call>
+        </service>
         <service id="tixi_api.assemblerPoiKeyword" class="%tixi_api.poikeywordassembler.class%"/>
         <service id="tixi_api.assemblerHandicap" class="%tixi_api.handicapassembler.class%"/>
         <service id="tixi_api.assemblerInsurance" class="%tixi_api.insuranceassembler.class%"/>

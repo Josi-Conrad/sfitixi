@@ -176,7 +176,16 @@ class Address extends CommonBaseEntity {
      * @return mixed|string
      */
     public function toString() {
-        return (null !== $this->getName()) ? $this->getName() : $this->constructAlternativeName();
+        $addressName = (null !== $this->getName()) ? $this->getName() : $this->constructAlternativeName();
+        $poiSuffix = '';
+        //if there are pois, we take the concatinated poi name
+        foreach($this->pois as $key=>$poi) {
+            if($key>0) {
+                $poiSuffix.' ';
+            }
+            $poiSuffix.= $poi->getName();
+        }
+        return ('' !== $poiSuffix) ? $addressName.' ('.$poiSuffix.')' : $addressName;
     }
 
     /**

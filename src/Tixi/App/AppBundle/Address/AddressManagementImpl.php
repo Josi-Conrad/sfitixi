@@ -34,7 +34,7 @@ class AddressManagementImpl extends ContainerAware implements AddressManagement 
                     break;
                 }
             } catch (\Exception $e) {
-
+                //skip service
             }
         }
         return $addressSuggestions;
@@ -47,7 +47,8 @@ class AddressManagementImpl extends ContainerAware implements AddressManagement 
     protected function createServiceTrail() {
         $lookupServiceFactory = $this->container->get('tixi_app.addresslookupfactory');
         $serviceTrail = array();
-        $serviceTrail[] = $lookupServiceFactory->get(AddressLookupFactory::$localServiceId);
+        $serviceTrail[] = $lookupServiceFactory->get(AddressLookupFactory::$localAddressServiceId);
+        $serviceTrail[] = $lookupServiceFactory->get(AddressLookupFactory::$localPoiServiceId);
         $serviceTrail[] = $lookupServiceFactory->get(AddressLookupFactory::$googleServiceId);
         return $serviceTrail;
 
@@ -90,7 +91,7 @@ class AddressManagementImpl extends ContainerAware implements AddressManagement 
                 $addressHandleDTO->postalCode,
                 $addressHandleDTO->city,
                 $addressHandleDTO->country,
-                $addressHandleDTO->name,
+                null,
                 $addressHandleDTO->lat,
                 $addressHandleDTO->lng,
                 $addressHandleDTO->source
@@ -108,7 +109,7 @@ class AddressManagementImpl extends ContainerAware implements AddressManagement 
                     $addressHandleDTO->postalCode,
                     $addressHandleDTO->city,
                     $addressHandleDTO->country,
-                    $addressHandleDTO->name,
+                    null,
                     $addressHandleDTO->lat,
                     $addressHandleDTO->lng,
                     $addressHandleDTO->source

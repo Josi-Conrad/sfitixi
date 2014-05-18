@@ -9,6 +9,7 @@
 namespace Tixi\ApiBundle\Interfaces\Management;
 
 
+use Tixi\ApiBundle\Interfaces\AddressAssembler;
 use Tixi\CoreDomain\Address;
 use Tixi\CoreDomain\VehicleDepot;
 
@@ -17,15 +18,17 @@ use Tixi\CoreDomain\VehicleDepot;
  * @package Tixi\ApiBundle\Interfaces\Management
  */
 class VehicleDepotAssembler {
+
+    /** @var  AddressAssembler $addressAssembler */
+    protected $addressAssembler;
+
     /**
      * @param VehicleDepotRegisterDTO $dto
      * @return VehicleDepot
      */
     public function registerDTOtoNewVehicleDepot(VehicleDepotRegisterDTO $dto) {
-        $vehicleDepot = VehicleDepot::registerVehicleDepot($dto->name,
-            Address::registerAddress(
-                $dto->street, $dto->postalCode,
-                $dto->city, $dto->country));
+        $address = $this->addressAssembler->addressLookaheadDTOtoAddress($dto->address);
+        $vehicleDepot = VehicleDepot::registerVehicleDepot($dto->name, $address);
         return $vehicleDepot;
     }
 
@@ -34,10 +37,8 @@ class VehicleDepotAssembler {
      * @param VehicleDepotRegisterDTO $dto
      */
     public function registerDTOtoVehicleDepot(VehicleDepot $vehicleDepot, VehicleDepotRegisterDTO $dto) {
-        $address = $vehicleDepot->getAddress();
-        $address->updateAddressData($dto->street, $dto->postalCode,
-            $dto->city, $dto->country);
-        $vehicleDepot->updateVehicleDepotData($dto->name);
+        $address = $this->addressAssembler->addressLookaheadDTOtoAddress($dto->address);
+        $vehicleDepot->updateVehicleDepotData($dto->name, $address);
     }
 
     /**
@@ -49,10 +50,7 @@ class VehicleDepotAssembler {
         $vehicleDepotDTO->id = $vehicleDepot->getId();
         $vehicleDepotDTO->name = $vehicleDepot->getName();
 
-        $vehicleDepotDTO->street = $vehicleDepot->getAddress()->getStreet();
-        $vehicleDepotDTO->postalCode = $vehicleDepot->getAddress()->getPostalCode();
-        $vehicleDepotDTO->city = $vehicleDepot->getAddress()->getCity();
-        $vehicleDepotDTO->country = $vehicleDepot->getAddress()->getCountry();
+        $vehicleDepotDTO->address = $this->addressAssembler->addressToAddressLookaheadDTO($vehicleDepot->getAddress());
 
         return $vehicleDepotDTO;
     }
@@ -82,5 +80,9 @@ class VehicleDepotAssembler {
         $vehicleDepotListDTO->city = $vehicleDepot->getAddress()->getCity();
 
         return $vehicleDepotListDTO;
+    }
+
+    public function setAddressAssembler(AddressAssembler $assembler) {
+        $this->addressAssembler = $assembler;
     }
 } 

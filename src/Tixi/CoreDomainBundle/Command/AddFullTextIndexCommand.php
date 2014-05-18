@@ -21,7 +21,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class AddFullTextIndexCommand extends ContainerAwareCommand {
     public function configure() {
         $this->setName('project:build-fulltext');
-        $this->setDescription('Inserts FulltextSearch Indexes for address table');
+        $this->setDescription('Inserts FulltextSearch Indexes for address and poi table');
     }
 
     /**
@@ -34,7 +34,7 @@ class AddFullTextIndexCommand extends ContainerAwareCommand {
         $connection->query("
         ALTER TABLE `address` ADD FULLTEXT `address_fts_idx` (`name`, `street`, `postalCode`, `city`, `country`, `source`);
         ");
-
+        $connection->query("ALTER TABLE `poi` ADD FULLTEXT `poi_fts_idx` (`name`);");
         $output->writeln('Alter address table for fulltext search executed');
     }
 }

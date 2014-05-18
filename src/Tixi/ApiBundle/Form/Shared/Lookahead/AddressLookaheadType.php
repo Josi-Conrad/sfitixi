@@ -21,14 +21,8 @@ use Tixi\ApiBundle\Form\Shared\AddressHandleType;
 class AddressLookaheadType extends AbstractLookaheadType {
 
     public function buildForm(FormBuilderInterface $builder, array $options) {
-        $builder->add('addressSelectionId','hidden');
         $builder->add('addressDisplayName','text');
-        $builder->add('addressHandles', 'collection', array(
-            'attr' => array('class'=>'addressHandle'),
-            'type' => new AddressHandleType(),
-            'allow_add' => true,
-            'allow_delete' => true
-        ));
+        $builder->add('addressHandle', new AddressHandleType());
     }
 
     /**
@@ -38,6 +32,7 @@ class AddressLookaheadType extends AbstractLookaheadType {
         $resolver->setDefaults(array(
             'data_class' => 'Tixi\ApiBundle\Interfaces\AddressLookaheadDTO'
         ));
+        parent::setDefaultOptions($resolver);
     }
 
     /**

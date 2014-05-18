@@ -94,7 +94,7 @@ class POI extends CommonBaseEntity {
             $poi->setName($name);
         }
         if (!empty($address)) {
-            $poi->setAddress($address);
+            $poi->assignAddress($address);
         }
 
         $poi->setDepartment($department);
@@ -121,7 +121,7 @@ class POI extends CommonBaseEntity {
             $this->setName($name);
         }
         if (!empty($address)) {
-            $this->setAddress($address);
+            $this->assignAddress($address);
         }
         $this->setDepartment($department);
         $this->setTelephone($telephone);

@@ -1,0 +1,52 @@
+<div class="col-md-12">
+
+    <div class="text-right">
+        {% for resolvedElement in children %}
+            {% if 'formcontrol' in resolvedElement.viewIndentifiers %}
+                {{ resolvedElement.rawData | raw }}
+            {% endif %}
+        {% endfor %}
+    </div>
+
+    {{ form_start(form, {'attr':{'id':formId, 'class':'form-horizontal customForm'} }) }}
+    <div class="row">
+        <div class="col-md-6">
+            <div class="row">
+                <div class="form-group">
+                    <div class="col-md-4">
+                        {{ form_label(form.anchorDate, null, {'label_attr': {'style':'width:100%', 'class':'control-label' }}
+                        ) }}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form_widget(form.anchorDate, { 'attr': {'class': 'form-control'} }) }}
+                        <div class="error_message">{{ form_errors(form.anchorDate) }}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <div class="col-md-4">
+                        {{ form_label(form.lookaheadaddressFrom, null, {'label_attr': {'style':'width:100%', 'class':'control-label' }}
+                        ) }}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form_widget(form.lookaheadaddressFrom, { 'attr': {'class': 'form-control'} }) }}
+                        <div class="error_message">{{ form_errors(form.lookaheadaddressFrom) }}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <div class="col-md-4">
+                        {{ form_label(form.lookaheadaddressTo, null, {'label_attr': {'style':'width:100%', 'class':'control-label' }}
+                        ) }}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form_widget(form.lookaheadaddressTo, { 'attr': {'class': 'form-control'} }) }}
+                        <div class="error_message">{{ form_errors(form.lookaheadaddressTo) }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

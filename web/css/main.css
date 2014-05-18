@@ -1,9 +1,27 @@
 /* Address overlay*/
-#googleMapCanvas {
+.googleMapCanvasWrapper {
     z-index: 3000;
     position: absolute;
-    width: 654px;
-    height: 300px;
+    width: 600px;
+    height: 500px;
+    right: -660px;
+    top: -120px;
+    display: none;
+}
+
+.googleMapCanvas {
+    z-index: 3001;
+    width: 570px;
+    height: 470px;
+    padding: 0px;
+}
+
+.geocodeInputWrapper {
+    z-index: 3002;
+    position: absolute;
+    top: 30px;
+    left: 160px;
+    width: 250px;
     display: none;
 }
 
@@ -31,16 +49,11 @@
     display: none;
 }
 
-.manualAddWrapper {
+.lookaheadWrapper .editManually {
     display: none;
 }
 
-
-.selectionsModelContainer {
-    display: none;
-}
-
-.selectionsDisplayContainer {
+.addressContainerWrapper {
     display: none;
 }
 

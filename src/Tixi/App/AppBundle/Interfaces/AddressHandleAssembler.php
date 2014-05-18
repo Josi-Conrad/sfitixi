@@ -25,7 +25,7 @@ class AddressHandleAssembler {
         $addressHandleDTO = new AddressHandleDTO();
 
         $addressHandleDTO->id = $address->getId();
-        $addressHandleDTO->name = $address->getName();
+        $addressHandleDTO->displayName = $address->toString();
         $addressHandleDTO->street = $address->getStreet();
         $addressHandleDTO->postalCode = $address->getPostalCode();
         $addressHandleDTO->city = $address->getCity();

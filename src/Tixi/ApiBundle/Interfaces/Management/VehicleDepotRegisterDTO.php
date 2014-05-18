@@ -13,7 +13,8 @@ use Tixi\ApiBundle\Interfaces\AddressRegisterDTO;
  * Class VehicleDepotRegisterDTO
  * @package Tixi\ApiBundle\Interfaces\Management
  */
-class VehicleDepotRegisterDTO extends AddressRegisterDTO{
+class VehicleDepotRegisterDTO {
     public $id;
     public $name;
+    public $address;
 }

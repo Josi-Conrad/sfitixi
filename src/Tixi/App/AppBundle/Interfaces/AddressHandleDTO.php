@@ -15,7 +15,7 @@ namespace Tixi\App\AppBundle\Interfaces;
 class AddressHandleDTO {
 
     public $id;
-    public $name;
+    public $displayName;
     public $street;
     public $postalCode;
     public $city;

@@ -16,37 +16,48 @@
 {% endblock dateTimePicker_widget %}
 
 {% block addresslookahead_widget %}
-    {% set lookaheadId = 'lookahead_' ~ form.vars.name %}
+    {% set lookaheadId = 'lookahead_' ~ form.vars.lookaheadId %}
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key={{ form.vars.googleMapsApiKey }}&sensor=false"></script>
     <script src="{{ asset('bundles/tixiapi/js/GoogleMapWrapper.js') }}"></script>
-    <div id="googleMapCanvas"></div>
     <div class="col-md-12">
         <div class="{{ lookaheadId }}" data-datasrc="{{ form.vars.dataSrc }}">
-            <div class="lookaheadWrapper">
-                <div class="row">
-                    {{ form_widget(form.addressDisplayName, { 'attr': {'class': 'lookaheadInput','autocomplete' : 'off'} }) }}
-                    {{ form_widget(form.addressSelectionId, { 'attr': {'class': 'lookaheadSelectionId'} }) }}
-                </div>
-                <div class="row selectionsWrapper">
-                    <div class="col-md-12">
-                        <ul class="selectionsDisplayContainer list-unstyled">
-
-                        </ul>
-                        <ul class="selectionsModelContainer"
-                            data-prototype="{{ form_widget(form.addressHandles.vars.prototype)|e }}">
-                        </ul>
-                        {#{{ form_widget(form.addressHandles) }}#}
+            <div class="googleMapCanvasWrapper">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="geocodeInputWrapper">
+                            <div class="input-group">
+                                <input type="text" class="form-control geocodeInput" />
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default geocodeInputButton" type="button">Go!</button>
+                                    </span>
+                            </div>
+                        </div>
+                        <div class="googleMapCanvas"></div>
                     </div>
                 </div>
             </div>
-            <div class="manualAddWrapper">
-                <div class="manualAddFieldContainer"></div>
+            <div class="lookaheadWrapper">
+                <div class="row">
+                    {{ form_widget(form.addressDisplayName, { 'attr': {'class': 'lookaheadInput','autocomplete' : 'off'} }) }}
+                    <a href="#" class="editManually">Adresse manuell editieren</a>
+                </div>
+                <div class="row addressSelectionsWrapper">
+                    <div class="col-md-12">
+                        <ul class="addressSelectionsContainer list-unstyled" />
+                    </div>
+                </div>
+            </div>
+            <div class="addressContainerWrapper">
+                {{ form_widget(form.addressHandle, { 'attr': {'class': 'addressContainer'} }) }}
+                <div class="row">
+                    <a href="#" class="cancelManualAdd">Abbrechen</a> <a href="#" class="saveManualAdd" style="margin-left: 15px;">Speichern</a>
+                </div>
             </div>
         </div>
         <script type="text/javascript">
             jQuery(function ($) {
                 var lookahead = new AddressLookahead();
-                lookahead.init('{{ lookaheadId }}', '{{ 'addressHandles' }}', Address.prototype, 'googleMapCanvas');
+                lookahead.init('{{ lookaheadId }}', 'addressHandles', Address.prototype, 'googleMapCanvas');
             });
         </script>
     </div>

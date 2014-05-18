@@ -2,8 +2,8 @@
 /**
  * Created by PhpStorm.
  * User: faustos
- * Date: 26.04.14
- * Time: 21:31
+ * Date: 18.05.14
+ * Time: 11:21
  */
 
 namespace Tixi\App\AppBundle\Address;
@@ -11,17 +11,12 @@ namespace Tixi\App\AppBundle\Address;
 
 use Doctrine\ORM\Query\ResultSetMappingBuilder;
 use Tixi\App\AppBundle\Interfaces\AddressHandleAssembler;
+use Tixi\CoreDomain\AddressRepository;
+use Tixi\CoreDomain\POI;
+use Tixi\CoreDomain\POIRepository;
+use Tixi\CoreDomainBundle\Repository\AddressRepositoryDoctrine;
 
-/**
- * Class AddressLookupServiceLocalDoctrineMysql
- * @package Tixi\App\AppBundle\Address
- *
- * This class makes use of mysql fulltext index.
- * Please make sure that the following defaults are set in the mysql config file:
- * ft_min_word_len=1
- * innodb_ft_min_token_size=1
- */
-class AddressLookupServiceLocalDoctrineMysql extends AddressLookupService {
+class PoiLookupServiceLocalDoctrineMysql extends AddressLookupService{
     /**
      * @return bool|mixed
      */
@@ -37,21 +32,27 @@ class AddressLookupServiceLocalDoctrineMysql extends AddressLookupService {
         $searchString = $this->constructFulltextSearchString($lookupStr);
 
         $rsm = new ResultSetMappingBuilder($this->getEntityManager());
-        $rsm->addRootEntityFromClassMetadata('Tixi\CoreDomain\Address', 'a');
+        $rsm->addRootEntityFromClassMetadata('Tixi\CoreDomain\POI', 'p');
 
-        $sql = "SELECT a.id, a.street, a.postalCode, a.city, a.country, a.lat, a.lng, a.source FROM address a
-        WHERE MATCH (name, street, postalCode, city, country, source)
-        AGAINST ('.$searchString.' IN BOOLEAN MODE) AND a.isDeleted = 0
+        $sql = "SELECT p.id, p.name FROM poi p
+        WHERE MATCH (p.name)
+        AGAINST ('.$searchString.' IN BOOLEAN MODE) AND p.isDeleted = 0
         LIMIT 0, " . $this->getLookupLimit();
 
         $query = $this->getEntityManager()->createNativeQuery($sql, $rsm);
         $results = $query->getResult();
-
         $addresses = array();
-        /** @var $result Address */
-        foreach ($results as $result) {
-            $addresses[] = AddressHandleAssembler::toAddressHandleDTO($result);
+        /** @var POIRepository $poiRepository */
+        $poiRepository = $this->container->get('poi_repository');
+        foreach($results as $result) {
+            /** @var POI $poi */
+            $id = $result->getId();
+            $this->getEntityManager()->close();
+            $poi = $poiRepository->find($id);
+            $address = $poi->getAddress();
+            $addresses[] = AddressHandleAssembler::toAddressHandleDTO($address);
         }
+
         return $addresses;
     }
 
@@ -75,4 +76,4 @@ class AddressLookupServiceLocalDoctrineMysql extends AddressLookupService {
     protected function getSingleAddressHandleDTO($lookupStr) {
         return null;
     }
-}
+} 

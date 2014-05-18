@@ -15,28 +15,26 @@ namespace Tixi\ApiBundle\Interfaces\Dispo;
 class DrivingOrderRegisterDTO {
 
     public $id;
+    public $anchorDate;
+    public $lookaheadaddressFrom;
+    public $lookaheadaddressTo;
 
-    public $passengerId;
-    public $passengerFirstName;
-    public $passengerLastName;
-    public $passengerAddressId;
-
-    public $pickupDate;
-    public $pickupTime;
-    public $memo;
-    public $companion;
-
-    public $addressFromId;
-    public $addressToId;
-
-    public $routeId;
-
-    public $zoneType;
-
-    public $withDrivingOrderBack;
-
-    public function __construct() {
-
-    }
-
+//    public $passengerId;
+//    public $passengerFirstName;
+//    public $passengerLastName;
+//    public $passengerAddressId;
+//
+//    public $pickupDate;
+//    public $pickupTime;
+//    public $memo;
+//    public $companion;
+//
+//    public $addressFromId;
+//    public $addressToId;
+//
+//    public $routeId;
+//
+//    public $zoneType;
+//
+//    public $withDrivingOrderBack;
 } 
