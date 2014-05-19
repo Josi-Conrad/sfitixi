@@ -65,6 +65,7 @@ fourthweek.name: 4. Woche
 lastweek.name: 5. Woche
 
 #DrivingOrder
+drivingorder.button.new: Neuer Fahrauftrag
 drivingorder.panel.new: Neuer Fahrauftrag für
 drivingorder.field.anchordate: Datum
 drivingorder.field.anchordatelong: Datum von
