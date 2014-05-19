@@ -79,7 +79,20 @@
 
 /* Driving Order */
 .routingInformationWrapper {
+    height: 60px;
+    font-weight: bold;
+}
+
+.repeatedEndDateWrapper {
     display: none;
+}
+
+.repeatedTimeWrapper {
+    display: none;
+}
+
+.repeatedTimeWrapper .repeatedTimeWidget {
+    font-weight: normal;
 }
 
 /* Top Action */

@@ -275,9 +275,9 @@ function AddressLookahead() {
         $(_this._inputField).val(model.getDisplayName());
         _this._updateAddressContainer(model);
         _this._hideAddressSelections();
-        setTimeout(function() {
-            $(_this._inputField).focus();
-        },300);
+//        setTimeout(function() {
+//            $(_this._inputField).focus();
+//        },300);
     }
 
     this._onUserHomeLinkClick = function(passengerId) {

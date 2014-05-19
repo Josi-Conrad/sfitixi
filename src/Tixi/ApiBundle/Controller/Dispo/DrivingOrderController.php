@@ -57,7 +57,7 @@ class DrivingOrderController extends Controller{
             return $this->redirect($this->generateUrl('tixiapi_passenger_get', array('passengerId'=>$passengerId)));
         }
 
-        $rootPanel = new RootPanel($this->menuId, 'drivingorder.panel.new');
+        $rootPanel = new RootPanel($this->menuId, 'drivingorder.panel.new',$passenger->getNameString());
         $rootPanel->add(new DrivingOrderTile($form, $passengerId, $this->generateUrl('tixiapp_service_routing')));
 
         return new Response($tileRenderer->render($rootPanel));

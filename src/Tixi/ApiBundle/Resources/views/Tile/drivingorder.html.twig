@@ -13,23 +13,33 @@
         <div class="col-md-6">
             <div class="row">
                 <div class="form-group">
-                    <div class="col-md-3">
+                    <div class="col-md-2 orderDateFromLabel">
                         {{ form_label(form.anchorDate, null, {'label_attr': {'style':'width:100%', 'class':'control-label' }}
                         ) }}
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-3">
                         {{ form_widget(form.anchorDate, { 'attr': {'class': 'form-control'} }) }}
                         <div class="error_message">{{ form_errors(form.anchorDate) }}</div>
+                    </div>
+                    <div class="repeatedEndDateWrapper">
+                        <div class="col-md-2">
+                            {{ form_label(form.endDate, null, {'label_attr': {'style':'width:100%', 'class':'control-label' }}
+                            ) }}
+                        </div>
+                        <div class="col-md-3">
+                            {{ form_widget(form.endDate, { 'attr': {'class': 'form-control'} }) }}
+                            <div class="error_message">{{ form_errors(form.anchorDate) }}</div>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="form-group">
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         {{ form_label(form.lookaheadaddressFrom, null, {'label_attr': {'style':'width:100%', 'class':'control-label' }}
                         ) }}
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-8">
                         {{ form_widget(form.lookaheadaddressFrom, { 'attr': {'class': 'form-control'} }) }}
                         <div class="error_message">{{ form_errors(form.lookaheadaddressFrom) }}</div>
                     </div>
@@ -37,18 +47,127 @@
             </div>
             <div class="row">
                 <div class="form-group">
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         {{ form_label(form.lookaheadaddressTo, null, {'label_attr': {'style':'width:100%', 'class':'control-label' }}
                         ) }}
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-8">
                         {{ form_widget(form.lookaheadaddressTo, { 'attr': {'class': 'form-control'} }) }}
                         <div class="error_message">{{ form_errors(form.lookaheadaddressTo) }}</div>
                     </div>
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-6 col-md-offset-3 routingInformationWrapper"></div>
+                <div class="col-md-8 col-md-offset-2 routingInformationWrapper"></div>
+            </div>
+            <div class="singleTimeWrapper">
+                <div class="row">
+                    <div class="form-group">
+                        <div class="col-md-10">
+                            {{ form_widget(form.orderTime) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <div class="col-md-2">
+                        {{ form_label(form.isRepeated, null, {'label_attr': {'style':'width:100%', 'class':'control-label' }}
+                        ) }}
+                    </div>
+                    <div class="col-md-2">
+                        {{ form_widget(form.isRepeated, { 'attr': {'class': 'form-control isRepeatedCheckbox'} }) }}
+                    </div>
+                </div>
+            </div>
+            <div class="repeatedTimeWrapper">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-2">
+                            {{ form_label(form.mondayOrderTime, null, {'label_attr': {'style':'width:100%', 'class':'control-label' }}
+                            ) }}
+                        </div>
+                        <div class="col-md-8">
+                            {{ form_widget(form.mondayOrderTime, { 'attr': {'class': 'form-control'} }) }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2">
+                            {{ form_label(form.tuesdayOrderTime, null, {'label_attr': {'style':'width:100%', 'class':'control-label' }}
+                            ) }}
+                        </div>
+                        <div class="col-md-8">
+                            {{ form_widget(form.tuesdayOrderTime, { 'attr': {'class': 'form-control'} }) }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2">
+                            {{ form_label(form.wednesdayOrderTime, null, {'label_attr': {'style':'width:100%', 'class':'control-label' }}
+                            ) }}
+                        </div>
+                        <div class="col-md-8">
+                            {{ form_widget(form.wednesdayOrderTime, { 'attr': {'class': 'form-control'} }) }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2">
+                            {{ form_label(form.thursdayOrderTime, null, {'label_attr': {'style':'width:100%', 'class':'control-label' }}
+                            ) }}
+                        </div>
+                        <div class="col-md-8">
+                            {{ form_widget(form.thursdayOrderTime, { 'attr': {'class': 'form-control'} }) }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2">
+                            {{ form_label(form.fridayOrderTime, null, {'label_attr': {'style':'width:100%', 'class':'control-label' }}
+                            ) }}
+                        </div>
+                        <div class="col-md-8">
+                            {{ form_widget(form.fridayOrderTime, { 'attr': {'class': 'form-control'} }) }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2">
+                            {{ form_label(form.saturdayOrderTime, null, {'label_attr': {'style':'width:100%', 'class':'control-label' }}
+                            ) }}
+                        </div>
+                        <div class="col-md-8">
+                            {{ form_widget(form.saturdayOrderTime, { 'attr': {'class': 'form-control'} }) }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2">
+                            {{ form_label(form.sundayOrderTime, null, {'label_attr': {'style':'width:100%', 'class':'control-label' }}
+                            ) }}
+                        </div>
+                        <div class="col-md-8">
+                            {{ form_widget(form.sundayOrderTime, { 'attr': {'class': 'form-control'} }) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <div class="col-md-2">
+                        {{ form_label(form.compagnion, null, {'label_attr': {'style':'width:100%', 'class':'control-label' }}
+                        ) }}
+                    </div>
+                    <div class="col-md-2">
+                        {{ form_widget(form.compagnion, { 'attr': {'class': 'form-control'} }) }}
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <div class="col-md-2">
+                        {{ form_label(form.memo, null, {'label_attr': {'style':'width:100%', 'class':'control-label' }}
+                        ) }}
+                    </div>
+                    <div class="col-md-8">
+                        {{ form_widget(form.memo, { 'attr': {'class': 'form-control'} }) }}
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -56,7 +175,11 @@
     <script type="text/javascript">
         jQuery(function ($) {
             var drivingOrderController = new DrivingOrder();
-            drivingOrderController.init('addressfrom','addressto','{{ passengerId }}','{{ routingMachineSrcUrl }}');
+            drivingOrderController.init('addressfrom','addressto','{{ passengerId }}','{{ routingMachineSrcUrl }}', {
+                'dateFromLabelSingleText':"{{ 'drivingorder.field.anchordate' | trans }}",
+                'dateFromLabelRepeatedText':"{{ 'drivingorder.field.anchordatelong' | trans }}"
+            });
+            new FormValidationController('{{ formId }}');
         });
     </script>
 </div>

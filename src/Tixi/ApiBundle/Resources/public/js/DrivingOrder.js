@@ -12,14 +12,25 @@ function DrivingOrder() {
     this._routingMachineSrcUrl = null;
     this._route = null;
 
+    this._isRepeatedCheckbox = null;
+
+    this._dateFromLabel = null;
+    this._repeatedEndDateWrapper = null;
+    this._singleTimeWrapper = null;
+    this._repeatedTimeWrapper = null;
+
     this._routingInformationWrapper = null;
 
-    this.init = function(lookaheadFromId, lookaheadToId, passengerId, routingMachineSrcUrl) {
+    this._trans = null;
+
+    this.init = function(lookaheadFromId, lookaheadToId, passengerId, routingMachineSrcUrl, trans) {
         _this._passengerId = passengerId;
         _this._routingMachineSrcUrl = routingMachineSrcUrl;
-        _this._initELements();
+        _this._trans = trans;
+        _this._initElements();
         _this._initListeners();
         _this._initLookaheadAddresses(lookaheadFromId, lookaheadToId);
+        _this._toggleState();
 
     }
 
@@ -32,14 +43,48 @@ function DrivingOrder() {
         _this._lookaheadAddressTo = _lookaheadTo;
     }
 
-    this._initELements = function() {
+    this._initElements = function() {
         var _wrapper = $('.drivingOrderWrapper'),
+            _isRepeatedCheckbox = _wrapper.find('.isRepeatedCheckbox'),
+            _dateFromLabel = _wrapper.find('.orderDateFromLabel').find('label'),
+            _repeatedEndDateWrapper = _wrapper.find('.repeatedEndDateWrapper'),
+            _singleTimeWrapper = _wrapper.find('.singleTimeWrapper'),
+            _repeatedTimeWrapper = _wrapper.find('.repeatedTimeWrapper'),
             _routingInformationWrapper = _wrapper.find('.routingInformationWrapper');
+        _this._isRepeatedCheckbox = _isRepeatedCheckbox;
+        _this._dateFromLabel = _dateFromLabel;
+        _this._repeatedEndDateWrapper = _repeatedEndDateWrapper;
+        _this._singleTimeWrapper = _singleTimeWrapper;
+        _this._repeatedTimeWrapper = _repeatedTimeWrapper;
         _this._routingInformationWrapper = _routingInformationWrapper;
     }
 
     this._initListeners = function() {
+        $(_this._isRepeatedCheckbox).on('change', _this._toggleState);
         $('body').on('addressChanged', _this._onAddressChanged);
+    }
+
+    this._toggleState = function() {
+        if($(_this._isRepeatedCheckbox).prop('checked')) {
+            _this._switchToRepeatedState();
+        }else {
+            _this._switchToSingleState();
+        }
+    }
+
+    this._switchToSingleState = function() {
+        $(_this._repeatedEndDateWrapper).hide();
+        $(_this._repeatedTimeWrapper).hide();
+        $(_this._singleTimeWrapper).show();
+        $(_this._dateFromLabel).text(_this._trans.dateFromLabelSingleText);
+
+    }
+
+    this._switchToRepeatedState = function() {
+        $(_this._singleTimeWrapper).hide();
+        $(_this._repeatedEndDateWrapper).show();
+        $(_this._repeatedTimeWrapper).show();
+        $(_this._dateFromLabel).text(_this._trans.dateFromLabelRepeatedText);
     }
 
     this._onAddressChanged = function() {
@@ -60,17 +105,11 @@ function DrivingOrder() {
 
     this._routeInformationUpdated = function(route) {
         $(_this._routingInformationWrapper).html(route.toString());
-        $(_this._routingInformationWrapper).show();
     }
 
     this._resetRouteInformation = function() {
         _this._route = null;
-        $(_this._routingInformationWrapper).hide();
     }
-
-
-
-
 }
 
 function Route(from, to) {
@@ -125,7 +164,7 @@ function Route(from, to) {
     this.toString = function() {
         var _toReturn = '';
 //        _toReturn += 'Zone: ';
-        _toReturn += 'Fahrtdauer: '+_this._convertSecToMin(_this._duration)+' min ';
+        _toReturn += 'Fahrtdauer: '+_this._convertSecToMin(_this._duration)+' min - ';
         _toReturn += 'Fahrdistanz: '+_this._distance+' m';
         return _toReturn;
     }

@@ -18,6 +18,20 @@ class DrivingOrderRegisterDTO {
     public $anchorDate;
     public $lookaheadaddressFrom;
     public $lookaheadaddressTo;
+    public $orderTime;
+    public $isRepeated;
+    public $compagnion;
+    public $memo;
+
+    //repeated part
+    public $endDate;
+    public $mondayOrderTime;
+    public $tuesdayOrderTime;
+    public $wednesdayOrderTime;
+    public $thursdayOrderTime;
+    public $fridayOrderTime;
+    public $saturdayOrderTime;
+    public $sundayOrderTime;
 
 //    public $passengerId;
 //    public $passengerFirstName;

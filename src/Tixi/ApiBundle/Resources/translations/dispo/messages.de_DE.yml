@@ -65,7 +65,15 @@ fourthweek.name: 4. Woche
 lastweek.name: 5. Woche
 
 #DrivingOrder
-drivingorder.panel.new: Neuer Fahrauftrag
+drivingorder.panel.new: Neuer Fahrauftrag für
 drivingorder.field.anchordate: Datum
+drivingorder.field.anchordatelong: Datum von
+drivingorder.field.enddate: Datum bis
 drivingorder.field.lookaheadaddressFrom: Von
 drivingorder.field.lookaheadaddressTo: Nach
+drivingorder.field.outwardTime: Hinfahrt
+drivingorder.field.returnTime: Rückfahrt
+drivingorder.field.isRepeated: Wiederkehrend
+drivingorder.field.compagnion: Anzahl Begleitpersonen
+drivingorder.field.memo: Bemerkungen
+

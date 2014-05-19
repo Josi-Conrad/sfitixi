@@ -11,7 +11,9 @@ namespace Tixi\ApiBundle\Form\Dispo;
 
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Validator\Constraints\Time;
 use Tixi\ApiBundle\Form\Shared\CommonAbstractType;
+use Tixi\ApiBundle\Form\Shared\DrivingOrderTime;
 
 /**
  * Class DrivingOrderType
@@ -27,6 +29,11 @@ class DrivingOrderType extends CommonAbstractType{
             'label' => 'drivingorder.field.anchordate'
         ));
 
+        $builder->add('endDate', 'datePicker', array(
+            'required' => false,
+            'label' => 'drivingorder.field.enddate'
+        ));
+
         $builder->add('lookaheadaddressFrom','addresslookahead', array(
             'label' => 'drivingorder.field.lookaheadaddressFrom',
             'lookahead_id' => 'addressfrom',
@@ -38,6 +45,56 @@ class DrivingOrderType extends CommonAbstractType{
             'lookahead_id' => 'addressto',
             'late_init' => true
         ));
+
+        $builder->add('orderTime', new DrivingOrderTime(), array(
+            'required' => false,
+        ));
+
+        $builder->add('isRepeated', 'checkbox', array(
+            'required' => false,
+            'label' => 'drivingorder.field.isRepeated'
+        ));
+
+        $builder->add('mondayOrderTime', new DrivingOrderTime(), array(
+            'required' => false,
+            'label' => 'monday.name'
+        ));
+        $builder->add('tuesdayOrderTime', new DrivingOrderTime(), array(
+            'required' => false,
+            'label' => 'tuesday.name'
+        ));
+        $builder->add('wednesdayOrderTime', new DrivingOrderTime(), array(
+            'required' => false,
+            'label' => 'wednesday.name'
+        ));
+        $builder->add('thursdayOrderTime', new DrivingOrderTime(), array(
+            'required' => false,
+            'label' => 'thursday.name'
+        ));
+        $builder->add('fridayOrderTime', new DrivingOrderTime(), array(
+            'required' => false,
+            'label' => 'friday.name'
+        ));
+        $builder->add('saturdayOrderTime', new DrivingOrderTime(), array(
+            'required' => false,
+            'label' => 'saturday.name'
+        ));
+        $builder->add('sundayOrderTime', new DrivingOrderTime(), array(
+            'required' => false,
+            'label' => 'sunday.name'
+        ));
+
+        $builder->add('compagnion', 'integer', array(
+            'required' => false,
+            'label' => 'drivingorder.field.compagnion'
+        ));
+
+        $builder->add('memo', 'textarea', array(
+            'required' => false,
+            'label' => 'drivingorder.field.memo'
+        ));
+
+
     }
 
     /**
