@@ -16,14 +16,14 @@
         <div class="error_message">{{ form_errors(form.anchorDate) }}</div>
         <div class="error_message">{{ form_errors(form.endDate) }}</div>
 
-        <div class="col-md-6">
+        <div class="col-md-5">
             <div class="row">
                 <div class="form-group">
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         {{ form_label(form.subject, null, {'label_attr': {'style':'width:100%', 'class':'control-label' }}
                         ) }}
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-8">
                         {{ form_widget(form.subject, { 'attr': {'class': 'form-control'} }) }}
                         <div class="error_message">{{ form_errors(form.subject) }}</div>
                     </div>
@@ -31,11 +31,11 @@
             </div>
             <div class="row">
                 <div class="form-group">
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         {{ form_label(form.memo, null, {'label_attr': {'style':'width:100%', 'class':'control-label' }}
                         ) }}
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-8">
                         {{ form_widget(form.memo, { 'attr': {'class': 'form-control'} }) }}
                         <div class="error_message">{{ form_errors(form.memo) }}</div>
                     </div>
@@ -43,41 +43,41 @@
             </div>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-3">
             <div class="row">
                 <div class="form-group">
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         {{ form_label(form.anchorDate, null, {'label_attr': {'style':'width:100%', 'class':'control-label' }}
                         ) }}
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-7">
                         {{ form_widget(form.anchorDate, { 'attr': {'class': 'form-control'} }) }}
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="form-group">
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         {{ form_label(form.endDate, null, {'label_attr': {'class':'control-label' }}) }}
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-7">
                         {{ form_widget(form.endDate, { 'attr': {'class': 'form-control'} }) }}
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="col-md-2">
+        <div class="col-md-4">
             <div class="row">
-                <div class="">
+                <div class="col-md-6">
                     {{ form_widget(form.frequency, { 'attr': {'class': 'form-control repeatedDrivingAssertionFrequencyControl'} }) }}
                 </div>
-            </div>
-            <div class="row">
-                <div class="checkbox">
-                    <label>
-                        {{ form_widget(form.withHolidays) }} {{ form_label(form.withHolidays) }}
-                    </label>
+                <div class="col-md-5">
+                    <div class="checkbox">
+                        <label>
+                            {{ form_widget(form.withHolidays) }} {{ form_label(form.withHolidays) }}
+                        </label>
+                    </div>
                 </div>
             </div>
         </div>
@@ -108,24 +108,28 @@
                 {#{{ form_row(form.weeklyDaysSelector) }}#}
             </div>
         </div>
-        <div class="col-md-8">
+        <div class="col-md-7 col-md-offset-1">
             <div class="row">
-                <div class="col-md-5">
-                    <h4 class="text-muted">{{ 'repeateddrivingmission.shiftselection.text' | trans }}</h4>
+                <div class="row">
+                    <div class="col-md-5">
+                        <h4 class="text-muted">{{ 'repeateddrivingmission.shiftselection.text' | trans }}</h4>
+                    </div>
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-12">
-                    <ul class="weeklyShiftSelections list-unstyled"
-                        data-prototype="{{ form_widget(form.weeklyShiftSelections.vars.prototype)|e }}">
-                        {% for selection in form.weeklyShiftSelections %}
-                            <li>
-                                {{ form_errors(selection) }}
-                                {{ form_widget(selection) }}
-                            </li>
-                        {% endfor %}
-                    </ul>
-                    {{ form_widget(form.weeklyShiftSelections) }}
+                <div class="row">
+                    <div class="col-md-12">
+                        <ul class="weeklyShiftSelections list-unstyled"
+                            data-prototype="{{ form_widget(form.weeklyShiftSelections.vars.prototype)|e }}">
+                            {% for selection in form.weeklyShiftSelections %}
+                                <li>
+                                    {{ form_errors(selection) }}
+                                    {{ form_widget(selection) }}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                        {{ form_widget(form.weeklyShiftSelections) }}
+                    </div>
                 </div>
             </div>
         </div>
@@ -165,21 +169,25 @@
         </div>
         <div class="col-md-7">
             <div class="row">
-                <div class="col-md-5">
-                    <h4 class="text-muted">{{ 'repeateddrivingmission.shiftselection.text' | trans }}</h4>
+                <div class="row">
+                    <div class="col-md-5">
+                        <h4 class="text-muted">{{ 'repeateddrivingmission.shiftselection.text' | trans }}</h4>
+                    </div>
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-12">
-                    <ul class="monthlyShiftSelections list-unstyled"
-                        data-prototype="{{ form_widget(form.monthlyShiftSelections.vars.prototype)|e }}">
-                        {% for selection in form.monthlyShiftSelections %}
-                            <li>
-                                {{ form_errors(selection) }}
-                                {{ form_widget(selection) }}
-                            </li>
-                        {% endfor %}
-                    </ul>
+                <div class="row">
+                    <div class="col-md-12">
+                        <ul class="monthlyShiftSelections list-unstyled"
+                            data-prototype="{{ form_widget(form.monthlyShiftSelections.vars.prototype)|e }}">
+                            {% for selection in form.monthlyShiftSelections %}
+                                <li>
+                                    {{ form_errors(selection) }}
+                                    {{ form_widget(selection) }}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
                 </div>
             </div>
             {{ form_widget(form.monthlyShiftSelections) }}
