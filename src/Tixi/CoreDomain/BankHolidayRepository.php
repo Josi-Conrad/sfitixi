@@ -8,6 +8,7 @@
 
 namespace Tixi\CoreDomain;
 
+use Tixi\CoreDomain\Dispo\WorkingDay;
 use Tixi\CoreDomain\Shared\CommonBaseRepository;
 
 /**
@@ -26,4 +27,10 @@ interface BankHolidayRepository extends CommonBaseRepository {
      * @return mixed
      */
     public function remove(BankHoliday $bankHoliday);
+
+    /**
+     * @param WorkingDay $workingDay
+     * @return bool
+     */
+    public function checkIfWorkingDayIsBankHoliday(WorkingDay $workingDay);
 } 

@@ -10,6 +10,8 @@ namespace Tixi\CoreDomain;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Tixi\CoreDomain\Dispo\DrivingPool;
+use Tixi\CoreDomain\Dispo\RepeatedDrivingAssertion;
 use Tixi\CoreDomain\Dispo\RepeatedDrivingAssertionPlan;
 use Tixi\CoreDomain\Dispo\Shift;
 
@@ -166,8 +168,35 @@ class Driver extends Person {
         $driver->removePerson();
     }
 
-    public function isAvailableOn(Shift $shift) {
-
+    /**
+     * @param Shift $shift
+     * @param bool $isBankHoliday
+     * @return mixed
+     */
+    public function isAvailableOn(Shift $shift, $isBankHoliday = false) {
+        //check absents, if match = driver is not available
+        foreach ($this->getAbsents() as $absent) {
+            if ($absent->matchDate($shift->getDate())) {
+                return false;
+            }
+        }
+        
+        $isAvailable = false;
+        foreach ($this->getRepeatedDrivingAssertionPlans() as $rDrivingAssertionPlan) {
+            foreach ($rDrivingAssertionPlan->getRepeatedDrivingAssertions() as $rDrivingAssertion) {
+                if ($rDrivingAssertion->matching($shift)) {
+                    if ($isBankHoliday) {
+                        //if it's a BankHoliday and Driver was willing to work on Holidays
+                        if ($rDrivingAssertionPlan->getWithHolidays()) {
+                            $isAvailable = true;
+                        }
+                    } else {
+                        $isAvailable = true;
+                    }
+                }
+            }
+        }
+        return $isAvailable;
     }
 
     /**
@@ -266,10 +295,17 @@ class Driver extends Person {
     }
 
     /**
-     * @return mixed
+     * @return RepeatedDrivingAssertionPlan[]
      */
     public function getRepeatedDrivingAssertionPlans() {
         return $this->repeatedDrivingAssertionPlans;
+    }
+
+    /**
+     * @return DrivingPool[]
+     */
+    public function getDrivingPools() {
+        return $this->drivingPools;
     }
 
     /**

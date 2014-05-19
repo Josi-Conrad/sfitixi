@@ -79,7 +79,7 @@ class ShiftTypeAssembler {
 
     /**
      * @param ShiftType $shiftType
-     * @return ShiftTypeEmbeddedListDTO
+     * @return ShiftTypeListDTO
      */
     public function shiftTypesToShiftTypeListDTO(ShiftType $shiftType) {
         $shiftTypeEmbeddedListDTO = new ShiftTypeListDTO();

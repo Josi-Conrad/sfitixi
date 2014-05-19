@@ -289,7 +289,7 @@ class Person extends CommonBaseEntity {
     }
 
     /**
-     * @return mixed
+     * @return Absent[]
      */
     public function getAbsents() {
         return $this->absents;

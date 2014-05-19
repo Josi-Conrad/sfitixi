@@ -13,6 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Tixi\App\Address\AddressManagement;
 use Tixi\App\AppBundle\Routing\RoutingMachineOSRM;
 use Tixi\App\Disposition\DispositionManagement;
+use Tixi\App\Disposition\WorkingMonthManagement;
 use Tixi\App\Routing\RouteManagement;
 use Tixi\App\ZonePlan\ZonePlanManagement;
 use Tixi\CoreDomain\POI;
@@ -156,16 +157,18 @@ class CommonBaseTest extends WebTestCase {
      * @var RouteManagement
      */
     protected $routeManagement;
-
     /**
      * @var AddressManagement
      */
     protected $addressManagement;
-
     /**
      * @var DispositionManagement
      */
     protected $dispoManagement;
+    /**
+     * @var WorkingMonthManagement
+     */
+    protected $workingMonthManagement;
 
     public function setUp() {
         $kernel = static::createKernel();
@@ -218,6 +221,7 @@ class CommonBaseTest extends WebTestCase {
         $this->routeManagement = $kernel->getContainer()->get('tixi_app.routemanagement');
         $this->addressManagement = $kernel->getContainer()->get('tixi_app.addressmanagement');
         $this->dispoManagement = $kernel->getContainer()->get('tixi_app.dispomanagement');
+        $this->workingMonthManagement = $kernel->getContainer()->get('tixi_app.workingmonthmanagement');
 
         $this->em->beginTransaction();
     }

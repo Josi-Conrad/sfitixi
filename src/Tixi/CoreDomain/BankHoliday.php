@@ -68,6 +68,7 @@ class BankHoliday extends CommonBaseEntity {
             $this->setDate($date);
         }
         $this->setMemo($memo);
+        $this->updateModifiedDate();
     }
 
 

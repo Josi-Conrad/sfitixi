@@ -80,6 +80,8 @@ class ServicePlan extends CommonBaseEntity {
         }
         $this->setSubject($subject);
         $this->setMemo($memo);
+
+        $this->updateModifiedDate();
     }
 
     /**
@@ -112,7 +114,7 @@ class ServicePlan extends CommonBaseEntity {
     }
 
     /**
-     * @return mixed
+     * @return \DateTime
      */
     public function getEnd() {
         return $this->end;

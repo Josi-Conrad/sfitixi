@@ -26,4 +26,6 @@ class DispositionVariables {
      * Arrive several minutes before the Pickup Order begins
      */
     const ARRIVAL_BEFORE_PICKUP = 5;
+
+
 }

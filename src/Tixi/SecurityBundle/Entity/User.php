@@ -80,6 +80,7 @@ class User extends CommonBaseEntity implements AdvancedUserInterface, \Serializa
         if (!empty($email)) {
             $this->setEmail($email);
         }
+        parent::updateModifiedDate();
     }
 
     public function deleteLogically() {

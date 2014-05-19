@@ -81,6 +81,7 @@ class ShiftType extends CommonBaseEntity {
             $this->setEnd($end);
         }
         $this->setMemo($memo);
+        parent::updateModifiedDate();
     }
 
     /**

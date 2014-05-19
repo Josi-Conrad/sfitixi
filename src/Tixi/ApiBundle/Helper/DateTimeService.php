@@ -26,6 +26,9 @@ class DateTimeService extends ContainerAware {
         return new \DateTime('2999-01-01');
     }
 
+    public static function isInTimeRange($datetime1, $datetime2, $compareTime){
+
+    }
     /**
      * @param \DateTime $dateTime
      * @return float

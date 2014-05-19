@@ -60,6 +60,7 @@ class Insurance extends CommonBaseEntity {
             $this->setName($name);
         }
         $this->setMemo($memo);
+        $this->updateModifiedDate();
     }
 
     /**

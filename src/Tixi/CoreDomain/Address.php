@@ -146,6 +146,7 @@ class Address extends CommonBaseEntity {
         $this->setLat($lat);
         $this->setLng($lng);
         $this->setSource($source);
+        $this->updateModifiedDate();
     }
 
     public static function removeAddress(Address $address) {

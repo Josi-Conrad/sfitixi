@@ -17,13 +17,12 @@ use Tixi\CoreDomain\VehicleRepository;
  * Class VehicleRepositoryDoctrine
  * @package Tixi\CoreDomainBundle\Repository
  */
-class VehicleRepositoryDoctrine extends CommonBaseRepositoryDoctrine implements VehicleRepository{
+class VehicleRepositoryDoctrine extends CommonBaseRepositoryDoctrine implements VehicleRepository {
     /**
      * @param Vehicle $vehicle
      * @return mixed|void
      */
-    public function store(Vehicle $vehicle)
-    {
+    public function store(Vehicle $vehicle) {
         $this->getEntityManager()->persist($vehicle);
     }
 
@@ -31,8 +30,7 @@ class VehicleRepositoryDoctrine extends CommonBaseRepositoryDoctrine implements 
      * @param Vehicle $vehicle
      * @return mixed|void
      */
-    public function remove(Vehicle $vehicle)
-    {
+    public function remove(Vehicle $vehicle) {
         $this->getEntityManager()->remove($vehicle);
     }
 
@@ -40,8 +38,7 @@ class VehicleRepositoryDoctrine extends CommonBaseRepositoryDoctrine implements 
      * @param VehicleCategory $category
      * @return mixed
      */
-    public function getAmountByVehicleCategory(VehicleCategory $category)
-    {
+    public function getAmountByVehicleCategory(VehicleCategory $category) {
         $qb = parent::createQueryBuilder('e')->select('count(e.id)');
         $qb->add('where', 'e.category = :category');
         $qb->setParameter('category', $category);
@@ -52,11 +49,20 @@ class VehicleRepositoryDoctrine extends CommonBaseRepositoryDoctrine implements 
      * @param VehicleDepot $depot
      * @return mixed
      */
-    public function getAmountByVehicleDepot(VehicleDepot $depot)
-    {
+    public function getAmountByVehicleDepot(VehicleDepot $depot) {
         $qb = parent::createQueryBuilder('e')->select('count(e.id)');
         $qb->add('where', 'e.depot = :depot');
         $qb->setParameter('depot', $depot);
         return $qb->getQuery()->getSingleScalarResult();
+    }
+
+    /**
+     * @return Vehicle[]
+     */
+    public function findAllNotDeleted(){
+        $qb = parent::createQueryBuilder('s');
+        $qb->select()
+            ->where('s.isDeleted = 0');
+        return $qb->getQuery()->getResult();
     }
 }

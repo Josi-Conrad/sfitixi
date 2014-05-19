@@ -60,6 +60,7 @@ class Handicap extends CommonBaseEntity{
             $this->setName($name);
         }
         $this->setMemo($memo);
+        $this->updateModifiedDate();
     }
 
     /**
