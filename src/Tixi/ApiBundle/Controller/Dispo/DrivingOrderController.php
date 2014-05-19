@@ -31,6 +31,7 @@ use Tixi\CoreDomain\Passenger;
 class DrivingOrderController extends Controller{
 
     protected $menuId;
+    protected $routingMachineSrcUrl;
 
     public function __construct() {
         $this->menuId = MenuService::$menuPassengerDrivingOrderId;
@@ -53,11 +54,11 @@ class DrivingOrderController extends Controller{
             $registerDto = $form->getData();
             $this->registerOrUpdateDrivingOrder($registerDto, $passenger);
             $this->get('entity_manager')->flush();
-            return $this->redirect($this->generateUrl('tixiapi_passenger_get', array('passengerId'=>$passengerIds)));
+            return $this->redirect($this->generateUrl('tixiapi_passenger_get', array('passengerId'=>$passengerId)));
         }
 
         $rootPanel = new RootPanel($this->menuId, 'drivingorder.panel.new');
-        $rootPanel->add(new DrivingOrderTile($form, $passengerId));
+        $rootPanel->add(new DrivingOrderTile($form, $passengerId, $this->generateUrl('tixiapp_service_routing')));
 
         return new Response($tileRenderer->render($rootPanel));
     }

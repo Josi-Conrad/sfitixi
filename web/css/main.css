@@ -57,7 +57,8 @@
     position: absolute;
     display: none;
     padding-top: 7px;
-    left: -30px;
+    left: -35px;
+    cursor: pointer;
 }
 
 .addressSelectionsWrapper {
@@ -74,6 +75,11 @@
 
 .lookaheadSelection:hover {
     color: #428bca;
+}
+
+/* Driving Order */
+.routingInformationWrapper {
+    display: none;
 }
 
 /* Top Action */
