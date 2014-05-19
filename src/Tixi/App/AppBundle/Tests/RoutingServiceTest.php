@@ -10,7 +10,6 @@ namespace Tixi\App\AppBundle\Tests;
 
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Tixi\App\AppBundle\Controller\AddressManagementImplDoctrine;
 use Tixi\App\AppBundle\Routing\RoutingMachineOSRM;
 use Tixi\App\Routing\RouteManagement;
 use Tixi\CoreDomain\Address;

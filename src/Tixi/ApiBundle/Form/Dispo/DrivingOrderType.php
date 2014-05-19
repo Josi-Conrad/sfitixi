@@ -28,16 +28,17 @@ class DrivingOrderType extends CommonAbstractType{
         ));
 
         $builder->add('lookaheadaddressFrom','addresslookahead', array(
-                'label' => 'drivingorder.field.lookaheadaddressFrom',
-                'lookahead_id' => 'addressfrom'
+            'label' => 'drivingorder.field.lookaheadaddressFrom',
+            'lookahead_id' => 'addressfrom',
+            'late_init' => true
         ));
 
         $builder->add('lookaheadaddressTo','addresslookahead', array(
-                'label' => 'drivingorder.field.lookaheadaddressTo',
-                'lookahead_id' => 'addressto'
+            'label' => 'drivingorder.field.lookaheadaddressTo',
+            'lookahead_id' => 'addressto',
+            'late_init' => true
         ));
     }
-
 
     /**
      * @param OptionsResolverInterface $resolver

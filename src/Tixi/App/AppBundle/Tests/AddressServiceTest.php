@@ -10,7 +10,6 @@ namespace Tixi\App\AppBundle\Tests;
 
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Tixi\App\AppBundle\Controller\AddressManagementImplDoctrine;
 use Tixi\CoreDomain\Address;
 use Tixi\CoreDomainBundle\Tests\CommonBaseTest;
 

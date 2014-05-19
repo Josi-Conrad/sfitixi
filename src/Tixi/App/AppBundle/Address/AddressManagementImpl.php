@@ -11,6 +11,7 @@ namespace Tixi\App\AppBundle\Address;
 
 use Symfony\Component\DependencyInjection\ContainerAware;
 use Tixi\App\Address\AddressManagement;
+use Tixi\App\AppBundle\Interfaces\AddressHandleAssembler;
 use Tixi\App\AppBundle\Interfaces\AddressHandleDTO;
 use Tixi\CoreDomain\Address;
 use Tixi\CoreDomainBundle\Repository\AddressRepositoryDoctrine;
@@ -38,6 +39,25 @@ class AddressManagementImpl extends ContainerAware implements AddressManagement 
             }
         }
         return $addressSuggestions;
+    }
+
+
+    /**
+     * Get array of AddressHandleDTOs with size of one containing the users home address associated with the given
+     * user id
+     *
+     * @param $passengerId
+     * @return mixed
+     */
+    public function getAddressHandleByPassengerId($passengerId)
+    {
+        $handleDtos = array();
+        $passengerRepository = $this->container->get('passenger_repository');
+        $passenger = $passengerRepository->find($passengerId);
+        if($passenger) {
+            $handleDtos[] = AddressHandleAssembler::toAddressHandleDTO($passenger->getAddress());
+        }
+        return $handleDtos;
     }
 
     /**

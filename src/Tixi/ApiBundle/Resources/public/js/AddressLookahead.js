@@ -4,6 +4,9 @@ function AddressLookahead() {
     this.MANUALADDSTATE = 1;
     this.LOOKAHEADSTATE = 2;
 
+    this.SEARCHREQUESTSTATE = 'search_state';
+    this.USERADDRESSREQUESTSTATE = 'user_state';
+
     this._state = null;
 
     this._wrapper = null;
@@ -27,13 +30,15 @@ function AddressLookahead() {
     this._saveManualAddLink = null;
     this._editManuallyLink = null;
 
-    this.init = function(lookaheadId) {
+    this.init = function(lookaheadId, passengerId) {
         _this._initElements(lookaheadId);
         _this._initDataSrcUrl();
         _this._initListeners();
+        _this._initPassengerHomeAddressLink(passengerId);
         _this._initGoogleMapWrapper();
         _this._initSelectedAddress();
         _this._switchToLookaheadState();
+
     }
 
     this._initElements = function(lookaheadId) {
@@ -75,6 +80,18 @@ function AddressLookahead() {
         $(_this._cancelManualAddLink).on('click', _this._onCancelManualAddClicked);
         $(_this._saveManualAddLink).on('click', _this._onSaveManualAddClicked);
         $(_this._editManuallyLink).on('click', _this._onEditManuallyClicked);
+    }
+
+    this._initPassengerHomeAddressLink = function(passengerId) {
+        var _passengerId = (undefined !== passengerId) ? passengerId : null,
+            _userHomeLink;
+        if(_passengerId !== null) {
+            _userHomeLink = $(_this._wrapper).find('.userHomeLinkWrapper');
+            $(_userHomeLink).on('click', function() {
+                _this._onUserHomeLinkClick(passengerId);
+            });
+            $(_userHomeLink).show();
+        }
     }
 
     this._initGoogleMapWrapper = function(mapCanvasId) {
@@ -127,7 +144,7 @@ function AddressLookahead() {
         var _model,
             _domSelectionDisplay;
         if($(_this._inputField).val().length>0) {
-            _this._pollDataFromSource(_this._constructParams()).done(function(data) {
+            _this._pollDataFromSource(_this._constructParamsForSearch()).done(function(data) {
                 _this._resetLookahead();
                 $.each(data.models, function(index, jsonModel) {
                     _model = new Address(jsonModel, index);
@@ -144,9 +161,29 @@ function AddressLookahead() {
         }
     }
 
-    this._constructParams = function() {
+    this._updateAddressWithUserHomeAddress = function(passengerId) {
+        var _model;
+        _this._pollDataFromSource(_this._constructParamsForUserHomeAddress(passengerId)).done(function(data) {
+            if(data.models[0]) {
+                _model = new Address(data.models[0], 0);
+                _this._onAddressSelectionClick(_model);
+            }
+        }).fail(function() {
+            //ToDo Exception handling
+        });
+    }
+
+    this._constructParamsForSearch = function() {
         var _jsonToReturn = {};
+        _jsonToReturn['requeststate'] = _this.SEARCHREQUESTSTATE;
         _jsonToReturn['searchstr'] = $(_this._inputField).val();
+        return _jsonToReturn;
+    }
+
+    this._constructParamsForUserHomeAddress = function(passengerId) {
+        var _jsonToReturn = {};
+        _jsonToReturn['requeststate'] = _this.USERADDRESSREQUESTSTATE;
+        _jsonToReturn['passengerid'] = passengerId;
         return _jsonToReturn;
     }
 
@@ -159,7 +196,6 @@ function AddressLookahead() {
     }
 
     this._updateAddressContainer = function(model) {
-        console.log('container updated')
         for(var _field in model.fields) {
             _this._setAddressFieldValue(_field, model.fields[_field]);
         }
@@ -169,7 +205,6 @@ function AddressLookahead() {
         var _dummyAddress = new Address();
         _this._selectedAddress = null;
         for(var _field in _dummyAddress.fields) {
-            console.log(_field)
             _this._setAddressFieldValue(_field, '');
         }
     }
@@ -232,6 +267,10 @@ function AddressLookahead() {
         setTimeout(function() {
             $(_this._inputField).focus();
         },300);
+    }
+
+    this._onUserHomeLinkClick = function(passengerId) {
+        _this._updateAddressWithUserHomeAddress(passengerId);
     }
 
     this._onEditManuallyClicked = function(event) {
@@ -307,9 +346,7 @@ function AddressLookahead() {
     this._resetLookahead = function() {
         $(_this._addressSelectionsContainer).empty();
     }
-
 }
-
 
 function Address(address, index) {
     var _this = this;
@@ -328,7 +365,6 @@ function Address(address, index) {
     };
 
     _this.getDisplayName = function() {
-        console.log(_this.fields.displayName)
         return _this.fields.displayName ? _this.fields.displayName :  _this._constructAlternativeDisplayName();
     }
 

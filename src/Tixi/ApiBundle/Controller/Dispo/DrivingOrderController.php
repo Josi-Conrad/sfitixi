@@ -57,7 +57,7 @@ class DrivingOrderController extends Controller{
         }
 
         $rootPanel = new RootPanel($this->menuId, 'drivingorder.panel.new');
-        $rootPanel->add(new DrivingOrderTile($form));
+        $rootPanel->add(new DrivingOrderTile($form, $passengerId));
 
         return new Response($tileRenderer->render($rootPanel));
     }

@@ -34,7 +34,8 @@ abstract class AbstractLookaheadType extends AbstractType implements ContainerAw
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver) {
         $resolver->setDefaults(array(
-            'lookahead_id' => 'lookahead'
+            'lookahead_id' => 'lookahead',
+            'late_init' => false
         ));
     }
 
@@ -46,6 +47,7 @@ abstract class AbstractLookaheadType extends AbstractType implements ContainerAw
     {
         $view->vars['dataSrc'] = $this->getDataSrc();
         $view->vars['lookaheadId'] = $options['lookahead_id'];
+        $view->vars['lateInit'] = $options['late_init'];
         parent::buildView($view, $form, $options);
 
     }

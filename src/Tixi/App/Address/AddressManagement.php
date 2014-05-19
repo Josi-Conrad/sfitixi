@@ -26,6 +26,15 @@ interface AddressManagement {
     public function getAddressSuggestionsByString($addressString);
 
     /**
+     * Get array of AddressHandleDTOs with size of one containing the users home address associated with the given
+     * user id
+     *
+     * @param $passengerId
+     * @return mixed
+     */
+    public function getAddressHandleByPassengerId($passengerId);
+
+    /**
      * Will query  AddressString on a lookup service like google and takes first best suggestion given.
      * Addresstring should be valid for exact queries. Returns Suggestion as an AddressHandleDTO
      *

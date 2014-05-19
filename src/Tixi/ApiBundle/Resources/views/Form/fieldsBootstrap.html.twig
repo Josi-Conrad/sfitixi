@@ -17,8 +17,8 @@
 
 {% block addresslookahead_widget %}
     {% set lookaheadId = 'lookahead_' ~ form.vars.lookaheadId %}
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key={{ form.vars.googleMapsApiKey }}&sensor=false"></script>
     <script src="{{ asset('bundles/tixiapi/js/GoogleMapWrapper.js') }}"></script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key={{ form.vars.googleMapsApiKey }}&sensor=false"></script>
     <div class="col-md-12">
         <div class="{{ lookaheadId }}" data-datasrc="{{ form.vars.dataSrc }}">
             <div class="googleMapCanvasWrapper">
@@ -37,6 +37,9 @@
                 </div>
             </div>
             <div class="lookaheadWrapper">
+                <div class="userHomeLinkWrapper">
+                    <span class="glyphicon glyphicon-user"></span>
+                </div>
                 <div class="row">
                     {{ form_widget(form.addressDisplayName, { 'attr': {'class': 'lookaheadInput','autocomplete' : 'off'} }) }}
                     <a href="#" class="editManually">Adresse manuell editieren</a>
@@ -56,8 +59,10 @@
         </div>
         <script type="text/javascript">
             jQuery(function ($) {
-                var lookahead = new AddressLookahead();
-                lookahead.init('{{ lookaheadId }}', 'addressHandles', Address.prototype, 'googleMapCanvas');
+                {% if not form.vars.lateInit %}
+                    var lookahead = new AddressLookahead();
+                    lookahead.init('{{ lookaheadId }}');
+                {% endif %}
             });
         </script>
     </div>

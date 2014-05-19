@@ -53,6 +53,17 @@
     display: none;
 }
 
+.lookaheadWrapper .userHomeLinkWrapper {
+    position: absolute;
+    display: none;
+    padding-top: 7px;
+    left: -30px;
+}
+
+.addressSelectionsWrapper {
+    display: none;
+}
+
 .addressContainerWrapper {
     display: none;
 }

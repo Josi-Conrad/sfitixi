@@ -30,10 +30,18 @@ class AddressManagementController extends Controller{
         /** @var AddressManagementImpl $addressManager */
         $addressManager = $this->get('tixi_app.addressmanagement');
 
-        $searchStr = $request->get('searchstr');
-        $addresses = $addressManager->getAddressSuggestionsByString($searchStr);
-
+        $requestState = $request->get('requeststate');
         $response = new JsonResponse();
+        $addresses = null;
+        if($requestState === 'search_state') {
+            $searchStr = $request->get('searchstr');
+            $addresses = $addressManager->getAddressSuggestionsByString($searchStr);
+        }elseif($requestState === 'user_state') {
+            $passengerId = $request->get('passengerid');
+            $addresses = $addressManager->getAddressHandleByPassengerId($passengerId);
+        }else {
+            //ToDo throw proper exception (invalid request)
+        }
         $response->setData(array('models'=>$addresses));
         return $response;
     }
