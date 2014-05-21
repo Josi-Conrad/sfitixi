@@ -179,13 +179,13 @@ class Address extends CommonBaseEntity {
         $addressName = (null !== $this->getName()) ? $this->getName() : $this->constructAlternativeName();
         $poiSuffix = '';
         //if there are pois, we take the concatinated poi name
-        foreach($this->pois as $key=>$poi) {
-            if($key>0) {
-                $poiSuffix.' ';
+        foreach ($this->pois as $key => $poi) {
+            if ($key > 0) {
+                $poiSuffix . ' ';
             }
-            $poiSuffix.= $poi->getName();
+            $poiSuffix .= $poi->getName();
         }
-        return ('' !== $poiSuffix) ? $addressName.' ('.$poiSuffix.')' : $addressName;
+        return ('' !== $poiSuffix) ? $addressName . ' (' . $poiSuffix . ')' : $addressName;
     }
 
     /**
@@ -390,5 +390,13 @@ class Address extends CommonBaseEntity {
      */
     public function gotNearestCoordinates() {
         return (!empty($this->getNearestLat()) && !empty($this->getNearestLng()));
+    }
+
+    /**
+     * gets a fast CRC32 Hash from lat and lng, to put address in a hashmap
+     * @return string
+     */
+    public function getHashFromBigIntCoordinates() {
+        return hash('md2', $this->lat + $this->lng);
     }
 }

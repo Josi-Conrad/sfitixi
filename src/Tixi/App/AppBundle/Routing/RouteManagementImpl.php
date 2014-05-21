@@ -11,8 +11,8 @@ namespace Tixi\App\AppBundle\Routing;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
-use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\DependencyInjection\ContainerAware;
+use Tixi\App\AppBundle\Disposition\RideNode;
 use Tixi\App\Routing\RouteManagement;
 use Tixi\CoreDomain\Address;
 use Tixi\CoreDomain\Dispo\Route;
@@ -66,9 +66,37 @@ class RouteManagementImpl extends ContainerAware implements RouteManagement {
             $routeRepo->store($route);
             $em->flush();
             return $route;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return null;
         }
     }
 
+    /**
+     * Test 21.05.2014: its faster if we get all routes threw routingMachine
+     * then checking first if we got a database entry...
+     *
+     * @param RideNode[] $rideNodes
+     * @return RideNode[]
+     */
+    public function fillRoutesForMultipleRideNodes($rideNodes) {
+        /**@var $routingMachine \Tixi\App\Routing\RoutingMachine */
+        $routingMachine = $this->container->get('tixi_app.routingmachine');
+
+        $routesToQuery = array();
+        /** @var $rideNode RideNode */
+        foreach ($rideNodes as $hashKey => $rideNode) {
+            $routesToQuery[$hashKey] = Route::registerRoute($rideNode->startAddress, $rideNode->targetAddress);
+        }
+        try {
+            $filledRoutings = $routingMachine->fillRoutingInformationsForMultipleRoutes($routesToQuery);
+
+            foreach ($filledRoutings as $hashKey => $route) {
+                $rideNodes[$hashKey]->duration = $route->getDurationInMinutes();
+                $rideNodes[$hashKey]->distance = $route->getDistanceInMeters();
+            }
+        } catch (\Exception $e) {
+
+        }
+        return $rideNodes;
+    }
 }

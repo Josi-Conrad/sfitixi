@@ -10,6 +10,7 @@ namespace Tixi\CoreDomain\Dispo;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Tixi\CoreDomain\Address;
 use Tixi\CoreDomain\Shared\CommonBaseEntity;
 
 /**
@@ -49,12 +50,6 @@ class Route extends CommonBaseEntity {
      * @ORM\Column(type="integer")
      */
     protected $distance;
-    /**
-     * additional time taken for this route
-     * This is a special case, if routing time is manually corrected by user
-     * @ORM\Column(type="integer")
-     */
-    protected $additionalTime;
 
     public function __construct() {
         parent::__construct();
@@ -65,16 +60,14 @@ class Route extends CommonBaseEntity {
      * @param $targetAddress
      * @param int|null $duration
      * @param int|null $distance
-     * @param int $additionalTime
      * @return Route
      */
-    public static function registerRoute($startAddress, $targetAddress, $duration = 0, $distance = 0, $additionalTime = 0) {
+    public static function registerRoute($startAddress, $targetAddress, $duration = 0, $distance = 0) {
         $route = new Route();
         $route->setStartAddress($startAddress);
         $route->setTargetAddress($targetAddress);
         $route->setDuration($duration);
         $route->setDistance($distance);
-        $route->setAdditionalTime($additionalTime);
         return $route;
     }
 
@@ -162,7 +155,7 @@ class Route extends CommonBaseEntity {
     }
 
     /**
-     * @return mixed
+     * @return Address
      */
     public function getStartAddress() {
         return $this->startAddress;
@@ -176,23 +169,9 @@ class Route extends CommonBaseEntity {
     }
 
     /**
-     * @return mixed
+     * @return Address
      */
     public function getTargetAddress() {
         return $this->targetAddress;
-    }
-
-    /**
-     * @param mixed $additionalTime
-     */
-    public function setAdditionalTime($additionalTime) {
-        $this->additionalTime = $additionalTime;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getAdditionalTime() {
-        return $this->additionalTime;
     }
 }

@@ -96,10 +96,9 @@ class DrivingMission {
         $drivingMission = new DrivingMission();
         $drivingMission->setDirection(self::SAME_START);
 
-        $boardingTime = DispositionVariables::BOARDING_TIME + DispositionVariables::DEBOARDING_TIME;
+        $boardingTime = DispositionVariables::getBoardingTimes();
         $extraMinutesPassenger = $drivingOrder->getPassenger()->getExtraMinutes();
-        $additionRouteTime = $drivingOrder->getRoute()->getAdditionalTime();
-        $additionalTimesOnRide = $boardingTime + $extraMinutesPassenger + $additionRouteTime;
+        $additionalTimesOnRide = $boardingTime + $extraMinutesPassenger;
 
         $serviceMinuteOfDay = DateTimeService::getMinutesOfDay($drivingOrder->getPickUpTime());
         $serviceDuration = $drivingOrder->getRoute()->getDurationInMinutes() + $additionalTimesOnRide;

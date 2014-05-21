@@ -99,6 +99,13 @@ class RepeatedDrivingAssertionPlan extends CommonBaseEntity {
     }
 
     /**
+     * @param RepeatedDrivingAssertion $repeatedDrivingAssertion
+     */
+    public function assignRepeatedDrivingAssertion(RepeatedDrivingAssertion $repeatedDrivingAssertion) {
+        $this->getRepeatedDrivingAssertions()->add($repeatedDrivingAssertion);
+    }
+
+    /**
      * @param Driver $driver
      */
     public function assignDriver(Driver $driver) {
@@ -173,7 +180,7 @@ class RepeatedDrivingAssertionPlan extends CommonBaseEntity {
     }
 
     /**
-     * @return RepeatedDrivingAssertion[]
+     * @return ArrayCollection
      */
     public function getRepeatedDrivingAssertions() {
         return $this->repeatedDrivingAssertions;

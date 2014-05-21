@@ -28,4 +28,12 @@ class DispositionVariables {
     const ARRIVAL_BEFORE_PICKUP = 5;
 
 
+    /**
+     * returns all additional times for passenger boarding, deboarding etc.
+     * @return int
+     */
+    public static function getBoardingTimes(){
+        return self::BOARDING_TIME + self::DEBOARDING_TIME;
+    }
+
 }

@@ -11,6 +11,12 @@ namespace Tixi\App\Routing;
 
 use Tixi\CoreDomain\Address;
 
+/**
+ * Services for Route Management. If only RoutingInformation is needed, use routingMachine
+ *
+ * Interface RouteManagement
+ * @package Tixi\App\Routing
+ */
 interface RouteManagement {
 
     /**
@@ -19,5 +25,11 @@ interface RouteManagement {
      * @return mixed
      */
     public function getRouteFromAddresses(Address $from, Address $to);
+
+    /**
+     * @param $rideNodes
+     * @return mixed
+     */
+    public function fillRoutesForMultipleRideNodes($rideNodes);
 
 }

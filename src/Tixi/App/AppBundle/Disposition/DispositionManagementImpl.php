@@ -21,71 +21,56 @@ use Tixi\CoreDomain\Dispo\ShiftRepository;
 
 class DispositionManagementImpl extends ContainerAware implements DispositionManagement {
     /**
-     * checks if a drivingOrder is possible
-     * @param \Tixi\CoreDomain\Dispo\DrivingOrder $drivingOrder
+     * Shift informations of start/end minutes
+     * @var
+     */
+    protected $shiftStart;
+    protected $shiftEnd;
+
+    /**
+     * @param \DateTime $day
+     * @param \DateTime $time
+     * @param $direction
+     * @param $duration
+     * @param $additionalTime
      * @return mixed
      */
-    public function checkFeasibility(DrivingOrder $drivingOrder) {
-        //TODO: Change to controller and check feasibility only with pickupTime, duration and passengerID
-        $day = $drivingOrder->getPickUpDate();
-        $shift = $this->getResponsibleShiftForOrder($drivingOrder);
+    public function checkFeasibility(\DateTime $day, \DateTime $time, $direction, $duration, $additionalTime) {
+        //TODO: create controller and check feasibility only with pickupTime, duration and passengerID + additionalTime
+        $feasibleNode = RideNode::registerFeasibleRide($time, $direction, $duration, $additionalTime);
+
+        $shift = $this->getResponsibleShiftForDayAndTime($day, $time);
+
         if ($shift === null) {
+            echo "No Shift found for node time\n";
             return false;
         }
+
         $vehicles = $this->getAvailableVehiclesForDay($day);
         $drivingPools = $shift->getDrivingPools()->toArray();
-
-        $missionNodes = array();
         $drivingMissions = $this->getDrivingMissionsInShift($shift);
-        foreach ($drivingMissions as $drivingMission) {
-            /**
-             * if DrivingMission got no elements in ServiceOrder => singleOrder
-             * if it got elements in it => multiOrder
-             */
-            if (empty($drivingMission->getServiceOrder())) {
-                /**@var $order DrivingOrder */
-                $order = $drivingMission->getDrivingOrders()->first();
-                $startAddress = $order->getRoute()->getStartAddress();
-                $targetAddress = $order->getRoute()->getTargetAddress();
-            } else {
-                $sort = $drivingMission->getServiceOrder();
-                $first = reset($sort);
-                $last = count($sort);
 
-                /**@var $sOrder DrivingOrder */
-                $fOrder = $drivingMission->getDrivingOrders()->get($sort[$first]);
-                /**@var $tOrder DrivingOrder */
-                $lOrder = $drivingMission->getDrivingOrders()->get($sort[$last]);
-
-                if ($drivingMission->getDirection() === DrivingMission::SAME_START) {
-                    $startAddress = $fOrder->getRoute()->getStartAddress();
-                    $targetAddress = $lOrder->getRoute()->getTargetAddress();
-                } else {
-                    $startAddress = $fOrder->getRoute()->getStartAddress();
-                    $targetAddress = $fOrder->getRoute()->getTargetAddress();
-                }
-            }
-
-            $missionNode = RideNode::registerPassengerRide($drivingMission, $startAddress, $targetAddress);
-            array_push($missionNodes, $missionNode);
-        }
-
-        //TODO: get vehicles/pools, compare, create configurationSet
-        //array with RaidConfiguration[]
-        //RaidConfiguration got array[][] with vehicles and orders per shift
-
-//        $tempMission = DrivingMission::registerDrivingMissionFromOrder($drivingOrder);
-//        $checkingNode = RideNode::registerPassengerRide(
-//            $tempMission, $drivingOrder->getRoute()->getStartAddress(), $drivingOrder->getRoute()->getTargetAddress());
+        echo "\nMissions for Shift: " . count($drivingMissions) . "\n   ";
 
         /**
          * feasibility checks only time windows in a possible configuration
          */
-        $rideConfig = new RideConfiguration($missionNodes, $drivingPools, RideConfiguration::ONLY_TIME_WINDOWS);
+        $rideConfig = new RideConfiguration($drivingMissions, $drivingPools, $vehicles, RideConfiguration::ONLY_TIME_WINDOWS);
+        $rideConfig->addAdditionalRideNode($feasibleNode);
         $rideConfig->buildConfiguration();
-        $emptyRide = $rideConfig->getAllPossibleEmptyRides();
 
-        echo "\n";
+        $rideConfigurationArray = $rideConfig->getRideConfigurationArray();
+        echo "Shift:" . $this->shiftStart . " - " . $this->shiftEnd . "\n";
+        foreach ($rideConfigurationArray as $poolId => $poolNodes) {
+            echo $poolId . "\t|";
+            /**@var $node RideNode */
+            foreach ($poolNodes as $node) {
+                echo "(" . $node->startMinute . "-" . $node->endMinute . ")\t";
+            }
+            echo "\n";
+        }
+
+        return !$rideConfig->gotNotFeasibleNodes();
     }
 
     /**
@@ -100,45 +85,6 @@ class DispositionManagementImpl extends ContainerAware implements DispositionMan
         $drivingPools = $shift->getDrivingPools()->toArray();
         $drivingMissions = $this->getDrivingMissionsInShift($shift);
 
-        $missionNodes = array();
-        foreach ($drivingMissions as $drivingMission) {
-            /**
-             * if DrivingMission got no elements in ServiceOrder => singleOrder
-             * if it got elements in it => multiOrder
-             */
-            if (empty($drivingMission->getServiceOrder())) {
-                /**@var $order DrivingOrder */
-                $order = $drivingMission->getDrivingOrders()->first();
-                $startAddress = $order->getRoute()->getStartAddress();
-                $targetAddress = $order->getRoute()->getTargetAddress();
-            } else {
-                $sort = $drivingMission->getServiceOrder();
-                $first = reset($sort);
-                $last = count($sort);
-
-                /**@var $sOrder DrivingOrder */
-                $fOrder = $drivingMission->getDrivingOrders()->get($sort[$first]);
-                /**@var $tOrder DrivingOrder */
-                $lOrder = $drivingMission->getDrivingOrders()->get($sort[$last]);
-
-                if ($drivingMission->getDirection() === DrivingMission::SAME_START) {
-                    $startAddress = $fOrder->getRoute()->getStartAddress();
-                    $targetAddress = $lOrder->getRoute()->getTargetAddress();
-                } else {
-                    $startAddress = $fOrder->getRoute()->getStartAddress();
-                    $targetAddress = $fOrder->getRoute()->getTargetAddress();
-                }
-            }
-
-            $missionNode = RideNode::registerPassengerRide($drivingMission, $startAddress, $targetAddress);
-            array_push($missionNodes, $missionNode);
-        }
-
-
-        foreach ($missionNodes as $key => $value) {
-            echo "$key: $value->startMinute \n";
-        }
-
         //TODO: get vehicles/pools, compare, create configurationSet
         //array with RaidConfiguration[]
         //RaidConfiguration got array[][] with vehicles and orders per shift
@@ -146,39 +92,48 @@ class DispositionManagementImpl extends ContainerAware implements DispositionMan
         /**
          * feasibility checks only time windows in a possible configuration
          */
-        $rideConfig = new RideConfiguration($missionNodes, $drivingPools, RideConfiguration::ONLY_TIME_WINDOWS);
-        $rideConfig->buildConfiguration();
-        $emptyRide = $rideConfig->getAllPossibleEmptyRides();
+        $rideConfig = new RideConfiguration($drivingMissions, $drivingPools, $vehicles, RideConfiguration::LEAST_KILOMETER);
+//        $rideConfig->buildConfiguration();
 
-        echo "\n";
+        $emptyRides = $rideConfig->getAllPossibleEmptyRides();
+        $s = microtime(true);
+        $routeManagement = $this->container->get('tixi_app.routemanagement');
+        $routeManagement->fillRoutesForMultipleRideNodes($emptyRides);
+        $e = microtime(true);
+
+        echo "Filled " . count($emptyRides) . " emptyRideNodes in: " . ($e - $s) . "s\n";
     }
 
     /**
      * runs routing algorithm to set optimized missions and orders for a DayPlan
      * @return mixed
      */
-    public function getOptimizedDayPlan(){
+    public function getOptimizedDayPlan() {
 
     }
 
     /**
-     * @param DrivingOrder $order
+     * @param \DateTime $day
+     * @param \DateTime $time
      * @return null|Shift
      */
-    private function getResponsibleShiftForOrder(DrivingOrder $order) {
-        $time = $this->container->get('tixi_api.datetimeservice');
+    private function getResponsibleShiftForDayAndTime(\DateTime $day, \DateTime $time) {
+        $timeService = $this->container->get('tixi_api.datetimeservice');
         $shiftRepo = $this->container->get('shift_repository');
-        $shiftsForDay = $shiftRepo->findShiftsForDay($order->getPickUpDate());
+        $shiftsForDay = $shiftRepo->findShiftsForDay($day);
 
-        $pickTime = $time->convertToLocalDateTime($order->getPickUpTime());
-        $pickMinutes = $time->getMinutesOfDay($pickTime);
+        $pickTime = $timeService->convertToLocalDateTime($time);
+        $pickMinutes = $timeService->getMinutesOfDay($pickTime);
 
         foreach ($shiftsForDay as $shift) {
-            $startTime = $time->convertToLocalDateTime($shift->getStart());
-            $endTime = $time->convertToLocalDateTime($shift->getEnd());
-            $shiftMinutesStart = $time->getMinutesOfDay($startTime);
-            $shiftMinutesEnd = $time->getMinutesOfDay($endTime);
+            $startTime = $timeService->convertToLocalDateTime($shift->getStartDate());
+            $endTime = $timeService->convertToLocalDateTime($shift->getEndDate());
+            echo "Shift: " . $startTime->format('H:i') . " - " . $endTime->format('H:i');
+            $shiftMinutesStart = $timeService->getMinutesOfDay($startTime);
+            $shiftMinutesEnd = $timeService->getMinutesOfDay($endTime);
             if ($pickMinutes >= $shiftMinutesStart && $pickMinutes <= $shiftMinutesEnd) {
+                $this->shiftStart = $shiftMinutesStart;
+                $this->shiftEnd = $shiftMinutesEnd;
                 return $shift;
             }
         }
@@ -190,15 +145,15 @@ class DispositionManagementImpl extends ContainerAware implements DispositionMan
      * @return DrivingMission[]
      */
     private function getDrivingMissionsInShift(Shift $shift) {
-        $time = $this->container->get('tixi_api.datetimeservice');
+        $timeService = $this->container->get('tixi_api.datetimeservice');
         $drivingMissionRepo = $this->container->get('drivingmission_repository');
         $matchingDrivingMissions = array();
 
-        $startTime = $time->convertToLocalDateTime($shift->getStart());
-        $endTime = $time->convertToLocalDateTime($shift->getEnd());
+        $startTime = $timeService->convertToLocalDateTime($shift->getStartDate());
+        $endTime = $timeService->convertToLocalDateTime($shift->getEndDate());
 
-        $shiftMinutesStart = $time->getMinutesOfDay($startTime);
-        $shiftMinutesEnd = $time->getMinutesOfDay($endTime);
+        $shiftMinutesStart = $timeService->getMinutesOfDay($startTime);
+        $shiftMinutesEnd = $timeService->getMinutesOfDay($endTime);
 
         $drivingMissions = $drivingMissionRepo->findDrivingMissionsForDay($shift->getDate());
         foreach ($drivingMissions as $drivingMission) {
@@ -206,8 +161,9 @@ class DispositionManagementImpl extends ContainerAware implements DispositionMan
             $startMinute = $drivingMission->getServiceMinuteOfDay();
             $endMinute = $startMinute + $drivingMission->getServiceDuration();
 
+            //TODO: Tactic if all missions with beginnTime in Shift or also with a part of endTime?
             /** start or end of the order laps into a shift time */
-            if ($endMinute >= $shiftMinutesStart && $endMinute <= $shiftMinutesEnd ||
+            if ($startMinute >= $shiftMinutesStart && $endMinute <= $shiftMinutesEnd ||
                 $startMinute >= $shiftMinutesStart && $startMinute <= $shiftMinutesEnd
             ) {
                 array_push($matchingDrivingMissions, $drivingMission);
@@ -221,7 +177,7 @@ class DispositionManagementImpl extends ContainerAware implements DispositionMan
      * @return array
      */
     private function getAvailableVehiclesForDay(\DateTime $day) {
-        $time = $this->container->get('tixi_api.datetimeservice');
+        $timeService = $this->container->get('tixi_api.datetimeservice');
         $vehicleRepo = $this->container->get('vehicle_repository');
         $allVehicles = $vehicleRepo->findAllNotDeleted();
         $vehicles = array();
@@ -232,8 +188,8 @@ class DispositionManagementImpl extends ContainerAware implements DispositionMan
             } else {
                 $isInService = false;
                 foreach ($servicePlans as $servicePlan) {
-                    $spStart = $time->convertToLocalDateTime($servicePlan->getStart())->setTime(0, 0);
-                    $spEnd = $time->convertToLocalDateTime($servicePlan->getEnd())->setTime(0, 0);
+                    $spStart = $timeService->convertToLocalDateTime($servicePlan->getStart())->setTime(0, 0);
+                    $spEnd = $timeService->convertToLocalDateTime($servicePlan->getEnd())->setTime(0, 0);
                     if (($spStart == $day || $spEnd == $day)
                     ) {
                         $isInService = true;
@@ -246,4 +202,5 @@ class DispositionManagementImpl extends ContainerAware implements DispositionMan
         }
         return $vehicles;
     }
+
 }

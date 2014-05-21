@@ -61,6 +61,7 @@ class TestDataDispositionCommand extends ContainerAwareCommand {
         $driverRepo = $this->getContainer()->get('driver_repository');
         $vehicleRepo = $this->getContainer()->get('vehicle_repository');
         $addressRepo = $this->getContainer()->get('address_repository');
+        $poiRepo = $this->getContainer()->get('poi_repository');
         $routeRepo = $this->getContainer()->get('route_repository');
         $drivingMissionRepo = $this->getContainer()->get('drivingmission_repository');
         $drivingOrderRepo = $this->getContainer()->get('drivingorder_repository');
@@ -70,6 +71,7 @@ class TestDataDispositionCommand extends ContainerAwareCommand {
         $repeatedDrivingOrderPlanRepo = $this->getContainer()->get('repeateddrivingorderplan_repository.doctrine');
 
         $time = $this->getContainer()->get('tixi_api.datetimeservice');
+        $routingMachine = $this->getContainer()->get('tixi_app.routingmachine');
         $routeManagement = $this->getContainer()->get('tixi_app.routemanagement');
         $workingMonthManagement = $this->getContainer()->get('tixi_app.workingmonthmanagement');
 
@@ -82,19 +84,19 @@ class TestDataDispositionCommand extends ContainerAwareCommand {
         $drivers = $driverRepo->findAllActive();
         foreach ($drivers as $driver) {
             $reDrivingAssertionPlan = RepeatedDrivingAssertionPlan::registerRepeatedAssertionPlan(
-                'test', new \DateTime('today'), 'weekly', 0);
+                'test', new \DateTime('today'), 'weekly', rand(0, 1));
+            $reDrivingAssertionPlan->assignDriver($driver);
+            $driver->assignRepeatedDrivingAssertionPlan($reDrivingAssertionPlan);
             $repeatedDrivingAssertionPlanRepo->store($reDrivingAssertionPlan);
             for ($i = 1; $i <= 7; $i++) {
-//                if (rand(0, 1)) {
                 $reDrivingWeeklyAssertion = new RepeatedWeeklyDrivingAssertion();
-                $repeatedDrivingAssertionRepo->store($reDrivingWeeklyAssertion);
                 $reDrivingWeeklyAssertion->addShiftType($shiftTypes[rand(0, count($shiftTypes) - 1)]);
                 $reDrivingWeeklyAssertion->addShiftType($shiftTypes[rand(0, count($shiftTypes) - 1)]);
                 $reDrivingWeeklyAssertion->addShiftType($shiftTypes[rand(0, count($shiftTypes) - 1)]);
-                $reDrivingWeeklyAssertion->setAssertionPlan($reDrivingAssertionPlan);
                 $reDrivingWeeklyAssertion->setWeekday($i);
-                $reDrivingAssertionPlan->assignDriver($driver);
-//                }
+                $reDrivingWeeklyAssertion->setAssertionPlan($reDrivingAssertionPlan);
+                $reDrivingAssertionPlan->assignRepeatedDrivingAssertion($reDrivingWeeklyAssertion);
+                $repeatedDrivingAssertionRepo->store($reDrivingWeeklyAssertion);
             }
         }
         $em->flush();
@@ -119,7 +121,7 @@ class TestDataDispositionCommand extends ContainerAwareCommand {
                 /** @var $shiftType ShiftType */
                 foreach ($shiftTypes as $shiftType) {
                     $shift = Shift::registerShift($workingDay, $shiftType);
-                    $shift->setAmountOfDrivers(rand(12, 20));
+                    $shift->setAmountOfDrivers(rand(12, 18));
                     $workingDay->assignShift($shift);
                     for ($i = 1; $i <= $shift->getAmountOfDrivers(); $i++) {
                         $drivingPool = DrivingPool::registerDrivingPool($shift);
@@ -134,10 +136,17 @@ class TestDataDispositionCommand extends ContainerAwareCommand {
         }
         $em->flush();
 
+        /**@var $pois POI[] */
+        $pois = $poiRepo->findAll();
+        $countPois = count($pois);
+
+        $orders = array();
+        $routes = array();
+
         //create Driving Orders
         $countOrders = 0;
         foreach ($shiftTypes as $shiftType) {
-            $approxOrdersPerShift = rand(40, 80);
+            $approxOrdersPerShift = rand(40, 60);
             for ($i = 0; $i < $approxOrdersPerShift; $i++) {
                 /**@var $passenger Passenger */
                 $passenger = $passengerRepo->find(rand(100, 500));
@@ -155,37 +164,45 @@ class TestDataDispositionCommand extends ContainerAwareCommand {
                 $pickupTime = clone $stStart;
                 $pickupTime->add(new \DateInterval('PT' . rand(1, $minutes) . 'M'));
 
-                //DrivingOrder <-> Passenger + Route
                 $order = DrivingOrder::registerDrivingOrder($monthDate, $pickupTime, rand(0, 1));
 
                 $start = $passenger->getAddress();
-                $target = $addressRepo->find(rand(10, 1000));
-
-                //TODO: improve by multiple requests at one
-                $route = $routeManagement->getRouteFromAddresses($start, $target);
+                $target = $pois[rand(0, $countPois - 1)]->getAddress();
+                $route = Route::registerRoute($start, $target);
+                $hashKey = hash('crc32', $start->getHashFromBigIntCoordinates() . $target->getHashFromBigIntCoordinates());
+                $routes[$hashKey] = $route;
+                $routeRepo->storeRouteIfNotExist($route);
 
                 $order->assignRoute($route);
                 $order->assignPassenger($passenger);
                 $passenger->assignDrivingOrder($order);
+                array_push($orders, $order);
                 $drivingOrderRepo->store($order);
-
-                $boardingTime = DispositionVariables::BOARDING_TIME + DispositionVariables::DEBOARDING_TIME;
-                $extraMinutesPassenger = $passenger->getExtraMinutes();
-                $additionRouteTime = $route->getAdditionalTime();
-                $additionalTimesOnRide = $boardingTime + $extraMinutesPassenger + $additionRouteTime;
-
-                $serviceMinuteOfDay = $time->getMinutesOfDay($pickupTime);
-                $serviceDuration = $route->getDurationInMinutes() + $additionalTimesOnRide;
-                $serviceDistance = $route->getDistanceInMeters();
-
-                //DrivingMission <-> Order
-                $drivingMission = DrivingMission::registerDrivingMission(rand(0, 1), $serviceMinuteOfDay, $serviceDuration, $serviceDistance);
-                $drivingMission->assignDrivingOrder($order);
-                $order->assignDrivingMission($drivingMission);
-                $drivingMissionRepo->store($drivingMission);
-
-                $countOrders++;
             }
+        }
+
+        $routingMachine->fillRoutingInformationsForMultipleRoutes($routes);
+
+        /**@var $order DrivingOrder */
+        foreach ($orders as $order) {
+            $passenger = $order->getPassenger();
+            $route = $order->getRoute();
+
+            $boardingTime = DispositionVariables::BOARDING_TIME + DispositionVariables::DEBOARDING_TIME;
+            $extraMinutesPassenger = $passenger->getExtraMinutes();
+            $additionalTimesOnRide = $boardingTime + $extraMinutesPassenger;
+
+            $serviceMinuteOfDay = $time->getMinutesOfDay($order->getPickUpTime());
+            $serviceDuration = $route->getDurationInMinutes() + $additionalTimesOnRide;
+            $serviceDistance = $route->getDistanceInMeters();
+
+            //DrivingMission <-> Order
+            $drivingMission = DrivingMission::registerDrivingMission(rand(0, 1), $serviceMinuteOfDay, $serviceDuration, $serviceDistance);
+            $drivingMission->assignDrivingOrder($order);
+            $order->assignDrivingMission($drivingMission);
+            $drivingMissionRepo->store($drivingMission);
+
+            $countOrders++;
         }
         $em->flush();
 

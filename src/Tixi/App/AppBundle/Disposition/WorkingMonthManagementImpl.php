@@ -29,6 +29,7 @@ class WorkingMonthManagementImpl extends ContainerAware implements WorkingMonthM
 
         $drivers = $driverRepo->findAllActive();
 
+        //TODO: tag Drivers with multiple shifts
         $workingDays = $workingMonth->getWorkingDays();
         foreach ($workingDays as $workingDay) {
             $isBankHoliday = $bankHolidayRepo->checkIfWorkingDayIsBankHoliday($workingDay);
@@ -43,7 +44,7 @@ class WorkingMonthManagementImpl extends ContainerAware implements WorkingMonthM
                     foreach ($drivingPools as $pool) {
                         if ($driver->isAvailableOn($shift, $isBankHoliday)) {
                             $pool->assignDriver($driver);
-                            $pool->getStatus(DrivingPool::WAITING_FOR_CONFIRMATION);
+                            $pool->setStatus(DrivingPool::WAITING_FOR_CONFIRMATION);
                             break;
                         }
                     }
@@ -64,6 +65,7 @@ class WorkingMonthManagementImpl extends ContainerAware implements WorkingMonthM
             $shifts = $workingDay->getShifts();
             foreach ($shifts as $shift) {
                 $drivingPools = $shift->getDrivingPools();
+                /**@var $drivingPool DrivingPool */
                 foreach ($drivingPools as $drivingPool) {
                     if (!$drivingPool->hasAssociatedDriver()) {
                         array_push($unassignedDrivingPools, $drivingPool);

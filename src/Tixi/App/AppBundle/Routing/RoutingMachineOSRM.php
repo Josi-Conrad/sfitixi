@@ -9,7 +9,6 @@
 namespace Tixi\App\AppBundle\Routing;
 
 
-use Symfony\Component\Config\Definition\Exception\InvalidTypeException;
 use Symfony\Component\DependencyInjection\ContainerAware;
 use Tixi\App\Routing\RoutingInformation;
 use Tixi\App\Routing\RoutingMachine;
@@ -102,34 +101,27 @@ class RoutingMachineOSRM extends ContainerAware implements RoutingMachine {
 
     /**
      * This functions fills an existing array of Route objects with distance and duration
-     * BEWARE: No return objects! It writes in to the existing array by reference!
      * For multiple object curl_multi asynchronous requests are generated
      * -> much higher performance against single curl requests
      *
-     * @param array $routes by reference
+     * @param Route[] $routes with hashKeys from coordinates
+     * @return Route[]
      * @throws RoutingMachineException
      * @throws \Exception
      */
-    public function fillRoutingInformationsForMultipleRoutes(array &$routes) {
+    public function fillRoutingInformationsForMultipleRoutes($routes) {
         $this->prepareServerUrl();
         if (!$this->checkConnectivity()) {
             throw new RoutingMachineException('OSRM connection failed');
         }
-        $routings = array();
-        foreach ($routes as &$route) {
-            if (!($route instanceof Route)) {
-                throw new \Exception('Entries in $routes must be Instance of Route');
-            }
-            array_push($routings, new RoutingClassOSRM($route));
-        }
-        $s = microtime(true);
-        $this->fillNearestPoints($routings);
-        $e = microtime(true);
-        echo "filled nearest points in: " . ($e - $s) . "s\n";
-        $s = microtime(true);
-        $this->setRoutingInformations($routings);
-        $e = microtime(true);
-        echo "filled routings in: " . ($e - $s) . "s\n";
+
+        //fills nearestPoints address if none is available
+        $nearestRoutings = $this->fillNearestPoints($routes);
+
+        //fills duration and distance into the Route object
+        $filledRoutings = $this->setRoutingInformations($nearestRoutings);
+
+        return $filledRoutings;
     }
 
     /**
@@ -241,94 +233,92 @@ class RoutingMachineOSRM extends ContainerAware implements RoutingMachine {
 
 
     /**
-     * @param array $routings
+     * @param Route[] $routes
+     * @return Route[]
      */
-    private function fillNearestPoints(array &$routings) {
-        $indicator = count($routings);
-
+    private function fillNearestPoints(array $routes) {
         $curlHandlesFrom = array();
         $curlHandlesTo = array();
 
         //generate curl requests
-        for ($i = 0; $i < $indicator; $i++) {
-            /**@var $route Route */
-            $route = $routings[$i]->getRoute();
+        foreach ($routes as $hashKey => $route) {
 
-            //set all from start coordinates
-            $coordinateFrom = new RoutingCoordinate(
-                $route->getStartAddress()->getLat(),
-                $route->getStartAddress()->getLng());
-            $curlRequestFrom = $this->createCurlRequest($this->osrm_server . self::NEAREST . $coordinateFrom);
-            array_push($curlHandlesFrom, $curlRequestFrom);
+            //set all from start coordinates if no nearest points
+            if (!$route->getStartAddress()->gotNearestCoordinates()) {
+                $coordinateFrom = new RoutingCoordinate(
+                    $route->getStartAddress()->getLat(),
+                    $route->getStartAddress()->getLng());
+                $curlHandlesFrom[$hashKey] = $this->createCurlRequest($this->osrm_server . self::NEAREST . $coordinateFrom);
+            }
 
-            //set all target coordinates
-            $coordinateTo = new RoutingCoordinate(
-                $route->getTargetAddress()->getLat(),
-                $route->getTargetAddress()->getLng());
-
-            $curlRequestTo = $this->createCurlRequest($this->osrm_server . self::NEAREST . $coordinateTo);
-            array_push($curlHandlesTo, $curlRequestTo);
+            //set all target coordinates if no nearest points
+            if (!$route->getTargetAddress()->gotNearestCoordinates()) {
+                $coordinateTo = new RoutingCoordinate(
+                    $route->getTargetAddress()->getLat(),
+                    $route->getTargetAddress()->getLng());
+                $curlHandlesTo[$hashKey] = $this->createCurlRequest($this->osrm_server . self::NEAREST . $coordinateTo);
+            }
         }
 
-        $responsesFrom = $this->runMultiCurlsBlockWise($indicator, $curlHandlesFrom);
-        $responsesTo = $this->runMultiCurlsBlockWise($indicator, $curlHandlesTo);
+        $responsesFrom = $this->runMultiCurlsBlockWise($curlHandlesFrom);
+        $responsesTo = $this->runMultiCurlsBlockWise($curlHandlesTo);
 
-        for ($i = 0; $i < $indicator; $i++) {
-            $json = json_decode($responsesFrom[$i]);
+        foreach ($responsesFrom as $hashKey => $response) {
+            $json = json_decode($response);
             $lat = $json->mapped_coordinate[0];
             $lng = $json->mapped_coordinate[1];
-            $routings[$i]->setNearestFromLat($lat);
-            $routings[$i]->setNearestFromLng($lng);
+            $routes[$hashKey]->getStartAddress()->setNearestLat($lat);
+            $routes[$hashKey]->getStartAddress()->setNearestLng($lng);
         }
-
-        for ($i = 0; $i < $indicator; $i++) {
-            $json = json_decode($responsesTo[$i]);
+        foreach ($responsesTo as $hashKey => $response) {
+            $json = json_decode($response);
             $lat = $json->mapped_coordinate[0];
             $lng = $json->mapped_coordinate[1];
-            $routings[$i]->setNearestToLat($lat);
-            $routings[$i]->setNearestToLng($lng);
+            $routes[$hashKey]->getTargetAddress()->setNearestLat($lat);
+            $routes[$hashKey]->getTargetAddress()->setNearestLng($lng);
         }
+
+        return $routes;
     }
 
     /**
-     * @param array $routings
+     * @param Route[] $routes
+     * @return Route[]
      */
-    private function setRoutingInformations(array &$routings) {
-        $indicator = count($routings);
+    private function setRoutingInformations($routes) {
         $curlHandles = array();
 
         //generate curl requests
-        for ($i = 0; $i < $indicator; $i++) {
-            $route = $routings[$i]->getRoute();
+        foreach ($routes as $hashKey => $route) {
             //set all from start coordinates
             $coordinateFrom = new RoutingCoordinate(
-                $route->getStartAddress()->getLat(),
-                $route->getStartAddress()->getLng());
+                $route->getStartAddress()->getNearestLat(),
+                $route->getStartAddress()->getNearestLng());
 
             //set all target coordinates
             $coordinateTo = new RoutingCoordinate(
-                $route->getTargetAddress()->getLat(),
-                $route->getTargetAddress()->getLng());
+                $route->getTargetAddress()->getNearestLat(),
+                $route->getTargetAddress()->getNearestLng());
 
             $requestUrl = $this->osrm_server . self::VIAROUTE . self::ZOOMLEVEL . '&' .
                 $coordinateFrom . '&' . $coordinateTo . '&' . self::ALT;
 
             $curlRequest = $this->createCurlRequest($requestUrl);
-            $curlHandles[] = $curlRequest;
+            $curlHandles[$hashKey] = $curlRequest;
         }
 
-        $responses = $this->runMultiCurlsBlockWise($indicator, $curlHandles);
+        $responses = $this->runMultiCurlsBlockWise($curlHandles);
 
-        for ($i = 0; $i < $indicator; $i++) {
-            $route = $routings[$i]->getRoute();
-            $json = json_decode($responses[$i]);
-
+        foreach ($responses as $hashKey => $response) {
+            $json = json_decode($response);
             $totalTime = $json->route_summary->total_time;
             $totalDistance = $json->route_summary->total_distance;
 
-            $route->setDuration($totalTime);
-            $route->setDistance($totalDistance);
+            $routes[$hashKey]->setDuration($totalTime);
+            $routes[$hashKey]->setDistance($totalDistance);
         }
+
+        return $routes;
     }
 
     /**
@@ -342,13 +332,12 @@ class RoutingMachineOSRM extends ContainerAware implements RoutingMachine {
     }
 
     /**
-     * @param $indicator
      * @param $curlHandles
      * @throws RoutingMachineException
      * @return array
      */
-    private function runMultiCurlsBlockWise($indicator, $curlHandles) {
-        //here comes the tricky part, we run curl_multi only on a BLOCKSIZE so we don't generate a flood
+    private function runMultiCurlsBlockWise($curlHandles) {
+        //we run curl_multi only on a BLOCKSIZE so we don't generate a flood
         $curlMultiHandle = curl_multi_init();
         curl_multi_setopt($curlMultiHandle, CURLMOPT_PIPELINING, 1);
         curl_multi_setopt($curlMultiHandle, CURLMOPT_MAXCONNECTS, self::BLOCK_SIZE);
@@ -357,14 +346,11 @@ class RoutingMachineOSRM extends ContainerAware implements RoutingMachine {
         $blockCount = 0; // count where we are in the list so we can break up the runs into smaller blocks
         $blockResults = array(); // to accumulate the curl_handles for each group we'll run simultaneously
 
-        for ($i = 0; $i < $indicator; $i++) {
+        foreach ($curlHandles as $hashKey => $curlHandle) {
             $blockCount++;
-            $curlHandle = $curlHandles[$i];
             // add the handle to the curl_multi_handle and to our tracking "block"
             curl_multi_add_handle($curlMultiHandle, $curlHandle);
-            array_push($blockResults, $curlHandle);
-
-            // -- check to see if we've got a "full block" to run or if we're at the end of out list of handles
+            $blockResults[$hashKey] = $curlHandle;
             if (($blockCount % self::BLOCK_SIZE === 0) or ($blockCount === count($curlHandles))) {
                 $running = NULL;
                 do {
@@ -378,8 +364,8 @@ class RoutingMachineOSRM extends ContainerAware implements RoutingMachine {
                     }
                 } while ($running > 0);
 
-                // -- once the number still running is 0, curl_multi_ is done, so check the results
-                foreach ($blockResults as $result) {
+                //once the number still running is 0, curl_multi_ is done, so check the results
+                foreach ($blockResults as $hashKeyBlock => $result) {
                     // HTTP response code
                     $code = curl_getinfo($result, CURLINFO_HTTP_CODE);
                     // cURL error number
@@ -393,9 +379,7 @@ class RoutingMachineOSRM extends ContainerAware implements RoutingMachine {
 
                     // fill results from our requests we get
                     $response = curl_multi_getcontent($result);
-                    if ($response) {
-                        array_push($responses, $response);
-                    }
+                    $responses[$hashKeyBlock] = $response;
 
                     // remove the (used) handle from the curl_multi_handle
                     curl_multi_remove_handle($curlMultiHandle, $result);
@@ -403,13 +387,13 @@ class RoutingMachineOSRM extends ContainerAware implements RoutingMachine {
                 // reset the block to empty, since we've run its curl_handles
                 $blockResults = array();
             }
+
         }
 
         // close the curl_multi_handle once we're done
         curl_multi_close($curlMultiHandle);
         return $responses;
     }
-
 
     /**
      * @param $requestUrl

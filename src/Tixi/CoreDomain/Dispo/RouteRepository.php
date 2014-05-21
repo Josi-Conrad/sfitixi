@@ -28,4 +28,10 @@ interface RouteRepository extends CommonBaseRepository {
      * @return Route
      */
     public function findRouteWithAddresses(Address $from, Address $to);
+
+    /**
+     * @param \Tixi\CoreDomain\Dispo\Route $route
+     * @return bool
+     */
+    public function storeRouteIfNotExist(Route $route);
 }

@@ -92,6 +92,13 @@ class DrivingPool {
     /**
      * @return bool
      */
+    public function hasAssociatedDrivingMissions() {
+        return (count($this->getDrivingMissions()) > 0);
+    }
+
+    /**
+     * @return bool
+     */
     public function isCompleted() {
         return ($this->hasAssociatedDriver() && $this->hasAssociatedVehicle());
     }
@@ -102,6 +109,7 @@ class DrivingPool {
     public function assignShift($shift) {
         $this->shift = $shift;
     }
+
     /**
      * @param Driver $driver
      */
@@ -124,6 +132,13 @@ class DrivingPool {
     }
 
     /**
+     * @return mixed
+     */
+    public function getId() {
+        return $this->id;
+    }
+
+    /**
      * @return Driver
      */
     public function getDriver() {
@@ -138,7 +153,7 @@ class DrivingPool {
     }
 
     /**
-     * @return mixed
+     * @return DrivingMission[]
      */
     public function getDrivingMissions() {
         return $this->drivingMissions;

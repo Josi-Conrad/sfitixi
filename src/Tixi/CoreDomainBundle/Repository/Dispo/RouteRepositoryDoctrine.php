@@ -11,7 +11,7 @@ use Tixi\CoreDomainBundle\Repository\CommonBaseRepositoryDoctrine;
  * Class RouteRepositoryDoctrine
  * @package Tixi\CoreDomainBundle\Repository\Dispo
  */
-class RouteRepositoryDoctrine  extends CommonBaseRepositoryDoctrine implements RouteRepository {
+class RouteRepositoryDoctrine extends CommonBaseRepositoryDoctrine implements RouteRepository {
     /**
      * @param Route $route
      * @return mixed|void
@@ -40,5 +40,22 @@ class RouteRepositoryDoctrine  extends CommonBaseRepositoryDoctrine implements R
             ->setParameter('startAddressId', $from->getId())
             ->setParameter('targetAddressId', $to->getId());
         return $qb->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * @param \Tixi\CoreDomain\Dispo\Route $route
+     * @return bool
+     */
+    public function storeRouteIfNotExist(Route $route) {
+        $qb = $this->createQueryBuilder('e')
+            ->where('e.startAddress = :startAddressId')
+            ->andWhere('e.targetAddress = :targetAddressId')
+            ->setParameter('startAddressId', $route->getStartAddress()->getId())
+            ->setParameter('targetAddressId', $route->getTargetAddress()->getId());
+        if (!$qb->getQuery()->getOneOrNullResult()) {
+            $this->store($route);
+            return true;
+        }
+        return false;
     }
 }

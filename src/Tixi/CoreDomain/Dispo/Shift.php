@@ -194,17 +194,25 @@ class Shift {
     /**
      * returns startDate (workday) with Time (shiftType)
      */
-    public function getStart() {
+    public function getStartDate() {
         $returnDate = clone $this->workingDay->getDate();
-        return $returnDate->setTime($this->getShiftType()->getStart()->format('H'), $this->getShiftType()->getStart()->format('i'));
+        return $returnDate->setTimestamp($this->getShiftType()->getStart()->getTimestamp());
     }
 
     /**
      * returns endDate (workDay) with Time (shiftType)
      */
-    public function getEnd() {
+    public function getEndDate() {
         $returnDate = clone $this->workingDay->getDate();
         return $returnDate->setTimestamp($this->getShiftType()->getEnd()->getTimestamp());
+    }
+
+    public function getStart(){
+        return $this->shiftType->getStart();
+    }
+
+    public function getEnd(){
+        return $this->shiftType->getEnd();
     }
 
     /**

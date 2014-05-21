@@ -9,8 +9,10 @@
 namespace Tixi\App\Routing;
 
 
+use Tixi\App\AppBundle\Routing\RoutingClassOSRM;
 use Tixi\App\AppBundle\Routing\RoutingCoordinate;
 use Tixi\App\AppBundle\Routing\RoutingMachineException;
+use Tixi\CoreDomain\Dispo\Route;
 
 interface RoutingMachine {
 
@@ -48,13 +50,13 @@ interface RoutingMachine {
 
     /**
      * This functions fills an existing array of Route objects with distance and duration
-     * BEWARE: No return objects! It writes in to the existing array by reference!
      * For multiple object curl_multi asynchronous requests are generated
      * -> much higher performance against single curl requests
      *
-     * @param array $routes by reference
+     * @param Route[] $routes with hashKeys from coordinates
+     * @return Route[]
      * @throws RoutingMachineException
      * @throws \Exception
      */
-    public function fillRoutingInformationsForMultipleRoutes(array &$routes);
+    public function fillRoutingInformationsForMultipleRoutes($routes);
 } 

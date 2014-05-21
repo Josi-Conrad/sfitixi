@@ -9,12 +9,14 @@
 namespace Tixi\App\AppBundle\Tests;
 
 
+use Tixi\App\AppBundle\Disposition\RideNode;
 use Tixi\App\Disposition\DispositionVariables;
 use Tixi\CoreDomain\Dispo\DrivingMission;
 use Tixi\CoreDomain\Dispo\DrivingOrder;
 use Tixi\CoreDomain\Dispo\DrivingPool;
 use Tixi\CoreDomain\Dispo\RepeatedDrivingAssertionPlan;
 use Tixi\CoreDomain\Dispo\RepeatedWeeklyDrivingAssertion;
+use Tixi\CoreDomain\Dispo\Route;
 use Tixi\CoreDomain\Dispo\Shift;
 use Tixi\CoreDomain\Dispo\ShiftType;
 use Tixi\CoreDomain\Dispo\WorkingDay;
@@ -29,19 +31,13 @@ class DispositionTest extends CommonBaseTest {
         parent::setUp();
     }
 
-    public function testDispo() {
-
-        $testDate = new \DateTime('2014-06-01');
-        $testDateTime = new \DateTime('2014-06-01 18:00:00');
-        $s = $this->createTestAddressGoldau();
-        $t = $this->createTestAddressBaar();
-        $r = $this->routeManagement->getRouteFromAddresses($s, $t);
-        $order = DrivingOrder::registerDrivingOrder($testDate, $testDateTime);
-        $order->assignRoute($r);
-
-        $this->dispoManagement->checkFeasibility($order);
-
-
+    public function testFeasibility() {
+        $day = new \DateTime('2014-06-01 10:15:00');
+        $time = new \DateTime('2014-06-01 18:15:00');
+        $isFeasible = $this->dispoManagement->checkFeasibility($day, $time, DrivingMission::SAME_START, 28, 2);
+        $this->assertNotNull($isFeasible);
+        $isFeasible ? $str = "\nIs feasible" : $str = "\nIs NOT feasible";
+        echo $str;
     }
 
     public function testWorkingMonthDriverAssignment() {
@@ -79,11 +75,33 @@ class DispositionTest extends CommonBaseTest {
         }
 
         $this->workingMonthManagement->assignAvailableDriversToDrivingPools($workingMonth);
+
         echo "\nStill not associated DrivingPools: " .
             count($this->workingMonthManagement->getAllUnassignedDrivingPoolsForMonth($workingMonth)) . "\n";
     }
 
-    public function tearDown() {
+    public function testHashCoordinates() {
+        $add = $this->createTestAddressBaar();
+        $add2 = $this->createTestAddressGoldau();
+
+//        $this->assertEquals('308eb7f2', $add->getHashFromBigIntCoordinates());
+//        $this->assertEquals('72250006', $add2->getHashFromBigIntCoordinates());
+
+        $arr = array();
+        $arr[$add->getHashFromBigIntCoordinates()] = $add;
+        $arr[$add2->getHashFromBigIntCoordinates()] = $add2;
+
+        echo "\n" . $add->getHashFromBigIntCoordinates();
+        echo "\n" . $add2->getHashFromBigIntCoordinates();
+//        foreach(hash_algos() as $alg){
+//            echo "\n" . $alg;
+//        };
+
+        $this->assertEquals($arr[$add->getHashFromBigIntCoordinates()], $add);
+    }
+
+    public
+    function tearDown() {
         parent::tearDown();
     }
 } 

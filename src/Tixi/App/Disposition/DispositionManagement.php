@@ -9,6 +9,7 @@
 namespace Tixi\App\Disposition;
 
 
+use Tixi\App\AppBundle\Disposition\RideNode;
 use Tixi\CoreDomain\Dispo\DrivingOrder;
 use Tixi\CoreDomain\Dispo\Shift;
 
@@ -19,11 +20,14 @@ use Tixi\CoreDomain\Dispo\Shift;
 interface DispositionManagement {
 
     /**
-     * checks if a drivingOrder is possible
-     * @param \Tixi\CoreDomain\Dispo\DrivingOrder $drivingOrder
-     * @return mixed
+     * @param \DateTime $day
+     * @param \DateTime $time
+     * @param $direction
+     * @param $duration
+     * @param $additionalTime
+     * @return bool
      */
-    public function checkFeasibility(DrivingOrder $drivingOrder);
+    public function checkFeasibility(\DateTime $day, \DateTime $time, $direction, $duration, $additionalTime);
 
     /**
      * runs routing algorithm to set optimized missions and orders for a shift
