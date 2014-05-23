@@ -182,7 +182,7 @@ class DrivingOrder extends CommonBaseEntity {
     }
 
     /**
-     * @return mixed
+     * @return Passenger
      */
     public function getPassenger() {
         return $this->passenger;
@@ -203,7 +203,7 @@ class DrivingOrder extends CommonBaseEntity {
     }
 
     /**
-     * @return mixed
+     * @return integer
      */
     public function getCompanion() {
         return $this->companion;

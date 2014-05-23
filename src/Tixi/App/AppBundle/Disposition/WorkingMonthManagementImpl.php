@@ -29,6 +29,9 @@ class WorkingMonthManagementImpl extends ContainerAware implements WorkingMonthM
 
         $drivers = $driverRepo->findAllActive();
 
+        //random shuffle drivers array for better usage of all people
+        shuffle($drivers);
+
         //TODO: tag Drivers with multiple shifts
         $workingDays = $workingMonth->getWorkingDays();
         foreach ($workingDays as $workingDay) {

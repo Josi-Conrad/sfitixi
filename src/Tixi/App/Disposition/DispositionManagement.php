@@ -10,8 +10,10 @@ namespace Tixi\App\Disposition;
 
 
 use Tixi\App\AppBundle\Disposition\RideNode;
+use Tixi\CoreDomain\Dispo\DrivingMission;
 use Tixi\CoreDomain\Dispo\DrivingOrder;
 use Tixi\CoreDomain\Dispo\Shift;
+use Tixi\CoreDomain\Vehicle;
 
 /**
  * Interface DispositionManagement
@@ -41,4 +43,24 @@ interface DispositionManagement {
      * @return mixed
      */
     public function getOptimizedDayPlan();
+
+    /**
+     * @param \DateTime $day
+     * @param \DateTime $time
+     * @return Shift
+     */
+    public function getResponsibleShiftForDayAndTime(\DateTime $day, \DateTime $time);
+
+    /**
+     * @param Shift $shift
+     * @return DrivingMission[]
+     */
+    public function getDrivingMissionsInShift(Shift $shift);
+
+    /**
+     * @param \DateTime $day
+     * @return Vehicle[]
+     */
+    public function getAvailableVehiclesForDay(\DateTime $day);
+
 }

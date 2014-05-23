@@ -101,6 +101,9 @@ class RideNode {
         $ride->startAddress = $startAddress;
         $ride->targetAddress = $endAddress;
 
+        $ride->startMinute = 0;
+        $ride->endMinute = 0;
+
         return $ride;
     }
 

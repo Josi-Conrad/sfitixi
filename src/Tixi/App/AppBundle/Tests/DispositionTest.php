@@ -33,11 +33,20 @@ class DispositionTest extends CommonBaseTest {
 
     public function testFeasibility() {
         $day = new \DateTime('2014-06-01 10:15:00');
-        $time = new \DateTime('2014-06-01 18:15:00');
+        $time = new \DateTime('2014-06-01 12:15:00');
         $isFeasible = $this->dispoManagement->checkFeasibility($day, $time, DrivingMission::SAME_START, 28, 2);
         $this->assertNotNull($isFeasible);
         $isFeasible ? $str = "\nIs feasible" : $str = "\nIs NOT feasible";
         echo $str;
+    }
+
+    public function testOptimization() {
+        $day = new \DateTime('2014-06-01 10:15:00');
+        $time = new \DateTime('2014-06-01 18:15:00');
+        $shift = $this->dispoManagement->getResponsibleShiftForDayAndTime($day, $time);
+        if($shift !== null){
+            $this->dispoManagement->getOptimizedPlanForShift($shift);
+        }
     }
 
     public function testWorkingMonthDriverAssignment() {

@@ -20,7 +20,6 @@ class RideConfiguration {
      * only for simple feasibility check
      */
     const ONLY_TIME_WINDOWS = 0;
-
     /** TACTICS
      * from vehicle all possible missions to next vehicle
      */
@@ -35,10 +34,6 @@ class RideConfiguration {
     const MOST_POSSIBLE_MISSIONS = 3;
 
     /**
-     * @var
-     */
-    protected $type;
-    /**
      * @var DrivingPool[]
      */
     protected $drivingPools;
@@ -47,9 +42,20 @@ class RideConfiguration {
      */
     protected $missionNodes;
     /**
-     * @var
+     * @var RideNode[]
      */
     protected $notFeasibleNodes;
+    /**
+     * @var RideNode[]
+     */
+    protected $emptyRides;
+    /**
+     * @var Vehicle[]
+     */
+    protected $availableVehicles;
+    protected $vehicleDepotAddresses;
+    protected $type;
+    protected $totalDistance;
 
     /**
      * two dimensional array of missionNodes according to a pool
@@ -77,6 +83,9 @@ class RideConfiguration {
             $this->drivingPools[$id] = $pool;
             $this->rideConfiguration[$id] = array();
         }
+        $this->emptyRides = array();
+        $this->availableVehicles = $vehicles;
+        $this->fillVehicleDepotNodes();
         $this->type = $type;
     }
 
@@ -86,6 +95,7 @@ class RideConfiguration {
                 $this->buildTimeWindowsConfiguration();
                 break;
             case self::LEAST_KILOMETER:
+                $this->buildLeastKilometerConfiguration();
                 break;
             case self::LEAST_VEHICLE:
                 break;
@@ -98,30 +108,99 @@ class RideConfiguration {
      * gets hash array with nodes, where key is concatenated coordinate hash (md2) from start and destination
      * @return array
      */
-    public function getAllPossibleEmptyRides() {
+    public function buildAllPossibleEmptyRides() {
         $this->sortNodesByStartMinute($this->missionNodes);
-        $emptyRides = array();
 
         $workNodes = $this->missionNodes;
         foreach ($workNodes as $key => $workNode) {
+            //fill rides from and to vehicleDepot
+            foreach ($this->vehicleDepotAddresses as $depotAddress) {
+                $depotToNode = RideNode::registerEmptyRide($depotAddress, $workNode->startAddress);
+                $nodeToDepot = RideNode::registerEmptyRide($workNode->targetAddress, $depotAddress);
+                $this->emptyRides[$depotToNode->getRideHash()] = $depotToNode;
+                $this->emptyRides[$nodeToDepot->getRideHash()] = $nodeToDepot;
+            }
+
+            //fill possible rides between any nodes
             $comparesNodes = $workNodes;
             foreach ($comparesNodes as $compareNode) {
                 if ($workNode->endMinute + DispositionVariables::ARRIVAL_BEFORE_PICKUP < $compareNode->startMinute) {
                     $node = RideNode::registerEmptyRide($workNode->targetAddress, $compareNode->startAddress);
-                    $emptyRides[$node->getRideHash()] = $node;
+                    $this->emptyRides[$node->getRideHash()] = $node;
                 }
             }
             unset($workNodes[$key]);
         }
-        return $emptyRides;
+        return $this->emptyRides;
+    }
+
+    protected function buildLeastKilometerConfiguration() {
+        $workNodes = $this->missionNodes;
+        $workVehicles = $this->availableVehicles;
+        $this->sortNodesByStartMinute($workNodes);
+
+        foreach ($this->drivingPools as $poolId => $pool) {
+
+            $this->rideConfiguration[$poolId] = new \SplDoublyLinkedList();
+            if ($pool->hasAssociatedDriver()) {
+                foreach ($workVehicles as $vehicleKey => $vehicle) {
+                    $vehicleCategory = $vehicle->getCategory();
+                    $depot = $vehicle->getDepot()->getAddress();
+                    $depotNode = RideNode::registerEmptyRide($depot, $depot);
+                    /**@var $list \SplDoublyLinkedList */
+                    $list = $this->rideConfiguration[$poolId];
+
+                    if ($list->isEmpty()) {
+                        $list->push($depotNode);
+                    }
+
+                    if ($pool->getDriver()->isCompatibleWithVehicleCategory($vehicleCategory)) {
+                        /**@var $bestNode RideNode */
+                        $bestNode = null;
+                        $bestNodeKey = 0;
+                        $bestNodeDistance = 0;
+
+                        foreach ($workNodes as $nodeKey => $nextNode) {
+                            if ($nextNode->drivingMission->isCompatibleWithVehicleCategory($vehicleCategory)) {
+                                /**@var $currentNode RideNode */
+//                                $currentNode = $list->pop();
+                                $currentNode = $depotNode;
+
+                                $emptyRide = $this->emptyRides[$this->getHashFromTwoNodes($currentNode, $nextNode)];
+
+                                if ($bestNode !== null) {
+                                    //is possible in time
+                                    if ($currentNode->endMinute + $emptyRide->duration < $nextNode->startMinute) {
+                                        //distance is better then previous node
+                                        if ($emptyRide->distance < $bestNodeDistance) {
+                                            $bestNode = $nextNode;
+                                            $bestNodeKey = $nodeKey;
+                                            $bestNodeDistance = $emptyRide->distance;
+                                        }
+                                    }
+                                } else {
+                                    $bestNode = $nextNode;
+                                    $bestNodeKey = $nodeKey;
+                                    $bestNodeDistance = $emptyRide->distance;
+                                }
+                            }
+                        }
+                        unset($workNodes[$bestNodeKey]);
+                    }
+                }
+            }
+        }
+
+    }
+
+    protected function findNearestNextNode($startNode, $nodes) {
+
     }
 
     /**
      * Build configuration according to RideNode times and DrivingPools
      */
     protected function buildTimeWindowsConfiguration() {
-        //array copy = not copy/clone values, only references
-        //so we can edit the references without impact values
         $workNodes = $this->missionNodes;
 
         //fill existing missions<->orders and nodes away from workNodes
@@ -176,13 +255,6 @@ class RideConfiguration {
     }
 
     /**
-     * @param RideNode $feasibleNode
-     */
-    public function addAdditionalRideNode(RideNode $feasibleNode) {
-        $this->missionNodes[] = $feasibleNode;
-    }
-
-    /**
      * @param DrivingMission[] $drivingMissions
      * @return RideNode[]
      */
@@ -191,7 +263,7 @@ class RideConfiguration {
         foreach ($drivingMissions as $drivingMission) {
             /**
              * if DrivingMission got no elements in ServiceOrder => singleOrder
-             * if it got elements in it => multiOrder
+             * if elements exist => multiOrder
              */
             if (empty($drivingMission->getServiceOrder())) {
                 /**@var $order DrivingOrder */
@@ -223,20 +295,19 @@ class RideConfiguration {
         return $missionNodes;
     }
 
+
     /**
-     * sort Mission by startMinutes
+     * @param RideNode $feasibleNode
      */
-    private function sortNodesByStartMinute(&$nodes) {
-        usort($nodes, function ($a, $b) {
-            return ($a->startMinute > $b->startMinute);
-        });
+    public function addAdditionalRideNode(RideNode $feasibleNode) {
+        $this->missionNodes[] = $feasibleNode;
     }
 
     /**
-     * @return bool
+     * @return array
      */
-    public function gotNotFeasibleNodes() {
-        return isset($this->notFeasibleNodes);
+    public function getEmptyRides() {
+        return $this->emptyRides;
     }
 
     /**
@@ -253,5 +324,39 @@ class RideConfiguration {
         return $this->rideConfiguration;
     }
 
+    /**
+     * sort Mission by startMinutes
+     */
+    private function sortNodesByStartMinute(&$nodes) {
+        usort($nodes, function ($a, $b) {
+            return ($a->startMinute > $b->startMinute);
+        });
+    }
 
+    /**
+     * creates rideNodes from all vehicle depots
+     */
+    private function fillVehicleDepotNodes() {
+        foreach ($this->availableVehicles as $vehicle) {
+            $depotAddress = $vehicle->getDepot()->getAddress();
+            $this->vehicleDepotAddresses[$depotAddress->getHashFromBigIntCoordinates()] = $depotAddress;
+        }
+    }
+
+    /**
+     * @return bool
+     */
+    public function gotNotFeasibleNodes() {
+        return isset($this->notFeasibleNodes);
+    }
+
+    /**
+     * @param RideNode $startNode
+     * @param RideNode $targetNode
+     * @return string
+     */
+    private function getHashFromTwoNodes(RideNode $startNode, RideNode $targetNode) {
+        return hash('md2', $startNode->targetAddress->getHashFromBigIntCoordinates()
+            . $targetNode->startAddress->getHashFromBigIntCoordinates());
+    }
 }

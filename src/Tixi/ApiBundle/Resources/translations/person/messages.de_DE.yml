@@ -14,7 +14,6 @@ person.field.entrydate: Eintrittsdatum
 person.field.birthday: Geburtsdatum
 person.field.extraminutes: Extra-Minuten
 person.field.details: Details (vertraulich, für Manager)
-person.field.house: Haus
 
 person.field.correspondenceaddress: Korrespondenz-Adresse
 person.field.billingaddress: Rechnungs-Adresse

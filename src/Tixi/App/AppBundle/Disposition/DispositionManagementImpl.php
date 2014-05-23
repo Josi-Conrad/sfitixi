@@ -93,15 +93,16 @@ class DispositionManagementImpl extends ContainerAware implements DispositionMan
          * feasibility checks only time windows in a possible configuration
          */
         $rideConfig = new RideConfiguration($drivingMissions, $drivingPools, $vehicles, RideConfiguration::LEAST_KILOMETER);
-//        $rideConfig->buildConfiguration();
 
-        $emptyRides = $rideConfig->getAllPossibleEmptyRides();
+        $emptyRides = $rideConfig->buildAllPossibleEmptyRides();
         $s = microtime(true);
         $routeManagement = $this->container->get('tixi_app.routemanagement');
         $routeManagement->fillRoutesForMultipleRideNodes($emptyRides);
         $e = microtime(true);
 
-        echo "Filled " . count($emptyRides) . " emptyRideNodes in: " . ($e - $s) . "s\n";
+        $rideConfig->buildConfiguration();
+
+        echo "\n\nFilled " . count($emptyRides) . " emptyRideNodes in: " . ($e - $s) . "s\n";
     }
 
     /**
@@ -117,7 +118,7 @@ class DispositionManagementImpl extends ContainerAware implements DispositionMan
      * @param \DateTime $time
      * @return null|Shift
      */
-    private function getResponsibleShiftForDayAndTime(\DateTime $day, \DateTime $time) {
+    public function getResponsibleShiftForDayAndTime(\DateTime $day, \DateTime $time) {
         $timeService = $this->container->get('tixi_api.datetimeservice');
         $shiftRepo = $this->container->get('shift_repository');
         $shiftsForDay = $shiftRepo->findShiftsForDay($day);
@@ -128,7 +129,7 @@ class DispositionManagementImpl extends ContainerAware implements DispositionMan
         foreach ($shiftsForDay as $shift) {
             $startTime = $timeService->convertToLocalDateTime($shift->getStartDate());
             $endTime = $timeService->convertToLocalDateTime($shift->getEndDate());
-            echo "Shift: " . $startTime->format('H:i') . " - " . $endTime->format('H:i');
+            echo "Shift: " . $startTime->format('H:i') . " - " . $endTime->format('H:i') . "\t";
             $shiftMinutesStart = $timeService->getMinutesOfDay($startTime);
             $shiftMinutesEnd = $timeService->getMinutesOfDay($endTime);
             if ($pickMinutes >= $shiftMinutesStart && $pickMinutes <= $shiftMinutesEnd) {
@@ -144,7 +145,7 @@ class DispositionManagementImpl extends ContainerAware implements DispositionMan
      * @param Shift $shift
      * @return DrivingMission[]
      */
-    private function getDrivingMissionsInShift(Shift $shift) {
+    public function getDrivingMissionsInShift(Shift $shift) {
         $timeService = $this->container->get('tixi_api.datetimeservice');
         $drivingMissionRepo = $this->container->get('drivingmission_repository');
         $matchingDrivingMissions = array();
@@ -176,7 +177,7 @@ class DispositionManagementImpl extends ContainerAware implements DispositionMan
      * @param \DateTime $day
      * @return array
      */
-    private function getAvailableVehiclesForDay(\DateTime $day) {
+    public function getAvailableVehiclesForDay(\DateTime $day) {
         $timeService = $this->container->get('tixi_api.datetimeservice');
         $vehicleRepo = $this->container->get('vehicle_repository');
         $allVehicles = $vehicleRepo->findAllNotDeleted();

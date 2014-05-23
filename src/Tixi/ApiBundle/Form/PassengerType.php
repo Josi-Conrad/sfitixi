@@ -44,9 +44,9 @@ class PassengerType extends PersonType {
 
         parent::buildForm($builder, $options);
 
-        $builder->add('house', 'text', array(
+        $builder->add('building', 'text', array(
             'required' => false,
-            'label' => 'person.field.house',
+            'label' => 'address.field.building',
         ));
         $builder->add('lookaheadaddress','addresslookahead',array(
                 'label' => 'address.field.lookahead'

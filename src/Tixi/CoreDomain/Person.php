@@ -30,6 +30,12 @@ class Person extends CommonBaseEntity {
     protected $id;
 
     /**
+     * old Id from data integration
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $pin;
+
+    /**
      * @ORM\OneToOne(targetEntity="Address")
      * @ORM\JoinColumn(name="address_id", referencedColumnName="id")
      */
@@ -548,4 +554,5 @@ class Person extends CommonBaseEntity {
         }
         return $genderString;
     }
+
 }

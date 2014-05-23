@@ -43,7 +43,7 @@ class Passenger extends Person {
     /**
      * @ORM\Column(type="boolean")
      */
-    protected $gotMonthlyBilling;
+    protected $hasMonthlyBilling;
 
     /**
      * @ORM\Column(type="text", nullable=true)
@@ -122,7 +122,7 @@ class Passenger extends Person {
         );
 
         $passenger->setIsInWheelChair($isInWheelChair);
-        $passenger->setGotMonthlyBilling($gotMonthlyBilling);
+        $passenger->setHasMonthlyBilling($gotMonthlyBilling);
         $passenger->setNotice($notice);
 
         return $passenger;
@@ -159,7 +159,7 @@ class Passenger extends Person {
         );
 
         $this->setIsInWheelChair($isInWheelChair);
-        $this->setGotMonthlyBilling($gotMonthlyBilling);
+        $this->setHasMonthlyBilling($gotMonthlyBilling);
         $this->setNotice($notice);
     }
 
@@ -215,15 +215,15 @@ class Passenger extends Person {
     /**
      * @param mixed $gotMonthlyBilling
      */
-    public function setGotMonthlyBilling($gotMonthlyBilling) {
-        $this->gotMonthlyBilling = $gotMonthlyBilling;
+    public function setHasMonthlyBilling($gotMonthlyBilling) {
+        $this->hasMonthlyBilling = $gotMonthlyBilling;
     }
 
     /**
      * @return mixed
      */
-    public function getGotMonthlyBilling() {
-        return $this->gotMonthlyBilling;
+    public function getHasMonthlyBilling() {
+        return $this->hasMonthlyBilling;
     }
 
     /**
@@ -234,7 +234,7 @@ class Passenger extends Person {
     }
 
     /**
-     * @return mixed
+     * @return bool
      */
     public function getIsInWheelChair() {
         return $this->isInWheelChair;
@@ -315,7 +315,7 @@ class Passenger extends Person {
      * @return string
      */
     public function getMonthlyBillingAsString() {
-        return self::constructMonthlyBillingString($this->getGotMonthlyBilling());
+        return self::constructMonthlyBillingString($this->getHasMonthlyBilling());
     }
 
     /**
@@ -346,5 +346,23 @@ class Passenger extends Person {
             $string .= $insurance->getName();
         }
         return $string;
+    }
+
+    /**
+     * @param VehicleCategory $vehicleCategory
+     * @return bool
+     */
+    public function isCompatibleWithVehicleCategory(VehicleCategory $vehicleCategory) {
+        if($this->isInWheelChair){
+            if($vehicleCategory->getAmountOfWheelChairs() < 1){
+                return false;
+            }
+        }
+        foreach ($this->contradictVehicleCategories as $contradict) {
+            if ($vehicleCategory->getId() === $contradict->getId()) {
+                return false;
+            }
+        }
+        return true;
     }
 }

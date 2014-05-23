@@ -27,6 +27,12 @@ class POI extends CommonBaseEntity {
     protected $id;
 
     /**
+     * old Id from data integration
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $pin;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Address", inversedBy="pois")
      * @ORM\JoinColumn(name="address_id", referencedColumnName="id")
      */

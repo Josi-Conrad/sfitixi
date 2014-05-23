@@ -29,7 +29,7 @@ class PassengerAssembler {
      */
     public function registerDTOtoNewPassenger(PassengerRegisterDTO $passengerDTO) {
         $address = $this->addressAssembler->addressLookaheadDTOtoAddress($passengerDTO->lookaheadaddress);
-        $address->setHouse($passengerDTO->house);
+        $address->setBuilding($passengerDTO->building);
         $passenger = Passenger::registerPassenger($passengerDTO->gender, $passengerDTO->firstname,
             $passengerDTO->lastname, $passengerDTO->telephone,
             $address, $passengerDTO->title,
@@ -58,7 +58,7 @@ class PassengerAssembler {
      */
     public function registerDTOToPassenger(Passenger $passenger, PassengerRegisterDTO $passengerDTO) {
         $address = $this->addressAssembler->addressLookaheadDTOtoAddress($passengerDTO->lookaheadaddress);
-        $address->setHouse($passengerDTO->house);
+        $address->setBuilding($passengerDTO->building);
         $passenger->updatePassengerData($passengerDTO->gender, $passengerDTO->firstname,
             $passengerDTO->lastname, $passengerDTO->telephone,
             $address, $passengerDTO->title,
@@ -93,7 +93,7 @@ class PassengerAssembler {
         $passengerDTO->contradictVehicleCategories = $passenger->getContradictVehicleCategories();
 
         $passengerDTO->isInWheelChair = $passenger->getIsInWheelChair();
-        $passengerDTO->gotMonthlyBilling = $passenger->getGotMonthlyBilling();
+        $passengerDTO->gotMonthlyBilling = $passenger->getHasMonthlyBilling();
         $passengerDTO->notice = $passenger->getNotice();
 
         $passengerDTO->handicaps = $passenger->getHandicaps();
@@ -103,7 +103,7 @@ class PassengerAssembler {
         $passengerDTO->billingAddress = $passenger->getBillingAddress();
         $passengerDTO->isBillingAddress = $passenger->getIsBillingAddress();
 
-        $passengerDTO->house = $passenger->getAddress()->getHouse();
+        $passengerDTO->building = $passenger->getAddress()->getBuilding();
         $passengerDTO->lookaheadaddress = $this->addressAssembler->addressToAddressLookaheadDTO($passenger->getAddress());
 
         return $passengerDTO;

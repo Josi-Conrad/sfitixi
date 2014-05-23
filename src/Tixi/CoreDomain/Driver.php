@@ -322,4 +322,18 @@ class Driver extends Person {
     public static function constructWheelChairAttendanceString($wheelChairAttendance) {
         return $wheelChairAttendance ? 'driver.wheelchairattendance.yes' : 'driver.wheelchairattendance.no';
     }
+
+    /**
+     * drives ceratin vehicle categories
+     * @param VehicleCategory $vehicleCategory
+     * @return bool
+     */
+    public function isCompatibleWithVehicleCategory(VehicleCategory $vehicleCategory) {
+        foreach ($this->contradictVehicleCategories as $contradict) {
+            if ($vehicleCategory->getId() === $contradict->getId()) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

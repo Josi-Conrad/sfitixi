@@ -13,6 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Tixi\ApiBundle\Helper\DateTimeService;
 use Tixi\App\Disposition\DispositionVariables;
 use Tixi\CoreDomain\Shared\CommonBaseEntity;
+use Tixi\CoreDomain\VehicleCategory;
 
 /**
  * Tixi\CoreDomain\Dispo\DrivingMission
@@ -253,6 +254,31 @@ class DrivingMission {
      */
     public function getServiceOrder() {
         return $this->serviceOrder;
+    }
+
+    /**
+     * @param VehicleCategory $vehicleCategory
+     * @return bool
+     */
+    public function isCompatibleWithVehicleCategory(VehicleCategory $vehicleCategory) {
+        $amountOfPassengers = 0;
+        $amountOfWheelChairs = 0;
+        /**@var $order \Tixi\CoreDomain\Dispo\DrivingOrder */
+        foreach ($this->getDrivingOrders() as $order) {
+            if (!$order->getPassenger()->isCompatibleWithVehicleCategory($vehicleCategory)) {
+                return false;
+            }
+            $amountOfPassengers += 1 + $order->getCompanion();
+            if ($order->getPassenger()->getIsInWheelChair()) {
+                $amountOfWheelChairs++;
+            }
+        }
+        if ($vehicleCategory->getAmountOfWheelChairs() >= $amountOfWheelChairs &&
+            $vehicleCategory->getAmountOfSeats() >= $amountOfPassengers
+        ) {
+            return true;
+        }
+        return false;
     }
 
 }
