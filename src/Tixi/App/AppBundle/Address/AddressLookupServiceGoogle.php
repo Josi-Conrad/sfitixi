@@ -136,9 +136,13 @@ class AddressLookupServiceGoogle extends AddressLookupService {
                 $streetNr = $this->getLongName($addressComponent);
             } elseif (in_array('route', $types)) {
                 $streetName = $this->getLongName($addressComponent);
-            } elseif (in_array('administrative_area_level_2', $types)) {
+            } elseif (in_array('locality', $types)) {
                 $city = $this->getLongName($addressComponent);
             } elseif (in_array('administrative_area_level_1', $types)) {
+                if (null === $city) {
+                    $city = $this->getLongName($addressComponent);
+                }
+            } elseif (in_array('administrative_area_level_2', $types)) {
                 if (null === $city) {
                     $city = $this->getLongName($addressComponent);
                 }
@@ -295,9 +299,9 @@ class AddressLookupServiceGoogle extends AddressLookupService {
     protected function constructLanguageSection($localStr) {
         $languageString = '';
         //the localStr can be in the format languageCode_countryCode. To use the google service we only need the languageCode
-        $lang = explode('_',$localStr)[0];
-        if('' !== $lang) {
-            $languageString .= 'language='.$lang;
+        $lang = explode('_', $localStr)[0];
+        if ('' !== $lang) {
+            $languageString .= 'language=' . $lang;
         }
         return $languageString;
     }
