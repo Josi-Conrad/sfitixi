@@ -16,10 +16,13 @@ use Tixi\ApiBundle\Shared\DataGrid\GridControllers\Management\BankHolidayDataGri
 use Tixi\ApiBundle\Shared\DataGrid\GridControllers\Management\DriverCategoryDataGridController;
 use Tixi\ApiBundle\Shared\DataGrid\GridControllers\Management\HandicapDataGridController;
 use Tixi\ApiBundle\Shared\DataGrid\GridControllers\Management\InsuranceDataGridController;
+use Tixi\ApiBundle\Shared\DataGrid\GridControllers\Management\PersonCategoryDataGridController;
 use Tixi\ApiBundle\Shared\DataGrid\GridControllers\Management\PoiKeywordDataGridController;
 use Tixi\ApiBundle\Shared\DataGrid\GridControllers\Management\ShiftTypeDataGridController;
 use Tixi\ApiBundle\Shared\DataGrid\GridControllers\Management\VehicleCategoryDataGridController;
 use Tixi\ApiBundle\Shared\DataGrid\GridControllers\Management\VehicleDepotDataGridController;
+use Tixi\ApiBundle\Shared\DataGrid\GridControllers\Management\ZoneDataGridController;
+use Tixi\ApiBundle\Shared\DataGrid\GridControllers\Management\ZonePlanDataGridController;
 use Tixi\ApiBundle\Shared\DataGrid\GridControllers\PassengerAbsentDataGridController;
 use Tixi\ApiBundle\Shared\DataGrid\GridControllers\PassengerDataGridController;
 use Tixi\ApiBundle\Shared\DataGrid\GridControllers\POIDataGridController;
@@ -193,9 +196,37 @@ class DataGridControllerFactory extends ContainerAware {
     /**
      * @param bool $embeddedState
      * @param array $routeProperties
+     * @return PersonCategoryDataGridController
+     */
+    public function createManagementPersonCategoryController($embeddedState = false, array $routeProperties = array()) {
+        return new PersonCategoryDataGridController($this->container, $embeddedState, $routeProperties);
+    }
+
+    /**
+     * @param bool $embeddedState
+     * @param array $routeProperties
+     * @return ZoneDataGridController
+     */
+    public function createManagementZoneController($embeddedState = false, array $routeProperties = array()) {
+        return new ZoneDataGridController($this->container, $embeddedState, $routeProperties);
+    }
+
+    /**
+     * @param bool $embeddedState
+     * @param array $routeProperties
+     * @return ZonePlanDataGridController
+     */
+    public function createManagementZonePlanController($embeddedState = false, array $routeProperties = array()) {
+        return new ZonePlanDataGridController($this->container, $embeddedState, $routeProperties);
+    }
+
+    /**
+     * @param bool $embeddedState
+     * @param array $routeProperties
      * @return WorkingMonthDataGridController
      */
     public function createDispoWorkingMonthController($embeddedState = false, array $routeProperties = array()) {
         return new WorkingMonthDataGridController($this->container, $embeddedState, $routeProperties);
     }
+
 } 

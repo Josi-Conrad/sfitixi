@@ -34,7 +34,7 @@ class PassengerAssembler {
             $passengerDTO->lastname, $passengerDTO->telephone,
             $address, $passengerDTO->title,
             $passengerDTO->isInWheelChair,
-            $passengerDTO->gotMonthlyBilling,
+            $passengerDTO->hasMonthlyBilling,
             $passengerDTO->email, $passengerDTO->entryDate, $passengerDTO->birthday,
             $passengerDTO->extraMinutes, $passengerDTO->details, $passengerDTO->notice,
             $passengerDTO->correspondenceAddress, $passengerDTO->billingAddress, $passengerDTO->isBillingAddress
@@ -47,6 +47,9 @@ class PassengerAssembler {
         }
         foreach ($passengerDTO->contradictVehicleCategories as $category) {
             $passenger->assignContradictVehicleCategory($category);
+        }
+        foreach ($passengerDTO->personCategories as $category) {
+            $passenger->assignPersonCategory($category);
         }
         return $passenger;
     }
@@ -63,13 +66,14 @@ class PassengerAssembler {
             $passengerDTO->lastname, $passengerDTO->telephone,
             $address, $passengerDTO->title,
             $passengerDTO->isInWheelChair,
-            $passengerDTO->gotMonthlyBilling,
+            $passengerDTO->hasMonthlyBilling,
             $passengerDTO->email, $passengerDTO->entryDate, $passengerDTO->birthday,
             $passengerDTO->extraMinutes, $passengerDTO->details, $passengerDTO->notice,
             $passengerDTO->correspondenceAddress, $passengerDTO->billingAddress, $passengerDTO->isBillingAddress);
         $passenger->setHandicaps($passengerDTO->handicaps);
         $passenger->setInsurances($passengerDTO->insurances);
         $passenger->setContradictVehicleCategories($passengerDTO->contradictVehicleCategories);
+        $passenger->setPersonCategories($passengerDTO->personCategories);
         return $passenger;
     }
 
@@ -91,9 +95,10 @@ class PassengerAssembler {
         $passengerDTO->extraMinutes = $passenger->getExtraMinutes();
         $passengerDTO->details = $passenger->getDetails();
         $passengerDTO->contradictVehicleCategories = $passenger->getContradictVehicleCategories();
+        $passengerDTO->personCategories = $passenger->getPersonCategories();
 
         $passengerDTO->isInWheelChair = $passenger->getIsInWheelChair();
-        $passengerDTO->gotMonthlyBilling = $passenger->getHasMonthlyBilling();
+        $passengerDTO->hasMonthlyBilling = $passenger->getHasMonthlyBilling();
         $passengerDTO->notice = $passenger->getNotice();
 
         $passengerDTO->handicaps = $passenger->getHandicaps();
@@ -135,7 +140,7 @@ class PassengerAssembler {
         $passengerListDTO->street = $passenger->getAddress()->getStreet();
         $passengerListDTO->city = $passenger->getAddress()->getCity();
         $passengerListDTO->isInWheelChair = $passenger->getIsInWheelChairAsString();
-        $passengerListDTO->gotMonthlyBilling = $passenger->getMonthlyBillingAsString();
+        $passengerListDTO->hasMonthlyBilling = $passenger->getMonthlyBillingAsString();
         $passengerListDTO->insurances = $passenger->getInsurancesAsString();
         return $passengerListDTO;
     }

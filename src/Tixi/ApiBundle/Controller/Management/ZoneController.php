@@ -15,39 +15,40 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Tixi\ApiBundle\Form\Management\ZonePlanType;
-use Tixi\ApiBundle\Interfaces\Management\ZonePlanAssembler;
-use Tixi\ApiBundle\Interfaces\Management\ZonePlanRegisterDTO;
+use Tixi\ApiBundle\Form\Management\ZoneType;
+use Tixi\ApiBundle\Interfaces\Management\ZoneAssembler;
+use Tixi\ApiBundle\Interfaces\Management\ZoneRegisterDTO;
 use Tixi\ApiBundle\Menu\MenuService;
 use Tixi\ApiBundle\Tile\Core\FormTile;
 use Tixi\ApiBundle\Tile\Core\PanelDeleteFooterTile;
 use Tixi\ApiBundle\Tile\Core\ReferentialConstraintErrorTile;
 use Tixi\ApiBundle\Tile\Core\RootPanel;
+use Tixi\CoreDomain\Zone;
 
 /**
- * Class ZonePlanController
+ * Class ZoneController
  * @package Tixi\ApiBundle\Controller\Management
  * @Breadcrumb("management.breadcrumb.name")
- * @Breadcrumb("zoneplan.panel.name", route="tixiapi_management_zoneplans_get")
- * @Route("/management/zoneplans")
+ * @Breadcrumb("zone.panel.name", route="tixiapi_management_zones_get")
+ * @Route("/management/zones")
  */
-class ZonePlanController extends Controller {
+class ZoneController extends Controller {
 
     protected $menuId;
 
     public function __construct() {
-        $this->menuId = MenuService::$menuManagementZonePlanId;
+        $this->menuId = MenuService::$menuManagementZoneId;
     }
 
     /**
-     * @Route("",name="tixiapi_management_zoneplans_get")
+     * @Route("",name="tixiapi_management_zones_get")
      * @Method({"GET","POST"})
      * @param Request $request
      * @param bool $embeddedState
      * @throws AccessDeniedException
      * @return Response
      */
-    public function getZonePlansAction(Request $request, $embeddedState = false) {
+    public function getZonesAction(Request $request, $embeddedState = false) {
         if (false === $this->get('security.context')->isGranted('ROLE_MANAGER')) {
             throw new AccessDeniedException();
         }
@@ -58,12 +59,12 @@ class ZonePlanController extends Controller {
         $dataGridControllerFactory = $this->get('tixi_api.datagridcontrollerfactory');
         $tileRenderer = $this->get('tixi_api.tilerenderer');
 
-        $gridController = $dataGridControllerFactory->createManagementZonePlanController($embeddedState);
+        $gridController = $dataGridControllerFactory->createManagementZoneController($embeddedState);
         $dataGridTile = $dataGridHandler->createDataGridTileByRequest($request, $this->menuId, $gridController);
 
         $rootPanel = null;
         if (!$embeddedState && !$isPartial) {
-            $rootPanel = new RootPanel($this->menuId, 'zoneplan.list.name');
+            $rootPanel = new RootPanel($this->menuId, 'zone.list.name');
             $rootPanel->add($dataGridTile);
         } else {
             $rootPanel = $dataGridTile;
@@ -73,32 +74,42 @@ class ZonePlanController extends Controller {
     }
 
     /**
-     * @Route("/{zonePlanId}/delete",name="tixiapi_management_zoneplan_delete")
+     * @Route("/{zoneId}/delete",name="tixiapi_management_zone_delete")
      * @Method({"GET","POST"})
      * @param Request $request
-     * @param $zonePlanId
+     * @param $zoneId
      * @throws AccessDeniedException
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function deleteZonePlanAction(Request $request, $zonePlanId) {
+    public function deleteZoneAction(Request $request, $zoneId) {
         if (false === $this->get('security.context')->isGranted('ROLE_MANAGER')) {
             throw new AccessDeniedException();
         }
-        $zonePlan = $this->getZonePlan($zonePlanId);
-        $zonePlan->deleteLogically();
-        $this->get('entity_manager')->flush();
-        return $this->redirect($this->generateUrl('tixiapi_management_zoneplans_get'));
+        $tileRenderer = $this->get('tixi_api.tilerenderer');
+        $zone = $this->getZone($zoneId);
+        $zoneRepository = $this->get('zoneplan_repository');
+        $usageAmount = $zoneRepository->getAmountByZone($zone);
+        if ($usageAmount > 0) {
+            $rootPanel = new RootPanel($this->menuId, 'error.refintegrity.header.name');
+            $rootPanel->add(new ReferentialConstraintErrorTile($usageAmount));
+            return new Response($tileRenderer->render($rootPanel));
+        } else {
+            $zone->deleteLogically();
+            $this->get('entity_manager')->flush();
+
+            return $this->redirect($this->generateUrl('tixiapi_management_zones_get'));
+        }
     }
 
     /**
-     * @Route("/new",name="tixiapi_management_zoneplan_new")
+     * @Route("/new",name="tixiapi_management_zone_new")
      * @Method({"GET","POST"})
-     * @Breadcrumb("zoneplan.panel.new", route="tixiapi_management_zoneplan_new")
+     * @Breadcrumb("zone.panel.new", route="tixiapi_management_zone_new")
      * @param Request $request
      * @throws AccessDeniedException
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      */
-    public function newZonePlanAction(Request $request) {
+    public function newZoneAction(Request $request) {
         if (false === $this->get('security.context')->isGranted('ROLE_MANAGER')) {
             throw new AccessDeniedException();
         }
@@ -107,60 +118,60 @@ class ZonePlanController extends Controller {
         $form = $this->getForm();
         $form->handleRequest($request);
         if ($form->isValid()) {
-            $zonePlanDTO = $form->getData();
-            $this->registerOrUpdateZonePlan($zonePlanDTO);
+            $zoneDTO = $form->getData();
+            $this->registerOrUpdateZone($zoneDTO);
             $this->get('entity_manager')->flush();
-            return $this->redirect($this->generateUrl('tixiapi_management_zoneplans_get'));
+            return $this->redirect($this->generateUrl('tixiapi_management_zones_get'));
         }
 
-        $rootPanel = new RootPanel($this->menuId, 'zoneplan.panel.new');
+        $rootPanel = new RootPanel($this->menuId, 'zone.panel.new');
         $rootPanel->add(new FormTile($form, true));
 
         return new Response($tileRenderer->render($rootPanel));
     }
 
     /**
-     * @Route("/{zonePlanId}/edit", name="tixiapi_management_zoneplan_edit")
+     * @Route("/{zoneId}/edit", name="tixiapi_management_zone_edit")
      * @Method({"GET","POST"})
-     * @Breadcrumb("{zonePlanId}", route={"name"="tixiapi_management_zoneplan_edit", "parameters"={"zonePlanId"}})
+     * @Breadcrumb("{zoneId}", route={"name"="tixiapi_management_zone_edit", "parameters"={"zoneId"}})
      * @param Request $request
-     * @param $zonePlanId
+     * @param $zoneId
      * @throws AccessDeniedException
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      */
-    public function editZonePlanAction(Request $request, $zonePlanId) {
+    public function editZoneAction(Request $request, $zoneId) {
         if (false === $this->get('security.context')->isGranted('ROLE_MANAGER')) {
             throw new AccessDeniedException();
         }
         $tileRenderer = $this->get('tixi_api.tilerenderer');
-        /** @var ZonePlanAssembler $assembler */
-        $assembler = $this->get('tixi_api.assemblerzoneplan');
+        /** @var ZoneAssembler $assembler */
+        $assembler = $this->get('tixi_api.assemblerzone');
 
-        $zonePlan = $this->getZonePlan($zonePlanId);
-        $zonePlanDTO = $assembler->toZonePlanRegisterDTO($zonePlan);
-        $form = $this->getForm($zonePlanDTO);
+        $zone = $this->getZone($zoneId);
+        $zoneDTO = $assembler->toZoneRegisterDTO($zone);
+        $form = $this->getForm($zoneDTO);
         $form->handleRequest($request);
         if ($form->isValid()) {
-            $zonePlanDTO = $form->getData();
-            $this->registerOrUpdateZonePlan($zonePlanDTO);
+            $zoneDTO = $form->getData();
+            $this->registerOrUpdateZone($zoneDTO);
             $this->get('entity_manager')->flush();
-            return $this->redirect($this->generateUrl('tixiapi_management_zoneplans_get'));
+            return $this->redirect($this->generateUrl('tixiapi_management_zones_get'));
         }
-        $rootPanel = new RootPanel($this->menuId, 'zoneplan.panel.edit');
+        $rootPanel = new RootPanel($this->menuId, 'zone.panel.edit');
         $rootPanel->add(new FormTile($form, true));
-        $rootPanel->add(new PanelDeleteFooterTile($this->generateUrl('tixiapi_management_zoneplan_delete', array('zonePlanId' => $zonePlanId)), 'zoneplan.button.delete'));
+        $rootPanel->add(new PanelDeleteFooterTile($this->generateUrl('tixiapi_management_zone_delete', array('zoneId' => $zoneId)), 'zone.button.delete'));
 
         return new Response($tileRenderer->render($rootPanel));
     }
 
     /**
-     * @param null $zonePlanDTO
+     * @param null $zoneDTO
      * @param null $targetRoute
      * @param array $parameters
      * @param string $method
      * @return mixed
      */
-    protected function getForm($zonePlanDTO = null, $targetRoute = null, $parameters = array(), $method = 'POST') {
+    protected function getForm($zoneDTO = null, $targetRoute = null, $parameters = array(), $method = 'POST') {
         if ($targetRoute) {
             $options = array(
                 'action' => $this->generateUrl($targetRoute, $parameters),
@@ -169,41 +180,41 @@ class ZonePlanController extends Controller {
         } else {
             $options = array();
         }
-        return $this->createForm(new ZonePlanType($this->menuId), $zonePlanDTO, $options);
+        return $this->createForm(new ZoneType($this->menuId), $zoneDTO, $options);
     }
 
     /**
-     * @param ZonePlanRegisterDTO $dto
+     * @param ZoneRegisterDTO $dto
      * @return mixed|\Tixi\CoreDomain\POIKeyword
      */
-    protected function registerOrUpdateZonePlan(ZonePlanRegisterDTO $dto) {
-        /** @var ZonePlanAssembler $assembler */
-        $assembler = $this->get('tixi_api.assemblerzoneplan');
-        $zonePlanRepository = $this->get('zoneplan_repository');
+    protected function registerOrUpdateZone(ZoneRegisterDTO $dto) {
+        /** @var ZoneAssembler $assembler */
+        $assembler = $this->get('tixi_api.assemblerzone');
+        $zoneRepository = $this->get('zone_repository');
 
         if (null === $dto->id) {
-            $zonePlan = $assembler->registerDTOtoNewZonePlan($dto);
-            $zonePlanRepository->store($zonePlan);
-            return $zonePlan;
+            $zone = $assembler->registerDTOtoNewZone($dto);
+            $zoneRepository->store($zone);
+            return $zone;
         } else {
-            $zonePlan = $this->getZonePlan($dto->id);
-            $assembler->registerDTOtoZonePlan($zonePlan, $dto);
-            return $zonePlan;
+            $zone = $this->getZone($dto->id);
+            $assembler->registerDTOtoZone($zone, $dto);
+            return $zone;
         }
     }
 
     /**
-     * @param $zonePlanId
-     * @return mixed
+     * @param $zoneId
+     * @return Zone
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
-    protected function getZonePlan($zonePlanId) {
-        $repository = $this->get('zoneplan_repository');
-        $zonePlan = $repository->find($zonePlanId);
-        if (null === $zonePlan) {
-            throw $this->createNotFoundException('The zonePlan with id ' . $zonePlanId . ' does not exist');
+    protected function getZone($zoneId) {
+        $repository = $this->get('zone_repository');
+        $zone = $repository->find($zoneId);
+        if (null === $zone) {
+            throw $this->createNotFoundException('The zone with id ' . $zoneId . ' does not exist');
         }
-        return $zonePlan;
+        return $zone;
     }
 
 

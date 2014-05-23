@@ -33,7 +33,9 @@
         <parameter key="tixi_api.shifttypeassembler.class">Tixi\ApiBundle\Interfaces\Management\ShiftTypeAssembler</parameter>
         <parameter key="tixi_api.bankholidayassembler.class">Tixi\ApiBundle\Interfaces\Management\BankHolidayAssembler</parameter>
         <parameter key="tixi_api.drivercategoryassembler.class">Tixi\ApiBundle\Interfaces\Management\DriverCategoryAssembler</parameter>
+        <parameter key="tixi_api.personcategoryassembler.class">Tixi\ApiBundle\Interfaces\Management\PersonCategoryAssembler</parameter>
         <parameter key="tixi_api.zoneplanassembler.class">Tixi\ApiBundle\Interfaces\Management\ZonePlanAssembler</parameter>
+        <parameter key="tixi_api.zoneassembler.class">Tixi\ApiBundle\Interfaces\Management\ZoneAssembler</parameter>
 
         <!-- Formtype -->
         <parameter key="tixi_api.form.type.lookahead.address.class">Tixi\ApiBundle\Form\Shared\Lookahead\AddressLookaheadType</parameter>
@@ -162,7 +164,9 @@
         </service>
         <service id="tixi_api.assemblerBankHoliday" class="%tixi_api.bankholidayassembler.class%"/>
         <service id="tixi_api.assemblerDriverCategory" class="%tixi_api.drivercategoryassembler.class%"/>
+        <service id="tixi_api.assemblerPersonCategory" class="%tixi_api.personcategoryassembler.class%"/>
         <service id="tixi_api.assemblerZonePlan" class="%tixi_api.zoneplanassembler.class%"/>
+        <service id="tixi_api.assemblerZone" class="%tixi_api.zoneassembler.class%"/>
 
 
         <!-- Formtypes -->

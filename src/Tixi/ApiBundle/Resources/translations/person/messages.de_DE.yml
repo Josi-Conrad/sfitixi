@@ -19,3 +19,13 @@ person.field.correspondenceaddress: Korrespondenz-Adresse
 person.field.billingaddress: Rechnungs-Adresse
 
 person.field.contradict_vehicle_category: Nicht bevorzugte Fahrzeugkategorien
+
+#PersonCategory
+personcategory.button.new: Neue Personenkategorie
+personcategory.button.delete: Personenkategorie löschen
+personcategory.list.name: Alle Personenkategorien
+personcategory.panel.name: Personenkategorie
+personcategory.panel.new: Neue Personenkategorie
+personcategory.panel.edit: Personenkategorie editieren
+personcategory.field.name: Name
+personcategory.field.memo: Memo (für Disposition)

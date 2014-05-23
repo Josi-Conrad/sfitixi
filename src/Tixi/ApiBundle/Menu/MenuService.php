@@ -46,9 +46,11 @@ class MenuService extends ContainerAware {
     public static $menuManagementInsuranceId = 'management_insurances';
     public static $menuManagementBankHolidayId = 'management_bankholidays';
     public static $menuManagementDriverCategoryId = 'management_drivercategories';
+    public static $menuManagementPersonCategoryId = 'management_personcategories';
     public static $menuManagementZoningPlanId = 'management_zoningplans';
     public static $menuManagementShiftTypeId = 'management_shifttypes';
     public static $menuManagementVehicleDepotId = 'management_vehicledepots';
+    public static $menuManagementZoneId = 'management_zone';
     public static $menuManagementZonePlanId = 'management_zoneplan';
 
 
@@ -100,19 +102,21 @@ class MenuService extends ContainerAware {
             $managementSelectionTile =
                 $menuTile->add(new MenuSelectionItemTile(self::$menuSelectionManagementId,
                     'management.panel.name', $this->checkSelectionRootActivity(self::$menuSelectionManagementId, $activeItem)));
+
             $managementSelectionTile->add(new MenuItemTile(self::$menuManagementUserId,
                 $this->generateUrl('tixiapi_management_users_get'), 'user.panel.name', $this->checkSelectionChildActivity(self::$menuManagementUserId, $activeItem)));
-
-            if ($this->container->get('security.context')->isGranted('ROLE_ADMIN')) {
-                $managementSelectionTile->add(new MenuItemTile(self::$menuManagementZonePlanId,
-                    $this->generateUrl('tixiapi_management_zoneplan_edit'), 'zoneplan.panel.name', $this->checkSelectionChildActivity(self::$menuManagementZonePlanId, $activeItem)));
-            }
+            $managementSelectionTile->add(new MenuItemTile(self::$menuManagementZoneId,
+                $this->generateUrl('tixiapi_management_zones_get'), 'zone.panel.name', $this->checkSelectionChildActivity(self::$menuManagementZoneId, $activeItem)));
+            $managementSelectionTile->add(new MenuItemTile(self::$menuManagementZonePlanId,
+                $this->generateUrl('tixiapi_management_zoneplans_get'), 'zoneplan.panel.name', $this->checkSelectionChildActivity(self::$menuManagementZonePlanId, $activeItem)));
             $managementSelectionTile->add(new MenuItemTile(self::$menuManagementVehicleCategoryId,
                 $this->generateUrl('tixiapi_management_vehiclecategories_get'), 'vehiclecategory.panel.name', $this->checkSelectionChildActivity(self::$menuManagementVehicleCategoryId, $activeItem)));
             $managementSelectionTile->add(new MenuItemTile(self::$menuManagementVehicleDepotId,
                 $this->generateUrl('tixiapi_management_vehicledepots_get'), 'vehicledepot.panel.name', $this->checkSelectionChildActivity(self::$menuManagementVehicleDepotId, $activeItem)));
             $managementSelectionTile->add(new MenuItemTile(self::$menuManagementDriverCategoryId,
                 $this->generateUrl('tixiapi_management_drivercategories_get'), 'drivercategory.panel.name', $this->checkSelectionChildActivity(self::$menuManagementDriverCategoryId, $activeItem)));
+            $managementSelectionTile->add(new MenuItemTile(self::$menuManagementPersonCategoryId,
+                $this->generateUrl('tixiapi_management_personcategories_get'), 'personcategory.panel.name', $this->checkSelectionChildActivity(self::$menuManagementPersonCategoryId, $activeItem)));
             $managementSelectionTile->add(new MenuItemTile(self::$menuManagementPoiKeywordsId,
                 $this->generateUrl('tixiapi_management_poikeywords_get'), 'poikeyword.panel.name', $this->checkSelectionChildActivity(self::$menuManagementPoiKeywordsId, $activeItem)));
             $managementSelectionTile->add(new MenuItemTile(self::$menuManagementHandicapId,

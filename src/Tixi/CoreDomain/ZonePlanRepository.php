@@ -1,6 +1,6 @@
 <?php
 
-namespace Tixi\CoreDomain\Dispo;
+namespace Tixi\CoreDomain;
 
 use Tixi\CoreDomain\Shared\CommonBaseRepository;
 
@@ -14,6 +14,12 @@ interface ZonePlanRepository extends CommonBaseRepository {
      * @return mixed
      */
     public function store(ZonePlan $zonePlan);
+
+    /**
+     * @param Zone $zone
+     * @return mixed
+     */
+    public function getAmountByZone(Zone $zone);
 
     /**
      * @param ZonePlan $zonePlan

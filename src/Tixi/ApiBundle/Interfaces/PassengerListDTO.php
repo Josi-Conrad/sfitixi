@@ -55,9 +55,9 @@ class PassengerListDTO implements DataGridSourceClass {
      */
     public $isInWheelChair;
     /**
-     * @GridField(propertyId="Passenger.gotMonthlyBilling", headerName="passenger.field.payment", order=10)
+     * @GridField(propertyId="Passenger.hasMonthlyBilling", headerName="passenger.field.payment", order=10)
      */
-    public $gotMonthlyBilling;
+    public $hasMonthlyBilling;
     /**
      * @GridField(propertyId="Insurance.name", headerName="passenger.field.insurance", order=11)
      */

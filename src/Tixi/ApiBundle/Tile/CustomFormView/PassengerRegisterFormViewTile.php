@@ -34,8 +34,8 @@ class PassengerRegisterFormViewTile extends AbstractFormViewTile {
         $this->basicFormRows[] = new FormRowView('address', 'address.field.lookahead', $dto->lookaheadaddress->addressDisplayName);
         $this->basicFormRows[] = new FormRowView('isInWheelChair', 'passenger.field.isinwheelchair',
             Passenger::constructIsInWheelChairString($dto->isInWheelChair));
-        $this->basicFormRows[] = new FormRowView('gotMonthlyBilling', 'passenger.field.payment',
-            Passenger::constructMonthlyBillingString($dto->gotMonthlyBilling));
+        $this->basicFormRows[] = new FormRowView('hasMonthlyBilling', 'passenger.field.payment',
+            Passenger::constructMonthlyBillingString($dto->hasMonthlyBilling));
         $this->basicFormRows[] = new FormRowView('insurances', 'passenger.field.insurance',
             Passenger::constructInsurancesString($dto->insurances));
         $this->basicFormRows[] = new FormRowView('notice', 'passenger.field.notice', $dto->notice);

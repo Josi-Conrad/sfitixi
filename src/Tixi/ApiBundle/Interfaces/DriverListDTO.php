@@ -63,7 +63,7 @@ class DriverListDTO implements DataGridSourceClass {
      * @return GenericAccessQuery
      */
     public function getAccessQuery() {
-        return new GenericAccessQuery('Driver', 'Tixi\CoreDomain\Driver Driver JOIN Driver.driverCategory DriverCategory
+        return new GenericAccessQuery('Driver', 'Tixi\CoreDomain\Driver Driver LEFT JOIN Driver.driverCategory DriverCategory
         JOIN Driver.address Address', 'Driver.id');
     }
 }

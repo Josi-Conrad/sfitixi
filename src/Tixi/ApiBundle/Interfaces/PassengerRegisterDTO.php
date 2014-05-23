@@ -16,10 +16,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 class PassengerRegisterDTO extends PersonRegisterDTO {
     //Passenger
     public $isInWheelChair;
-    public $gotMonthlyBilling;
+    public $hasMonthlyBilling;
     public $notice;
 
     public $handicaps;
     public $insurances;
+    public $personCategories;
 
 }

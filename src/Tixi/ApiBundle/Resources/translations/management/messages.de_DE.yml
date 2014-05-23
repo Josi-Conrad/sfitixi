@@ -1,5 +1,20 @@
+#Zone
+zone.list.name: Zonen
+zone.panel.name: Zone
+zone.panel.edit: Zone editieren
+zone.panel.new: Neue Zone
+zone.field.name: Zonenname
+zone.field.rate: Tarif (CHF)
+zone.button.new: Neue Zone
+zone.button.delete: Zone löschen
+
 #ZonePlan
-zoneplan.panel.name: ZonenPlan
-zoneplan.panel.edit: ZonenPlan editieren
-zoneplan.field.innerzone: Innere Zone (evtl. gleich Kantonsgrenze)
-zoneplan.field.adjacentzone: Angrenzende Zone
+zoneplan.list.name: Zonenplan
+zoneplan.panel.name: Zonenplan
+zoneplan.panel.edit: Zonenplan editieren
+zoneplan.panel.new: Neuer Zonenplan
+zoneplan.field.city: Ortsname
+zoneplan.field.zone: Zone
+zoneplan.field.memo: Memo
+zoneplan.button.new: Neuer Zonenplan
+zoneplan.button.delete: Zonenplan löschen

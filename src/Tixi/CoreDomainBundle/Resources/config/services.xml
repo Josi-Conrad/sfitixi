@@ -18,6 +18,8 @@
         <parameter key="driver_repository.doctrine.class">Tixi\CoreDomainBundle\Repository\DriverRepositoryDoctrine</parameter>
         <parameter key="drivercategory.doctrine.entity">Tixi\CoreDomain\DriverCategory</parameter>
         <parameter key="drivercategory_repository.doctrine.class">Tixi\CoreDomainBundle\Repository\DriverCategoryRepositoryDoctrine</parameter>
+        <parameter key="personcategory.doctrine.entity">Tixi\CoreDomain\PersonCategory</parameter>
+        <parameter key="personcategory_repository.doctrine.class">Tixi\CoreDomainBundle\Repository\PersonCategoryRepositoryDoctrine</parameter>
         <parameter key="handicap.doctrine.entity">Tixi\CoreDomain\Handicap</parameter>
         <parameter key="handicap_repository.doctrine.class">Tixi\CoreDomainBundle\Repository\HandicapRepositoryDoctrine</parameter>
         <parameter key="insurance.doctrine.entity">Tixi\CoreDomain\Insurance</parameter>
@@ -65,8 +67,10 @@
         <parameter key="workingday_repository.doctrine.class">Tixi\CoreDomainBundle\Repository\Dispo\WorkingDayRepositoryDoctrine</parameter>
         <parameter key="workingmonth.doctrine.entity">Tixi\CoreDomain\Dispo\WorkingMonth</parameter>
         <parameter key="workingmonth_repository.doctrine.class">Tixi\CoreDomainBundle\Repository\Dispo\WorkingMonthRepositoryDoctrine</parameter>
-        <parameter key="zoneplan.doctrine.entity">Tixi\CoreDomain\Dispo\ZonePlan</parameter>
-        <parameter key="zoneplan_repository.doctrine.class">Tixi\CoreDomainBundle\Repository\Dispo\ZonePlanRepositoryDoctrine</parameter>
+        <parameter key="zoneplan.doctrine.entity">Tixi\CoreDomain\ZonePlan</parameter>
+        <parameter key="zoneplan_repository.doctrine.class">Tixi\CoreDomainBundle\Repository\ZonePlanRepositoryDoctrine</parameter>
+        <parameter key="zone.doctrine.entity">Tixi\CoreDomain\Zone</parameter>
+        <parameter key="zone_repository.doctrine.class">Tixi\CoreDomainBundle\Repository\ZoneRepositoryDoctrine</parameter>
 
         <!-- AppImpl Services -->
         <parameter key="addressquotahelper.doctrine.entity">Tixi\CoreDomain\App\AddressLookupQuotaHelper</parameter>
@@ -116,6 +120,11 @@
         <service id="drivercategory_repository" alias="drivercategory_repository.doctrine"></service>
         <service id="drivercategory_repository.doctrine" class="%drivercategory_repository.doctrine.class%" factory-service="doctrine" factory-method="getrepository">
             <argument type="string">%drivercategory.doctrine.entity%</argument>
+        </service>
+
+        <service id="personcategory_repository" alias="personcategory_repository.doctrine"></service>
+        <service id="personcategory_repository.doctrine" class="%personcategory_repository.doctrine.class%" factory-service="doctrine" factory-method="getrepository">
+            <argument type="string">%personcategory.doctrine.entity%</argument>
         </service>
 
         <service id="handicap_repository" alias="handicap_repository.doctrine"></service>
@@ -232,6 +241,11 @@
         <service id="zoneplan_repository" alias="zoneplan_repository.doctrine"></service>
         <service id="zoneplan_repository.doctrine" class="%zoneplan_repository.doctrine.class%" factory-service="doctrine" factory-method="getrepository">
             <argument type="string">%zoneplan.doctrine.entity%</argument>
+        </service>
+
+        <service id="zone_repository" alias="zone_repository.doctrine"></service>
+        <service id="zone_repository.doctrine" class="%zone_repository.doctrine.class%" factory-service="doctrine" factory-method="getrepository">
+            <argument type="string">%zone.doctrine.entity%</argument>
         </service>
 
         <service id="bankholiday_repository" alias="bankholiday_repository.doctrine"></service>

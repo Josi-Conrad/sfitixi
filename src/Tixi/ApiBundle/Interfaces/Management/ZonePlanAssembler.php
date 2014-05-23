@@ -2,40 +2,74 @@
 /**
  * Created by PhpStorm.
  * User: hert
- * Date: 28.04.14
- * Time: 17:45
+ * Date: 17.04.14
+ * Time: 09:48
  */
 
 namespace Tixi\ApiBundle\Interfaces\Management;
 
-use Tixi\ApiBundle\Interfaces\Management\ZonePlanDTO;
-use Tixi\CoreDomain\Dispo\ZonePlan;
+
+use Tixi\CoreDomain\ZonePlan;
 
 /**
  * Class ZonePlanAssembler
- * @package Tixi\ApiBundle\Management
+ * @package Tixi\ApiBundle\Interfaces\Management
  */
 class ZonePlanAssembler {
+
     /**
-     * @param ZonePlanDTO $zonePlanDTO
+     * @param ZonePlanRegisterDTO $dto
      * @return ZonePlan
      */
-    public function dtoToZonePlan(ZonePlanDTO $zonePlanDTO) {
-        $zonePlan = ZonePlan::registerZonePlan(
-            $zonePlanDTO->innerZone,
-            $zonePlanDTO->adjacentZone
-        );
+    public function registerDTOtoNewZonePlan(ZonePlanRegisterDTO $dto) {
+        $zonePlan = ZonePlan::registerZonePlan($dto->city, $dto->memo);
+        $zonePlan->setZone($dto->zone);
         return $zonePlan;
     }
 
     /**
      * @param ZonePlan $zonePlan
-     * @return ZonePlanDTO
+     * @param ZonePlanRegisterDTO $dto
      */
-    public function zonePlanToDTO(ZonePlan $zonePlan) {
-        $zonePlanDTO = new ZonePlanDTO();
-        $zonePlanDTO->innerZone = $zonePlan->getInnerZone();
-        $zonePlanDTO->adjacentZone = $zonePlan->getAdjacentZone();
+    public function registerDTOtoZonePlan(ZonePlan $zonePlan, ZonePlanRegisterDTO $dto) {
+        $zonePlan->updateZonePlan($dto->city, $dto->memo);
+        $zonePlan->setZone($dto->zone);
+    }
+
+    /**
+     * @param ZonePlan $zonePlan
+     * @return ZonePlanRegisterDTO
+     */
+    public function toZonePlanRegisterDTO(ZonePlan $zonePlan) {
+        $zonePlanDTO = new ZonePlanRegisterDTO();
+        $zonePlanDTO->id = $zonePlan->getId();
+        $zonePlanDTO->city = $zonePlan->getCity();
+        $zonePlanDTO->memo = $zonePlan->getMemo();
+        $zonePlanDTO->zone = $zonePlan->getZone();
         return $zonePlanDTO;
+    }
+
+    /**
+     * @param $zonePlans
+     * @return array
+     */
+    public function zonePlansToZonePlanListDTOs($zonePlans) {
+        $dtoArray = array();
+        foreach ($zonePlans as $zonePlan) {
+            $dtoArray[] = $this->toZonePlanListDTO($zonePlan);
+        }
+        return $dtoArray;
+    }
+
+    /**
+     * @param ZonePlan $zonePlan
+     * @return ZonePlanListDTO
+     */
+    public function toZonePlanListDTO(ZonePlan $zonePlan) {
+        $zonePlanListDTO = new ZonePlanListDTO();
+        $zonePlanListDTO->id = $zonePlan->getId();
+        $zonePlanListDTO->city = $zonePlan->getCity();
+        $zonePlanListDTO->zoneName = $zonePlan->getZone()->getName();
+        return $zonePlanListDTO;
     }
 }

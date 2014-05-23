@@ -57,6 +57,15 @@ class Person extends CommonBaseEntity {
     protected $contradictVehicleCategories;
 
     /**
+     * @ORM\ManyToMany(targetEntity="PersonCategory")
+     * @ORM\JoinTable(name="person_to_category",
+     *      joinColumns={@ORM\JoinColumn(name="person_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="person_category_id", referencedColumnName="id")}
+     *      )
+     */
+    protected $personCategories;
+
+    /**
      * @ORM\Column(type="string", length=50, nullable=true)
      */
     protected $title;
@@ -151,6 +160,7 @@ class Person extends CommonBaseEntity {
 
         $this->absents = new ArrayCollection();
         $this->contradictVehicleCategories = new ArrayCollection();
+        $this->personCategories = new ArrayCollection();
 
         $this->setGender($gender);
         $this->setFirstname($firstname);
@@ -281,6 +291,13 @@ class Person extends CommonBaseEntity {
     }
 
     /**
+     * @param PersonCategory $personCategory
+     */
+    public function assignPersonCategory($personCategory) {
+        $this->personCategories->add($personCategory);
+    }
+
+    /**
      * @return mixed
      */
     public function getContradictVehicleCategories() {
@@ -288,10 +305,24 @@ class Person extends CommonBaseEntity {
     }
 
     /**
+     * @return mixed
+     */
+    public function getPersonCategories() {
+        return $this->personCategories;
+    }
+
+    /**
      * @param $contradictVehicleCategories
      */
     public function setContradictVehicleCategories($contradictVehicleCategories) {
         $this->contradictVehicleCategories = $contradictVehicleCategories;
+    }
+
+    /**
+     * @param $personCategories
+     */
+    public function setPersonCategories($personCategories) {
+        $this->personCategories = $personCategories;
     }
 
     /**

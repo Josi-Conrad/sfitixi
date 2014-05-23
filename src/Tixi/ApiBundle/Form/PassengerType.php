@@ -60,7 +60,7 @@ class PassengerType extends PersonType {
             'required' => false,
             'label' => 'person.field.billingaddress'
         ));
-        $builder->add('gotMonthlyBilling', 'checkbox', array(
+        $builder->add('hasMonthlyBilling', 'checkbox', array(
             'required' => false,
             'label' => 'passenger.field.monthlybilling'
         ));
@@ -87,6 +87,18 @@ class PassengerType extends PersonType {
             'expanded' => true,
             'multiple' => true,
             'label' => 'passenger.field.insurance',
+            'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('e')
+                        ->where('e.isDeleted = 0');
+                },
+        ));
+        $builder->add('personCategories', 'entity', array(
+            'required' => false,
+            'class' => 'Tixi\CoreDomain\PersonCategory',
+            'property' => 'name',
+            'expanded' => true,
+            'multiple' => true,
+            'label' => 'passenger.field.personcategory',
             'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('e')
                         ->where('e.isDeleted = 0');

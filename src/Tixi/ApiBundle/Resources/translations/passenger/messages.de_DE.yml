@@ -22,6 +22,7 @@ passenger.isinwheelchair.no: Nein
 passenger.monthlybilling.yes: monatlich
 passenger.monthlybilling.no: bar
 passenger.field.isbillingaddress: Addresse entspricht Rechnungsadresse
+passenger.field.personcategory: Personenkategorie
 
 #Handicap
 handicap.list.name: Alle Behinderungen

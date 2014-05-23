@@ -1,9 +1,10 @@
 <?php
 
-namespace Tixi\CoreDomainBundle\Repository\Dispo;
+namespace Tixi\CoreDomainBundle\Repository;
 
-use Tixi\CoreDomain\Dispo\ZonePlan;
-use Tixi\CoreDomain\Dispo\ZonePlanRepository;
+use Tixi\CoreDomain\Zone;
+use Tixi\CoreDomain\ZonePlan;
+use Tixi\CoreDomain\ZonePlanRepository;
 use Tixi\CoreDomainBundle\Repository\CommonBaseRepositoryDoctrine;
 
 /**
@@ -17,6 +18,17 @@ class ZonePlanRepositoryDoctrine  extends CommonBaseRepositoryDoctrine implement
      */
     public function store(ZonePlan $zonePlan) {
         $this->getEntityManager()->persist($zonePlan);
+    }
+
+    /**
+     * @param Zone $zone
+     * @return mixed
+     */
+    public function getAmountByZone(Zone $zone) {
+        $qb = parent::createQueryBuilder('e')->select('count(e.id)');
+        $qb->add('where', 'e.zone = :zone');
+        $qb->setParameter('zone', $zone);
+        return $qb->getQuery()->getSingleScalarResult();
     }
 
     /**
