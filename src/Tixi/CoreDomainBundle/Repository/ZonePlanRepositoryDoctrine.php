@@ -11,13 +11,21 @@ use Tixi\CoreDomainBundle\Repository\CommonBaseRepositoryDoctrine;
  * Class ZonePlanRepositoryDoctrine
  * @package Tixi\CoreDomainBundle\Repository\Dispo
  */
-class ZonePlanRepositoryDoctrine  extends CommonBaseRepositoryDoctrine implements ZonePlanRepository {
+class ZonePlanRepositoryDoctrine extends CommonBaseRepositoryDoctrine implements ZonePlanRepository {
     /**
      * @param ZonePlan $zonePlan
      * @return mixed|void
      */
     public function store(ZonePlan $zonePlan) {
         $this->getEntityManager()->persist($zonePlan);
+    }
+
+    /**
+     * @param ZonePlan $zonePlan
+     * @return mixed|void
+     */
+    public function remove(ZonePlan $zonePlan) {
+        $this->getEntityManager()->remove($zonePlan);
     }
 
     /**
@@ -32,10 +40,13 @@ class ZonePlanRepositoryDoctrine  extends CommonBaseRepositoryDoctrine implement
     }
 
     /**
-     * @param ZonePlan $zonePlan
-     * @return mixed|void
+     * @param $city
+     * @return ZonePlan
      */
-    public function remove(ZonePlan $zonePlan) {
-        $this->getEntityManager()->remove($zonePlan);
+    public function getZonePlanForCityName($city) {
+        $qb = parent::createQueryBuilder('e')
+            ->where('e.city = :addCity')
+            ->setParameter('addCity', $city);
+        return $qb->getQuery()->getSingleResult();
     }
 }

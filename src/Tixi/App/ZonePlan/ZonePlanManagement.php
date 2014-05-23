@@ -8,7 +8,8 @@
 
 namespace Tixi\App\ZonePlan;
 use Tixi\CoreDomain\Address;
-use Tixi\CoreDomain\Dispo\ZonePlan;
+use Tixi\CoreDomain\Zone;
+use Tixi\CoreDomain\ZonePlan;
 
 /**
  * Interface ZonePlanManagement
@@ -16,27 +17,10 @@ use Tixi\CoreDomain\Dispo\ZonePlan;
  */
 interface ZonePlanManagement {
     /**
-     * returns true if coordinates of an address matches in predefined ZonePlan
+     * returns zone which address matches
      * @param $address
-     * @return boolean
+     * @return Zone
      */
-    public function addressMatchesZonePlan(Address $address);
+    public function getZoneForAddress(Address $address);
 
-    /**
-     * returns true if coordinates of an address matches in predefined adjacent ZonePlan
-     * @param $address
-     * @return boolean
-     */
-    public function addressMatchesAdjacentZonePlan(Address $address);
-
-    /**
-     * @return ZonePlan
-     */
-    public function getZonePlan();
-
-    /**
-     * @param \Tixi\CoreDomain\Dispo\ZonePlan $zonePlan
-     * @return ZonePlan
-     */
-    public function createOrUpdateZonePlan(ZonePlan $zonePlan);
 } 

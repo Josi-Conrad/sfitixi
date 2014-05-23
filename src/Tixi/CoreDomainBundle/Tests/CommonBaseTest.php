@@ -126,9 +126,13 @@ class CommonBaseTest extends WebTestCase {
      */
     protected $routeRepo;
     /**
-     * @var \Tixi\CoreDomainBundle\Repository\Dispo\ZonePlanRepositoryDoctrine
+     * @var \Tixi\CoreDomainBundle\Repository\ZoneRepositoryDoctrine
      */
-    protected $zonePlan;
+    protected $zoneRepo;
+    /**
+     * @var \Tixi\CoreDomainBundle\Repository\ZonePlanRepositoryDoctrine
+     */
+    protected $zonePlanRepo;
     /**
      * @var \Tixi\SecurityBundle\Repository\UserRepositoryDoctrine
      */
@@ -200,7 +204,8 @@ class CommonBaseTest extends WebTestCase {
         $this->shiftTypeRepo = $kernel->getContainer()->get('shifttype_repository');
         $this->repeatedDrivingAssertionRepo = $kernel->getContainer()->get('repeateddrivingassertion_repository');
         $this->repeatedDrivingAssertionPlanRepo = $kernel->getContainer()->get('repeateddrivingassertionplan_repository');
-        $this->zonePlan = $kernel->getContainer()->get('zoneplan_repository');
+        $this->zoneRepo = $kernel->getContainer()->get('zone_repository');
+        $this->zonePlanRepo = $kernel->getContainer()->get('zoneplan_repository');
 
         $this->drivingOrderRepo = $kernel->getContainer()->get('drivingorder_repository');
         $this->repeatedDrivingOrderRepo = $kernel->getContainer()->get('repeateddrivingorder_repository');

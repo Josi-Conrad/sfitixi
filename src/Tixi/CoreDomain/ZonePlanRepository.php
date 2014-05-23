@@ -27,4 +27,9 @@ interface ZonePlanRepository extends CommonBaseRepository {
      */
     public function remove(ZonePlan $zonePlan);
 
+    /**
+     * @param $city
+     * @return ZonePlan
+     */
+    public function getZonePlanForCityName($city);
 }

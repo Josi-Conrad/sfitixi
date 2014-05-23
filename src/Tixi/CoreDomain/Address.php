@@ -32,12 +32,6 @@ class Address extends CommonBaseEntity {
     protected $id;
 
     /**
-     * old Id from data integration
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    protected $pin;
-
-    /**
      * @ORM\OneToMany(targetEntity="POI", mappedBy="address")
      * @ORM\JoinColumn(name="poi_id", referencedColumnName="id")
      */
