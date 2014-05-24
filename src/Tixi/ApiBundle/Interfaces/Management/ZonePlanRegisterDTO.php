@@ -17,5 +17,6 @@ class ZonePlanRegisterDTO {
     public $city;
     public $postalCode;
     public $memo;
+
     public $zone;
 }

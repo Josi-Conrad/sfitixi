@@ -14,6 +14,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Config\Definition\Exception\Exception;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -124,10 +125,20 @@ class ShiftTypeController extends Controller {
         if ($form->isValid()) {
             $shiftTypeDTO = $form->getData();
             $shiftType = $this->registerOrUpdateShiftType($shiftTypeDTO);
-            $this->get('entity_manager')->flush();
-            return $this->redirect($this->generateUrl('tixiapi_management_shifttypes_get', array('shifttypeId' => $shiftType->getId())));
-        }
+            try {
+                $this->get('entity_manager')->flush();
+            } catch (DBALException $e) {
+                $errorMsg = $this->get('translator')->trans('form.error.valid.unique');
+                $error = new FormError($errorMsg);
+                $form->addError($error);
+                $form->get('name')->addError($error);
+            }
 
+            //if no errors/invalids in form
+            if (count($form->getErrors()) < 1) {
+                return $this->redirect($this->generateUrl('tixiapi_management_shifttypes_get', array('shifttypeId' => $shiftType->getId())));
+            }
+        }
         $rootPanel = new RootPanel($this->menuId, 'shifttype.panel.new');
         $rootPanel->add(new FormTile($form, true));
 
@@ -160,8 +171,19 @@ class ShiftTypeController extends Controller {
         if ($form->isValid()) {
             $shiftTypeDTO = $form->getData();
             $this->registerOrUpdateShiftType($shiftTypeDTO);
-            $this->get('entity_manager')->flush();
-            return $this->redirect($this->generateUrl('tixiapi_management_shifttypes_get', array('shiftTypeId' => $shiftTypeId)));
+            try {
+                $this->get('entity_manager')->flush();
+            } catch (DBALException $e) {
+                $errorMsg = $this->get('translator')->trans('form.error.valid.unique');
+                $error = new FormError($errorMsg);
+                $form->addError($error);
+                $form->get('name')->addError($error);
+            }
+
+            //if no errors/invalids in form
+            if (count($form->getErrors()) < 1) {
+                return $this->redirect($this->generateUrl('tixiapi_management_shifttypes_get', array('shiftTypeId' => $shiftTypeId)));
+            }
         }
         $rootPanel = new RootPanel($this->menuId, 'shifttype.panel.edit');
         $rootPanel->add(new FormTile($form, true));

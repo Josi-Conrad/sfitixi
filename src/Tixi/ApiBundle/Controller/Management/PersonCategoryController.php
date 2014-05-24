@@ -14,6 +14,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Config\Definition\Exception\Exception;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -93,8 +94,19 @@ class PersonCategoryController extends Controller {
         if ($form->isValid()) {
             $personCategoryDTO = $form->getData();
             $personCategory = $this->registerOrUpdatePersonCategory($personCategoryDTO);
-            $this->get('entity_manager')->flush();
-            return $this->redirect($this->generateUrl('tixiapi_management_personcategories_get', array('personcategoryId' => $personCategory->getId())));
+            try {
+                $this->get('entity_manager')->flush();
+            } catch (DBALException $e) {
+                $errorMsg = $this->get('translator')->trans('form.error.valid.unique');
+                $error = new FormError($errorMsg);
+                $form->addError($error);
+                $form->get('name')->addError($error);
+            }
+
+            //if no errors/invalids in form
+            if (count($form->getErrors()) < 1) {
+                return $this->redirect($this->generateUrl('tixiapi_management_personcategories_get', array('personcategoryId' => $personCategory->getId())));
+            }
         }
 
         $rootPanel = new RootPanel($this->menuId, 'personcategory.panel.new');
@@ -129,8 +141,19 @@ class PersonCategoryController extends Controller {
         if ($form->isValid()) {
             $personCategoryDTO = $form->getData();
             $this->registerOrUpdatePersonCategory($personCategoryDTO);
-            $this->get('entity_manager')->flush();
-            return $this->redirect($this->generateUrl('tixiapi_management_personcategories_get', array('personCategoryId' => $personCategoryId)));
+            try {
+                $this->get('entity_manager')->flush();
+            } catch (DBALException $e) {
+                $errorMsg = $this->get('translator')->trans('form.error.valid.unique');
+                $error = new FormError($errorMsg);
+                $form->addError($error);
+                $form->get('name')->addError($error);
+            }
+
+            //if no errors/invalids in form
+            if (count($form->getErrors()) < 1) {
+                return $this->redirect($this->generateUrl('tixiapi_management_personcategories_get', array('personCategoryId' => $personCategoryId)));
+            }
         }
         $rootPanel = new RootPanel($this->menuId, 'personcategory.panel.edit');
         $rootPanel->add(new FormTile($form, true));

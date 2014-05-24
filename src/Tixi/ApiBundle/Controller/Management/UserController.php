@@ -8,10 +8,12 @@
 namespace Tixi\ApiBundle\Controller\Management;
 
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
+use Doctrine\DBAL\DBALException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Config\Definition\Exception\Exception;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -94,12 +96,20 @@ class UserController extends Controller {
         $rootPanel->add(new FormTile($form, true));
         if ($form->isValid()) {
             $userDTO = $form->getData();
-            if (!$this->isUsernameAvailable($userDTO->username)) {
-                return new Response($tileRenderer->render($rootPanel));
-            }
             $user = $this->registerUser($userDTO);
-            $this->get('entity_manager')->flush();
-            return $this->redirect($this->generateUrl('tixiapi_management_users_get', array('userId' => $user->getId())));
+            try {
+                $this->get('entity_manager')->flush();
+            } catch (DBALException $e) {
+                $errorMsg = $this->get('translator')->trans('form.error.valid.unique');
+                $error = new FormError($errorMsg);
+                $form->addError($error);
+                $form->get('username')->addError($error);
+            }
+
+            //if no errors/invalids in form
+            if (count($form->getErrors()) < 1) {
+                return $this->redirect($this->generateUrl('tixiapi_management_users_get', array('userId' => $user->getId())));
+            }
         }
 
         return new Response($tileRenderer->render($rootPanel));
@@ -131,8 +141,19 @@ class UserController extends Controller {
         if ($form->isValid()) {
             $userDTO = $form->getData();
             $this->updateUser($userDTO);
-            $this->get('entity_manager')->flush();
-            return $this->redirect($this->generateUrl('tixiapi_management_users_get', array('userId' => $userId)));
+            try {
+                $this->get('entity_manager')->flush();
+            } catch (DBALException $e) {
+                $errorMsg = $this->get('translator')->trans('form.error.valid.unique');
+                $error = new FormError($errorMsg);
+                $form->addError($error);
+                $form->get('username')->addError($error);
+            }
+
+            //if no errors/invalids in form
+            if (count($form->getErrors()) < 1) {
+                return $this->redirect($this->generateUrl('tixiapi_management_users_get', array('userId' => $userId)));
+            }
         }
         $rootPanel = new RootPanel($this->menuId, 'user.panel.edit');
         $rootPanel->add(new FormTile($form, true));
@@ -210,18 +231,6 @@ class UserController extends Controller {
             throw $this->createNotFoundException('This role does not exist');
         }
         return $role;
-    }
-
-    /**
-     * @param $username
-     * @return bool
-     */
-    protected function isUsernameAvailable($username) {
-        $duplicate = $this->get('tixi_user_repository')->findOneBy(array('username' => $username));
-        if (!empty($duplicate)) {
-            return false;
-        }
-        return true;
     }
 
     protected function getUserById($userId) {
