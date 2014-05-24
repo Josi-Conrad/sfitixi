@@ -30,7 +30,11 @@ class ZonePlanListDTO implements DataGridSourceClass{
      */
     public $city;
     /**
-     * @GridField(propertyId="Zone.name", headerName="zoneplan.field.zone", order=2)
+     * @GridField(propertyId="ZonePlan.postalCode", headerName="zoneplan.field.postalcode", order=2)
+     */
+    public $postalCode;
+    /**
+     * @GridField(propertyId="Zone.name", headerName="zoneplan.field.zone", order=3)
      */
     public $zoneName;
 

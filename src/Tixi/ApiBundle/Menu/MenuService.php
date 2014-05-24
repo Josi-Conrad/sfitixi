@@ -82,7 +82,7 @@ class MenuService extends ContainerAware {
         $managementSelectionTile =
             $menuTile->add(new MenuSelectionItemTile(self::$menuDispoId,
                 'disposition.panel.name', $this->checkSelectionRootActivity(self::$menuDispoId, $activeItem)));
-        if ($this->container->get('security.context')->isGranted('ROLE_ADMIN')) {
+        if ($this->container->get('security.context')->isGranted('ROLE_MANAGER')) {
             $managementSelectionTile->add(new MenuItemTile(self::$menuWorkingMonthId,
                 $this->generateUrl('tixiapi_dispo_workingmonths_get'), 'workingmonth.panel.name', $this->checkSelectionChildActivity(self::$menuWorkingMonthId, $activeItem)));
         }

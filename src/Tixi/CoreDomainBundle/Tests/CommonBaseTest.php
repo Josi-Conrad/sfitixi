@@ -259,6 +259,14 @@ class CommonBaseTest extends WebTestCase {
         return $address;
     }
 
+    protected function createTestAddressAesch() {
+        $address = Address::registerAddress('Test 9', '4147',
+            'Aesch', 'Schweiz', 'Test', 47.049536, 8.547931);
+        $this->addressRepo->store($address);
+        $this->em->flush();
+        return $address;
+    }
+
     public function tearDown() {
         $this->em->rollback();
         parent::tearDown();

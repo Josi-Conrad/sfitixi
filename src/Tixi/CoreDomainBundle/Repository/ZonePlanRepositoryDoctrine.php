@@ -2,6 +2,7 @@
 
 namespace Tixi\CoreDomainBundle\Repository;
 
+use Tixi\CoreDomain\Address;
 use Tixi\CoreDomain\Zone;
 use Tixi\CoreDomain\ZonePlan;
 use Tixi\CoreDomain\ZonePlanRepository;
@@ -40,13 +41,19 @@ class ZonePlanRepositoryDoctrine extends CommonBaseRepositoryDoctrine implements
     }
 
     /**
-     * @param $city
+     * @param \Tixi\CoreDomain\Address $address
      * @return ZonePlan
      */
-    public function getZonePlanForCityName($city) {
+    public function getZonePlanForAddress(Address $address) {
+        $city = $address->getCity();
+        $plz = $address->getPostalCode();
+        $postalCode = substr($plz, 0, 1). '%';
+
         $qb = parent::createQueryBuilder('e')
             ->where('e.city = :addCity')
-            ->setParameter('addCity', $city);
+            ->andWhere('e.postalCode LIKE :addPostalCode')
+            ->setParameter('addCity', $city)
+            ->setParameter('addPostalCode', $postalCode);
         return $qb->getQuery()->getSingleResult();
     }
 }

@@ -15,6 +15,7 @@ zoneplan.panel.edit: Zonenplan editieren
 zoneplan.panel.new: Neuer Zonenplan
 zoneplan.field.city: Ortsname
 zoneplan.field.zone: Zone
-zoneplan.field.memo: Memo
+zoneplan.field.memo: Bemerkung
+zoneplan.field.postalcode: PLZ
 zoneplan.button.new: Neuer Zonenplan
 zoneplan.button.delete: Zonenplan löschen

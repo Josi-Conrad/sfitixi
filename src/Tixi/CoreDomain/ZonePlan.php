@@ -31,6 +31,10 @@ class ZonePlan extends CommonBaseEntity {
      */
     protected $city;
     /**
+     * @ORM\Column(type="string", length=5)
+     */
+    protected $postalCode;
+    /**
      * @ORM\Column(type="text", nullable=true)
      */
     protected $memo;
@@ -47,23 +51,29 @@ class ZonePlan extends CommonBaseEntity {
 
     /**
      * @param $city
+     * @param $postalCode
      * @param null $memo
      * @return ZonePlan
      */
-    public static function registerZonePlan($city, $memo = null) {
+    public static function registerZonePlan($city, $postalCode, $memo = null) {
         $zonePlan = new ZonePlan();
         $zonePlan->setCity($city);
+        $zonePlan->setPostalCode($postalCode);
         $zonePlan->setMemo($memo);
         return $zonePlan;
     }
 
     /**
      * @param null $city
+     * @param $postalCode
      * @param null $memo
      */
-    public function updateZonePlan($city = null, $memo = null) {
+    public function updateZonePlan($city = null, $postalCode, $memo = null) {
         if (!empty($city)) {
             $this->setCity($city);
+        }
+        if (!empty($postalCode)) {
+            $this->setPostalCode($postalCode);
         }
         if (!empty($memo)) {
             $this->setMemo($memo);
@@ -105,6 +115,20 @@ class ZonePlan extends CommonBaseEntity {
      */
     public function getCity() {
         return $this->city;
+    }
+
+    /**
+     * @param mixed $postalCode
+     */
+    public function setPostalCode($postalCode) {
+        $this->postalCode = $postalCode;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPostalCode() {
+        return $this->postalCode;
     }
 
     /**

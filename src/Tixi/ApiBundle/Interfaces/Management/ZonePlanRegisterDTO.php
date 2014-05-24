@@ -15,6 +15,7 @@ namespace Tixi\ApiBundle\Interfaces\Management;
 class ZonePlanRegisterDTO {
     public $id;
     public $city;
+    public $postalCode;
     public $memo;
     public $zone;
 }

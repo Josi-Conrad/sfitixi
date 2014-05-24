@@ -29,7 +29,8 @@ class ZonePlanManagementImpl extends ContainerAware implements ZonePlanManagemen
     public function getZoneForAddress(Address $address) {
         $zonePlanRepo = $this->container->get('zoneplan_repository');
         /**@var $zone \Tixi\CoreDomain\Zone */
-        $zone = $zonePlanRepo->getZonePlanForCityName($address->getCity());
+        $zonePlan = $zonePlanRepo->getZonePlanForAddress($address);
+        $zone = $zonePlan->getZone();
         return $zone;
 
 //        return PolygonCalc::pointInPolygon(new Point($address->getLat(), $address->getLng()),

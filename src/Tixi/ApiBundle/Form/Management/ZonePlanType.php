@@ -33,6 +33,14 @@ class ZonePlanType extends CommonAbstractType {
                 new NotBlank(array('message' => 'field.not_blank'))
             ),
         ));
+        $builder->add('postalCode', 'text', array(
+            'label' => 'zoneplan.field.postalcode',
+            'pattern' => '^[\+0-9A-Z*]{4,7}',
+            'attr' => array('title' => 'form.field.title.postalcode'),
+            'constraints' => array(
+                new NotBlank(array('message' => 'field.not_blank'))
+            ),
+        ));
         $builder->add('zone', 'entity', array(
             'class' => 'Tixi\CoreDomain\Zone',
             'property' => 'name',
