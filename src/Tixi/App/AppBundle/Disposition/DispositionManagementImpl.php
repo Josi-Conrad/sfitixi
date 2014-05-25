@@ -55,7 +55,7 @@ class DispositionManagementImpl extends ContainerAware implements DispositionMan
         /**
          * feasibility checks only time windows in a possible configuration
          */
-        $rideConfig = new RideConfiguration($drivingMissions, $drivingPools, $vehicles, RideConfiguration::ONLY_TIME_WINDOWS);
+        $rideConfig = new RideConfigurator($drivingMissions, $drivingPools, $vehicles, RideConfigurator::ONLY_TIME_WINDOWS);
         $rideConfig->addAdditionalRideNode($feasibleNode);
         $rideConfig->buildConfiguration();
 
@@ -92,7 +92,7 @@ class DispositionManagementImpl extends ContainerAware implements DispositionMan
         /**
          * feasibility checks only time windows in a possible configuration
          */
-        $rideConfig = new RideConfiguration($drivingMissions, $drivingPools, $vehicles, RideConfiguration::LEAST_KILOMETER);
+        $rideConfig = new RideConfigurator($drivingMissions, $drivingPools, $vehicles, RideConfigurator::LEAST_KILOMETER);
 
         $emptyRides = $rideConfig->buildAllPossibleEmptyRides();
         $s = microtime(true);
