@@ -10,3 +10,6 @@ form.field.title.telephone: Muss einer Telefonnummer entsprechen (+41-41 800 00 
 form.field.title.digit: Darf nur aus Zahlen bestehen
 form.field.title.date: Muss das Format dd.mm.yyyy haben (z.B. 21.03.2014)
 form.field.title.datetime: Muss das Format HH:MM haben (z.B. 12:59)
+
+#Form specifig error messages
+form.error.valid.unique: Ein identischer Eintrag existiert bereits

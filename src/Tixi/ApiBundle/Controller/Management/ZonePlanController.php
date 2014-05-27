@@ -9,9 +9,12 @@
 namespace Tixi\ApiBundle\Controller\Management;
 
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
+use Doctrine\DBAL\DBALException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Form;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -106,11 +109,24 @@ class ZonePlanController extends Controller {
 
         $form = $this->getForm();
         $form->handleRequest($request);
+
         if ($form->isValid()) {
             $zonePlanDTO = $form->getData();
             $this->registerOrUpdateZonePlan($zonePlanDTO);
-            $this->get('entity_manager')->flush();
-            return $this->redirect($this->generateUrl('tixiapi_management_zoneplans_get'));
+
+            try {
+                $this->get('entity_manager')->flush();
+            } catch (DBALException $e) {
+                $errorMsg = $this->get('translator')->trans('form.error.valid.unique');
+                $error = new FormError($errorMsg);
+                $form->addError($error);
+                $form->get('city')->addError($error);
+            }
+
+            //if no errors/invalids in form
+            if (count($form->getErrors()) < 1) {
+                return $this->redirect($this->generateUrl('tixiapi_management_zoneplans_get'));
+            }
         }
 
         $rootPanel = new RootPanel($this->menuId, 'zoneplan.panel.new');
@@ -143,8 +159,20 @@ class ZonePlanController extends Controller {
         if ($form->isValid()) {
             $zonePlanDTO = $form->getData();
             $this->registerOrUpdateZonePlan($zonePlanDTO);
-            $this->get('entity_manager')->flush();
-            return $this->redirect($this->generateUrl('tixiapi_management_zoneplans_get'));
+
+            try {
+                $this->get('entity_manager')->flush();
+            } catch (DBALException $e) {
+                $errorMsg = $this->get('translator')->trans('form.error.valid.unique');
+                $error = new FormError($errorMsg);
+                $form->addError($error);
+                $form->get('city')->addError($error);
+            }
+
+            //if no errors/invalids in form
+            if (count($form->getErrors()) < 1) {
+                return $this->redirect($this->generateUrl('tixiapi_management_zoneplans_get'));
+            }
         }
         $rootPanel = new RootPanel($this->menuId, 'zoneplan.panel.edit');
         $rootPanel->add(new FormTile($form, true));
@@ -158,7 +186,7 @@ class ZonePlanController extends Controller {
      * @param null $targetRoute
      * @param array $parameters
      * @param string $method
-     * @return mixed
+     * @return Form
      */
     protected function getForm($zonePlanDTO = null, $targetRoute = null, $parameters = array(), $method = 'POST') {
         if ($targetRoute) {

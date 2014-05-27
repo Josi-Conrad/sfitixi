@@ -10,10 +10,12 @@ namespace Tixi\ApiBundle\Form\Management;
 
 
 use Doctrine\ORM\EntityRepository;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Tixi\ApiBundle\Form\Shared\CommonAbstractType;
+use Tixi\CoreDomain\ZonePlanRepository;
 
 /**
  * Class ZonePlanType
@@ -30,9 +32,8 @@ class ZonePlanType extends CommonAbstractType {
             'label' => 'zoneplan.field.city',
             'attr' => array('title' => 'form.field.title.not_blank'),
             'constraints' => array(
-                new NotBlank(array('message' => 'field.not_blank'))
-            ),
-        ));
+                new NotBlank(array('message' => 'field.not_blank')),
+            )));
         $builder->add('postalCode', 'text', array(
             'label' => 'zoneplan.field.postalcode',
             'pattern' => '^[\+0-9A-Z*]{4,7}',
@@ -45,9 +46,9 @@ class ZonePlanType extends CommonAbstractType {
             'class' => 'Tixi\CoreDomain\Zone',
             'property' => 'name',
             'label' => 'zoneplan.field.zone',
-            'attr'=>array('title' => 'form.field.title.not_selected'),
+            'attr' => array('title' => 'form.field.title.not_selected'),
             'constraints' => array(
-                new NotBlank(array('message'=>'form.field.not_blank'))
+                new NotBlank(array('message' => 'form.field.not_blank'))
             ),
             'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('e')

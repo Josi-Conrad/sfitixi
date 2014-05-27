@@ -14,6 +14,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Config\Definition\Exception\Exception;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -93,8 +94,19 @@ class DriverCategoryController extends Controller {
         if ($form->isValid()) {
             $driverCategoryDTO = $form->getData();
             $driverCategory = $this->registerOrUpdateDriverCategory($driverCategoryDTO);
-            $this->get('entity_manager')->flush();
-            return $this->redirect($this->generateUrl('tixiapi_management_drivercategories_get', array('drivercategoryId' => $driverCategory->getId())));
+            try {
+                $this->get('entity_manager')->flush();
+            } catch (DBALException $e) {
+                $errorMsg = $this->get('translator')->trans('form.error.valid.unique');
+                $error = new FormError($errorMsg);
+                $form->addError($error);
+                $form->get('name')->addError($error);
+            }
+
+            //if no errors/invalids in form
+            if (count($form->getErrors()) < 1) {
+                return $this->redirect($this->generateUrl('tixiapi_management_drivercategories_get', array('drivercategoryId' => $driverCategory->getId())));
+            }
         }
 
         $rootPanel = new RootPanel($this->menuId, 'drivercategory.panel.new');
@@ -129,8 +141,19 @@ class DriverCategoryController extends Controller {
         if ($form->isValid()) {
             $driverCategoryDTO = $form->getData();
             $this->registerOrUpdateDriverCategory($driverCategoryDTO);
-            $this->get('entity_manager')->flush();
-            return $this->redirect($this->generateUrl('tixiapi_management_drivercategories_get', array('driverCategoryId' => $driverCategoryId)));
+            try {
+                $this->get('entity_manager')->flush();
+            } catch (DBALException $e) {
+                $errorMsg = $this->get('translator')->trans('form.error.valid.unique');
+                $error = new FormError($errorMsg);
+                $form->addError($error);
+                $form->get('name')->addError($error);
+            }
+
+            //if no errors/invalids in form
+            if (count($form->getErrors()) < 1) {
+                return $this->redirect($this->generateUrl('tixiapi_management_drivercategories_get', array('driverCategoryId' => $driverCategoryId)));
+            }
         }
         $rootPanel = new RootPanel($this->menuId, 'drivercategory.panel.edit');
         $rootPanel->add(new FormTile($form, true));

@@ -9,9 +9,11 @@
 namespace Tixi\ApiBundle\Controller\Management;
 
 use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
+use Doctrine\DBAL\DBALException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -92,8 +94,7 @@ class InsuranceController extends Controller {
             $rootPanel = new RootPanel($this->menuId, 'error.refintegrity.header.name');
             $rootPanel->add(new ReferentialConstraintErrorTile($usageAmount));
             return new Response($tileRenderer->render($rootPanel));
-        }
-        else {
+        } else {
             $insurance->deleteLogically();
             $this->get('entity_manager')->flush();
             return $this->redirect($this->generateUrl('tixiapi_management_insurances_get'));
@@ -119,8 +120,19 @@ class InsuranceController extends Controller {
         if ($form->isValid()) {
             $insuranceDTO = $form->getData();
             $this->registerOrUpdateInsurance($insuranceDTO);
-            $this->get('entity_manager')->flush();
-            return $this->redirect($this->generateUrl('tixiapi_management_insurances_get'));
+            try {
+                $this->get('entity_manager')->flush();
+            } catch (DBALException $e) {
+                $errorMsg = $this->get('translator')->trans('form.error.valid.unique');
+                $error = new FormError($errorMsg);
+                $form->addError($error);
+                $form->get('name')->addError($error);
+            }
+
+            //if no errors/invalids in form
+            if (count($form->getErrors()) < 1) {
+                return $this->redirect($this->generateUrl('tixiapi_management_insurances_get'));
+            }
         }
 
         $rootPanel = new RootPanel($this->menuId, 'insurance.panel.new');
@@ -153,8 +165,19 @@ class InsuranceController extends Controller {
         if ($form->isValid()) {
             $insuranceDTO = $form->getData();
             $this->registerOrUpdateInsurance($insuranceDTO);
-            $this->get('entity_manager')->flush();
-            return $this->redirect($this->generateUrl('tixiapi_management_insurances_get'));
+            try {
+                $this->get('entity_manager')->flush();
+            } catch (DBALException $e) {
+                $errorMsg = $this->get('translator')->trans('form.error.valid.unique');
+                $error = new FormError($errorMsg);
+                $form->addError($error);
+                $form->get('name')->addError($error);
+            }
+
+            //if no errors/invalids in form
+            if (count($form->getErrors()) < 1) {
+                return $this->redirect($this->generateUrl('tixiapi_management_insurances_get'));
+            }
         }
         $rootPanel = new RootPanel($this->menuId, 'insurance.panel.edit');
         $rootPanel->add(new FormTile($form, true));

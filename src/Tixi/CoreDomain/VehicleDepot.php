@@ -27,7 +27,7 @@ class VehicleDepot extends CommonBaseEntity {
     protected $id;
 
     /**
-     * @ORM\Column(type="string", length=50)
+     * @ORM\Column(type="string", length=50, unique=true)
      */
     protected $name;
 
