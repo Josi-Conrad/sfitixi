@@ -34,6 +34,15 @@ productionplan.th.date: Datum
 productionplan.th.weekday: Tag
 productionplan.th.comment: Kommentar
 
+#MonthlyView
+monthlyplan.panel.name: Monatsplan
+monthlyplan.panel.edit: Monatsplan editieren
+
+monthlyplan.edit.field.workingmonth: Monatsplan
+monthlyplan.edit.field.workingday: Tag
+
+monthlyplan.edit.driverselection.field.empty: --- Bitte Fahrer auswählen ---
+
 #RepeatedDrivingMission
 repeateddrivingmission.panel.new: Neuer Dauereinsatz
 repeateddrivingmission.panel.edit: Dauereinsatz editieren
