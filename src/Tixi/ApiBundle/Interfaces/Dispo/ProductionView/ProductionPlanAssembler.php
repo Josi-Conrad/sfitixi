@@ -54,7 +54,7 @@ class ProductionPlanAssembler {
             $workingDayDTO->dateString = $workingDay->getDateString();
             $workingDayDTO->weekDayString = $workingDay->getWeekDayAsString();
 
-            $workingShifts = $workingDay->getShifts();
+            $workingShifts = $workingDay->getShiftsOrderedByStartTime();
             /** @var Shift $workingShift */
             foreach($workingShifts as $workingShift) {
                 if($workingDayIndex===0) {
