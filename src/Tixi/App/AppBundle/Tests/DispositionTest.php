@@ -41,8 +41,8 @@ class DispositionTest extends CommonBaseTest {
     }
 
     public function testOptimization() {
-        $day = new \DateTime('2014-06-01 10:15:00');
-        $time = new \DateTime('2014-06-01 18:15:00');
+        $day = new \DateTime('2014-06-01 00:00:00');
+        $time = new \DateTime('2014-06-01 08:15:00');
         $shift = $this->dispoManagement->getResponsibleShiftForDayAndTime($day, $time);
         if($shift !== null){
             $this->dispoManagement->getOptimizedPlanForShift($shift);

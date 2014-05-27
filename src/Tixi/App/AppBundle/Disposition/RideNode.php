@@ -80,6 +80,7 @@ class RideNode {
         $ride->drivingMission = $drivingMission;
 
         $ride->duration = $drivingMission->getServiceDuration();
+        $ride->distance = $drivingMission->getServiceDistance();
         $ride->startMinute = $drivingMission->getServiceMinuteOfDay();
         $ride->endMinute = $drivingMission->getServiceMinuteOfDay() + $drivingMission->getServiceDuration();
 

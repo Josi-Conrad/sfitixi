@@ -43,8 +43,9 @@ class RouteRepositoryDoctrine extends CommonBaseRepositoryDoctrine implements Ro
     }
 
     /**
+     * Stores Route if none exist and get result
      * @param \Tixi\CoreDomain\Dispo\Route $route
-     * @return bool
+     * @return Route
      */
     public function storeRouteIfNotExist(Route $route) {
         $qb = $this->createQueryBuilder('e')
@@ -52,10 +53,12 @@ class RouteRepositoryDoctrine extends CommonBaseRepositoryDoctrine implements Ro
             ->andWhere('e.targetAddress = :targetAddressId')
             ->setParameter('startAddressId', $route->getStartAddress()->getId())
             ->setParameter('targetAddressId', $route->getTargetAddress()->getId());
-        if (!$qb->getQuery()->getOneOrNullResult()) {
+        $result = $qb->getQuery()->getOneOrNullResult();
+        if ($result) {
+            return $result;
+        } else {
             $this->store($route);
-            return true;
+            return $route;
         }
-        return false;
     }
 }
