@@ -30,7 +30,7 @@ class ShiftTypeRepositoryDoctrine extends CommonBaseRepositoryDoctrine implement
     /**
      * @return ShiftType[]
      */
-    public function findAllNotDeleted(){
+    public function findAllActive(){
         $qb = parent::createQueryBuilder('s');
         $qb->select()
             ->where('s.isDeleted = 0');

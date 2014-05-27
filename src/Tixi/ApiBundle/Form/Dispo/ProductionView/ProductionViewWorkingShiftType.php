@@ -2,25 +2,19 @@
 /**
  * Created by PhpStorm.
  * User: faustos
- * Date: 05.04.14
- * Time: 09:41
+ * Date: 26.05.14
+ * Time: 14:37
  */
 
-namespace Tixi\ApiBundle\Form\Dispo;
+namespace Tixi\ApiBundle\Form\Dispo\ProductionView;
 
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Tixi\ApiBundle\Interfaces\Dispo\WorkingShiftDTO;
+use Symfony\Component\Validator\Constraints\Regex;
 
-/**
- * Class WorkingShiftNameType
- * @package Tixi\ApiBundle\Form\Dispo
- */
-class WorkingShiftNameType extends AbstractType {
+class ProductionViewWorkingShiftType extends AbstractType{
 
     /**
      * @param FormBuilderInterface $builder
@@ -28,7 +22,14 @@ class WorkingShiftNameType extends AbstractType {
      */
     public function buildForm(FormBuilderInterface $builder, array $options) {
 
-        $builder->add('workingShiftName', 'textOnly');
+        $builder->add('amountOfDrivers', 'integer', array(
+            'label' => false,
+            'required' => true,
+            'pattern' => '\d+',
+            'constraints' => array(
+                new Regex(array('message' => 'form.field.title.digit', 'pattern' => '/\d+/')),
+            ),
+        ));
 
     }
 
@@ -37,8 +38,9 @@ class WorkingShiftNameType extends AbstractType {
      *
      * @return string The name of this type
      */
-    public function getName() {
-        return 'workingShiftName';
+    public function getName()
+    {
+        return "productionViewWorkingShift";
     }
 
     /**
@@ -46,7 +48,7 @@ class WorkingShiftNameType extends AbstractType {
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver) {
         $resolver->setDefaults(array(
-            'data_class' => 'Tixi\ApiBundle\Interfaces\Dispo\WorkingShiftNameDTO'
+            'data_class' => 'Tixi\ApiBundle\Interfaces\Dispo\ProductionView\ProductionViewWorkingShiftDTO'
         ));
     }
 }

@@ -33,9 +33,9 @@ class WorkingMonthRepositoryDoctrine extends CommonBaseRepositoryDoctrine implem
      */
     public function findWorkingMonthByDate(\DateTime $date) {
         $qb = parent::createQueryBuilder('e');
-        $qb->where('e.date = :dayOfMonth')
+        $qb->where('e.date = :correctedDate')
             ->andWhere('e.isDeleted = 0')
-            ->setParameter('dayOfMonth', $date->modify('first day of this month')->format('Y-m-d'));
+            ->setParameter('correctedDate', $date->modify('first day of this month')->format('Y-m-d'));
         return $qb->getQuery()->getOneOrNullResult();
     }
 }

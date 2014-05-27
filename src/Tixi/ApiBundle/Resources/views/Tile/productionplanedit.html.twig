@@ -1,0 +1,94 @@
+{{ form_start(form, {'attr':{'id':formId, 'class':'form-horizontal customForm'} }) }}
+<div class="col-md-12">
+    <div class="row text-right">
+        {% for resolvedElement in children %}
+            {% if 'formcontrol' in resolvedElement.viewIndentifiers %}
+                {{ resolvedElement.rawData | raw }}
+            {% endif %}
+        {% endfor %}
+    </div>
+    <div class="row">
+        <div class="col-md-8">
+            <p class="lead">{{ form.vars.dateString }}</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="row">
+                <div class="form-group">
+                    <div class="col-md-2">
+                        {{ form_label(form.memo, null, {'label_attr': {'style':'width:100%', 'class':'col-md-12 control-label' }}
+                        ) }}
+                    </div>
+                    <div class="col-md-8">
+                        {{ form_widget(form.memo, { 'attr': {'class': 'form-control'} }) }}
+                    </div>
+                    <div class="error_message">{{ form_errors(form.memo) }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="col-md-12">
+    <hr>
+    <table class="table table-hover">
+        <tr>
+            <th>
+                {% trans %}productionplan.th.date{% endtrans %}
+            </th>
+            <th>
+                {% trans %}productionplan.th.weekday{% endtrans %}
+            </th>
+            <th>
+                <table width="100%">
+                    <tr>
+                        {% for shiftName in form.vars.workingShiftsDisplayNames %}
+                            <th>
+                                {{ shiftName ~ ' *' }}
+                            </th>
+                        {% endfor %}
+                    </tr>
+                </table>
+            </th>
+            <th>
+                {% trans %}productionplan.th.comment{% endtrans %}
+            </th>
+        </tr>
+
+        {% for day in form.workingDays %}
+            <tr>
+                <td width="15%">
+                    {{ day.vars.dateString }}
+                </td>
+                <td width="15%">
+                    {{ day.vars.weekDayString | trans }}
+                </td>
+                <td width="40%">
+                    <table>
+                        <tr>
+                            {% for shift in day.workingShifts %}
+                                <td>
+                                    {{ form_widget(shift.amountOfDrivers) }}
+                                    {{ form_label(shift.amountOfDrivers, null, {'label_attr': {'class':'control-label' }}) }}
+                                </td>
+                            {% endfor %}
+                        </tr>
+                    </table>
+                </td>
+                <td width="30%">
+                    {{ form_widget(day.comment) }}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+</div>
+
+{{ form_end(form) }}
+
+<script type="text/javascript">
+    jQuery(function ($) {
+        new FormValidationController('{{ formId }}');
+    });
+</script>

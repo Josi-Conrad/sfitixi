@@ -61,7 +61,7 @@ class DispositionTest extends CommonBaseTest {
             $this->workingMonthRepo->store($workingMonth);
             $workingDays = $workingMonth->getWorkingDays();
 
-            $shiftTypes = $this->shiftTypeRepo->findAllNotDeleted();
+            $shiftTypes = $this->shiftTypeRepo->findAllActive();
 
             //create workingDays shifts, assign them drivingpools, get amount of needed drivers
             /** @var $workingDay WorkingDay */
