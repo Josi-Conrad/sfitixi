@@ -23,7 +23,6 @@ use Tixi\ApiBundle\Tile\TileRenderer;
 class MenuService extends ContainerAware {
 
     public static $menuHomeId = 'home';
-    public static $menuDispoId = 'dispo';
     public static $menuPrepareId = 'prepare';
     public static $menuPassengerId = 'passenger';
     public static $menuPoiId = 'poi';
@@ -35,8 +34,9 @@ class MenuService extends ContainerAware {
     public static $menuPassengerAbsentId = 'passenger_absents';
     public static $menuPassengerDrivingOrderId = 'passenger_drivingorder';
     public static $menuUserProfileId = 'user_profile';
-    public static $menuWorkingMonthId = 'working_month';
 
+    public static $menuSelectionDispositionId = 'disposition';
+    public static $menuDispositionProductionPlanId = 'disposition_productionplan';
 
     public static $menuSelectionManagementId = 'management';
     public static $menuManagementUserId = 'management_users';
@@ -52,6 +52,7 @@ class MenuService extends ContainerAware {
     public static $menuManagementVehicleDepotId = 'management_vehicledepots';
     public static $menuManagementZoneId = 'management_zone';
     public static $menuManagementZonePlanId = 'management_zoneplan';
+
 
 
     public function __construct() {
@@ -79,12 +80,12 @@ class MenuService extends ContainerAware {
 
 
         /**Disposition*/
-        $managementSelectionTile =
-            $menuTile->add(new MenuSelectionItemTile(self::$menuDispoId,
-                'disposition.panel.name', $this->checkSelectionRootActivity(self::$menuDispoId, $activeItem)));
+        $dispositionSelectionTile =
+            $menuTile->add(new MenuSelectionItemTile(self::$menuSelectionDispositionId,
+                'disposition.panel.name', $this->checkSelectionRootActivity(self::$menuSelectionDispositionId, $activeItem)));
         if ($this->container->get('security.context')->isGranted('ROLE_MANAGER')) {
-            $managementSelectionTile->add(new MenuItemTile(self::$menuWorkingMonthId,
-                $this->generateUrl('tixiapi_dispo_workingmonths_get'), 'workingmonth.panel.name', $this->checkSelectionChildActivity(self::$menuWorkingMonthId, $activeItem)));
+            $dispositionSelectionTile->add(new MenuItemTile(self::$menuDispositionProductionPlanId,
+                $this->generateUrl('tixiapi_dispo_productionplans_get'), 'productionplan.panel.name', $this->checkSelectionChildActivity(self::$menuDispositionProductionPlanId, $activeItem)));
         }
 
         /**Prepare*/
@@ -96,7 +97,7 @@ class MenuService extends ContainerAware {
         $menuTile->add(new MenuItemTile(self::$menuVehicleId, $this->generateUrl('tixiapi_vehicles_get'), 'vehicle.panel.name', $rootId === self::$menuVehicleId));
 
         /**
-         * render management functions only if user got manager role
+         * render management functions only if user is assigned to manager role
          */
         if ($this->container->get('security.context')->isGranted('ROLE_MANAGER')) {
             $managementSelectionTile =

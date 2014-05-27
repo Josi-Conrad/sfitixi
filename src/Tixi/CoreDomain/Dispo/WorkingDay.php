@@ -10,6 +10,7 @@ namespace Tixi\CoreDomain\Dispo;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Tixi\ApiBundle\Helper\WeekdayService;
 
 /**
  * Tixi\CoreDomain\Dispo\WorkingDay
@@ -71,6 +72,14 @@ class WorkingDay {
      */
     public function assignShift(Shift $shift) {
         $this->shifts->add($shift);
+    }
+
+    public function getDateString() {
+        return $this->getDate()->format('d.m.Y');
+    }
+
+    public function getWeekDayAsString() {
+        return WeekdayService::$numericToWeekdayConverter[$this->getDate()->format('N')] . '.name';
     }
 
     /**

@@ -21,6 +21,11 @@ use Tixi\CoreDomain\Vehicle;
  */
 interface DispositionManagement {
 
+    public function openWorkingMonth($year, $month);
+
+    public function processChangeInAmountOfDriversPerShift(Shift $shift, $oldAmount, $newAmount);
+
+
     /**
      * @param \DateTime $day
      * @param \DateTime $time

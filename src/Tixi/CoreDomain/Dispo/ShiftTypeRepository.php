@@ -24,6 +24,6 @@ interface ShiftTypeRepository extends CommonBaseRepository {
     /**
      * @return ShiftType[]
      */
-    public function findAllNotDeleted();
+    public function findAllActive();
 
 }

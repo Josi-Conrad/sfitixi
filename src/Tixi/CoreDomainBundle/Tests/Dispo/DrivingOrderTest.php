@@ -75,7 +75,7 @@ class DrivingOrderTest extends CommonBaseTest {
         $workingDays = $workingMonth->getWorkingDays();
 
         /**@var $shiftTypes ShiftType[] */
-        $shiftTypes = $this->shiftTypeRepo->findAllNotDeleted();
+        $shiftTypes = $this->shiftTypeRepo->findAllActive();
 
         //create workingDays shifts, assign them drivingpools, get amount of needed drivers
         $start = microtime(true);

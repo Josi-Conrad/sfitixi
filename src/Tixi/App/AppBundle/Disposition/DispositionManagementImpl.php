@@ -11,6 +11,7 @@ namespace Tixi\App\AppBundle\Disposition;
 
 use Doctrine\ORM\EntityNotFoundException;
 use Symfony\Component\DependencyInjection\ContainerAware;
+use Symfony\Component\Validator\Constraints\DateTime;
 use Tixi\App\Disposition\DispositionManagement;
 use Tixi\CoreDomain\Dispo\DrivingMission;
 use Tixi\CoreDomain\Dispo\DrivingMissionRepository;
@@ -18,6 +19,10 @@ use Tixi\CoreDomain\Dispo\DrivingOrder;
 use Tixi\CoreDomain\Dispo\DrivingOrderRepository;
 use Tixi\CoreDomain\Dispo\Shift;
 use Tixi\CoreDomain\Dispo\ShiftRepository;
+use Tixi\CoreDomain\Dispo\ShiftTypeRepository;
+use Tixi\CoreDomain\Dispo\WorkingDayRepository;
+use Tixi\CoreDomain\Dispo\WorkingMonth;
+use Tixi\CoreDomain\Dispo\WorkingMonthRepository;
 
 class DispositionManagementImpl extends ContainerAware implements DispositionManagement {
     /**
@@ -204,4 +209,45 @@ class DispositionManagementImpl extends ContainerAware implements DispositionMan
         return $vehicles;
     }
 
+    public function processChangeInAmountOfDriversPerShift(Shift $shift, $oldAmount, $newAmount)
+    {
+        // TODO: Implement processChangeInAmountOfDriversPerShift() method.
+        $shift->setAmountOfDrivers($newAmount);
+    }
+
+    public function openWorkingMonth($year, $month)
+    {
+        /** @var WorkingMonthRepository $workingMonthRepository */
+        $workingMonthRepository = $this->container->get('workingmonth_repository');
+        /** @var WorkingDayRepository $workingDayRepository */
+        $workingDayRepository = $this->container->get('workingday_repository');
+        /** @var ShiftRepository $shiftRepository */
+        $shiftRepository = $this->container->get('shift_repository');
+        /** @var ShiftTypeRepository $shiftTypeRepository */
+        $shiftTypeRepository = $this->container->get('shifttype_repository');
+
+        try {
+            $date = new \DateTime();
+            $date->setDate($year,$month,1);
+        }catch (\Exception $e) {
+            return null;
+        }
+        $workingMonth = WorkingMonth::registerWorkingMonth($date);
+        $workingMonth->createWorkingDaysForThisMonth();
+
+        $shiftTypes = $shiftTypeRepository->findAllActive();
+
+        $workingDays = $workingMonth->getWorkingDays();
+        foreach($workingDays as $workingDay) {
+            $workingDayRepository->store($workingDay);
+            foreach($shiftTypes as $shiftType) {
+                $shift = Shift::registerShift($workingDay, $shiftType);
+                $workingDay->assignShift($shift);
+                $shiftRepository->store($shift);
+            }
+
+        }
+        $workingMonthRepository->store($workingMonth);
+        return $workingMonth;
+    }
 }

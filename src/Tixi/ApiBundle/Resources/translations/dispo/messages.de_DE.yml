@@ -15,24 +15,24 @@ shifttype.field.end: Endzeit
 shifttype.field.memo: Memo (für Disposition)
 shifttype.button.new: Neue Schicht
 
-#WorkingMonth
-workingmonth.th.date: Datum
-workingmonth.th.weekday: Tag
-workingmonth.th.comment: Kommentar
+#ProdcutionView
+productionplan.button.new: Produktionsplan Erstellen
+productionplan.button.edit: Produktionsplan editieren
 
-workingmonth.button.new: Produktionsplan Erstellen
+productionplan.list.name: Aktuelle Produktionspläne
 
-workingmonth.panel.name: Produktionsplan
-workingmonth.panel.edit: Produktionsplan editieren
+productionplan.panel.name: Produktionsplan
+productionplan.panel.edit: Produktionsplan editieren
+productionplan.panel.new: Produktionsplan erstellen
 
-workingmonth.field.memo: Memo
-workingmonth.field.date: Monat - Jahr
-workingmonth.field.status: Status
-workingmonth.field.year: Jahr
-workingmonth.field.month: Monat
+productionplan.field.memo: Memo
+productionplan.field.date: Monat - Jahr
+productionplan.field.year: Jahr
+productionplan.field.month: Monat
 
-workingmonth.list.name: Aktuelle Produktionspläne
-workingmonth.panel.new: Produktionsplan erstellen
+productionplan.th.date: Datum
+productionplan.th.weekday: Tag
+productionplan.th.comment: Kommentar
 
 #RepeatedDrivingMission
 repeateddrivingmission.panel.new: Neuer Dauereinsatz

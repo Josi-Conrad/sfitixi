@@ -10,6 +10,7 @@ namespace Tixi\ApiBundle\Shared\DataGrid;
 
 
 use Symfony\Component\DependencyInjection\ContainerAware;
+use Tixi\ApiBundle\Shared\DataGrid\GridControllers\Dispo\ProductionPlanDataGridController;
 use Tixi\ApiBundle\Shared\DataGrid\GridControllers\DriverAbsentDataGridController;
 use Tixi\ApiBundle\Shared\DataGrid\GridControllers\DriverDataGridController;
 use Tixi\ApiBundle\Shared\DataGrid\GridControllers\Management\BankHolidayDataGridController;
@@ -220,13 +221,8 @@ class DataGridControllerFactory extends ContainerAware {
         return new ZonePlanDataGridController($this->container, $embeddedState, $routeProperties);
     }
 
-    /**
-     * @param bool $embeddedState
-     * @param array $routeProperties
-     * @return WorkingMonthDataGridController
-     */
-    public function createDispoWorkingMonthController($embeddedState = false, array $routeProperties = array()) {
-        return new WorkingMonthDataGridController($this->container, $embeddedState, $routeProperties);
+    public function createDispoProductionPlanController($embeddedState = false, array $routeProperties = array()) {
+        return new ProductionPlanDataGridController($this->container, $embeddedState, $routeProperties);
     }
 
 } 

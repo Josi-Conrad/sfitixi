@@ -2,8 +2,8 @@
 /**
  * Created by PhpStorm.
  * User: faustos
- * Date: 26.03.14
- * Time: 20:41
+ * Date: 27.05.14
+ * Time: 12:41
  */
 
 namespace Tixi\ApiBundle\Tile\Dispo;
@@ -13,10 +13,10 @@ use Tixi\ApiBundle\Tile\AbstractTile;
 use Tixi\ApiBundle\Tile\Core\FormControlTile;
 
 /**
- * Class WorkingMonthTile
+ * Class ProductionPlanEditTile
  * @package Tixi\ApiBundle\Tile\Dispo
  */
-class WorkingMonthTile extends AbstractTile{
+class ProductionPlanEditTile extends AbstractTile{
 
     protected $formId;
     protected $form;
@@ -42,18 +42,18 @@ class WorkingMonthTile extends AbstractTile{
     }
 
     /**
-     * @return mixed|string
+     * @return mixed
      */
     public function getTemplateName()
     {
-        return 'TixiApiBundle:Tile:workingmonth.html.twig';
+        return 'TixiApiBundle:Tile:productionplanedit.html.twig';
     }
 
     /**
-     * @return mixed|string
+     * @return mixed
      */
     public function getName()
     {
-        return 'form';
+        return 'productionPlanEditForm';
     }
 }

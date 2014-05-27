@@ -92,6 +92,10 @@ class WorkingMonth extends CommonBaseEntity {
         }
     }
 
+    public function getDateString() {
+        return $this->getDate()->format('m - Y');
+    }
+
     public function assignWorkingDay(WorkingDay $workingDay) {
         $this->workingDays->add($workingDay);
     }
