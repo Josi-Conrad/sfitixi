@@ -11,6 +11,8 @@ namespace Tixi\App\AppBundle\Disposition;
 
 use Doctrine\ORM\EntityNotFoundException;
 use Symfony\Component\DependencyInjection\ContainerAware;
+use Tixi\App\AppBundle\Disposition\RideStrategies\RideStrategyLeastDistance;
+use Tixi\App\AppBundle\Disposition\RideStrategies\RideStrategyTimeWindow;
 use Symfony\Component\Validator\Constraints\DateTime;
 use Tixi\App\Disposition\DispositionManagement;
 use Tixi\CoreDomain\Dispo\DrivingMission;
@@ -52,30 +54,30 @@ class DispositionManagementImpl extends ContainerAware implements DispositionMan
         }
 
         $vehicles = $this->getAvailableVehiclesForDay($day);
-        $drivingPools = $shift->getDrivingPools()->toArray();
+        $drivingPools = $shift->getDrivingPools();
         $drivingMissions = $this->getDrivingMissionsInShift($shift);
-
-        echo "\nMissions for Shift: " . count($drivingMissions) . "\n   ";
 
         /**
          * feasibility checks only time windows in a possible configuration
          */
-        $rideConfig = new RideConfigurator($drivingMissions, $drivingPools, $vehicles, RideConfigurator::ONLY_TIME_WINDOWS);
-        $rideConfig->addAdditionalRideNode($feasibleNode);
-        $rideConfig->buildConfiguration();
+        $rideStrategy = new RideStrategyTimeWindow();
+        $rideConfigurator = new RideConfigurator($drivingMissions, $drivingPools, $vehicles, $rideStrategy);
+        $rideConfigurator->addAdditionalRideNode($feasibleNode);
+        $rideConfig = $rideConfigurator->buildConfiguration();
 
-        $rideConfigurationArray = $rideConfig->getRideConfigurationArray();
         echo "Shift:" . $this->shiftStart . " - " . $this->shiftEnd . "\n";
-        foreach ($rideConfigurationArray as $poolId => $poolNodes) {
-            echo $poolId . "\t|";
-            /**@var $node RideNode */
-            foreach ($poolNodes as $node) {
-                echo "(" . $node->startMinute . "-" . $node->endMinute . ")\t";
+            $rideNodeLists = $rideConfig->getRideNodeLists();
+            foreach ($rideNodeLists as $drivePoolId => $rideNodeList) {
+                $rideNodes = $rideNodeList->getRideNodes();
+                echo $drivePoolId . "\t|";
+                /**@var $node RideNode */
+                foreach ($rideNodes as $node) {
+                    echo "(" . $node->startMinute . "-" . $node->endMinute . ")\t";
+                }
+                echo "\n";
             }
-            echo "\n";
-        }
 
-        return !$rideConfig->gotNotFeasibleNodes();
+        return !$rideConfig->hasNotFeasibleNodes();
     }
 
     /**
@@ -85,29 +87,42 @@ class DispositionManagementImpl extends ContainerAware implements DispositionMan
      */
     public function getOptimizedPlanForShift(Shift $shift) {
         $day = $shift->getDate();
-
         $vehicles = $this->getAvailableVehiclesForDay($day);
-        $drivingPools = $shift->getDrivingPools()->toArray();
+        $drivingPools = $shift->getDrivingPools();
         $drivingMissions = $this->getDrivingMissionsInShift($shift);
 
-        //TODO: get vehicles/pools, compare, create configurationSet
-        //array with RaidConfiguration[]
-        //RaidConfiguration got array[][] with vehicles and orders per shift
+        $rideStrategy = new RideStrategyLeastDistance();
+        $rideConfigurator = new RideConfigurator($drivingMissions, $drivingPools, $vehicles, $rideStrategy);
 
-        /**
-         * feasibility checks only time windows in a possible configuration
-         */
-        $rideConfig = new RideConfigurator($drivingMissions, $drivingPools, $vehicles, RideConfigurator::LEAST_KILOMETER);
+        $emptyRides = $rideConfigurator->buildAllPossibleEmptyRides();
 
-        $emptyRides = $rideConfig->buildAllPossibleEmptyRides();
         $s = microtime(true);
         $routeManagement = $this->container->get('tixi_app.routemanagement');
-        $routeManagement->fillRoutesForMultipleRideNodes($emptyRides);
+        $emptyRides = $routeManagement->fillRoutesForMultipleRideNodes($emptyRides);
         $e = microtime(true);
+        echo "\n\nFilled " . count($emptyRides) . " emptyRideNodes with routing informations in: " . ($e - $s) . "s\n";
 
-        $rideConfig->buildConfiguration();
+        $s = microtime(true);
+        $rideConfigurations = $rideConfigurator->buildConfigurations(200);
+        $e = microtime(true);
+        echo "Built rideConfiguration in: " . ($e - $s) . "s\n";
 
-        echo "\n\nFilled " . count($emptyRides) . " emptyRideNodes in: " . ($e - $s) . "s\n";
+        echo "Shift:" . $this->shiftStart . " - " . $this->shiftEnd . "\n";
+        foreach ($rideConfigurations as $rideConfig) {
+            echo "Configuration total empty rides time:\t" . $rideConfig->getTotalEmptyRideTime() . "min\n";
+            echo "Configuration total distance:\t" . $rideConfig->getTotalDistance() / 1000 . "km\n";
+            echo "Not Feasible Nodes:\t" . count($rideConfig->getNotFeasibleNodes()) . "\n";
+            $rideNodeLists = $rideConfig->getRideNodeLists();
+            foreach ($rideNodeLists as $drivePoolId => $rideNodeList) {
+                $rideNodes = $rideNodeList->getRideNodes();
+                echo $drivePoolId . "\t|";
+                /**@var $node RideNode */
+                foreach ($rideNodes as $node) {
+                    echo "(" . $node->startMinute . "-" . $node->endMinute . ")\t";
+                }
+                echo "\n";
+            }
+        }
     }
 
     /**

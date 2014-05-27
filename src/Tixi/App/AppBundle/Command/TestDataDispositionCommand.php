@@ -171,13 +171,13 @@ class TestDataDispositionCommand extends ContainerAwareCommand {
                 $route = Route::registerRoute($start, $target);
                 $hashKey = hash('crc32', $start->getHashFromBigIntCoordinates() . $target->getHashFromBigIntCoordinates());
                 $routes[$hashKey] = $route;
-                $routeRepo->storeRouteIfNotExist($route);
+                $route = $routeRepo->storeRouteIfNotExist($route);
 
                 $order->assignRoute($route);
                 $order->assignPassenger($passenger);
                 $passenger->assignDrivingOrder($order);
-                array_push($orders, $order);
                 $drivingOrderRepo->store($order);
+                array_push($orders, $order);
             }
         }
 

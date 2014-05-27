@@ -76,6 +76,7 @@ class RouteManagementImpl extends ContainerAware implements RouteManagement {
      * then checking first if we got a database entry...
      *
      * @param RideNode[] $rideNodes
+     * @throws \Exception
      * @return RideNode[]
      */
     public function fillRoutesForMultipleRideNodes($rideNodes) {
@@ -95,7 +96,7 @@ class RouteManagementImpl extends ContainerAware implements RouteManagement {
                 $rideNodes[$hashKey]->distance = $route->getDistanceInMeters();
             }
         } catch (\Exception $e) {
-
+            throw $e;
         }
         return $rideNodes;
     }
