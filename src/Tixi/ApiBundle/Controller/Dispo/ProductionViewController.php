@@ -103,7 +103,7 @@ class ProductionViewController extends Controller{
                 $this->get('entity_manager')->flush();
                 return $this->redirect($this->generateUrl('tixiapi_dispo_productionplans_get'));
             }catch (\LogicException $e) {
-                $form->addError(new FormError($this->get('translator')->trans('productionplan.form.drivingpoolerror')));
+                $form->addError(new FormError($e->getMessage().': '.$this->get('translator')->trans('productionplan.form.drivingpoolerror')));
             }catch (\InvalidArgumentException $e) {
                 $form->addError(new FormError($this->get('translator')->trans('productionplan.form.drivingpoolerror')));
             }

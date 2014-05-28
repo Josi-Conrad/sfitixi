@@ -94,7 +94,7 @@ class ProductionPlanAssembler {
                         $this->dispoService->processChangeInAmountOfDriversPerShift(
                             $workingShift, $workingShift->getAmountOfDrivers(), $formWorkingShift->amountOfDrivers);
                     }catch (\LogicException $e) {
-                        throw new \LogicException($workingShift->getDate().' '.$workingShift->getShiftType()->getName());
+                        throw new \LogicException($workingShift->getDate()->format('Y-m-d').', '.$workingShift->getShiftType()->getName());
                     }
                 }
             }
