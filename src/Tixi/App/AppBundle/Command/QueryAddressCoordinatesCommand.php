@@ -96,6 +96,50 @@ class QueryAddressCoordinatesCommand extends ContainerAwareCommand {
         }
         $em->flush();
 
+
+        //Mail changes
+        $renderView = $this->getContainer()->get('templating');
+        $mailer = $this->getContainer()->get('mailer');
+        $translator = $this->getContainer()->get('translator');
+
+        $subject = $translator->trans('addrquery.subject');
+        $title = $translator->trans('addrquery.title');
+        $body = $translator->trans('addrquery.descr1') . ' ' . $changedNearest . ' ' . $translator->trans('addrquery.descr2');
+
+        $message = \Swift_Message::newInstance()
+            ->setSubject($subject)
+            ->setFrom('itixi@gmail.com')
+            ->setTo('hertus@gmail.com')
+            ->setReadReceiptTo('itixi@gmail.com')
+            ->
+            setBody(
+                $renderView->render(
+                    'TixiApiBundle:Mail:addressQuery.html.twig',
+                    array(
+                        'mail_parameter_name' => $title,
+                        'mail_addrquery_body' => $body,
+                    )
+                ), 'text/html', 'utf8'
+            );
+
+        if (!$mailer->send($message, $failures)) {
+            echo "Mail send failures:";
+            print_r($failures);
+        } else {
+            echo "Mail send successfull";
+        }
+
+        $this->getContainer()->get('knp_snappy.pdf')->generateFromHtml(
+            $renderView->render(
+                'TixiApiBundle:Mail:addressQuery.html.twig',
+                array(
+                    'mail_parameter_name' => $title,
+                    'mail_addrquery_body' => $body,
+                )
+            ),
+            'tmp/pdf/addrquery.pdf'
+        );
+
         $output->writeln("\n--------------------------------------------\n" .
             "Addresses without coordinates: " . $count . "\n" . "Addresses Updated: " . $changed . "\n" .
             "Addresses only without nearest coordinates: " . $countNearest . "\n" . "Addresses Updated: " . $changedNearest . "\n");

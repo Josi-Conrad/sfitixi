@@ -86,7 +86,10 @@ swiftmailer:
     host:      "%mailer_host%"
     username:  "%mailer_user%"
     password:  "%mailer_password%"
-    spool:     { type: memory }
+    spool:
+      type: memory
+#      if you set spool type to file, you have to trigger the send process (by cron job for example)
+#      path: %kernel.root_dir%/spool/mail
 
 # Bundles Configuration
 fos_rest:
@@ -128,3 +131,11 @@ monolog:
       path:   %kernel.root_dir%/logs/entity.log
       level:  info
       channels: entity_channel
+
+#knp_snappy:
+#    pdf:
+#        enabled:    true
+#        binary:     D:\PHP\wkhtml\wkhtmltopdf.exe
+#        options:    []
+#    image:
+#        enabled:    false
