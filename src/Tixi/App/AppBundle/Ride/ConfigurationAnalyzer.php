@@ -8,13 +8,19 @@
 
 namespace Tixi\App\AppBundle\Ride;
 
+use Tixi\CoreDomain\Vehicle;
+
 /**
  * Class ConfigurationAnalyzer
  * @package Tixi\App\AppBundle\Ride
  */
 class ConfigurationAnalyzer {
+    /**@var $rideConfiguration RideConfiguration */
     protected $rideConfiguration;
 
+    /**
+     * @param RideConfiguration $rideConfiguration
+     */
     public function __construct(RideConfiguration $rideConfiguration) {
         $this->rideConfiguration = $rideConfiguration;
     }
@@ -52,4 +58,45 @@ class ConfigurationAnalyzer {
         return $feasible;
     }
 
+    /**
+     * true if every rideLists get a vehicle assigned
+     * @param $vehicles Vehicle[]
+     * @return bool
+     */
+    public function assignVehiclesToBestConfiguration($vehicles) {
+        $workVehicles = $vehicles;
+        $this->sortVehiclesWithSize($workVehicles);
+
+        $config = $this->rideConfiguration;
+        $pools = $config->getDrivingPools();
+        $lists = count($config->getRideNodeLists());
+
+        foreach ($config->getRideNodeLists() as $poolId => $nodeList) {
+            foreach ($workVehicles as $vehicleKey => $vehicle) {
+                if ($nodeList->vehicleIsCompatibleWithThisList($vehicle)) {
+                    $pools[$poolId]->assignVehicle($vehicle);
+                    unset($workVehicles[$vehicleKey]);
+                    $lists--;
+                    break;
+                }
+            }
+        }
+        if ($lists < 1) {
+            return true;
+        }
+        return false;
+    }
+
+
+    /**
+     * @param $vehicles
+     */
+    private function sortVehiclesWithSize(&$vehicles) {
+        usort($vehicles, function ($a, $b) {
+            /**@var $a \Tixi\CoreDomain\Vehicle
+             * @var $b \Tixi\CoreDomain\Vehicle
+             */
+            return ($a->getApproximatedSize() > $b->getApproximatedSize());
+        });
+    }
 } 
