@@ -79,7 +79,7 @@ class TestDataDispositionCommand extends ContainerAwareCommand {
         $monthDate->modify('+' . $month . ' month');
         $monthDate->modify('first day of this month');
 
-        $shiftTypes = $shiftTypeRepo->findAllNotDeleted();
+        $shiftTypes = $shiftTypeRepo->findAllActive();
 
         $drivers = $driverRepo->findAllActive();
         foreach ($drivers as $driver) {
@@ -206,8 +206,8 @@ class TestDataDispositionCommand extends ContainerAwareCommand {
         }
         $em->flush();
 
-        //assign available Drivers to drivingPools
-        $workingMonthManagement->assignAvailableDriversToDrivingPools($workingMonth);
+        //TODO: assign available Drivers to drivingPools - NOW NEW with driveAssertions
+        //$workingMonthManagement->assignAvailableDriversToDrivingPools($workingMonth);
         $unassignedDrivingPools = count($workingMonthManagement->getAllUnassignedDrivingPoolsForMonth($workingMonth));
 
         $output->writeln(

@@ -13,6 +13,12 @@ namespace Tixi\App\AppBundle\Ride;
  * @package Tixi\App\AppBundle\Ride
  */
 class ConfigurationAnalyzer {
+    protected $rideConfiguration;
+
+    public function __construct(RideConfiguration $rideConfiguration) {
+        $this->rideConfiguration = $rideConfiguration;
+    }
+
     /**
      * @param RideNode $rideNode
      * @return bool
