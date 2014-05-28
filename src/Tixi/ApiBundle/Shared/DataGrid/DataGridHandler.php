@@ -179,12 +179,14 @@ class DataGridHandler {
         $headers = array();
 
         foreach($sourceReflectionObject->getProperties() as $reflProperty) {
+            /** @var GridField $dataGridFieldAnnotation */
             $dataGridFieldAnnotation = $this->annotationReader->getPropertyAnnotation($reflProperty, $this->fieldAnnotationClass);
             if(null !== $dataGridFieldAnnotation) {
                 if(!empty($dataGridFieldAnnotation->headerName)) {
                     $rowId = $dataGridFieldAnnotation->propertyId;
-                    if(null === $rowId) {throw new \Exception('no propertyId found on field '.$reflProperty->getName());}
-                    $headers[] = new DataGridHeader($rowId, $dataGridFieldAnnotation->headerName, $dataGridFieldAnnotation->order);
+                    $isComputed = $dataGridFieldAnnotation->isComputed;
+                    if(null === $rowId && !$isComputed) {throw new \Exception('no propertyId found on field '.$reflProperty->getName());}
+                    $headers[] = new DataGridHeader($rowId, $dataGridFieldAnnotation->headerName, $dataGridFieldAnnotation->order, $isComputed);
                 }
             }
         }

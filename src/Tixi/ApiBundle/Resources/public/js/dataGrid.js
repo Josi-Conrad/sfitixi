@@ -78,7 +78,10 @@ function DataGrid(outline, gridId, dblClickCallback, isEmbedded, trans) {
     this._initHeaders = function () {
         _this._headers = [];
         _this._outline.find('.headerWrapper').each(function (index, headerWrapper) {
-            _this._headers.push(new DataGridHeader(headerWrapper, $($(headerWrapper).find('.header')).attr('data-fieldid'), _this._onHeaderClick));
+            var _header = $(this).find('.header'),
+                _fieldId = $(_header).data('fieldid'),
+                _isComputed = $(_header).data('iscomputed');
+            _this._headers.push(new DataGridHeader(headerWrapper,_fieldId, _this._onHeaderClick,_isComputed));
         });
     }
 
@@ -281,7 +284,7 @@ function DataGrid(outline, gridId, dblClickCallback, isEmbedded, trans) {
     _this._init(outline, gridId, dblClickCallback, isEmbedded, trans);
 }
 
-function DataGridHeader(headerWrapper, fieldId, callback) {
+function DataGridHeader(headerWrapper, fieldId, callback, isComputed) {
     if (this == global) {
         return new DataGrid(arguments);
     }
@@ -302,7 +305,11 @@ function DataGridHeader(headerWrapper, fieldId, callback) {
         this._callback = callback;
         this._headerWrapper = headerWrapper;
         this._header = $(headerWrapper).find('.header');
-        $(_this._header).on('click', _this._onHeaderClick);
+        $(_this._header).on('click', function() {
+            if(!isComputed) {
+                _this._onHeaderClick()
+            }
+        });
 
     }
 
