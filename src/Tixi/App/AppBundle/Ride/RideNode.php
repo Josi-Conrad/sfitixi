@@ -6,7 +6,7 @@
  * Time: 21:20
  */
 
-namespace Tixi\App\AppBundle\Disposition;
+namespace Tixi\App\AppBundle\Ride;
 
 use Tixi\ApiBundle\Helper\DateTimeService;
 use Tixi\App\Disposition\DispositionVariables;
@@ -28,13 +28,11 @@ class RideNode {
      * @var int
      */
     public $type;
-
     /**
      * persist the mission too for possible configuration buildings with pools
      * @var DrivingMission
      */
     public $drivingMission;
-
     /**
      * @var int
      */
@@ -60,6 +58,9 @@ class RideNode {
      * @var int
      */
     public $distance;
+
+    public $nextNode;
+    public $previousNode;
 
     /**
      * @param $type
@@ -130,6 +131,20 @@ class RideNode {
         }
 
         return $ride;
+    }
+
+    /**
+     * @param RideNode $node
+     */
+    public function setNextNode(RideNode &$node) {
+        $this->nextNode = $node;
+    }
+
+    /**
+     * @param RideNode $node
+     */
+    public function setPreviousNode(RideNode &$node) {
+        $this->previousNode = $node;
     }
 
     /**

@@ -6,14 +6,36 @@
  * Time: 20:26
  */
 
-namespace Tixi\App\AppBundle\Disposition;
+namespace Tixi\App\AppBundle\Ride;
 
 
+use Tixi\App\AppBundle\Ride\RideNodeList;
 use Tixi\CoreDomain\Dispo\DrivingPool;
 
+/**
+ * Class RideConfiguration
+ * @package Tixi\App\AppBundle\Ride
+ */
 class RideConfiguration {
+    /**
+     * time above all empty rides
+     * @var int
+     */
     protected $totalEmptyRideTime;
+    /**
+     * distance above all empty rides
+     * @var int
+     */
+    protected $totalEmptyRideDistance;
+    /**
+     * total distance from all lists
+     * @var int
+     */
     protected $totalDistance;
+    /**
+     * any nodes that are left on this configuration = not feasible
+     * @var
+     */
     protected $notFeasibleNodes;
 
     /**
@@ -52,6 +74,7 @@ class RideConfiguration {
     public function addRideNodeListAtPool(DrivingPool $drivingPool, RideNodeList $rideNodeList) {
         $this->totalDistance += $rideNodeList->getTotalDistance();
         $this->totalEmptyRideTime += $rideNodeList->getTotalEmptyRideTime();
+        $this->totalEmptyRideDistance += $rideNodeList->getTotalEmptyRideDistance();
         $this->rideNodeLists[$drivingPool->getId()] = $rideNodeList;
     }
 
@@ -97,7 +120,18 @@ class RideConfiguration {
         return $this->totalEmptyRideTime;
     }
 
-    public function hasNotFeasibleNodes(){
-        return isset($this->notFeasibleNodes);
+    /**
+     * @return bool
+     */
+    public function hasNotFeasibleNodes() {
+        return (count($this->notFeasibleNodes) > 0);
     }
+
+    /**
+     * @return int
+     */
+    public function getTotalEmptyRideDistance() {
+        return $this->totalEmptyRideDistance;
+    }
+
 }

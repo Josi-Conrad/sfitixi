@@ -6,10 +6,13 @@
  * Time: 10:43
  */
 
-namespace Tixi\App\AppBundle\Disposition;
+namespace Tixi\App\AppBundle\Ride;
 
 
-use Tixi\App\AppBundle\Disposition\RideStrategies\RideStrategy;
+use Tixi\App\AppBundle\Ride\RideConfiguration;
+use Tixi\App\AppBundle\Ride\RideNode;
+use Tixi\App\AppBundle\Ride\RideStrategies\RideStrategy;
+use Tixi\App\AppBundle\Disposition\RideStrategies;
 use Tixi\App\Disposition\DispositionVariables;
 use Tixi\CoreDomain\Address;
 use Tixi\CoreDomain\Dispo\DrivingMission;
@@ -17,9 +20,13 @@ use Tixi\CoreDomain\Dispo\DrivingOrder;
 use Tixi\CoreDomain\Dispo\DrivingPool;
 use Tixi\CoreDomain\Vehicle;
 
-class RideConfigurator {
+/**
+ * Class ConfigurationBuilder
+ * @package Tixi\App\AppBundle\Ride
+ */
+class ConfigurationBuilder {
     /**
-     * @var RideStrategies\RideStrategy
+     * @var \Tixi\App\AppBundle\Ride\RideStrategies\RideStrategy
      */
     protected $strategy;
     /**
@@ -33,7 +40,7 @@ class RideConfigurator {
     /**
      * @var RideNode[]
      */
-    protected $emptyRides;
+    protected $emptyRideNodes;
     /**
      * @var Vehicle[]
      */
@@ -43,6 +50,10 @@ class RideConfigurator {
      */
     protected $vehicleDepotAddresses;
     /**
+     * @var RideConfiguration
+     */
+    protected $rideConfiguration;
+    /**
      * @var RideConfiguration[]
      */
     protected $rideConfigurations;
@@ -51,14 +62,14 @@ class RideConfigurator {
      * @param DrivingMission[] $drivingMissions
      * @param DrivingPool[] $drivingPools
      * @param Vehicle[] $vehicles
-     * @param RideStrategies\RideStrategy $rideStrategy
+     * @param \Tixi\App\AppBundle\Ride\RideStrategies\RideStrategy $rideStrategy
      */
     public function __construct($drivingMissions, $drivingPools, $vehicles, RideStrategy $rideStrategy) {
         $this->rideNodes = $this->createRideNodesFromDrivingMissions($drivingMissions);
         $this->drivingPools = $drivingPools;
         $this->fillVehicleDepotNodes($vehicles);
         $this->strategy = $rideStrategy;
-        $this->emptyRides = array();
+        $this->emptyRideNodes = array();
     }
 
     /**
@@ -66,7 +77,9 @@ class RideConfigurator {
      * @return RideConfiguration
      */
     public function buildConfiguration() {
-        return $this->strategy->buildConfiguration($this->rideNodes, $this->drivingPools, $this->emptyRides);
+        $rideConfiguration = $this->strategy->buildConfiguration($this->rideNodes, $this->drivingPools, $this->emptyRideNodes);
+        $this->rideConfiguration = $rideConfiguration;
+        return $rideConfiguration;
     }
 
     /**
@@ -74,7 +87,9 @@ class RideConfigurator {
      * @return RideConfiguration[]
      */
     public function buildConfigurations($factor) {
-        return $this->strategy->buildConfigurations($this->rideNodes, $this->drivingPools, $this->emptyRides, $factor);
+        $rideConfigurations = $this->strategy->buildConfigurations($this->rideNodes, $this->drivingPools, $this->emptyRideNodes, $factor);
+        $this->rideConfigurations = $rideConfigurations;
+        return $rideConfigurations;
     }
 
     /**
@@ -90,8 +105,8 @@ class RideConfigurator {
             foreach ($this->vehicleDepotAddresses as $depotAddress) {
                 $depotToNode = RideNode::registerEmptyRide($depotAddress, $workNode->startAddress);
                 $nodeToDepot = RideNode::registerEmptyRide($workNode->targetAddress, $depotAddress);
-                $this->emptyRides[$depotToNode->getRideHash()] = $depotToNode;
-                $this->emptyRides[$nodeToDepot->getRideHash()] = $nodeToDepot;
+                $this->emptyRideNodes[$depotToNode->getRideHash()] = $depotToNode;
+                $this->emptyRideNodes[$nodeToDepot->getRideHash()] = $nodeToDepot;
             }
 
             //fill possible rides between any time-feasible nodes
@@ -99,15 +114,16 @@ class RideConfigurator {
             foreach ($comparesNodes as $compareNode) {
                 if ($workNode->endMinute < $compareNode->startMinute) {
                     $node = RideNode::registerEmptyRide($workNode->targetAddress, $compareNode->startAddress);
-                    $this->emptyRides[$node->getRideHash()] = $node;
+                    $this->emptyRideNodes[$node->getRideHash()] = $node;
                 }
             }
             unset($workNodes[$key]);
         }
-        return $this->emptyRides;
+        return $this->emptyRideNodes;
     }
 
     /**
+     * creates an array with RideNodes according to a drivingMission with missionId as arrayKey
      * @param DrivingMission[] $drivingMissions
      * @return RideNode[]
      */
@@ -160,7 +176,7 @@ class RideConfigurator {
      * @return array
      */
     public function getEmptyRides() {
-        return $this->emptyRides;
+        return $this->emptyRideNodes;
     }
 
     /**
@@ -172,10 +188,21 @@ class RideConfigurator {
 
     /**
      * sort Mission by startMinutes
+     * @param RideNode[] $nodes
      */
     public static function sortNodesByStartMinute(&$nodes) {
         usort($nodes, function ($a, $b) {
             return ($a->startMinute > $b->startMinute);
+        });
+    }
+
+    /**
+     * sort Configurations by totalDistance
+     * @param RideConfiguration[] $configs
+     */
+    public static function sortRideConfigurationsByTotalDistance(&$configs) {
+        usort($configs, function ($a, $b) {
+            return ($a->getTotalDistance() > $b->getTotalDistance());
         });
     }
 

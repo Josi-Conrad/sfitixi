@@ -6,20 +6,43 @@
  * Time: 20:44
  */
 
-namespace Tixi\App\AppBundle\Disposition;
+namespace Tixi\App\AppBundle\Ride;
 
 
+use Tixi\App\AppBundle\Ride\RideNode;
+
+/**
+ * Class RideNodeList
+ * @package Tixi\App\AppBundle\Ride
+ */
 class RideNodeList {
-
-    protected $counter;
-
+    /**
+     * time above all included emptyRideNodes
+     * @var int
+     */
     protected $totalEmptyRideTime;
+    /**
+     * distance above all inserted nodes
+     * @var int
+     */
+    protected $totalEmptyRideDistance;
+    /**
+     * distance above all inserted nodes
+     * @var int
+     */
     protected $totalDistance;
 
     /**
-     * @var RideNode[]
+     * list entries
+     * @var int
      */
+    protected $counter;
+    /**@var RideNode[] */
     protected $rideNodes;
+    /**@var &RideNode */
+    protected $firstNode;
+    /**@var &RideNode */
+    protected $lastNode;
 
     public function __construct() {
         $this->counter = 0;
@@ -35,12 +58,21 @@ class RideNodeList {
      */
     public function addRideNode(RideNode $rideNode) {
         if ($rideNode->type == RideNode::RIDE_PASSENGER) {
-            $this->counter++;
+            if ($this->isEmpty()) {
+                $this->firstNode = & $rideNode;
+            }
+            if ($this->lastNode) {
+                $this->lastNode->setNextNode($rideNode);
+                $rideNode->setPreviousNode($this->lastNode);
+            }
+            $this->lastNode = & $rideNode;
             $this->rideNodes[] = $rideNode;
             $this->totalDistance += $rideNode->distance;
+            $this->counter++;
         }
         if ($rideNode->type == RideNode::RIDE_EMPTY) {
             $this->totalEmptyRideTime += $rideNode->duration;
+            $this->totalEmptyRideDistance += $rideNode->distance;
             $this->totalDistance += $rideNode->distance;
         }
     }
@@ -82,4 +114,33 @@ class RideNodeList {
     public function getTotalEmptyRideTime() {
         return $this->totalEmptyRideTime;
     }
+
+    /**
+     * @return int
+     */
+    public function getTotalEmptyRideDistance() {
+        return $this->totalEmptyRideDistance;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCounter() {
+        return $this->counter;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFirstNode() {
+        return $this->firstNode;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLastNode() {
+        return $this->lastNode;
+    }
+
 }

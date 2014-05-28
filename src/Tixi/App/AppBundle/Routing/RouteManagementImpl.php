@@ -12,7 +12,7 @@ namespace Tixi\App\AppBundle\Routing;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\DependencyInjection\ContainerAware;
-use Tixi\App\AppBundle\Disposition\RideNode;
+use Tixi\App\AppBundle\Ride\RideNode;
 use Tixi\App\Routing\RouteManagement;
 use Tixi\CoreDomain\Address;
 use Tixi\CoreDomain\Dispo\Route;
@@ -84,7 +84,7 @@ class RouteManagementImpl extends ContainerAware implements RouteManagement {
         $routingMachine = $this->container->get('tixi_app.routingmachine');
 
         $routesToQuery = array();
-        /** @var $rideNode RideNode */
+        /** @var $rideNode \Tixi\App\AppBundle\Ride\RideNode */
         foreach ($rideNodes as $hashKey => $rideNode) {
             $routesToQuery[$hashKey] = Route::registerRoute($rideNode->startAddress, $rideNode->targetAddress);
         }

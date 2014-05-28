@@ -6,16 +6,21 @@
  * Time: 18:43
  */
 
-namespace Tixi\App\AppBundle\Disposition\RideStrategies;
+namespace Tixi\App\AppBundle\Ride\RideStrategies;
 
 
-use Tixi\App\AppBundle\Disposition\RideConfiguration;
-use Tixi\App\AppBundle\Disposition\RideConfigurator;
-use Tixi\App\AppBundle\Disposition\RideNode;
-use Tixi\App\AppBundle\Disposition\RideNodeList;
+use Tixi\App\AppBundle\Ride\RideStrategies\RideStrategy;
+use Tixi\App\AppBundle\Ride\RideConfiguration;
+use Tixi\App\AppBundle\Ride\ConfigurationBuilder;
+use Tixi\App\AppBundle\Ride\RideNode;
+use Tixi\App\AppBundle\Ride\RideNodeList;
 use Tixi\App\Disposition\DispositionVariables;
 use Tixi\CoreDomain\Dispo\DrivingPool;
 
+/**
+ * Class RideStrategyTimeWindow
+ * @package Tixi\App\AppBundle\Ride\RideStrategies
+ */
 class RideStrategyTimeWindow implements RideStrategy {
     /**
      * @var RideNode[]
@@ -41,9 +46,10 @@ class RideStrategyTimeWindow implements RideStrategy {
 
         //fill existing missions<->orders and nodes away from workNodes
         foreach ($this->drivingPools as $drivingPool) {
+            $rideNodeList = new RideNodeList();
+
             /**@var $drivingPool DrivingPool */
             if ($drivingPool->hasAssociatedDrivingMissions()) {
-                $rideNodeList = new RideNodeList();
                 foreach ($drivingPool->getDrivingMissions() as $mission) {
                     $id = $mission->getId();
                     if ($workNodes[$id] !== null) {
@@ -51,33 +57,47 @@ class RideStrategyTimeWindow implements RideStrategy {
                         unset($workNodes[$id]);
                     }
                 }
-                $rideConfiguration->addRideNodeListAtPool($drivingPool, $rideNodeList);
             }
+
+            $rideConfiguration->addRideNodeListAtPool($drivingPool, $rideNodeList);
         }
 
-        RideConfigurator::sortNodesByStartMinute($workNodes);
+        ConfigurationBuilder::sortNodesByStartMinute($workNodes);
 
         //compare all other RideNodes if they fit in a TimeWindows
-        foreach ($rideConfiguration->getRideNodeLists() as $poolId => $poolNodes) {
-            $lastNodeTime = 0;
-            foreach ($workNodes as $missionId => $node) {
-                //compare with existing nodes
-                if (count($poolNodes) > 0) {
-                    foreach ($poolNodes as $key => $poolNode) {
-                        if ($node->endMinute < $poolNode->startMinute ||
-                            $node->startMinute > $poolNode->endMinute
-                        ) {
-                            $poolNodes[$missionId] = $node;
-                            unset($workNodes[$missionId]);
+        foreach ($rideConfiguration->getRideNodeLists() as $nodeListId => &$nodeList) {
+            $lastNodeTime = -1;
+            foreach ($workNodes as $nodeKey => $node) {
+
+                /*
+
+                //TODO: compare with existing nodes requires better logic and array_splice to insert node between 2 possible nodes
+
+                if (!$nodeList->isEmpty()) {
+                    $isFeasibleToExistingNodes = false;
+                    $nodesInList = $nodeList->getRideNodes();
+                    foreach ($nodesInList as $key => $existingNode) {
+                        if ($node->endMinute < $existingNode->startMinute &&
+                            $node->startMinute > $existingNode->endMinute) {
+                            $isFeasibleToExistingNodes = true;
+                        } else {
+                            $isFeasibleToExistingNodes = false;
+                            break;
                         }
                     }
-                    $lastNodeTime = $node->endMinute + DispositionVariables::ARRIVAL_BEFORE_PICKUP;
-                } else {
-                    if ($node->startMinute > $lastNodeTime) {
-                        $rideConfiguration->getRideNodeListFromPoolId($poolId)[$missionId] = $node;
+                    if ($isFeasibleToExistingNodes) {
                         $lastNodeTime = $node->endMinute + DispositionVariables::ARRIVAL_BEFORE_PICKUP;
-                        unset($workNodes[$missionId]);
+                        $nodeList->addRideNode($node);
+                        unset($workNodes[$nodeKey]);
                     }
+                    continue;
+                }
+                */
+
+                if ($node->startMinute > $lastNodeTime) {
+                    $nodeList->addRideNode($node);
+                    $lastNodeTime = $node->endMinute + DispositionVariables::ARRIVAL_BEFORE_PICKUP;
+                    unset($workNodes[$nodeKey]);
                 }
             }
         }

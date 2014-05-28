@@ -9,7 +9,7 @@
 namespace Tixi\App\AppBundle\Tests;
 
 
-use Tixi\App\AppBundle\Disposition\RideNode;
+use Tixi\App\AppBundle\Ride\RideNode;
 use Tixi\App\Disposition\DispositionVariables;
 use Tixi\CoreDomain\Dispo\DrivingMission;
 use Tixi\CoreDomain\Dispo\DrivingOrder;
@@ -34,7 +34,7 @@ class DispositionTest extends CommonBaseTest {
     public function testFeasibility() {
         $day = new \DateTime('2014-06-01 10:15:00');
         $time = new \DateTime('2014-06-01 12:15:00');
-        $isFeasible = $this->dispoManagement->checkFeasibility($day, $time, DrivingMission::SAME_START, 28, 2);
+        $isFeasible = $this->rideManagement->checkFeasibility($day, $time, DrivingMission::SAME_START, 28, 2);
         $this->assertNotNull($isFeasible);
         $isFeasible ? $str = "\nIs feasible" : $str = "\nIs NOT feasible";
         echo $str;
@@ -45,7 +45,7 @@ class DispositionTest extends CommonBaseTest {
         $time = new \DateTime('2014-06-01 08:15:00');
         $shift = $this->dispoManagement->getResponsibleShiftForDayAndTime($day, $time);
         if($shift !== null){
-            $this->dispoManagement->getOptimizedPlanForShift($shift);
+            $this->rideManagement->getOptimizedPlanForShift($shift);
         }
     }
 
