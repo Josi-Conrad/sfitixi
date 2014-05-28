@@ -148,12 +148,16 @@ class DrivingPool {
         return $this->id;
     }
 
-//    /**
-//     * @return Driver
-//     */
-//    public function getDriver() {
-//        return $this->driver;
-//    }
+    /**
+     * @return Driver
+     */
+    public function getDriver() {
+        $driver = null;
+        if(isset($this->drivingAssertion) && null !== $this->drivingAssertion) {
+            $driver = $this->drivingAssertion->getDriver();
+        }
+        return $driver;
+    }
 
     /**
      * @param mixed $drivingMissions

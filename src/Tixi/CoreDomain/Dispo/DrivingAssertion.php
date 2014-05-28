@@ -73,4 +73,14 @@ class DrivingAssertion extends CommonBaseEntity implements DrivingAssertionInter
     public function isAssignedToDrivingPool() {
         return (isset($this->drivingPool) && null!==$this->drivingPool);
     }
+
+    /**
+     * @return mixed
+     */
+    public function getDriver()
+    {
+        return $this->driver;
+    }
+
+
 }
