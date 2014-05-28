@@ -11,6 +11,7 @@ namespace Tixi\CoreDomainBundle\Repository\Dispo;
 
 use Tixi\CoreDomain\Dispo\DrivingAssertion;
 use Tixi\CoreDomain\Dispo\DrivingAssertionRepository;
+use Tixi\CoreDomain\Dispo\Shift;
 use Tixi\CoreDomainBundle\Repository\CommonBaseRepositoryDoctrine;
 
 class DrivingAssertionRepositoryDoctrine extends CommonBaseRepositoryDoctrine implements DrivingAssertionRepository{
@@ -32,4 +33,13 @@ class DrivingAssertionRepositoryDoctrine extends CommonBaseRepositoryDoctrine im
     {
         $this->getEntityManager()->remove($drivingAssertion);
     }
-} 
+
+    public function findAllActiveByShift(Shift $shift)
+    {
+        $qb = parent::createQueryBuilder('e');
+        $qb->where('e.shift = :shift')
+            ->andWhere('e.isDeleted = 0')
+            ->setParameter('shift', $shift);
+        return $qb->getQuery()->getResult();
+    }
+}

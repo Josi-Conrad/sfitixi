@@ -45,6 +45,7 @@ class MonthlyPlanDriversPerShiftType extends AbstractType{
     {
         /** @var MonthlyPlanDriversPerShiftDTO $data */
         $data = $form->getData();
+        $view->vars['assertedDrivers'] = $data->driversWithAssertion;
         $view->vars['shiftDisplayName'] = $data->shiftDisplayName;
     }
 

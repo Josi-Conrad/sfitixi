@@ -13,19 +13,22 @@ namespace Tixi\ApiBundle\Shared\DataGrid;;
  * @package Tixi\ApiBundle\Shared\DataGrid
  */
 class DataGridHeader {
-    private $fieldPropertyName;
-    private $headerName;
-    private $order;
+    protected $fieldPropertyName;
+    protected $headerName;
+    protected $order;
+    protected $isComputed;
 
     /**
      * @param $fieldPropertyName
      * @param $headerName
      * @param $order
+     * @param $isComputed
      */
-    public function __construct($fieldPropertyName, $headerName, $order) {
+    public function __construct($fieldPropertyName, $headerName, $order, $isComputed) {
         $this->fieldPropertyName = $fieldPropertyName;
         $this->headerName = $headerName;
         $this->order = $order;
+        $this->isComputed = $isComputed;
     }
 
     /**
@@ -51,6 +54,10 @@ class DataGridHeader {
     public function getFieldPropertyName()
     {
         return $this->fieldPropertyName;
+    }
+
+    public function isComputed() {
+        return $this->isComputed ? 1 : 0;
     }
 
 

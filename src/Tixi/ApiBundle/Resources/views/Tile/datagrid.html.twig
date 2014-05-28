@@ -30,8 +30,8 @@
                     {% for header in gridState.getHeaders() %}
                         <th>
                             <div class="headerWrapper">
-                                <div id="{{ 'fpx_' ~ menuId ~ '_' ~ gridId ~ '_header_' ~ header.getFieldPropertyName() }}" class="header"
-                                     data-fieldId="{{ header.getFieldPropertyName() }}">{{ header.getHeaderName()|trans }}</div>
+                                <div id="{{ 'fpx_' ~ menuId ~ '_' ~ gridId ~ '_header_' ~ header.getFieldPropertyName() }}" class="header {% if header.isComputed() == 1%}computedHeader{% endif %}"
+                                     data-fieldId="{{ header.getFieldPropertyName() }}" data-isComputed="{{ header.isComputed() }}">{{ header.getHeaderName()|trans }}</div>
                                 <span class="sortIcon glyphicon"></span>
                             </div>
                         </th>

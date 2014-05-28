@@ -31,6 +31,11 @@ class GridField {
      */
     public $comparingOperator = '=';
     /**
+     * @var bool
+     * If field is computed, it doesn't need a propertyId but can't be sorted or searched
+     */
+    public $isComputed = false;
+    /**
      * @var string
      * Format: EntityName.PropertyName
      */

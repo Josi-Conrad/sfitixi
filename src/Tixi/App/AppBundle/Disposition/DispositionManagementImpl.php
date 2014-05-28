@@ -8,14 +8,18 @@
 
 namespace Tixi\App\AppBundle\Disposition;
 
-
 use Doctrine\ORM\EntityNotFoundException;
 use Symfony\Component\Console\Tests\Helper\FormatterHelperTest;
 use Symfony\Component\DependencyInjection\ContainerAware;
+use Tixi\ApiBundle\Interfaces\Dispo\MonthlyView\MonthlyPlanDriversPerShiftDTO;
+use Tixi\ApiBundle\Interfaces\Dispo\MonthlyView\MonthlyPlanDrivingAssertionDTO;
+use Tixi\ApiBundle\Interfaces\Dispo\MonthlyView\MonthlyPlanEditDTO;
 use Tixi\App\AppBundle\Ride\RideStrategies\RideStrategyLeastDistance;
 use Tixi\App\AppBundle\Ride\RideStrategies\RideStrategyTimeWindow;
 use Symfony\Component\Validator\Constraints\DateTime;
 use Tixi\App\Disposition\DispositionManagement;
+use Tixi\CoreDomain\Dispo\DrivingAssertion;
+use Tixi\CoreDomain\Dispo\DrivingAssertionRepository;
 use Tixi\CoreDomain\Dispo\DrivingMission;
 use Tixi\CoreDomain\Dispo\DrivingMissionRepository;
 use Tixi\CoreDomain\Dispo\DrivingOrder;
@@ -28,6 +32,8 @@ use Tixi\CoreDomain\Dispo\ShiftTypeRepository;
 use Tixi\CoreDomain\Dispo\WorkingDayRepository;
 use Tixi\CoreDomain\Dispo\WorkingMonth;
 use Tixi\CoreDomain\Dispo\WorkingMonthRepository;
+use Tixi\CoreDomain\Driver;
+use Tixi\CoreDomain\DriverRepository;
 
 class DispositionManagementImpl extends ContainerAware implements DispositionManagement {
     /**
@@ -198,5 +204,43 @@ class DispositionManagementImpl extends ContainerAware implements DispositionMan
         }
         $workingMonthRepository->store($workingMonth);
         return $workingMonth;
+    }
+
+    public function createDrivingAssertionsFromMonthlyPlan(MonthlyPlanEditDTO $monthlyPlan)
+    {
+        /** @var ShiftRepository $shiftRepository */
+        $shiftRepository = $this->container->get('shift_repository');
+        /** @var DrivingAssertionRepository $drivingAssertionRepository */
+        $drivingAssertionRepository = $this->container->get('drivingassertion_repository');
+
+        $driversPerShifts = $monthlyPlan->shifts;
+        /** @var MonthlyPlanDriversPerShiftDTO $driversPerShift */
+        foreach($driversPerShifts as $driversPerShift) {
+            $newDrivers = $driversPerShift->newDrivers;
+            /** @var MonthlyPlanDrivingAssertionDTO $newDriver */
+            $shift = $shiftRepository->find($driversPerShift->shiftId);
+            foreach($newDrivers as $newDriver) {
+                $driver = $newDriver->driver;
+                if(null !== $driver) {
+                    if(!$this->hasDrivingAssertionForShift($shift, $driver)) {
+                        $drivingAssertion = DrivingAssertion::registerDrivingAssertion($driver, $shift);
+                        $drivingAssertionRepository->store($drivingAssertion);
+                    }
+                }
+            }
+        }
+    }
+
+    protected function hasDrivingAssertionForShift(Shift $shift, Driver $driver) {
+        /** @var DrivingAssertionRepository $drivingAssertionRepository */
+        $drivingAssertionRepository = $this->container->get('drivingassertion_repository');
+        $assertions = $drivingAssertionRepository->findAllActiveByShift($shift);
+        /** @var DrivingAssertion $assertion */
+        foreach($assertions as $assertion) {
+            if($assertion->getDriver()->getId() === $driver->getId()) {
+                return true;
+            }
+        }
+        return false;
     }
 }

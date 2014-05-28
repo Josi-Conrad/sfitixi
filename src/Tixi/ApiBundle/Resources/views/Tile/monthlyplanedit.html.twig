@@ -26,6 +26,7 @@
 </div>
 
 <div class="col-md-6">
+
     {% for shift in form.shifts %}
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -36,9 +37,17 @@
                     {{ form_widget(newDriver.driver) }}
                 {% endfor %}
             </div>
-        </div>
+            <ul class="list-group">
+                {% for assertedDriver in shift.vars.assertedDrivers %}
+                    <li class="list-group-item">{{ assertedDriver.getNameStringForContact() }}</li>
+                {% endfor %}
+            </ul>
 
+
+
+        </div>
     {% endfor %}
+
 </div>
 
 {{ form_end(form) }}

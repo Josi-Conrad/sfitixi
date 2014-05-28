@@ -36,6 +36,11 @@
     display: inline-block;
 }
 
+.dataGrid .computedHeader {
+    cursor: auto!important;
+    font-style: italic;
+}
+
 .dataGrid .sortIcon {
     margin-left: 5px;
 }

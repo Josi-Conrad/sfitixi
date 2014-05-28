@@ -147,7 +147,11 @@
                 <argument type="service" id="tixi_app.dispomanagement" />
             </call>
         </service>
-        <service id="tixi_api.assemblerMonthlyPlan" class="%tixi_api.monthlyplanassembler.class%" />
+        <service id="tixi_api.assemblerMonthlyPlan" class="%tixi_api.monthlyplanassembler.class%">
+            <call method="setDispoService">
+                <argument type="service" id="tixi_app.dispomanagement" />
+            </call>
+        </service>
         <!-- Management -->
         <service id="tixi_api.assemblerUser" class="%tixi_api.userassembler.class%">
             <call method="setEncoderFactory">
