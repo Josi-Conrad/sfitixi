@@ -298,7 +298,7 @@ class Person extends CommonBaseEntity {
     }
 
     /**
-     * @return mixed
+     * @return VehicleCategory[]
      */
     public function getContradictVehicleCategories() {
         return $this->contradictVehicleCategories;

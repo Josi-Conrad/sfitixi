@@ -66,8 +66,8 @@ class ConfigurationBuilder {
      */
     public function __construct($drivingMissions, $drivingPools, $vehicles, RideStrategy $rideStrategy) {
         $this->rideNodes = $this->createRideNodesFromDrivingMissions($drivingMissions);
-        $this->drivingPools = $drivingPools;
         $this->fillVehicleDepotNodes($vehicles);
+        $this->drivingPools = $drivingPools;
         $this->strategy = $rideStrategy;
         $this->emptyRideNodes = array();
     }
@@ -215,6 +215,21 @@ class ConfigurationBuilder {
             $depotAddress = $vehicle->getDepot()->getAddress();
             $this->vehicleDepotAddresses[$depotAddress->getHashFromBigIntCoordinates()] = $depotAddress;
         }
+    }
+
+    /**
+     * @param RideConfiguration $rideConfiguration
+     * @return \Tixi\App\AppBundle\Ride\RideConfiguration
+     */
+    public function assignMissionsToPools(RideConfiguration $rideConfiguration) {
+        foreach ($rideConfiguration->getRideNodeLists() as $poolId => $list) {
+            foreach ($list->getRideNodes() as $node) {
+                $pool = $rideConfiguration->getDrivingPoolFromId($poolId);
+                $pool->assignDrivingMission($node->drivingMission);
+                $node->drivingMission->assignDrivingPool($pool);
+            }
+        }
+        return $rideConfiguration;
     }
 
     /**

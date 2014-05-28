@@ -41,7 +41,7 @@ class RideStrategyTimeWindow implements RideStrategy {
         $this->rideNodes = $rideNodes;
         $this->drivingPools = $drivingPools;
 
-        $rideConfiguration = new RideConfiguration();
+        $rideConfiguration = new RideConfiguration($this->drivingPools);
         $workNodes = $this->rideNodes;
 
         //fill existing missions<->orders and nodes away from workNodes

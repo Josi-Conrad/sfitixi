@@ -12,6 +12,8 @@ use Tixi\ApiBundle\Helper\DateTimeService;
 use Tixi\App\Disposition\DispositionVariables;
 use Tixi\CoreDomain\Address;
 use Tixi\CoreDomain\Dispo\DrivingMission;
+use Tixi\CoreDomain\Dispo\DrivingOrder;
+use Tixi\CoreDomain\VehicleCategory;
 
 /**
  * Simple Node DTO to save relevant Information for routeConfiguration calculation
@@ -58,7 +60,22 @@ class RideNode {
      * @var int
      */
     public $distance;
+    /**
+     * Passengers without wheelchair
+     * @var int
+     */
+    public $passengers;
+    /**
+     * Passengers in wheelchair
+     * @var int
+     */
+    public $wheelChairs;
+    /**
+     * @var $contradictingVehicleCategories VehicleCategory[]
+     */
+    public $contradictingVehicleCategories;
 
+    /**node in list*/
     public $nextNode;
     public $previousNode;
 
@@ -84,6 +101,20 @@ class RideNode {
         $ride->distance = $drivingMission->getServiceDistance();
         $ride->startMinute = $drivingMission->getServiceMinuteOfDay();
         $ride->endMinute = $drivingMission->getServiceMinuteOfDay() + $drivingMission->getServiceDuration();
+
+        //fill amount of passenger with or without wheelchair
+        foreach ($drivingMission->getDrivingOrders() as $order) {
+            /**@var $order DrivingOrder */
+            $passenger = $order->getPassenger();
+            if ($passenger->getIsInWheelChair()) {
+                $ride->wheelChairs++;
+            } else {
+                $ride->passengers++;
+            }
+            foreach ($passenger->getContradictVehicleCategories() as $contradict) {
+                $ride->contradictingVehicleCategories[$contradict->getId()] = $contradict;
+            }
+        }
 
         $ride->startAddress = $startAddress;
         $ride->targetAddress = $endAddress;

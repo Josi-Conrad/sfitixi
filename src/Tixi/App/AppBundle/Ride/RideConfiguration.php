@@ -34,19 +34,30 @@ class RideConfiguration {
     protected $totalDistance;
     /**
      * any nodes that are left on this configuration = not feasible
-     * @var
+     * @var $notFeasibleNodes RideNode[]
      */
     protected $notFeasibleNodes;
 
     /**
-     * Array of RideNodeLists with ID = drivingPoolID
-     * @var RideNodeList[]
+     * Array of RideNodeLists with key = drivingPoolID
+     * @var $rideNodeLists RideNodeList[]
      */
     protected $rideNodeLists;
 
-    public function __construct() {
-        $this->rideNodeLists = array();
+    /**
+     * Array of DrivingPools with key = drivingPoolID
+     * @var $drivingPools DrivingPool[]
+     */
+    protected $drivingPools;
 
+    /**
+     * @param $drivingPools DrivingPool[]
+     */
+    public function __construct($drivingPools) {
+        $this->rideNodeLists = array();
+        foreach ($drivingPools as $drivingPool) {
+            $this->drivingPools[$drivingPool->getId()] = $drivingPool;
+        }
         $this->totalDistance = 0;
         $this->totalEmptyRideTime = 0;
     }
@@ -55,17 +66,10 @@ class RideConfiguration {
      * @param DrivingPool $drivingPool
      * @return RideNodeList
      */
-    public function getRideNodeListFromPool(DrivingPool $drivingPool) {
+    public function getRideNodeListForPool(DrivingPool $drivingPool) {
         return $this->rideNodeLists[$drivingPool->getId()];
     }
 
-    /**
-     * @param $drivingPoolId
-     * @return RideNodeList
-     */
-    public function getRideNodeListFromPoolId($drivingPoolId) {
-        return $this->rideNodeLists[$drivingPoolId];
-    }
 
     /**
      * @param DrivingPool $drivingPool
@@ -100,6 +104,7 @@ class RideConfiguration {
     }
 
     /**
+     * returns array with key = PoolId and value = RideNodeList
      * @return RideNodeList[]
      */
     public function getRideNodeLists() {
@@ -134,4 +139,18 @@ class RideConfiguration {
         return $this->totalEmptyRideDistance;
     }
 
+    /**
+     * @return \Tixi\CoreDomain\Dispo\DrivingPool[]
+     */
+    public function getDrivingPools() {
+        return $this->drivingPools;
+    }
+
+    /**
+     * @param $drivingPoolId
+     * @return DrivingPool
+     */
+    public function getDrivingPoolFromId($drivingPoolId) {
+        return $this->drivingPools[$drivingPoolId];
+    }
 }

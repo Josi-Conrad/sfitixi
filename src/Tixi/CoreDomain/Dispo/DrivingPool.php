@@ -120,6 +120,13 @@ class DrivingPool {
         $this->shift = $shift;
     }
 
+    /**
+     * @param DrivingMission $drivingMission
+     */
+    public function assignDrivingMission(DrivingMission $drivingMission) {
+        $this->drivingMissions->add($drivingMission);
+    }
+
 //    /**
 //     * @param Driver $driver
 //     */
@@ -157,7 +164,7 @@ class DrivingPool {
      */
     public function getDriver() {
         $driver = null;
-        if(isset($this->drivingAssertion) && null !== $this->drivingAssertion) {
+        if (isset($this->drivingAssertion) && null !== $this->drivingAssertion) {
             $driver = $this->drivingAssertion->getDriver();
         }
         return $driver;

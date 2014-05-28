@@ -139,13 +139,6 @@ class Shift {
     }
 
     /**
-     * @param Driver $driver
-     */
-    protected function assignDriver(Driver $driver) {
-        $this->assignDrivingPool(DrivingPool::registerDrivingPool($this, $driver));
-    }
-
-    /**
      * @return mixed
      */
     protected function amountOfDriversNeeded() {
