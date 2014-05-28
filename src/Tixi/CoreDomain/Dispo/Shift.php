@@ -41,7 +41,7 @@ class Shift {
      */
     protected $drivingPools;
     /**
-     * @ORM\OneToMany(targetEntity="Tixi\CoreDomain\Dispo\DrivingAssertion", mappedBy="driver")
+     * @ORM\OneToMany(targetEntity="Tixi\CoreDomain\Dispo\DrivingAssertion", mappedBy="shift")
      * @ORM\JoinColumn(name="drivingassertion_id", referencedColumnName="id")
      */
     protected $drivingAssertions;
@@ -136,6 +136,15 @@ class Shift {
 
     public function getAmountOfMissingDrivers() {
         return ($this->getAmountOfDrivers() - count($this->drivingAssertions));
+    }
+
+    public function getAssignedDrivers() {
+        $drivers = array();
+        /** @var DrivingAssertion $assertion */
+        foreach($this->drivingAssertions as $assertion) {
+            $drivers[] = $assertion->getDriver();
+        }
+        return $drivers;
     }
 
     /**

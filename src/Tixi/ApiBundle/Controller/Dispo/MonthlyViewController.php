@@ -76,6 +76,10 @@ class MonthlyViewController extends Controller{
 
         if($form->isValid()) {
             $editDTO = $form->getData();
+            $assembler->editDTOtoWorkingDay($editDTO);
+            $this->get('entity_manager')->flush();
+            return $this->redirect($this->generateUrl('tixiapi_dispo_monthlyplan_edit',
+                array('workingMonthId'=>$workingMonthId, 'workingDayId'=>$workingDayId)));
         }
 
         $rootPanel = new RootPanel($this->menuId, 'monthlyplan.panel.edit');

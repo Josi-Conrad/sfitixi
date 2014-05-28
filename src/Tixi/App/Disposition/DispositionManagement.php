@@ -9,6 +9,7 @@
 namespace Tixi\App\Disposition;
 
 
+use Tixi\ApiBundle\Interfaces\Dispo\MonthlyView\MonthlyPlanEditDTO;
 use Tixi\App\AppBundle\Ride\RideNode;
 use Tixi\CoreDomain\Dispo\DrivingMission;
 use Tixi\CoreDomain\Dispo\DrivingOrder;
@@ -24,6 +25,8 @@ interface DispositionManagement {
     public function openWorkingMonth($year, $month);
 
     public function processChangeInAmountOfDriversPerShift(Shift $shift, $oldAmount, $newAmount);
+
+    public function createDrivingAssertionsFromMonthlyPlan(MonthlyPlanEditDTO $monthlyPlan);
 
     /**
      * @param \DateTime $day

@@ -24,4 +24,6 @@ interface DrivingAssertionRepository extends CommonBaseRepository{
      * @return mixed
      */
     public function remove(DrivingAssertion $drivingAssertion);
+
+    public function findAllActiveByShift(Shift $shift);
 } 

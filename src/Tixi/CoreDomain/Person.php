@@ -523,6 +523,10 @@ class Person extends CommonBaseEntity {
         return $this->firstname . ' ' . $this->lastname . ' (ID: ' . $this->id . ')';
     }
 
+    public function getNameStringForContact() {
+        return $this->firstname . ' ' . $this->lastname . ' (ID: ' . $this->id . ') - ' . $this->telephone;
+    }
+
     /**
      * @param mixed $gender
      */

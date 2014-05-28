@@ -17,4 +17,5 @@ class MonthlyPlanEditDTO {
     public $workingDayWeekdayString;
     public $workingDayDateString;
     public $shifts = array();
+
 } 

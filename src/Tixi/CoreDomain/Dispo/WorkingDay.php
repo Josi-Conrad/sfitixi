@@ -142,6 +142,10 @@ class WorkingDay {
         return $this->shifts;
     }
 
+    public function getShiftsAsArray() {
+        return $this->shifts->toArray();
+    }
+
     /**
      * @param mixed $comment
      */

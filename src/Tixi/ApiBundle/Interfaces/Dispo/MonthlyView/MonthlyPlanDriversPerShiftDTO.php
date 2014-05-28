@@ -12,6 +12,9 @@ namespace Tixi\ApiBundle\Interfaces\Dispo\MonthlyView;
 class MonthlyPlanDriversPerShiftDTO {
 
     public $shiftDisplayName;
+    public $shiftId;
     public $newDrivers = array();
     public $driversWithAssertion = array();
+
+
 } 

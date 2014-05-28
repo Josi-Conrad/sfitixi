@@ -48,11 +48,16 @@ class DrivingAssertion extends CommonBaseEntity implements DrivingAssertionInter
         return $shift->getId() === $this->shift->getId();
     }
 
+    /**
+     * @param Driver $driver
+     * @param Shift $shift
+     * @return DrivingAssertion
+     */
     public static function registerDrivingAssertion(Driver $driver, Shift $shift) {
         $drivingAssertion = new DrivingAssertion();
         $drivingAssertion->assignShift($shift);
         $drivingAssertion->assignDriver($driver);
-
+        return $drivingAssertion;
     }
 
     public function assignDriver(Driver $driver) {
