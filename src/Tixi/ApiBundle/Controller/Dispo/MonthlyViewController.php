@@ -67,6 +67,7 @@ class MonthlyViewController extends Controller{
     /**
      * @Route("/month/{workingMonthId}",name="tixiapi_dispo_monthlyplan_workingdays_get")
      * @Method({"GET","POST"})
+     * @Breadcrumb("{workingMonthId}", route={"name"="tixiapi_dispo_monthlyplan_workingdays_get", "parameters"={"workingMonthId"}})
      * @param Request $request
      * @param bool $embeddedState
      * @param $workingMonthId
@@ -97,6 +98,8 @@ class MonthlyViewController extends Controller{
     /**
      * @Route("/month/{workingMonthId}/day/{workingDayId}/edit",name="tixiapi_dispo_monthlyplan_edit")
      * @Method({"GET","POST"})
+     * @Breadcrumb("{workingMonthId}", route={"name"="tixiapi_dispo_monthlyplan_workingdays_get", "parameters"={"workingMonthId"}})
+     * @Breadcrumb("monthlyplan.workingday.list.name", route={"name"="tixiapi_dispo_monthlyplan_edit", "parameters"={"workingMonthId","workingDayId"}})
      * @param Request $request
      * @param $workingMonthId
      * @param $workingDayId

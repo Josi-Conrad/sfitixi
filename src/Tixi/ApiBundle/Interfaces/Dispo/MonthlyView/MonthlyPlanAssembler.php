@@ -87,6 +87,9 @@ class MonthlyPlanAssembler {
         $dto->id = $workingDay->getId();
         $dto->dateString = $workingDay->getDateString();
         $dto->weekDayString = $workingDay->getWeekDayAsString();
+        $missingDriversInfoArray = $workingDay->getMisingDriversInformationArray();
+        $dto->missingDrivers = $missingDriversInfoArray['total'];
+        $dto->missingDriversPerShift = $missingDriversInfoArray['perShiftString'];
         return $dto;
     }
 

@@ -22,13 +22,21 @@ class MonthlyPlanWorkingDayListDTO implements DataGridSourceClass{
      */
     public $workingMonthId;
     /**
-     * @GridField(propertyId="WorkingDay.date", headerName="monthlyplan.workingday.field.datestring")
+     * @GridField(propertyId="WorkingDay.date", headerName="monthlyplan.workingday.field.datestring", order=1)
      */
     public $dateString;
     /**
-     * @GridField(headerName="monthlyplan.workingday.field.weekdaystring", isComputed=true)
+     * @GridField(headerName="monthlyplan.workingday.field.weekdaystring", isComputed=true, order=2)
      */
     public $weekDayString;
+    /**
+     * @GridField(headerName="monthlyplan.field.missingdrivers", isComputed=true, order=3)
+     */
+    public $missingDrivers;
+    /**
+     * @GridField(headerName="monthlyplan.field.missingdriverspershift", isComputed=true, order=4)
+     */
+    public $missingDriversPerShift;
 
     /**
      * @return mixed
