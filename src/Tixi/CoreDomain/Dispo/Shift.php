@@ -41,6 +41,11 @@ class Shift {
      */
     protected $drivingPools;
     /**
+     * @ORM\OneToMany(targetEntity="Tixi\CoreDomain\Dispo\DrivingAssertion", mappedBy="driver")
+     * @ORM\JoinColumn(name="drivingassertion_id", referencedColumnName="id")
+     */
+    protected $drivingAssertions;
+    /**
      * @var $workingDay WorkingDay
      * @ORM\ManyToOne(targetEntity="WorkingDay", inversedBy="shifts")
      * @ORM\JoinColumn(name="working_day_id", referencedColumnName="id")
@@ -63,6 +68,7 @@ class Shift {
 
     protected function __construct() {
         $this->drivingPools = new ArrayCollection();
+        $this->drivingAssertions = new ArrayCollection();
     }
 
     /**
@@ -128,6 +134,10 @@ class Shift {
         return false;
     }
 
+    public function getAmountOfMissingDrivers() {
+        return ($this->getAmountOfDrivers() - count($this->drivingAssertions));
+    }
+
     /**
      * @param Driver $driver
      */
@@ -145,8 +155,15 @@ class Shift {
     /**
      * @param mixed $drivingPool
      */
-    public function assignDrivingPool($drivingPool) {
+    public function assignDrivingPool(DrivingPool $drivingPool) {
         $this->drivingPools->add($drivingPool);
+    }
+
+    public function removeDrivingPool(DrivingPool $drivingPool) {
+        if($drivingPool->getAmountOfAssociatedDrivingMissions() !== 0) {
+            throw new \LogicException('the driving pool with id '.$drivingPool->getId().' is not empty');
+        }
+        $this->drivingPools->removeElement($drivingPool);
     }
 
     /**
@@ -154,6 +171,28 @@ class Shift {
      */
     public function getDrivingPools() {
         return $this->drivingPools;
+    }
+
+    public function getDrivingPoolsAsArray() {
+        return $this->drivingPools->toArray();
+    }
+
+    /**
+     * @param DrivingAssertion $drivingAssertion
+     */
+    public function assignDrivingAssertion(DrivingAssertion $drivingAssertion) {
+        $this->drivingAssertions->add($drivingAssertion);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDrivingAssertions() {
+        return $this->drivingAssertions;
+    }
+
+    public function getDrivingAssertionsAsArray() {
+        return $this->drivingAssertions->toArray();
     }
 
     /**

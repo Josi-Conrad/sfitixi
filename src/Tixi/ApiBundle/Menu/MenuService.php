@@ -37,6 +37,7 @@ class MenuService extends ContainerAware {
 
     public static $menuSelectionDispositionId = 'disposition';
     public static $menuDispositionProductionPlanId = 'disposition_productionplan';
+    public static $menuDispositionMonthlyPlanId = 'disposition_monthlyplan';
 
     public static $menuSelectionManagementId = 'management';
     public static $menuManagementUserId = 'management_users';

@@ -10,6 +10,7 @@ namespace Tixi\CoreDomain;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Tixi\CoreDomain\Dispo\DrivingAssertion;
 use Tixi\CoreDomain\Dispo\DrivingPool;
 use Tixi\CoreDomain\Dispo\RepeatedDrivingAssertion;
 use Tixi\CoreDomain\Dispo\RepeatedDrivingAssertionPlan;
@@ -51,10 +52,16 @@ class Driver extends Person {
     protected $repeatedDrivingAssertionPlans;
 
     /**
-     * @ORM\OneToMany(targetEntity="Tixi\CoreDomain\Dispo\DrivingPool", mappedBy="driver")
-     * @ORM\JoinColumn(name="driving_pool_id", referencedColumnName="id")
+     * @ORM\OneToMany(targetEntity="Tixi\CoreDomain\Dispo\DrivingAssertion", mappedBy="driver")
+     * @ORM\JoinColumn(name="drivingassertion_id", referencedColumnName="id")
      */
-    protected $drivingPools;
+    protected $drivingAssertions;
+
+//    /**
+//     * @ORM\OneToMany(targetEntity="Tixi\CoreDomain\Dispo\DrivingPool", mappedBy="driver")
+//     * @ORM\JoinColumn(name="driving_pool_id", referencedColumnName="id")
+//     */
+//    protected $drivingPools;
 
     /**
      * @ORM\Column(type="text", nullable=true)
@@ -229,6 +236,10 @@ class Driver extends Person {
     public function removeRepeatedDrivingAssertionPlan(RepeatedDrivingAssertionPlan $assertionPlan) {
         $assertionPlan->removeDriver();
         $this->repeatedDrivingAssertionPlans->removeElement($assertionPlan);
+    }
+
+    public function assignDrivingAssertion(DrivingAssertion $drivingAssertion) {
+        $this->drivingAssertions->add($drivingAssertion);
     }
 
     /**
