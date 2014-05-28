@@ -109,6 +109,10 @@ class DrivingPool {
         return ($this->hasAssociatedDriver() && $this->hasAssociatedVehicle());
     }
 
+    public function getAmountOfAssociatedDrivingMissions() {
+        return count($this->drivingMissions);
+    }
+
     /**
      * @param mixed $shift
      */
@@ -171,6 +175,10 @@ class DrivingPool {
      */
     public function getDrivingMissions() {
         return $this->drivingMissions;
+    }
+
+    public function getDrivingMissionsAsArray() {
+        return $this->drivingMissions->toArray();
     }
 
     /**

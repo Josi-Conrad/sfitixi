@@ -70,6 +70,12 @@ class ProductionPlanAssembler {
         return $dto;
     }
 
+    /**
+     * @param ProductionPlanEditDTO $editDTO
+     * @param WorkingMonth $workingMonth
+     * @throws \LogicException
+     * @throws \InvalidArgumentException
+     */
     public function editDtoToWorkingMonth(ProductionPlanEditDTO $editDTO, WorkingMonth $workingMonth) {
         $workingMonth->setMemo($editDTO->memo);
         foreach($workingMonth->getWorkingDays() as $workingDay) {
@@ -80,9 +86,16 @@ class ProductionPlanAssembler {
             foreach($workingShifts as $workingShift) {
                 /** @var ProductionViewWorkingShiftDTO $formWorkingShift */
                 $formWorkingShift = $formWorkingDay->getWorkingShiftPerId($workingShift->getId());
+                if($formWorkingShift->amountOfDrivers<0) {
+                    throw new \InvalidArgumentException();
+                }
                 if($workingShift->getAmountOfDrivers()!==$formWorkingShift->amountOfDrivers) {
-                    $this->dispoService->processChangeInAmountOfDriversPerShift(
-                        $workingShift, $workingShift->getAmountOfDrivers(), $formWorkingShift->amountOfDrivers);
+                    try {
+                        $this->dispoService->processChangeInAmountOfDriversPerShift(
+                            $workingShift, $workingShift->getAmountOfDrivers(), $formWorkingShift->amountOfDrivers);
+                    }catch (\LogicException $e) {
+                        throw new \LogicException($workingShift->getDate().' '.$workingShift->getShiftType()->getName());
+                    }
                 }
             }
             $editDTO->getWorkingDayPerId($workingDay->getId());

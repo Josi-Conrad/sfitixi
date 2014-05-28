@@ -155,8 +155,15 @@ class Shift {
     /**
      * @param mixed $drivingPool
      */
-    public function assignDrivingPool($drivingPool) {
+    public function assignDrivingPool(DrivingPool $drivingPool) {
         $this->drivingPools->add($drivingPool);
+    }
+
+    public function removeDrivingPool(DrivingPool $drivingPool) {
+        if($drivingPool->getAmountOfAssociatedDrivingMissions() !== 0) {
+            throw new \LogicException('the driving pool with id '.$drivingPool->getId().' is not empty');
+        }
+        $this->drivingPools->removeElement($drivingPool);
     }
 
     /**
@@ -164,6 +171,10 @@ class Shift {
      */
     public function getDrivingPools() {
         return $this->drivingPools;
+    }
+
+    public function getDrivingPoolsAsArray() {
+        return $this->drivingPools->toArray();
     }
 
     /**

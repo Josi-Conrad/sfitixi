@@ -26,8 +26,12 @@ class ProductionViewWorkingShiftType extends AbstractType{
             'label' => false,
             'required' => true,
             'pattern' => '\d+',
+            'attr' => array(
+                'min' => 0,
+                'title' => 'form.field.title.digitpositive'
+            ),
             'constraints' => array(
-                new Regex(array('message' => 'form.field.title.digit', 'pattern' => '/\d+/')),
+                new Regex(array('message' => 'form.field.title.digitpositive', 'pattern' => '/^[0-9]\d*$/')),
             ),
         ));
 

@@ -37,7 +37,6 @@ class ProductionPlanEditType extends CommonAbstractType{
         $builder->add('workingDays', 'collection', array(
             'type' => new ProductionViewWorkingDayType(),
             'label' => false,
-            'required' => false,
         ));
     }
 

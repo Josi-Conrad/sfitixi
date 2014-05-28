@@ -34,6 +34,8 @@ productionplan.th.date: Datum
 productionplan.th.weekday: Tag
 productionplan.th.comment: Kommentar
 
+productionplan.form.drivingpoolerror: Es konnten nicht genug freie Fahrgemeinschaften gefunden werden. Die Änderung wurde nicht gespeichert.
+
 #MonthlyView
 monthlyplan.panel.name: Monatsplan
 monthlyplan.panel.edit: Monatsplan editieren

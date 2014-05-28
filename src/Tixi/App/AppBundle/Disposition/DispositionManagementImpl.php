@@ -10,7 +10,9 @@ namespace Tixi\App\AppBundle\Disposition;
 
 
 use Doctrine\ORM\EntityNotFoundException;
+use Symfony\Component\Console\Tests\Helper\FormatterHelperTest;
 use Symfony\Component\DependencyInjection\ContainerAware;
+use Symfony\Component\Finder\Exception\OperationNotPermitedException;
 use Tixi\App\AppBundle\Disposition\RideStrategies\RideStrategyLeastDistance;
 use Tixi\App\AppBundle\Disposition\RideStrategies\RideStrategyTimeWindow;
 use Symfony\Component\Validator\Constraints\DateTime;
@@ -19,6 +21,8 @@ use Tixi\CoreDomain\Dispo\DrivingMission;
 use Tixi\CoreDomain\Dispo\DrivingMissionRepository;
 use Tixi\CoreDomain\Dispo\DrivingOrder;
 use Tixi\CoreDomain\Dispo\DrivingOrderRepository;
+use Tixi\CoreDomain\Dispo\DrivingPool;
+use Tixi\CoreDomain\Dispo\DrivingPoolRepository;
 use Tixi\CoreDomain\Dispo\Shift;
 use Tixi\CoreDomain\Dispo\ShiftRepository;
 use Tixi\CoreDomain\Dispo\ShiftTypeRepository;
@@ -224,9 +228,50 @@ class DispositionManagementImpl extends ContainerAware implements DispositionMan
         return $vehicles;
     }
 
+    /**
+     * @param Shift $shift
+     * @param $oldAmount
+     * @param $newAmount
+     * @throws \LogicException
+     */
     public function processChangeInAmountOfDriversPerShift(Shift $shift, $oldAmount, $newAmount)
     {
-        // TODO: Implement processChangeInAmountOfDriversPerShift() method.
+        /** @var DrivingPoolRepository $drivingPoolRepository */
+        $drivingPoolRepository = $this->container->get('drivingpool_repository');
+        $delta = $newAmount - $oldAmount;
+
+        if($delta > 0) {
+            //new driving pool(s) need to be created. Just create the new driving pool(s).
+            for($i=0;$i<$delta;$i++) {
+                $drivingPoolRepository->store(DrivingPool::registerDrivingPool($shift));
+            }
+
+        }elseif($delta < 0) {
+            //we need to remove driving pool(s). This operation is only permitted if enough empty driving pool(s) could
+            //be found (a driving pool is considered to be empty if it has no associated driving missions).
+            $amountOfPoolsToRemove = abs($delta);
+            $poolsToRemove = array();
+            $drivingPools = $shift->getDrivingPoolsAsArray();
+            /** @var DrivingPool $drivingPool */
+            foreach($drivingPools as $drivingPool) {
+                if($drivingPool->getAmountOfAssociatedDrivingMissions() === 0) {
+                    $poolsToRemove[] = $drivingPool;
+                    $amountOfPoolsToRemove--;
+                    if($amountOfPoolsToRemove === 0) {
+                        //we have enough pools to remove
+                        break;
+                    }
+                }
+            }
+            if($amountOfPoolsToRemove===0) {
+                foreach($poolsToRemove as $poolToRemove) {
+                    $shift->removeDrivingPool($poolToRemove);
+                    $drivingPoolRepository->remove($poolToRemove);
+                }
+            }else {
+                throw new \LogicException('not enough empty driving pools found to remove');
+            }
+        }
         $shift->setAmountOfDrivers($newAmount);
     }
 
