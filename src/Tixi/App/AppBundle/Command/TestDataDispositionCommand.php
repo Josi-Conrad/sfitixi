@@ -79,7 +79,7 @@ class TestDataDispositionCommand extends ContainerAwareCommand {
         $monthDate->modify('+' . $month . ' month');
         $monthDate->modify('first day of this month');
 
-        $shiftTypes = $shiftTypeRepo->findAllNotDeleted();
+        $shiftTypes = $shiftTypeRepo->findAllActive();
 
         $drivers = $driverRepo->findAllActive();
         foreach ($drivers as $driver) {
