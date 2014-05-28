@@ -40,19 +40,58 @@ class MonthlyViewController extends Controller{
      * @Method({"GET","POST"})
      * @param Request $request
      * @param bool $embeddedState
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function getMonthlyPlansAction(Request $request, $embeddedState = false) {
+        $embeddedState = $embeddedState || $request->get('embedded') === "true";
+        $isPartial = $request->get('partial') === "true";
 
+        $dataGridHandler = $this->get('tixi_api.datagridhandler');
+        $dataGridControllerFactory = $this->get('tixi_api.datagridcontrollerfactory');
+        $tileRenderer = $this->get('tixi_api.tilerenderer');
+
+        $gridController = $dataGridControllerFactory->createDispoMonthlyPlanController($embeddedState);
+        $dataGridTile = $dataGridHandler->createDataGridTileByRequest($request, $this->menuId, $gridController);
+
+        $rootPanel = null;
+        if (!$embeddedState && !$isPartial) {
+            $rootPanel = new RootPanel($this->menuId, 'monthlyplan.list.name');
+            $rootPanel->add($dataGridTile);
+        } else {
+            $rootPanel = $dataGridTile;
+        }
+
+        return new Response($tileRenderer->render($rootPanel));
     }
 
     /**
-     * @Route("",name="tixiapi_dispo_monthlyplan_workingdays_get")
+     * @Route("/month/{workingMonthId}",name="tixiapi_dispo_monthlyplan_workingdays_get")
      * @Method({"GET","POST"})
      * @param Request $request
+     * @param bool $embeddedState
      * @param $workingMonthId
+     * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function getMonthlyPlanWorkingDaysAction(Request $request, $workingMonthId) {
+    public function getMonthlyPlanWorkingDaysAction(Request $request, $embeddedState = false, $workingMonthId) {
+        $embeddedState = $embeddedState || $request->get('embedded') === "true";
+        $isPartial = $request->get('partial') === "true";
 
+        $dataGridHandler = $this->get('tixi_api.datagridhandler');
+        $dataGridControllerFactory = $this->get('tixi_api.datagridcontrollerfactory');
+        $tileRenderer = $this->get('tixi_api.tilerenderer');
+
+        $gridController = $dataGridControllerFactory->createDispoMonthlyPlanWorkingDayController($embeddedState, array('workingMonthId' => $workingMonthId));
+        $dataGridTile = $dataGridHandler->createDataGridTileByRequest($request, $this->menuId, $gridController);
+
+        $rootPanel = null;
+        if (!$embeddedState && !$isPartial) {
+            $rootPanel = new RootPanel($this->menuId, 'monthlyplan.workingday.list.name');
+            $rootPanel->add($dataGridTile);
+        } else {
+            $rootPanel = $dataGridTile;
+        }
+
+        return new Response($tileRenderer->render($rootPanel));
     }
 
     /**

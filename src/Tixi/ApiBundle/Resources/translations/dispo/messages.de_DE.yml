@@ -37,13 +37,28 @@ productionplan.th.comment: Kommentar
 productionplan.form.drivingpoolerror: Es konnten nicht genug freie Fahrgemeinschaften gefunden werden. Die Änderung wurde nicht gespeichert.
 
 #MonthlyView
+monthlyplan.button.new: Monatsplan eröffnen
+
 monthlyplan.panel.name: Monatsplan
 monthlyplan.panel.edit: Monatsplan editieren
+
+monthlyplan.list.name: Aktuelle Monatspläne
 
 monthlyplan.edit.field.workingmonth: Monatsplan
 monthlyplan.edit.field.workingday: Tag
 
+monthlyplan.field.date: Monat - Jahr
+monthlyplan.field.status: Status
+
 monthlyplan.edit.driverselection.field.empty: --- Bitte Fahrer auswählen ---
+
+monthlyplan.workingday.list.name: Tage in Monatsplan
+monthlyplan.workingday.field.datestring: Datum
+monthlyplan.workingday.field.weekdaystring: Tag
+
+#WorkingMonth
+workingmonth.status.open: Offen
+workingmonth.status.sent: Versandt
 
 #RepeatedDrivingMission
 repeateddrivingmission.panel.new: Neuer Dauereinsatz

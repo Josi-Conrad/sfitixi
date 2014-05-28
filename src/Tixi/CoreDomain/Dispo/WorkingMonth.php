@@ -162,4 +162,14 @@ class WorkingMonth extends CommonBaseEntity {
     public function getStatus() {
         return $this->status;
     }
+
+    public function getStatusAsTransString() {
+        $transString = '';
+        if($this->status === self::OPEN) {
+            $transString = 'workingmonth.status.open';
+        }else if($this->status === self::SENT) {
+            $transString = 'workingmonth.status.sent';
+        }
+        return $transString;
+    }
 }
