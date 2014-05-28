@@ -6,17 +6,21 @@
  * Time: 18:16
  */
 
-namespace Tixi\App\AppBundle\Disposition\RideStrategies;
+namespace Tixi\App\AppBundle\Ride\RideStrategies;
 
 
-use Tixi\App\AppBundle\Disposition\RideConfiguration;
+use Tixi\App\AppBundle\Ride\RideConfiguration;
 
+/**
+ * Interface RideStrategy
+ * @package Tixi\App\AppBundle\Ride\RideStrategies
+ */
 interface RideStrategy {
     /**
      * @param $rideNodes
      * @param $emptyRideNodes
      * @param $drivingPools
-     * @return RideConfiguration
+     * @return \Tixi\App\AppBundle\Ride\RideConfiguration
      */
     public function buildConfiguration($rideNodes, $drivingPools, $emptyRideNodes);
 
@@ -25,7 +29,7 @@ interface RideStrategy {
      * @param $emptyRideNodes
      * @param $drivingPools
      * @param $factor
-     * @return RideConfiguration[]
+     * @return \Tixi\App\AppBundle\Ride\RideConfiguration[]
      */
     public function buildConfigurations($rideNodes, $drivingPools, $emptyRideNodes, $factor);
 } 

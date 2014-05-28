@@ -206,8 +206,8 @@ class TestDataDispositionCommand extends ContainerAwareCommand {
         }
         $em->flush();
 
-        //assign available Drivers to drivingPools
-        $workingMonthManagement->assignAvailableDriversToDrivingPools($workingMonth);
+        //TODO: assign available Drivers to drivingPools - NOW NEW with driveAssertions
+        //$workingMonthManagement->assignAvailableDriversToDrivingPools($workingMonth);
         $unassignedDrivingPools = count($workingMonthManagement->getAllUnassignedDrivingPoolsForMonth($workingMonth));
 
         $output->writeln(

@@ -6,15 +6,20 @@
  * Time: 18:17
  */
 
-namespace Tixi\App\AppBundle\Disposition\RideStrategies;
+namespace Tixi\App\AppBundle\Ride\RideStrategies;
 
 
-use Tixi\App\AppBundle\Disposition\RideConfiguration;
-use Tixi\App\AppBundle\Disposition\RideConfigurator;
-use Tixi\App\AppBundle\Disposition\RideNode;
-use Tixi\App\AppBundle\Disposition\RideNodeList;
+use Tixi\App\AppBundle\Ride\RideStrategies\RideStrategy;
+use Tixi\App\AppBundle\Ride\RideConfiguration;
+use Tixi\App\AppBundle\Ride\ConfigurationBuilder;
+use Tixi\App\AppBundle\Ride\RideNode;
+use Tixi\App\AppBundle\Ride\RideNodeList;
 use Tixi\App\Disposition\DispositionVariables;
 
+/**
+ * Class RideStrategyLeastDistance
+ * @package Tixi\App\AppBundle\Ride\RideStrategies
+ */
 class RideStrategyLeastDistance implements RideStrategy {
     /**
      * @var RideNode[]
@@ -27,7 +32,7 @@ class RideStrategyLeastDistance implements RideStrategy {
      * @param $rideNodes
      * @param $emptyRideNodes
      * @param $drivingPools
-     * @return RideConfiguration
+     * @return \Tixi\App\AppBundle\Ride\RideConfiguration
      */
     public function buildConfiguration($rideNodes, $drivingPools, $emptyRideNodes) {
         $this->rideNodes = $rideNodes;
@@ -35,7 +40,7 @@ class RideStrategyLeastDistance implements RideStrategy {
         $this->emptyRides = $emptyRideNodes;
 
         $workNodes = $this->rideNodes;
-        RideConfigurator::sortNodesByStartMinute($workNodes);
+        ConfigurationBuilder::sortNodesByStartMinute($workNodes);
 
         return $this->buildLeastDistanceConfiguration($workNodes);
     }
@@ -45,7 +50,7 @@ class RideStrategyLeastDistance implements RideStrategy {
      * @param $emptyRideNodes
      * @param $drivingPools
      * @param $factor
-     * @return RideConfiguration[]
+     * @return \Tixi\App\AppBundle\Ride\RideConfiguration[]
      */
     public function buildConfigurations($rideNodes, $drivingPools, $emptyRideNodes, $factor) {
         $this->rideNodes = $rideNodes;
@@ -53,38 +58,38 @@ class RideStrategyLeastDistance implements RideStrategy {
         $this->emptyRides = $emptyRideNodes;
 
         $workNodes = $this->rideNodes;
-        RideConfigurator::sortNodesByStartMinute($workNodes);
+        ConfigurationBuilder::sortNodesByStartMinute($workNodes);
 
-        //build some configs
+        //build some configs and return feasible configs
         $rideConfigurations = array();
-
-        $c1 = 0;
-        $mod = 1;
-        $div = count($this->rideNodes);
-
-        for ($i = 0; $i < $div; $i++) {
+        $diversity = count($this->rideNodes);
+        for ($i = 0; $i < $factor; $i++) {
             $workRideNodes = $workNodes;
-
-            $mod++;
-            if ($factor % $mod === 0) {
-                $c1++;
+            if ($i >= $diversity) {
+                shuffle($workRideNodes);
+            } else {
+                $switch = $workRideNodes[0];
+                $workRideNodes[0] = $workRideNodes[$i];
+                $workRideNodes[$i] = $switch;
             }
-            $c2 = $i % $div;
-            $switch = $workRideNodes[$c2];
-            $workRideNodes[$c2] = $workRideNodes[$c1];
-            $workRideNodes[$c1] = $switch;
 
-            $rideConfigurations[] = $this->buildLeastDistanceConfiguration($workRideNodes);
+            $rideConfiguration = $this->buildLeastDistanceConfiguration($workRideNodes);
+
+            if (!$rideConfiguration->hasNotFeasibleNodes()) {
+                $rideConfigurations[] = $rideConfiguration;
+            }
         }
+
+        ConfigurationBuilder::sortRideConfigurationsByTotalDistance($rideConfigurations);
         return $rideConfigurations;
     }
 
     /**
      * @param $rideNodes
-     * @return RideConfiguration
+     * @return \Tixi\App\AppBundle\Ride\RideConfiguration
      */
     private function buildLeastDistanceConfiguration($rideNodes) {
-        $rideConfiguration = new RideConfiguration();
+        $rideConfiguration = new RideConfiguration($this->drivingPools);
         $workRideNodes = $rideNodes;
 
         foreach ($this->drivingPools as $drivingPool) {
@@ -95,7 +100,6 @@ class RideStrategyLeastDistance implements RideStrategy {
 
             //set first node on start
             $rideNodeList->addRideNode(array_shift($workRideNodes));
-            $copyRideNodes = $workRideNodes;
 
             $stillFeasible = true;
             while ($stillFeasible) {
@@ -103,44 +107,43 @@ class RideStrategyLeastDistance implements RideStrategy {
                 $bestNode = null;
                 $bestNodeKey = null;
                 $bestEmptyRide = null;
-                $actualDistance = 0;
+                $actualDistance = -1;
 
                 //check all nodes in workSet for feasible and best distance
-                foreach ($copyRideNodes as $compareNodeKey => $compareNode) {
-                    //$stillFeasible = false;
+                foreach ($workRideNodes as $compareNodeKey => $compareNode) {
 
-                    //not feasible time at all, get next node
+                    //not feasible time, get next node
                     if (!($actualNode->endMinute < $compareNode->startMinute)) {
                         continue;
                     }
 
-                    $bestEmptyRide = $this->getEmptyRideFromTwoNodes($actualNode, $compareNode);
+                    $emptyRide = $this->getEmptyRideFromTwoNodes($actualNode, $compareNode);
 
-                    $feasibleTimeForNextNode = $actualNode->endMinute + $bestEmptyRide->duration
+                    $feasibleTimeForNextNode = $actualNode->endMinute + $emptyRide->duration
                         + DispositionVariables::ARRIVAL_BEFORE_PICKUP;
 
                     //feasible time for node + emptyRide -> to next node
                     if ($feasibleTimeForNextNode <= $compareNode->startMinute) {
-                        //$stillFeasible = true;
 
-                        if ($actualDistance === 0) {
+                        if ($actualDistance === -1) {
                             $bestNode = $compareNode;
                             $bestNodeKey = $compareNodeKey;
-                            $actualDistance = $bestEmptyRide->distance;
+                            $bestEmptyRide = $emptyRide;
+                            $actualDistance = $emptyRide->distance;
                         }
 
                         //if no node is set, set first and repeat with distance check
-                        if ($bestEmptyRide->distance < $actualDistance) {
+                        if ($emptyRide->distance < $actualDistance) {
                             $bestNode = $compareNode;
                             $bestNodeKey = $compareNodeKey;
-                            $actualDistance = $bestEmptyRide->distance;
+                            $bestEmptyRide = $emptyRide;
+                            $actualDistance = $emptyRide->distance;
                         }
                     }
 
                 }
 
                 if ($bestNode && $bestEmptyRide) {
-                    $copyRideNodes = array_slice($copyRideNodes, $bestNodeKey, count($copyRideNodes));
                     $rideNodeList->addRideNode($bestNode);
                     $rideNodeList->addRideNode($bestEmptyRide);
                     unset($workRideNodes[$bestNodeKey]);
@@ -150,14 +153,13 @@ class RideStrategyLeastDistance implements RideStrategy {
             }
             $rideConfiguration->addRideNodeListAtPool($drivingPool, $rideNodeList);
         }
-
         $rideConfiguration->setNotFeasibleNodes($workRideNodes);
         return $rideConfiguration;
     }
 
     /**
      * @param RideNode $startNode
-     * @param RideNode $targetNode
+     * @param \Tixi\App\AppBundle\Ride\RideNode $targetNode
      * @return string
      */
     private function getHashFromTwoNodes(RideNode $startNode, RideNode $targetNode) {

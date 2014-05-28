@@ -22,6 +22,7 @@
         <parameter key="tixi_api.poiassembler.class">Tixi\ApiBundle\Interfaces\POIAssembler</parameter>
         <parameter key="tixi_api.addressassembler.class">Tixi\ApiBundle\Interfaces\AddressAssembler</parameter>
         <parameter key="tixi_api.productionplanassembler.class">Tixi\ApiBundle\Interfaces\Dispo\ProductionView\ProductionPlanAssembler</parameter>
+        <parameter key="tixi_api.monthlyplanassembler.class">Tixi\ApiBundle\Interfaces\Dispo\MonthlyView\MonthlyPlanAssembler</parameter>
 
         <!-- Management -->
         <parameter key="tixi_api.userassembler.class">Tixi\ApiBundle\Interfaces\Management\UserAssembler</parameter>
@@ -142,6 +143,11 @@
             </call>
         </service>
         <service id="tixi_api.assemblerProductionPlan" class="%tixi_api.productionplanassembler.class%">
+            <call method="setDispoService">
+                <argument type="service" id="tixi_app.dispomanagement" />
+            </call>
+        </service>
+        <service id="tixi_api.assemblerMonthlyPlan" class="%tixi_api.monthlyplanassembler.class%">
             <call method="setDispoService">
                 <argument type="service" id="tixi_app.dispomanagement" />
             </call>

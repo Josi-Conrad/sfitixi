@@ -375,4 +375,27 @@ class Vehicle extends CommonBaseEntity {
     public function getDepot() {
         return $this->depot;
     }
+
+    /**
+     * gives an approximation of a vehicle size
+     * according to the vehicle category with passenger places and wheelchair places
+     * @return mixed
+     */
+    public function getApproximatedSize() {
+        return $this->getCategory()->getAmountOfSeats() + $this->getCategory()->getAmountOfWheelChairs() * 2;
+    }
+
+    /**
+     * @param $passengers
+     * @param $wheelchairs
+     * @return bool
+     */
+    public function isCompatibleWithPassengerAndWheelChairAmount($passengers, $wheelchairs) {
+        if ($this->getCategory()->getAmountOfSeats() < $passengers
+            || $this->getCategory()->getAmountOfWheelChairs() < $wheelchairs
+        ) {
+            return false;
+        }
+        return true;
+    }
 }

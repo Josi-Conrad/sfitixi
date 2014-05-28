@@ -13,6 +13,7 @@ use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Tixi\ApiBundle\Form\Dispo\ProductionView\ProductionPlanCreateType;
@@ -97,9 +98,15 @@ class ProductionViewController extends Controller{
 
         if($form->isValid()) {
             $editDTO = $form->getData();
-            $assembler->editDtoToWorkingMonth($editDTO, $workingMonth);
-            $this->get('entity_manager')->flush();
-            return $this->redirect($this->generateUrl('tixiapi_dispo_productionplans_get'));
+            try {
+                $assembler->editDtoToWorkingMonth($editDTO, $workingMonth);
+                $this->get('entity_manager')->flush();
+                return $this->redirect($this->generateUrl('tixiapi_dispo_productionplans_get'));
+            }catch (\LogicException $e) {
+                $form->addError(new FormError($e->getMessage().': '.$this->get('translator')->trans('productionplan.form.drivingpoolerror')));
+            }catch (\InvalidArgumentException $e) {
+                $form->addError(new FormError($this->get('translator')->trans('productionplan.form.drivingpoolerror')));
+            }
         }
 
         $rootPanel = new RootPanel($this->menuId, 'productionplan.panel.edit');

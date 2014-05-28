@@ -9,7 +9,8 @@
 namespace Tixi\App\Disposition;
 
 
-use Tixi\App\AppBundle\Disposition\RideNode;
+use Tixi\ApiBundle\Interfaces\Dispo\MonthlyView\MonthlyPlanEditDTO;
+use Tixi\App\AppBundle\Ride\RideNode;
 use Tixi\CoreDomain\Dispo\DrivingMission;
 use Tixi\CoreDomain\Dispo\DrivingOrder;
 use Tixi\CoreDomain\Dispo\Shift;
@@ -25,29 +26,7 @@ interface DispositionManagement {
 
     public function processChangeInAmountOfDriversPerShift(Shift $shift, $oldAmount, $newAmount);
 
-
-    /**
-     * @param \DateTime $day
-     * @param \DateTime $time
-     * @param $direction
-     * @param $duration
-     * @param $additionalTime
-     * @return bool
-     */
-    public function checkFeasibility(\DateTime $day, \DateTime $time, $direction, $duration, $additionalTime);
-
-    /**
-     * runs routing algorithm to set optimized missions and orders for a shift
-     * @param Shift $shift
-     * @return mixed
-     */
-    public function getOptimizedPlanForShift(Shift $shift);
-
-    /**
-     * runs routing algorithm to set optimized missions and orders for a DayPlan
-     * @return mixed
-     */
-    public function getOptimizedDayPlan();
+    public function createDrivingAssertionsFromMonthlyPlan(MonthlyPlanEditDTO $monthlyPlan);
 
     /**
      * @param \DateTime $day

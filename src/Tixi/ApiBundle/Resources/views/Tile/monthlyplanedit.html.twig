@@ -1,0 +1,59 @@
+{{ form_start(form, {'attr':{'id':formId, 'class':'form-horizontal customForm'} }) }}
+<div class="col-md-12">
+    <div class="row text-right">
+        {% for resolvedElement in children %}
+            {% if 'formcontrol' in resolvedElement.viewIndentifiers %}
+                {{ resolvedElement.rawData | raw }}
+            {% endif %}
+        {% endfor %}
+    </div>
+    <div class="row">
+        <div class="col-md-2">
+            <p class="lead">{{ 'monthlyplan.edit.field.workingmonth' | trans }}</p>
+        </div>
+        <div class="col-md-8">
+            <p class="lead">{{ form.vars.workingMonthDateString }}</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2">
+            <p class="lead">{{ 'monthlyplan.edit.field.workingday' | trans }}</p>
+        </div>
+        <div class="col-md-8">
+            <p class="lead">{{ form.vars.workingDayWeekdayString | trans ~ ', ' ~ form.vars.workingDayDateString }}</p>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-6">
+
+    {% for shift in form.shifts %}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">{{ shift.vars.shiftDisplayName }}</h3>
+            </div>
+            <div class="panel-body">
+                {% for newDriver in shift.newDrivers %}
+                    {{ form_widget(newDriver.driver) }}
+                {% endfor %}
+            </div>
+            <ul class="list-group">
+                {% for assertedDriver in shift.vars.assertedDrivers %}
+                    <li class="list-group-item">{{ assertedDriver.getNameStringForContact() }}</li>
+                {% endfor %}
+            </ul>
+
+
+
+        </div>
+    {% endfor %}
+
+</div>
+
+{{ form_end(form) }}
+
+<script type="text/javascript">
+    jQuery(function ($) {
+        new FormValidationController('{{ formId }}');
+    });
+</script>

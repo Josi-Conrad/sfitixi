@@ -43,11 +43,17 @@ class DrivingPool {
      * @ORM\JoinColumn(name="shift_id", referencedColumnName="id")
      */
     protected $shift;
+
     /**
-     * @ORM\ManyToOne(targetEntity="Tixi\CoreDomain\Driver", inversedBy="drivingPools")
-     * @ORM\JoinColumn(name="driver_id", referencedColumnName="id")
+     * @ORM\OneToOne(targetEntity="DrivingAssertion", inversedBy="drivingPool")
+     * @ORM\JoinColumn(name="driving_assertion_id", referencedColumnName="id")
      */
-    protected $driver;
+    protected $drivingAssertion;
+//    /**
+//     * @ORM\ManyToOne(targetEntity="Tixi\CoreDomain\Driver", inversedBy="drivingPools")
+//     * @ORM\JoinColumn(name="driver_id", referencedColumnName="id")
+//     */
+//    protected $driver;
     /**
      * @ORM\ManyToOne(targetEntity="Tixi\CoreDomain\Vehicle")
      * @ORM\JoinColumn(name="vehicle_id", referencedColumnName="id")
@@ -79,7 +85,7 @@ class DrivingPool {
      * @return bool
      */
     public function hasAssociatedDriver() {
-        return isset($this->driver);
+        return isset($this->drivingAssertion);
     }
 
     /**
@@ -103,6 +109,10 @@ class DrivingPool {
         return ($this->hasAssociatedDriver() && $this->hasAssociatedVehicle());
     }
 
+    public function getAmountOfAssociatedDrivingMissions() {
+        return count($this->drivingMissions);
+    }
+
     /**
      * @param mixed $shift
      */
@@ -111,17 +121,28 @@ class DrivingPool {
     }
 
     /**
-     * @param Driver $driver
+     * @param DrivingMission $drivingMission
      */
-    public function assignDriver(Driver $driver) {
-        $this->driver = $driver;
+    public function assignDrivingMission(DrivingMission $drivingMission) {
+        $this->drivingMissions->add($drivingMission);
     }
+
+//    /**
+//     * @param Driver $driver
+//     */
+//    public function assignDriver(Driver $driver) {
+//        $this->driver = $driver;
+//    }
 
     /**
      * @param Vehicle $vehicle
      */
     public function assignVehicle(Vehicle $vehicle) {
         $this->vehicle = $vehicle;
+    }
+
+    public function assignDrivingAssertion(DrivingAssertion $drivingAssertion) {
+        $this->drivingAssertion = $drivingAssertion;
     }
 
     /**
@@ -142,7 +163,11 @@ class DrivingPool {
      * @return Driver
      */
     public function getDriver() {
-        return $this->driver;
+        $driver = null;
+        if (isset($this->drivingAssertion) && null !== $this->drivingAssertion) {
+            $driver = $this->drivingAssertion->getDriver();
+        }
+        return $driver;
     }
 
     /**
@@ -157,6 +182,10 @@ class DrivingPool {
      */
     public function getDrivingMissions() {
         return $this->drivingMissions;
+    }
+
+    public function getDrivingMissionsAsArray() {
+        return $this->drivingMissions->toArray();
     }
 
     /**

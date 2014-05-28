@@ -82,6 +82,20 @@ class WorkingDay {
         return WeekdayService::$numericToWeekdayConverter[$this->getDate()->format('N')] . '.name';
     }
 
+    public function getShiftsOrderedByStartTime() {
+        $orderedShifts = $this->getShifts()->toArray();
+        usort($orderedShifts, function(Shift $a, Shift $b) {
+            if($a->getStart() < $b->getStart()) {
+                return -1;
+            }else if($a->getStart() == $b->getStart()) {
+                return 0;
+            }else {
+                return 1;
+            }
+        });
+        return $orderedShifts;
+    }
+
     /**
      * @param DrivingMission $mission
      */
@@ -93,6 +107,10 @@ class WorkingDay {
             }
         }
 
+    }
+
+    public function getWorkingMonth() {
+        return $this->workingMonth;
     }
 
     /**
@@ -122,6 +140,10 @@ class WorkingDay {
      */
     public function getShifts() {
         return $this->shifts;
+    }
+
+    public function getShiftsAsArray() {
+        return $this->shifts->toArray();
     }
 
     /**

@@ -14,6 +14,7 @@ use Tixi\App\Address\AddressManagement;
 use Tixi\App\AppBundle\Routing\RoutingMachineOSRM;
 use Tixi\App\Disposition\DispositionManagement;
 use Tixi\App\Disposition\WorkingMonthManagement;
+use Tixi\App\Ride\RideManagement;
 use Tixi\App\Routing\RouteManagement;
 use Tixi\App\ZonePlan\ZonePlanManagement;
 use Tixi\CoreDomain\POI;
@@ -170,6 +171,10 @@ class CommonBaseTest extends WebTestCase {
      */
     protected $dispoManagement;
     /**
+     * @var RideManagement
+     */
+    protected $rideManagement;
+    /**
      * @var WorkingMonthManagement
      */
     protected $workingMonthManagement;
@@ -226,6 +231,7 @@ class CommonBaseTest extends WebTestCase {
         $this->routeManagement = $kernel->getContainer()->get('tixi_app.routemanagement');
         $this->addressManagement = $kernel->getContainer()->get('tixi_app.addressmanagement');
         $this->dispoManagement = $kernel->getContainer()->get('tixi_app.dispomanagement');
+        $this->rideManagement = $kernel->getContainer()->get('tixi_app.ridemanagement');
         $this->workingMonthManagement = $kernel->getContainer()->get('tixi_app.workingmonthmanagement');
 
         $this->em->beginTransaction();

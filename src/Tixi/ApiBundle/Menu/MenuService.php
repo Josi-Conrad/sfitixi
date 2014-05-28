@@ -37,6 +37,7 @@ class MenuService extends ContainerAware {
 
     public static $menuSelectionDispositionId = 'disposition';
     public static $menuDispositionProductionPlanId = 'disposition_productionplan';
+    public static $menuDispositionMonthlyPlanId = 'disposition_monthlyplan';
 
     public static $menuSelectionManagementId = 'management';
     public static $menuManagementUserId = 'management_users';
@@ -87,6 +88,8 @@ class MenuService extends ContainerAware {
             $dispositionSelectionTile->add(new MenuItemTile(self::$menuDispositionProductionPlanId,
                 $this->generateUrl('tixiapi_dispo_productionplans_get'), 'productionplan.panel.name', $this->checkSelectionChildActivity(self::$menuDispositionProductionPlanId, $activeItem)));
         }
+        $dispositionSelectionTile->add(new MenuItemTile(self::$menuDispositionMonthlyPlanId,
+            $this->generateUrl('tixiapi_dispo_monthlyplans_get'), 'monthlyplan.panel.name', $this->checkSelectionChildActivity(self::$menuDispositionMonthlyPlanId, $activeItem)));
 
         /**Prepare*/
         $menuTile->add(new MenuItemTile(self::$menuPrepareId, '#', 'prepare.panel.name', $rootId === self::$menuPrepareId));
