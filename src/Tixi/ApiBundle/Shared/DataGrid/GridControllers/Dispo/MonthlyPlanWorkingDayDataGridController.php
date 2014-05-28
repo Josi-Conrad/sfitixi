@@ -59,7 +59,7 @@ class MonthlyPlanWorkingDayDataGridController extends DataGridAbstractController
     {
         $referenceDTO = null;
         if (!$this->isInEmbeddedState()) {
-            $referenceDTO = MonthlyPlanWorkingDayListDTO::createReferenceDTOByWorkingDayId(DataGridHandler::$dataGirdReplaceIdentifier);
+            $referenceDTO = MonthlyPlanWorkingDayListDTO::createReferenceDTOByWorkingDayId($this->routeProperties['workingMonthId']);
         } else {
         }
         return $referenceDTO;

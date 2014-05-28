@@ -18,6 +18,10 @@ class MonthlyPlanWorkingDayListDTO implements DataGridSourceClass{
      */
     public $id;
     /**
+     * @GridField(propertyId="WorkingMonth.id", restrictive=true)
+     */
+    public $workingMonthId;
+    /**
      * @GridField(propertyId="WorkingDay.date", headerName="monthlyplan.workingday.field.datestring")
      */
     public $dateString;
@@ -31,16 +35,16 @@ class MonthlyPlanWorkingDayListDTO implements DataGridSourceClass{
      */
     public function getAccessQuery()
     {
-        return new GenericAccessQuery('WorkingDay', 'Tixi\CoreDomain\Dispo\WorkingDay WorkingDay', 'WorkingDay.id');
+        return new GenericAccessQuery('WorkingDay', 'Tixi\CoreDomain\Dispo\WorkingDay WorkingDay JOIN WorkingDay.workingMonth WorkingMonth', 'WorkingDay.id');
     }
 
     /**
-     * @param $workingDayId
+     * @param $workingMonthId
      * @return MonthlyPlanWorkingDayListDTO
      */
-    public static function createReferenceDTOByWorkingDayId($workingDayId) {
+    public static function createReferenceDTOByWorkingDayId($workingMonthId) {
         $dto = new MonthlyPlanWorkingDayListDTO();
-        $dto->id = $workingDayId;
+        $dto->workingMonthId = $workingMonthId;
         return $dto;
     }
 }
