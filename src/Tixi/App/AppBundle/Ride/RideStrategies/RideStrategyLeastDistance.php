@@ -15,6 +15,7 @@ use Tixi\App\AppBundle\Ride\ConfigurationBuilder;
 use Tixi\App\AppBundle\Ride\RideNode;
 use Tixi\App\AppBundle\Ride\RideNodeList;
 use Tixi\App\Disposition\DispositionVariables;
+use Tixi\CoreDomain\Dispo\DrivingPool;
 
 /**
  * Class RideStrategyLeastDistance
@@ -22,10 +23,16 @@ use Tixi\App\Disposition\DispositionVariables;
  */
 class RideStrategyLeastDistance implements RideStrategy {
     /**
-     * @var RideNode[]
+     * @var $emptyRides RideNode[]
      */
     protected $emptyRides;
+    /**
+     * @var $rideNodes RideNode[]
+     */
     protected $rideNodes;
+    /**
+     * @var $drivingPools DrivingPool[]
+     */
     protected $drivingPools;
 
     /**
@@ -81,7 +88,6 @@ class RideStrategyLeastDistance implements RideStrategy {
             }
         }
 
-        ConfigurationBuilder::sortRideConfigurationsByTotalDistance($rideConfigurations);
         return $rideConfigurations;
     }
 
@@ -93,6 +99,9 @@ class RideStrategyLeastDistance implements RideStrategy {
         $rideConfiguration = new RideConfiguration($this->drivingPools);
         $workRideNodes = $rideNodes;
 
+        //always loop all available pools - but stop when no missions are left so it is
+        //possible to have empty pools (no driver/vehicle needed for these missions)
+        //the amount of creates rideNodeLists will give the amount of used vehicles
         foreach ($this->drivingPools as $drivingPool) {
             if (count($workRideNodes) < 1) {
                 break;
@@ -101,6 +110,11 @@ class RideStrategyLeastDistance implements RideStrategy {
 
             //set first node on start
             $rideNodeList->addRideNode(array_shift($workRideNodes));
+
+            $poolExtraMinutesPerRide = 0;
+            if($drivingPool->hasAssociatedDriver()){
+                $poolExtraMinutesPerRide += $drivingPool->getDriver()->getExtraMinutes();
+            }
 
             $stillFeasible = true;
             while ($stillFeasible) {
@@ -121,7 +135,7 @@ class RideStrategyLeastDistance implements RideStrategy {
                     $emptyRide = $this->getEmptyRideFromTwoNodes($actualNode, $compareNode);
 
                     $feasibleTimeForNextNode = $actualNode->endMinute + $emptyRide->duration
-                        + DispositionVariables::ARRIVAL_BEFORE_PICKUP;
+                        + DispositionVariables::ARRIVAL_BEFORE_PICKUP + $poolExtraMinutesPerRide;
 
                     //feasible time for node + emptyRide -> to next node
                     if ($feasibleTimeForNextNode <= $compareNode->startMinute) {
@@ -133,7 +147,6 @@ class RideStrategyLeastDistance implements RideStrategy {
                             $actualDistance = $emptyRide->distance;
                         }
 
-                        //if no node is set, set first and repeat with distance check
                         if ($emptyRide->distance < $actualDistance) {
                             $bestNode = $compareNode;
                             $bestNodeKey = $compareNodeKey;

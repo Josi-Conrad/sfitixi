@@ -29,11 +29,10 @@ interface DispositionManagement {
     public function createDrivingAssertionsFromMonthlyPlan(MonthlyPlanEditDTO $monthlyPlan);
 
     /**
-     * @param \DateTime $day
-     * @param \DateTime $time
+     * @param \DateTime $dayTime
      * @return Shift
      */
-    public function getResponsibleShiftForDayAndTime(\DateTime $day, \DateTime $time);
+    public function getResponsibleShiftForDayAndTime(\DateTime $dayTime);
 
     /**
      * @param Shift $shift

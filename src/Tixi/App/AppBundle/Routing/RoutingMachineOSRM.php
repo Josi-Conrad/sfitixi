@@ -22,9 +22,10 @@ class RoutingMachineOSRM extends ContainerAware implements RoutingMachine {
     const NO_ROUTE = 207;
 
     /**
-     * defines running curl requests at same time
+     * defines simultaneous running curl requests at once
+     * a greater block size requires a higher available bandwith
      */
-    const BLOCK_SIZE = 20;
+    const BLOCK_SIZE = 40;
 
     /**
      * defines OSRM API usage parameters

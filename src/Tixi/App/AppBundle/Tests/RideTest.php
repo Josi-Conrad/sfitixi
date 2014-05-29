@@ -9,6 +9,7 @@
 namespace Tixi\App\AppBundle\Tests;
 
 
+use Tixi\ApiBundle\Helper\DateTimeService;
 use Tixi\App\AppBundle\Ride\RideNode;
 use Tixi\App\Disposition\DispositionVariables;
 use Tixi\CoreDomain\Dispo\DrivingMission;
@@ -31,20 +32,18 @@ class RideTest extends CommonBaseTest {
         parent::setUp();
     }
 
-   public function testFeasibility() {
-        $day = new \DateTime('2014-06-01 00:00:00');
-        $time = new \DateTime('2014-06-01 08:15:00');
-        $isFeasible = $this->rideManagement->checkFeasibility($day, $time, DrivingMission::SAME_START, 28, 2);
+    public function testFeasibility() {
+        $dayTime = \DateTime::createFromFormat('d.m.Y H.i', '02.06.2014 08.55');
+        $isFeasible = $this->rideManagement->checkFeasibility($dayTime, DrivingMission::SAME_START, 120, 2);
         $this->assertNotNull($isFeasible);
         $isFeasible ? $str = "\nIs feasible" : $str = "\nIs NOT feasible";
         echo $str;
     }
 
     public function testOptimization() {
-        $day = new \DateTime('2014-06-01 00:00:00');
-        $time = new \DateTime('2014-06-01 08:15:00');
-        $shift = $this->dispoManagement->getResponsibleShiftForDayAndTime($day, $time);
-        if($shift !== null){
+        $dayTime = \DateTime::createFromFormat('d.m.Y H.i', '01.06.2014 20.15');
+        $shift = $this->dispoManagement->getResponsibleShiftForDayAndTime($dayTime);
+        if ($shift !== null) {
             $this->rideManagement->getOptimizedPlanForShift($shift);
         }
     }

@@ -37,16 +37,15 @@ use Tixi\CoreDomain\DriverRepository;
 
 class DispositionManagementImpl extends ContainerAware implements DispositionManagement {
     /**
-     * @param \DateTime $day
-     * @param \DateTime $time
+     * @param \DateTime $dayTime
      * @return null|Shift
      */
-    public function getResponsibleShiftForDayAndTime(\DateTime $day, \DateTime $time) {
+    public function getResponsibleShiftForDayAndTime(\DateTime $dayTime) {
         $timeService = $this->container->get('tixi_api.datetimeservice');
         $shiftRepo = $this->container->get('shift_repository');
-        $shiftsForDay = $shiftRepo->findShiftsForDay($day);
+        $shiftsForDay = $shiftRepo->findShiftsForDay($dayTime);
 
-        $pickTime = $timeService->convertToLocalDateTime($time);
+        $pickTime = $timeService->convertToLocalDateTime($dayTime);
         $pickMinutes = $timeService->getMinutesOfDay($pickTime);
 
         foreach ($shiftsForDay as $shift) {

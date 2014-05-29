@@ -127,6 +127,17 @@ class DrivingPool {
         $this->drivingMissions->add($drivingMission);
     }
 
+    /**
+     * removes all associations from missions * <-> 1 orders
+     */
+    public function removeDrivingMissions() {
+        foreach ($this->drivingMissions as $mission) {
+            /**@var $mission DrivingMission */
+            $mission->removeDrivingPool();
+        }
+        $this->drivingMissions->clear();
+    }
+
 //    /**
 //     * @param Driver $driver
 //     */
@@ -199,7 +210,7 @@ class DrivingPool {
     }
 
     /**
-     * @return mixed
+     * @return Vehicle
      */
     public function getVehicle() {
         return $this->vehicle;

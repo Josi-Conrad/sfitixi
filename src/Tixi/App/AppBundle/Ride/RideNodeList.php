@@ -79,33 +79,77 @@ class RideNodeList {
     public function addRideNode(RideNode $rideNode) {
         if ($rideNode->type == RideNode::RIDE_PASSENGER) {
             if ($this->isEmpty()) {
-                $this->firstNode = & $rideNode;
+                $this->setFirstNode($rideNode);
             }
             if ($this->lastNode) {
                 $this->lastNode->setNextNode($rideNode);
                 $rideNode->setPreviousNode($this->lastNode);
             }
-            $this->lastNode = & $rideNode;
+            $this->setLastNode($rideNode);
             $this->rideNodes[$rideNode->drivingMission->getId()] = $rideNode;
-            $this->totalDistance += $rideNode->distance;
-
-            if ($rideNode->passengers > $this->maxPassengersOnRide) {
-                $this->maxPassengersOnRide = $rideNode->passengers;
-            }
-            if ($rideNode->wheelChairs > $this->maxWheelChairsOnRide) {
-                $this->maxWheelChairsOnRide = $rideNode->wheelChairs;
-            }
-            if (count($rideNode->contradictingVehicleCategories) > 0) {
-                foreach ($rideNode->contradictingVehicleCategories as $key => $cat) {
-                    $this->contradictingVehicleCategories[$key] = $cat;
-                }
-            }
+            $this->updateRideNodeListInformation($rideNode);
             $this->counter++;
         }
         if ($rideNode->type == RideNode::RIDE_EMPTY) {
             $this->totalEmptyRideTime += $rideNode->duration;
             $this->totalEmptyRideDistance += $rideNode->distance;
             $this->totalDistance += $rideNode->distance;
+        }
+    }
+
+    /**
+     * @param RideNode $rideNode
+     * @param RideNode $leftNode
+     */
+    public function addRideNodeAfterRideNode(RideNode $rideNode, RideNode $leftNode) {
+        if ($this->lastNode === $leftNode) {
+            $this->setLastNode($rideNode);
+        } else {
+            $rightNode = $leftNode->nextNode;
+            $rideNode->setNextNode($rightNode);
+        }
+        $leftNode->setNextNode($rideNode);
+        $rideNode->setPreviousNode($leftNode);
+
+        $this->rideNodes[$rideNode->drivingMission->getId()] = $rideNode;
+        $this->updateRideNodeListInformation($rideNode);
+        $this->counter++;
+    }
+
+    /**
+     * @param RideNode $rideNode
+     * @param RideNode $rightNode
+     */
+    public function addRideNodeBeforeRideNode(RideNode $rideNode, RideNode $rightNode) {
+        if ($this->firstNode === $rightNode) {
+            $this->setFirstNode($rideNode);
+        } else {
+            $leftNode = $rightNode->previousNode;
+            $rideNode->setPreviousNode($leftNode);
+        }
+        $rightNode->setPreviousNode($rideNode);
+        $rideNode->setNextNode($rightNode);
+
+        $this->rideNodes[$rideNode->drivingMission->getId()] = $rideNode;
+        $this->updateRideNodeListInformation($rideNode);
+        $this->counter++;
+    }
+
+    /**
+     * @param RideNode $rideNode
+     */
+    private function updateRideNodeListInformation(RideNode $rideNode) {
+        $this->totalDistance += $rideNode->distance;
+        if ($rideNode->passengers > $this->maxPassengersOnRide) {
+            $this->maxPassengersOnRide = $rideNode->passengers;
+        }
+        if ($rideNode->wheelChairs > $this->maxWheelChairsOnRide) {
+            $this->maxWheelChairsOnRide = $rideNode->wheelChairs;
+        }
+        if (count($rideNode->contradictingVehicleCategories) > 0) {
+            foreach ($rideNode->contradictingVehicleCategories as $key => $cat) {
+                $this->contradictingVehicleCategories[$key] = $cat;
+            }
         }
     }
 
@@ -166,6 +210,20 @@ class RideNodeList {
      */
     public function getFirstNode() {
         return $this->firstNode;
+    }
+
+    /**
+     * @param \Tixi\App\AppBundle\Ride\RideNode $firstNode
+     */
+    public function setFirstNode(&$firstNode) {
+        $this->firstNode = $firstNode;
+    }
+
+    /**
+     * @param \Tixi\App\AppBundle\Ride\RideNode $lastNode
+     */
+    public function setLastNode(&$lastNode) {
+        $this->lastNode = $lastNode;
     }
 
     /**

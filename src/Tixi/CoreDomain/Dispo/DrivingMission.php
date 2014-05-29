@@ -93,6 +93,10 @@ class DrivingMission {
         return $drivingMission;
     }
 
+    /**
+     * @param DrivingOrder $drivingOrder
+     * @return DrivingMission
+     */
     public static function registerDrivingMissionFromOrder(DrivingOrder $drivingOrder) {
         $drivingMission = new DrivingMission();
         $drivingMission->setDirection(self::SAME_START);
@@ -121,6 +125,13 @@ class DrivingMission {
      */
     public function assignDrivingPool(DrivingPool $drivingPool) {
         $this->setDrivingPool($drivingPool);
+    }
+
+    /**
+     * set drivingPool to null
+     */
+    public function removeDrivingPool() {
+        $this->drivingPool = null;
     }
 
     /**

@@ -175,6 +175,9 @@ class Shift {
         return $this->drivingPools;
     }
 
+    /**
+     * @return DrivingPool[]
+     */
     public function getDrivingPoolsAsArray() {
         return $this->drivingPools->toArray();
     }
