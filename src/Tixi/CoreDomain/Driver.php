@@ -242,6 +242,10 @@ class Driver extends Person {
         $this->drivingAssertions->add($drivingAssertion);
     }
 
+    public function removeDrivingAssertion(DrivingAssertion $drivingAssertion) {
+        $this->drivingAssertions->removeElement($drivingAssertion);
+    }
+
     /**
      * @return Vehicle[]
      */

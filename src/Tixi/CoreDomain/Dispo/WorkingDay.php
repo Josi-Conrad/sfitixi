@@ -107,7 +107,9 @@ class WorkingDay {
         foreach($shifts as $shift) {
             $missingDrivers = $shift->getAmountOfMissingDrivers();
             $correctedMissingDrivers = $missingDrivers<0 ? 0 : $missingDrivers;
-            $missingDriversArray['perShiftString'] .= $shift->getShiftType()->getName().': '.$correctedMissingDrivers.'/'.$shift->getAmountOfDrivers().' ';
+            $assignedPositions = count($shift->getDrivingAssertionsAsArray());
+            $missingDriversArray['perShiftString'] .= $shift->getShiftType()->getName()
+                .': '.$assignedPositions.'/'.$shift->getAmountOfDrivers().' ';
             $total += $correctedMissingDrivers;
         }
         $missingDriversArray['total'] = $total;

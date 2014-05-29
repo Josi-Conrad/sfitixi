@@ -88,6 +88,9 @@ class DriverController extends Controller {
         $repeatedAssertionPlanController = $dataGridControllerFactory->createRepeatedDrivingAssertionPlanController(true, array('driverId'=>$driverId));
         $repeatedAssertionGridTile = $dataGridHandler->createEmbeddedDataGridTile($this->menuId, $repeatedAssertionPlanController);
 
+        $assertionController = $dataGridControllerFactory->createDispoDrivingAssertionController(true, array('driverId'=>$driverId));
+        $assertionGridTile = $dataGridHandler->createEmbeddedDataGridTile($this->menuId, $assertionController);
+
         $rootPanel = new RootPanel($this->menuId, 'driver.panel.name', $driver->getFirstname().' '.$driver->getLastname());
         $panelSplitter = $rootPanel->add(new PanelSplitterTile('1:1'));
         $formPanel = $panelSplitter->addLeft(new PanelTile('driver.panel.details', PanelTile::$primaryType));
@@ -96,6 +99,8 @@ class DriverController extends Controller {
         $absentGridPanel->add($absentGridTile);
         $repeatedAssertionGridPanel = $panelSplitter->addRight(new PanelTile('repeateddrivingmission.panel.embedded'));
         $repeatedAssertionGridPanel->add($repeatedAssertionGridTile);
+        $assertionGridPanel = $panelSplitter->addRight(new PanelTile('drivingassertion.panel.embedded'));
+        $assertionGridPanel->add($assertionGridTile);
         $rootPanel->add(new PanelDeleteFooterTile($this->generateUrl('tixiapi_driver_delete', array('driverId' => $driverId)),'driver.button.delete'));
         return new Response($tileRenderer->render($rootPanel));
     }
