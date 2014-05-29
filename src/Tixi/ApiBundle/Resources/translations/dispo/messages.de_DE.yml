@@ -51,7 +51,7 @@ monthlyplan.edit.field.workingday: Tag
 monthlyplan.field.date: Monat - Jahr
 monthlyplan.field.status: Status
 monthlyplan.field.missingdrivers: Total offene Positionen
-monthlyplan.field.missingdriverspershift: Offene Positionen je Schicht
+monthlyplan.field.missingdriverspershift: Positionen je Schicht
 
 monthlyplan.edit.driverselection.field.empty: --- Bitte Fahrer auswählen ---
 
