@@ -64,12 +64,16 @@ class RideConfiguration {
 
     /**
      * @param DrivingPool $drivingPool
-     * @return RideNodeList
+     * @return RideNodeList or null if none exist
      */
     public function getRideNodeListForPool(DrivingPool $drivingPool) {
-        return $this->rideNodeLists[$drivingPool->getId()];
+        $id = $drivingPool->getId();
+        if (array_key_exists($id, $this->rideNodeLists)) {
+            return $this->rideNodeLists[$drivingPool->getId()];
+        } else {
+            return null;
+        }
     }
-
 
     /**
      * @param DrivingPool $drivingPool
@@ -80,13 +84,6 @@ class RideConfiguration {
         $this->totalEmptyRideTime += $rideNodeList->getTotalEmptyRideTime();
         $this->totalEmptyRideDistance += $rideNodeList->getTotalEmptyRideDistance();
         $this->rideNodeLists[$drivingPool->getId()] = $rideNodeList;
-    }
-
-    /**
-     * @param RideNodeList $rideNodeList
-     */
-    public function addRideNodeList(RideNodeList $rideNodeList) {
-        $this->rideNodeLists[] = $rideNodeList;
     }
 
     /**
@@ -152,5 +149,12 @@ class RideConfiguration {
      */
     public function getDrivingPoolFromId($drivingPoolId) {
         return $this->drivingPools[$drivingPoolId];
+    }
+
+    /**
+     * @return int
+     */
+    public function getAmountOfUsedVehicles() {
+        return count($this->rideNodeLists);
     }
 }

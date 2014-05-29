@@ -13,14 +13,13 @@ use Tixi\CoreDomain\Dispo\Shift;
 
 interface RideManagement {
     /**
-     * @param \DateTime $day
-     * @param \DateTime $time
+     * @param \DateTime $dayTime
      * @param $direction
      * @param $duration
      * @param $additionalTime
      * @return bool
      */
-    public function checkFeasibility(\DateTime $day, \DateTime $time, $direction, $duration, $additionalTime);
+    public function checkFeasibility(\DateTime $dayTime, $direction, $duration, $additionalTime);
 
     /**
      * runs routing algorithm to set optimized missions and orders for a shift

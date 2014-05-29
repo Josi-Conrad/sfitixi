@@ -75,8 +75,9 @@ class RideNode {
      */
     public $contradictingVehicleCategories;
 
-    /**node in list*/
+    /**@var $nextNode RideNode */
     public $nextNode;
+    /**@var $previousNode RideNode */
     public $previousNode;
 
     /**
@@ -111,6 +112,8 @@ class RideNode {
             } else {
                 $ride->passengers++;
             }
+            //add additional companion passenger
+            $ride->passengers += $order->getCompanion();
             foreach ($passenger->getContradictVehicleCategories() as $contradict) {
                 $ride->contradictingVehicleCategories[$contradict->getId()] = $contradict;
             }

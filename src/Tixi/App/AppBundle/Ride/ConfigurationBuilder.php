@@ -12,7 +12,6 @@ namespace Tixi\App\AppBundle\Ride;
 use Tixi\App\AppBundle\Ride\RideConfiguration;
 use Tixi\App\AppBundle\Ride\RideNode;
 use Tixi\App\AppBundle\Ride\RideStrategies\RideStrategy;
-use Tixi\App\AppBundle\Disposition\RideStrategies;
 use Tixi\App\Disposition\DispositionVariables;
 use Tixi\CoreDomain\Address;
 use Tixi\CoreDomain\Dispo\DrivingMission;
@@ -70,6 +69,7 @@ class ConfigurationBuilder {
         $this->drivingPools = $drivingPools;
         $this->strategy = $rideStrategy;
         $this->emptyRideNodes = array();
+        $this->rideConfiguration = new RideConfiguration($drivingPools);
     }
 
     /**
@@ -93,6 +93,7 @@ class ConfigurationBuilder {
     }
 
     /**
+     * builds array of emptyRides in this builder and returns it
      * gets hash array with nodes, where key is concatenated coordinate hash (md2) from start and destination
      * @return array
      */
@@ -123,22 +124,22 @@ class ConfigurationBuilder {
     }
 
     /**
+     * build rideConfiguration in this builder and returns it
      * @return RideConfiguration
      */
-    public function buildConfigurationFromExistingMissions(){
-        $rideConfiguration = new RideConfiguration($this->drivingPools);
-        foreach($this->drivingPools as $poolId=>$pool){
+    public function buildConfigurationFromExistingMissions() {
+        foreach ($this->drivingPools as $poolId => $pool) {
             $rideNodeList = new RideNodeList();
-            if($pool->hasAssociatedDrivingMissions()){
+            if ($pool->hasAssociatedDrivingMissions()) {
                 $nodes = $this->createRideNodesFromDrivingMissions($pool->getDrivingMissions());
                 $this->sortNodesByStartMinute($nodes);
-                foreach($nodes as $node){
+                foreach ($nodes as $node) {
                     $rideNodeList->addRideNode($node);
                 }
             }
-            $rideConfiguration->addRideNodeListAtPool($pool, $rideNodeList);
+            $this->rideConfiguration->addRideNodeListAtPool($pool, $rideNodeList);
         }
-        return $rideConfiguration;
+        return $this->rideConfiguration;
     }
 
     /**
@@ -164,19 +165,18 @@ class ConfigurationBuilder {
                 $last = count($sort);
 
                 /**@var $sOrder DrivingOrder */
-                $fOrder = $drivingMission->getDrivingOrders()->get($sort[$first]);
+                $firstOrder = $drivingMission->getDrivingOrders()->get($sort[$first]);
                 /**@var $tOrder DrivingOrder */
-                $lOrder = $drivingMission->getDrivingOrders()->get($sort[$last]);
+                $lastOrder = $drivingMission->getDrivingOrders()->get($sort[$last]);
 
                 if ($drivingMission->getDirection() === DrivingMission::SAME_START) {
-                    $startAddress = $fOrder->getRoute()->getStartAddress();
-                    $targetAddress = $lOrder->getRoute()->getTargetAddress();
+                    $startAddress = $firstOrder->getRoute()->getStartAddress();
+                    $targetAddress = $lastOrder->getRoute()->getTargetAddress();
                 } else {
-                    $startAddress = $fOrder->getRoute()->getStartAddress();
-                    $targetAddress = $fOrder->getRoute()->getTargetAddress();
+                    $startAddress = $firstOrder->getRoute()->getStartAddress();
+                    $targetAddress = $firstOrder->getRoute()->getTargetAddress();
                 }
             }
-
             $missionNode = RideNode::registerPassengerRide($drivingMission, $startAddress, $targetAddress);
             $missionNodes[$drivingMission->getId()] = $missionNode;
         }
@@ -219,9 +219,30 @@ class ConfigurationBuilder {
      * sort Configurations by totalDistance
      * @param RideConfiguration[] $configs
      */
-    public static function sortRideConfigurationsByTotalDistance(&$configs) {
+    public static function sortRideConfigurationsByDistance(&$configs) {
         usort($configs, function ($a, $b) {
             return ($a->getTotalDistance() > $b->getTotalDistance());
+        });
+    }
+
+    /**
+     * sort Configurations by totalDistance
+     * @param RideConfiguration[] $configs
+     */
+    public static function sortRideConfigurationsByUsedVehicles(&$configs) {
+        usort($configs, function ($a, $b) {
+            return ($a->getAmountOfUsedVehicles() > $b->getAmountOfUsedVehicles());
+        });
+    }
+
+    /**
+     * sort Configurations by totalDistance
+     * @param RideConfiguration[] $configs
+     */
+    public static function sortRideConfigurationsByUsedVehicleAndDistance(&$configs) {
+        usort($configs, function ($a, $b) {
+            return ($a->getAmountOfUsedVehicles() * $a->getTotalDistance() >
+                $b->getAmountOfUsedVehicles() * $b->getTotalDistance());
         });
     }
 

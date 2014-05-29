@@ -8,6 +8,7 @@
 
 namespace Tixi\App\AppBundle\Ride;
 
+use Tixi\App\Disposition\DispositionVariables;
 use Tixi\CoreDomain\Vehicle;
 
 /**
@@ -26,36 +27,52 @@ class ConfigurationAnalyzer {
     }
 
     /**
-     * @param RideNode $rideNode
+     * @param RideNode $feasibleNode
      * @return bool
      */
-    public function checkIfNodeIsFeasibleInConfiguration(RideNode $rideNode) {
-        $feasible = false;
-        foreach ($this->rideConfiguration->getRideNodeLists() as $rideNodeList) {
-            /**@var RideNode $lastNode */
-            $lastNode = null;
-            foreach ($rideNodeList->getRideNodes() as $node) {
-                if ($lastNode === null) {
-                    $lastNode = $node;
-                    if ($rideNode->endMinute < $lastNode->startMinute) {
-                        $feasible = true;
-                    }
-                    continue;
-                }
+    public function checkIfNodeIsFeasibleInConfiguration(RideNode $feasibleNode) {
+        $rideConfiguration = $this->rideConfiguration;
+        $addTimePickup = DispositionVariables::ARRIVAL_BEFORE_PICKUP;
 
-                if ($rideNode->startMinute < $lastNode->endMinute && $rideNode->endMinute < $node->startMinute
-                    || $rideNode->endMinute < $lastNode->startMinute
-                ) {
-                    $feasible = true;
-                }
-                $lastNode = $node;
+        foreach ($rideConfiguration->getDrivingPools() as $drivingPool) {
+            $rideNodeList = $rideConfiguration->getRideNodeListForPool($drivingPool);
+
+            //if List is empty, there is a drivingPool without nodes, so its definitely possible to drive this mission
+            if ($rideNodeList === null) {
+                return true;
+            }
+            if($rideNodeList->isEmpty()){
+                return true;
             }
 
-            if ($rideNode->startMinute > $lastNode->endMinute) {
-                $feasible = true;
+            //check if feasibleNode with time constraint fits between existing nodes
+            foreach ($rideNodeList->getRideNodes() as $listNode) {
+                if (!$listNode->previousNode) {
+                    if ($feasibleNode->endMinute + $addTimePickup < $listNode->startMinute) {
+                        return true;
+                    }
+                } else {
+                    if ($feasibleNode->endMinute + $addTimePickup < $listNode->startMinute
+                        && $feasibleNode->startMinute > $listNode->previousNode->endMinute + $addTimePickup
+                    ) {
+                        return true;
+                    }
+                }
+
+                if (!$listNode->nextNode) {
+                    if ($feasibleNode->startMinute > $listNode->endMinute + $addTimePickup) {
+                        return true;
+                    }
+                } else {
+                    if ($feasibleNode->startMinute > $listNode->endMinute + $addTimePickup
+                        && $feasibleNode->endMinute + $addTimePickup < $listNode->nextNode->startMinute
+                    ) {
+                        return true;
+                    }
+                }
             }
         }
-        return $feasible;
+        return false;
     }
 
     /**
@@ -71,9 +88,16 @@ class ConfigurationAnalyzer {
         $pools = $config->getDrivingPools();
         $lists = count($config->getRideNodeLists());
 
+        //for all nodelists search a compatible vehicle, continue in vehicle list if not compatible
         foreach ($config->getRideNodeLists() as $poolId => $nodeList) {
             foreach ($workVehicles as $vehicleKey => $vehicle) {
                 if ($nodeList->vehicleIsCompatibleWithThisList($vehicle)) {
+                    $pool = $pools[$poolId];
+                    if ($pool->hasAssociatedDriver()) {
+                        if (!$pool->getDriver()->isCompatibleWithVehicleCategory($vehicle->getCategory())) {
+                            continue;
+                        }
+                    }
                     $pools[$poolId]->assignVehicle($vehicle);
                     unset($workVehicles[$vehicleKey]);
                     $lists--;
@@ -99,4 +123,4 @@ class ConfigurationAnalyzer {
             return ($a->getApproximatedSize() > $b->getApproximatedSize());
         });
     }
-} 
+}
