@@ -39,7 +39,7 @@ class RideConfiguration {
     protected $notFeasibleNodes;
 
     /**
-     * Array of RideNodeLists with key = drivingPoolID
+     * Array of RideNodeLists
      * @var $rideNodeLists RideNodeList[]
      */
     protected $rideNodeLists;
@@ -63,27 +63,13 @@ class RideConfiguration {
     }
 
     /**
-     * @param DrivingPool $drivingPool
-     * @return RideNodeList or null if none exist
-     */
-    public function getRideNodeListForPool(DrivingPool $drivingPool) {
-        $id = $drivingPool->getId();
-        if (array_key_exists($id, $this->rideNodeLists)) {
-            return $this->rideNodeLists[$drivingPool->getId()];
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * @param DrivingPool $drivingPool
      * @param RideNodeList $rideNodeList
      */
-    public function addRideNodeListAtPool(DrivingPool $drivingPool, RideNodeList $rideNodeList) {
+    public function addRideNodeList(RideNodeList $rideNodeList) {
         $this->totalDistance += $rideNodeList->getTotalDistance();
         $this->totalEmptyRideTime += $rideNodeList->getTotalEmptyRideTime();
         $this->totalEmptyRideDistance += $rideNodeList->getTotalEmptyRideDistance();
-        $this->rideNodeLists[$drivingPool->getId()] = $rideNodeList;
+        $this->rideNodeLists[] = $rideNodeList;
     }
 
     /**
@@ -137,7 +123,7 @@ class RideConfiguration {
     }
 
     /**
-     * @return \Tixi\CoreDomain\Dispo\DrivingPool[]
+     * @return DrivingPool[]
      */
     public function getDrivingPools() {
         return $this->drivingPools;
@@ -156,5 +142,13 @@ class RideConfiguration {
      */
     public function getAmountOfUsedVehicles() {
         return count($this->rideNodeLists);
+    }
+
+    public function removeEmptyRideNodeLists() {
+        foreach ($this->rideNodeLists as $key => $list) {
+            if ($list->isEmpty()) {
+                unset($this->rideNodeLists[$key]);
+            }
+        }
     }
 }

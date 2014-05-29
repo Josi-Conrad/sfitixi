@@ -18,10 +18,10 @@ use Tixi\App\Disposition\DispositionVariables;
 use Tixi\CoreDomain\Dispo\DrivingPool;
 
 /**
- * Class RideStrategyLeastDistance
+ * Class RideStrategyAnnealing
  * @package Tixi\App\AppBundle\Ride\RideStrategies
  */
-class RideStrategyLeastDistance implements RideStrategy {
+class RideStrategyAnnealing implements RideStrategy {
     /**
      * @var $emptyRides RideNode[]
      */
@@ -34,6 +34,8 @@ class RideStrategyLeastDistance implements RideStrategy {
      * @var $drivingPools DrivingPool[]
      */
     protected $drivingPools;
+
+    protected $adjacenceMatrix;
 
     /**
      * @param $rideNodes
@@ -50,7 +52,7 @@ class RideStrategyLeastDistance implements RideStrategy {
         $workNodes = $this->rideNodes;
         ConfigurationBuilder::sortNodesByStartMinute($workNodes);
 
-        return $this->buildLeastDistanceConfiguration($workNodes);
+        return $this->buildFeasibleConfiguration($workNodes);
     }
 
     /**
@@ -68,40 +70,72 @@ class RideStrategyLeastDistance implements RideStrategy {
         $workNodes = $this->rideNodes;
         ConfigurationBuilder::sortNodesByStartMinute($workNodes);
 
-        //build some configs and return feasible configs
-        $rideConfigurations = array();
-        $diversity = count($this->rideNodes);
-        for ($i = 0; $i < $factor; $i++) {
-            $workRideNodes = $workNodes;
-            if ($i >= $diversity) {
-                shuffle($workRideNodes);
-            } else {
-                $switch = $workRideNodes[0];
-                $workRideNodes[0] = $workRideNodes[$i];
-                $workRideNodes[$i] = $switch;
+        $this->adjacenceMatrix = $this->buildAdjacenceMatrixFromNodes($workNodes);
+        $currentConfiguration = $this->buildFeasibleConfiguration($workNodes);
+
+        //Annealing
+        $iteration = -1;
+        $temperature = 10000.0;
+        $distance = 0;
+        $deltaDistance = 0;
+        $coolingRate = 0.9999;
+        $absoluteTemperature = 0.00001;
+
+        while ($temperature > $absoluteTemperature) {
+
+            $nextConfiguration = $this->randomSwitchTwoNodes($currentConfiguration);
+
+            $ran = mt_rand($absoluteTemperature * $temperature, $coolingRate * $temperature) / $temperature;
+            if (($deltaDistance < 0) || ($distance > 0 && exp(-$deltaDistance / $temperature) > $ran)) {
+
             }
 
-            $rideConfiguration = $this->buildLeastDistanceConfiguration($workRideNodes);
-
-            if (!$rideConfiguration->hasNotFeasibleNodes()) {
-                $rideConfigurations[] = $rideConfiguration;
-            }
+            $iteration++;
         }
 
+        $rideConfigurations = array();
+        for ($i = 0; $i < 2; $i++) {
+            $rideConfigurations[] = $this->buildConfiguration($rideNodes, $drivingPools, $emptyRideNodes);
+        }
         return $rideConfigurations;
+    }
+
+
+    private function randomSwitchTwoNodes(RideConfiguration $config){
+        $nextConfig = $config;
+
+        $l1 = mt_rand(0, count($config->getRideNodeLists())-1);
+        $list1 = $config->getRideNodeLists()[$l1];
+        $n1 = mt_rand(0, count($list1->getRideNodes())-1);
+        $node1 = $list1->getRideNodes()[$n1];
+
+        $l2 = mt_rand(0, count($config->getRideNodeLists())-1);
+        $list2 = $config->getRideNodeLists()[$l2];
+        $n2 = mt_rand(0, count($list2->getRideNodes())-1);
+        $node2 = $list2->getRideNodes()[$n2];
+
+        $feas = $this->adjacenceMatrix[$node1->getRideHash()][$node2->getRideHash()];
+
+        if($feas !== -1 && $feas !== 0){
+
+        } else {
+            return null;
+        }
+
+        return $nextConfig;
     }
 
     /**
      * @param $rideNodes
      * @return \Tixi\App\AppBundle\Ride\RideConfiguration
      */
-    private function buildLeastDistanceConfiguration($rideNodes) {
+    private function buildFeasibleConfiguration($rideNodes) {
         $rideConfiguration = new RideConfiguration($this->drivingPools);
         $workRideNodes = $rideNodes;
 
         //always loop all available pools - but stop when no missions are left so it is
-        //possible to have empty pools (no driver/vehicle needed for these missions)
-        //the amount of creates rideNodeLists will give the amount of used vehicles
+        //possible to have empty rideNodeLists (no driver/vehicle needed for these)
+        //the amount of created rideNodeLists will give the amount of used vehicles
         foreach ($this->drivingPools as $drivingPool) {
             if (count($workRideNodes) < 1) {
                 break;
@@ -112,7 +146,7 @@ class RideStrategyLeastDistance implements RideStrategy {
             $rideNodeList->addRideNode(array_shift($workRideNodes));
 
             $poolExtraMinutesPerRide = 0;
-            if($drivingPool->hasAssociatedDriver()){
+            if ($drivingPool->hasAssociatedDriver()) {
                 $poolExtraMinutesPerRide += $drivingPool->getDriver()->getExtraMinutes();
             }
 
@@ -122,41 +156,32 @@ class RideStrategyLeastDistance implements RideStrategy {
                 $bestNode = null;
                 $bestNodeKey = null;
                 $bestEmptyRide = null;
-                $actualDistance = -1;
-
+                $actualDuration = -1;
                 //check all nodes in workSet for feasible and best distance
                 foreach ($workRideNodes as $compareNodeKey => $compareNode) {
-
                     //not feasible time, get next node
                     if (!($actualNode->endMinute < $compareNode->startMinute)) {
                         continue;
                     }
-
                     $emptyRide = $this->getEmptyRideFromTwoNodes($actualNode, $compareNode);
-
                     $feasibleTimeForNextNode = $actualNode->endMinute + $emptyRide->duration
                         + DispositionVariables::ARRIVAL_BEFORE_PICKUP + $poolExtraMinutesPerRide;
-
                     //feasible time for node + emptyRide -> to next node
                     if ($feasibleTimeForNextNode <= $compareNode->startMinute) {
-
-                        if ($actualDistance === -1) {
+                        if ($actualDuration === -1) {
                             $bestNode = $compareNode;
                             $bestNodeKey = $compareNodeKey;
                             $bestEmptyRide = $emptyRide;
-                            $actualDistance = $emptyRide->distance;
+                            $actualDuration = $emptyRide->duration;
                         }
-
-                        if ($emptyRide->distance < $actualDistance) {
+                        if ($emptyRide->duration < $actualDuration) {
                             $bestNode = $compareNode;
                             $bestNodeKey = $compareNodeKey;
                             $bestEmptyRide = $emptyRide;
-                            $actualDistance = $emptyRide->distance;
+                            $actualDuration = $emptyRide->duration;
                         }
                     }
-
                 }
-
                 if ($bestNode && $bestEmptyRide) {
                     $rideNodeList->addRideNode($bestNode);
                     $rideNodeList->addRideNode($bestEmptyRide);
@@ -168,7 +193,35 @@ class RideStrategyLeastDistance implements RideStrategy {
             $rideConfiguration->addRideNodeList($rideNodeList);
         }
         $rideConfiguration->setNotFeasibleNodes($workRideNodes);
+        $rideConfiguration->removeEmptyRideNodeLists();
+
         return $rideConfiguration;
+    }
+
+    /**
+     * @param $rideNodes RideNode[]
+     * @return array
+     */
+    private function buildAdjacenceMatrixFromNodes($rideNodes) {
+        $adjacenceMatrix = array();
+        foreach ($rideNodes as $leftNode) {
+            foreach ($rideNodes as $rightNode) {
+                if ($leftNode === $rightNode) {
+                    //same node = 0
+                    $adjacenceMatrix[$leftNode->getRideHash()][$rightNode->getRideHash()] = 0;
+                    continue;
+                }
+                if ($leftNode->endMinute < $rightNode->startMinute) {
+                    //if our criterium is distance, get this between to nodes
+                    $distance = $this->getEmptyRideFromTwoNodes($leftNode, $rightNode)->distance;
+                    $adjacenceMatrix[$leftNode->getRideHash()][$rightNode->getRideHash()] = $distance;
+                } else {
+                    //not faesible = -1
+                    $adjacenceMatrix[$leftNode->getRideHash()][$rightNode->getRideHash()] = -1;
+                }
+            }
+        }
+        return $adjacenceMatrix;
     }
 
     /**

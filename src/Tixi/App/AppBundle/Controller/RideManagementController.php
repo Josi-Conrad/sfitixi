@@ -26,7 +26,7 @@ class RideManagementController extends Controller {
     /**
      * Get json routing information for feasibility, for example:
      * /service/ride/feasible?day=01.06.2014&time=12.23&direction=1&duration=23&additionalTime=2
-     * @Route("/ride/feasible", name="tixiapp_service_ride")
+     * @Route("/ride/feasible", name="tixiapp_service_ride_feasible")
      * @Method({"GET"})
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\JsonResponse
@@ -63,7 +63,7 @@ class RideManagementController extends Controller {
     /**
      * starts optimization for one shift, return false if it fails, for example:
      * /service/ride/optimize?shiftId=3
-     * @Route("/ride/optimize", name="tixiapp_service_ride")
+     * @Route("/ride/optimize", name="tixiapp_service_ride_optimize")
      * @Method({"GET"})
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\JsonResponse

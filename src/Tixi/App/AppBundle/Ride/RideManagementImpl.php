@@ -11,6 +11,7 @@ namespace Tixi\App\AppBundle\Ride;
 
 use Symfony\Component\DependencyInjection\ContainerAware;
 use Tixi\App\AppBundle\Ride\RideStrategies\RideStrategyLeastDistance;
+use Tixi\App\AppBundle\Ride\RideStrategies\RideStrategyAnnealing;
 use Tixi\App\AppBundle\Ride\RideStrategies\RideStrategyTimeWindow;
 use Tixi\App\Ride\RideManagement;
 use Tixi\CoreDomain\Dispo\DrivingPool;
@@ -35,7 +36,7 @@ class RideManagementImpl extends ContainerAware implements RideManagement {
 
         $shift = $dispoManagement->getResponsibleShiftForDayAndTime($dayTime);
         //if there is not already a planed shift in future, it should be feasible
-        //TODO: Check with repeatedDrivingMissions, but we cannot check to far in future...
+        //TODO: Check with repeatedDrivingMissions, but we cannot check too far in future...
         if ($shift === null) {
             return true;
         }
@@ -77,11 +78,15 @@ class RideManagementImpl extends ContainerAware implements RideManagement {
      * @return mixed
      */
     public function getOptimizedPlanForShift(Shift $shift) {
+        //STRATEGY for RideOptimization
+        $rideStrategy = new RideStrategyLeastDistance();
+        //$rideStrategy = new RideStrategyAnnealing();
+
+        //TODO: Problem with shift before and after + pool assignments
         $em = $this->container->get('entity_manager');
         $em->beginTransaction();
 
         $dispoManagement = $this->container->get('tixi_app.dispomanagement');
-
 
         $day = $shift->getDate();
         $vehicles = $dispoManagement->getAvailableVehiclesForDay($day);
@@ -89,24 +94,20 @@ class RideManagementImpl extends ContainerAware implements RideManagement {
         $drivingPools = $shift->getDrivingPoolsAsArray();
         if (count($drivingPools) < 1) {
             $em->rollback();
-            return false;
+            $this->fallback();
         }
 
         $drivingMissions = $dispoManagement->getDrivingMissionsInShift($shift);
         if (count($drivingMissions) < 1) {
             $em->rollback();
-            return false;
+            $this->fallback();
         }
 
         //clean drivingPools for new optimization
         foreach ($drivingPools as $pool) {
             $pool->removeDrivingMissions();
-            if ($pool->hasAssociatedDrivingMissions()) {
-                echo "fail";
-            }
         }
 
-        $rideStrategy = new RideStrategyLeastDistance();
         $rideConfigurator = new ConfigurationBuilder($drivingMissions, $drivingPools, $vehicles, $rideStrategy);
 
         $emptyRides = $rideConfigurator->buildAllPossibleEmptyRides();
@@ -130,38 +131,39 @@ class RideManagementImpl extends ContainerAware implements RideManagement {
 
         if (count($rideConfigurations) < 1) {
             $em->rollback();
-            return false;
+            $this->fallback();
         }
 
         //success on setting vehicles to a configuration
         $success = false;
+        $rideAnalyzer = null;
         $rideConfiguration = null;
-        //get best configuration (first element in sorted list)
+        //get best feasible configuration (first element in sorted list)
         while (!$success) {
             if (count($rideConfigurations) < 1) {
-                return false;
+                $em->rollback();
+                $this->fallback();
             }
             $rideConfiguration = array_shift($rideConfigurations);
             $rideAnalyzer = new ConfigurationAnalyzer($rideConfiguration);
+            $rideAnalyzer->assignPoolsToRideNodeList();
             $success = $rideAnalyzer->assignVehiclesToBestConfiguration($vehicles);
         }
-        if ($rideConfiguration === null) {
-            return false;
+        if (!$success) {
+            $em->rollback();
+            $this->fallback();
         }
-        $rideConfiguration = $rideConfigurator->assignMissionsToPools($rideConfiguration);
+
+        $rideAnalyzer->assignMissionsToPools($rideConfiguration);
 
         foreach ($rideConfigurations as $rideConfig) {
             $this->printConfiguration($rideConfig);
         }
 
         //if everything worked return successfully
-        if ($success) {
-            $em->commit();
-            $em->flush();
-            return true;
-        }
-        $em->rollback();
-        return false;
+        $em->commit();
+        $em->flush();
+        return true;
     }
 
     /**
@@ -170,7 +172,7 @@ class RideManagementImpl extends ContainerAware implements RideManagement {
      */
     private function printConfiguration(RideConfiguration $rideConfig) {
         echo "Used Vehicles:\t" . $rideConfig->getAmountOfUsedVehicles() . "\n";
-        echo "\nConfiguration total empty rides time:\t" . $rideConfig->getTotalEmptyRideTime() . "min\n";
+        echo "Configuration total empty rides time:\t" . $rideConfig->getTotalEmptyRideTime() . "min\n";
         echo "Configuration total empty ride distance:\t" . $rideConfig->getTotalEmptyRideDistance() / 1000 . "km\n";
         echo "Choosen Vehicles: ";
         foreach ($rideConfig->getDrivingPools() as $pool) {
@@ -189,6 +191,10 @@ class RideManagementImpl extends ContainerAware implements RideManagement {
             }
             echo "\n";
         }
+    }
 
+    private function fallback() {
+        echo "NO FEASIBLE CONFIG";
+        return false;
     }
 }
