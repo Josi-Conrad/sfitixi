@@ -14,6 +14,7 @@
         <parameter key="tixi_app.dispomanagement.class">Tixi\App\AppBundle\Disposition\DispositionManagementImpl</parameter>
         <parameter key="tixi_app.ridemanagement.class">Tixi\App\AppBundle\Ride\RideManagementImpl</parameter>
         <parameter key="tixi_app.workingmonthmanagement.class">Tixi\App\AppBundle\Disposition\WorkingMonthManagementImpl</parameter>
+        <parameter key="tixi_app.drivingassertionmanagement.class">Tixi\App\AppBundle\Driving\DrivingAssertionManagementImpl</parameter>
 
     </parameters>
 
@@ -54,6 +55,11 @@
             </call>
         </service>
         <service id="tixi_app.workingmonthmanagement" class="%tixi_app.workingmonthmanagement.class%">
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
+        </service>
+        <service id="tixi_app.drivingassertionmanagement" class="%tixi_app.drivingassertionmanagement.class%">
             <call method="setContainer">
                 <argument type="service" id="service_container"/>
             </call>

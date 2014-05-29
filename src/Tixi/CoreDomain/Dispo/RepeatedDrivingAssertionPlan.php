@@ -61,9 +61,14 @@ class RepeatedDrivingAssertionPlan extends CommonBaseEntity {
      * @ORM\JoinColumn(name="driver_id", referencedColumnName="id")
      */
     protected $driver;
+    /**
+     * @ORM\OneToMany(targetEntity="DrivingAssertion", mappedBy="repeatedDrivingAssertion")
+     */
+    protected $drivingAssertions;
 
     protected function __construct() {
         $this->repeatedDrivingAssertions = new ArrayCollection();
+        $this->drivingAssertions = new ArrayCollection();
         parent::__construct();
     }
 
@@ -103,6 +108,14 @@ class RepeatedDrivingAssertionPlan extends CommonBaseEntity {
      */
     public function assignRepeatedDrivingAssertion(RepeatedDrivingAssertion $repeatedDrivingAssertion) {
         $this->getRepeatedDrivingAssertions()->add($repeatedDrivingAssertion);
+    }
+
+    public function assigneDrivingAssertion(DrivingAssertion $drivingAssertion) {
+        $this->drivingAssertions->add($drivingAssertion);
+    }
+
+    public function removeDrivingAssertion(DrivingAssertion $drivingAssertion) {
+        $this->drivingAssertions->removeElement($drivingAssertion);
     }
 
     /**
@@ -184,6 +197,10 @@ class RepeatedDrivingAssertionPlan extends CommonBaseEntity {
      */
     public function getRepeatedDrivingAssertions() {
         return $this->repeatedDrivingAssertions;
+    }
+
+    public function getRepeatedDrivingAssertionsAsArray() {
+        return $this->repeatedDrivingAssertions->toArray();
     }
 
     /**

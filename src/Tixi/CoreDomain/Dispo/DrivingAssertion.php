@@ -40,6 +40,11 @@ class DrivingAssertion extends CommonBaseEntity implements DrivingAssertionInter
      */
     protected $drivingPool;
     /**
+     * @ORM\ManyToOne(targetEntity="RepeatedDrivingAssertionPlan", inversedBy="drivingAssertions")
+     * @ORM\JoinColumn(name="repeateddrivingassertionplan_id", referencedColumnName="id")
+     */
+    protected $repeatedDrivingAssertionPlan;
+    /**
      * @param Shift $shift
      * @return mixed
      */
@@ -85,6 +90,14 @@ class DrivingAssertion extends CommonBaseEntity implements DrivingAssertionInter
 
     public function isAssignedToDrivingPool() {
         return (isset($this->drivingPool) && null!==$this->drivingPool);
+    }
+
+    public function assignedRepeatedDrivingAssertionPlan(RepeatedDrivingAssertionPlan $repeatedDrivingAssertionPlan) {
+        $this->repeatedDrivingAssertionPlan = $repeatedDrivingAssertionPlan;
+    }
+
+    public function removeRepeatedDrivingAssertionPlan() {
+        $this->repeatedDrivingAssertionPlan = null;
     }
 
     /**

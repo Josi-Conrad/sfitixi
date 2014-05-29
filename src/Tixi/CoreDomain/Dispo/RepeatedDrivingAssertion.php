@@ -40,6 +40,7 @@ abstract class RepeatedDrivingAssertion implements DrivingAssertionInterface {
      */
     protected $shiftTypes;
 
+
     public function __construct() {
         $this->shiftTypes = new ArrayCollection();
     }
