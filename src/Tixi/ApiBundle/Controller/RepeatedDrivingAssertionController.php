@@ -205,6 +205,7 @@ class RepeatedDrivingAssertionController extends Controller{
             $drivingAssertionService->handleNewRepeatedDrivingAssertion($assertionPlan);
         }else {
 
+            $drivingAssertionService->handleChangeInRepeatedDrivingAssertion($assertionPlan);
         }
     }
 

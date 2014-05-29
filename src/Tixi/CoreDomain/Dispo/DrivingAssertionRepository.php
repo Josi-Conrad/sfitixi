@@ -26,4 +26,7 @@ interface DrivingAssertionRepository extends CommonBaseRepository{
     public function remove(DrivingAssertion $drivingAssertion);
 
     public function findAllActiveByShift(Shift $shift);
+
+    public function findAllProspectiveByRepeatedDrivingAssertionPlan(RepeatedDrivingAssertionPlan $repeatedDrivingAssertionPlan);
+       
 } 

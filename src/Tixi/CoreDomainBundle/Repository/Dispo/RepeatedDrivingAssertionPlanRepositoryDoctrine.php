@@ -13,6 +13,7 @@ use Doctrine\Common\Collections\Criteria;
 use Tixi\CoreDomain\Dispo\RepeatedDrivingAssertionPlan;
 use Tixi\CoreDomain\Dispo\RepeatedDrivingAssertionPlanRepository;
 use Tixi\CoreDomain\Dispo\WorkingMonth;
+use Tixi\CoreDomain\Driver;
 use Tixi\CoreDomainBundle\Repository\CommonBaseRepositoryDoctrine;
 
 /**
@@ -61,6 +62,18 @@ class RepeatedDrivingAssertionPlanRepositoryDoctrine extends CommonBaseRepositor
         $qb->where('p.anchorDate <= :endDate')->andWhere('p.endingDate >= :startDate');
         $qb->setParameter('startDate',$startDate->format('Y-m-d'));
         $qb->setParameter('endDate',$endDate->format('Y-m-d'));
+        return $qb->getQuery()->getResult();
+    }
+
+    public function findAllProspectiveForDriver(Driver $driver)
+    {
+        $now = new \DateTime();
+        $qb = parent::createQueryBuilder('p');
+        $qb->where('p.driver = :driver')
+            ->andWhere('p.endingDate >= :now')
+            ->andWhere('p.isDeleted = 0')
+            ->setParameter('driver',$driver)
+            ->setParameter('now',$now->format('Y-m-d'));
         return $qb->getQuery()->getResult();
     }
 }

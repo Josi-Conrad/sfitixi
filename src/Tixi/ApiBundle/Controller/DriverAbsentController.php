@@ -22,6 +22,7 @@ use Tixi\ApiBundle\Tile\Core\FormTile;
 use Tixi\ApiBundle\Tile\Core\PanelDeleteFooterTile;
 use Tixi\ApiBundle\Tile\Core\RootPanel;
 use Tixi\ApiBundle\Tile\CustomFormView\AbsentRegisterFormViewTile;
+use Tixi\App\Driving\DrivingAssertionManagement;
 use Tixi\CoreDomain\Driver;
 
 /**
@@ -177,6 +178,8 @@ class DriverAbsentController extends Controller {
     protected function registerOrUpdateAbsentToDriver(AbsentRegisterDTO $absentDTO, Driver $driver) {
         $absentRepository = $this->get('absent_repository');
         $assembler = $this->get('tixi_api.assemblerabsent');
+        /** @var DrivingAssertionManagement $drivingAssertionService */
+        $drivingAssertionService = $this->get('tixi_app.drivingassertionmanagement');
         if (empty($absentDTO->id)) {
             $absent = $assembler->registerDTOtoNewAbsent($absentDTO);
             $driver->assignAbsent($absent);
@@ -185,6 +188,7 @@ class DriverAbsentController extends Controller {
             $absent = $absentRepository->find($absentDTO->id);
             $assembler->registerDTOtoAbsent($absentDTO, $absent);
         }
+        $drivingAssertionService->handleNewOrChangedAbsent($driver);
     }
 
     /**

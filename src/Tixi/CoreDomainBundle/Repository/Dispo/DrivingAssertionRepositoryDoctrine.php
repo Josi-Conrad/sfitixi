@@ -11,6 +11,7 @@ namespace Tixi\CoreDomainBundle\Repository\Dispo;
 
 use Tixi\CoreDomain\Dispo\DrivingAssertion;
 use Tixi\CoreDomain\Dispo\DrivingAssertionRepository;
+use Tixi\CoreDomain\Dispo\RepeatedDrivingAssertionPlan;
 use Tixi\CoreDomain\Dispo\Shift;
 use Tixi\CoreDomainBundle\Repository\CommonBaseRepositoryDoctrine;
 
@@ -41,5 +42,21 @@ class DrivingAssertionRepositoryDoctrine extends CommonBaseRepositoryDoctrine im
             ->andWhere('e.isDeleted = 0')
             ->setParameter('shift', $shift);
         return $qb->getQuery()->getResult();
+    }
+
+    public function findAllProspectiveByRepeatedDrivingAssertionPlan(RepeatedDrivingAssertionPlan $repeatedDrivingAssertionPlan)
+    {
+        $now = new \DateTime();
+        $qb = parent::createQueryBuilder('e');
+        $qb->join('e.repeatedDrivingAssertionPlan', 'p')
+            ->join('e.shift','s')
+            ->join('s.workingDay','w')
+            ->where('p = :assertionPlan')
+            ->andWhere('w.date >= :now')
+            ->setParameter('assertionPlan',$repeatedDrivingAssertionPlan)
+            ->setParameter('now',$now->format('Y-m-d'));
+        return $qb->getQuery()->getResult();
+
+
     }
 }

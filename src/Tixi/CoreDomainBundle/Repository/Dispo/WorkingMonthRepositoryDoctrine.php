@@ -40,22 +40,17 @@ class WorkingMonthRepositoryDoctrine extends CommonBaseRepositoryDoctrine implem
         return $qb->getQuery()->getOneOrNullResult();
     }
 
-    public function findNextActiveWorkingMonths($limit = 3)
+    public function findProspectiveWorkingMonths()
     {
-        $workingMonths = array();
+        $now = new \DateTime();
+        $startMonth = $now->modify('first day of this month');
+        $qb = parent::createQueryBuilder('e');
+        $qb->where('e.date >= :startMonth')
+            ->andWhere('e.isDeleted = 0')
+            ->setParameter('startMonth',$startMonth->format('Y-m-d'));
+        return $qb->getQuery()->getResult();
 
-        $startMonth = new \DateTime();
-        $startMonth = $startMonth->modify('first day of this month');
-        $endMonth = new \DateTime();
-        $endMonth = $endMonth->modify('first day of +'.$limit.' month');
-        $interval = new \DateInterval('P1M');
-        $monthPeriode = new \DatePeriod($startMonth, $interval, $endMonth);
-        foreach($monthPeriode as $month) {
-            $workingMonth = $this->findWorkingMonthByDate($month);
-            if(null !== $workingMonth) {
-                $workingMonths[] = $workingMonth;
-            }
-        }
-        return $workingMonths;
+
+
     }
 }

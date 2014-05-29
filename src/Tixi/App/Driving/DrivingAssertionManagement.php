@@ -10,20 +10,19 @@ namespace Tixi\App\Driving;
 
 
 use Tixi\ApiBundle\Interfaces\Dispo\MonthlyView\MonthlyPlanEditDTO;
-use Tixi\CoreDomain\Absent;
-use Tixi\CoreDomain\Dispo\RepeatedDrivingAssertion;
 use Tixi\CoreDomain\Dispo\RepeatedDrivingAssertionPlan;
 use Tixi\CoreDomain\Dispo\WorkingMonth;
+use Tixi\CoreDomain\Driver;
 
 interface DrivingAssertionManagement {
 
-    public function handleNewRepeatedDrivingAssertion(RepeatedDrivingAssertionPlan $repeatedDrivingAssertion);
+    public function handleNewRepeatedDrivingAssertion(RepeatedDrivingAssertionPlan $repeatedDrivingAssertionPlan);
 
-    public function handleChangeInRepeatedDrivingAssertion(RepeatedDrivingAssertion $repeatedDrivingAssertion);
+    public function handleChangeInRepeatedDrivingAssertion(RepeatedDrivingAssertionPlan $repeatedDrivingAssertionPlan);
 
     public function createAllDrivingAssertionsForNewMonthlyPlan(WorkingMonth $workingMonth);
 
-    public function handleNewOrChangedAbsent(Absent $absent);
+    public function handleNewOrChangedAbsent(Driver $driver);
 
     public function handleMonthlyPlan(MonthlyPlanEditDTO $monthlyPlan);
 

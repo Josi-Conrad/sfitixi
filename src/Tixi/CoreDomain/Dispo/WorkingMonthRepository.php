@@ -30,5 +30,5 @@ interface WorkingMonthRepository extends CommonBaseRepository {
     /*
      * Finds the next few active working month (including the currently running), if they exists
      */
-    public function findNextActiveWorkingMonths($limit=3);
+    public function findProspectiveWorkingMonths();
 }

@@ -9,6 +9,7 @@
 namespace Tixi\CoreDomain\Dispo;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Tixi\ApiBundle\Helper\DateTimeService;
 use Tixi\CoreDomain\Driver;

@@ -9,6 +9,7 @@
 namespace Tixi\CoreDomain\Dispo;
 
 
+use Tixi\CoreDomain\Driver;
 use Tixi\CoreDomain\Shared\CommonBaseRepository;
 
 /**
@@ -36,5 +37,7 @@ interface RepeatedDrivingAssertionPlanRepository extends CommonBaseRepository {
     public function findPlanForDate(\DateTime $date);
 
     public function findActivePlansInRangeOfWorkingMonth(WorkingMonth $workingMonth);
+
+    public function findAllProspectiveForDriver(Driver $driver);
 
 }
