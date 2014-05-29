@@ -67,4 +67,8 @@ class CommonBaseEntity {
     public function undeleteLogically() {
         $this->isDeleted = false;
     }
+
+    public function isActive() {
+        return !$this->isDeleted;
+    }
 }

@@ -187,23 +187,32 @@ class Driver extends Person {
                 return false;
             }
         }
-        
-        $isAvailable = false;
+        //uses direct return statements to improve performance
         foreach ($this->getRepeatedDrivingAssertionPlans() as $rDrivingAssertionPlan) {
             foreach ($rDrivingAssertionPlan->getRepeatedDrivingAssertions() as $rDrivingAssertion) {
                 if ($rDrivingAssertion->matching($shift)) {
                     if ($isBankHoliday) {
-                        //if it's a BankHoliday and Driver was willing to work on Holidays
+                        //check if driving assertion also count for holidays
                         if ($rDrivingAssertionPlan->getWithHolidays()) {
-                            $isAvailable = true;
+                            return true;
                         }
                     } else {
-                        $isAvailable = true;
+                        return true;
                     }
                 }
             }
         }
-        return $isAvailable;
+        return false;
+    }
+
+    public function hasDrivingAssertionForShift(Shift $shift) {
+        /** @var DrivingAssertion $drivingAssertion */
+        foreach($this->drivingAssertions as $drivingAssertion) {
+            if($drivingAssertion->getShift() === $shift) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

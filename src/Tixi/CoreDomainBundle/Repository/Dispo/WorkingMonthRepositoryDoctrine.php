@@ -2,6 +2,7 @@
 
 namespace Tixi\CoreDomainBundle\Repository\Dispo;
 
+use Symfony\Component\Validator\Constraints\DateTime;
 use Tixi\CoreDomain\Dispo\WorkingMonth;
 use Tixi\CoreDomain\Dispo\WorkingMonthRepository;
 use Tixi\CoreDomainBundle\Repository\CommonBaseRepositoryDoctrine;
@@ -37,5 +38,24 @@ class WorkingMonthRepositoryDoctrine extends CommonBaseRepositoryDoctrine implem
             ->andWhere('e.isDeleted = 0')
             ->setParameter('correctedDate', $date->modify('first day of this month')->format('Y-m-d'));
         return $qb->getQuery()->getOneOrNullResult();
+    }
+
+    public function findNextActiveWorkingMonths($limit = 3)
+    {
+        $workingMonths = array();
+
+        $startMonth = new \DateTime();
+        $startMonth = $startMonth->modify('first day of this month');
+        $endMonth = new \DateTime();
+        $endMonth = $endMonth->modify('first day of +'.$limit.' month');
+        $interval = new \DateInterval('P1M');
+        $monthPeriode = new \DatePeriod($startMonth, $interval, $endMonth);
+        foreach($monthPeriode as $month) {
+            $workingMonth = $this->findWorkingMonthByDate($month);
+            if(null !== $workingMonth) {
+                $workingMonths[] = $workingMonth;
+            }
+        }
+        return $workingMonths;
     }
 }

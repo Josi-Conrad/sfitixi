@@ -12,6 +12,7 @@ namespace Tixi\CoreDomainBundle\Repository\Dispo;
 use Doctrine\Common\Collections\Criteria;
 use Tixi\CoreDomain\Dispo\RepeatedDrivingAssertionPlan;
 use Tixi\CoreDomain\Dispo\RepeatedDrivingAssertionPlanRepository;
+use Tixi\CoreDomain\Dispo\WorkingMonth;
 use Tixi\CoreDomainBundle\Repository\CommonBaseRepositoryDoctrine;
 
 /**
@@ -45,6 +46,21 @@ class RepeatedDrivingAssertionPlanRepositoryDoctrine extends CommonBaseRepositor
         $qb = parent::createQueryBuilder('p');
         $qb->where('p.anchorDate <= :date')->andWhere('p.endingDate >= :date');
         $qb->setParameter('date', $date->format('Y-m-d'));
+        return $qb->getQuery()->getResult();
+    }
+
+    public function findActivePlansInRangeOfWorkingMonth(WorkingMonth $workingMonth)
+    {
+        /** @var \DateTime $startDate */
+        $startDate = clone $workingMonth->getDate();
+        /** @var \DateTime $endDate */
+        $endDate = clone $workingMonth->getDate();
+        $endDate->modify('last day of this month');
+
+        $qb = parent::createQueryBuilder('p');
+        $qb->where('p.anchorDate <= :endDate')->andWhere('p.endingDate >= :startDate');
+        $qb->setParameter('startDate',$startDate->format('Y-m-d'));
+        $qb->setParameter('endDate',$endDate->format('Y-m-d'));
         return $qb->getQuery()->getResult();
     }
 }

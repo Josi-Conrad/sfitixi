@@ -25,6 +25,7 @@ use Tixi\ApiBundle\Tile\Core\FormTile;
 use Tixi\ApiBundle\Tile\Core\PanelDeleteFooterTile;
 use Tixi\ApiBundle\Tile\Core\RootPanel;
 use Tixi\ApiBundle\Tile\Dispo\RepeatedAssertionTile;
+use Tixi\App\Driving\DrivingAssertionManagement;
 use Tixi\CoreDomain\Dispo\RepeatedDrivingAssertion;
 use Tixi\CoreDomain\Dispo\RepeatedDrivingAssertionPlan;
 use Tixi\CoreDomain\Dispo\RepeatedMonthlyDrivingAssertion;
@@ -170,13 +171,17 @@ class RepeatedDrivingAssertionController extends Controller{
         $assertionRepository = $this->get('repeateddrivingassertion_repository');
         /** @var RepeatedDrivingAssertionAssembler $assembler*/
         $assembler = $this->get('tixi_api.repeateddrivingassertionplanassembler');
+        /** @var DrivingAssertionManagement $drivingAssertionService */
+        $drivingAssertionService = $this->get('tixi_app.drivingassertionmanagement');
 
         /** @var RepeatedDrivingAssertionPlan $assertionPlan*/
         $assertionPlan = null;
         if (null === $assertionDTO->id) {
+            //create new
             $assertionPlan = $assembler->repeatedRegisterDTOToNewDrivingAssertionPlan($assertionDTO);
             $driver->assignRepeatedDrivingAssertionPlan($assertionPlan);
         } else {
+            //update
             $assertionPlan = $assertionPlanRepository->find($assertionDTO->id);
             $assembler->repeatedRegisterDTOToDrivingAssertionPlan($assertionPlan, $assertionDTO);
             foreach($assertionPlan->getRepeatedDrivingAssertions() as $previousAssertions) {
@@ -196,6 +201,11 @@ class RepeatedDrivingAssertionController extends Controller{
         }
         $assertionPlan->replaceRepeatedDrivingAssertions($repeatedAssertions);
         $assertionPlanRepository->store($assertionPlan);
+        if(null === $assertionDTO->id) {
+            $drivingAssertionService->handleNewRepeatedDrivingAssertion($assertionPlan);
+        }else {
+
+        }
     }
 
     /**

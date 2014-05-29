@@ -18,6 +18,7 @@ use Tixi\App\AppBundle\Ride\RideStrategies\RideStrategyLeastDistance;
 use Tixi\App\AppBundle\Ride\RideStrategies\RideStrategyTimeWindow;
 use Symfony\Component\Validator\Constraints\DateTime;
 use Tixi\App\Disposition\DispositionManagement;
+use Tixi\App\Driving\DrivingAssertionManagement;
 use Tixi\CoreDomain\Dispo\DrivingAssertion;
 use Tixi\CoreDomain\Dispo\DrivingAssertionRepository;
 use Tixi\CoreDomain\Dispo\DrivingMission;
@@ -180,6 +181,8 @@ class DispositionManagementImpl extends ContainerAware implements DispositionMan
         $shiftRepository = $this->container->get('shift_repository');
         /** @var ShiftTypeRepository $shiftTypeRepository */
         $shiftTypeRepository = $this->container->get('shifttype_repository');
+        /** @var DrivingAssertionManagement $drivingAssertionService */
+        $drivingAssertionService = $this->container->get('tixi_app.drivingassertionmanagement');
 
         try {
             $date = new \DateTime();
@@ -203,44 +206,16 @@ class DispositionManagementImpl extends ContainerAware implements DispositionMan
 
         }
         $workingMonthRepository->store($workingMonth);
+        $drivingAssertionService->createAllDrivingAssertionsForNewMonthlyPlan($workingMonth);
         return $workingMonth;
     }
 
+
+
     public function createDrivingAssertionsFromMonthlyPlan(MonthlyPlanEditDTO $monthlyPlan)
     {
-        /** @var ShiftRepository $shiftRepository */
-        $shiftRepository = $this->container->get('shift_repository');
-        /** @var DrivingAssertionRepository $drivingAssertionRepository */
-        $drivingAssertionRepository = $this->container->get('drivingassertion_repository');
-
-        $driversPerShifts = $monthlyPlan->shifts;
-        /** @var MonthlyPlanDriversPerShiftDTO $driversPerShift */
-        foreach($driversPerShifts as $driversPerShift) {
-            $newDrivers = $driversPerShift->newDrivers;
-            /** @var MonthlyPlanDrivingAssertionDTO $newDriver */
-            $shift = $shiftRepository->find($driversPerShift->shiftId);
-            foreach($newDrivers as $newDriver) {
-                $driver = $newDriver->driver;
-                if(null !== $driver) {
-                    if(!$this->hasDrivingAssertionForShift($shift, $driver)) {
-                        $drivingAssertion = DrivingAssertion::registerDrivingAssertion($driver, $shift);
-                        $drivingAssertionRepository->store($drivingAssertion);
-                    }
-                }
-            }
-        }
-    }
-
-    protected function hasDrivingAssertionForShift(Shift $shift, Driver $driver) {
-        /** @var DrivingAssertionRepository $drivingAssertionRepository */
-        $drivingAssertionRepository = $this->container->get('drivingassertion_repository');
-        $assertions = $drivingAssertionRepository->findAllActiveByShift($shift);
-        /** @var DrivingAssertion $assertion */
-        foreach($assertions as $assertion) {
-            if($assertion->getDriver()->getId() === $driver->getId()) {
-                return true;
-            }
-        }
-        return false;
+        /** @var DrivingAssertionManagement $drivingAssertionService */
+        $drivingAssertionService = $this->container->get('tixi_app.drivingassertionmanagement');
+        $drivingAssertionService->handleMonthlyPlan($monthlyPlan);
     }
 }
