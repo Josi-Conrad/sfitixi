@@ -97,6 +97,24 @@ class WorkingDay {
     }
 
     /**
+     * @return array
+     */
+    public function getMisingDriversInformationArray() {
+        $missingDriversArray = array('perShiftString'=>'','total'=>0);
+        $shifts = $this->getShiftsOrderedByStartTime();
+        $total = 0;
+        /** @var Shift $shift */
+        foreach($shifts as $shift) {
+            $missingDrivers = $shift->getAmountOfMissingDrivers();
+            $correctedMissingDrivers = $missingDrivers<0 ? 0 : $missingDrivers;
+            $missingDriversArray['perShiftString'] .= $shift->getShiftType()->getName().': '.$correctedMissingDrivers.'/'.$shift->getAmountOfDrivers().' ';
+            $total += $correctedMissingDrivers;
+        }
+        $missingDriversArray['total'] = $total;
+        return $missingDriversArray;
+    }
+
+    /**
      * @param DrivingMission $mission
      */
     protected function getPossibleDrivingPoolForMission(DrivingMission $mission) {
