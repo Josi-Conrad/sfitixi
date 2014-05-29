@@ -188,10 +188,6 @@ class DrivingPool {
         return $this->drivingMissions;
     }
 
-    public function getDrivingMissionsAsArray() {
-        return $this->drivingMissions->toArray();
-    }
-
     /**
      * @return Shift
      */

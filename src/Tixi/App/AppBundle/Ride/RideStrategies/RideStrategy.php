@@ -18,11 +18,12 @@ use Tixi\App\AppBundle\Ride\RideConfiguration;
 interface RideStrategy {
     /**
      * @param $rideNodes
-     * @param $emptyRideNodes
      * @param $drivingPools
-     * @return \Tixi\App\AppBundle\Ride\RideConfiguration
+     * @param $emptyRideNodes
+     * @param RideConfiguration $existingConfiguration
+     * @return mixed
      */
-    public function buildConfiguration($rideNodes, $drivingPools, $emptyRideNodes);
+    public function buildConfiguration($rideNodes, $drivingPools, $emptyRideNodes, RideConfiguration $existingConfiguration = null);
 
     /**
      * @param $rideNodes

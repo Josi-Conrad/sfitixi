@@ -54,7 +54,7 @@ class RideNodeList {
      * @var int
      */
     protected $counter;
-    /**@var $rideNodes RideNode[] */
+    /**@var $rideNodes RideNode[] with key = drivingMissionID */
     protected $rideNodes;
     /**@var $firstNode RideNode Reference */
     protected $firstNode;
@@ -86,7 +86,7 @@ class RideNodeList {
                 $rideNode->setPreviousNode($this->lastNode);
             }
             $this->lastNode = & $rideNode;
-            $this->rideNodes[] = $rideNode;
+            $this->rideNodes[$rideNode->drivingMission->getId()] = $rideNode;
             $this->totalDistance += $rideNode->distance;
 
             if ($rideNode->passengers > $this->maxPassengersOnRide) {
@@ -123,7 +123,7 @@ class RideNodeList {
         if ($this->isEmpty()) {
             return null;
         }
-        return $this->rideNodes[$this->counter - 1];
+        return $this->lastNode;
     }
 
     /**

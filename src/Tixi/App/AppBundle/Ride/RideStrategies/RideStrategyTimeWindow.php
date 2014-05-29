@@ -23,7 +23,7 @@ use Tixi\CoreDomain\Dispo\DrivingPool;
  */
 class RideStrategyTimeWindow implements RideStrategy {
     /**
-     * @var RideNode[]
+     * @var RideNode[] with key = drivingMissionID
      */
     protected $rideNodes;
     /**
@@ -33,33 +33,27 @@ class RideStrategyTimeWindow implements RideStrategy {
 
     /**
      * @param $rideNodes
-     * @param $emptyRideNodes
      * @param $drivingPools
+     * @param $emptyRideNodes
+     * @param \Tixi\App\AppBundle\Ride\RideConfiguration $existingConfiguration
      * @return RideConfiguration
      */
-    public function buildConfiguration($rideNodes, $drivingPools, $emptyRideNodes) {
+    public function buildConfiguration($rideNodes, $drivingPools, $emptyRideNodes, RideConfiguration $existingConfiguration = null) {
         $this->rideNodes = $rideNodes;
         $this->drivingPools = $drivingPools;
 
-        $rideConfiguration = new RideConfiguration($this->drivingPools);
         $workNodes = $this->rideNodes;
 
-        //fill existing missions<->orders and nodes away from workNodes
-        foreach ($this->drivingPools as $drivingPool) {
-            $rideNodeList = new RideNodeList();
-
-            /**@var $drivingPool DrivingPool */
-            if ($drivingPool->hasAssociatedDrivingMissions()) {
-                foreach ($drivingPool->getDrivingMissions() as $mission) {
-                    $id = $mission->getId();
-                    if ($workNodes[$id] !== null) {
-                        $rideNodeList->addRideNode($workNodes[$id]);
-                        unset($workNodes[$id]);
-                    }
+        //remove existing nodes from workSet
+        if ($existingConfiguration) {
+            $rideConfiguration = $existingConfiguration;
+            foreach ($rideConfiguration->getRideNodeLists() as $list) {
+                foreach ($list->getRideNodes() as $key => $node) {
+                    unset($workNodes[$key]);
                 }
             }
-
-            $rideConfiguration->addRideNodeListAtPool($drivingPool, $rideNodeList);
+        } else {
+            $rideConfiguration = new RideConfiguration($this->drivingPools);
         }
 
         ConfigurationBuilder::sortNodesByStartMinute($workNodes);

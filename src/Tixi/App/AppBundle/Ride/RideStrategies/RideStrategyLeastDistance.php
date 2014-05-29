@@ -30,11 +30,12 @@ class RideStrategyLeastDistance implements RideStrategy {
 
     /**
      * @param $rideNodes
-     * @param $emptyRideNodes
      * @param $drivingPools
+     * @param $emptyRideNodes
+     * @param \Tixi\App\AppBundle\Ride\RideConfiguration $existingConfiguration
      * @return \Tixi\App\AppBundle\Ride\RideConfiguration
      */
-    public function buildConfiguration($rideNodes, $drivingPools, $emptyRideNodes) {
+    public function buildConfiguration($rideNodes, $drivingPools, $emptyRideNodes, RideConfiguration $existingConfiguration = null) {
         $this->rideNodes = $rideNodes;
         $this->drivingPools = $drivingPools;
         $this->emptyRides = $emptyRideNodes;
