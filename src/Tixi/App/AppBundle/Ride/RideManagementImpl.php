@@ -31,6 +31,7 @@ class RideManagementImpl extends ContainerAware implements RideManagement {
     public function checkFeasibility(\DateTime $day, \DateTime $time, $direction, $duration, $additionalTime) {
         //TODO: create controller and check feasibility only with pickupTime, duration and passengerID + additionalTime
         //TODO: Feasibility with 1 current strategy (~10sec)or timewindow?
+        $s = microtime(true);
 
         $dispo = $this->container->get('tixi_app.dispomanagement');
 
@@ -42,19 +43,15 @@ class RideManagementImpl extends ContainerAware implements RideManagement {
 
         $rideStrategy = new RideStrategyLeastDistance();
         $rideConfigurator = new ConfigurationBuilder($drivingMissions, $drivingPools, $vehicles, $rideStrategy);
-        $emptyRides = $rideConfigurator->buildAllPossibleEmptyRides();
 
-        $s = microtime(true);
-        $routeManagement = $this->container->get('tixi_app.routemanagement');
-        $emptyRides = $routeManagement->fillRoutesForMultipleRideNodes($emptyRides);
-        $e = microtime(true);
-        echo "\n\nFilled " . count($emptyRides) . " emptyRideNodes with routing informations in: " . ($e - $s) . "s\n";
+        $existingRideConfiguration = $rideConfigurator->buildConfigurationFromExistingMissions();
+        $rideConfigurator->setRideConfiguration($existingRideConfiguration);
 
-        $s = microtime(true);
         //ride configuration with factor of all nodes (change all first entries once) and the same amount for shuffling
         $rideConfiguration = $rideConfigurator->buildConfiguration();
+
         $e = microtime(true);
-        echo "Built rideConfiguration in: " . ($e - $s) . "s\n";
+        echo "Check feasibility TimeWindow in: " . ($e - $s) . "s\n";
 
         $this->printConfiguration($rideConfiguration);
 
@@ -74,8 +71,17 @@ class RideManagementImpl extends ContainerAware implements RideManagement {
 
         $day = $shift->getDate();
         $vehicles = $dispoManagement->getAvailableVehiclesForDay($day);
-        $drivingPools = $shift->getDrivingPools();
+
+        $drivingPools = $shift->getDrivingPoolsAsArray();
+        if (count($drivingPools) < 1) {
+            $em->rollback();
+            return false;
+        }
         $drivingMissions = $dispoManagement->getDrivingMissionsInShift($shift);
+        if (count($drivingMissions) < 1) {
+            $em->rollback();
+            return false;
+        }
 
         $rideStrategy = new RideStrategyLeastDistance();
         $rideConfigurator = new ConfigurationBuilder($drivingMissions, $drivingPools, $vehicles, $rideStrategy);

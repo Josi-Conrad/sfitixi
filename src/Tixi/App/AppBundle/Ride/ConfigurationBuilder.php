@@ -77,7 +77,7 @@ class ConfigurationBuilder {
      * @return RideConfiguration
      */
     public function buildConfiguration() {
-        $rideConfiguration = $this->strategy->buildConfiguration($this->rideNodes, $this->drivingPools, $this->emptyRideNodes);
+        $rideConfiguration = $this->strategy->buildConfiguration($this->rideNodes, $this->drivingPools, $this->emptyRideNodes, $this->rideConfiguration);
         $this->rideConfiguration = $rideConfiguration;
         return $rideConfiguration;
     }
@@ -123,11 +123,30 @@ class ConfigurationBuilder {
     }
 
     /**
+     * @return RideConfiguration
+     */
+    public function buildConfigurationFromExistingMissions(){
+        $rideConfiguration = new RideConfiguration($this->drivingPools);
+        foreach($this->drivingPools as $poolId=>$pool){
+            $rideNodeList = new RideNodeList();
+            if($pool->hasAssociatedDrivingMissions()){
+                $nodes = $this->createRideNodesFromDrivingMissions($pool->getDrivingMissions());
+                $this->sortNodesByStartMinute($nodes);
+                foreach($nodes as $node){
+                    $rideNodeList->addRideNode($node);
+                }
+            }
+            $rideConfiguration->addRideNodeListAtPool($pool, $rideNodeList);
+        }
+        return $rideConfiguration;
+    }
+
+    /**
      * creates an array with RideNodes according to a drivingMission with missionId as arrayKey
      * @param DrivingMission[] $drivingMissions
-     * @return RideNode[]
+     * @return RideNode[] with key = drivingMissionID
      */
-    private function createRideNodesFromDrivingMissions($drivingMissions) {
+    public function createRideNodesFromDrivingMissions($drivingMissions) {
         $missionNodes = array();
         foreach ($drivingMissions as $drivingMission) {
             /**
@@ -237,6 +256,13 @@ class ConfigurationBuilder {
      */
     public function getRideNodes() {
         return $this->rideNodes;
+    }
+
+    /**
+     * @param \Tixi\App\AppBundle\Ride\RideConfiguration $rideConfiguration
+     */
+    public function setRideConfiguration($rideConfiguration) {
+        $this->rideConfiguration = $rideConfiguration;
     }
 
 }
