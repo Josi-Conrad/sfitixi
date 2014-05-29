@@ -60,6 +60,14 @@ class DrivingAssertion extends CommonBaseEntity implements DrivingAssertionInter
         return $drivingAssertion;
     }
 
+    public function deletePhysically() {
+        $this->driver->removeDrivingAssertion($this);
+        $this->shift->removeDrivingAssertion($this);
+        if(null !== $this->drivingPool) {
+            $this->drivingPool->removeDrivingAssertion();
+        }
+    }
+
     public function assignDriver(Driver $driver) {
         $this->driver = $driver;
         $driver->assignDrivingAssertion($this);
@@ -86,6 +94,24 @@ class DrivingAssertion extends CommonBaseEntity implements DrivingAssertionInter
     {
         return $this->driver;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getShift()
+    {
+        return $this->shift;
+    }
+
+
 
 
 }

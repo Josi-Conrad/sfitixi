@@ -145,6 +145,10 @@ class DrivingPool {
         $this->drivingAssertion = $drivingAssertion;
     }
 
+    public function removeDrivingAssertion() {
+        $this->drivingAssertion = null;
+    }
+
     /**
      * @param DrivingMission $drivingMission
      */

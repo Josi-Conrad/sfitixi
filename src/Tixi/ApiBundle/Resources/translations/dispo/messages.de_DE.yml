@@ -63,7 +63,13 @@ monthlyplan.workingday.field.weekdaystring: Tag
 workingmonth.status.open: Offen
 workingmonth.status.sent: Versandt
 
-#RepeatedDrivingMission
+#DrivingAssertion
+drivingassertion.panel.embedded: Nächsten Einsätze
+
+drivingassertion.field.date: Datum
+drivingassertion.field.shift: Schicht
+
+#RepeatedDrivingAssertion
 repeateddrivingmission.panel.new: Neuer Dauereinsatz
 repeateddrivingmission.panel.edit: Dauereinsatz editieren
 repeateddrivingmission.panel.embedded: Dauereinsätze

@@ -186,6 +186,10 @@ class Shift {
         $this->drivingAssertions->add($drivingAssertion);
     }
 
+    public function removeDrivingAssertion(DrivingAssertion $drivingAssertion) {
+        $this->drivingAssertions->removeElement($drivingAssertion);
+    }
+
     /**
      * @return mixed
      */
