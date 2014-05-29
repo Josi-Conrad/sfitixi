@@ -23,7 +23,7 @@ use Tixi\CoreDomain\Dispo\DrivingPool;
  */
 class RideStrategyTimeWindow implements RideStrategy {
     /**
-     * @var $rideNodes RideNode[] with key = drivingMissionID
+     * @var $rideNodes RideNode[]
      */
     protected $rideNodes;
     /**
@@ -62,16 +62,19 @@ class RideStrategyTimeWindow implements RideStrategy {
 
         ConfigurationBuilder::sortNodesByStartMinute($workRideNodes);
 
+        $workRideNodeLists = $rideConfiguration->getRideNodeLists();
+
         //always loop all available pools - but stop when no missions are left so it is
         //possible to have empty pools (no driver/vehicle needed for these missions)
         foreach ($drivingPools as $drivingPool) {
             if (count($workRideNodes) < 1) {
                 break;
             }
-            $rideNodeList = $rideConfiguration->getRideNodeListForPool($drivingPool);
-            if ($rideNodeList === null) {
+            if (count($workRideNodeLists) > 0) {
+                $rideNodeList = array_shift($workRideNodeLists);
+            } else {
                 $rideNodeList = new RideNodeList();
-                $rideConfiguration->addRideNodeListAtPool($drivingPool, $rideNodeList);
+                $rideConfiguration->addRideNodeList($rideNodeList);
             }
 
             //no existing list with nodes, so we add rideNodes normally with time constraint

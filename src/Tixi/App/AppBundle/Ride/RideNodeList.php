@@ -19,6 +19,10 @@ use Tixi\CoreDomain\VehicleCategory;
  */
 class RideNodeList {
     /**
+     * @var int
+     */
+    protected $drivingPoolId;
+    /**
      * time above all included emptyRideNodes
      * @var int
      */
@@ -54,7 +58,7 @@ class RideNodeList {
      * @var int
      */
     protected $counter;
-    /**@var $rideNodes RideNode[] with key = drivingMissionID */
+    /**@var $rideNodes RideNode[] */
     protected $rideNodes;
     /**@var $firstNode RideNode Reference */
     protected $firstNode;
@@ -86,7 +90,7 @@ class RideNodeList {
                 $rideNode->setPreviousNode($this->lastNode);
             }
             $this->setLastNode($rideNode);
-            $this->rideNodes[$rideNode->drivingMission->getId()] = $rideNode;
+            $this->rideNodes[] = $rideNode;
             $this->updateRideNodeListInformation($rideNode);
             $this->counter++;
         }
@@ -111,7 +115,7 @@ class RideNodeList {
         $leftNode->setNextNode($rideNode);
         $rideNode->setPreviousNode($leftNode);
 
-        $this->rideNodes[$rideNode->drivingMission->getId()] = $rideNode;
+        $this->rideNodes[] = $rideNode;
         $this->updateRideNodeListInformation($rideNode);
         $this->counter++;
     }
@@ -130,8 +134,40 @@ class RideNodeList {
         $rightNode->setPreviousNode($rideNode);
         $rideNode->setNextNode($rightNode);
 
-        $this->rideNodes[$rideNode->drivingMission->getId()] = $rideNode;
+        $this->rideNodes[] = $rideNode;
         $this->updateRideNodeListInformation($rideNode);
+        $this->counter++;
+    }
+
+    /**
+     * BE AWARE that changing (not only insert) the NodeList requires a full information update
+     * @param $position
+     * @param RideNode $rideNode
+     */
+    public function switchRideNodeAtPosition($position, RideNode $rideNode) {
+        $switchNode = $this->rideNodes[$position];
+
+        if ($this->lastNode === $switchNode) {
+            $this->setLastNode($rideNode);
+            $prev = $switchNode->previousNode;
+            $rideNode->setPreviousNode($prev);
+            $prev->setNextNode($rideNode);
+        }
+        else if($this->firstNode === $switchNode){
+            $this->setFirstNode($rideNode);
+            $next = $switchNode->nextNode;
+            $rideNode->setNextNode($next);
+            $next->setPreviousNode($rideNode);
+        } else {
+            $next = $switchNode->nextNode;
+            $rideNode->setNextNode($next);
+            $next->setPreviousNode($rideNode);
+            $prev = $switchNode->previousNode;
+            $rideNode->setPreviousNode($prev);
+            $prev->setNextNode($rideNode);
+        }
+
+        $this->rideNodes[$position] = $rideNode;
         $this->counter++;
     }
 
@@ -150,6 +186,12 @@ class RideNodeList {
             foreach ($rideNode->contradictingVehicleCategories as $key => $cat) {
                 $this->contradictingVehicleCategories[$key] = $cat;
             }
+        }
+    }
+
+    private function recreateRideNodeListInformation($emptyRides){
+        foreach($this->rideNodes as $nodes){
+
         }
     }
 
@@ -245,6 +287,20 @@ class RideNodeList {
      */
     public function getMaxWheelChairsOnRide() {
         return $this->maxWheelChairsOnRide;
+    }
+
+    /**
+     * @param int $drivingPoolId
+     */
+    public function setDrivingPoolId($drivingPoolId) {
+        $this->drivingPoolId = $drivingPoolId;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDrivingPoolId() {
+        return $this->drivingPoolId;
     }
 
     /**
