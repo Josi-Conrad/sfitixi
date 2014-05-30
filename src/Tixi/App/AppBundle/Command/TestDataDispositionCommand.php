@@ -181,7 +181,7 @@ class TestDataDispositionCommand extends ContainerAwareCommand {
             }
         }
 
-        $routingMachine->fillRoutingInformationsForMultipleRoutes($routes);
+        $routingMachine->fillRoutingInformationForMultipleRoutes($routes);
 
         /**@var $order DrivingOrder */
         foreach ($orders as $order) {

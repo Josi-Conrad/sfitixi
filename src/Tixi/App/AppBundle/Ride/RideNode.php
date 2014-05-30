@@ -190,11 +190,23 @@ class RideNode {
     }
 
     /**
-     * generates Hash from Start and Target Adress coordinates as string together, since
-     * calculate sum from both bigInts would be the same ride from->to and to->from
+     * generates identically hash for this node only (adjacenceMatrix)
      * @return string
      */
-    public function getRideHash() {
+    public function getRideNodeHashId() {
+        return hash('md2', $this->startAddress->getHashFromBigIntCoordinates()
+            . $this->targetAddress->getHashFromBigIntCoordinates()
+            . $this->startMinute . $this->endMinute
+            . $this->drivingMission->getId());
+    }
+
+    /**
+     * generates Hash from Start and Target Adress (Route Hashtable)
+     * coordinates as string together, since calculate sum from both bigInts
+     * would be the same ride from->to and to->from
+     * @return string
+     */
+    public function getRideRouteHash() {
         return hash('md2', $this->startAddress->getHashFromBigIntCoordinates()
             . $this->targetAddress->getHashFromBigIntCoordinates());
     }

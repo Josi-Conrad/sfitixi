@@ -58,5 +58,5 @@ interface RoutingMachine {
      * @throws RoutingMachineException
      * @throws \Exception
      */
-    public function fillRoutingInformationsForMultipleRoutes($routes);
+    public function fillRoutingInformationForMultipleRoutes($routes);
 } 

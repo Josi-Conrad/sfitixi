@@ -106,8 +106,8 @@ class ConfigurationBuilder {
             foreach ($this->vehicleDepotAddresses as $depotAddress) {
                 $depotToNode = RideNode::registerEmptyRide($depotAddress, $workNode->startAddress);
                 $nodeToDepot = RideNode::registerEmptyRide($workNode->targetAddress, $depotAddress);
-                $this->emptyRideNodes[$depotToNode->getRideHash()] = $depotToNode;
-                $this->emptyRideNodes[$nodeToDepot->getRideHash()] = $nodeToDepot;
+                $this->emptyRideNodes[$depotToNode->getRideRouteHash()] = $depotToNode;
+                $this->emptyRideNodes[$nodeToDepot->getRideRouteHash()] = $nodeToDepot;
             }
 
             //fill possible rides between any time-feasible nodes
@@ -115,7 +115,7 @@ class ConfigurationBuilder {
             foreach ($comparesNodes as $compareNode) {
                 if ($workNode->endMinute < $compareNode->startMinute) {
                     $node = RideNode::registerEmptyRide($workNode->targetAddress, $compareNode->startAddress);
-                    $this->emptyRideNodes[$node->getRideHash()] = $node;
+                    $this->emptyRideNodes[$node->getRideRouteHash()] = $node;
                 }
             }
             unset($workNodes[$key]);
@@ -211,6 +211,8 @@ class ConfigurationBuilder {
      * @param RideNode[] $nodes
      */
     public static function sortNodesByStartMinute(&$nodes) {
+        /**@var $a RideNode
+         * @var $b RideNode */
         usort($nodes, function ($a, $b) {
             return ($a->startMinute > $b->startMinute);
         });
@@ -222,6 +224,8 @@ class ConfigurationBuilder {
      */
     public static function sortRideConfigurationsByDistance(&$configs) {
         usort($configs, function ($a, $b) {
+            /**@var $a RideConfiguration
+             * @var $b RideConfiguration*/
             return ($a->getTotalDistance() > $b->getTotalDistance());
         });
     }
@@ -232,6 +236,8 @@ class ConfigurationBuilder {
      */
     public static function sortRideConfigurationsByUsedVehicles(&$configs) {
         usort($configs, function ($a, $b) {
+            /**@var $a RideConfiguration
+             * @var $b RideConfiguration*/
             return ($a->getAmountOfUsedVehicles() > $b->getAmountOfUsedVehicles());
         });
     }
@@ -242,6 +248,8 @@ class ConfigurationBuilder {
      */
     public static function sortRideConfigurationsByUsedVehicleAndDistance(&$configs) {
         usort($configs, function ($a, $b) {
+            /**@var $a RideConfiguration
+             * @var $b RideConfiguration*/
             return ($a->getAmountOfUsedVehicles() * $a->getTotalDistance() >
                 $b->getAmountOfUsedVehicles() * $b->getTotalDistance());
         });
@@ -259,21 +267,6 @@ class ConfigurationBuilder {
     }
 
     /**
-     * @return RideNode[]
-     */
-    public function getRideNodes() {
-        return $this->rideNodes;
-    }
-
-    /**
-     * @param \Tixi\App\AppBundle\Ride\RideConfiguration $rideConfiguration
-     */
-    public function setRideConfiguration($rideConfiguration) {
-        $this->rideConfiguration = $rideConfiguration;
-    }
-
-
-    /**
      * builds an adjacence matrix (array[][]) for a map between all possible node rides
      * if its not feasible or same node, value is = -1
      * if its feasible, value is = emptyRide between these two nodes
@@ -287,7 +280,7 @@ class ConfigurationBuilder {
             foreach ($rideNodes as $rightNode) {
                 if ($leftNode === $rightNode) {
                     //same node not feasible
-                    $adjacenceMatrix[$leftNode->getRideHash()][$rightNode->getRideHash()] = -1;
+                    $adjacenceMatrix[$leftNode->getRideNodeHashId()][$rightNode->getRideNodeHashId()] = -1;
                     continue;
                 }
                 //feasible nodes in time slice, so get emptyRide between
@@ -297,12 +290,12 @@ class ConfigurationBuilder {
                     //feasible nodes with emptyRide between
                     if ($feasibleTimeForNextNode <= $rightNode->startMinute) {
                         //if our criteria is distance, get this between two nodes
-                        $adjacenceMatrix[$leftNode->getRideHash()][$rightNode->getRideHash()] = $ride;
+                        $adjacenceMatrix[$leftNode->getRideNodeHashId()][$rightNode->getRideNodeHashId()] = $ride;
                         continue;
                     }
                 }
                 //not definitly two feasible nodes = -1
-                $adjacenceMatrix[$leftNode->getRideHash()][$rightNode->getRideHash()] = -1;
+                $adjacenceMatrix[$leftNode->getRideNodeHashId()][$rightNode->getRideNodeHashId()] = -1;
             }
         }
         return $adjacenceMatrix;
@@ -313,7 +306,7 @@ class ConfigurationBuilder {
      * @param \Tixi\App\AppBundle\Ride\RideNode $targetNode
      * @return string
      */
-    public static function getHashFromTwoNodes(RideNode $startNode, RideNode $targetNode) {
+    public static function getRideHashFromTwoNodes(RideNode $startNode, RideNode $targetNode) {
         return hash('md2', $startNode->targetAddress->getHashFromBigIntCoordinates()
             . $targetNode->startAddress->getHashFromBigIntCoordinates());
     }
@@ -325,6 +318,6 @@ class ConfigurationBuilder {
      * @return RideNode
      */
     public static function getEmptyRideFromTwoNodes(RideNode $startNode, RideNode $targetNode, $emptyRideNodes) {
-        return $emptyRideNodes[self::getHashFromTwoNodes($startNode, $targetNode)];
+        return $emptyRideNodes[self::getRideHashFromTwoNodes($startNode, $targetNode)];
     }
 }

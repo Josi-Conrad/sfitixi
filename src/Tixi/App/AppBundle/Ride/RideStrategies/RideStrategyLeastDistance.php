@@ -99,7 +99,7 @@ class RideStrategyLeastDistance implements RideStrategy {
     }
 
     /**
-     * @param $rideNodes
+     * @param $rideNodes RideNode[]
      * @return \Tixi\App\AppBundle\Ride\RideConfiguration
      */
     private function buildLeastDistanceConfiguration($rideNodes) {
@@ -133,7 +133,7 @@ class RideStrategyLeastDistance implements RideStrategy {
 
                 //check all nodes in workSet for feasible and best distance
                 foreach ($workRideNodes as $compareNodeKey => $compareNode) {
-                    $emptyRide = $this->adjacenceMatrix[$actualNode->getRideHash()][$compareNode->getRideHash()];
+                    $emptyRide = $this->adjacenceMatrix[$actualNode->getRideNodeHashId()][$compareNode->getRideNodeHashId()];
                     //not feasible, get next node
                     if ($emptyRide === -1) {
                         continue;

@@ -48,7 +48,7 @@ class RunOSRMTestCommand extends ContainerAwareCommand {
             array_push($routes, Route::registerRoute($address1, $address2));
         }
         $startTime = microtime(true);
-        $routingMachine->fillRoutingInformationsForMultipleRoutes($routes);
+        $routingMachine->fillRoutingInformationForMultipleRoutes($routes);
         $endTime = microtime(true);
         $output->writeln('Exectued ' . $n . ' OSRM requests in: ' . ($endTime - $startTime) . "s\n");
     }

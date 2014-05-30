@@ -184,7 +184,7 @@ class RideStrategyAnnealing implements RideStrategy {
         foreach ($list->getRideNodes() as $node) {
             $totalDistance += $node->distance;
             if ($node->nextNode) {
-                $emptyRide = $this->adjacenceMatrix[$node->getRideHash()][$node->nextNode->getRideHash()];
+                $emptyRide = $this->adjacenceMatrix[$node->getRideNodeHashId()][$node->nextNode->getRideNodeHashId()];
                 $totalEmptyRideTime += $emptyRide->duration;
                 $totalEmptyRideDistance += $emptyRide->distance;
                 $totalDistance += $emptyRide->distance;
@@ -236,12 +236,12 @@ class RideStrategyAnnealing implements RideStrategy {
         $right = $nodeGettingSwitched->nextNode;
         //if previous or next node is null - then we set feas to possible
         if ($left !== null) {
-            $feasibleLeft = $this->adjacenceMatrix[$left->getRideHash()][$nodeToSwitch->getRideHash()];
+            $feasibleLeft = $this->adjacenceMatrix[$left->getRideNodeHashId()][$nodeToSwitch->getRideNodeHashId()];
         } else {
             $feasibleLeft = 0;
         }
         if ($right !== null) {
-            $feasibleRight = $this->adjacenceMatrix[$nodeToSwitch->getRideHash()][$right->getRideHash()];
+            $feasibleRight = $this->adjacenceMatrix[$nodeToSwitch->getRideNodeHashId()][$right->getRideNodeHashId()];
         } else {
             $feasibleRight = 0;
         }
@@ -252,7 +252,7 @@ class RideStrategyAnnealing implements RideStrategy {
     }
 
     /**
-     * @param $rideNodes
+     * @param $rideNodes RideNode[]
      * @return \Tixi\App\AppBundle\Ride\RideConfiguration
      */
     private function buildFeasibleConfiguration($rideNodes) {
@@ -286,7 +286,7 @@ class RideStrategyAnnealing implements RideStrategy {
                 //check all nodes in workSet for feasible and best distance
                 foreach ($workRideNodes as $compareNodeKey => $compareNode) {
                     //not feasible, get next node
-                    $emptyRide = $this->adjacenceMatrix[$actualNode->getRideHash()][$compareNode->getRideHash()];
+                    $emptyRide = $this->adjacenceMatrix[$actualNode->getRideNodeHashId()][$compareNode->getRideNodeHashId()];
                     if ($emptyRide === -1) {
                         continue;
                     }

@@ -48,7 +48,7 @@ class RoutingServiceTest extends CommonBaseTest {
         for ($i = 0; $i < 10; $i++) {
             array_push($routes, Route::registerRoute($address1, $address2, null, null));
         }
-        $this->routingMachine->fillRoutingInformationsForMultipleRoutes($routes);
+        $this->routingMachine->fillRoutingInformationForMultipleRoutes($routes);
 
         foreach ($routes as $route) {
             $this->assertNotEmpty($route->getDuration());

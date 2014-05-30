@@ -89,7 +89,7 @@ class RouteManagementImpl extends ContainerAware implements RouteManagement {
             $routesToQuery[$hashKey] = Route::registerRoute($rideNode->startAddress, $rideNode->targetAddress);
         }
         try {
-            $filledRoutings = $routingMachine->fillRoutingInformationsForMultipleRoutes($routesToQuery);
+            $filledRoutings = $routingMachine->fillRoutingInformationForMultipleRoutes($routesToQuery);
 
             foreach ($filledRoutings as $hashKey => $route) {
                 $rideNodes[$hashKey]->duration = $route->getDurationInMinutes();

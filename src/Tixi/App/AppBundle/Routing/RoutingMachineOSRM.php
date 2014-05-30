@@ -110,7 +110,7 @@ class RoutingMachineOSRM extends ContainerAware implements RoutingMachine {
      * @throws RoutingMachineException
      * @throws \Exception
      */
-    public function fillRoutingInformationsForMultipleRoutes($routes) {
+    public function fillRoutingInformationForMultipleRoutes($routes) {
         $this->prepareServerUrl();
         if (!$this->checkConnectivity()) {
             throw new RoutingMachineException('OSRM connection failed');
@@ -120,7 +120,7 @@ class RoutingMachineOSRM extends ContainerAware implements RoutingMachine {
         $nearestRoutings = $this->fillNearestPoints($routes);
 
         //fills duration and distance into the Route object
-        $filledRoutings = $this->setRoutingInformations($nearestRoutings);
+        $filledRoutings = $this->setRoutingInformationForMultipleRoutes($nearestRoutings);
 
         return $filledRoutings;
     }
@@ -286,7 +286,7 @@ class RoutingMachineOSRM extends ContainerAware implements RoutingMachine {
      * @param Route[] $routes
      * @return Route[]
      */
-    private function setRoutingInformations($routes) {
+    private function setRoutingInformationForMultipleRoutes($routes) {
         $curlHandles = array();
 
         //generate curl requests
