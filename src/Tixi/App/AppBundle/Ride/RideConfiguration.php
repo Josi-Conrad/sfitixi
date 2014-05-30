@@ -95,6 +95,14 @@ class RideConfiguration {
     }
 
     /**
+     * @param $position
+     * @param RideNodeList $rideNodeList
+     */
+    public function setRideNodeListAt($position, RideNodeList $rideNodeList) {
+        $this->rideNodeLists[$position] = $rideNodeList;
+    }
+
+    /**
      * @return mixed
      */
     public function getTotalDistance() {
@@ -106,6 +114,27 @@ class RideConfiguration {
      */
     public function getTotalEmptyRideTime() {
         return $this->totalEmptyRideTime;
+    }
+
+    /**
+     * @param int $totalDistance
+     */
+    public function setTotalDistance($totalDistance) {
+        $this->totalDistance = $totalDistance;
+    }
+
+    /**
+     * @param int $totalEmptyRideDistance
+     */
+    public function setTotalEmptyRideDistance($totalEmptyRideDistance) {
+        $this->totalEmptyRideDistance = $totalEmptyRideDistance;
+    }
+
+    /**
+     * @param int $totalEmptyRideTime
+     */
+    public function setTotalEmptyRideTime($totalEmptyRideTime) {
+        $this->totalEmptyRideTime = $totalEmptyRideTime;
     }
 
     /**
@@ -123,7 +152,7 @@ class RideConfiguration {
     }
 
     /**
-     * @return DrivingPool[]
+     * @return DrivingPool[] with drivingPoolID => drivingPool
      */
     public function getDrivingPools() {
         return $this->drivingPools;

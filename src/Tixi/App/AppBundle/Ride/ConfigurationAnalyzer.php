@@ -98,7 +98,7 @@ class ConfigurationAnalyzer {
                 }
             }
             */
-            $list->setDrivingPoolId($pool->getId());
+            $list->assignDrivingPoolToList($pool);
         }
     }
 
@@ -117,16 +117,15 @@ class ConfigurationAnalyzer {
 
         //for all nodelists search a compatible vehicle, continue in vehicle list if not compatible
         foreach ($config->getRideNodeLists() as $nodeList) {
-            $poolId = $nodeList->getDrivingPoolId();
             foreach ($workVehicles as $vehicleKey => $vehicle) {
                 if ($nodeList->vehicleIsCompatibleWithThisList($vehicle)) {
-                    $pool = $pools[$poolId];
+                    $pool = $nodeList->getDrivingPoolForList();
                     if ($pool->hasAssociatedDriver()) {
                         if (!$pool->getDriver()->isCompatibleWithVehicleCategory($vehicle->getCategory())) {
                             continue;
                         }
                     }
-                    $pools[$poolId]->assignVehicle($vehicle);
+                    $pools[$pool->getId()]->assignVehicle($vehicle);
                     unset($workVehicles[$vehicleKey]);
                     $lists--;
                     break;

@@ -174,11 +174,19 @@ class RideNode {
         $this->nextNode = $node;
     }
 
+    public function removeNextNode() {
+        $this->nextNode = null;
+    }
+
     /**
      * @param RideNode $node
      */
     public function setPreviousNode(RideNode &$node) {
         $this->previousNode = $node;
+    }
+
+    public function removePreviousNode() {
+        $this->previousNode = null;
     }
 
     /**

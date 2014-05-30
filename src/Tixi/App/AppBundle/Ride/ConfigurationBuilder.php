@@ -130,7 +130,7 @@ class ConfigurationBuilder {
     public function buildConfigurationFromExistingMissions() {
         foreach ($this->drivingPools as $pool) {
             $rideNodeList = new RideNodeList();
-            $rideNodeList->setDrivingPoolId($pool->getId());
+            $rideNodeList->assignDrivingPoolToList($pool);
             if ($pool->hasAssociatedDrivingMissions()) {
                 $nodes = $this->createRideNodesFromDrivingMissions($pool->getDrivingMissions());
                 $this->sortNodesByStartMinute($nodes);
@@ -272,4 +272,59 @@ class ConfigurationBuilder {
         $this->rideConfiguration = $rideConfiguration;
     }
 
+
+    /**
+     * builds an adjacence matrix (array[][]) for a map between all possible node rides
+     * if its not feasible or same node, value is = -1
+     * if its feasible, value is = emptyRide between these two nodes
+     * @param $rideNodes RideNode[]
+     * @param $emptyRideNodes
+     * @return array
+     */
+    public static function buildAdjacenceMatrixFromNodes($rideNodes, $emptyRideNodes) {
+        $adjacenceMatrix = array();
+        foreach ($rideNodes as $leftNode) {
+            foreach ($rideNodes as $rightNode) {
+                if ($leftNode === $rightNode) {
+                    //same node not feasible
+                    $adjacenceMatrix[$leftNode->getRideHash()][$rightNode->getRideHash()] = -1;
+                    continue;
+                }
+                //feasible nodes in time slice, so get emptyRide between
+                if ($leftNode->endMinute < $rightNode->startMinute) {
+                    $ride = self::getEmptyRideFromTwoNodes($leftNode, $rightNode, $emptyRideNodes);
+                    $feasibleTimeForNextNode = $leftNode->endMinute + $ride->duration + DispositionVariables::ARRIVAL_BEFORE_PICKUP;
+                    //feasible nodes with emptyRide between
+                    if ($feasibleTimeForNextNode <= $rightNode->startMinute) {
+                        //if our criteria is distance, get this between two nodes
+                        $adjacenceMatrix[$leftNode->getRideHash()][$rightNode->getRideHash()] = $ride;
+                        continue;
+                    }
+                }
+                //not definitly two feasible nodes = -1
+                $adjacenceMatrix[$leftNode->getRideHash()][$rightNode->getRideHash()] = -1;
+            }
+        }
+        return $adjacenceMatrix;
+    }
+
+    /**
+     * @param RideNode $startNode
+     * @param \Tixi\App\AppBundle\Ride\RideNode $targetNode
+     * @return string
+     */
+    public static function getHashFromTwoNodes(RideNode $startNode, RideNode $targetNode) {
+        return hash('md2', $startNode->targetAddress->getHashFromBigIntCoordinates()
+            . $targetNode->startAddress->getHashFromBigIntCoordinates());
+    }
+
+    /**
+     * @param RideNode $startNode
+     * @param RideNode $targetNode
+     * @param $emptyRideNodes
+     * @return RideNode
+     */
+    public static function getEmptyRideFromTwoNodes(RideNode $startNode, RideNode $targetNode, $emptyRideNodes) {
+        return $emptyRideNodes[self::getHashFromTwoNodes($startNode, $targetNode)];
+    }
 }

@@ -10,6 +10,7 @@ namespace Tixi\App\AppBundle\Ride;
 
 
 use Tixi\App\AppBundle\Ride\RideNode;
+use Tixi\CoreDomain\Dispo\DrivingPool;
 use Tixi\CoreDomain\Vehicle;
 use Tixi\CoreDomain\VehicleCategory;
 
@@ -19,9 +20,9 @@ use Tixi\CoreDomain\VehicleCategory;
  */
 class RideNodeList {
     /**
-     * @var int
+     * @var DrivingPool
      */
-    protected $drivingPoolId;
+    protected $drivingPool;
     /**
      * time above all included emptyRideNodes
      * @var int
@@ -146,29 +147,27 @@ class RideNodeList {
      */
     public function switchRideNodeAtPosition($position, RideNode $rideNode) {
         $switchNode = $this->rideNodes[$position];
-
-        if ($this->lastNode === $switchNode) {
-            $this->setLastNode($rideNode);
-            $prev = $switchNode->previousNode;
+        $prev = $switchNode->previousNode;
+        $next = $switchNode->nextNode;
+        if ($prev) {
             $rideNode->setPreviousNode($prev);
             $prev->setNextNode($rideNode);
+        } else {
+            $rideNode->removePreviousNode();
         }
-        else if($this->firstNode === $switchNode){
-            $this->setFirstNode($rideNode);
-            $next = $switchNode->nextNode;
+        if ($next) {
             $rideNode->setNextNode($next);
             $next->setPreviousNode($rideNode);
         } else {
-            $next = $switchNode->nextNode;
-            $rideNode->setNextNode($next);
-            $next->setPreviousNode($rideNode);
-            $prev = $switchNode->previousNode;
-            $rideNode->setPreviousNode($prev);
-            $prev->setNextNode($rideNode);
+            $rideNode->removeNextNode();
         }
-
+        if ($this->lastNode === $switchNode) {
+            $this->setLastNode($rideNode);
+        }
+        if ($this->firstNode === $switchNode) {
+            $this->setFirstNode($rideNode);
+        }
         $this->rideNodes[$position] = $rideNode;
-        $this->counter++;
     }
 
     /**
@@ -189,8 +188,8 @@ class RideNodeList {
         }
     }
 
-    private function recreateRideNodeListInformation($emptyRides){
-        foreach($this->rideNodes as $nodes){
+    private function recreateRideNodeListInformation($emptyRides) {
+        foreach ($this->rideNodes as $nodes) {
 
         }
     }
@@ -290,17 +289,59 @@ class RideNodeList {
     }
 
     /**
-     * @param int $drivingPoolId
+     * @param DrivingPool $drivingPool
      */
-    public function setDrivingPoolId($drivingPoolId) {
-        $this->drivingPoolId = $drivingPoolId;
+    public function assignDrivingPoolToList(DrivingPool $drivingPool) {
+        $this->drivingPool = $drivingPool;
     }
 
     /**
-     * @return int
+     * @return DrivingPool
      */
-    public function getDrivingPoolId() {
-        return $this->drivingPoolId;
+    public function getDrivingPoolForList() {
+        return $this->drivingPool;
+    }
+
+    /**
+     * @param int $maxPassengersOnRide
+     */
+    public function setMaxPassengersOnRide($maxPassengersOnRide) {
+        $this->maxPassengersOnRide = $maxPassengersOnRide;
+    }
+
+    /**
+     * @param int $maxWheelChairsOnRide
+     */
+    public function setMaxWheelChairsOnRide($maxWheelChairsOnRide) {
+        $this->maxWheelChairsOnRide = $maxWheelChairsOnRide;
+    }
+
+    /**
+     * @param int $totalEmptyRideTime
+     */
+    public function setTotalEmptyRideTime($totalEmptyRideTime) {
+        $this->totalEmptyRideTime = $totalEmptyRideTime;
+    }
+
+    /**
+     * @param int $totalEmptyRideDistance
+     */
+    public function setTotalEmptyRideDistance($totalEmptyRideDistance) {
+        $this->totalEmptyRideDistance = $totalEmptyRideDistance;
+    }
+
+    /**
+     * @param int $totalDistance
+     */
+    public function setTotalDistance($totalDistance) {
+        $this->totalDistance = $totalDistance;
+    }
+
+    /**
+     * @param \Tixi\CoreDomain\VehicleCategory[] $contradictingVehicleCategories
+     */
+    public function setContradictingVehicleCategories($contradictingVehicleCategories) {
+        $this->contradictingVehicleCategories = $contradictingVehicleCategories;
     }
 
     /**

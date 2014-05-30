@@ -34,6 +34,10 @@ class RideStrategyLeastDistance implements RideStrategy {
      * @var $drivingPools DrivingPool[]
      */
     protected $drivingPools;
+    /**
+     * @var array[][]
+     */
+    protected $adjacenceMatrix;
 
     /**
      * @param $rideNodes
@@ -49,6 +53,8 @@ class RideStrategyLeastDistance implements RideStrategy {
 
         $workNodes = $this->rideNodes;
         ConfigurationBuilder::sortNodesByStartMinute($workNodes);
+
+        $this->adjacenceMatrix = ConfigurationBuilder::buildAdjacenceMatrixFromNodes($workNodes, $emptyRideNodes);
 
         return $this->buildLeastDistanceConfiguration($workNodes);
     }
@@ -67,6 +73,8 @@ class RideStrategyLeastDistance implements RideStrategy {
 
         $workNodes = $this->rideNodes;
         ConfigurationBuilder::sortNodesByStartMinute($workNodes);
+
+        $this->adjacenceMatrix = ConfigurationBuilder::buildAdjacenceMatrixFromNodes($workNodes, $emptyRideNodes);
 
         //build some configs and return feasible configs
         $rideConfigurations = array();
@@ -87,7 +95,6 @@ class RideStrategyLeastDistance implements RideStrategy {
                 $rideConfigurations[] = $rideConfiguration;
             }
         }
-
         return $rideConfigurations;
     }
 
@@ -112,7 +119,7 @@ class RideStrategyLeastDistance implements RideStrategy {
             $rideNodeList->addRideNode(array_shift($workRideNodes));
 
             $poolExtraMinutesPerRide = 0;
-            if($drivingPool->hasAssociatedDriver()){
+            if ($drivingPool->hasAssociatedDriver()) {
                 $poolExtraMinutesPerRide += $drivingPool->getDriver()->getExtraMinutes();
             }
 
@@ -126,27 +133,21 @@ class RideStrategyLeastDistance implements RideStrategy {
 
                 //check all nodes in workSet for feasible and best distance
                 foreach ($workRideNodes as $compareNodeKey => $compareNode) {
-
-                    //not feasible time, get next node
-                    if (!($actualNode->endMinute < $compareNode->startMinute)) {
+                    $emptyRide = $this->adjacenceMatrix[$actualNode->getRideHash()][$compareNode->getRideHash()];
+                    //not feasible, get next node
+                    if ($emptyRide === -1) {
                         continue;
                     }
-
-                    $emptyRide = $this->getEmptyRideFromTwoNodes($actualNode, $compareNode);
-
                     $feasibleTimeForNextNode = $actualNode->endMinute + $emptyRide->duration
                         + DispositionVariables::ARRIVAL_BEFORE_PICKUP + $poolExtraMinutesPerRide;
-
                     //feasible time for node + emptyRide -> to next node
                     if ($feasibleTimeForNextNode <= $compareNode->startMinute) {
-
                         if ($actualDistance === -1) {
                             $bestNode = $compareNode;
                             $bestNodeKey = $compareNodeKey;
                             $bestEmptyRide = $emptyRide;
                             $actualDistance = $emptyRide->distance;
                         }
-
                         if ($emptyRide->distance < $actualDistance) {
                             $bestNode = $compareNode;
                             $bestNodeKey = $compareNodeKey;
@@ -154,7 +155,6 @@ class RideStrategyLeastDistance implements RideStrategy {
                             $actualDistance = $emptyRide->distance;
                         }
                     }
-
                 }
 
                 if ($bestNode && $bestEmptyRide) {
@@ -169,24 +169,5 @@ class RideStrategyLeastDistance implements RideStrategy {
         }
         $rideConfiguration->setNotFeasibleNodes($workRideNodes);
         return $rideConfiguration;
-    }
-
-    /**
-     * @param RideNode $startNode
-     * @param \Tixi\App\AppBundle\Ride\RideNode $targetNode
-     * @return string
-     */
-    private function getHashFromTwoNodes(RideNode $startNode, RideNode $targetNode) {
-        return hash('md2', $startNode->targetAddress->getHashFromBigIntCoordinates()
-            . $targetNode->startAddress->getHashFromBigIntCoordinates());
-    }
-
-    /**
-     * @param RideNode $startNode
-     * @param RideNode $targetNode
-     * @return RideNode
-     */
-    private function getEmptyRideFromTwoNodes(RideNode $startNode, RideNode $targetNode) {
-        return $this->emptyRides[$this->getHashFromTwoNodes($startNode, $targetNode)];
     }
 }

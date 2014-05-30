@@ -23,13 +23,13 @@ use Tixi\CoreDomain\Dispo\DrivingPool;
  */
 class RideStrategyAnnealing implements RideStrategy {
     /**
-     * @var $emptyRides RideNode[]
-     */
-    protected $emptyRides;
-    /**
      * @var $rideNodes RideNode[]
      */
     protected $rideNodes;
+    /**
+     * @var $emptyRides RideNode[]
+     */
+    protected $emptyRideNodes;
     /**
      * @var $drivingPools DrivingPool[]
      */
@@ -49,12 +49,20 @@ class RideStrategyAnnealing implements RideStrategy {
     public function buildConfiguration($rideNodes, $drivingPools, $emptyRideNodes, RideConfiguration $existingConfiguration = null) {
         $this->rideNodes = $rideNodes;
         $this->drivingPools = $drivingPools;
-        $this->emptyRides = $emptyRideNodes;
+        $this->emptyRideNodes = $emptyRideNodes;
 
         $workNodes = $this->rideNodes;
         ConfigurationBuilder::sortNodesByStartMinute($workNodes);
 
-        return $this->buildFeasibleConfiguration($workNodes);
+        $this->adjacenceMatrix = ConfigurationBuilder::buildAdjacenceMatrixFromNodes($workNodes, $emptyRideNodes);
+
+        $initialConfiguration = $this->buildFeasibleConfiguration($workNodes);
+        $configurations = $this->annealConfigurations($initialConfiguration);
+
+        //sort and return best configuration
+        ConfigurationBuilder::sortRideConfigurationsByUsedVehicleAndDistance($configurations);
+        return $configurations[0];
+
     }
 
     /**
@@ -67,19 +75,28 @@ class RideStrategyAnnealing implements RideStrategy {
     public function buildConfigurations($rideNodes, $drivingPools, $emptyRideNodes, $factor) {
         $this->rideNodes = $rideNodes;
         $this->drivingPools = $drivingPools;
-        $this->emptyRides = $emptyRideNodes;
-        $configurations = array();
+        $this->emptyRideNodes = $emptyRideNodes;
 
         $workNodes = $this->rideNodes;
         ConfigurationBuilder::sortNodesByStartMinute($workNodes);
-
-        $this->adjacenceMatrix = $this->buildAdjacenceMatrixFromNodes($workNodes);
+        $this->adjacenceMatrix = ConfigurationBuilder::buildAdjacenceMatrixFromNodes($workNodes, $emptyRideNodes);
 
         $initialConfiguration = $this->buildFeasibleConfiguration($workNodes);
-        $initialDistance = $initialConfiguration->getTotalDistance();
-        $configurations[] = $initialConfiguration;
+        $configurations = $this->annealConfigurations($initialConfiguration);
 
-        //Annealing
+        //sort by best and return configurations
+        return $configurations;
+    }
+
+    /**
+     * Use Simulated Annealing to randomize and optimize an existing feasible Configuration
+     * @param $initialConfiguration RideConfiguration
+     * @return array
+     */
+    private function annealConfigurations($initialConfiguration) {
+        $configurations = array();
+        $initialDistance = $initialConfiguration->getTotalDistance();
+
         $iteration = -1;
         $temperature = 10000.0;
         $coolingRate = 0.999;
@@ -112,7 +129,6 @@ class RideStrategyAnnealing implements RideStrategy {
             $iteration++;
         }
 
-        ConfigurationBuilder::sortRideConfigurationsByUsedVehicleAndDistance($configurations);
         echo $iteration . " Iterations\n";
         echo "Initial Distance: " . $initialDistance / 1000 . "km - ";
         echo "best Annealed Distance: " . $bestDistance / 1000 . "km - ";
@@ -168,7 +184,7 @@ class RideStrategyAnnealing implements RideStrategy {
         foreach ($list->getRideNodes() as $node) {
             $totalDistance += $node->distance;
             if ($node->nextNode) {
-                $emptyRide = $this->getEmptyRideFromTwoNodes($node, $node->nextNode);
+                $emptyRide = $this->adjacenceMatrix[$node->getRideHash()][$node->nextNode->getRideHash()];
                 $totalEmptyRideTime += $emptyRide->duration;
                 $totalEmptyRideDistance += $emptyRide->distance;
                 $totalDistance += $emptyRide->distance;
@@ -269,11 +285,11 @@ class RideStrategyAnnealing implements RideStrategy {
                 $actualDuration = -1;
                 //check all nodes in workSet for feasible and best distance
                 foreach ($workRideNodes as $compareNodeKey => $compareNode) {
-                    //not feasible time, get next node
-                    if (!($actualNode->endMinute < $compareNode->startMinute)) {
+                    //not feasible, get next node
+                    $emptyRide = $this->adjacenceMatrix[$actualNode->getRideHash()][$compareNode->getRideHash()];
+                    if ($emptyRide === -1) {
                         continue;
                     }
-                    $emptyRide = $this->getEmptyRideFromTwoNodes($actualNode, $compareNode);
                     $feasibleTimeForNextNode = $actualNode->endMinute + $emptyRide->duration
                         + DispositionVariables::ARRIVAL_BEFORE_PICKUP + $poolExtraMinutesPerRide;
                     //feasible time for node + emptyRide -> to next node
@@ -306,58 +322,5 @@ class RideStrategyAnnealing implements RideStrategy {
         $rideConfiguration->removeEmptyRideNodeLists();
 
         return $rideConfiguration;
-    }
-
-    /**
-     * builds an adjacence matrix (array[][]) for a map between all possible node rides
-     * if its not feasible or same node, value is = -1
-     * if its feasible, value is = distance between these nodes
-     * @param $rideNodes RideNode[]
-     * @return array
-     */
-    private function buildAdjacenceMatrixFromNodes($rideNodes) {
-        $adjacenceMatrix = array();
-        foreach ($rideNodes as $leftNode) {
-            foreach ($rideNodes as $rightNode) {
-                if ($leftNode === $rightNode) {
-                    //same node not feasible
-                    $adjacenceMatrix[$leftNode->getRideHash()][$rightNode->getRideHash()] = -1;
-                    continue;
-                }
-                //feasible nodes in time slice, so get emptyRide between
-                if ($leftNode->endMinute < $rightNode->startMinute) {
-                    $ride = $this->getEmptyRideFromTwoNodes($leftNode, $rightNode);
-                    $feasibleTimeForNextNode = $leftNode->endMinute + $ride->duration + DispositionVariables::ARRIVAL_BEFORE_PICKUP;
-                    //feasible nodes with emptyRide between
-                    if ($feasibleTimeForNextNode <= $rightNode->startMinute) {
-                        //if our criteria is distance, get this between two nodes
-                        $adjacenceMatrix[$leftNode->getRideHash()][$rightNode->getRideHash()] = $ride->distance;
-                        continue;
-                    }
-                }
-                //not definitly two feasible nodes = -1
-                $adjacenceMatrix[$leftNode->getRideHash()][$rightNode->getRideHash()] = -1;
-            }
-        }
-        return $adjacenceMatrix;
-    }
-
-    /**
-     * @param RideNode $startNode
-     * @param \Tixi\App\AppBundle\Ride\RideNode $targetNode
-     * @return string
-     */
-    private function getHashFromTwoNodes(RideNode $startNode, RideNode $targetNode) {
-        return hash('md2', $startNode->targetAddress->getHashFromBigIntCoordinates()
-            . $targetNode->startAddress->getHashFromBigIntCoordinates());
-    }
-
-    /**
-     * @param RideNode $startNode
-     * @param RideNode $targetNode
-     * @return RideNode
-     */
-    private function getEmptyRideFromTwoNodes(RideNode $startNode, RideNode $targetNode) {
-        return $this->emptyRides[$this->getHashFromTwoNodes($startNode, $targetNode)];
     }
 }

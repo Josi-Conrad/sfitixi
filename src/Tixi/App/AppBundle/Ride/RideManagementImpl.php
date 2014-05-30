@@ -79,8 +79,7 @@ class RideManagementImpl extends ContainerAware implements RideManagement {
      */
     public function getOptimizedPlanForShift(Shift $shift) {
         //STRATEGY for RideOptimization
-        $rideStrategy = new RideStrategyLeastDistance();
-        //$rideStrategy = new RideStrategyAnnealing();
+        $rideStrategy = new RideStrategyAnnealing();
 
         //TODO: Problem with shift before and after + pool assignments
         $em = $this->container->get('entity_manager');
@@ -117,7 +116,7 @@ class RideManagementImpl extends ContainerAware implements RideManagement {
         //get routing information from routing machine and fill node objects
         $emptyRides = $routeManagement->fillRoutesForMultipleRideNodes($emptyRides);
         $e = microtime(true);
-        echo "\n\nFilled " . count($emptyRides) . " emptyRideNodes with routing informations in: " . ($e - $s) . "s\n";
+        echo "\n\nFilled " . count($emptyRides) . " rides from RoutingMachine in: " . ($e - $s) . "s\n";
 
         $s = microtime(true);
         //ride configuration with factor of all nodes (change all first entries once) and the same amount for shuffling
@@ -156,9 +155,7 @@ class RideManagementImpl extends ContainerAware implements RideManagement {
 
         $rideAnalyzer->assignMissionsToPools($rideConfiguration);
 
-        foreach ($rideConfigurations as $rideConfig) {
-            $this->printConfiguration($rideConfig);
-        }
+        $this->printConfiguration($rideConfiguration);
 
         //if everything worked return successfully
         $em->commit();
@@ -171,9 +168,10 @@ class RideManagementImpl extends ContainerAware implements RideManagement {
      * @param RideConfiguration $rideConfig
      */
     private function printConfiguration(RideConfiguration $rideConfig) {
-        echo "Used Vehicles:\t" . $rideConfig->getAmountOfUsedVehicles() . "\n";
-        echo "Configuration total empty rides time:\t" . $rideConfig->getTotalEmptyRideTime() . "min\n";
-        echo "Configuration total empty ride distance:\t" . $rideConfig->getTotalEmptyRideDistance() / 1000 . "km\n";
+        echo "Configuration Vehicles: " . $rideConfig->getAmountOfUsedVehicles() . " - ";
+        echo "Distance: " . $rideConfig->getTotalDistance() / 1000 . "km - ";
+        echo "EmptyRideTime: " . $rideConfig->getTotalEmptyRideTime() . "min - ";
+        echo "EmptyRideDistance: " . $rideConfig->getTotalEmptyRideDistance() / 1000 . "km\n";
         echo "Choosen Vehicles: ";
         foreach ($rideConfig->getDrivingPools() as $pool) {
             if ($pool->hasAssociatedVehicle()) {
@@ -191,6 +189,7 @@ class RideManagementImpl extends ContainerAware implements RideManagement {
             }
             echo "\n";
         }
+        echo "\n";
     }
 
     private function fallback() {
