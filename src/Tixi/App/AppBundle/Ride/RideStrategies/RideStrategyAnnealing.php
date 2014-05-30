@@ -34,7 +34,9 @@ class RideStrategyAnnealing implements RideStrategy {
      * @var $drivingPools DrivingPool[]
      */
     protected $drivingPools;
-
+    /**
+     * @var array[][]
+     */
     protected $adjacenceMatrix;
 
     /**
@@ -66,63 +68,171 @@ class RideStrategyAnnealing implements RideStrategy {
         $this->rideNodes = $rideNodes;
         $this->drivingPools = $drivingPools;
         $this->emptyRides = $emptyRideNodes;
+        $configurations = array();
 
         $workNodes = $this->rideNodes;
         ConfigurationBuilder::sortNodesByStartMinute($workNodes);
 
         $this->adjacenceMatrix = $this->buildAdjacenceMatrixFromNodes($workNodes);
-        $currentConfiguration = $this->buildFeasibleConfiguration($workNodes);
+
+        $initialConfiguration = $this->buildFeasibleConfiguration($workNodes);
+        $initialDistance = $initialConfiguration->getTotalDistance();
+        $configurations[] = $initialConfiguration;
 
         //Annealing
         $iteration = -1;
         $temperature = 10000.0;
-        $distance = 0;
-        $deltaDistance = 0;
-        $coolingRate = 0.9999;
-        $absoluteTemperature = 0.00001;
+        $coolingRate = 0.999;
+        $absoluteTemperature = 0.0001;
 
+        $distance = $initialDistance;
+        $bestDistance = $initialDistance;
+        $currentConfiguration = clone $initialConfiguration;
+
+        echo "Annealing with Temperatur: " . $temperature . " and ";
         while ($temperature > $absoluteTemperature) {
+            $nextConfiguration = $this->getNextRandomConfiguration($currentConfiguration);
+            if ($nextConfiguration !== null) {
+                $nextDistance = $nextConfiguration->getTotalDistance();
+                $deltaDistance = $nextDistance - $distance;
 
-            $nextConfiguration = $this->randomSwitchTwoNodes($currentConfiguration);
-
-            $ran = mt_rand($absoluteTemperature * $temperature, $coolingRate * $temperature) / $temperature;
-            if (($deltaDistance < 0) || ($distance > 0 && exp(-$deltaDistance / $temperature) > $ran)) {
-
+                //random next double 0.0 > ran < 1.0 gives us Boltzman condition value for acceptance
+                $ran = mt_rand(1, 100000000) / 100000000;
+                //we accept the configuration if distance is lower or satisfies Boltzman condition
+                if (($deltaDistance < 0) || ($distance > 0 && exp(-$deltaDistance / $temperature) > $ran)) {
+                    $distance = $nextDistance;
+                    if ($distance < $bestDistance) {
+                        $bestDistance = $nextDistance;
+                        $configurations[] = clone $nextConfiguration;
+                    }
+                }
             }
-
+            //cool down!
+            $temperature *= $coolingRate;
             $iteration++;
         }
 
-        $rideConfigurations = array();
-        for ($i = 0; $i < 2; $i++) {
-            $rideConfigurations[] = $this->buildConfiguration($rideNodes, $drivingPools, $emptyRideNodes);
-        }
-        return $rideConfigurations;
+        ConfigurationBuilder::sortRideConfigurationsByUsedVehicleAndDistance($configurations);
+        echo $iteration . " Iterations\n";
+        echo "Initial Distance: " . $initialDistance / 1000 . "km - ";
+        echo "best Annealed Distance: " . $bestDistance / 1000 . "km - ";
+        echo "saved " . ($initialDistance - $bestDistance) / 1000 . "km\n";
+
+        return $configurations;
     }
 
+    /**
+     * @param RideConfiguration $config
+     * @return null|RideConfiguration
+     */
+    private function getNextRandomConfiguration(RideConfiguration $config) {
+        $nextConfig = clone $config;
 
-    private function randomSwitchTwoNodes(RideConfiguration $config){
-        $nextConfig = $config;
+        //random node from random list
+        $l1 = mt_rand(0, count($nextConfig->getRideNodeLists()) - 1);
+        $list1 = clone $nextConfig->getRideNodeLists()[$l1];
+        $n1 = mt_rand(0, count($list1->getRideNodes()) - 1);
+        $node1 = clone $list1->getRideNodes()[$n1];
 
-        $l1 = mt_rand(0, count($config->getRideNodeLists())-1);
-        $list1 = $config->getRideNodeLists()[$l1];
-        $n1 = mt_rand(0, count($list1->getRideNodes())-1);
-        $node1 = $list1->getRideNodes()[$n1];
+        $l2 = mt_rand(0, count($nextConfig->getRideNodeLists()) - 1);
+        $list2 = clone $nextConfig->getRideNodeLists()[$l2];
+        $n2 = mt_rand(0, count($list2->getRideNodes()) - 1);
+        $node2 = clone $list2->getRideNodes()[$n2];
 
-        $l2 = mt_rand(0, count($config->getRideNodeLists())-1);
-        $list2 = $config->getRideNodeLists()[$l2];
-        $n2 = mt_rand(0, count($list2->getRideNodes())-1);
-        $node2 = $list2->getRideNodes()[$n2];
-
-        $feas = $this->adjacenceMatrix[$node1->getRideHash()][$node2->getRideHash()];
-
-        if($feas !== -1 && $feas !== 0){
-
+        //possible to switch? update all information
+        if ($this->isNodeFeasibleToSwitch($node2, $node1) && $this->isNodeFeasibleToSwitch($node1, $node2)) {
+            $list1->switchRideNodeAtPosition($n1, $node2);
+            $list2->switchRideNodeAtPosition($n2, $node1);
+            //update all information
+            $this->updateRideNodeListInformation($list1);
+            $this->updateRideNodeListInformation($list2);
+            $nextConfig->setRideNodeListAt($l1, $list1);
+            $nextConfig->setRideNodeListAt($l2, $list2);
+            $this->updateRideConfigurationInformation($nextConfig);
         } else {
             return null;
         }
-
         return $nextConfig;
+    }
+
+    /**
+     * @param RideNodeList $list
+     */
+    private function updateRideNodeListInformation(RideNodeList &$list) {
+        $totalDistance = 0;
+        $totalEmptyRideTime = 0;
+        $totalEmptyRideDistance = 0;
+        $maxPassengersOnRide = 0;
+        $maxWheelChairsOnRide = 0;
+        $contradictingVehicleCategories = array();
+        foreach ($list->getRideNodes() as $node) {
+            $totalDistance += $node->distance;
+            if ($node->nextNode) {
+                $emptyRide = $this->getEmptyRideFromTwoNodes($node, $node->nextNode);
+                $totalEmptyRideTime += $emptyRide->duration;
+                $totalEmptyRideDistance += $emptyRide->distance;
+                $totalDistance += $emptyRide->distance;
+            }
+            if ($node->passengers > $maxPassengersOnRide) {
+                $maxPassengersOnRide += $node->passengers;
+            }
+            if ($node->wheelChairs > $maxWheelChairsOnRide) {
+                $maxWheelChairsOnRide = $node->wheelChairs;
+            }
+            if (count($node->contradictingVehicleCategories) > 0) {
+                foreach ($node->contradictingVehicleCategories as $key => $cat) {
+                    $contradictingVehicleCategories[$key] = $cat;
+                }
+            }
+        }
+        $list->setTotalDistance($totalDistance);
+        $list->setTotalEmptyRideDistance($totalEmptyRideDistance);
+        $list->setTotalEmptyRideTime($totalEmptyRideTime);
+        $list->setMaxPassengersOnRide($maxPassengersOnRide);
+        $list->setMaxWheelChairsOnRide($maxWheelChairsOnRide);
+        $list->setContradictingVehicleCategories($contradictingVehicleCategories);
+    }
+
+    /**
+     * @param RideConfiguration $config
+     */
+    private function updateRideConfigurationInformation(RideConfiguration &$config) {
+        $totalDistance = 0;
+        $totalEmptyRideTime = 0;
+        $totalEmptyRideDistance = 0;
+        foreach ($config->getRideNodeLists() as $list) {
+            $totalDistance += $list->getTotalDistance();
+            $totalEmptyRideTime += $list->getTotalEmptyRideTime();
+            $totalEmptyRideDistance += $list->getTotalEmptyRideDistance();
+        }
+        $config->setTotalDistance($totalDistance);
+        $config->setTotalEmptyRideDistance($totalEmptyRideDistance);
+        $config->setTotalEmptyRideTime($totalEmptyRideTime);
+    }
+
+    /**
+     * @param $nodeGettingSwitched
+     * @param $nodeToSwitch
+     * @return array
+     */
+    private function isNodeFeasibleToSwitch(RideNode $nodeGettingSwitched, RideNode $nodeToSwitch) {
+        $left = $nodeGettingSwitched->previousNode;
+        $right = $nodeGettingSwitched->nextNode;
+        //if previous or next node is null - then we set feas to possible
+        if ($left !== null) {
+            $feasibleLeft = $this->adjacenceMatrix[$left->getRideHash()][$nodeToSwitch->getRideHash()];
+        } else {
+            $feasibleLeft = 0;
+        }
+        if ($right !== null) {
+            $feasibleRight = $this->adjacenceMatrix[$nodeToSwitch->getRideHash()][$right->getRideHash()];
+        } else {
+            $feasibleRight = 0;
+        }
+        if (($feasibleLeft !== -1) && ($feasibleRight !== -1)) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -199,6 +309,9 @@ class RideStrategyAnnealing implements RideStrategy {
     }
 
     /**
+     * builds an adjacence matrix (array[][]) for a map between all possible node rides
+     * if its not feasible or same node, value is = -1
+     * if its feasible, value is = distance between these nodes
      * @param $rideNodes RideNode[]
      * @return array
      */
@@ -207,18 +320,23 @@ class RideStrategyAnnealing implements RideStrategy {
         foreach ($rideNodes as $leftNode) {
             foreach ($rideNodes as $rightNode) {
                 if ($leftNode === $rightNode) {
-                    //same node = 0
-                    $adjacenceMatrix[$leftNode->getRideHash()][$rightNode->getRideHash()] = 0;
+                    //same node not feasible
+                    $adjacenceMatrix[$leftNode->getRideHash()][$rightNode->getRideHash()] = -1;
                     continue;
                 }
+                //feasible nodes in time slice, so get emptyRide between
                 if ($leftNode->endMinute < $rightNode->startMinute) {
-                    //if our criterium is distance, get this between to nodes
-                    $distance = $this->getEmptyRideFromTwoNodes($leftNode, $rightNode)->distance;
-                    $adjacenceMatrix[$leftNode->getRideHash()][$rightNode->getRideHash()] = $distance;
-                } else {
-                    //not faesible = -1
-                    $adjacenceMatrix[$leftNode->getRideHash()][$rightNode->getRideHash()] = -1;
+                    $ride = $this->getEmptyRideFromTwoNodes($leftNode, $rightNode);
+                    $feasibleTimeForNextNode = $leftNode->endMinute + $ride->duration + DispositionVariables::ARRIVAL_BEFORE_PICKUP;
+                    //feasible nodes with emptyRide between
+                    if ($feasibleTimeForNextNode <= $rightNode->startMinute) {
+                        //if our criteria is distance, get this between two nodes
+                        $adjacenceMatrix[$leftNode->getRideHash()][$rightNode->getRideHash()] = $ride->distance;
+                        continue;
+                    }
                 }
+                //not definitly two feasible nodes = -1
+                $adjacenceMatrix[$leftNode->getRideHash()][$rightNode->getRideHash()] = -1;
             }
         }
         return $adjacenceMatrix;
