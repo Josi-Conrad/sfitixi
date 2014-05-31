@@ -33,11 +33,12 @@ class ZoneType extends CommonAbstractType{
                 new NotBlank(array('message' => 'field.not_blank'))
             ),
         ));
-        $builder->add('priority', 'integer', array(
+        $builder->add('priority', 'text', array(
             'label' => 'zone.field.priority',
-            'attr'=>array('title' => 'form.field.title.digit'),
+            'attr'=>array('title' => 'zone.field.title.priority'),
+            'pattern' => '[0-9]{1,3}',
             'constraints' => array(
-                new Regex(array('message'=>'form.field.title.digit','pattern'=>'/\d+/'))
+                new NotBlank(array('message'=>'form.field.title.digit'))
             ),
         ));
     }

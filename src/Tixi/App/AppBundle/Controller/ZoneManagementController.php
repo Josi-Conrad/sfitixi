@@ -30,11 +30,11 @@ class ZoneManagementController extends Controller{
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
-    public function getZoneAction(Request $request) {
+    public function getZonePlanAction(Request $request) {
         /** @var ZonePlanManagement $zoneManager */
         $zoneManager = $this->get('tixi_app.zoneplanmanagement');
         $city = $request->get('city');
-        //get the corresponding zone for city string, returns null if nothing was found.
+
         $error = false;
         $zone = null;
         try {
@@ -42,7 +42,7 @@ class ZoneManagementController extends Controller{
         }catch (\InvalidArgumentException $e) {
             $error = true;
         }
-        $zoneTransfer = ZoneAssembler::zoneToZoneTransferDTO($zone, $error);
+        $zoneTransfer = ZoneAssembler::zoneToZoneTransferDTO($zone, $error, $this->get('translator'));
         $response = new JsonResponse();
         $response->setData($zoneTransfer->toArray());
         return $response;

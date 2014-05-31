@@ -13,17 +13,20 @@ use Tixi\CoreDomain\Zone;
 
 class ZoneAssembler {
 
-    public static function zoneToZoneTransferDTO($zone, $error) {
+    public static function zoneToZoneTransferDTO($zone, $error, $translator) {
         $zoneTransferDTO = new ZoneTransferDTO();
         if($error) {
             $zoneTransferDTO->status = ZoneTransferDTO::ERROR;
-        }elseif($zone === null) {
-            $zoneTransferDTO->status = ZoneTransferDTO::NOTFOUND;
-        }else {
+        }
+        else {
             /** @var Zone $zone */
-            $zoneTransferDTO->status = ZoneTransferDTO::FOUND;
+            if($zone->isUnclassified()) {
+                $zoneTransferDTO->status = ZoneTransferDTO::UNCLASSIFIED;
+            }else {
+                $zoneTransferDTO->status =ZoneTransferDTO::CLASSIFIED;
+            }
             $zoneTransferDTO->zoneId = $zone->getId();
-            $zoneTransferDTO->zoneName = $zone->getName();
+            $zoneTransferDTO->zoneName = $translator->trans($zone->getName());
             $zoneTransferDTO->zonePriority = $zone->getPriority();
         }
         return $zoneTransferDTO;

@@ -39,4 +39,12 @@ class ZoneRepositoryDoctrine extends CommonBaseRepositoryDoctrine implements Zon
             return false;
         }
     }
+
+    public function findUnclassifiedZone()
+    {
+        $qb = parent::createQueryBuilder('z');
+        $qb->where('z.priority = :unclassifiedPriority')
+            ->setParameter('unclassifiedPriority',Zone::UNCLASSIFIEDPRIORITY);
+        return $qb->getQuery()->getOneOrNullResult();
+    }
 }

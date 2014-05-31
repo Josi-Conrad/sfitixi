@@ -32,4 +32,6 @@ interface ZonePlanManagement {
     public function getZoneForAddressData($city, $plz);
 
     public function getZoneForCity($city);
+
+    public function findOrCreateUnclassfiedZone();
 } 
