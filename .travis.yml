@@ -8,7 +8,7 @@ env:
 
 before_script:
   - echo 'date.timezone = "Europe/Zurich"' >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-  - php composer.phar install
+  - php composer.phar update
   - cp app/config/parameters.yml.dist app/config/parameters.yml
   - php app/console doctrine:database:create
   - php app/console doctrine:schema:update --force
