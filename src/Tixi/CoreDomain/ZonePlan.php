@@ -38,7 +38,6 @@ class ZonePlan extends CommonBaseEntity {
      * @ORM\Column(type="text", nullable=true)
      */
     protected $memo;
-
     /**
      * @ORM\ManyToOne(targetEntity="Zone", inversedBy="zonePlans")
      * @ORM\JoinColumn(name="zone_id", referencedColumnName="id")

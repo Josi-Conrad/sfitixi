@@ -22,7 +22,7 @@ class ZoneAssembler {
      * @return Zone
      */
     public function registerDTOtoNewZone(ZoneRegisterDTO $dto) {
-        $zone = Zone::registerZone($dto->name, $dto->rate);
+        $zone = Zone::registerZone($dto->name);
         return $zone;
     }
 
@@ -31,7 +31,7 @@ class ZoneAssembler {
      * @param ZoneRegisterDTO $dto
      */
     public function registerDTOtoZone(Zone $zone, ZoneRegisterDTO $dto) {
-        $zone->updateZone($dto->name, $dto->rate);
+        $zone->updateZone($dto->name);
     }
 
     /**
@@ -42,7 +42,6 @@ class ZoneAssembler {
         $zoneDTO = new ZoneRegisterDTO();
         $zoneDTO->id = $zone->getId();
         $zoneDTO->name = $zone->getName();
-        $zoneDTO->rate = $zone->getRate();
         return $zoneDTO;
     }
 
@@ -66,7 +65,6 @@ class ZoneAssembler {
         $zoneListDTO = new ZoneListDTO();
         $zoneListDTO->id = $zone->getId();
         $zoneListDTO->name = $zone->getName();
-        $zoneListDTO->rate = $zone->getRate();
         return $zoneListDTO;
     }
 }

@@ -42,19 +42,29 @@ class ZonePlanRepositoryDoctrine extends CommonBaseRepositoryDoctrine implements
 
     /**
      * @param \Tixi\CoreDomain\Address $address
-     * @return ZonePlan
+     * @return ZonePlan[]
      */
     public function getZonePlanForAddress(Address $address) {
         $city = $address->getCity();
         $plz = $address->getPostalCode();
-        $postalCode = substr($plz, 0, 1). '%';
+        return $this->getZonePlanForAddressData($city, $plz);
+    }
+
+    /**
+     * @param $city
+     * @param $plz
+     * @return ZonePlan[]
+     */
+    public function getZonePlanForAddressData($city, $plz) {
+        $postalCode = substr($plz, 0, 1) . '%';
 
         $qb = parent::createQueryBuilder('e')
             ->where('e.city = :addCity')
-            ->andWhere('e.postalCode LIKE :addPostalCode')
+            ->OrWhere('e.postalCode LIKE :addPostalCode')
+            ->andWhere('e.isDeleted = 0')
             ->setParameter('addCity', $city)
             ->setParameter('addPostalCode', $postalCode);
-        return $qb->getQuery()->getSingleResult();
+        return $qb->getQuery()->getResult();
     }
 
     public function getZonePlanForCity($city)

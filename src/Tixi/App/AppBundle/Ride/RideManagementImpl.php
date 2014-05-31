@@ -78,12 +78,12 @@ class RideManagementImpl extends ContainerAware implements RideManagement {
      * @return mixed
      */
     public function getOptimizedPlanForShift(Shift $shift) {
-        //STRATEGY for RideOptimization
-        $rideStrategy = new RideStrategyAnnealing();
-
         //TODO: Problem with shift before and after + pool assignments
         $em = $this->container->get('entity_manager');
         $em->beginTransaction();
+
+        //STRATEGY for RideOptimization
+        $rideStrategy = new RideStrategyAnnealing();
 
         $dispoManagement = $this->container->get('tixi_app.dispomanagement');
 
@@ -105,11 +105,12 @@ class RideManagementImpl extends ContainerAware implements RideManagement {
         //clean drivingPools for new optimization
         foreach ($drivingPools as $pool) {
             $pool->removeDrivingMissions();
+            $pool->removeVehicle();
         }
 
-        $rideConfigurator = new ConfigurationBuilder($drivingMissions, $drivingPools, $vehicles, $rideStrategy);
+        $configurationBuilder = new ConfigurationBuilder($drivingMissions, $drivingPools, $vehicles, $rideStrategy);
 
-        $emptyRides = $rideConfigurator->buildAllPossibleEmptyRides();
+        $emptyRides = $configurationBuilder->buildAllPossibleEmptyRides();
 
         $s = microtime(true);
         $routeManagement = $this->container->get('tixi_app.routemanagement');
@@ -120,13 +121,12 @@ class RideManagementImpl extends ContainerAware implements RideManagement {
 
         $s = microtime(true);
         //ride configuration with factor of all nodes (change all first entries once) and the same amount for shuffling
-        $rideConfigurations = $rideConfigurator->buildConfigurations(count($drivingMissions) * 2);
+        $rideConfigurations = $configurationBuilder->buildConfigurations(count($drivingMissions) * 2);
         $e = microtime(true);
         echo "Built rideConfiguration in: " . ($e - $s) . "s\n";
 
-        //sort by certain tactic
-        //TODO: configuration with 13 vehicles and 70km emptyRide, and one with 14 vehicles and 60km emptyRide, which one is better?
-        $rideConfigurator->sortRideConfigurationsByUsedVehicleAndDistance($rideConfigurations);
+        //for efficiency we choose a configuration with less vehicles and less distance to drive
+        $configurationBuilder->sortRideConfigurationsByUsedVehicleAndDistance($rideConfigurations);
 
         if (count($rideConfigurations) < 1) {
             $em->rollback();
@@ -135,8 +135,9 @@ class RideManagementImpl extends ContainerAware implements RideManagement {
 
         //success on setting vehicles to a configuration
         $success = false;
-        $rideAnalyzer = null;
+        $configurationAnalyzer = null;
         $rideConfiguration = null;
+
         //get best feasible configuration (first element in sorted list)
         while (!$success) {
             if (count($rideConfigurations) < 1) {
@@ -144,16 +145,19 @@ class RideManagementImpl extends ContainerAware implements RideManagement {
                 $this->fallback();
             }
             $rideConfiguration = array_shift($rideConfigurations);
-            $rideAnalyzer = new ConfigurationAnalyzer($rideConfiguration);
-            $rideAnalyzer->assignPoolsToRideNodeList();
-            $success = $rideAnalyzer->assignVehiclesToBestConfiguration($vehicles);
+            $configurationAnalyzer = new ConfigurationAnalyzer($rideConfiguration);
+
+            if ($configurationAnalyzer->assignVehiclesToBestConfiguration($vehicles)) {
+                $success = $configurationAnalyzer->assignPoolsToRideNodeList();
+            }
         }
         if (!$success) {
             $em->rollback();
             $this->fallback();
         }
 
-        $rideAnalyzer->assignMissionsToPools($rideConfiguration);
+        //if all configuration and arrangements are possible, set finally missions and vehicle to pool
+        $configurationAnalyzer->assignMissionsAndVehiclesToPool($rideConfiguration);
 
         $this->printConfiguration($rideConfiguration);
 
@@ -192,6 +196,10 @@ class RideManagementImpl extends ContainerAware implements RideManagement {
         echo "\n";
     }
 
+    /**
+     * fallback with action (mail send to inform user?)
+     * @return bool
+     */
     private function fallback() {
         echo "NO FEASIBLE CONFIG";
         return false;

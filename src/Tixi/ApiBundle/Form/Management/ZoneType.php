@@ -32,15 +32,6 @@ class ZoneType extends CommonAbstractType{
                 new NotBlank(array('message' => 'field.not_blank'))
             ),
         ));
-        $builder->add('rate', 'money', array(
-            'label' => 'zone.field.rate',
-            'precision' => 2,
-            'currency' => false,
-            'attr' => array('title' => 'form.field.title.not_blank'),
-            'constraints' => array(
-                new NotBlank(array('message' => 'field.not_blank'))
-            ),
-        ));
     }
 
     /**

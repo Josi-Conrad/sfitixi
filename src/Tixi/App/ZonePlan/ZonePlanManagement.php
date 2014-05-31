@@ -22,5 +22,14 @@ interface ZonePlanManagement {
      * @return Zone
      */
     public function getZoneForAddress(Address $address);
+
+    /**
+     * returns zone which matches city or plz pattern
+     * @param $city
+     * @param $plz
+     * @return Zone
+     */
+    public function getZoneForAddressData($city, $plz);
+
     public function getZoneForCity($city);
 } 

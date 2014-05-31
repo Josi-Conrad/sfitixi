@@ -12,29 +12,49 @@ namespace Tixi\App\AppBundle\ZonePlan;
 use Symfony\Component\DependencyInjection\ContainerAware;
 use Tixi\App\AppBundle\ZonePlan\Point;
 use Tixi\App\AppBundle\ZonePlan\PolygonCalc;
+use Tixi\CoreDomain\Dispo\ZonePlan;
 use Tixi\App\ZonePlan\ZonePlanManagement;
 use Tixi\CoreDomain\Address;
-use Tixi\CoreDomain\ZonePlan;
-use Tixi\CoreDomain\ZonePlanRepository;
+use Tixi\CoreDomain\Zone;
 
 class ZonePlanManagementImpl extends ContainerAware implements ZonePlanManagement {
-
-//    const ZONEPLAN_ID = 0;
-
     /**
      * returns true if coordinates of an address matches in predefined ZonePlan
      * @param $address
-     * @return Zone
+     * @return Zone|null
      */
     public function getZoneForAddress(Address $address) {
-        $zonePlanRepo = $this->container->get('zoneplan_repository');
-        /**@var ZonePlan $zonePlan */
-        $zonePlan = $zonePlanRepo->getZonePlanForAddress($address);
-        $zone = $zonePlan->getZone();
-        return $zone;
+        return $this->getZoneForAddressData($address->getCity(), $address->getPostalCode());
+    }
 
-//        return PolygonCalc::pointInPolygon(new Point($address->getLat(), $address->getLng()),
-//            PolygonCalc::createPolygonFromGeoJSON($innerZone));
+    /**
+     * returns zone which matches city or plz pattern
+     * @param $city
+     * @param $plz
+     * @return Zone
+     */
+    public function getZoneForAddressData($city, $plz) {
+        $zonePlanRepo = $this->container->get('zoneplan_repository');
+        $zonePlans = $zonePlanRepo->getZonePlanForAddressData($city, $plz);
+
+        if ($zonePlans) {
+            foreach ($zonePlans as $zonePlan) {
+                $zone = $zonePlan->getZone();
+                //same city found
+                if ($zonePlan->getCity() === $city) {
+                    return $zone;
+                }
+                //if not city, then compare PLZ substring
+                $zonePlz = $zonePlan->getPostalCode();
+                $plzCompareZone = rtrim($zonePlz, '*');
+                $trims = strlen($zonePlz) - strlen($plzCompareZone);
+                $plzCompare = substr($plz, 0, -$trims);
+                if ($plzCompareZone == $plzCompare) {
+                    return $zone;
+                }
+            }
+        }
+        return null;
     }
 
 

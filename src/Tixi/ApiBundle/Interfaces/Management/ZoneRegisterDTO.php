@@ -15,5 +15,4 @@ namespace Tixi\ApiBundle\Interfaces\Management;
 class ZoneRegisterDTO {
     public $id;
     public $name;
-    public $rate;
 }

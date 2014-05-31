@@ -36,8 +36,8 @@ class ZonePlanType extends CommonAbstractType {
             )));
         $builder->add('postalCode', 'text', array(
             'label' => 'zoneplan.field.postalcode',
-            'pattern' => '^[\+0-9A-Z*]{4,7}',
-            'attr' => array('title' => 'form.field.title.postalcode'),
+            'pattern' => '^[\+0-9][\+0-9*]{3}',
+            'attr' => array('title' => 'form.field.title.postalcodezoneplan'),
             'constraints' => array(
                 new NotBlank(array('message' => 'field.not_blank'))
             ),

@@ -27,14 +27,9 @@ class Zone extends CommonBaseEntity {
      */
     protected $id;
     /**
-     * @ORM\Column(type="string", length=50, unique=true)
+     * @ORM\Column(type="string", length=50)
      */
     protected $name;
-    /**
-     * @ORM\Column(type="decimal", precision=8, scale=2)
-     */
-    protected $rate;
-
     /**
      * @ORM\OneToMany(targetEntity="ZonePlan", mappedBy="zone")
      */
@@ -47,26 +42,20 @@ class Zone extends CommonBaseEntity {
 
     /**
      * @param $name
-     * @param $rate
      * @return Zone
      */
-    public static function registerZone($name, $rate) {
+    public static function registerZone($name) {
         $zone = new Zone();
         $zone->setName($name);
-        $zone->setRate($rate);
         return $zone;
     }
 
     /**
      * @param null $name
-     * @param null $rate
      */
-    public function updateZone($name = null, $rate = null) {
+    public function updateZone($name = null) {
         if (!empty($name)) {
             $this->setName($name);
-        }
-        if (!empty($rate)) {
-            $this->setRate($rate);
         }
         $this->updateModifiedDate();
     }
@@ -112,19 +101,4 @@ class Zone extends CommonBaseEntity {
     public function getName() {
         return $this->name;
     }
-
-    /**
-     * @param mixed $rate
-     */
-    public function setRate($rate) {
-        $this->rate = $rate;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getRate() {
-        return $this->rate;
-    }
-
 }
