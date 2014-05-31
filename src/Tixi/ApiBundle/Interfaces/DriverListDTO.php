@@ -27,7 +27,7 @@ class DriverListDTO implements DataGridSourceClass {
      */
     public $isDeleted = 'false';
     /**
-     * @GridField(propertyId="Driver.gender", headerName="person.field.title", order=2)
+     * @GridField(propertyId="Driver.gender", headerName="person.field.gender", order=2)
      */
     public $gender;
     /**

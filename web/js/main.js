@@ -2,7 +2,7 @@ $(document).ready(function () {
     $('.jqueryDatePicker').each(function () {
         $(this).datepicker({
             dateFormat: "dd.mm.yy",
-            showAnim:   "slideDown"});
+            showAnim: "slideDown"});
     });
     $('.customLink').each(function () {
         if ($(this).hasClass('backButton')) {

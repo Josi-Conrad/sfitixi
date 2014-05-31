@@ -24,7 +24,7 @@ class AppKernel extends Kernel
             new APY\BreadcrumbTrailBundle\APYBreadcrumbTrailBundle(),
             new Tixi\SecurityBundle\TixiSecurityBundle(),
             new Tixi\App\AppBundle\TixiAppBundle(),
-//            new Knp\Bundle\SnappyBundle\KnpSnappyBundle(),
+            new Knp\Bundle\SnappyBundle\KnpSnappyBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

@@ -1,3 +1,4 @@
+# This file is auto-generated during the composer install
 parameters:
     database_driver: pdo_mysql
     database_host: 127.0.0.1
@@ -12,5 +13,4 @@ parameters:
     locale: en
     secret: ThisTokenIsNotSoSecretChangeIt
     time_zone: Europe/Zurich
-
-
+    wkhtmltopdf_path: "/usr/bin/wkhtmltopdf"

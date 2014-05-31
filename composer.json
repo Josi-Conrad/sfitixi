@@ -49,7 +49,7 @@
         "symfony-web-dir": "web",
         "incenteev-parameters": {
             "file": "app/config/parameters.yml",
-            "dist-file": "build/parameters.yml.dist"
+            "dist-file": "app/config/parameters.yml.dist"
         },
         "branch-alias": {
             "dev-master": "2.4-dev"

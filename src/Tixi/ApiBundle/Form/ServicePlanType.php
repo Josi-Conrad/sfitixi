@@ -29,7 +29,6 @@ class ServicePlanType extends CommonAbstractType {
         $builder->add('id', 'hidden');
 
         $builder->add('subject', 'text', array(
-            'required' => false,
             'label' => 'serviceplan.field.subject',
         ));
 
