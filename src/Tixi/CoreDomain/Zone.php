@@ -20,6 +20,10 @@ use Tixi\CoreDomain\Shared\CommonBaseEntity;
  * @ORM\Table(name="zone")
  */
 class Zone extends CommonBaseEntity {
+
+    const MAXZONEPRIORITY = 1000;
+    const UNCLASSIFIEDPRIORITY = 1001;
+
     /**
      * @ORM\Id
      * @ORM\Column(type="integer", name="id")
@@ -49,27 +53,46 @@ class Zone extends CommonBaseEntity {
     /**
      * @param $name
      * @param $priority
+     * @throws \InvalidArgumentException
      * @return Zone
      */
     public static function registerZone($name, $priority) {
         $zone = new Zone();
+        if($priority>self::MAXZONEPRIORITY) {
+            throw new \InvalidArgumentException('priority must be smaller than '.self::MAXZONEPRIORITY);
+        }
         $zone->setName($name);
         $zone->setPriority($priority);
+        return $zone;
+    }
+
+    public static function createUnclassifiedZone() {
+        $zone = new Zone();
+        $zone->setName('zone.unclassified');
+        $zone->setPriority(self::UNCLASSIFIEDPRIORITY);
         return $zone;
     }
 
     /**
      * @param null $name
      * @param null $priority
+     * @throws \InvalidArgumentException
      */
     public function updateZone($name = null, $priority = null) {
         if (!empty($name)) {
             $this->setName($name);
         }
         if(!empty($priority)) {
+            if($priority>self::MAXZONEPRIORITY) {
+                throw new \InvalidArgumentException('priority must be smaller than '.self::MAXZONEPRIORITY);
+            }
             $this->setPriority($priority);
         }
         $this->updateModifiedDate();
+    }
+
+    public function isUnclassified() {
+        return $this->priority === self::UNCLASSIFIEDPRIORITY;
     }
 
     /**

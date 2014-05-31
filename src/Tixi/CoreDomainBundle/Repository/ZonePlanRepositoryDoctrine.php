@@ -67,7 +67,7 @@ class ZonePlanRepositoryDoctrine extends CommonBaseRepositoryDoctrine implements
         return $qb->getQuery()->getResult();
     }
 
-    public function getZonePlanForCity($city)
+    public function findZonePlanForCity($city)
     {
         $qb = parent::createQueryBuilder('e')
             ->where('e.city = :addCity')

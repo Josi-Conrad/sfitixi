@@ -5,6 +5,8 @@ zone.panel.edit: Zone editieren
 zone.panel.new: Neue Zone
 zone.field.name: Zonenname
 zone.field.priority: Priorität
+zone.field.title.priority: Positive Zahl zwischen 0 und 999
+zone.unclassified: Fernfahrt
 zone.button.new: Neue Zone
 zone.button.delete: Zone löschen
 

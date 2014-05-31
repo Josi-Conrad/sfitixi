@@ -12,8 +12,8 @@ namespace Tixi\App\AppBundle\Interfaces;
 class ZoneTransferDTO {
 
     const ERROR = -1;
-    const NOTFOUND = 0;
-    const FOUND = 200;
+    const UNCLASSIFIED = 0;
+    const CLASSIFIED = 1;
 
     public $status;
     public $zoneId;
@@ -23,7 +23,7 @@ class ZoneTransferDTO {
     public function toArray() {
         $zoneArray = array();
         $zoneArray['status'] = $this->status;
-        if($this->status===self::FOUND) {
+        if($this->status!==self::ERROR) {
             $zoneArray['zoneid'] = $this->zoneId;
             $zoneArray['zonename'] = $this->zoneName;
             $zoneArray['zonepriority'] = $this->zonePriority;

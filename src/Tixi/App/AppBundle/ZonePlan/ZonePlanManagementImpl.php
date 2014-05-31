@@ -16,6 +16,8 @@ use Tixi\CoreDomain\Dispo\ZonePlan;
 use Tixi\App\ZonePlan\ZonePlanManagement;
 use Tixi\CoreDomain\Address;
 use Tixi\CoreDomain\Zone;
+use Tixi\CoreDomain\ZonePlanRepository;
+use Tixi\CoreDomain\ZoneRepository;
 
 class ZonePlanManagementImpl extends ContainerAware implements ZonePlanManagement {
     /**
@@ -65,12 +67,27 @@ class ZonePlanManagementImpl extends ContainerAware implements ZonePlanManagemen
         if(null === $city || $city === '') {
             throw new \InvalidArgumentException();
         }
-        $zonePlane = $zonePlanRepository->getZonePlanForCity($city);
+        $zonePlane = $zonePlanRepository->findZonePlanForCity($city);
         $zone = null;
         /** @var ZonePlan */
         if(null !== $zonePlane) {
             $zone = $zonePlane->getZone();
+        }else {
+            $zone = $this->findOrCreateUnclassfiedZone();
         }
         return $zone;
+    }
+
+    public function findOrCreateUnclassfiedZone()
+    {
+        /** @var ZoneRepository $zoneRepository */
+        $zoneRepository = $this->container->get('zone_repository');
+        $unclassifiedZone = $zoneRepository->findUnclassifiedZone();
+        if(null === $unclassifiedZone) {
+            $unclassifiedZone = Zone::createUnclassifiedZone();
+            $zoneRepository->store($unclassifiedZone);
+            $this->container->get('entity_manager')->flush();
+        }
+        return $unclassifiedZone;
     }
 }
