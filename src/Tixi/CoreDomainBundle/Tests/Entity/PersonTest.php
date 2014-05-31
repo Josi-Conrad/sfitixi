@@ -30,6 +30,12 @@ class PersonTest extends CommonBaseTest {
         parent::setUp();
     }
 
+    public function testPersonCategoryAmount(){
+        $pc = $this->personCategoryRepo->find(1);
+        $a = $this->personRepo->getAmountByPersonCategory($pc);
+        echo $a;
+    }
+
     public function testDriverCRUD() {
         $driverCategory = $this->createDriverCategory('Zivildienst');
         $address = Address::registerAddress('Burstrasse 22c', '6333', 'Baar', 'Schweiz');

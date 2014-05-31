@@ -31,6 +31,10 @@ class CommonBaseTest extends WebTestCase {
      */
     protected $personRepo;
     /**
+     * @var \Tixi\CoreDomainBundle\Repository\PersonCategoryRepositoryDoctrine
+     */
+    protected $personCategoryRepo;
+    /**
      * @var \Tixi\CoreDomainBundle\Repository\PassengerRepositoryDoctrine
      */
     protected $passengerRepo;
@@ -187,6 +191,7 @@ class CommonBaseTest extends WebTestCase {
         $this->em = $kernel->getContainer()->get('entity_manager');
 
         $this->personRepo = $kernel->getContainer()->get('person_repository');
+        $this->personCategoryRepo = $kernel->getContainer()->get('personcategory_repository');
         $this->driverRepo = $kernel->getContainer()->get('driver_repository');
         $this->passengerRepo = $kernel->getContainer()->get('passenger_repository');
         $this->driverCategoryRepo = $kernel->getContainer()->get('drivercategory_repository');
@@ -237,7 +242,7 @@ class CommonBaseTest extends WebTestCase {
         $this->em->beginTransaction();
     }
 
-    public function testBase(){
+    public function testBase() {
         $this->assertNotNull($this->em);
     }
 
