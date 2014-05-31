@@ -24,6 +24,7 @@ class ZoneAssembler {
             $zoneTransferDTO->status = ZoneTransferDTO::FOUND;
             $zoneTransferDTO->zoneId = $zone->getId();
             $zoneTransferDTO->zoneName = $zone->getName();
+            $zoneTransferDTO->zonePriority = $zone->getPriority();
         }
         return $zoneTransferDTO;
     }
