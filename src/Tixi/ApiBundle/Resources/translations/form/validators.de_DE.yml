@@ -15,3 +15,4 @@ valid.start_before_end: Start muss vor oder gleich dem Ende sein
 valid.startdate_before_enddate: Start-Datum muss vor dem End-Datum sein
 valid.anchordate_before_enddate: Ab-Datum muss vor dem Bis-Datum sein
 valid.enddate_weekly: Von - Bis muss mindestens eine Woche betreffen
+valid.start_before_end_shifttype: Eine Schicht muss eine klare Zeitspanne vor oder nach Mitternacht haben und die Startzeit muss vor der Endzeit liegen

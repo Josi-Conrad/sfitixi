@@ -10,6 +10,7 @@ namespace Tixi\ApiBundle\Interfaces\Validators;
 
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
+use Tixi\ApiBundle\Interfaces\Dispo\RepeatedDrivingAssertionRegisterDTO;
 
 /**
  * Class DateRangeConstraintValidator
@@ -20,7 +21,7 @@ class RepeatedDrivingAssertionRegisterConstraintValidator extends ConstraintVali
     /**
      * Checks if the passed value is valid.
      *
-     * @param mixed $dto
+     * @param RepeatedDrivingAssertionRegisterDTO $dto
      * @param Constraint $constraint The constraint for the validation
      *
      * @api
