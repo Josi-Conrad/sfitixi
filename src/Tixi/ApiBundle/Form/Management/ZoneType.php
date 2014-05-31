@@ -12,6 +12,7 @@ namespace Tixi\ApiBundle\Form\Management;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Regex;
 use Tixi\ApiBundle\Form\Shared\CommonAbstractType;
 
 /**
@@ -30,6 +31,13 @@ class ZoneType extends CommonAbstractType{
             'attr' => array('title' => 'form.field.title.not_blank'),
             'constraints' => array(
                 new NotBlank(array('message' => 'field.not_blank'))
+            ),
+        ));
+        $builder->add('priority', 'integer', array(
+            'label' => 'zone.field.priority',
+            'attr'=>array('title' => 'form.field.title.digit'),
+            'constraints' => array(
+                new Regex(array('message'=>'form.field.title.digit','pattern'=>'/\d+/'))
             ),
         ));
     }

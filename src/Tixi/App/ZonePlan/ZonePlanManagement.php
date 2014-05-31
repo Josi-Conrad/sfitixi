@@ -7,7 +7,6 @@
  */
 
 namespace Tixi\App\ZonePlan;
-
 use Tixi\CoreDomain\Address;
 use Tixi\CoreDomain\Zone;
 use Tixi\CoreDomain\ZonePlan;
@@ -32,4 +31,5 @@ interface ZonePlanManagement {
      */
     public function getZoneForAddressData($city, $plz);
 
+    public function getZoneForCity($city);
 } 

@@ -32,4 +32,6 @@ interface ZonePlanRepository extends CommonBaseRepository {
      * @return ZonePlan
      */
     public function getZonePlanForAddress(Address $address);
+
+    public function getZonePlanForCity($city);
 }

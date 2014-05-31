@@ -31,9 +31,15 @@ class Zone extends CommonBaseEntity {
      */
     protected $name;
     /**
+     * @ORM\Column(type="smallint")
+    */
+    protected $priority;
+    /**
      * @ORM\OneToMany(targetEntity="ZonePlan", mappedBy="zone")
      */
     protected $zonePlans;
+
+
 
     protected function __construct() {
         $this->zonePlans = new ArrayCollection();
@@ -42,20 +48,26 @@ class Zone extends CommonBaseEntity {
 
     /**
      * @param $name
+     * @param $priority
      * @return Zone
      */
-    public static function registerZone($name) {
+    public static function registerZone($name, $priority) {
         $zone = new Zone();
         $zone->setName($name);
+        $zone->setPriority($priority);
         return $zone;
     }
 
     /**
      * @param null $name
+     * @param null $priority
      */
-    public function updateZone($name = null) {
+    public function updateZone($name = null, $priority = null) {
         if (!empty($name)) {
             $this->setName($name);
+        }
+        if(!empty($priority)) {
+            $this->setPriority($priority);
         }
         $this->updateModifiedDate();
     }
@@ -101,4 +113,22 @@ class Zone extends CommonBaseEntity {
     public function getName() {
         return $this->name;
     }
+
+    /**
+     * @param mixed $priority
+     */
+    public function setPriority($priority)
+    {
+        $this->priority = $priority;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPriority()
+    {
+        return $this->priority;
+    }
+
+
 }

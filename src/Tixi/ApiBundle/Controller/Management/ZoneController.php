@@ -165,7 +165,7 @@ class ZoneController extends Controller {
         $form->handleRequest($request);
         if ($form->isValid()) {
             $zoneDTO = $form->getData();
-            if ($this->zoneNameAlreadyExist($zoneDTO->name)) {
+            if ($zoneDTO->name !== $zone->getName() && $this->zoneNameAlreadyExist($zoneDTO->name)) {
                 $errorMsg = $this->get('translator')->trans('form.error.valid.unique');
                 $error = new FormError($errorMsg);
                 $form->addError($error);
