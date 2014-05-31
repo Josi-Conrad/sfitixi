@@ -56,4 +56,12 @@ class ZonePlanRepositoryDoctrine extends CommonBaseRepositoryDoctrine implements
             ->setParameter('addPostalCode', $postalCode);
         return $qb->getQuery()->getSingleResult();
     }
+
+    public function getZonePlanForCity($city)
+    {
+        $qb = parent::createQueryBuilder('e')
+            ->where('e.city = :addCity')
+            ->setParameter('addCity', $city);
+        return $qb->getQuery()->getOneOrNullResult();
+    }
 }

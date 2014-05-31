@@ -12,10 +12,10 @@ namespace Tixi\App\AppBundle\ZonePlan;
 use Symfony\Component\DependencyInjection\ContainerAware;
 use Tixi\App\AppBundle\ZonePlan\Point;
 use Tixi\App\AppBundle\ZonePlan\PolygonCalc;
-use Tixi\CoreDomain\Dispo\ZonePlan;
 use Tixi\App\ZonePlan\ZonePlanManagement;
 use Tixi\CoreDomain\Address;
-use Tixi\CoreDomain\Zone;
+use Tixi\CoreDomain\ZonePlan;
+use Tixi\CoreDomain\ZonePlanRepository;
 
 class ZonePlanManagementImpl extends ContainerAware implements ZonePlanManagement {
 
@@ -28,7 +28,7 @@ class ZonePlanManagementImpl extends ContainerAware implements ZonePlanManagemen
      */
     public function getZoneForAddress(Address $address) {
         $zonePlanRepo = $this->container->get('zoneplan_repository');
-        /**@var $zone \Tixi\CoreDomain\Zone */
+        /**@var ZonePlan $zonePlan */
         $zonePlan = $zonePlanRepo->getZonePlanForAddress($address);
         $zone = $zonePlan->getZone();
         return $zone;
@@ -36,6 +36,8 @@ class ZonePlanManagementImpl extends ContainerAware implements ZonePlanManagemen
 //        return PolygonCalc::pointInPolygon(new Point($address->getLat(), $address->getLng()),
 //            PolygonCalc::createPolygonFromGeoJSON($innerZone));
     }
+
+
 //
 //    /**
 //     * returns true if coordinates of an address matches in predefined adjacent ZonePlan
@@ -85,4 +87,17 @@ class ZonePlanManagementImpl extends ContainerAware implements ZonePlanManagemen
 //            return $zonePlan;
 //        }
 //    }
+    public function getZoneForCity($city)
+    {
+        /** @var ZonePlanRepository $zonePlanRepository */
+        $zonePlanRepository = $this->container->get('zoneplan_repository');
+        /** @var ZonePlan $zonePlane */
+        $zonePlane = $zonePlanRepository->getZonePlanForCity($city);
+        $zone = null;
+        /** @var ZonePlan */
+        if(null !== $zonePlane) {
+            $zone = $zonePlane->getZone();
+        }
+        return $zone;
+    }
 }

@@ -22,5 +22,5 @@ interface ZonePlanManagement {
      * @return Zone
      */
     public function getZoneForAddress(Address $address);
-
+    public function getZoneForCity($city);
 } 
