@@ -20,6 +20,8 @@ MySQL Version 5.6
 
 Doctrine 2.4
 
+Additional libraries installed
+http://wkhtmltopdf.org/
 
 ### Configuration Requirements
 PHP Extensions must be enabled and configured (mostly in php.ini):
@@ -36,6 +38,11 @@ PHP Parameters shall be set to:
 `xdebug.max_nesting_level=200`  200 or more
 
 `date.timezone`     must be set to a valid Timezone
+
+
+Symfony Bundle Parameters on build shall be set:
+
+`wkhtmltopdf_path` must lead to wkhtmltopdf binary
 
 
 2) Build and Deploy

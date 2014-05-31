@@ -13,5 +13,4 @@ parameters:
     locale: en
     secret: ThisTokenIsNotSoSecretChangeIt
     time_zone: Europe/Zurich
-
-
+    wkhtmltopdf_path: "/usr/bin/wkhtmltopdf"
