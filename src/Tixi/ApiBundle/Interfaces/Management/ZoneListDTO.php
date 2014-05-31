@@ -29,6 +29,10 @@ class ZoneListDTO implements DataGridSourceClass{
      * @GridField(propertyId="Zone.name", headerName="zone.field.name", order=1)
      */
     public $name;
+    /**
+     * @GridField(propertyId="Zone.priority", headerName="zone.field.priority", order=2)
+     */
+    public $priority;
 
     public function getAccessQuery()
     {

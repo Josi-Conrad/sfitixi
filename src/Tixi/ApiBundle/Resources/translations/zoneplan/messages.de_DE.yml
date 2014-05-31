@@ -4,7 +4,7 @@ zone.panel.name: Zone
 zone.panel.edit: Zone editieren
 zone.panel.new: Neue Zone
 zone.field.name: Zonenname
-zone.field.rate: Tarif (CHF)
+zone.field.priority: Priorität
 zone.button.new: Neue Zone
 zone.button.delete: Zone löschen
 
