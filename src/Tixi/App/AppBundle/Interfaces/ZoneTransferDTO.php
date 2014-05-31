@@ -11,19 +11,22 @@ namespace Tixi\App\AppBundle\Interfaces;
 
 class ZoneTransferDTO {
 
-    const FOUND = 1;
+    const ERROR = -1;
     const NOTFOUND = 0;
+    const FOUND = 200;
 
     public $status;
     public $zoneId;
     public $zoneName;
+    public $zonePriority;
 
     public function toArray() {
         $zoneArray = array();
         $zoneArray['status'] = $this->status;
-        if($this->status!==self::NOTFOUND) {
+        if($this->status===self::FOUND) {
             $zoneArray['zoneid'] = $this->zoneId;
             $zoneArray['zonename'] = $this->zoneName;
+            $zoneArray['zonepriority'] = $this->zonePriority;
         }
         return $zoneArray;
     }

@@ -35,8 +35,14 @@ class ZoneManagementController extends Controller{
         $zoneManager = $this->get('tixi_app.zoneplanmanagement');
         $city = $request->get('city');
         //get the corresponding zone for city string, returns null if nothing was found.
-        $zone = $zoneManager->getZoneForCity($city);
-        $zoneTransfer = ZoneAssembler::zoneToZoneTransferDTO($zone);
+        $error = false;
+        $zone = null;
+        try {
+            $zone = $zoneManager->getZoneForCity($city);
+        }catch (\InvalidArgumentException $e) {
+            $error = true;
+        }
+        $zoneTransfer = ZoneAssembler::zoneToZoneTransferDTO($zone, $error);
         $response = new JsonResponse();
         $response->setData($zoneTransfer->toArray());
         return $response;

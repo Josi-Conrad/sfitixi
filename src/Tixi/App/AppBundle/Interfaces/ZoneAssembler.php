@@ -13,9 +13,11 @@ use Tixi\CoreDomain\Zone;
 
 class ZoneAssembler {
 
-    public static function zoneToZoneTransferDTO($zone) {
+    public static function zoneToZoneTransferDTO($zone, $error) {
         $zoneTransferDTO = new ZoneTransferDTO();
-        if($zone === null) {
+        if($error) {
+            $zoneTransferDTO->status = ZoneTransferDTO::ERROR;
+        }elseif($zone === null) {
             $zoneTransferDTO->status = ZoneTransferDTO::NOTFOUND;
         }else {
             /** @var Zone $zone */

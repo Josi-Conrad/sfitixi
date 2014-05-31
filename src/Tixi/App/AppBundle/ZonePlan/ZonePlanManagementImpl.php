@@ -62,6 +62,9 @@ class ZonePlanManagementImpl extends ContainerAware implements ZonePlanManagemen
         /** @var ZonePlanRepository $zonePlanRepository */
         $zonePlanRepository = $this->container->get('zoneplan_repository');
         /** @var ZonePlan $zonePlane */
+        if(null === $city || $city === '') {
+            throw new \InvalidArgumentException();
+        }
         $zonePlane = $zonePlanRepository->getZonePlanForCity($city);
         $zone = null;
         /** @var ZonePlan */
