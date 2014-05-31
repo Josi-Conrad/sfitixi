@@ -10,7 +10,7 @@ use Tixi\CoreDomainBundle\Repository\CommonBaseRepositoryDoctrine;
  * Class ZoneRepositoryDoctrine
  * @package Tixi\CoreDomainBundle\Repository\Dispo
  */
-class ZoneRepositoryDoctrine  extends CommonBaseRepositoryDoctrine implements ZoneRepository {
+class ZoneRepositoryDoctrine extends CommonBaseRepositoryDoctrine implements ZoneRepository {
     /**
      * @param Zone $zone
      * @return mixed|void
@@ -25,5 +25,18 @@ class ZoneRepositoryDoctrine  extends CommonBaseRepositoryDoctrine implements Zo
      */
     public function remove(Zone $zone) {
         $this->getEntityManager()->remove($zone);
+    }
+
+    public function checkIfNameAlreadyExist($name) {
+        $qb = parent::createQueryBuilder('s');
+        $qb->select()
+            ->where('s.isDeleted = 0')
+            ->andWhere('s.name = :duplicateName')
+            ->setParameter('duplicateName', $name);
+        if ($qb->getQuery()->getResult()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

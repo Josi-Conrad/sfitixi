@@ -11,6 +11,7 @@ namespace Tixi\App\AppBundle\Ride;
 
 use Tixi\App\AppBundle\Ride\RideNode;
 use Tixi\CoreDomain\Dispo\DrivingPool;
+use Tixi\CoreDomain\Driver;
 use Tixi\CoreDomain\Vehicle;
 use Tixi\CoreDomain\VehicleCategory;
 
@@ -20,9 +21,15 @@ use Tixi\CoreDomain\VehicleCategory;
  */
 class RideNodeList {
     /**
+     * assigned pool for this ride
      * @var DrivingPool
      */
     protected $drivingPool;
+    /**
+     * assigned vehicle for this ride
+     * @var Vehicle
+     */
+    protected $vehicle;
     /**
      * time above all included emptyRideNodes
      * @var int
@@ -291,16 +298,31 @@ class RideNodeList {
     /**
      * @param DrivingPool $drivingPool
      */
-    public function assignDrivingPoolToList(DrivingPool $drivingPool) {
+    public function assignDrivingPool(DrivingPool $drivingPool) {
         $this->drivingPool = $drivingPool;
     }
 
     /**
      * @return DrivingPool
      */
-    public function getDrivingPoolForList() {
+    public function getDrivingPool() {
         return $this->drivingPool;
     }
+
+    /**
+     * @param Vehicle $vehicle
+     */
+    public function assignVehicle(Vehicle $vehicle) {
+        $this->vehicle = $vehicle;
+    }
+
+    /**
+     * @return Vehicle
+     */
+    public function getVehicle() {
+        return $this->vehicle;
+    }
+
 
     /**
      * @param int $maxPassengersOnRide
@@ -364,5 +386,22 @@ class RideNodeList {
     public function vehicleIsCompatibleWithThisList(Vehicle $vehicle) {
         return ($vehicle->isCompatibleWithPassengerAndWheelChairAmount($this->getMaxPassengersOnRide(), $this->getMaxWheelChairsOnRide())
             && !$this->vehicleCategoryIsContradicting($vehicle->getCategory()));
+    }
+
+    /**
+     * @param Driver $driver
+     * @return bool
+     */
+    public function driverIsCompatibleWithThisList(Driver $driver) {
+        $wh = $driver->getWheelChairAttendance();
+        if ($this->getMaxWheelChairsOnRide() > 1 && $wh == false) {
+            return false;
+        }
+        foreach ($driver->getContradictVehicleCategories() as $contradictCategory) {
+            if ($this->vehicle->getCategory()->getId() == $contradictCategory->getId()) {
+                return false;
+            }
+        }
+        return true;
     }
 }

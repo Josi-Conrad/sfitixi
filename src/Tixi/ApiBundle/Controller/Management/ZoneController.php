@@ -121,16 +121,15 @@ class ZoneController extends Controller {
         $form->handleRequest($request);
         if ($form->isValid()) {
             $zoneDTO = $form->getData();
-            $this->registerOrUpdateZone($zoneDTO);
-            try {
-                $this->get('entity_manager')->flush();
-            } catch (DBALException $e) {
+            if ($this->zoneNameAlreadyExist($zoneDTO->name)) {
                 $errorMsg = $this->get('translator')->trans('form.error.valid.unique');
                 $error = new FormError($errorMsg);
                 $form->addError($error);
                 $form->get('name')->addError($error);
+            } else {
+                $this->registerOrUpdateZone($zoneDTO);
+                $this->get('entity_manager')->flush();
             }
-
             //if no errors/invalids in form
             if (count($form->getErrors()) < 1) {
                 return $this->redirect($this->generateUrl('tixiapi_management_zones_get'));
@@ -166,16 +165,15 @@ class ZoneController extends Controller {
         $form->handleRequest($request);
         if ($form->isValid()) {
             $zoneDTO = $form->getData();
-            $this->registerOrUpdateZone($zoneDTO);
-            try {
-                $this->get('entity_manager')->flush();
-            } catch (DBALException $e) {
+            if ($this->zoneNameAlreadyExist($zoneDTO->name)) {
                 $errorMsg = $this->get('translator')->trans('form.error.valid.unique');
                 $error = new FormError($errorMsg);
                 $form->addError($error);
                 $form->get('name')->addError($error);
+            } else {
+                $this->registerOrUpdateZone($zoneDTO);
+                $this->get('entity_manager')->flush();
             }
-
             //if no errors/invalids in form
             if (count($form->getErrors()) < 1) {
                 return $this->redirect($this->generateUrl('tixiapi_management_zones_get'));
@@ -225,6 +223,18 @@ class ZoneController extends Controller {
             $assembler->registerDTOtoZone($zone, $dto);
             return $zone;
         }
+    }
+
+    /**
+     * @param $name
+     * @return bool
+     */
+    protected function zoneNameAlreadyExist($name) {
+        $zoneRepository = $this->get('zone_repository');
+        if ($zoneRepository->checkIfNameAlreadyExist($name)) {
+            return true;
+        }
+        return false;
     }
 
     /**

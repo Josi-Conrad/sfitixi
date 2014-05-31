@@ -130,7 +130,7 @@ class ConfigurationBuilder {
     public function buildConfigurationFromExistingMissions() {
         foreach ($this->drivingPools as $pool) {
             $rideNodeList = new RideNodeList();
-            $rideNodeList->assignDrivingPoolToList($pool);
+            $rideNodeList->assignDrivingPool($pool);
             if ($pool->hasAssociatedDrivingMissions()) {
                 $nodes = $this->createRideNodesFromDrivingMissions($pool->getDrivingMissions());
                 $this->sortNodesByStartMinute($nodes);

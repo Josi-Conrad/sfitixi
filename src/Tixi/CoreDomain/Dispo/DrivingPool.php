@@ -152,6 +152,10 @@ class DrivingPool {
         $this->vehicle = $vehicle;
     }
 
+    public function removeVehicle(){
+        $this->vehicle = null;
+    }
+
     public function assignDrivingAssertion(DrivingAssertion $drivingAssertion) {
         $this->drivingAssertion = $drivingAssertion;
     }
@@ -204,13 +208,6 @@ class DrivingPool {
      */
     public function getShift() {
         return $this->shift;
-    }
-
-    /**
-     * @param mixed $vehicle
-     */
-    public function setVehicle($vehicle) {
-        $this->vehicle = $vehicle;
     }
 
     /**

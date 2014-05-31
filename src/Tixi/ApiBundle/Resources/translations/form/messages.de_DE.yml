@@ -1,5 +1,6 @@
 #Form field titles
-form.field.title.postalcode: Wert muss einer PLZ entsprechen (6430)
+form.field.title.postalcode: Wert muss einer PLZ entsprechen (z.B. 6430 oder DE99610)
+form.field.title.postalcodezoneplan: Wert gibt ein Pattern für eine Schweizer PLZ an mit mindestens 1 Stelle und maximal drei * Platzhaltern wie 643* oder 6***
 form.field.title.not_blank: Wert erforderlich
 form.field.title.username: Ein Benutzername muss aus mindestens 3 und maximal 20 Zeichen bestehen und darf  Klein- Grossbuchstaben, sowie Zahlen und die Zeichen . - _ beinhalten
 form.field.title.letter_digit: Darf nur aus Buchstaben und Zahlen bestehen

@@ -84,22 +84,30 @@ class ConfigurationAnalyzer {
      * assign DrivingPools to a built rideNodeList
      */
     public function assignPoolsToRideNodeList() {
-        //TODO: maybe any constraints in future for driving pool to some nodes in this list
-        $workPools = $this->rideConfiguration->getDrivingPools();
-        /**@var $pool DrivingPool */
-        foreach ($this->rideConfiguration->getRideNodeLists() as $list) {
-            $pool = array_shift($workPools);
+        $config = $this->rideConfiguration;
+        $workPools = $config->getDrivingPools();
+        $this->sortDrivingPoolsWithDrivers($workPools);
+        $lists = count($config->getRideNodeLists());
 
-            /*
-            if($pool->hasAssociatedDriver()){
-                $wh = $pool->getDriver()->getWheelChairAttendance();
-                if($list->getMaxWheelChairsOnRide() > 1 && $wh === false){
-                    continue;
+        /**@var $pool DrivingPool */
+        foreach ($config->getRideNodeLists() as $nodeList) {
+            foreach ($workPools as $key => $pool) {
+                if ($pool->hasAssociatedDriver()) {
+                    $driver = $pool->getDriver();
+                    if (!$nodeList->driverIsCompatibleWithThisList($driver)) {
+                        continue;
+                    }
                 }
+                $nodeList->assignDrivingPool($pool);
+                unset($workPools[$key]);
+                $lists--;
+                break;
             }
-            */
-            $list->assignDrivingPoolToList($pool);
         }
+        if ($lists < 1) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -108,24 +116,16 @@ class ConfigurationAnalyzer {
      * @return bool
      */
     public function assignVehiclesToBestConfiguration($vehicles) {
-        $workVehicles = $vehicles;
-        $this->sortVehiclesWithSize($workVehicles);
-
         $config = $this->rideConfiguration;
-        $pools = $config->getDrivingPools();
+        $workVehicles = $vehicles;
+        $this->sortVehiclesBySize($workVehicles);
         $lists = count($config->getRideNodeLists());
 
         //for all nodelists search a compatible vehicle, continue in vehicle list if not compatible
         foreach ($config->getRideNodeLists() as $nodeList) {
             foreach ($workVehicles as $vehicleKey => $vehicle) {
                 if ($nodeList->vehicleIsCompatibleWithThisList($vehicle)) {
-                    $pool = $nodeList->getDrivingPoolForList();
-                    if ($pool->hasAssociatedDriver()) {
-                        if (!$pool->getDriver()->isCompatibleWithVehicleCategory($vehicle->getCategory())) {
-                            continue;
-                        }
-                    }
-                    $pools[$pool->getId()]->assignVehicle($vehicle);
+                    $nodeList->assignVehicle($vehicle);
                     unset($workVehicles[$vehicleKey]);
                     $lists--;
                     break;
@@ -140,13 +140,14 @@ class ConfigurationAnalyzer {
 
 
     /**
-     * assign the missions in nodes to every pool <-> nodeList
+     * assign the missions in nodes to every pool
+     * and assigns vehicles to every pool
      */
-    public function assignMissionsToPools() {
-        $workPools = $this->rideConfiguration->getDrivingPools();
-        foreach ($this->rideConfiguration->getRideNodeLists() as $list) {
-            $pool = array_shift($workPools);
-            foreach ($list->getRideNodes() as $node) {
+    public function assignMissionsAndVehiclesToPool() {
+        foreach ($this->rideConfiguration->getRideNodeLists() as $nodeList) {
+            $pool = $nodeList->getDrivingPool();
+            $pool->assignVehicle($nodeList->getVehicle());
+            foreach ($nodeList->getRideNodes() as $node) {
                 $pool->assignDrivingMission($node->drivingMission);
                 $node->drivingMission->assignDrivingPool($pool);
             }
@@ -154,14 +155,27 @@ class ConfigurationAnalyzer {
     }
 
     /**
+     * sorts vehicles after size, smaller vehicles first
      * @param $vehicles
      */
-    private function sortVehiclesWithSize(&$vehicles) {
+    private function sortVehiclesBySize(&$vehicles) {
         usort($vehicles, function ($a, $b) {
             /**@var $a \Tixi\CoreDomain\Vehicle
              * @var $b \Tixi\CoreDomain\Vehicle
              */
             return ($a->getApproximatedSize() > $b->getApproximatedSize());
+        });
+    }
+
+    /**
+     * @param $drivingPools
+     */
+    private function sortDrivingPoolsWithDrivers(&$drivingPools) {
+        usort($drivingPools, function ($a, $b) {
+            /**@var $a DrivingPool
+             * @var $b DrivingPool
+             */
+            return ($a->hasAssociatedDriver() > $b->hasAssociatedDriver());
         });
     }
 
