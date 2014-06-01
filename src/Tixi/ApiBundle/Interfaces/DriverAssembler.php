@@ -48,9 +48,9 @@ class DriverAssembler {
     public function registerDTOToDriver(DriverRegisterDTO $driverDTO, Driver $driver) {
         $driver->updateDriverData($driverDTO->gender, $driverDTO->firstname,
             $driverDTO->lastname, $driverDTO->telephone,
-            $this->addressAssembler->addressLookaheadDTOtoAddress($driverDTO->lookaheadaddress), $driverDTO->licenceNumber, $driverDTO->driverCategory,
-            $driverDTO->wheelChairAttendance, $driverDTO->title,
-            $driverDTO->email, $driverDTO->entryDate, $driverDTO->birthday,
+            $this->addressAssembler->addressLookaheadDTOtoAddress($driverDTO->lookaheadaddress),
+            $driverDTO->licenceNumber, $driverDTO->driverCategory, $driverDTO->wheelChairAttendance,
+            $driverDTO->title, $driverDTO->email, $driverDTO->entryDate, $driverDTO->birthday,
             $driverDTO->extraMinutes, $driverDTO->details, $driverDTO->operationWish, $driverDTO->fax);
         return $driver;
     }
@@ -78,7 +78,7 @@ class DriverAssembler {
         $driverDTO->wheelChairAttendance = $driver->getWheelChairAttendance();
         $driverDTO->operationWish = $driver->getOperationWish();
 
-        $driverDTO->driverCategory = $driver->getDriverCategory()->getName();
+        $driverDTO->driverCategory = $driver->getDriverCategory();
 
         $driverDTO->lookaheadaddress = $this->addressAssembler->addressToAddressLookaheadDTO($driver->getAddress());
 
