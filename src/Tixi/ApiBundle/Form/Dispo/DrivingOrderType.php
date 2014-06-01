@@ -46,6 +46,14 @@ class DrivingOrderType extends CommonAbstractType{
             'late_init' => true
         ));
 
+        $builder->add('zoneStatus','hidden');
+        $builder->add('zoneId','hidden');
+        $builder->add('zoneName','text',array(
+            'label' => 'drivingorder.field.zone',
+            'disabled' => true,
+            'required' => false
+        ));
+
         $builder->add('orderTime', new DrivingOrderTime(), array(
             'required' => false,
         ));

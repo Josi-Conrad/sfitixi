@@ -58,6 +58,20 @@
                 </div>
             </div>
             <div class="row">
+                <div class="form-group">
+                    <div class="col-md-2">
+                        {{ form_label(form.zoneName, null, {'label_attr': {'style':'width:100%', 'class':'control-label' }}
+                        ) }}
+                    </div>
+                    <div class="col-md-8">
+                        {{ form_widget(form.zoneStatus, { 'attr': {'class': 'form-control zoneStatus'} }) }}
+                        {{ form_widget(form.zoneId, { 'attr': {'class': 'form-control zoneId'} }) }}
+                        {{ form_widget(form.zoneName, { 'attr': {'class': 'form-control zoneName'} }) }}
+                        <div class="error_message">{{ form_errors(form.zoneName) }}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
                 <div class="col-md-8 col-md-offset-2 routingInformationWrapper"></div>
             </div>
             <div class="singleTimeWrapper">
@@ -175,7 +189,8 @@
     <script type="text/javascript">
         jQuery(function ($) {
             var drivingOrderController = new DrivingOrder();
-            drivingOrderController.init('addressfrom','addressto','{{ passengerId }}','{{ routingMachineSrcUrl }}', {
+            drivingOrderController.init('addressfrom','addressto','{{ passengerId }}','{{ routingMachineSrcUrl }}',
+                    '{{ zoneServiceSrcUrl }}', {
                 'dateFromLabelSingleText':"{{ 'drivingorder.field.anchordate' | trans }}",
                 'dateFromLabelRepeatedText':"{{ 'drivingorder.field.anchordatelong' | trans }}"
             });

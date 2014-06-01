@@ -112,6 +112,14 @@ function AddressLookahead() {
         return _this._selectedAddress;
     }
 
+    this.getAddressCity = function() {
+        var _city = null;
+        if(_this._selectedAddress) {
+            _city = _this._getAddressFieldValue('city');
+        }
+        return _city;
+    }
+
 
     this._switchToManualAddState = function(edit) {
         var _edit = (undefined === edit) ? false : true;
@@ -266,18 +274,13 @@ function AddressLookahead() {
     this._setSelectedAddress = function(model) {
         _this._selectedAddress = model;
         $('body').trigger('addressChanged',[_this]);
-        console.log('triggered');
     }
 
     this._onAddressSelectionClick = function(model) {
-        _this._setSelectedAddress(model);
-
         $(_this._inputField).val(model.getDisplayName());
         _this._updateAddressContainer(model);
+        _this._setSelectedAddress(model);
         _this._hideAddressSelections();
-//        setTimeout(function() {
-//            $(_this._inputField).focus();
-//        },300);
     }
 
     this._onUserHomeLinkClick = function(passengerId) {

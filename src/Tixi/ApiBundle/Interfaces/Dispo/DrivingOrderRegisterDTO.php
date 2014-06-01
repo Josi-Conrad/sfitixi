@@ -18,6 +18,9 @@ class DrivingOrderRegisterDTO {
     public $anchorDate;
     public $lookaheadaddressFrom;
     public $lookaheadaddressTo;
+    public $zoneStatus;
+    public $zoneId;
+    public $zoneName;
     public $orderTime;
     public $isRepeated;
     public $compagnion;

@@ -38,7 +38,7 @@ class MenuTwigExtension extends \Twig_Extension {
      */
     public function getName()
     {
-        'menuservice';
+        return 'menuservice';
     }
 
     /**

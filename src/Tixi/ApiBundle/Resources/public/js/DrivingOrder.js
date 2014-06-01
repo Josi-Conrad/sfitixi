@@ -19,13 +19,19 @@ function DrivingOrder() {
     this._singleTimeWrapper = null;
     this._repeatedTimeWrapper = null;
 
+    this._zoneServiceSrcUrl = null;
+    this._zoneIdField = null;
+    this._zoneStatusField = null;
+    this._zoneNameField = null;
+
     this._routingInformationWrapper = null;
 
     this._trans = null;
 
-    this.init = function(lookaheadFromId, lookaheadToId, passengerId, routingMachineSrcUrl, trans) {
+    this.init = function(lookaheadFromId, lookaheadToId, passengerId, routingMachineSrcUrl, zoneServiceSrcUrl, trans) {
         _this._passengerId = passengerId;
         _this._routingMachineSrcUrl = routingMachineSrcUrl;
+        _this._zoneServiceSrcUrl = zoneServiceSrcUrl;
         _this._trans = trans;
         _this._initElements();
         _this._initListeners();
@@ -50,13 +56,19 @@ function DrivingOrder() {
             _repeatedEndDateWrapper = _wrapper.find('.repeatedEndDateWrapper'),
             _singleTimeWrapper = _wrapper.find('.singleTimeWrapper'),
             _repeatedTimeWrapper = _wrapper.find('.repeatedTimeWrapper'),
-            _routingInformationWrapper = _wrapper.find('.routingInformationWrapper');
+            _routingInformationWrapper = _wrapper.find('.routingInformationWrapper'),
+            _zoneStatusField = _wrapper.find('.zoneStatus'),
+            _zoneIdField = _wrapper.find('.zoneId'),
+            _zoneNameField = _wrapper.find('.zoneName');
         _this._isRepeatedCheckbox = _isRepeatedCheckbox;
         _this._dateFromLabel = _dateFromLabel;
         _this._repeatedEndDateWrapper = _repeatedEndDateWrapper;
         _this._singleTimeWrapper = _singleTimeWrapper;
         _this._repeatedTimeWrapper = _repeatedTimeWrapper;
         _this._routingInformationWrapper = _routingInformationWrapper;
+        _this._zoneStatusField = _zoneStatusField;
+        _this._zoneIdField = _zoneIdField;
+        _this._zoneNameField = _zoneNameField;
     }
 
     this._initListeners = function() {
@@ -89,12 +101,15 @@ function DrivingOrder() {
 
     this._onAddressChanged = function() {
         var _addressFrom = _this._lookaheadAddressFrom.getAddress(),
-            _addressTo = _this._lookaheadAddressTo.getAddress();
-
+            _addressTo = _this._lookaheadAddressTo.getAddress(),
+            _cityFrom = _this._lookaheadAddressFrom.getAddressCity(),
+            _cityTo = _this._lookaheadAddressTo.getAddressCity();
         if(_addressFrom && _addressTo) {
             _this._updateRouteInformation(_addressFrom, _addressTo);
+            _this._updateZoneInformation(_cityFrom, _cityTo);
         }else {
             _this._resetRouteInformation();
+            _this._resetZoneInformation();
         }
     }
 
@@ -109,6 +124,32 @@ function DrivingOrder() {
 
     this._resetRouteInformation = function() {
         _this._route = null;
+        $(_this._routingInformationWrapper).html('');
+    }
+
+    this._updateZoneInformation = function(cityFrom, cityTo) {
+        var _zoneManager = new ZoneManager();
+        _zoneManager.requestZoneInformation(cityFrom, cityTo, _this._zoneServiceSrcUrl, _this._zoneInformationUpdated);
+    }
+
+    this._zoneInformationUpdated = function(zone) {
+        if(!zone || zone.getStatus() == -1) {
+            //error state
+            $(_this._zoneStatusField).val(-1);
+        }else {
+            $(_this._zoneNameField).val(zone.getName());
+            $(_this._zoneStatusField).val(zone.getStatus());
+            if(zone.getStatus() != 0) {
+                $(_this._zoneIdField).val(zone.getId());
+            }
+        }
+    }
+
+    this._resetZoneInformation = function() {
+        $(_this._zoneStatusField).val('');
+        $(_this._zoneNameField).val('');
+        $(_this._zoneIdField).val('');
+
     }
 }
 
@@ -117,7 +158,6 @@ function Route(from, to) {
 
     this._from = null;
     this._to = null;
-    this._zone = null;
     this._duration = null;
     this._distance = null;
 
@@ -172,6 +212,86 @@ function Route(from, to) {
     this._convertSecToMin = function(sec) {
         return Math.ceil(sec/60);
     }
+
+}
+
+function ZoneManager() {
+    var _this = this;
+
+    this.requestZoneInformation = function(cityFrom, cityTo, zoneServiceUrl, callback) {
+        var _tempZoneFrom,
+            _tempZoneTo;
+        _this._pollZoneInformation(zoneServiceUrl, _this._createParam(cityFrom)).done(function(data) {
+            _tempZoneFrom = new Zone(data);
+            _this._pollZoneInformation(zoneServiceUrl, _this._createParam(cityTo)).done(function(data) {
+                _tempZoneTo = new Zone(data);
+                if(_tempZoneFrom.getPriority()>_tempZoneTo.getPriority) {
+                    callback(_tempZoneFrom);
+                }else {
+                    callback(_tempZoneTo);
+                }
+            }).fail(function() {
+                callback(null);
+            });
+        }).fail(function() {
+            callback(null);
+        });
+    }
+
+    this._createParam = function(city) {
+        return {'city':city};
+
+    }
+
+    this._pollZoneInformation = function(srcUrl, params) {
+        return $.ajax({
+            type: 'GET',
+            url: srcUrl + '?' + $.param(params, true),
+            dataType: 'json'
+        });
+    }
+
+}
+
+function Zone(zoneTransferJson) {
+    var _this = this;
+
+    this._status = null;
+    this._id = null;
+    this._name = null;
+    this._priority = null;
+
+    this._init = function(zoneTransferJson) {
+        //status: -1 = error, 0 = unclassified, 1 = classified
+        _this._status = zoneTransferJson.status;
+        if(_this._status != -1) {
+            _this._name = zoneTransferJson.zonename;
+            _this._priority = zoneTransferJson.zonepriority;
+            if(_this._status == 1) {
+                _this._id = zoneTransferJson.zoneid;
+            }
+        }
+    }
+
+    this.getStatus = function() {
+        return _this._status;
+    }
+
+    this.getId = function() {
+        return _this._id;
+    }
+
+    this.getName = function() {
+        return _this._name;
+    }
+
+    this.getPriority = function() {
+        return _this._priority;
+    }
+
+    _this._init(zoneTransferJson);
+
+
 
 }
 

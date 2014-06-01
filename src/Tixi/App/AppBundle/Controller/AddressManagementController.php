@@ -12,8 +12,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Tixi\App\AppBundle\Address\AddressManagementImpl;
+use Tixi\App\Address\AddressManagement;
 
 /**
  * Class AddressManagementController
@@ -27,7 +26,7 @@ class AddressManagementController extends Controller{
      * @Method({"GET"})
      */
     public function getAddressSuggestionsAction(Request $request) {
-        /** @var AddressManagementImpl $addressManager */
+        /** @var AddressManagement $addressManager */
         $addressManager = $this->get('tixi_app.addressmanagement');
 
         $requestState = $request->get('requeststate');
