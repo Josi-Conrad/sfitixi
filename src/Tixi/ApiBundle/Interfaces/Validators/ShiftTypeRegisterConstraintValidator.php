@@ -10,28 +10,28 @@ namespace Tixi\ApiBundle\Interfaces\Validators;
 
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
-use Tixi\ApiBundle\Interfaces\PersonRegisterDTO;
+use Tixi\ApiBundle\Interfaces\Management\ShiftTypeRegisterDTO;
 
 /**
  * Class DateRangeConstraintValidator
  * @package Tixi\ApiBundle\Shared\Validator
  */
-class PersonRegisterConstraintValidator extends ConstraintValidator {
+class ShiftTypeRegisterConstraintValidator extends ConstraintValidator {
 
     /**
      * Checks if the passed value is valid.
      *
-     * @param PersonRegisterDTO $dto
+     * @param ShiftTypeRegisterDTO $dto
      * @param Constraint $constraint The constraint for the validation
      *
      * @api
      */
     public function validate($dto, Constraint $constraint) {
-        if ($dto->birthday !== null) {
-            if ($dto->birthday > new \DateTime('today')) {
+        if ($dto->start !== null && $dto->end !== null) {
+            if ($dto->start >= $dto->end) {
                 $this->context->addViolationAt(
-                    'birthday',
-                    'valid.birthday_in_future',
+                    'start',
+                    'valid.start_before_end_shifttype',
                     array(), null
                 );
             }

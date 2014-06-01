@@ -10,6 +10,7 @@ namespace Tixi\ApiBundle\Interfaces\Validators;
 
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
+use Tixi\ApiBundle\Interfaces\AbsentRegisterDTO;
 
 /**
  * Class DateRangeConstraintValidator
@@ -20,7 +21,7 @@ class AbsentRegisterConstraintValidator extends ConstraintValidator {
     /**
      * Checks if the passed value is valid.
      *
-     * @param mixed $dto
+     * @param AbsentRegisterDTO $dto
      * @param Constraint $constraint The constraint for the validation
      *
      * @api
