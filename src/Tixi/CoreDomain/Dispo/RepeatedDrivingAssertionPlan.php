@@ -63,7 +63,7 @@ class RepeatedDrivingAssertionPlan extends CommonBaseEntity {
      */
     protected $driver;
     /**
-     * @ORM\OneToMany(targetEntity="DrivingAssertion", mappedBy="repeatedDrivingAssertion")
+     * @ORM\OneToMany(targetEntity="DrivingAssertion", mappedBy="repeatedDrivingAssertionPlan")
      */
     protected $drivingAssertions;
 
