@@ -74,9 +74,11 @@ class TestDataDispositionCommand extends ContainerAwareCommand {
         $routingMachine = $this->getContainer()->get('tixi_app.routingmachine');
         $routeManagement = $this->getContainer()->get('tixi_app.routemanagement');
         $workingMonthManagement = $this->getContainer()->get('tixi_app.workingmonthmanagement');
+        $dispoManagement = $this->getContainer()->get('tixi_app.dispomanagement');
 
         $monthDate = new \DateTime('today');
         $monthDate->modify('+' . $month . ' month');
+        $monthDate->modify('+ 10 year');
         $monthDate->modify('first day of this month');
 
         $shiftTypes = $shiftTypeRepo->findAllActive();
@@ -106,32 +108,22 @@ class TestDataDispositionCommand extends ContainerAwareCommand {
         if ($workingMonth !== null) {
             $output->writeln("WorkingMonth " . $monthDate->format('m') . " already exists");
         } else {
-            $workingMonth = WorkingMonth::registerWorkingMonth($monthDate);
-            $workingMonth->createWorkingDaysForThisMonth();
-            foreach ($workingMonth->getWorkingDays() as $wd) {
-                $workingDayRepo->store($wd);
-            }
-            $workingMonthRepo->store($workingMonth);
-
+            $workingMonth = $dispoManagement->openWorkingMonth($monthDate->format('Y'), $monthDate->format('m'));
             $workingDays = $workingMonth->getWorkingDays();
 
             //create workingDays shifts, assign them drivingpools, get amount of needed drivers
             /** @var $workingDay WorkingDay */
             foreach ($workingDays as $workingDay) {
                 /** @var $shiftType ShiftType */
-                foreach ($shiftTypes as $shiftType) {
-                    $shift = Shift::registerShift($workingDay, $shiftType);
+                foreach ($workingDay->getShifts() as $shift) {
                     $shift->setAmountOfDrivers(rand(12, 18));
-                    $workingDay->assignShift($shift);
                     for ($i = 1; $i <= $shift->getAmountOfDrivers(); $i++) {
                         $drivingPool = DrivingPool::registerDrivingPool($shift);
                         $shift->assignDrivingPool($drivingPool);
                         $drivingPoolRepo->store($drivingPool);
                         $drivingPools++;
                     }
-                    $shiftRepo->store($shift);
                 }
-                $workingDayRepo->store($workingDay);
             }
         }
         $em->flush();

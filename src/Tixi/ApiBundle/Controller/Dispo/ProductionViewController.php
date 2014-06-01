@@ -16,6 +16,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Tixi\ApiBundle\Form\Dispo\ProductionView\ProductionPlanCreateType;
 use Tixi\ApiBundle\Form\Dispo\ProductionView\ProductionPlanEditType;
 use Tixi\ApiBundle\Interfaces\Dispo\ProductionView\ProductionPlanAssembler;

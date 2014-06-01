@@ -17,7 +17,7 @@ use Tixi\CoreDomain\Address;
 use Tixi\CoreDomain\Dispo\Route;
 
 /**
- * Class RunOSRMTests
+ * Class RunOSRMTestCommand
  * @package Tixi\App\AppBundle\Command
  */
 class RunOSRMTestCommand extends ContainerAwareCommand {

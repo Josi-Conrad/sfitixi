@@ -32,7 +32,7 @@ class RideTest extends CommonBaseTest {
         parent::setUp();
     }
 
-    public function testBoltzman(){
+    public function testBoltzman() {
         $ran = mt_rand(1, 100000000) / 100000000;
         echo $ran;
     }
