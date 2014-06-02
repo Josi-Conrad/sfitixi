@@ -20,13 +20,12 @@ use Tixi\CoreDomainBundle\Repository\CommonBaseRepositoryDoctrine;
  * Class RepeatedDrivingAssertionPlanRepositoryDoctrine
  * @package Tixi\CoreDomainBundle\Repository\Dispo
  */
-class RepeatedDrivingAssertionPlanRepositoryDoctrine extends CommonBaseRepositoryDoctrine implements RepeatedDrivingAssertionPlanRepository{
+class RepeatedDrivingAssertionPlanRepositoryDoctrine extends CommonBaseRepositoryDoctrine implements RepeatedDrivingAssertionPlanRepository {
     /**
      * @param RepeatedDrivingAssertionPlan $assertionPlan
      * @return mixed|void
      */
-    public function store(RepeatedDrivingAssertionPlan $assertionPlan)
-    {
+    public function store(RepeatedDrivingAssertionPlan $assertionPlan) {
         $this->getEntityManager()->persist($assertionPlan);
     }
 
@@ -34,8 +33,7 @@ class RepeatedDrivingAssertionPlanRepositoryDoctrine extends CommonBaseRepositor
      * @param RepeatedDrivingAssertionPlan $assertionPlan
      * @return mixed|void
      */
-    public function remove(RepeatedDrivingAssertionPlan $assertionPlan)
-    {
+    public function remove(RepeatedDrivingAssertionPlan $assertionPlan) {
         $this->getEntityManager()->remove($assertionPlan);
     }
 
@@ -50,8 +48,11 @@ class RepeatedDrivingAssertionPlanRepositoryDoctrine extends CommonBaseRepositor
         return $qb->getQuery()->getResult();
     }
 
-    public function findActivePlansInRangeOfWorkingMonth(WorkingMonth $workingMonth)
-    {
+    /**
+     * @param WorkingMonth $workingMonth
+     * @return RepeatedDrivingAssertionPlan[]
+     */
+    public function findActivePlansInRangeOfWorkingMonth(WorkingMonth $workingMonth) {
         /** @var \DateTime $startDate */
         $startDate = clone $workingMonth->getDate();
         /** @var \DateTime $endDate */
@@ -60,20 +61,35 @@ class RepeatedDrivingAssertionPlanRepositoryDoctrine extends CommonBaseRepositor
 
         $qb = parent::createQueryBuilder('p');
         $qb->where('p.anchorDate <= :endDate')->andWhere('p.endingDate >= :startDate');
-        $qb->setParameter('startDate',$startDate->format('Y-m-d'));
-        $qb->setParameter('endDate',$endDate->format('Y-m-d'));
+        $qb->setParameter('startDate', $startDate->format('Y-m-d'));
+        $qb->setParameter('endDate', $endDate->format('Y-m-d'));
         return $qb->getQuery()->getResult();
     }
 
-    public function findAllProspectiveForDriver(Driver $driver)
-    {
+    /**
+     * @param Driver $driver
+     * @return RepeatedDrivingAssertionPlan[]
+     */
+    public function findAllProspectiveForDriver(Driver $driver) {
         $now = new \DateTime();
         $qb = parent::createQueryBuilder('p');
         $qb->where('p.driver = :driver')
             ->andWhere('p.endingDate >= :now')
             ->andWhere('p.isDeleted = 0')
-            ->setParameter('driver',$driver)
-            ->setParameter('now',$now->format('Y-m-d'));
+            ->setParameter('driver', $driver)
+            ->setParameter('now', $now->format('Y-m-d'));
+        return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * @return RepeatedDrivingAssertionPlan[]
+     */
+    public function findAllActivePlansAtTheMoment() {
+        $moment = new \DateTime();
+
+        $qb = parent::createQueryBuilder('p');
+        $qb->where('p.anchorDate <= :moment')->andWhere('p.endingDate >= :moment')
+            ->setParameter('moment', $moment->format('Y-m-d'));
         return $qb->getQuery()->getResult();
     }
 }

@@ -15,7 +15,14 @@ namespace Tixi\CoreDomain\Dispo;
 interface DrivingAssertionInterface {
     /**
      * @param Shift $shift
-     * @return mixed
+     * @return bool
      */
     public function matching(Shift $shift);
-} 
+
+    /**
+     * @param \DateTime $dateTime
+     * @return bool
+     */
+    public function matchingDateTime(\DateTime $dateTime);
+
+}

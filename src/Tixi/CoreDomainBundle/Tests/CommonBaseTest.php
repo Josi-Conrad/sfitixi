@@ -178,10 +178,6 @@ class CommonBaseTest extends WebTestCase {
      * @var RideManagement
      */
     protected $rideManagement;
-    /**
-     * @var WorkingMonthManagement
-     */
-    protected $workingMonthManagement;
 
     public function setUp() {
         $kernel = static::createKernel();
@@ -237,7 +233,6 @@ class CommonBaseTest extends WebTestCase {
         $this->addressManagement = $kernel->getContainer()->get('tixi_app.addressmanagement');
         $this->dispoManagement = $kernel->getContainer()->get('tixi_app.dispomanagement');
         $this->rideManagement = $kernel->getContainer()->get('tixi_app.ridemanagement');
-        $this->workingMonthManagement = $kernel->getContainer()->get('tixi_app.workingmonthmanagement');
 
         $this->em->beginTransaction();
     }

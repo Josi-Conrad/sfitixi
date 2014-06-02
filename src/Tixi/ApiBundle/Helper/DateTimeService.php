@@ -17,27 +17,55 @@ use Symfony\Component\Validator\Constraints\DateTime;
  * @package Tixi\ApiBundle\Helper
  */
 class DateTimeService extends ContainerAware {
-
+    /**
+     * @return \DateTime
+     */
     public static function getUTCnow() {
         return new \DateTime('now', new \DateTimeZone('UTC'));
     }
 
+    /**
+     * @return \DateTime
+     */
     public static function getMaxDateTime() {
         return new \DateTime('2999-01-01');
     }
 
-    public static function isInTimeRange($datetime1, $datetime2, $compareTime){
-
-    }
     /**
      * @param \DateTime $dateTime
      * @return float
      */
-    public static function getMinutesOfDay(\DateTime $dateTime){
+    public static function getMinutesOfDay(\DateTime $dateTime) {
         $midnight = clone $dateTime;
-        $midnight->setTime(0,0);
+        $midnight->setTime(0, 0);
         $diff = $midnight->diff($dateTime);
         return ($diff->h * 60) + $diff->i;
+    }
+
+    /**
+     * gets minute of day and checks if given time is between start and end
+     * @param \DateTime $compareTime
+     * @param \DateTime $startTime
+     * @param \DateTime $endTime
+     * @return bool
+     */
+    public static function matchTimeBetweenTwoDateTimes(\DateTime $compareTime, \DateTime $startTime, \DateTime $endTime) {
+        $start = self::getMinutesOfDay($startTime);
+        $end = self::getMinutesOfDay($endTime);
+        $compare = self::getMinutesOfDay($compareTime);
+
+        if ($end > $start) {
+            if ($compare >= $start && $compare <= $end) {
+                return true;
+            }
+        } else {
+            //if endminute is smaller then start, the time lays between midnight
+            //so check if compare is not outside this time over midnight
+            if (!($compare <= $start && $compare >= $end)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -119,6 +147,7 @@ class DateTimeService extends ContainerAware {
             return $this->convertToLocalDateTime($utcDate)->format('H:i');
         }
     }
+
     /**
      * @param $localDateStr
      * @return \DateTime

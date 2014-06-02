@@ -11,6 +11,8 @@ namespace Tixi\CoreDomain\Dispo;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use JsonSchema\Constraints\String;
+use Symfony\Component\Validator\Constraints\DateTime;
+use Tixi\ApiBundle\Helper\DateTimeService;
 use Tixi\CoreDomain\Shared\CommonBaseEntity;
 
 /**
@@ -89,8 +91,7 @@ class ShiftType extends CommonBaseEntity {
      * @return bool
      */
     public function isResponsibleForTime(\DateTime $dateTime) {
-        //TODO:
-        return true;
+        return DateTimeService::matchTimeBetweenTwoDateTimes($dateTime, $this->start, $this->end);
     }
 
     /**

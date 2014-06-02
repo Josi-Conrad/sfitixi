@@ -32,13 +32,14 @@ class RideTest extends CommonBaseTest {
         parent::setUp();
     }
 
-    public function testBoltzman() {
-        $ran = mt_rand(1, 100000000) / 100000000;
-        echo $ran;
+    public function testRepeatedFeasibility() {
+        $dayTime = \DateTime::createFromFormat('d.m.Y H.i', '01.07.2014 12.15');
+        $endTime = \DateTime::createFromFormat('d.m.Y H.i', '01.07.2025 00.00');
+        echo $this->rideManagement->checkRepeatedFeasibility($dayTime, $endTime, 1, 0, 32);
     }
 
     public function testFeasibility() {
-        $dayTime = \DateTime::createFromFormat('d.m.Y H.i', '01.06.2014 12.55');
+        $dayTime = \DateTime::createFromFormat('d.m.Y H.i', '01.07.2024 08.15');
         $isFeasible = $this->rideManagement->checkFeasibility($dayTime, DrivingMission::SAME_START, 120, 2);
         $this->assertNotNull($isFeasible);
         $isFeasible ? $str = "\nIs feasible" : $str = "\nIs NOT feasible";
@@ -46,7 +47,7 @@ class RideTest extends CommonBaseTest {
     }
 
     public function testOptimization() {
-        $dayTime = \DateTime::createFromFormat('d.m.Y H.i', '01.06.2014 08.15');
+        $dayTime = \DateTime::createFromFormat('d.m.Y H.i', '01.07.2024 08.15');
         $shift = $this->dispoManagement->getResponsibleShiftForDayAndTime($dayTime);
         if ($shift !== null) {
             $this->rideManagement->getOptimizedPlanForShift($shift);

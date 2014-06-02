@@ -47,11 +47,18 @@ abstract class RepeatedDrivingAssertion implements DrivingAssertionInterface {
 
     /**
      * @param Shift $shift
-     * @return mixed
+     * @return bool
      */
     public abstract function matching(Shift $shift);
 
     /**
+     * care about UTC DateTime
+     * @param \DateTime $dateTime
+     * @return bool
+     */
+    public abstract function matchingDateTime(\DateTime $dateTime);
+
+        /**
      * @param RepeatedDrivingAssertionPlan $assertionPlan
      */
     public function setAssertionPlan(RepeatedDrivingAssertionPlan $assertionPlan) {

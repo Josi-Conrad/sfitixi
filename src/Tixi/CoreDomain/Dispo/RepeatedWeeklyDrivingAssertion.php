@@ -24,7 +24,7 @@ class RepeatedWeeklyDrivingAssertion extends RepeatedDrivingAssertion {
 
     /**
      * @param Shift $shift
-     * @return mixed|void
+     * @return bool
      */
     public function matching(Shift $shift) {
         $startDate = $this->getAssertionPlan()->getAnchorDate();
@@ -38,6 +38,27 @@ class RepeatedWeeklyDrivingAssertion extends RepeatedDrivingAssertion {
             if ($wd == $this->getWeekday()) {
                 if ($this->matchShiftType($shift->getShiftType())) {
                     return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @param \DateTime $dateTime
+     * @return bool
+     */
+    public function matchingDateTime(\DateTime $dateTime) {
+        $startDate = $this->getAssertionPlan()->getAnchorDate();
+        $endDate = $this->getAssertionPlan()->getEndingDate();
+
+        $wd = $dateTime->format('N');
+        if ($dateTime >= $startDate && $dateTime <= $endDate) {
+            if ($wd == $this->getWeekday()) {
+                foreach ($this->getShiftTypes() as $shiftType) {
+                    if ($shiftType->isResponsibleForTime($dateTime)) {
+                        return true;
+                    }
                 }
             }
         }

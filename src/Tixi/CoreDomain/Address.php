@@ -399,4 +399,12 @@ class Address extends CommonBaseEntity {
     public function getHashFromBigIntCoordinates() {
         return hash('md2', $this->lat + $this->lng);
     }
+
+    /**
+     * gets first letters from street
+     * @return string
+     */
+    public function getAddressNameShort(){
+        return substr($this->getStreet(), 0, 5);
+    }
 }

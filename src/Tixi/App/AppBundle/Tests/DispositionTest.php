@@ -64,11 +64,6 @@ class DispositionTest extends CommonBaseTest {
             }
             $this->em->flush();
         }
-
-        //$this->workingMonthManagement->assignAvailableDriversToDrivingPools($workingMonth);
-
-        echo "\nStill not associated DrivingPools: " .
-            count($this->workingMonthManagement->getAllUnassignedDrivingPoolsForMonth($workingMonth)) . "\n";
     }
 
     public function tearDown() {

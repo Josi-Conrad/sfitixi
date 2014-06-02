@@ -54,6 +54,14 @@ class DrivingAssertion extends CommonBaseEntity implements DrivingAssertionInter
     }
 
     /**
+     * @param \DateTime $dateTime
+     * @return bool
+     */
+    public function matchingDateTime(\DateTime $dateTime) {
+        //TODO: if necessary
+    }
+
+    /**
      * @param Driver $driver
      * @param Shift $shift
      * @return DrivingAssertion

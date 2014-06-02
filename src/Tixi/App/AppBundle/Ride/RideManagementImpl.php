@@ -10,6 +10,8 @@ namespace Tixi\App\AppBundle\Ride;
 
 
 use Symfony\Component\DependencyInjection\ContainerAware;
+use Tixi\ApiBundle\Helper\DateTimeService;
+use Tixi\ApiBundle\Helper\WeekdayService;
 use Tixi\App\AppBundle\Ride\RideStrategies\RideStrategyLeastDistance;
 use Tixi\App\AppBundle\Ride\RideStrategies\RideStrategyAnnealing;
 use Tixi\App\AppBundle\Ride\RideStrategies\RideStrategyTimeWindow;
@@ -29,7 +31,7 @@ class RideManagementImpl extends ContainerAware implements RideManagement {
      * @param $additionalTime
      * @return mixed
      */
-    public function checkFeasibility(\DateTime $dayTime, $direction, $duration, $additionalTime) {
+    public function checkFeasibility(\DateTime $dayTime, $direction, $duration, $additionalTime = 0) {
         $s = microtime(true);
 
         $dispoManagement = $this->container->get('tixi_app.dispomanagement');
@@ -51,7 +53,7 @@ class RideManagementImpl extends ContainerAware implements RideManagement {
         $rideStrategy = new RideStrategyTimeWindow();
         $rideConfigurator = new ConfigurationBuilder($drivingMissions, $drivingPools, $vehicles, $rideStrategy);
 
-        $rideConfigurator->buildConfigurationFromExistingMissions();
+        $rideConfigurator->createConfigurationFromExistingMissions();
 
         //ride configuration with factor of all nodes (change all first entries once) and the same amount for shuffling
         $rideConfiguration = $rideConfigurator->buildConfiguration();
@@ -72,6 +74,51 @@ class RideManagementImpl extends ContainerAware implements RideManagement {
         return $isFeasible;
     }
 
+
+    /**
+     * @param \DateTime $fromDateTime
+     * @param \DateTime $endDate
+     * @param $weekday
+     * @param $direction
+     * @param $duration
+     * @param int $additionalTime
+     * @throws \LogicException
+     * @return mixed
+     */
+    public function checkRepeatedFeasibility(\DateTime $fromDateTime, \DateTime $endDate, $weekday, $direction, $duration, $additionalTime = 0) {
+        if ($weekday < 1 || $weekday > 7) {
+            throw new \LogicException('weekday not in ISO-8601 range');
+        }
+        $repeatedDrivingAssertionPlanRepo = $this->container->get('repeateddrivingassertionplan_repository');
+        $timeService = $this->container->get('tixi_api.datetimeservice');
+
+        $utcDateTime = $timeService->convertToUTCDateTime($fromDateTime);
+        $weekDate = clone $utcDateTime;
+        $weekDate->modify('next ' . WeekdayService::$numericToWeekdayConverter[$weekday]);
+        $weekDate->setTime($utcDateTime->format('H'), $utcDateTime->format('i'));
+
+        $plans = $repeatedDrivingAssertionPlanRepo->findAllActivePlansAtTheMoment();
+
+        $vehicleRepo = $this->container->get('vehicle_repository');
+        $allVehicles = $vehicleRepo->findAllNotDeleted();
+
+        $countOfVehicles = count($allVehicles);
+        $countOfExistingAssertions = 0;
+        foreach ($plans as $plan) {
+            foreach ($plan->getRepeatedDrivingAssertionsAsArray() as $assertion) {
+                if ($assertion->matchingDateTime($weekDate)) {
+                    $countOfExistingAssertions++;
+                }
+            }
+        }
+        if ($countOfExistingAssertions > $countOfVehicles) {
+            //not feasible
+            return false;
+        }
+        //feasible
+        return true;
+    }
+
     /**
      * runs routing algorithm to set optimized missions and orders for a Shift
      * @param \Tixi\CoreDomain\Dispo\Shift $shift
@@ -84,6 +131,7 @@ class RideManagementImpl extends ContainerAware implements RideManagement {
 
         //STRATEGY for RideOptimization
         $rideStrategy = new RideStrategyAnnealing();
+//        $rideStrategy = new RideStrategyLeastDistance();
 
         $dispoManagement = $this->container->get('tixi_app.dispomanagement');
 
@@ -110,23 +158,28 @@ class RideManagementImpl extends ContainerAware implements RideManagement {
 
         $configurationBuilder = new ConfigurationBuilder($drivingMissions, $drivingPools, $vehicles, $rideStrategy);
 
+        //get all empty Rides
         $emptyRides = $configurationBuilder->buildAllPossibleEmptyRides();
 
+        //get routing information from routing machine and fill node objects
         $s = microtime(true);
         $routeManagement = $this->container->get('tixi_app.routemanagement');
-        //get routing information from routing machine and fill node objects
         $emptyRides = $routeManagement->fillRoutesForMultipleRideNodes($emptyRides);
         $e = microtime(true);
         echo "\n\nFilled " . count($emptyRides) . " rides from RoutingMachine in: " . ($e - $s) . "s\n";
 
+        //create ride configurations with strategy
         $s = microtime(true);
-        //ride configuration with factor of all nodes (change all first entries once) and the same amount for shuffling
-        $rideConfigurations = $configurationBuilder->buildConfigurations(count($drivingMissions) * 2);
+        $rideConfigurations = $configurationBuilder->buildConfigurations();
         $e = microtime(true);
         echo "Built rideConfiguration in: " . ($e - $s) . "s\n";
+        if (!$rideConfigurations) {
+            $em->rollback();
+            $this->fallback();
+        }
 
-        //for efficiency we choose a configuration with less vehicles and less distance to drive
-        $configurationBuilder->sortRideConfigurationsByUsedVehicleAndDistance($rideConfigurations);
+        //sort configurations by least distance
+        $configurationBuilder->sortRideConfigurationsByDistance($rideConfigurations);
 
         if (count($rideConfigurations) < 1) {
             $em->rollback();
@@ -176,20 +229,21 @@ class RideManagementImpl extends ContainerAware implements RideManagement {
         echo "Distance: " . $rideConfig->getTotalDistance() / 1000 . "km - ";
         echo "EmptyRideTime: " . $rideConfig->getTotalEmptyRideTime() . "min - ";
         echo "EmptyRideDistance: " . $rideConfig->getTotalEmptyRideDistance() / 1000 . "km\n";
-        echo "Choosen Vehicles: ";
-        foreach ($rideConfig->getDrivingPools() as $pool) {
-            if ($pool->hasAssociatedVehicle()) {
-                echo $pool->getVehicle()->getName() . ", ";
-            }
-        }
-        echo "\nNot Feasible Nodes:\t" . count($rideConfig->getNotFeasibleNodes()) . "\n";
+        echo "Not Feasible Nodes:\t" . count($rideConfig->getNotFeasibleNodes()) . "\n";
         $rideNodeLists = $rideConfig->getRideNodeLists();
         foreach ($rideNodeLists as $drivePoolId => $rideNodeList) {
             $rideNodes = $rideNodeList->getRideNodes();
-            echo $drivePoolId . " w:" . $rideNodeList->getMaxWheelChairsOnRide() . " p:" . $rideNodeList->getMaxPassengersOnRide() . "\t|";
+            echo $drivePoolId . " W:" . $rideNodeList->getMaxWheelChairsOnRide() . " P:" . $rideNodeList->getMaxPassengersOnRide() . "\t";
+            if ($rideNodeList->getDrivingPool()->hasAssociatedDriver()) {
+                echo $rideNodeList->getDrivingPool()->getDriver()->getNameString() . "\t";
+            }
+            if ($rideNodeList->getDrivingPool()->hasAssociatedVehicle()) {
+                echo $rideNodeList->getDrivingPool()->getVehicle()->getName() . "\t|";
+            }
             /**@var $node RideNode */
             foreach ($rideNodes as $node) {
-                echo "(" . $node->startMinute . "-" . $node->endMinute . ")\t";
+//                echo "(" . $node->startMinute . "-" . $node->endMinute . ")\t";
+                echo "(ID" . $node->drivingMission->getId() . ":" . $node->startAddress->getAddressNameShort() . "->" . $node->targetAddress->getAddressNameShort() . ")\t";
             }
             echo "\n";
         }

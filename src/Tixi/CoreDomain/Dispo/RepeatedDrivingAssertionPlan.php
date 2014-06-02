@@ -200,6 +200,9 @@ class RepeatedDrivingAssertionPlan extends CommonBaseEntity {
         return $this->repeatedDrivingAssertions;
     }
 
+    /**
+     * @return RepeatedDrivingAssertion[]
+     */
     public function getRepeatedDrivingAssertionsAsArray() {
         return $this->repeatedDrivingAssertions->toArray();
     }
