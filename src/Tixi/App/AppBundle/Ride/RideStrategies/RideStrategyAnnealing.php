@@ -9,6 +9,7 @@
 namespace Tixi\App\AppBundle\Ride\RideStrategies;
 
 
+use Composer\Config;
 use Tixi\App\AppBundle\Ride\RideStrategies\RideStrategy;
 use Tixi\App\AppBundle\Ride\RideConfiguration;
 use Tixi\App\AppBundle\Ride\ConfigurationBuilder;
@@ -69,10 +70,9 @@ class RideStrategyAnnealing implements RideStrategy {
      * @param $rideNodes
      * @param $emptyRideNodes
      * @param $drivingPools
-     * @param $factor
      * @return \Tixi\App\AppBundle\Ride\RideConfiguration[]
      */
-    public function buildConfigurations($rideNodes, $drivingPools, $emptyRideNodes, $factor) {
+    public function buildConfigurations($rideNodes, $drivingPools, $emptyRideNodes) {
         $this->rideNodes = $rideNodes;
         $this->drivingPools = $drivingPools;
         $this->emptyRideNodes = $emptyRideNodes;
@@ -81,11 +81,31 @@ class RideStrategyAnnealing implements RideStrategy {
         ConfigurationBuilder::sortNodesByStartMinute($workNodes);
         $this->adjacenceMatrix = ConfigurationBuilder::buildAdjacenceMatrixFromNodes($workNodes, $emptyRideNodes);
 
-        $initialConfiguration = $this->buildFeasibleConfiguration($workNodes);
-        $configurations = $this->annealConfigurations($initialConfiguration);
+        //Initial Config by LeastDistance Strategy
+        $s = microtime(true);
+        $initConfig = $this->buildFeasibleConfigFromStrategy(new RideStrategyLeastDistance());
+        $e = microtime(true);
+        echo "Feasible init config built in: " . ($e - $s) . "s\n";
 
-        //sort by best and return configurations
-        return $configurations;
+        if ($initConfig) {
+            $configurations = $this->annealConfigurations($initConfig);
+            return $configurations;
+        }
+        return null;
+    }
+
+    /**
+     * build a good and feasible rideConfiguration to anneal from
+     * @param RideStrategy $strategy
+     * @return null|RideConfiguration
+     */
+    private function buildFeasibleConfigFromStrategy(RideStrategy $strategy) {
+        $configurations = $strategy->buildConfigurations($this->rideNodes, $this->drivingPools, $this->emptyRideNodes);
+        if ($configurations) {
+            ConfigurationBuilder::sortRideConfigurationsByDistance($configurations);
+            return $configurations[0];
+        }
+        return null;
     }
 
     /**
@@ -172,6 +192,7 @@ class RideStrategyAnnealing implements RideStrategy {
     }
 
     /**
+     * updates all information in a RideNodeList
      * @param RideNodeList $list
      */
     private function updateRideNodeListInformation(RideNodeList &$list) {
@@ -210,6 +231,7 @@ class RideStrategyAnnealing implements RideStrategy {
     }
 
     /**
+     * updates all information in a RideConfiguration
      * @param RideConfiguration $config
      */
     private function updateRideConfigurationInformation(RideConfiguration &$config) {

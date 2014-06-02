@@ -29,8 +29,7 @@ interface RideStrategy {
      * @param $rideNodes
      * @param $emptyRideNodes
      * @param $drivingPools
-     * @param $factor
      * @return \Tixi\App\AppBundle\Ride\RideConfiguration[]
      */
-    public function buildConfigurations($rideNodes, $drivingPools, $emptyRideNodes, $factor);
+    public function buildConfigurations($rideNodes, $drivingPools, $emptyRideNodes);
 } 

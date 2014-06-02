@@ -83,11 +83,10 @@ class ConfigurationBuilder {
     }
 
     /**
-     * @param $factor
      * @return RideConfiguration[]
      */
-    public function buildConfigurations($factor) {
-        $rideConfigurations = $this->strategy->buildConfigurations($this->rideNodes, $this->drivingPools, $this->emptyRideNodes, $factor);
+    public function buildConfigurations() {
+        $rideConfigurations = $this->strategy->buildConfigurations($this->rideNodes, $this->drivingPools, $this->emptyRideNodes);
         $this->rideConfigurations = $rideConfigurations;
         return $rideConfigurations;
     }
@@ -127,7 +126,7 @@ class ConfigurationBuilder {
      * build rideConfiguration in this builder and returns it
      * @return RideConfiguration
      */
-    public function buildConfigurationFromExistingMissions() {
+    public function createConfigurationFromExistingMissions() {
         foreach ($this->drivingPools as $pool) {
             $rideNodeList = new RideNodeList();
             $rideNodeList->assignDrivingPool($pool);

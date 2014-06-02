@@ -63,10 +63,9 @@ class RideStrategyLeastDistance implements RideStrategy {
      * @param $rideNodes
      * @param $emptyRideNodes
      * @param $drivingPools
-     * @param $factor
      * @return \Tixi\App\AppBundle\Ride\RideConfiguration[]
      */
-    public function buildConfigurations($rideNodes, $drivingPools, $emptyRideNodes, $factor) {
+    public function buildConfigurations($rideNodes, $drivingPools, $emptyRideNodes) {
         $this->rideNodes = $rideNodes;
         $this->drivingPools = $drivingPools;
         $this->emptyRides = $emptyRideNodes;
@@ -79,6 +78,10 @@ class RideStrategyLeastDistance implements RideStrategy {
         //build some configs and return feasible configs
         $rideConfigurations = array();
         $diversity = count($this->rideNodes);
+        $factor = $diversity * 2;
+
+        //take for each driving pool another start node, and then shuffle the whole node array some times
+        //to create another start set to begin with
         for ($i = 0; $i < $factor; $i++) {
             $workRideNodes = $workNodes;
             if ($i >= $diversity) {
