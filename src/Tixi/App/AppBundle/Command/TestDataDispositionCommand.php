@@ -73,7 +73,6 @@ class TestDataDispositionCommand extends ContainerAwareCommand {
         $time = $this->getContainer()->get('tixi_api.datetimeservice');
         $routingMachine = $this->getContainer()->get('tixi_app.routingmachine');
         $routeManagement = $this->getContainer()->get('tixi_app.routemanagement');
-        $workingMonthManagement = $this->getContainer()->get('tixi_app.workingmonthmanagement');
         $dispoManagement = $this->getContainer()->get('tixi_app.dispomanagement');
 
         $monthDate = new \DateTime('today');
@@ -85,20 +84,26 @@ class TestDataDispositionCommand extends ContainerAwareCommand {
 
         $drivers = $driverRepo->findAllActive();
         foreach ($drivers as $driver) {
+            //no other assertion for zivis
+            if ($driver->getDriverCategory()->getId() == 2) {
+                continue;
+            }
             $reDrivingAssertionPlan = RepeatedDrivingAssertionPlan::registerRepeatedAssertionPlan(
                 'test', new \DateTime('today'), 'weekly', rand(0, 1));
             $reDrivingAssertionPlan->assignDriver($driver);
             $driver->assignRepeatedDrivingAssertionPlan($reDrivingAssertionPlan);
             $repeatedDrivingAssertionPlanRepo->store($reDrivingAssertionPlan);
             for ($i = 1; $i <= 7; $i++) {
-                $reDrivingWeeklyAssertion = new RepeatedWeeklyDrivingAssertion();
-                $reDrivingWeeklyAssertion->addShiftType($shiftTypes[rand(0, count($shiftTypes) - 1)]);
-                $reDrivingWeeklyAssertion->addShiftType($shiftTypes[rand(0, count($shiftTypes) - 1)]);
-                $reDrivingWeeklyAssertion->addShiftType($shiftTypes[rand(0, count($shiftTypes) - 1)]);
-                $reDrivingWeeklyAssertion->setWeekday($i);
-                $reDrivingWeeklyAssertion->setAssertionPlan($reDrivingAssertionPlan);
-                $reDrivingAssertionPlan->assignRepeatedDrivingAssertion($reDrivingWeeklyAssertion);
-                $repeatedDrivingAssertionRepo->store($reDrivingWeeklyAssertion);
+                if (rand(0, 3) < 3) {
+                    $reDrivingWeeklyAssertion = new RepeatedWeeklyDrivingAssertion();
+                    $reDrivingWeeklyAssertion->addShiftType($shiftTypes[rand(0, count($shiftTypes) - 1)]);
+                    $reDrivingWeeklyAssertion->addShiftType($shiftTypes[rand(0, count($shiftTypes) - 1)]);
+                    $reDrivingWeeklyAssertion->addShiftType($shiftTypes[rand(0, count($shiftTypes) - 1)]);
+                    $reDrivingWeeklyAssertion->setWeekday($i);
+                    $reDrivingWeeklyAssertion->setAssertionPlan($reDrivingAssertionPlan);
+                    $reDrivingAssertionPlan->assignRepeatedDrivingAssertion($reDrivingWeeklyAssertion);
+                    $repeatedDrivingAssertionRepo->store($reDrivingWeeklyAssertion);
+                }
             }
         }
         $em->flush();
@@ -198,15 +203,10 @@ class TestDataDispositionCommand extends ContainerAwareCommand {
         }
         $em->flush();
 
-        //TODO: assign available Drivers to drivingPools - NOW NEW with driveAssertions
-        //$workingMonthManagement->assignAvailableDriversToDrivingPools($workingMonth);
-        $unassignedDrivingPools = count($workingMonthManagement->getAllUnassignedDrivingPoolsForMonth($workingMonth));
-
         $output->writeln(
             "\n--------------------------------------------\n" .
             "Testdata created for month: " . $monthDate->format('m.Y') . " with:\n"
-            . $drivingPools . " DrivingPools and "
-            . $unassignedDrivingPools . " unassigned DrivingPools.\n" .
+            . $drivingPools . " DrivingPools \n" .
             "And orders for one day: " . $monthDate->format('d.m.Y') . " with:\n"
             . $countOrders . " DrivingOrders and Routes \n"
         );
