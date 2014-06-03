@@ -9,24 +9,9 @@
 namespace Tixi\App\AppBundle\Tests;
 
 
-use Tixi\ApiBundle\Helper\DateTimeService;
-use Tixi\App\AppBundle\Ride\RideNode;
-use Tixi\App\Disposition\DispositionVariables;
-use Tixi\CoreDomain\Dispo\DrivingMission;
-use Tixi\CoreDomain\Dispo\DrivingOrder;
-use Tixi\CoreDomain\Dispo\DrivingPool;
-use Tixi\CoreDomain\Dispo\RepeatedDrivingAssertionPlan;
-use Tixi\CoreDomain\Dispo\RepeatedWeeklyDrivingAssertion;
-use Tixi\CoreDomain\Dispo\Route;
-use Tixi\CoreDomain\Dispo\Shift;
-use Tixi\CoreDomain\Dispo\ShiftType;
-use Tixi\CoreDomain\Dispo\WorkingDay;
-use Tixi\CoreDomain\Dispo\WorkingMonth;
-use Tixi\CoreDomain\Passenger;
-use Tixi\CoreDomain\POI;
 use Tixi\CoreDomainBundle\Tests\CommonBaseTest;
 
-class RideTest extends CommonBaseTest {
+class DocumentTest extends CommonBaseTest {
 
     public function setUp() {
         parent::setUp();
