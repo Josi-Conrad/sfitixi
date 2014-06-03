@@ -13,9 +13,9 @@
         <parameter key="tixi_app.routemanagement.class">Tixi\App\AppBundle\Routing\RouteManagementImpl</parameter>
         <parameter key="tixi_app.dispomanagement.class">Tixi\App\AppBundle\Disposition\DispositionManagementImpl</parameter>
         <parameter key="tixi_app.ridemanagement.class">Tixi\App\AppBundle\Ride\RideManagementImpl</parameter>
-        <parameter key="tixi_app.workingmonthmanagement.class">Tixi\App\AppBundle\Disposition\WorkingMonthManagementImpl</parameter>
         <parameter key="tixi_app.drivingassertionmanagement.class">Tixi\App\AppBundle\Driving\DrivingAssertionManagementImpl</parameter>
-
+        <parameter key="tixi_app.documentmanagement.class">Tixi\App\AppBundle\Document\DocumentManagementKnp</parameter>
+        <parameter key="tixi_app.mailservice.class">Tixi\App\AppBundle\Mail\MailServiceSwiftMailer</parameter>
     </parameters>
 
     <services>
@@ -54,12 +54,17 @@
                 <argument type="service" id="service_container"/>
             </call>
         </service>
-        <service id="tixi_app.workingmonthmanagement" class="%tixi_app.workingmonthmanagement.class%">
+        <service id="tixi_app.drivingassertionmanagement" class="%tixi_app.drivingassertionmanagement.class%">
             <call method="setContainer">
                 <argument type="service" id="service_container"/>
             </call>
         </service>
-        <service id="tixi_app.drivingassertionmanagement" class="%tixi_app.drivingassertionmanagement.class%">
+        <service id="tixi_app.documentmanagement" class="%tixi_app.documentmanagement.class%">
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
+        </service>
+        <service id="tixi_app.mailservice" class="%tixi_app.mailservice.class%">
             <call method="setContainer">
                 <argument type="service" id="service_container"/>
             </call>

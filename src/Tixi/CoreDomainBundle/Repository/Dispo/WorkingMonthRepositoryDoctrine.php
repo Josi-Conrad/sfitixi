@@ -30,7 +30,7 @@ class WorkingMonthRepositoryDoctrine extends CommonBaseRepositoryDoctrine implem
 
     /**
      * @param \DateTime $date
-     * @return mixed
+     * @return WorkingMonth
      */
     public function findWorkingMonthByDate(\DateTime $date) {
         $qb = parent::createQueryBuilder('e');
@@ -40,6 +40,9 @@ class WorkingMonthRepositoryDoctrine extends CommonBaseRepositoryDoctrine implem
         return $qb->getQuery()->getOneOrNullResult();
     }
 
+    /**
+     * @return WorkingMonth[]
+     */
     public function findProspectiveWorkingMonths()
     {
         $now = new \DateTime();

@@ -255,10 +255,16 @@ class Shift {
         return $returnDate->setTimestamp($this->getShiftType()->getEnd()->getTimestamp());
     }
 
+    /**
+     * @return \DateTime
+     */
     public function getStart(){
         return $this->shiftType->getStart();
     }
 
+    /**
+     * @return \DateTime
+     */
     public function getEnd(){
         return $this->shiftType->getEnd();
     }

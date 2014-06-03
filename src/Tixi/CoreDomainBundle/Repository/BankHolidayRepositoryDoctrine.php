@@ -50,4 +50,15 @@ class BankHolidayRepositoryDoctrine extends CommonBaseRepositoryDoctrine impleme
         }
     }
 
+    /**
+     * @param \DateTime $date
+     * @return BankHoliday
+     */
+    public function findBankHolidayForDate(\DateTime $date) {
+        $qb = parent::createQueryBuilder('e');
+        $qb->where('e.date = :date')
+            ->andWhere('e.isDeleted = 0')
+            ->setParameter('date', $date->format('Y-m-d'));
+        return $qb->getQuery()->getOneOrNullResult();
+    }
 }

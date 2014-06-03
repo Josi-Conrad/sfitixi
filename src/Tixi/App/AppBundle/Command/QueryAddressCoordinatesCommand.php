@@ -108,13 +108,13 @@ class QueryAddressCoordinatesCommand extends ContainerAwareCommand {
 
         $message = \Swift_Message::newInstance()
             ->setSubject($subject)
-            ->setFrom('itixi@gmail.com')
+            ->setFrom("itixi@gmail.com")
             ->setTo('hertus@gmail.com')
             ->setReadReceiptTo('itixi@gmail.com')
             ->
             setBody(
                 $renderView->render(
-                    'TixiApiBundle:Mail:addressQuery.html.twig',
+                    'TixiAppBundle:mail:addressQuery.html.twig',
                     array(
                         'mail_parameter_name' => $title,
                         'mail_addrquery_body' => $body,
@@ -128,17 +128,6 @@ class QueryAddressCoordinatesCommand extends ContainerAwareCommand {
         } else {
             echo "Mail send successfull";
         }
-
-        $this->getContainer()->get('knp_snappy.pdf')->generateFromHtml(
-            $renderView->render(
-                'TixiApiBundle:Mail:addressQuery.html.twig',
-                array(
-                    'mail_parameter_name' => $title,
-                    'mail_addrquery_body' => $body,
-                )
-            ),
-            'tmp/pdf/addrquery.pdf'
-        );
 
         $output->writeln("\n--------------------------------------------\n" .
             "Addresses without coordinates: " . $count . "\n" . "Addresses Updated: " . $changed . "\n" .

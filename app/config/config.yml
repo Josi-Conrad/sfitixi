@@ -32,7 +32,6 @@ twig:
       tixi_parameter_version: %tixi_parameter_version%
       tixi_parameter_client: %tixi_parameter_client%
       tixi_parameter_client_page: %tixi_parameter_client_page%
-
     debug:            "%kernel.debug%"
     strict_variables: "%kernel.debug%"
     exception_controller: 'FOS\RestBundle\Controller\ExceptionController::showAction'
@@ -83,7 +82,7 @@ doctrine:
 # Swiftmailer Configuration
 swiftmailer:
     transport: "%mailer_transport%"
-    host:      "%mailer_host%"
+#    host:      "%mailer_host%"
     username:  "%mailer_user%"
     password:  "%mailer_password%"
     spool:

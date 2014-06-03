@@ -14,6 +14,8 @@ use Tixi\App\Address\AddressManagement;
 use Tixi\App\AppBundle\Routing\RoutingMachineOSRM;
 use Tixi\App\Disposition\DispositionManagement;
 use Tixi\App\Disposition\WorkingMonthManagement;
+use Tixi\App\Document\DocumentManagement;
+use Tixi\App\Mail\MailService;
 use Tixi\App\Ride\RideManagement;
 use Tixi\App\Routing\RouteManagement;
 use Tixi\App\ZonePlan\ZonePlanManagement;
@@ -178,6 +180,14 @@ class CommonBaseTest extends WebTestCase {
      * @var RideManagement
      */
     protected $rideManagement;
+    /**
+     * @var DocumentManagement
+     */
+    protected $documentManagement;
+    /**
+     * @var MailService
+     */
+    protected $mailService;
 
     public function setUp() {
         $kernel = static::createKernel();
@@ -233,6 +243,9 @@ class CommonBaseTest extends WebTestCase {
         $this->addressManagement = $kernel->getContainer()->get('tixi_app.addressmanagement');
         $this->dispoManagement = $kernel->getContainer()->get('tixi_app.dispomanagement');
         $this->rideManagement = $kernel->getContainer()->get('tixi_app.ridemanagement');
+        $this->documentManagement = $kernel->getContainer()->get('tixi_app.documentmanagement');
+        $this->mailService = $kernel->getContainer()->get('tixi_app.mailservice');
+
 
         $this->em->beginTransaction();
     }
