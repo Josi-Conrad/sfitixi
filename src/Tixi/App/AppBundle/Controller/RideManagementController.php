@@ -31,7 +31,7 @@ class RideManagementController extends Controller {
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
-    public function getRideFeasibilityAction(Request $request) {
+    public function getFeasibilityAction(Request $request) {
         /**@var $rideManagement RideManagement */
         $rideManagement = $this->container->get('tixi_app.ridemanagement');
 
@@ -48,6 +48,48 @@ class RideManagementController extends Controller {
 
         try {
             $isFeasible = $rideManagement->checkFeasibility($dayTime, $direction, $duration, $additionalTime);
+        } catch (\Exception $e) {
+            return new Response($e->getMessage(), 500);
+        }
+
+        $response = new JsonResponse();
+        $response->setData(array(
+            'isFeasible' => $isFeasible
+        ));
+
+        return $response;
+    }
+
+    /**
+     * Get json routing information for feasibility, for example:
+     * /service/ride/repeatedFeasible?fromDate=01.06.2014&toDate=01.07.2025&weekday=1&time=12.23&direction=1&duration=23&additionalTime=2
+     * @Route("/ride/repeatedFeasible", name="tixiapp_service_ride_repeated_feasible")
+     * @Method({"GET"})
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     */
+    public function getRepeatedFeasibilityAction(Request $request) {
+        /**@var $rideManagement RideManagement */
+        $rideManagement = $this->container->get('tixi_app.ridemanagement');
+
+        $fromDateStr = $request->get('fromDate');
+        $toDateStr = $request->get('toDate');
+        $timeStr = $request->get('time');
+
+        $dayTime = \DateTime::createFromFormat('d.m.Y H.i', $fromDateStr . ' ' . $timeStr);
+        $toDate = \DateTime::createFromFormat('d.m.Y', $toDateStr);
+
+        if (!$dayTime) {
+            return new Response('wrong day or time parameters', 500);
+        }
+
+        $weekday = $request->get('weekday');
+        $direction = $request->get('direction');
+        $duration = $request->get('duration');
+        $additionalTime = $request->get('additionalTime');
+
+        try {
+            $isFeasible = $rideManagement->checkRepeatedFeasibility($dayTime, $toDate, $weekday, $direction, $duration, $additionalTime);
         } catch (\Exception $e) {
             return new Response($e->getMessage(), 500);
         }

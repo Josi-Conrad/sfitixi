@@ -77,7 +77,7 @@ class RideManagementImpl extends ContainerAware implements RideManagement {
 
     /**
      * @param \DateTime $fromDateTime
-     * @param \DateTime $endDate
+     * @param \DateTime $toDate
      * @param $weekday
      * @param $direction
      * @param $duration
@@ -85,7 +85,7 @@ class RideManagementImpl extends ContainerAware implements RideManagement {
      * @throws \LogicException
      * @return mixed
      */
-    public function checkRepeatedFeasibility(\DateTime $fromDateTime, \DateTime $endDate, $weekday, $direction, $duration, $additionalTime = 0) {
+    public function checkRepeatedFeasibility(\DateTime $fromDateTime, \DateTime $toDate, $weekday, $direction, $duration, $additionalTime = 0) {
         if ($weekday < 1 || $weekday > 7) {
             throw new \LogicException('weekday not in ISO-8601 range');
         }
@@ -104,6 +104,8 @@ class RideManagementImpl extends ContainerAware implements RideManagement {
 
         $countOfVehicles = count($allVehicles);
         $countOfExistingAssertions = 0;
+        //pattern like matching on all available RepeatedDrivingAssertions,
+        //if more then available vehicle matches, it is not feasible
         foreach ($plans as $plan) {
             foreach ($plan->getRepeatedDrivingAssertionsAsArray() as $assertion) {
                 if ($assertion->matchingDateTime($weekDate)) {
@@ -141,13 +143,13 @@ class RideManagementImpl extends ContainerAware implements RideManagement {
         $drivingPools = $shift->getDrivingPoolsAsArray();
         if (count($drivingPools) < 1) {
             $em->rollback();
-            $this->fallback();
+            return $this->fallback();
         }
 
         $drivingMissions = $dispoManagement->getDrivingMissionsInShift($shift);
         if (count($drivingMissions) < 1) {
             $em->rollback();
-            $this->fallback();
+            return $this->fallback();
         }
 
         //clean drivingPools for new optimization
@@ -173,18 +175,13 @@ class RideManagementImpl extends ContainerAware implements RideManagement {
         $rideConfigurations = $configurationBuilder->buildConfigurations();
         $e = microtime(true);
         echo "Built rideConfiguration in: " . ($e - $s) . "s\n";
-        if (!$rideConfigurations) {
+        if ($rideConfigurations === null) {
             $em->rollback();
-            $this->fallback();
+            return $this->fallback();
         }
 
         //sort configurations by least distance
         $configurationBuilder->sortRideConfigurationsByDistance($rideConfigurations);
-
-        if (count($rideConfigurations) < 1) {
-            $em->rollback();
-            $this->fallback();
-        }
 
         //success on setting vehicles to a configuration
         $success = false;
@@ -195,7 +192,7 @@ class RideManagementImpl extends ContainerAware implements RideManagement {
         while (!$success) {
             if (count($rideConfigurations) < 1) {
                 $em->rollback();
-                $this->fallback();
+                return $this->fallback();
             }
             $rideConfiguration = array_shift($rideConfigurations);
             $configurationAnalyzer = new ConfigurationAnalyzer($rideConfiguration);
@@ -206,7 +203,7 @@ class RideManagementImpl extends ContainerAware implements RideManagement {
         }
         if (!$success) {
             $em->rollback();
-            $this->fallback();
+            return $this->fallback();
         }
 
         //if all configuration and arrangements are possible, set finally missions and vehicle to pool
@@ -243,7 +240,7 @@ class RideManagementImpl extends ContainerAware implements RideManagement {
             /**@var $node RideNode */
             foreach ($rideNodes as $node) {
 //                echo "(" . $node->startMinute . "-" . $node->endMinute . ")\t";
-                echo "(ID" . $node->drivingMission->getId() . ":" . $node->startAddress->getAddressNameShort() . "->" . $node->targetAddress->getAddressNameShort() . ")\t";
+                echo "(" . $node->drivingMission->getId() . ":" . $node->startAddress->getAddressNameShort() . "->" . $node->targetAddress->getAddressNameShort() . ")\t";
             }
             echo "\n";
         }

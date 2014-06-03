@@ -57,13 +57,14 @@ class RideStrategyAnnealing implements RideStrategy {
 
         $this->adjacenceMatrix = ConfigurationBuilder::buildAdjacenceMatrixFromNodes($workNodes, $emptyRideNodes);
 
-        $initialConfiguration = $this->buildFeasibleConfiguration($workNodes);
-        $configurations = $this->annealConfigurations($initialConfiguration);
-
-        //sort and return best configuration
-        ConfigurationBuilder::sortRideConfigurationsByUsedVehicleAndDistance($configurations);
-        return $configurations[0];
-
+        $initConfig = $this->buildFeasibleConfigFromStrategy(new RideStrategyLeastDistance());
+        if ($initConfig) {
+            $configurations = $this->annealConfigurations($initConfig);
+            //sort and return best configuration
+            ConfigurationBuilder::sortRideConfigurationsByDistance($configurations);
+            return $configurations[0];
+        }
+        return null;
     }
 
     /**
@@ -101,7 +102,7 @@ class RideStrategyAnnealing implements RideStrategy {
      */
     private function buildFeasibleConfigFromStrategy(RideStrategy $strategy) {
         $configurations = $strategy->buildConfigurations($this->rideNodes, $this->drivingPools, $this->emptyRideNodes);
-        if ($configurations) {
+        if (count($configurations)>1) {
             ConfigurationBuilder::sortRideConfigurationsByDistance($configurations);
             return $configurations[0];
         }

@@ -33,7 +33,7 @@ class RideTest extends CommonBaseTest {
     }
 
     public function testRepeatedFeasibility() {
-        $dayTime = \DateTime::createFromFormat('d.m.Y H.i', '01.07.2014 12.15');
+        $dayTime = \DateTime::createFromFormat('d.m.Y H.i', '01.07.2014 23.15');
         $endTime = \DateTime::createFromFormat('d.m.Y H.i', '01.07.2025 00.00');
         echo $this->rideManagement->checkRepeatedFeasibility($dayTime, $endTime, 1, 0, 32);
     }

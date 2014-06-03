@@ -92,11 +92,7 @@ class RideStrategyLeastDistance implements RideStrategy {
                 $workRideNodes[$i] = $switch;
             }
 
-            $rideConfiguration = $this->buildLeastDistanceConfiguration($workRideNodes);
-
-            if (!$rideConfiguration->hasNotFeasibleNodes()) {
-                $rideConfigurations[] = $rideConfiguration;
-            }
+            $rideConfigurations[] = $this->buildLeastDistanceConfiguration($workRideNodes);
         }
         return $rideConfigurations;
     }

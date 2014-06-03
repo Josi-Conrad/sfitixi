@@ -11,6 +11,7 @@ namespace Tixi\App\AppBundle\Disposition;
 use Doctrine\ORM\EntityNotFoundException;
 use Symfony\Component\Console\Tests\Helper\FormatterHelperTest;
 use Symfony\Component\DependencyInjection\ContainerAware;
+use Tixi\ApiBundle\Helper\DateTimeService;
 use Tixi\ApiBundle\Interfaces\Dispo\MonthlyView\MonthlyPlanDriversPerShiftDTO;
 use Tixi\ApiBundle\Interfaces\Dispo\MonthlyView\MonthlyPlanDrivingAssertionDTO;
 use Tixi\ApiBundle\Interfaces\Dispo\MonthlyView\MonthlyPlanEditDTO;
@@ -47,14 +48,11 @@ class DispositionManagementImpl extends ContainerAware implements DispositionMan
         $shiftsForDay = $shiftRepo->findShiftsForDay($dayTime);
 
         $pickTime = $timeService->convertToLocalDateTime($dayTime);
-        $pickMinutes = $timeService->getMinutesOfDay($pickTime);
 
         foreach ($shiftsForDay as $shift) {
             $startTime = $timeService->convertToLocalDateTime($shift->getStartDate());
             $endTime = $timeService->convertToLocalDateTime($shift->getEndDate());
-            $shiftMinutesStart = $timeService->getMinutesOfDay($startTime);
-            $shiftMinutesEnd = $timeService->getMinutesOfDay($endTime);
-            if ($pickMinutes >= $shiftMinutesStart && $pickMinutes <= $shiftMinutesEnd) {
+            if (DateTimeService::matchTimeBetweenTwoDateTimes($pickTime, $startTime, $endTime)) {
                 return $shift;
             }
         }
@@ -84,11 +82,22 @@ class DispositionManagementImpl extends ContainerAware implements DispositionMan
 
             //TODO: Tactic if all missions with beginnTime in Shift or also with a part of endTime?
             /** start or end of the order laps into a shift time */
-            if ($startMinute >= $shiftMinutesStart && $endMinute <= $shiftMinutesEnd ||
-                $startMinute >= $shiftMinutesStart && $startMinute <= $shiftMinutesEnd
-            ) {
-                array_push($matchingDrivingMissions, $drivingMission);
+            if ($shiftMinutesEnd > $shiftMinutesStart) {
+                if ($startMinute >= $shiftMinutesStart && $endMinute <= $shiftMinutesEnd ||
+                    $startMinute >= $shiftMinutesStart && $startMinute <= $shiftMinutesEnd
+                ) {
+                    array_push($matchingDrivingMissions, $drivingMission);
+                }
+            } else {
+                //if endminute is smaller then start, the time lays between midnight
+                //so check if compare is not outside this time over midnight
+                if (($startMinute >= $shiftMinutesStart && $startMinute >= $endMinute)
+                    || ($startMinute <= $shiftMinutesStart && $startMinute <= $endMinute)
+                ) {
+                    array_push($matchingDrivingMissions, $drivingMission);
+                }
             }
+
         }
         return $matchingDrivingMissions;
     }
@@ -130,41 +139,40 @@ class DispositionManagementImpl extends ContainerAware implements DispositionMan
      * @param $newAmount
      * @throws \LogicException
      */
-    public function processChangeInAmountOfDriversPerShift(Shift $shift, $oldAmount, $newAmount)
-    {
+    public function processChangeInAmountOfDriversPerShift(Shift $shift, $oldAmount, $newAmount) {
         /** @var DrivingPoolRepository $drivingPoolRepository */
         $drivingPoolRepository = $this->container->get('drivingpool_repository');
         $delta = $newAmount - $oldAmount;
 
-        if($delta > 0) {
+        if ($delta > 0) {
             //new driving pool(s) need to be created. Just create the new driving pool(s).
-            for($i=0;$i<$delta;$i++) {
+            for ($i = 0; $i < $delta; $i++) {
                 $drivingPoolRepository->store(DrivingPool::registerDrivingPool($shift));
             }
 
-        }elseif($delta < 0) {
+        } elseif ($delta < 0) {
             //we need to remove driving pool(s). This operation is only permitted if enough empty driving pool(s) could
             //be found (a driving pool is considered to be empty if it has no associated driving missions).
             $amountOfPoolsToRemove = abs($delta);
             $poolsToRemove = array();
             $drivingPools = $shift->getDrivingPoolsAsArray();
             /** @var DrivingPool $drivingPool */
-            foreach($drivingPools as $drivingPool) {
-                if($drivingPool->getAmountOfAssociatedDrivingMissions() === 0) {
+            foreach ($drivingPools as $drivingPool) {
+                if ($drivingPool->getAmountOfAssociatedDrivingMissions() === 0) {
                     $poolsToRemove[] = $drivingPool;
                     $amountOfPoolsToRemove--;
-                    if($amountOfPoolsToRemove === 0) {
+                    if ($amountOfPoolsToRemove === 0) {
                         //we have enough pools to remove
                         break;
                     }
                 }
             }
-            if($amountOfPoolsToRemove===0) {
-                foreach($poolsToRemove as $poolToRemove) {
+            if ($amountOfPoolsToRemove === 0) {
+                foreach ($poolsToRemove as $poolToRemove) {
                     $shift->removeDrivingPool($poolToRemove);
                     $drivingPoolRepository->remove($poolToRemove);
                 }
-            }else {
+            } else {
                 throw new \LogicException('not enough empty driving pools found to remove');
             }
         }
@@ -210,9 +218,7 @@ class DispositionManagementImpl extends ContainerAware implements DispositionMan
     }
 
 
-
-    public function createDrivingAssertionsFromMonthlyPlan(MonthlyPlanEditDTO $monthlyPlan)
-    {
+    public function createDrivingAssertionsFromMonthlyPlan(MonthlyPlanEditDTO $monthlyPlan) {
         /** @var DrivingAssertionManagement $drivingAssertionService */
         $drivingAssertionService = $this->container->get('tixi_app.drivingassertionmanagement');
         $drivingAssertionService->handleMonthlyPlan($monthlyPlan);

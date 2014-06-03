@@ -61,7 +61,8 @@ class DateTimeService extends ContainerAware {
         } else {
             //if endminute is smaller then start, the time lays between midnight
             //so check if compare is not outside this time over midnight
-            if (!($compare <= $start && $compare >= $end)) {
+            if (($compare >= $start && $compare >= $end)
+            || ($compare <= $start && $compare <= $end)) {
                 return true;
             }
         }
