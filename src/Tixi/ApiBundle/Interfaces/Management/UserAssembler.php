@@ -10,6 +10,7 @@ namespace Tixi\ApiBundle\Interfaces\Management;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Security\Core\Encoder\EncoderFactory;
+use Symfony\Component\Security\Core\SecurityContext;
 use Tixi\SecurityBundle\Entity\Role;
 use Tixi\SecurityBundle\Entity\RoleRepository;
 use Tixi\SecurityBundle\Entity\User;
@@ -24,12 +25,23 @@ class UserAssembler {
      * @var EncoderFactory $encoderFactory
      */
     private $encoderFactory;
+    /**
+     * @var SecurityContext $securityContext
+     */
+    private $securityContext;
 
     /**
      * @param EncoderFactory $encoderFactory
      */
     public function setEncoderFactory(EncoderFactory $encoderFactory) {
         $this->encoderFactory = $encoderFactory;
+    }
+
+    /**
+     * @param SecurityContext $securityContext
+     */
+    public function setSecurityContext(SecurityContext $securityContext) {
+        $this->securityContext = $securityContext;
     }
 
     /**
@@ -114,7 +126,14 @@ class UserAssembler {
     public function usersToUserListDTOs($users) {
         $dtoArray = array();
         foreach ($users as $user) {
+            if ($user->getId() == $this->securityContext->getToken()->getUser()->getId()) {
+                continue;
+            }
+            if ($user->getRoles() > $this->securityContext->getToken()->getRoles()) {
+                continue;
+            }
             $dtoArray[] = $this->toUserListDTO($user);
+
         }
         return $dtoArray;
     }

@@ -86,7 +86,8 @@ class UserController extends Controller {
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      */
     public function newUserAction(Request $request) {
-        if (false === $this->get('security.context')->isGranted('ROLE_MANAGER')) {
+        $securityContext = $this->get('security.context');
+        if (false === $securityContext->isGranted('ROLE_MANAGER')) {
             throw new AccessDeniedException();
         }
         $tileRenderer = $this->get('tixi_api.tilerenderer');
@@ -126,14 +127,24 @@ class UserController extends Controller {
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      */
     public function editUserAction(Request $request, $userId) {
-        if (false === $this->get('security.context')->isGranted('ROLE_MANAGER')) {
+        $securityContext = $this->get('security.context');
+        if (false === $securityContext->isGranted('ROLE_MANAGER')) {
             throw new AccessDeniedException();
         }
         $tileRenderer = $this->get('tixi_api.tilerenderer');
         $userAssembler = $this->get('tixi_api.assembleruser');
+        /**@var $user User */
         $user = $this->get('tixi_user_repository')->find($userId);
         if (null === $user) {
             throw $this->createNotFoundException('This user does not exist');
+        }
+        //no access to edit higher role users
+        if ($user->getRoles() > $securityContext->getToken()->getRoles()) {
+            throw new AccessDeniedException();
+        }
+        //no access to delete his own user
+        if ($user->getId() == $securityContext->getToken()->getUser()->getId()) {
+            throw new AccessDeniedException();
         }
         $userDTO = $userAssembler->userToUserEditDTO($user);
         $form = $this->getEditForm($userDTO);
@@ -172,10 +183,19 @@ class UserController extends Controller {
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function deleteUserAction(Request $request, $userId) {
-        if (false === $this->get('security.context')->isGranted('ROLE_MANAGER')) {
+        $securityContext = $this->get('security.context');
+        if (false === $securityContext->isGranted('ROLE_MANAGER')) {
             throw new AccessDeniedException();
         }
         $user = $this->getUserById($userId);
+        //no access to edit higher role users
+        if ($user->getRoles() > $securityContext->getToken()->getRoles()) {
+            throw new AccessDeniedException();
+        }
+        //no access to delete his own user
+        if ($user->getId() == $securityContext->getToken()->getUser()->getId()) {
+            throw new AccessDeniedException();
+        }
         $user->deleteLogically();
         $this->get('entity_manager')->flush();
         return $this->redirect($this->generateUrl('tixiapi_management_users_get'));
