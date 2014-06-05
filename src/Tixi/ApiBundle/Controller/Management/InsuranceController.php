@@ -119,14 +119,14 @@ class InsuranceController extends Controller {
         $form->handleRequest($request);
         if ($form->isValid()) {
             $insuranceDTO = $form->getData();
-            $this->registerOrUpdateInsurance($insuranceDTO);
-            try {
-                $this->get('entity_manager')->flush();
-            } catch (DBALException $e) {
+            if ($this->nameAlreadyExist($insuranceDTO->name)) {
                 $errorMsg = $this->get('translator')->trans('form.error.valid.unique');
                 $error = new FormError($errorMsg);
                 $form->addError($error);
                 $form->get('name')->addError($error);
+            } else {
+                $this->registerOrUpdateInsurance($insuranceDTO);
+                $this->get('entity_manager')->flush();
             }
 
             //if no errors/invalids in form
@@ -164,14 +164,14 @@ class InsuranceController extends Controller {
         $form->handleRequest($request);
         if ($form->isValid()) {
             $insuranceDTO = $form->getData();
-            $this->registerOrUpdateInsurance($insuranceDTO);
-            try {
-                $this->get('entity_manager')->flush();
-            } catch (DBALException $e) {
+            if ($this->nameAlreadyExist($insuranceDTO->name)) {
                 $errorMsg = $this->get('translator')->trans('form.error.valid.unique');
                 $error = new FormError($errorMsg);
                 $form->addError($error);
                 $form->get('name')->addError($error);
+            } else {
+                $this->registerOrUpdateInsurance($insuranceDTO);
+                $this->get('entity_manager')->flush();
             }
 
             //if no errors/invalids in form
@@ -237,5 +237,15 @@ class InsuranceController extends Controller {
         }
         return $insurance;
     }
-
+    /**
+     * @param $name
+     * @return bool
+     */
+    protected function nameAlreadyExist($name) {
+        $insuranceRepository = $this->get('insurance_repository');
+        if ($insuranceRepository->checkIfNameAlreadyExist($name)) {
+            return true;
+        }
+        return false;
+    }
 } 

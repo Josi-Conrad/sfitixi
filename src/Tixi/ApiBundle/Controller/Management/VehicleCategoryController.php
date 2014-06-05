@@ -123,14 +123,14 @@ class VehicleCategoryController extends Controller{
         $form->handleRequest($request);
         if ($form->isValid()) {
             $vehicleCategoryDTO = $form->getData();
-            $this->registerOrUpdateVehicleCategory($vehicleCategoryDTO);
-            try {
-                $this->get('entity_manager')->flush();
-            } catch (DBALException $e) {
+            if ($this->nameAlreadyExist($vehicleCategoryDTO->name)) {
                 $errorMsg = $this->get('translator')->trans('form.error.valid.unique');
                 $error = new FormError($errorMsg);
                 $form->addError($error);
                 $form->get('name')->addError($error);
+            } else {
+                $this->registerOrUpdateVehicleCategory($vehicleCategoryDTO);
+                $this->get('entity_manager')->flush();
             }
 
             //if no errors/invalids in form
@@ -168,14 +168,14 @@ class VehicleCategoryController extends Controller{
         $form->handleRequest($request);
         if ($form->isValid()) {
             $vehicleCategoryDTO = $form->getData();
-            $this->registerOrUpdateVehicleCategory($vehicleCategoryDTO);
-            try {
-                $this->get('entity_manager')->flush();
-            } catch (DBALException $e) {
+            if ($this->nameAlreadyExist($vehicleCategoryDTO->name)) {
                 $errorMsg = $this->get('translator')->trans('form.error.valid.unique');
                 $error = new FormError($errorMsg);
                 $form->addError($error);
                 $form->get('name')->addError($error);
+            } else {
+                $this->registerOrUpdateVehicleCategory($vehicleCategoryDTO);
+                $this->get('entity_manager')->flush();
             }
 
             //if no errors/invalids in form
@@ -243,6 +243,16 @@ class VehicleCategoryController extends Controller{
 
     }
 
-
+    /**
+     * @param $name
+     * @return bool
+     */
+    protected function nameAlreadyExist($name) {
+        $vehicleCategoryRepository = $this->get('vehiclecategory_repository');
+        if ($vehicleCategoryRepository->checkIfNameAlreadyExist($name)) {
+            return true;
+        }
+        return false;
+    }
 
 } 

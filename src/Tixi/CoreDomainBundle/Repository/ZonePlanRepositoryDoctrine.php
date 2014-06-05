@@ -67,11 +67,32 @@ class ZonePlanRepositoryDoctrine extends CommonBaseRepositoryDoctrine implements
         return $qb->getQuery()->getResult();
     }
 
+    /**
+     * @param $city
+     * @return mixed
+     */
     public function findZonePlanForCity($city)
     {
         $qb = parent::createQueryBuilder('e')
             ->where('e.city = :addCity')
             ->setParameter('addCity', $city);
         return $qb->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * @param $city
+     * @return bool
+     */
+    public function checkIfCityAlreadyExist($city) {
+        $qb = parent::createQueryBuilder('s');
+        $qb->select()
+            ->where('s.isDeleted = 0')
+            ->andWhere('s.city = :duplicateName')
+            ->setParameter('duplicateName', $city);
+        if ($qb->getQuery()->getResult()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

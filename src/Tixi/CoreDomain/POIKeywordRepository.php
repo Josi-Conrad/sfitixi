@@ -20,4 +20,9 @@ interface POIKeywordRepository extends CommonBaseRepository{
      * @return mixed
      */
     public function remove(POIKeyword $POIKeyword);
+    /**
+     * @param $name
+     * @return bool
+     */
+    public function checkIfNameAlreadyExist($name);
 } 

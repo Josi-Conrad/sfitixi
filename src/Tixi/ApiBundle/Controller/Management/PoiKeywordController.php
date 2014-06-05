@@ -119,16 +119,15 @@ class PoiKeywordController extends Controller{
         $form->handleRequest($request);
         if ($form->isValid()) {
             $poiKeywordDTO = $form->getData();
-            $this->registerOrUpdatePoiKeyword($poiKeywordDTO);
-            try {
-                $this->get('entity_manager')->flush();
-            } catch (DBALException $e) {
+            if ($this->nameAlreadyExist($poiKeywordDTO->name)) {
                 $errorMsg = $this->get('translator')->trans('form.error.valid.unique');
                 $error = new FormError($errorMsg);
                 $form->addError($error);
                 $form->get('name')->addError($error);
+            } else {
+                $this->registerOrUpdatePoiKeyword($poiKeywordDTO);
+                $this->get('entity_manager')->flush();
             }
-
             //if no errors/invalids in form
             if (count($form->getErrors()) < 1) {
                 return $this->redirect($this->generateUrl('tixiapi_management_poikeywords_get'));
@@ -164,14 +163,14 @@ class PoiKeywordController extends Controller{
         $form->handleRequest($request);
         if ($form->isValid()) {
             $poiKeywordDTO = $form->getData();
-            $this->registerOrUpdatePoiKeyword($poiKeywordDTO);
-            try {
-                $this->get('entity_manager')->flush();
-            } catch (DBALException $e) {
+            if ($this->nameAlreadyExist($poiKeywordDTO->name)) {
                 $errorMsg = $this->get('translator')->trans('form.error.valid.unique');
                 $error = new FormError($errorMsg);
                 $form->addError($error);
                 $form->get('name')->addError($error);
+            } else {
+                $this->registerOrUpdatePoiKeyword($poiKeywordDTO);
+                $this->get('entity_manager')->flush();
             }
 
             //if no errors/invalids in form
@@ -238,6 +237,16 @@ class PoiKeywordController extends Controller{
         return $poiKeyword;
     }
 
-
+    /**
+     * @param $name
+     * @return bool
+     */
+    protected function nameAlreadyExist($name) {
+        $poiKeywordRepository = $this->get('poikeyword_repository');
+        if ($poiKeywordRepository->checkIfNameAlreadyExist($name)) {
+            return true;
+        }
+        return false;
+    }
 
 } 

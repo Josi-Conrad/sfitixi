@@ -37,7 +37,6 @@ class ShiftTypeRepositoryDoctrine extends CommonBaseRepositoryDoctrine implement
         return $qb->getQuery()->getResult();
     }
 
-
     /**
      * @param $name
      * @return bool
@@ -54,5 +53,4 @@ class ShiftTypeRepositoryDoctrine extends CommonBaseRepositoryDoctrine implement
             return false;
         }
     }
-
 }

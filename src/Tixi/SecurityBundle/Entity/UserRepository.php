@@ -49,4 +49,9 @@ interface UserRepository {
      */
     public function remove(User $user);
 
+    /**
+     * @param $name
+     * @return bool
+     */
+    public function checkIfNameAlreadyExist($name);
 }

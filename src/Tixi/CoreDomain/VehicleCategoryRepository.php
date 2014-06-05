@@ -15,7 +15,7 @@ use Tixi\CoreDomain\Shared\CommonBaseRepository;
  * Interface VehicleCategoryRepository
  * @package Tixi\CoreDomain
  */
-interface VehicleCategoryRepository extends CommonBaseRepository{
+interface VehicleCategoryRepository extends CommonBaseRepository {
     /**
      * @param VehicleCategory $vehicleCategory
      * @return mixed
@@ -27,4 +27,10 @@ interface VehicleCategoryRepository extends CommonBaseRepository{
      * @return mixed
      */
     public function remove(VehicleCategory $vehicleCategory);
+
+    /**
+     * @param $name
+     * @return bool
+     */
+    public function checkIfNameAlreadyExist($name);
 } 

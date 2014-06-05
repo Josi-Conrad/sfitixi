@@ -96,14 +96,14 @@ class UserController extends Controller {
         $rootPanel->add(new FormTile($form, true));
         if ($form->isValid()) {
             $userDTO = $form->getData();
-            $user = $this->registerUser($userDTO);
-            try {
-                $this->get('entity_manager')->flush();
-            } catch (DBALException $e) {
+            if ($this->nameAlreadyExist($userDTO->username)) {
                 $errorMsg = $this->get('translator')->trans('form.error.valid.unique');
                 $error = new FormError($errorMsg);
                 $form->addError($error);
                 $form->get('username')->addError($error);
+            } else {
+                $user = $this->registerUser($userDTO);
+                $this->get('entity_manager')->flush();
             }
 
             //if no errors/invalids in form
@@ -140,14 +140,14 @@ class UserController extends Controller {
         $form->handleRequest($request);
         if ($form->isValid()) {
             $userDTO = $form->getData();
-            $this->updateUser($userDTO);
-            try {
-                $this->get('entity_manager')->flush();
-            } catch (DBALException $e) {
+            if ($this->nameAlreadyExist($userDTO->username)) {
                 $errorMsg = $this->get('translator')->trans('form.error.valid.unique');
                 $error = new FormError($errorMsg);
                 $form->addError($error);
                 $form->get('username')->addError($error);
+            } else {
+                $this->updateUser($userDTO);
+                $this->get('entity_manager')->flush();
             }
 
             //if no errors/invalids in form
@@ -233,11 +233,28 @@ class UserController extends Controller {
         return $role;
     }
 
+    /**
+     * @param $userId
+     * @return null|object
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     */
     protected function getUserById($userId) {
         $user = $this->get('tixi_user_repository')->find($userId);
         if (null === $user) {
             throw $this->createNotFoundException('The user with id ' . $userId . ' does not exist');
         }
         return $user;
+    }
+
+    /**
+     * @param $name
+     * @return bool
+     */
+    protected function nameAlreadyExist($name) {
+        $shiftTypeRepository = $this->get('tixi_user_repository');
+        if ($shiftTypeRepository->checkIfNameAlreadyExist($name)) {
+            return true;
+        }
+        return false;
     }
 }

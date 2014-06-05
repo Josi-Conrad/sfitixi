@@ -20,5 +20,10 @@ interface InsuranceRepository extends CommonBaseRepository{
      * @return mixed
      */
     public function remove(Insurance $insurance);
+    /**
+     * @param $name
+     * @return bool
+     */
+    public function checkIfNameAlreadyExist($name);
 
 }

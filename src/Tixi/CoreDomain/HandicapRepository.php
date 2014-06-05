@@ -20,5 +20,9 @@ interface HandicapRepository extends CommonBaseRepository{
      * @return mixed
      */
     public function remove(Handicap $handicap);
-
+    /**
+     * @param $name
+     * @return bool
+     */
+    public function checkIfNameAlreadyExist($name);
 }

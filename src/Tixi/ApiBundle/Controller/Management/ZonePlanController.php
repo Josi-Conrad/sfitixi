@@ -158,15 +158,14 @@ class ZonePlanController extends Controller {
         $form->handleRequest($request);
         if ($form->isValid()) {
             $zonePlanDTO = $form->getData();
-            $this->registerOrUpdateZonePlan($zonePlanDTO);
-
-            try {
-                $this->get('entity_manager')->flush();
-            } catch (DBALException $e) {
+            if ($this->cityAlreadyExist($zonePlanDTO->city)) {
                 $errorMsg = $this->get('translator')->trans('form.error.valid.unique');
                 $error = new FormError($errorMsg);
                 $form->addError($error);
-                $form->get('city')->addError($error);
+                $form->get('name')->addError($error);
+            } else {
+                $this->registerOrUpdateZonePlan($zonePlanDTO);
+                $this->get('entity_manager')->flush();
             }
 
             //if no errors/invalids in form
@@ -233,6 +232,16 @@ class ZonePlanController extends Controller {
         }
         return $zonePlan;
     }
-
+    /**
+     * @param $city
+     * @return bool
+     */
+    protected function cityAlreadyExist($city) {
+        $zonePlanRepository = $this->get('zoneplan_repository');
+        if ($zonePlanRepository->checkIfNameAlreadyExist($city)) {
+            return true;
+        }
+        return false;
+    }
 
 } 

@@ -93,14 +93,14 @@ class PersonCategoryController extends Controller {
         $form->handleRequest($request);
         if ($form->isValid()) {
             $personCategoryDTO = $form->getData();
-            $personCategory = $this->registerOrUpdatePersonCategory($personCategoryDTO);
-            try {
-                $this->get('entity_manager')->flush();
-            } catch (DBALException $e) {
+            if ($this->nameAlreadyExist($personCategoryDTO->name)) {
                 $errorMsg = $this->get('translator')->trans('form.error.valid.unique');
                 $error = new FormError($errorMsg);
                 $form->addError($error);
                 $form->get('name')->addError($error);
+            } else {
+                $this->registerOrUpdatePersonCategory($personCategoryDTO);
+                $this->get('entity_manager')->flush();
             }
 
             //if no errors/invalids in form
@@ -140,14 +140,14 @@ class PersonCategoryController extends Controller {
         $form->handleRequest($request);
         if ($form->isValid()) {
             $personCategoryDTO = $form->getData();
-            $this->registerOrUpdatePersonCategory($personCategoryDTO);
-            try {
-                $this->get('entity_manager')->flush();
-            } catch (DBALException $e) {
+            if ($this->nameAlreadyExist($personCategoryDTO->name)) {
                 $errorMsg = $this->get('translator')->trans('form.error.valid.unique');
                 $error = new FormError($errorMsg);
                 $form->addError($error);
                 $form->get('name')->addError($error);
+            } else {
+                $this->registerOrUpdatePersonCategory($personCategoryDTO);
+                $this->get('entity_manager')->flush();
             }
 
             //if no errors/invalids in form
@@ -240,5 +240,15 @@ class PersonCategoryController extends Controller {
             return $personCategory;
         }
     }
-
+    /**
+     * @param $name
+     * @return bool
+     */
+    protected function nameAlreadyExist($name) {
+        $personCategoryRepository = $this->get('personcategory_repository');
+        if ($personCategoryRepository->checkIfNameAlreadyExist($name)) {
+            return true;
+        }
+        return false;
+    }
 } 
