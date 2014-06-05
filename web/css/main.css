@@ -85,6 +85,7 @@
 /* Driving Order */
 .routingInformationWrapper {
     height: 60px;
+    padding-top: 20px;
     font-weight: bold;
 }
 

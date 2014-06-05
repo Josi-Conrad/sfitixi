@@ -41,16 +41,21 @@ class RoutingMachineController extends Controller {
         $latTo = $request->get('latTo');
         $lngTo = $request->get('lngTo');
 
+
+
         try {
-            $routingInformation = $routingMachine->getRoutingInformationFromCoordinates($latFrom, $lngFrom, $latTo, $lngTo);
+            $routingOutwardInformation = $routingMachine->getRoutingInformationFromCoordinates($latFrom, $lngFrom, $latTo, $lngTo);
+            $routingReturnInformation = $routingMachine->getRoutingInformationFromCoordinates($latTo, $lngTo, $latFrom, $lngFrom);
         } catch (\Exception $e) {
             return new Response($e->getMessage(), 500);
         }
 
         $response = new JsonResponse();
         $response->setData(array(
-            'routeDuration' => $routingInformation->getTotalTime(),
-            'routeDistance' => $routingInformation->getTotalDistance()
+            'routeOutwardDuration' => $routingOutwardInformation->getTotalTime(),
+            'routeOutwardDistance' => $routingOutwardInformation->getTotalDistance(),
+            'routeReturnDuration' => $routingReturnInformation->getTotalTime(),
+            'routeReturnDistance' => $routingReturnInformation->getTotalDistance()
         ));
         return $response;
     }

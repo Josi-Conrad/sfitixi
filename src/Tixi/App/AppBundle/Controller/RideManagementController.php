@@ -15,6 +15,7 @@ use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Tixi\ApiBundle\Helper\DateTimeService;
 use Tixi\App\Ride\RideManagement;
 
 /**
@@ -37,7 +38,7 @@ class RideManagementController extends Controller {
 
         $dayStr = $request->get('day');
         $timeStr = $request->get('time');
-        $dayTime = \DateTime::createFromFormat('d.m.Y H.i', $dayStr . ' ' . $timeStr);
+        $dayTime = \DateTime::createFromFormat('d.m.Y H:i', $dayStr . ' ' . $timeStr);
         if (!$dayTime) {
             return new Response('wrong day or time parameters', 500);
         }
@@ -76,8 +77,13 @@ class RideManagementController extends Controller {
         $toDateStr = $request->get('toDate');
         $timeStr = $request->get('time');
 
-        $dayTime = \DateTime::createFromFormat('d.m.Y H.i', $fromDateStr . ' ' . $timeStr);
-        $toDate = \DateTime::createFromFormat('d.m.Y', $toDateStr);
+        $dayTime = \DateTime::createFromFormat('d.m.Y H:i', $fromDateStr . ' ' . $timeStr);
+        if($toDateStr !== '') {
+            $toDate = \DateTime::createFromFormat('d.m.Y', $toDateStr);
+        }else {
+            $toDate = DateTimeService::getMaxDateTime();
+        }
+
 
         if (!$dayTime) {
             return new Response('wrong day or time parameters', 500);

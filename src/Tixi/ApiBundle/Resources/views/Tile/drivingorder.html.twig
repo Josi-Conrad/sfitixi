@@ -18,7 +18,7 @@
                         ) }}
                     </div>
                     <div class="col-md-3">
-                        {{ form_widget(form.anchorDate, { 'attr': {'class': 'form-control'} }) }}
+                        {{ form_widget(form.anchorDate, { 'attr': {'class': 'form-control dateFromInput'} }) }}
                         <div class="error_message">{{ form_errors(form.anchorDate) }}</div>
                     </div>
                     <div class="repeatedEndDateWrapper">
@@ -26,8 +26,8 @@
                             {{ form_label(form.endDate, null, {'label_attr': {'style':'width:100%', 'class':'control-label' }}
                             ) }}
                         </div>
-                        <div class="col-md-3">
-                            {{ form_widget(form.endDate, { 'attr': {'class': 'form-control'} }) }}
+                        <div class="col-md-3 orderDateToLabel">
+                            {{ form_widget(form.endDate, { 'attr': {'class': 'form-control dateToInput'} }) }}
                             <div class="error_message">{{ form_errors(form.anchorDate) }}</div>
                         </div>
                     </div>
@@ -72,7 +72,10 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-8 col-md-offset-2 routingInformationWrapper"></div>
+                <div class="routingInformationWrapper">
+                        <div class="col-md-3 col-md-offset-2 rideTimeOutward"></div>
+                        <div class="col-md-3 col-md-offset-2 rideTimeReturn"></div>
+                </div>
             </div>
             <div class="singleTimeWrapper">
                 <div class="row">
@@ -189,10 +192,15 @@
     <script type="text/javascript">
         jQuery(function ($) {
             var drivingOrderController = new DrivingOrder();
-            drivingOrderController.init('addressfrom','addressto','{{ passengerId }}','{{ routingMachineSrcUrl }}',
-                    '{{ zoneServiceSrcUrl }}', {
+            drivingOrderController.init('addressfrom','addressto','{{ passengerId }}', {
+                'routingMachine':"{{ serviceUrls.routingMachine }}",
+                'zone':"{{ serviceUrls.zone }}",
+                'singleRideCheck':"{{ serviceUrls.singleRideCheck }}",
+                'repeatedRideCheck':"{{ serviceUrls.repeatedRideCheck }}"
+            }, {
                 'dateFromLabelSingleText':"{{ 'drivingorder.field.anchordate' | trans }}",
-                'dateFromLabelRepeatedText':"{{ 'drivingorder.field.anchordatelong' | trans }}"
+                'dateFromLabelRepeatedText':"{{ 'drivingorder.field.anchordatelong' | trans }}",
+                'drivingDuration':"{{ 'drivingorder.drivingDuration' | trans }}"
             });
             new FormValidationController('{{ formId }}');
         });

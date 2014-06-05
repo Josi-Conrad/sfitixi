@@ -15,6 +15,9 @@ function DrivingOrder() {
     this._isRepeatedCheckbox = null;
 
     this._dateFromLabel = null;
+    this._dateFromField = null;
+    this._dateToField = null;
+
     this._repeatedEndDateWrapper = null;
     this._singleTimeWrapper = null;
     this._repeatedTimeWrapper = null;
@@ -24,20 +27,30 @@ function DrivingOrder() {
     this._zoneStatusField = null;
     this._zoneNameField = null;
 
+    this._rideCheckSingleSrcUrl = null;
+    this._rideCheckRepeatedSrcUrl = null;
+    this._rideTimeOutwardWrapper = null;
+    this._rideTimeReturnWrapper = null;
     this._routingInformationWrapper = null;
+
+    this._rideTimes = new Array();
+    this._rideOutwardDirection = 'outward';
+    this._rideReturnDirection = 'return';
 
     this._trans = null;
 
-    this.init = function(lookaheadFromId, lookaheadToId, passengerId, routingMachineSrcUrl, zoneServiceSrcUrl, trans) {
+    this.init = function(lookaheadFromId, lookaheadToId, passengerId, serviceUrls, trans) {
         _this._passengerId = passengerId;
-        _this._routingMachineSrcUrl = routingMachineSrcUrl;
-        _this._zoneServiceSrcUrl = zoneServiceSrcUrl;
+        _this._routingMachineSrcUrl = serviceUrls.routingMachine;
+        _this._zoneServiceSrcUrl = serviceUrls.zone;
+        _this._rideCheckSingleSrcUrl = serviceUrls.singleRideCheck;
+        _this._rideCheckRepeatedSrcUrl = serviceUrls.repeatedRideCheck;
         _this._trans = trans;
         _this._initElements();
+        _this._initRideCheck();
         _this._initListeners();
         _this._initLookaheadAddresses(lookaheadFromId, lookaheadToId);
         _this._toggleState();
-
     }
 
     this._initLookaheadAddresses = function(lookaheadFromId, lookaheadToId) {
@@ -53,27 +66,48 @@ function DrivingOrder() {
         var _wrapper = $('.drivingOrderWrapper'),
             _isRepeatedCheckbox = _wrapper.find('.isRepeatedCheckbox'),
             _dateFromLabel = _wrapper.find('.orderDateFromLabel').find('label'),
+            _dateFromField = _wrapper.find('.dateFromInput'),
+            _dateToField = _wrapper.find('.dateToInput'),
             _repeatedEndDateWrapper = _wrapper.find('.repeatedEndDateWrapper'),
             _singleTimeWrapper = _wrapper.find('.singleTimeWrapper'),
             _repeatedTimeWrapper = _wrapper.find('.repeatedTimeWrapper'),
             _routingInformationWrapper = _wrapper.find('.routingInformationWrapper'),
+            _rideTimeOutwardWrapper = $(_routingInformationWrapper).find('.rideTimeOutward'),
+            _rideTimeReturnWrapper = $(_routingInformationWrapper).find('.rideTimeReturn'),
             _zoneStatusField = _wrapper.find('.zoneStatus'),
             _zoneIdField = _wrapper.find('.zoneId'),
             _zoneNameField = _wrapper.find('.zoneName');
         _this._isRepeatedCheckbox = _isRepeatedCheckbox;
         _this._dateFromLabel = _dateFromLabel;
+        _this._dateFromField = _dateFromField;
+        _this._dateToField = _dateToField;
         _this._repeatedEndDateWrapper = _repeatedEndDateWrapper;
         _this._singleTimeWrapper = _singleTimeWrapper;
         _this._repeatedTimeWrapper = _repeatedTimeWrapper;
         _this._routingInformationWrapper = _routingInformationWrapper;
+        _this._rideTimeOutwardWrapper = _rideTimeOutwardWrapper;
+        _this._rideTimeReturnWrapper = _rideTimeReturnWrapper;
         _this._zoneStatusField = _zoneStatusField;
         _this._zoneIdField = _zoneIdField;
         _this._zoneNameField = _zoneNameField;
     }
 
+    this._initRideCheck = function() {
+        _this._rideTimes.push(new RideTime($(_this._singleTimeWrapper).find('.outwardTimeWrapper').first(), _this._rideOutwardDirection, false, _this));
+        _this._rideTimes.push(new RideTime($(_this._singleTimeWrapper).find('.returnTimeWrapper').first(), _this._rideReturnDirection, false, _this));
+        $(_this._repeatedTimeWrapper).find('.outwardTimeWrapper').each(function() {
+            _this._rideTimes.push(new RideTime(this, _this._rideOutwardDirection, true, _this));
+        });
+        $(_this._repeatedTimeWrapper).find('.returnTimeWrapper').each(function() {
+            _this._rideTimes.push(new RideTime(this, _this._rideReturnDirection, true, _this));
+        });
+    }
+
     this._initListeners = function() {
         $(_this._isRepeatedCheckbox).on('change', _this._toggleState);
         $('body').on('addressChanged', _this._onAddressChanged);
+        $(_this._dateFromField).on('change', _this._onDateFieldChanged);
+        $(_this._dateToField).on('change', _this._onDateFieldChanged);
     }
 
     this._toggleState = function() {
@@ -111,20 +145,28 @@ function DrivingOrder() {
             _this._resetRouteInformation();
             _this._resetZoneInformation();
         }
+        _this._resetRideCheckInformations();
+    }
+
+    this._onDateFieldChanged =function() {
+        _this._resetRideCheckInformations();
     }
 
     this._updateRouteInformation = function(addressFrom, addressTo) {
         var _route = new Route(addressFrom, addressTo);
         _route.updateRoutingInformation(_this._routingMachineSrcUrl, _this._routeInformationUpdated)
+        _this._route = _route;
     }
 
     this._routeInformationUpdated = function(route) {
-        $(_this._routingInformationWrapper).html(route.toString());
+        $(_this._rideTimeOutwardWrapper).html(_this._trans['drivingDuration']+': '+route.getOutwardDurationAsString());
+        $(_this._rideTimeReturnWrapper).html(_this._trans['drivingDuration']+': '+route.getReturnDurationAsString());
     }
 
     this._resetRouteInformation = function() {
         _this._route = null;
-        $(_this._routingInformationWrapper).html('');
+        $(_this._rideTimeOutwardWrapper).html('');
+        $(_this._rideTimeReturnWrapper).html('');
     }
 
     this._updateZoneInformation = function(cityFrom, cityTo) {
@@ -151,6 +193,155 @@ function DrivingOrder() {
         $(_this._zoneIdField).val('');
 
     }
+
+    this.getRideSingleSrcUrl = function() {
+        return _this._rideCheckSingleSrcUrl;
+    }
+
+    this.getRideRepeatedSrcUrl = function() {
+        return _this._rideCheckRepeatedSrcUrl;
+    }
+
+    this.isRideCheckPossible = function(timeInput) {
+        return (_this._route !== null && timeInput !== '' && $(_this._dateFromField).val() !== '');
+    }
+
+    this.createRideSingleCheckParams = function(timeInput, direction) {
+        var _params = {},
+            _duration;
+        if(_this.isRideCheckPossible()) {
+            _duration = (direction === _this._rideOutwardDirection) ? _this._route.getOutwardDuration : _this._route.getReturnDuration;
+            _params['day'] = $(_this._dateFromField).val();
+            _params['time'] = timeInput;
+            _params['duration'] = _duration;
+        }
+        return _params;
+    }
+
+    this.createRideRepeatedCheckParams = function(timeInput, direction, weekday) {
+        console.log(weekday);
+        var _params = {},
+            _duration;
+        if(_this.isRideCheckPossible()) {
+            _duration = (direction === _this._rideOutwardDirection) ? _this._route.getOutwardDuration : _this._route.getReturnDuration;
+            _params['fromDate'] = $(_this._dateFromField).val();
+            _params['toDate'] = $(_this._dateToField).val();
+            _params['time'] = timeInput;
+            _params['duration'] = _duration;
+            _params['weekday'] = weekday;
+        }
+        return _params;
+    }
+
+    this._resetRideCheckInformations = function() {
+        _this._rideTimes.forEach(function(rideTime) {
+            rideTime.reset();
+        })
+    }
+}
+
+function RideTime(elementWrapper, direction, isRepeated, orderController) {
+    var _this = this;
+
+    this._direction = null;
+    this._isRepeated = null;
+    this._orderController = null;
+
+
+    this._formGroupWrapper = null;
+    this._inputField = null;
+    this._feedbackWrapper = null;
+
+    this._weekday = null;
+
+    this._init = function() {
+        _this._direction = direction;
+        _this._isRepeated = isRepeated;
+        _this._orderController = orderController;
+        _this._formGroupWrapper = elementWrapper;
+        _this._inputField = $(elementWrapper).find('input');
+        _this._weekday = $(_this._inputField).data('weekday');
+        _this._feedbackWrapper = $(elementWrapper).find('span');
+        _this._initListeners();
+    }
+
+    this.reset = function() {
+        _this._resetFeasableState();
+    }
+
+    this._initListeners = function() {
+        $(_this._inputField).on('focusout', _this._onInputChange);
+    }
+
+    this._onInputChange = function() {
+        if(orderController.isRideCheckPossible($(_this._inputField).val())) {
+            if(_this._isRepeated) {
+                _this._pollFeasabilityInformationForRepeatedCheck().done(function(data) {
+                    if(data.isFeasible) {
+                        _this._setFeasableState();
+                    }else {
+                        _this._setUnfeasableState();
+                    }
+                }).fail(function() {
+
+                });
+            }else {
+                _this._pollFeasabilityInformationForSingleCheck().done(function(data) {
+                    if(data.isFeasible) {
+                        _this._setFeasableState();
+                    }else {
+                        _this._setUnfeasableState();
+                    }
+                }).fail(function() {
+
+                });
+            }
+        }
+
+
+    }
+
+    this._pollFeasabilityInformationForSingleCheck = function() {
+        var _src = _this._orderController.getRideSingleSrcUrl(),
+            _params = _this._orderController.createRideSingleCheckParams($(_this._inputField).val(),_this._direction);
+
+        return $.ajax({
+            type: 'GET',
+            url: _src + '?' + $.param(_params, true),
+            dataType: 'json'
+        });
+    }
+
+    this._pollFeasabilityInformationForRepeatedCheck = function() {
+        var _src = _this._orderController.getRideRepeatedSrcUrl(),
+            _params = _this._orderController.createRideRepeatedCheckParams($(_this._inputField).val(),_this._direction, _this._weekday);
+
+        return $.ajax({
+            type: 'GET',
+            url: _src + '?' + $.param(_params, true),
+            dataType: 'json'
+        });
+    }
+
+    this._setFeasableState = function(){
+        _this._resetFeasableState();
+        $(_this._feedbackWrapper).addClass('glyphicon-ok');
+        $(_this._formGroupWrapper).addClass('has-success');
+    }
+
+    this._setUnfeasableState = function() {
+        _this._resetFeasableState();
+        $(_this._feedbackWrapper).addClass('glyphicon-remove');
+        $(_this._formGroupWrapper).addClass('has-error');
+    }
+
+    this._resetFeasableState = function() {
+        $(_this._formGroupWrapper).removeClass('has-success has-error');
+        $(_this._feedbackWrapper).removeClass('glyphicon-ok glyphicon-remove');
+    }
+
+
+    _this._init();
 }
 
 function Route(from, to) {
@@ -158,8 +349,10 @@ function Route(from, to) {
 
     this._from = null;
     this._to = null;
-    this._duration = null;
-    this._distance = null;
+    this._durationOutward = null;
+    this._distanceOutward = null;
+    this._durationReturn = null;
+    this._distanceReturn = null;
 
     this._init = function(from, to) {
         _this._from = from;
@@ -168,8 +361,10 @@ function Route(from, to) {
 
     this.updateRoutingInformation = function(srcUrl, callback) {
         _this._pollRoutingInformation(srcUrl, _this._constructParams()).done(function(data) {
-            _this._distance = data.routeDistance;
-            _this._duration = data.routeDuration;
+            _this._distanceOutward = data.routeOutwardDistance;
+            _this._durationOutward = data.routeOutwardDuration;
+            _this._durationReturn = data.routeReturnDuration;
+            _this._distanceReturn = data.routeReturnDistance;
             callback(_this);
         }).fail(function() {
             //ToDo on routing fail
@@ -201,12 +396,20 @@ function Route(from, to) {
         });
     }
 
-    this.toString = function() {
-        var _toReturn = '';
-//        _toReturn += 'Zone: ';
-        _toReturn += 'Fahrtdauer: '+_this._convertSecToMin(_this._duration)+' min - ';
-        _toReturn += 'Fahrdistanz: '+_this._distance+' m';
-        return _toReturn;
+    this.getOutwardDurationAsString = function() {
+        return _this._convertSecToMin(_this._durationOutward)+' min';
+    }
+
+    this.getOutwardDuration = function() {
+        return _this._durationOutward;
+    }
+
+    this.getReturnDurationAsString = function() {
+        return _this._convertSecToMin(_this._durationReturn)+' min';
+    }
+
+    this.getReturnDuration = function() {
+        return _this._durationReturn;
     }
 
     this._convertSecToMin = function(sec) {

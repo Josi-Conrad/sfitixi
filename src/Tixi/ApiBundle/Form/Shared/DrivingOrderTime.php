@@ -15,6 +15,12 @@ use Symfony\Component\Validator\Constraints\Time;
 
 class DrivingOrderTime extends AbstractType{
 
+    protected $weekday;
+
+    public function __construct($weekday = '') {
+        $this->weekday = $weekday;
+    }
+
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -27,6 +33,7 @@ class DrivingOrderTime extends AbstractType{
             'input' => 'datetime',
             'widget' => 'single_text',
             'attr' => array(
+                'data-weekday' => $this->weekday,
                 'title' => 'form.field.title.datetime',
             ),
             'pattern' => '^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$',
@@ -41,6 +48,7 @@ class DrivingOrderTime extends AbstractType{
             'input' => 'datetime',
             'widget' => 'single_text',
             'attr' => array(
+                'data-weekday' => $this->weekday,
                 'title' => 'form.field.title.datetime',
             ),
             'pattern' => '^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$',

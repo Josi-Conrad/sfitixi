@@ -111,3 +111,5 @@ drivingorder.field.zone: Zone
 drivingorder.field.compagnion: Anzahl Begleitpersonen
 drivingorder.field.memo: Bemerkungen
 
+drivingorder.drivingDuration: Fahrtdauer
+

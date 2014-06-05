@@ -17,8 +17,7 @@ class DrivingOrderTile extends AbstractTile{
     protected $formId;
     protected $form;
     protected $passengerId;
-    protected $routingMachineSrcUrl;
-    protected $zoneServiceSrcUrl;
+    protected $serviceUrls;
 
     /**
      * @param $form
@@ -26,12 +25,11 @@ class DrivingOrderTile extends AbstractTile{
      * @param $routingMachineSrcUrl
      * @param $zoneServiceSrcUrl
      */
-    public function __construct($form, $passengerId, $routingMachineSrcUrl, $zoneServiceSrcUrl) {
+    public function __construct($form, $passengerId, $serviceUrls) {
         $this->formId = $form->getName();
         $this->form = $form;
         $this->passengerId = $passengerId;
-        $this->routingMachineSrcUrl = $routingMachineSrcUrl;
-        $this->zoneServiceSrcUrl = $zoneServiceSrcUrl;
+        $this->serviceUrls = $serviceUrls;
         $this->add(new FormControlTile($this->formId));
     }
 
@@ -41,7 +39,7 @@ class DrivingOrderTile extends AbstractTile{
     public function getViewParameters()
     {
         return array('formId'=>$this->formId, 'form'=>$this->form->createView(), 'passengerId'=>$this->passengerId,
-            'routingMachineSrcUrl'=>$this->routingMachineSrcUrl, 'zoneServiceSrcUrl'=>$this->zoneServiceSrcUrl);
+            'serviceUrls'=>$this->serviceUrls);
     }
 
     /**

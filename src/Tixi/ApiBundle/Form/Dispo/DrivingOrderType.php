@@ -63,31 +63,31 @@ class DrivingOrderType extends CommonAbstractType{
             'label' => 'drivingorder.field.isRepeated'
         ));
 
-        $builder->add('mondayOrderTime', new DrivingOrderTime(), array(
+        $builder->add('mondayOrderTime', new DrivingOrderTime('1'), array(
             'required' => false,
             'label' => 'monday.name'
         ));
-        $builder->add('tuesdayOrderTime', new DrivingOrderTime(), array(
+        $builder->add('tuesdayOrderTime', new DrivingOrderTime('2'), array(
             'required' => false,
             'label' => 'tuesday.name'
         ));
-        $builder->add('wednesdayOrderTime', new DrivingOrderTime(), array(
+        $builder->add('wednesdayOrderTime', new DrivingOrderTime('3'), array(
             'required' => false,
             'label' => 'wednesday.name'
         ));
-        $builder->add('thursdayOrderTime', new DrivingOrderTime(), array(
+        $builder->add('thursdayOrderTime', new DrivingOrderTime('4'), array(
             'required' => false,
             'label' => 'thursday.name'
         ));
-        $builder->add('fridayOrderTime', new DrivingOrderTime(), array(
+        $builder->add('fridayOrderTime', new DrivingOrderTime('5'), array(
             'required' => false,
             'label' => 'friday.name'
         ));
-        $builder->add('saturdayOrderTime', new DrivingOrderTime(), array(
+        $builder->add('saturdayOrderTime', new DrivingOrderTime('6'), array(
             'required' => false,
             'label' => 'saturday.name'
         ));
-        $builder->add('sundayOrderTime', new DrivingOrderTime(), array(
+        $builder->add('sundayOrderTime', new DrivingOrderTime('7'), array(
             'required' => false,
             'label' => 'sunday.name'
         ));

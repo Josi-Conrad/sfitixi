@@ -16,22 +16,27 @@
 {% endblock dateTimePicker_widget %}
 
 {% block drivingOrderTime_widget %}
-    <div class="form-group">
+
         <div class="col-md-2">
             {{ form_label(form.outwardTime, null, {'label_attr': {'style':'width:100%', 'class':'control-label repeatedTimeWidget' }}
             ) }}
         </div>
         <div class="col-md-3">
+            <div class="form-group has-feedback outwardTimeWrapper">
             {{ form_widget(form.outwardTime, { 'attr': {'class': 'form-control'} }) }}
+                <span class="glyphicon form-control-feedback"></span>
+             </div>
         </div>
         <div class="col-md-2">
             {{ form_label(form.returnTime, null, {'label_attr': {'style':'width:100%', 'class':'control-label repeatedTimeWidget' }}
             ) }}
         </div>
         <div class="col-md-3">
+            <div class="form-group has-feedback returnTimeWrapper">
             {{ form_widget(form.returnTime, { 'attr': {'class': 'form-control'} }) }}
+                <span class="glyphicon form-control-feedback"></span>
+                </div>
         </div>
-    </div>
 {% endblock drivingOrderTime_widget %}
 
 {% block addresslookahead_widget %}

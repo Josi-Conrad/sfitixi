@@ -58,7 +58,7 @@ class DrivingOrderController extends Controller{
         }
 
         $rootPanel = new RootPanel($this->menuId, 'drivingorder.panel.new',$passenger->getNameString());
-        $rootPanel->add(new DrivingOrderTile($form, $passengerId, $this->generateUrl('tixiapp_service_routing'),$this->generateUrl('tixiapp_service_zone')));
+        $rootPanel->add(new DrivingOrderTile($form, $passengerId, $this->constructServiceUrls()));
 
         return new Response($tileRenderer->render($rootPanel));
     }
@@ -68,6 +68,16 @@ class DrivingOrderController extends Controller{
      * @param Passenger $passenger
      */
     protected function registerOrUpdateDrivingOrder(DrivingOrderRegisterDTO $registerDto, Passenger $passenger) {
+
+    }
+
+    protected function constructServiceUrls() {
+        $serviceUrls = [];
+        $serviceUrls['routingMachine'] = $this->generateUrl('tixiapp_service_routing');
+        $serviceUrls['zone'] = $this->generateUrl('tixiapp_service_zone');
+        $serviceUrls['singleRideCheck'] = $this->generateUrl('tixiapp_service_ride_feasible');
+        $serviceUrls['repeatedRideCheck'] = $this->generateUrl('tixiapp_service_ride_repeated_feasible');
+        return $serviceUrls;
 
     }
 
