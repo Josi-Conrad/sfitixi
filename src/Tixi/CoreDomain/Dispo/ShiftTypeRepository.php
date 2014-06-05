@@ -26,4 +26,10 @@ interface ShiftTypeRepository extends CommonBaseRepository {
      */
     public function findAllActive();
 
+    /**
+     * @param $name
+     * @return mixed
+     */
+    public function checkIfNameAlreadyExist($name);
+
 }

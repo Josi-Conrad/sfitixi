@@ -124,16 +124,15 @@ class ShiftTypeController extends Controller {
         $form->handleRequest($request);
         if ($form->isValid()) {
             $shiftTypeDTO = $form->getData();
-            $shiftType = $this->registerOrUpdateShiftType($shiftTypeDTO);
-            try {
-                $this->get('entity_manager')->flush();
-            } catch (DBALException $e) {
+            if ($this->nameAlreadyExist($shiftTypeDTO->name)) {
                 $errorMsg = $this->get('translator')->trans('form.error.valid.unique');
                 $error = new FormError($errorMsg);
                 $form->addError($error);
                 $form->get('name')->addError($error);
+            } else {
+                $this->registerOrUpdateShiftType($shiftTypeDTO);
+                $this->get('entity_manager')->flush();
             }
-
             //if no errors/invalids in form
             if (count($form->getErrors()) < 1) {
                 return $this->redirect($this->generateUrl('tixiapi_management_shifttypes_get', array('shifttypeId' => $shiftType->getId())));
@@ -170,14 +169,14 @@ class ShiftTypeController extends Controller {
         $form->handleRequest($request);
         if ($form->isValid()) {
             $shiftTypeDTO = $form->getData();
-            $this->registerOrUpdateShiftType($shiftTypeDTO);
-            try {
-                $this->get('entity_manager')->flush();
-            } catch (DBALException $e) {
+            if ($this->nameAlreadyExist($shiftTypeDTO->name)) {
                 $errorMsg = $this->get('translator')->trans('form.error.valid.unique');
                 $error = new FormError($errorMsg);
                 $form->addError($error);
                 $form->get('name')->addError($error);
+            } else {
+                $this->registerOrUpdateShiftType($shiftTypeDTO);
+                $this->get('entity_manager')->flush();
             }
 
             //if no errors/invalids in form
@@ -242,4 +241,15 @@ class ShiftTypeController extends Controller {
         }
     }
 
+    /**
+     * @param $name
+     * @return bool
+     */
+    protected function nameAlreadyExist($name) {
+        $shiftTypeRepository = $this->get('shifttype_repository');
+        if ($shiftTypeRepository->checkIfNameAlreadyExist($name)) {
+            return true;
+        }
+        return false;
+    }
 } 

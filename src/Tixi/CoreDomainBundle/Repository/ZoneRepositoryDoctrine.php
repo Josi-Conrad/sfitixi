@@ -27,6 +27,10 @@ class ZoneRepositoryDoctrine extends CommonBaseRepositoryDoctrine implements Zon
         $this->getEntityManager()->remove($zone);
     }
 
+    /**
+     * @param $name
+     * @return bool
+     */
     public function checkIfNameAlreadyExist($name) {
         $qb = parent::createQueryBuilder('s');
         $qb->select()
@@ -40,6 +44,9 @@ class ZoneRepositoryDoctrine extends CommonBaseRepositoryDoctrine implements Zon
         }
     }
 
+    /**
+     * @return mixed
+     */
     public function findUnclassifiedZone()
     {
         $qb = parent::createQueryBuilder('z');

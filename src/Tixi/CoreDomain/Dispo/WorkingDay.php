@@ -44,6 +44,16 @@ class WorkingDay {
      * @ORM\Column(type="text", nullable=true)
      */
     protected $comment;
+    /**
+     * total amount of driven distance on this day in meters
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $totalDistanceOfOrders;
+    /**
+     * total amount of driven time on this day in minutes
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $totalTimeOfOrders;
 
     protected function __construct() {
         $this->shifts = new ArrayCollection();
@@ -84,12 +94,12 @@ class WorkingDay {
 
     public function getShiftsOrderedByStartTime() {
         $orderedShifts = $this->getShifts()->toArray();
-        usort($orderedShifts, function(Shift $a, Shift $b) {
-            if($a->getStart() < $b->getStart()) {
+        usort($orderedShifts, function (Shift $a, Shift $b) {
+            if ($a->getStart() < $b->getStart()) {
                 return -1;
-            }else if($a->getStart() == $b->getStart()) {
+            } else if ($a->getStart() == $b->getStart()) {
                 return 0;
-            }else {
+            } else {
                 return 1;
             }
         });
@@ -100,16 +110,16 @@ class WorkingDay {
      * @return array
      */
     public function getMisingDriversInformationArray() {
-        $missingDriversArray = array('perShiftString'=>'','total'=>0);
+        $missingDriversArray = array('perShiftString' => '', 'total' => 0);
         $shifts = $this->getShiftsOrderedByStartTime();
         $total = 0;
         /** @var Shift $shift */
-        foreach($shifts as $shift) {
+        foreach ($shifts as $shift) {
             $missingDrivers = $shift->getAmountOfMissingDrivers();
-            $correctedMissingDrivers = $missingDrivers<0 ? 0 : $missingDrivers;
+            $correctedMissingDrivers = $missingDrivers < 0 ? 0 : $missingDrivers;
             $assignedPositions = count($shift->getDrivingAssertionsAsArray());
             $missingDriversArray['perShiftString'] .= $shift->getShiftType()->getName()
-                .': '.$assignedPositions.'/'.$shift->getAmountOfDrivers().' ';
+                . ': ' . $assignedPositions . '/' . $shift->getAmountOfDrivers() . ' ';
             $total += $correctedMissingDrivers;
         }
         $missingDriversArray['total'] = $total;
