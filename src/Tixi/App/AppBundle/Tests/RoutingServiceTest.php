@@ -67,7 +67,7 @@ class RoutingServiceTest extends CommonBaseTest {
             ));
         $response = $client->getResponse();
         $json = json_decode($response->getContent());
-        $rd = $json->routeDuration;
+        $rd = $json->routeOutwardDuration;
         $this->assertNotEmpty($rd);
     }
 
