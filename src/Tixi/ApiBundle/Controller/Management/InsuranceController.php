@@ -25,6 +25,7 @@ use Tixi\ApiBundle\Tile\Core\FormTile;
 use Tixi\ApiBundle\Tile\Core\PanelDeleteFooterTile;
 use Tixi\ApiBundle\Tile\Core\ReferentialConstraintErrorTile;
 use Tixi\ApiBundle\Tile\Core\RootPanel;
+use Tixi\CoreDomain\Insurance;
 
 /**
  * Class InsuranceController
@@ -164,7 +165,7 @@ class InsuranceController extends Controller {
         $form->handleRequest($request);
         if ($form->isValid()) {
             $insuranceDTO = $form->getData();
-            if ($this->nameAlreadyExist($insuranceDTO->name)) {
+            if ($this->nameAlreadyExist($insuranceDTO->name) && ($insurance->getName() != $insuranceDTO->name)) {
                 $errorMsg = $this->get('translator')->trans('form.error.valid.unique');
                 $error = new FormError($errorMsg);
                 $form->addError($error);
@@ -226,7 +227,7 @@ class InsuranceController extends Controller {
 
     /**
      * @param $insuranceId
-     * @return mixed
+     * @return Insurance
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
     protected function getInsurance($insuranceId) {

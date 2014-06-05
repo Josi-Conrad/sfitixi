@@ -169,7 +169,7 @@ class ShiftTypeController extends Controller {
         $form->handleRequest($request);
         if ($form->isValid()) {
             $shiftTypeDTO = $form->getData();
-            if ($this->nameAlreadyExist($shiftTypeDTO->name)) {
+            if ($this->nameAlreadyExist($shiftTypeDTO->name) && ($shiftType->getName() != $shiftTypeDTO->name)) {
                 $errorMsg = $this->get('translator')->trans('form.error.valid.unique');
                 $error = new FormError($errorMsg);
                 $form->addError($error);

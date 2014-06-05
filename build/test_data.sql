@@ -42,7 +42,7 @@ INSERT INTO `shift_type` (`id`,`name`,`start`,`end`,`memo`,`isDeleted`,`creation
  (3,'Schicht 3','1970-01-01 11:00:00','1970-01-01 16:59:00',NULL,0,'2000-10-10 00:00:00','2000-10-10 00:00:00'),
  (4,'Schicht 4','1970-01-01 17:00:00','1970-01-01 21:00:00',NULL,0,'2000-10-10 00:00:00','2014-05-17 16:41:59');
 
-INSERT INTO `vehicle_category` VALUES 
+INSERT INTO `vehicle_category` (`id`,`name`,`amountOfSeats`,`amountOfWheelChairs`,`isDeleted`,`creationDateTime`,`modifiedDateTime`) VALUES
 (1,'Movano',5,2,0,'2000-10-10 00:00:00','2000-10-10 00:00:00'),
 (2,'Maxi',4,1,0,'2000-10-10 00:00:00','2000-10-10 00:00:00'),
 (3,'Caddy',3,1,0,'2000-10-10 00:00:00','2000-10-10 00:00:00');
@@ -80,7 +80,7 @@ INSERT INTO `absent` VALUES (1,1,'Ferien','2014-07-04','2014-07-11',0,'2000-10-1
 /*
 insert_vehicle_depots
 */
-INSERT INTO `vehicle_depot` VALUES (1,1,'Depot Zug',0,'2014-04-23 11:58:50','2014-04-23 11:58:50'),(2,2,'Depot Baar',0,'2014-04-23 11:58:50','2014-04-23 11:58:50');
+INSERT INTO `vehicle_depot`(`id`,`address_id`,`name`,`isDeleted`,`creationDateTime`,`modifiedDateTime`) VALUES (1,1,'Depot Zug',0,'2014-04-23 11:58:50','2014-04-23 11:58:50'),(2,2,'Depot Baar',0,'2014-04-23 11:58:50','2014-04-23 11:58:50');
 
 
 /*

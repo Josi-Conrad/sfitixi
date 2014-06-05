@@ -136,11 +136,12 @@ class DriverCategoryController extends Controller {
             throw $this->createNotFoundException('This driverCategory does not exist');
         }
         $driverCategoryDTO = $driverCategoryAssembler->driverCategoryToDriverCategoryRegisterDTO($driverCategory);
+        $origName = $driverCategoryDTO->name;
         $form = $this->getForm($driverCategoryDTO);
         $form->handleRequest($request);
         if ($form->isValid()) {
             $driverCategoryDTO = $form->getData();
-            if ($this->nameAlreadyExist($driverCategoryDTO->name)) {
+            if ($this->nameAlreadyExist($driverCategoryDTO->name) && ($origName != $driverCategoryDTO->name)) {
                 $errorMsg = $this->get('translator')->trans('form.error.valid.unique');
                 $error = new FormError($errorMsg);
                 $form->addError($error);

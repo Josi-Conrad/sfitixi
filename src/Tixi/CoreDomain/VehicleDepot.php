@@ -30,7 +30,10 @@ class VehicleDepot extends CommonBaseEntity {
      * @ORM\Column(type="string", length=50)
      */
     protected $name;
-
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $memo;
     /**
      * @ORM\ManyToOne(targetEntity="Address")
      * @ORM\JoinColumn(name="address_id", referencedColumnName="id")
@@ -50,12 +53,14 @@ class VehicleDepot extends CommonBaseEntity {
     /**
      * @param $name
      * @param Address $address
+     * @param null $memo
      * @return \Tixi\CoreDomain\VehicleDepot
      */
-    public static function registerVehicleDepot($name, Address $address) {
+    public static function registerVehicleDepot($name, Address $address, $memo=null) {
         $vehicleDepot = new VehicleDepot();
 
         $vehicleDepot->setName($name);
+        $vehicleDepot->setMemo($memo);
         $vehicleDepot->assignAddress($address);
 
         return $vehicleDepot;
@@ -64,14 +69,16 @@ class VehicleDepot extends CommonBaseEntity {
     /**
      * @param null $name
      * @param Address $address
+     * @param null $memo
      */
-    public function updateVehicleDepotData($name = null, Address $address = null) {
+    public function updateVehicleDepotData($name = null, Address $address = null, $memo=null) {
         if (!empty($name)) {
             $this->setName($name);
         }
         if(!empty($address)) {
             $this->assignAddress($address);
         }
+        $this->setMemo($memo);
     }
 
     public function assignAddress(Address $address) {
@@ -118,5 +125,19 @@ class VehicleDepot extends CommonBaseEntity {
      */
     public function getNameString() {
         return $this->name;
+    }
+
+    /**
+     * @param mixed $memo
+     */
+    public function setMemo($memo) {
+        $this->memo = $memo;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMemo() {
+        return $this->memo;
     }
 }

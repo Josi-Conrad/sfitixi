@@ -140,7 +140,7 @@ class UserController extends Controller {
         $form->handleRequest($request);
         if ($form->isValid()) {
             $userDTO = $form->getData();
-            if ($this->nameAlreadyExist($userDTO->username)) {
+            if ($this->nameAlreadyExist($userDTO->username) && ($user->getUsername() != $userDTO->username)) {
                 $errorMsg = $this->get('translator')->trans('form.error.valid.unique');
                 $error = new FormError($errorMsg);
                 $form->addError($error);

@@ -16,5 +16,6 @@ use Tixi\ApiBundle\Interfaces\AddressRegisterDTO;
 class VehicleDepotRegisterDTO {
     public $id;
     public $name;
+    public $memo;
     public $address;
 }

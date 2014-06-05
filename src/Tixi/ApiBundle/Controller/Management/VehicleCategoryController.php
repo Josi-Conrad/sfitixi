@@ -25,6 +25,7 @@ use Tixi\ApiBundle\Tile\Core\FormTile;
 use Tixi\ApiBundle\Tile\Core\PanelDeleteFooterTile;
 use Tixi\ApiBundle\Tile\Core\ReferentialConstraintErrorTile;
 use Tixi\ApiBundle\Tile\Core\RootPanel;
+use Tixi\CoreDomain\VehicleCategory;
 use Tixi\CoreDomainBundle\Repository\VehicleRepositoryDoctrine;
 
 /**
@@ -168,7 +169,7 @@ class VehicleCategoryController extends Controller{
         $form->handleRequest($request);
         if ($form->isValid()) {
             $vehicleCategoryDTO = $form->getData();
-            if ($this->nameAlreadyExist($vehicleCategoryDTO->name)) {
+            if ($this->nameAlreadyExist($vehicleCategoryDTO->name) && ($vehicleCategory->getName() != $vehicleCategoryDTO->name)) {
                 $errorMsg = $this->get('translator')->trans('form.error.valid.unique');
                 $error = new FormError($errorMsg);
                 $form->addError($error);
@@ -230,7 +231,7 @@ class VehicleCategoryController extends Controller{
 
     /**
      * @param $vehicleCategoryId
-     * @return mixed
+     * @return VehicleCategory
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
     protected function getVehicleCategory($vehicleCategoryId) {

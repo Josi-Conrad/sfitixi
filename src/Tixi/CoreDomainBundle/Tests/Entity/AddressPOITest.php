@@ -50,9 +50,6 @@ class AddressPOITest extends CommonBaseTest{
         $this->assertEquals(null, $this->addressRepo->find($id));
     }
 
-    /**
-     * @expectedException Doctrine\DBAL\DBALException
-     */
     public function testPoiCRUD() {
         $address = Address::registerAddress('Grundstrasse 12', '6431', 'Schwyz',
             'Schweiz', 'Spital Schwyz', 47.175460, 8.517752, 'Spital');
@@ -82,12 +79,6 @@ class AddressPOITest extends CommonBaseTest{
 
         $this->poiRemove($poi);
 
-        //unique exception
-        $poiSame1 = POIKeyword::registerPOIKeyword('Testsame');
-        $poiSame2 = POIKeyword::registerPOIKeyword('Testsame');
-        $this->poiKeywordRepo->store($poiSame1);
-        $this->poiKeywordRepo->store($poiSame2);
-        $this->em->flush();
     }
 
     private function poiRemove(POI $poi) {

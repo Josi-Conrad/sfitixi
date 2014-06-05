@@ -25,6 +25,7 @@ use Tixi\ApiBundle\Tile\Core\FormTile;
 use Tixi\ApiBundle\Tile\Core\PanelDeleteFooterTile;
 use Tixi\ApiBundle\Tile\Core\ReferentialConstraintErrorTile;
 use Tixi\ApiBundle\Tile\Core\RootPanel;
+use Tixi\CoreDomain\Handicap;
 
 /**
  * Class HandicapController
@@ -165,7 +166,7 @@ class HandicapController extends Controller {
         $form->handleRequest($request);
         if ($form->isValid()) {
             $handicapDTO = $form->getData();
-            if ($this->nameAlreadyExist($handicapDTO->name)) {
+            if ($this->nameAlreadyExist($handicapDTO->name) && ($handicap->getName() != $handicapDTO->name)) {
                 $errorMsg = $this->get('translator')->trans('form.error.valid.unique');
                 $error = new FormError($errorMsg);
                 $form->addError($error);
@@ -227,7 +228,7 @@ class HandicapController extends Controller {
 
     /**
      * @param $handicapId
-     * @return mixed
+     * @return Handicap
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
     protected function getHandicap($handicapId) {

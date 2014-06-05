@@ -25,6 +25,7 @@ use Tixi\ApiBundle\Tile\Core\FormTile;
 use Tixi\ApiBundle\Tile\Core\PanelDeleteFooterTile;
 use Tixi\ApiBundle\Tile\Core\ReferentialConstraintErrorTile;
 use Tixi\ApiBundle\Tile\Core\RootPanel;
+use Tixi\CoreDomain\POIKeyword;
 
 /**
  * Class PoiKeywordController
@@ -163,7 +164,7 @@ class PoiKeywordController extends Controller{
         $form->handleRequest($request);
         if ($form->isValid()) {
             $poiKeywordDTO = $form->getData();
-            if ($this->nameAlreadyExist($poiKeywordDTO->name)) {
+            if ($this->nameAlreadyExist($poiKeywordDTO->name) && ($poiKeyword->getName() != $poiKeywordDTO->name)) {
                 $errorMsg = $this->get('translator')->trans('form.error.valid.unique');
                 $error = new FormError($errorMsg);
                 $form->addError($error);
@@ -225,7 +226,7 @@ class PoiKeywordController extends Controller{
 
     /**
      * @param $poiKeywordId
-     * @return mixed
+     * @return POIKeyword
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
     protected function getPoiKeyword($poiKeywordId) {

@@ -20,7 +20,7 @@ class VehicleCategoryAssembler {
      * @return VehicleCategory
      */
     public function registerDTOtoNewVehicleCategory(VehicleCategoryRegisterDTO $dto) {
-        $vehicleCategory = VehicleCategory::registerVehicleCategory($dto->name, $dto->amountOfSeats, $dto->amountOfWheelChairs);
+        $vehicleCategory = VehicleCategory::registerVehicleCategory($dto->name, $dto->amountOfSeats, $dto->amountOfWheelChairs, $dto->memo);
         return $vehicleCategory;
     }
 
@@ -29,7 +29,7 @@ class VehicleCategoryAssembler {
      * @param VehicleCategoryRegisterDTO $dto
      */
     public function registerDTOtoVehicleCategory(VehicleCategory $vehicleCategory, VehicleCategoryRegisterDTO $dto) {
-        $vehicleCategory->updateData($dto->name, $dto->amountOfSeats, $dto->amountOfWheelChairs);
+        $vehicleCategory->updateData($dto->name, $dto->amountOfSeats, $dto->amountOfWheelChairs, $dto->memo);
     }
 
     /**
@@ -40,6 +40,7 @@ class VehicleCategoryAssembler {
         $vehicleCategoryDTO = new VehicleCategoryRegisterDTO();
         $vehicleCategoryDTO->id = $vehicleCategory->getId();
         $vehicleCategoryDTO->name = $vehicleCategory->getName();
+        $vehicleCategoryDTO->memo = $vehicleCategory->getMemo();
         $vehicleCategoryDTO->amountOfSeats = $vehicleCategory->getAmountOfSeats();
         $vehicleCategoryDTO->amountOfWheelChairs = $vehicleCategory->getAmountOfWheelChairs();
         return $vehicleCategoryDTO;

@@ -140,7 +140,7 @@ class PersonCategoryController extends Controller {
         $form->handleRequest($request);
         if ($form->isValid()) {
             $personCategoryDTO = $form->getData();
-            if ($this->nameAlreadyExist($personCategoryDTO->name)) {
+            if ($this->nameAlreadyExist($personCategoryDTO->name) && ($personCategory->getName() != $personCategoryDTO->name)) {
                 $errorMsg = $this->get('translator')->trans('form.error.valid.unique');
                 $error = new FormError($errorMsg);
                 $form->addError($error);

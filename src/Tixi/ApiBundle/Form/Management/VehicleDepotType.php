@@ -37,6 +37,10 @@ class VehicleDepotType extends CommonAbstractType{
                 'label' => 'address.field.lookahead'
             )
         );
+        $builder->add('memo', 'textarea', array(
+            'required'  => false,
+            'label' => 'vehicledepot.field.memo'
+        ));
     }
 
     /**
