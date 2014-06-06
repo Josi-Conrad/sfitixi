@@ -33,5 +33,15 @@ interface ZonePlanRepository extends CommonBaseRepository {
      */
     public function getZonePlanForAddress(Address $address);
 
+    /**
+     * @param $city
+     * @return mixed
+     */
     public function findZonePlanForCity($city);
+
+    /**
+     * @param $city
+     * @return bool
+     */
+    public function checkIfCityAlreadyExist($city);
 }

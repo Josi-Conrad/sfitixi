@@ -27,4 +27,10 @@ interface VehicleDepotRepository extends CommonBaseRepository{
      * @return mixed
      */
     public function remove(VehicleDepot $vehicleDepot);
+
+    /**
+     * @param $name
+     * @return bool
+     */
+    public function checkIfNameAlreadyExist($name);
 } 

@@ -20,5 +20,9 @@ interface DriverCategoryRepository extends CommonBaseRepository{
      * @return mixed
      */
     public function remove(DriverCategory $driverCategory);
-
+    /**
+     * @param $name
+     * @return bool
+     */
+    public function checkIfNameAlreadyExist($name);
 }

@@ -47,7 +47,10 @@ class VehicleCategoryType extends CommonAbstractType{
                 new Regex(array('message'=>'form.field.title.digit','pattern'=>'/\d+/'))
             ),
         ));
-
+        $builder->add('memo', 'textarea', array(
+            'required'  => false,
+            'label' => 'vehiclecategory.field.memo'
+        ));
     }
 
     /**

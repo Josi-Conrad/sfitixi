@@ -25,4 +25,21 @@ class POIKeywordRepositoryDoctrine extends CommonBaseRepositoryDoctrine implemen
     public function remove(POIKeyword $POIKeyword) {
         $this->getEntityManager()->remove($POIKeyword);
     }
+
+    /**
+     * @param $name
+     * @return bool
+     */
+    public function checkIfNameAlreadyExist($name) {
+        $qb = parent::createQueryBuilder('s');
+        $qb->select()
+            ->where('s.isDeleted = 0')
+            ->andWhere('s.name = :duplicateName')
+            ->setParameter('duplicateName', $name);
+        if ($qb->getQuery()->getResult()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

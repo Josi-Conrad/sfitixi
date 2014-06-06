@@ -25,6 +25,7 @@ use Tixi\ApiBundle\Tile\Core\FormTile;
 use Tixi\ApiBundle\Tile\Core\PanelDeleteFooterTile;
 use Tixi\ApiBundle\Tile\Core\ReferentialConstraintErrorTile;
 use Tixi\ApiBundle\Tile\Core\RootPanel;
+use Tixi\CoreDomain\VehicleDepot;
 
 /**
  * Class VehicleDepotController
@@ -120,14 +121,14 @@ class VehicleDepotController extends Controller {
         $form->handleRequest($request);
         if ($form->isValid()) {
             $vehicleDepotDTO = $form->getData();
-            $this->registerOrUpdateVehicleDepot($vehicleDepotDTO);
-            try {
-                $this->get('entity_manager')->flush();
-            } catch (DBALException $e) {
+            if ($this->nameAlreadyExist($vehicleDepotDTO->name)) {
                 $errorMsg = $this->get('translator')->trans('form.error.valid.unique');
                 $error = new FormError($errorMsg);
                 $form->addError($error);
                 $form->get('name')->addError($error);
+            } else {
+                $this->registerOrUpdateVehicleDepot($vehicleDepotDTO);
+                $this->get('entity_manager')->flush();
             }
 
             //if no errors/invalids in form
@@ -165,14 +166,14 @@ class VehicleDepotController extends Controller {
         $form->handleRequest($request);
         if ($form->isValid()) {
             $vehicleDepotDTO = $form->getData();
-            $this->registerOrUpdateVehicleDepot($vehicleDepotDTO);
-            try {
-                $this->get('entity_manager')->flush();
-            } catch (DBALException $e) {
+            if ($this->nameAlreadyExist($vehicleDepotDTO->name) && ($vehicleDepot->getName() != $vehicleDepotDTO->name)) {
                 $errorMsg = $this->get('translator')->trans('form.error.valid.unique');
                 $error = new FormError($errorMsg);
                 $form->addError($error);
                 $form->get('name')->addError($error);
+            } else {
+                $this->registerOrUpdateVehicleDepot($vehicleDepotDTO);
+                $this->get('entity_manager')->flush();
             }
 
             //if no errors/invalids in form
@@ -230,7 +231,7 @@ class VehicleDepotController extends Controller {
 
     /**
      * @param $vehicleDepotId
-     * @return mixed
+     * @return VehicleDepot
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
     protected function getVehicleDepot($vehicleDepotId) {
@@ -242,5 +243,16 @@ class VehicleDepotController extends Controller {
         return $vehicleDepot;
     }
 
+    /**
+     * @param $name
+     * @return bool
+     */
+    protected function nameAlreadyExist($name) {
+        $vehicleDepotRepository = $this->get('vehicledepot_repository');
+        if ($vehicleDepotRepository->checkIfNameAlreadyExist($name)) {
+            return true;
+        }
+        return false;
+    }
 
 } 

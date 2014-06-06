@@ -31,7 +31,7 @@ class User extends CommonBaseEntity implements AdvancedUserInterface, \Serializa
     private $isActive;
 
     /**
-     * @ORM\Column(type="string", length=50, unique=true)
+     * @ORM\Column(type="string", length=50)
      */
     private $username;
 
@@ -82,21 +82,32 @@ class User extends CommonBaseEntity implements AdvancedUserInterface, \Serializa
         }
         parent::updateModifiedDate();
     }
-
+    /**
+     * deletes entity logically and deactivate user
+     */
     public function deleteLogically() {
         parent::deleteLogically();
         $this->inactivate();
     }
 
+    /**
+     * undeletes entity logically and reactivate user
+     */
     public function undeleteLogically() {
         parent::undeleteLogically();
         $this->activate();
     }
 
+    /**
+     * actives user (symfony)
+     */
     public function activate() {
         $this->isActive = true;
     }
 
+    /**
+     * deactivates use (symfony)
+     */
     public function inactivate() {
         $this->isActive = false;
     }
@@ -330,14 +341,14 @@ class User extends CommonBaseEntity implements AdvancedUserInterface, \Serializa
     }
 
     /**
-     *
+     * returns all corresponding roles as string
      */
     public function getRolesAsString() {
         return self::constructRolesString($this->getRolesEntity());
     }
 
     /**
-     * @param $roles
+     * @param Role[] $roles
      * @return string
      */
     public static function constructRolesString($roles) {

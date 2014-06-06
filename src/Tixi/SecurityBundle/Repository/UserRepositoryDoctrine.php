@@ -9,6 +9,8 @@
 namespace Tixi\SecurityBundle\Repository;
 
 
+use Doctrine\ORM\NoResultException;
+use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Tixi\CoreDomainBundle\Repository\CommonBaseRepositoryDoctrine;
 use Tixi\SecurityBundle\Entity\User;
 use Tixi\SecurityBundle\Entity\UserRepository;
@@ -55,5 +57,22 @@ class UserRepositoryDoctrine extends CommonBaseRepositoryDoctrine implements Use
             throw new UsernameNotFoundException($message, 0, $e);
         }
         return $user;
+    }
+
+    /**
+     * checks if username exists, whether its active or not
+     * @param $name
+     * @return bool
+     */
+    public function checkIfNameAlreadyExist($name) {
+        $qb = parent::createQueryBuilder('s');
+        $qb->select()
+            ->where('s.username = :duplicateName')
+            ->setParameter('duplicateName', $name);
+        if ($qb->getQuery()->getResult()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

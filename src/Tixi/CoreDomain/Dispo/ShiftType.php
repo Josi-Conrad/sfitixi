@@ -29,7 +29,7 @@ class ShiftType extends CommonBaseEntity {
      */
     protected $id;
     /**
-     * @ORM\Column(type="string", length=25, unique=true)
+     * @ORM\Column(type="string", length=25)
      */
     protected $name;
     /**

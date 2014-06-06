@@ -58,6 +58,7 @@ vehiclecategory.button.new: Neue Fahrzeugkategorie
 vehiclecategory.button.delete: Fahrzeugkategorie löschen
 
 vehiclecategory.field.name: Kategoriebezeichnung
+vehiclecategory.field.memo: Bemerkung
 vehiclecategory.field.amountofseats: Anzahl Sitzplätze
 vehiclecategory.field.amountofwheelchairs: Anzahl Rollstühle
 vehiclecategory.name.not_blank: Bitte einen Namen definieren
@@ -75,5 +76,6 @@ vehicledepot.button.new: Neues Fahrzeugdepot
 vehicledepot.button.delete: Fahrzeugdepot löschen
 
 vehicledepot.field.name: Depotname
+vehicledepot.field.memo: Bemerkung
 
 

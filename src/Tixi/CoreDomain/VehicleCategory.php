@@ -25,7 +25,7 @@ class VehicleCategory extends CommonBaseEntity {
     protected $id;
 
     /**
-     * @ORM\Column(type="string", length=50, unique=true)
+     * @ORM\Column(type="string", length=50)
      */
     protected $name;
 
@@ -38,11 +38,15 @@ class VehicleCategory extends CommonBaseEntity {
      * @ORM\Column(type="integer")
      */
     protected $amountOfWheelChairs;
-
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $memo;
     /**
      * @ORM\OneToMany(targetEntity="Vehicle", mappedBy="category")
      */
     protected $vehicles;
+
 
     protected function __construct() {
         parent::__construct();
@@ -53,12 +57,14 @@ class VehicleCategory extends CommonBaseEntity {
      * @param $name
      * @param $amountOfSeats
      * @param null $amountOfWheelChairs
+     * @param null $memo
      * @return VehicleCategory
      */
-    public static function registerVehicleCategory($name, $amountOfSeats, $amountOfWheelChairs = null) {
+    public static function registerVehicleCategory($name, $amountOfSeats, $amountOfWheelChairs = null, $memo = null) {
         $vehicleCategory = new VehicleCategory();
 
         $vehicleCategory->setName($name);
+        $vehicleCategory->setMemo($memo);
         $vehicleCategory->setAmountOfSeats($amountOfSeats);
         $amountOfWheelChairs = (null !== $amountOfWheelChairs) ? $amountOfWheelChairs : 0;
         $vehicleCategory->setAmountOfWheelChairs($amountOfWheelChairs);
@@ -70,8 +76,9 @@ class VehicleCategory extends CommonBaseEntity {
      * @param null $name
      * @param null $amountOfSeats
      * @param null $amountOfWheelChairs
+     * @param null $memo
      */
-    public function updateData($name = null, $amountOfSeats = null, $amountOfWheelChairs = null) {
+    public function updateData($name = null, $amountOfSeats = null, $amountOfWheelChairs = null, $memo = null) {
         if (null !== $name) {
             $this->name = $name;
         }
@@ -81,6 +88,7 @@ class VehicleCategory extends CommonBaseEntity {
         if (null !== $amountOfWheelChairs) {
             $this->amountOfWheelChairs = $amountOfWheelChairs;
         }
+        $this->memo = $memo;
         $this->updateModifiedDate();
     }
 
@@ -145,5 +153,19 @@ class VehicleCategory extends CommonBaseEntity {
      */
     public function getVehicles() {
         return $this->vehicles;
+    }
+
+    /**
+     * @param mixed $memo
+     */
+    public function setMemo($memo) {
+        $this->memo = $memo;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMemo() {
+        return $this->memo;
     }
 }

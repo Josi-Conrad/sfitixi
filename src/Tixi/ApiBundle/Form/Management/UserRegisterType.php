@@ -9,10 +9,12 @@
 namespace Tixi\ApiBundle\Form\Management;
 
 
+use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Tixi\SecurityBundle\Entity\Role;
 
 /**
  * Class UserRegisterType
@@ -29,7 +31,13 @@ class UserRegisterType extends AbstractType{
         $builder->add('role', 'entity', array(
             'class' => 'Tixi\SecurityBundle\Entity\Role',
             'property' => 'name',
-            'label' => 'user.field.role'
+            'label' => 'user.field.role',
+            //it is not possible to create/edit administrators
+            'query_builder' => function (EntityRepository $er) {
+        return $er->createQueryBuilder('r')
+            ->where('r.role != :roleAdmin')
+            ->setParameter('roleAdmin', Role::$roleAdmin);
+    },
         ));
         $builder->add('username', 'text', array(
             'label' => 'user.field.username',

@@ -26,7 +26,7 @@ class Handicap extends CommonBaseEntity{
     protected $id;
 
     /**
-     * @ORM\Column(type="string", length=50, unique=true)
+     * @ORM\Column(type="string", length=50)
      */
     protected $name;
 

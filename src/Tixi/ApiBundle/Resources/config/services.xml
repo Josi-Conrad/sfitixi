@@ -171,6 +171,10 @@
             <call method="setEncoderFactory">
                 <argument type="service" id="security.encoder_factory" />
             </call>
+            <call method="setSecurityContext">
+                <argument type="service" id="security.context" />
+            </call>
+
         </service>
         <service id="tixi_api.assemblerVehicleCategory" class="%tixi_api.vehiclecategoryassembler.class%"/>
         <service id="tixi_api.assemblerVehicleDepot" class="%tixi_api.vehicledepotassembler.class%">

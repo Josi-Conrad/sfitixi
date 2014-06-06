@@ -25,6 +25,7 @@ use Tixi\ApiBundle\Tile\Core\FormTile;
 use Tixi\ApiBundle\Tile\Core\PanelDeleteFooterTile;
 use Tixi\ApiBundle\Tile\Core\ReferentialConstraintErrorTile;
 use Tixi\ApiBundle\Tile\Core\RootPanel;
+use Tixi\CoreDomain\Handicap;
 
 /**
  * Class HandicapController
@@ -120,14 +121,14 @@ class HandicapController extends Controller {
         $form->handleRequest($request);
         if ($form->isValid()) {
             $handicapDTO = $form->getData();
-            $this->registerOrUpdateHandicap($handicapDTO);
-            try {
-                $this->get('entity_manager')->flush();
-            } catch (DBALException $e) {
+            if ($this->nameAlreadyExist($handicapDTO->name)) {
                 $errorMsg = $this->get('translator')->trans('form.error.valid.unique');
                 $error = new FormError($errorMsg);
                 $form->addError($error);
                 $form->get('name')->addError($error);
+            } else {
+                $this->registerOrUpdateHandicap($handicapDTO);
+                $this->get('entity_manager')->flush();
             }
 
             //if no errors/invalids in form
@@ -165,14 +166,14 @@ class HandicapController extends Controller {
         $form->handleRequest($request);
         if ($form->isValid()) {
             $handicapDTO = $form->getData();
-            $this->registerOrUpdateHandicap($handicapDTO);
-            try {
-                $this->get('entity_manager')->flush();
-            } catch (DBALException $e) {
+            if ($this->nameAlreadyExist($handicapDTO->name) && ($handicap->getName() != $handicapDTO->name)) {
                 $errorMsg = $this->get('translator')->trans('form.error.valid.unique');
                 $error = new FormError($errorMsg);
                 $form->addError($error);
                 $form->get('name')->addError($error);
+            } else {
+                $this->registerOrUpdateHandicap($handicapDTO);
+                $this->get('entity_manager')->flush();
             }
 
             //if no errors/invalids in form
@@ -227,7 +228,7 @@ class HandicapController extends Controller {
 
     /**
      * @param $handicapId
-     * @return mixed
+     * @return Handicap
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
     protected function getHandicap($handicapId) {
@@ -238,6 +239,16 @@ class HandicapController extends Controller {
         }
         return $handicap;
     }
-
+    /**
+     * @param $name
+     * @return bool
+     */
+    protected function nameAlreadyExist($name) {
+        $handicapRepository = $this->get('handicap_repository');
+        if ($handicapRepository->checkIfNameAlreadyExist($name)) {
+            return true;
+        }
+        return false;
+    }
 
 } 

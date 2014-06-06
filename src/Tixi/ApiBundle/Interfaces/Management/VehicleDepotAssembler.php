@@ -28,7 +28,7 @@ class VehicleDepotAssembler {
      */
     public function registerDTOtoNewVehicleDepot(VehicleDepotRegisterDTO $dto) {
         $address = $this->addressAssembler->addressLookaheadDTOtoAddress($dto->address);
-        $vehicleDepot = VehicleDepot::registerVehicleDepot($dto->name, $address);
+        $vehicleDepot = VehicleDepot::registerVehicleDepot($dto->name, $address, $dto->memo);
         return $vehicleDepot;
     }
 
@@ -38,7 +38,7 @@ class VehicleDepotAssembler {
      */
     public function registerDTOtoVehicleDepot(VehicleDepot $vehicleDepot, VehicleDepotRegisterDTO $dto) {
         $address = $this->addressAssembler->addressLookaheadDTOtoAddress($dto->address);
-        $vehicleDepot->updateVehicleDepotData($dto->name, $address);
+        $vehicleDepot->updateVehicleDepotData($dto->name, $address, $dto->memo);
     }
 
     /**
@@ -49,7 +49,7 @@ class VehicleDepotAssembler {
         $vehicleDepotDTO = new VehicleDepotRegisterDTO();
         $vehicleDepotDTO->id = $vehicleDepot->getId();
         $vehicleDepotDTO->name = $vehicleDepot->getName();
-
+        $vehicleDepotDTO->memo = $vehicleDepot->getMemo();
         $vehicleDepotDTO->address = $this->addressAssembler->addressToAddressLookaheadDTO($vehicleDepot->getAddress());
 
         return $vehicleDepotDTO;
@@ -75,7 +75,6 @@ class VehicleDepotAssembler {
         $vehicleDepotListDTO = new VehicleDepotListDTO();
         $vehicleDepotListDTO->id = $vehicleDepot->getId();
         $vehicleDepotListDTO->name = $vehicleDepot->getName();
-
         $vehicleDepotListDTO->street = $vehicleDepot->getAddress()->getStreet();
         $vehicleDepotListDTO->city = $vehicleDepot->getAddress()->getCity();
 

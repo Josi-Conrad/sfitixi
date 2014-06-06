@@ -25,6 +25,7 @@ use Tixi\ApiBundle\Tile\Core\FormTile;
 use Tixi\ApiBundle\Tile\Core\PanelDeleteFooterTile;
 use Tixi\ApiBundle\Tile\Core\ReferentialConstraintErrorTile;
 use Tixi\ApiBundle\Tile\Core\RootPanel;
+use Tixi\CoreDomain\VehicleCategory;
 use Tixi\CoreDomainBundle\Repository\VehicleRepositoryDoctrine;
 
 /**
@@ -123,14 +124,14 @@ class VehicleCategoryController extends Controller{
         $form->handleRequest($request);
         if ($form->isValid()) {
             $vehicleCategoryDTO = $form->getData();
-            $this->registerOrUpdateVehicleCategory($vehicleCategoryDTO);
-            try {
-                $this->get('entity_manager')->flush();
-            } catch (DBALException $e) {
+            if ($this->nameAlreadyExist($vehicleCategoryDTO->name)) {
                 $errorMsg = $this->get('translator')->trans('form.error.valid.unique');
                 $error = new FormError($errorMsg);
                 $form->addError($error);
                 $form->get('name')->addError($error);
+            } else {
+                $this->registerOrUpdateVehicleCategory($vehicleCategoryDTO);
+                $this->get('entity_manager')->flush();
             }
 
             //if no errors/invalids in form
@@ -168,14 +169,14 @@ class VehicleCategoryController extends Controller{
         $form->handleRequest($request);
         if ($form->isValid()) {
             $vehicleCategoryDTO = $form->getData();
-            $this->registerOrUpdateVehicleCategory($vehicleCategoryDTO);
-            try {
-                $this->get('entity_manager')->flush();
-            } catch (DBALException $e) {
+            if ($this->nameAlreadyExist($vehicleCategoryDTO->name) && ($vehicleCategory->getName() != $vehicleCategoryDTO->name)) {
                 $errorMsg = $this->get('translator')->trans('form.error.valid.unique');
                 $error = new FormError($errorMsg);
                 $form->addError($error);
                 $form->get('name')->addError($error);
+            } else {
+                $this->registerOrUpdateVehicleCategory($vehicleCategoryDTO);
+                $this->get('entity_manager')->flush();
             }
 
             //if no errors/invalids in form
@@ -230,7 +231,7 @@ class VehicleCategoryController extends Controller{
 
     /**
      * @param $vehicleCategoryId
-     * @return mixed
+     * @return VehicleCategory
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
     protected function getVehicleCategory($vehicleCategoryId) {
@@ -243,6 +244,16 @@ class VehicleCategoryController extends Controller{
 
     }
 
-
+    /**
+     * @param $name
+     * @return bool
+     */
+    protected function nameAlreadyExist($name) {
+        $vehicleCategoryRepository = $this->get('vehiclecategory_repository');
+        if ($vehicleCategoryRepository->checkIfNameAlreadyExist($name)) {
+            return true;
+        }
+        return false;
+    }
 
 } 

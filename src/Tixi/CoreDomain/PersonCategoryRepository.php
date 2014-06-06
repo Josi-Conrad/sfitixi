@@ -21,4 +21,9 @@ interface PersonCategoryRepository extends CommonBaseRepository{
      */
     public function remove(PersonCategory $personCategory);
 
+    /**
+     * @param $name
+     * @return bool
+     */
+    public function checkIfNameAlreadyExist($name);
 }

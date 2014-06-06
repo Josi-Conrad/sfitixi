@@ -25,6 +25,9 @@ class DocumentManagementKnp extends ContainerAware implements DocumentManagement
         $bankHolidayRep = $this->container->get('bankholiday_repository');
         $workingMonthRepo = $this->container->get('workingmonth_repository');
         $workMonth = $workingMonthRepo->findWorkingMonthByDate($date);
+        if(!$workMonth){
+            return false;
+        }
         $timeService = $this->container->get('tixi_api.datetimeservice');
 
         $dir = $this->container->getParameter('tixi_parameter_files_directory');

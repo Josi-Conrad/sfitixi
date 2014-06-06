@@ -93,14 +93,14 @@ class DriverCategoryController extends Controller {
         $form->handleRequest($request);
         if ($form->isValid()) {
             $driverCategoryDTO = $form->getData();
-            $driverCategory = $this->registerOrUpdateDriverCategory($driverCategoryDTO);
-            try {
-                $this->get('entity_manager')->flush();
-            } catch (DBALException $e) {
+            if ($this->nameAlreadyExist($driverCategoryDTO->name)) {
                 $errorMsg = $this->get('translator')->trans('form.error.valid.unique');
                 $error = new FormError($errorMsg);
                 $form->addError($error);
                 $form->get('name')->addError($error);
+            } else {
+                $this->registerOrUpdateDriverCategory($driverCategoryDTO);
+                $this->get('entity_manager')->flush();
             }
 
             //if no errors/invalids in form
@@ -136,18 +136,19 @@ class DriverCategoryController extends Controller {
             throw $this->createNotFoundException('This driverCategory does not exist');
         }
         $driverCategoryDTO = $driverCategoryAssembler->driverCategoryToDriverCategoryRegisterDTO($driverCategory);
+        $origName = $driverCategoryDTO->name;
         $form = $this->getForm($driverCategoryDTO);
         $form->handleRequest($request);
         if ($form->isValid()) {
             $driverCategoryDTO = $form->getData();
-            $this->registerOrUpdateDriverCategory($driverCategoryDTO);
-            try {
-                $this->get('entity_manager')->flush();
-            } catch (DBALException $e) {
+            if ($this->nameAlreadyExist($driverCategoryDTO->name) && ($origName != $driverCategoryDTO->name)) {
                 $errorMsg = $this->get('translator')->trans('form.error.valid.unique');
                 $error = new FormError($errorMsg);
                 $form->addError($error);
                 $form->get('name')->addError($error);
+            } else {
+                $this->registerOrUpdateDriverCategory($driverCategoryDTO);
+                $this->get('entity_manager')->flush();
             }
 
             //if no errors/invalids in form
@@ -241,4 +242,15 @@ class DriverCategoryController extends Controller {
         }
     }
 
+    /**
+     * @param $name
+     * @return bool
+     */
+    protected function nameAlreadyExist($name) {
+        $driverCategoryRepository = $this->get('drivercategory_repository');
+        if ($driverCategoryRepository->checkIfNameAlreadyExist($name)) {
+            return true;
+        }
+        return false;
+    }
 } 

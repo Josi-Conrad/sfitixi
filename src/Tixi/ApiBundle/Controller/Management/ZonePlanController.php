@@ -26,6 +26,7 @@ use Tixi\ApiBundle\Tile\Core\FormTile;
 use Tixi\ApiBundle\Tile\Core\PanelDeleteFooterTile;
 use Tixi\ApiBundle\Tile\Core\ReferentialConstraintErrorTile;
 use Tixi\ApiBundle\Tile\Core\RootPanel;
+use Tixi\CoreDomain\ZonePlan;
 
 /**
  * Class ZonePlanController
@@ -158,15 +159,14 @@ class ZonePlanController extends Controller {
         $form->handleRequest($request);
         if ($form->isValid()) {
             $zonePlanDTO = $form->getData();
-            $this->registerOrUpdateZonePlan($zonePlanDTO);
-
-            try {
-                $this->get('entity_manager')->flush();
-            } catch (DBALException $e) {
+            if ($this->cityAlreadyExist($zonePlanDTO->city) && ($zonePlan->getCity() != $zonePlanDTO->city)) {
                 $errorMsg = $this->get('translator')->trans('form.error.valid.unique');
                 $error = new FormError($errorMsg);
                 $form->addError($error);
-                $form->get('city')->addError($error);
+                $form->get('name')->addError($error);
+            } else {
+                $this->registerOrUpdateZonePlan($zonePlanDTO);
+                $this->get('entity_manager')->flush();
             }
 
             //if no errors/invalids in form
@@ -222,7 +222,7 @@ class ZonePlanController extends Controller {
 
     /**
      * @param $zonePlanId
-     * @return mixed
+     * @return ZonePlan
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
     protected function getZonePlan($zonePlanId) {
@@ -233,6 +233,16 @@ class ZonePlanController extends Controller {
         }
         return $zonePlan;
     }
-
+    /**
+     * @param $city
+     * @return bool
+     */
+    protected function cityAlreadyExist($city) {
+        $zonePlanRepository = $this->get('zoneplan_repository');
+        if ($zonePlanRepository->checkIfCityAlreadyExist($city)) {
+            return true;
+        }
+        return false;
+    }
 
 } 
