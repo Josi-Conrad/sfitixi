@@ -27,8 +27,11 @@ function GoogleMapWrapper() {
     this.init = function(canvasWrapper, canvas) {
         _this._canvasWrapper = canvasWrapper;
         _this._canvas = canvas;
-        _this._initElements();
-        _this._initGeocoder();
+        //only init if google services have been loaded with success
+        if('google' in window) {
+            _this._initElements();
+            _this._initGeocoder();
+        }
     }
 
     this._initElements = function() {
