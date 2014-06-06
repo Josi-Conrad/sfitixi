@@ -26,38 +26,38 @@ class ZonePlanManagementImpl extends ContainerAware implements ZonePlanManagemen
      * @return Zone|null
      */
     public function getZoneForAddress(Address $address) {
-        return $this->getZoneForAddressData($address->getCity(), $address->getPostalCode());
+        return $this->getZoneForCity($address->getCity());
     }
 
-    /**
-     * returns zone which matches city or plz pattern
-     * @param $city
-     * @param $plz
-     * @return Zone
-     */
-    public function getZoneForAddressData($city, $plz) {
-        $zonePlanRepo = $this->container->get('zoneplan_repository');
-        $zonePlans = $zonePlanRepo->getZonePlanForAddressData($city, $plz);
-
-        if ($zonePlans) {
-            foreach ($zonePlans as $zonePlan) {
-                $zone = $zonePlan->getZone();
-                //same city found
-                if ($zonePlan->getCity() === $city) {
-                    return $zone;
-                }
-                //if not city, then compare PLZ substring
-                $zonePlz = $zonePlan->getPostalCode();
-                $plzCompareZone = rtrim($zonePlz, '*');
-                $trims = strlen($zonePlz) - strlen($plzCompareZone);
-                $plzCompare = substr($plz, 0, -$trims);
-                if ($plzCompareZone == $plzCompare) {
-                    return $zone;
-                }
-            }
-        }
-        return null;
-    }
+//    /**
+//     * returns zone which matches city or plz pattern
+//     * @param $city
+//     * @param $plz
+//     * @return Zone
+//     */
+//    public function getZoneForAddressData($city, $plz) {
+//        $zonePlanRepo = $this->container->get('zoneplan_repository');
+//        $zonePlans = $zonePlanRepo->getZonePlanForAddressData($city, $plz);
+//
+//        if ($zonePlans) {
+//            foreach ($zonePlans as $zonePlan) {
+//                $zone = $zonePlan->getZone();
+//                //same city found
+//                if ($zonePlan->getCity() === $city) {
+//                    return $zone;
+//                }
+//                //if not city, then compare PLZ substring
+//                $zonePlz = $zonePlan->getPostalCode();
+//                $plzCompareZone = rtrim($zonePlz, '*');
+//                $trims = strlen($zonePlz) - strlen($plzCompareZone);
+//                $plzCompare = substr($plz, 0, -$trims);
+//                if ($plzCompareZone == $plzCompare) {
+//                    return $zone;
+//                }
+//            }
+//        }
+//        return null;
+//    }
 
     public function getZoneForCity($city)
     {
@@ -89,5 +89,21 @@ class ZonePlanManagementImpl extends ContainerAware implements ZonePlanManagemen
             $this->container->get('entity_manager')->flush();
         }
         return $unclassifiedZone;
+    }
+
+    public function getZoneWithHighestPriorityForCities($cities)
+    {
+        $zoneWithHighestPriority = null;
+        foreach($cities as $city) {
+            try {
+                $tempZone = $this->getZoneForCity($city);
+            }catch (\InvalidArgumentException $e) {
+                throw $e;
+            }
+            if($zoneWithHighestPriority===null || $tempZone->getPriority() > $zoneWithHighestPriority->getPriority()) {
+                $zoneWithHighestPriority = $tempZone;
+            }
+        }
+        return $zoneWithHighestPriority;
     }
 }

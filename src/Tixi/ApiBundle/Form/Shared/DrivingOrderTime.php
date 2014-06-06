@@ -11,6 +11,7 @@ namespace Tixi\ApiBundle\Form\Shared;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints\Time;
 
 class DrivingOrderTime extends AbstractType{
@@ -66,5 +67,14 @@ class DrivingOrderTime extends AbstractType{
     public function getName()
     {
         return 'drivingOrderTime';
+    }
+
+    /**
+     * @param OptionsResolverInterface $resolver
+     */
+    public function setDefaultOptions(OptionsResolverInterface $resolver) {
+        $resolver->setDefaults(array(
+            'data_class' => 'Tixi\ApiBundle\Interfaces\Dispo\DrivingOrderTimeDTO'
+        ));
     }
 }

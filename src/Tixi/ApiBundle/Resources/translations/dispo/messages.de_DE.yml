@@ -108,6 +108,7 @@ drivingorder.field.outwardTime: Hinfahrt
 drivingorder.field.returnTime: Rückfahrt
 drivingorder.field.isRepeated: Wiederkehrend
 drivingorder.field.zone: Zone
+drivingorder.field.additionalTime: Zusätzliche Fahrminuten
 drivingorder.field.compagnion: Anzahl Begleitpersonen
 drivingorder.field.memo: Bemerkungen
 

@@ -8,8 +8,13 @@
 
 namespace Tixi\ApiBundle\Interfaces\Dispo;
 
+use Tixi\ApiBundle\Interfaces\AddressAssembler;
+use Tixi\App\Routing\RouteManagement;
+use Tixi\App\ZonePlan\ZonePlanManagement;
+use Tixi\CoreDomain\Address;
 use Tixi\CoreDomain\Dispo\DrivingOrder;
-use Tixi\CoreDomain\Dispo\Route;
+use Tixi\CoreDomain\Passenger;
+use Tixi\CoreDomain\Zone;
 
 /**
  * Class DrivingOrderAssembler
@@ -17,74 +22,72 @@ use Tixi\CoreDomain\Dispo\Route;
  */
 class DrivingOrderAssembler {
 
+    const OUTWARD_DIRECTION = 'out';
+    const RETURN_DIRECTION = 'return';
+
+    /** @var  AddressAssembler $addressAssembler */
+    protected $addressAssembler;
+    /** @var  RouteManagement $routeManagement */
+    protected $routeManagement;
+    /** @var  ZonePlanManagement $zonePlanManagement */
+    protected $zonePlanManagement;
+
+    public function registerDtoToNewDrivingOrders(DrivingOrderRegisterDTO $registerDTO, Passenger $passenger) {
+        $orders = [];
+        $outwardOrder = $this->registerDtoToDrivingOrder($registerDTO, $passenger, self::OUTWARD_DIRECTION);
+        $orders[] = $outwardOrder;
+        if(null !== $registerDTO->orderTime->returnTime) {
+            $returnOrder = $this->registerDtoToDrivingOrder($registerDTO, $passenger, self::RETURN_DIRECTION);
+            $outwardOrder->assignReturnOrder($returnOrder);
+            $orders[] = $returnOrder;
+        }
+        return $orders;
+    }
+
+    protected function registerDtoToDrivingOrder(DrivingOrderRegisterDTO $registerDTO, Passenger $passenger, $direction) {
+        $route = null;
+        /** @var Address $fromAddress */
+        $fromAddress = $this->addressAssembler->addressLookaheadDTOtoAddress($registerDTO->lookaheadaddressFrom);
+        /** @var Address $toAddress */
+        $toAddress = $this->addressAssembler->addressLookaheadDTOtoAddress($registerDTO->lookaheadaddressTo);
+        /** @var Zone $zone */
+        $zone = $this->zonePlanManagement->getZoneWithHighestPriorityForCities(array($fromAddress->getCity(), $toAddress->getCity()));
+        if($direction===self::OUTWARD_DIRECTION) {
+            $pickupTime = $registerDTO->orderTime->outwardTime;
+            $route = $this->routeManagement->getRouteFromAddresses($fromAddress, $toAddress);
+        }else {
+            $pickupTime = $registerDTO->orderTime->returnTime;
+            $route = $this->routeManagement->getRouteFromAddresses($toAddress, $fromAddress);
+        }
+
+        $drivingOrder = DrivingOrder::registerDrivingOrder(
+            $passenger,
+            $registerDTO->anchorDate,
+            $pickupTime,
+            $registerDTO->compagnion,
+            $registerDTO->memo
+        );
+        $drivingOrder->assignRoute($route);
+        if(null !== $zone) {
+            $drivingOrder->assignZone($zone);
+        }
+        return $drivingOrder;
+    }
 
 
+    public function registerDtoToNewRepeatedDrivingOrder(DrivingOrderRegisterDTO $registerDTO) {
 
+    }
 
-//    /**
-//     * @param DrivingOrderRegisterDTO $drivingOrderDTO
-//     * @return DrivingOrder
-//     */
-//    public function registerDTOtoNewDrivingOrder(DrivingOrderRegisterDTO $drivingOrderDTO) {
-//        $drivingOrder = DrivingOrder::registerDrivingOrder(
-//            $drivingOrderDTO->pickupDate,
-//            $drivingOrderDTO->pickupTime,
-//            $drivingOrderDTO->companion,
-//            $drivingOrderDTO->memo
-//        );
-//
-//        $route = Route::registerRoute($drivingOrderDTO->addressFrom,$drivingOrderDTO->addressTo,
-//            $drivingOrderDTO->routeDuration,$drivingOrderDTO->routeDistance,$drivingOrderDTO->routeAdditionalTime);
-//
-//        $drivingOrder->assignRoute($route);
-//
-//        return $drivingOrder;
-//    }
-//
-//    /**
-//     * @param DrivingOrderRegisterDTO $drivingOrderDTO
-//     * @param DrivingOrder $drivingOrder
-//     * @return DrivingOrder
-//     */
-//    public function registerDTOtoDrivingOrder(DrivingOrderRegisterDTO $drivingOrderDTO, DrivingOrder $drivingOrder) {
-//
-//        return $drivingOrder;
-//    }
-//
-//    /**
-//     * @param DrivingOrder $drivingOrder
-//     * @return DrivingOrderRegisterDTO
-//     */
-//    public function drivingOrderToDrivingOrderRegisterDTO(DrivingOrder $drivingOrder) {
-//        $drivingOrderDTO = new DrivingOrderRegisterDTO();
-//        $drivingOrderDTO->id = $drivingOrder->getId();
-//
-//        return $drivingOrderDTO;
-//    }
-//
-//    /**
-//     * @param $drivingOrders
-//     * @return array
-//     */
-//    public function drivingOrdersToDrivingOrderEmbeddedListDTOs($drivingOrders) {
-//        $dtoArray = array();
-//        foreach ($drivingOrders as $drivingOrder) {
-//            $dtoArray[] = $this->drivingOrdersToDrivingOrderEmbeddedListDTO($drivingOrder);
-//        }
-//        return $dtoArray;
-//    }
-//
-//    /**
-//     * @param DrivingOrder $drivingOrder
-//     * @return DrivingOrderEmbeddedListDTO
-//     */
-//    public function drivingOrdersToDrivingOrderEmbeddedListDTO(DrivingOrder $drivingOrder) {
-//        $drivingOrderEmbeddedListDTO = new DrivingOrderEmbeddedListDTO();
-//        $drivingOrderEmbeddedListDTO->id = $drivingOrder->getId();
-//        $drivingOrderEmbeddedListDTO->personId = $drivingOrder->getPerson()->getId();
-//        $drivingOrderEmbeddedListDTO->subject = $drivingOrder->getSubject();
-//        $drivingOrderEmbeddedListDTO->startDate = $drivingOrder->getStartDate()->format('d.m.Y');
-//        $drivingOrderEmbeddedListDTO->endDate = $drivingOrder->getEndDate()->format('d.m.Y');
-//        return $drivingOrderEmbeddedListDTO;
-//    }
+    public function setAddressAssembler(AddressAssembler $assembler) {
+        $this->addressAssembler = $assembler;
+    }
+
+    public function setRouteManagement(RouteManagement $routeManagement) {
+        $this->routeManagement = $routeManagement;
+    }
+
+    public function setZonePlaneManagement(ZonePlanManagement $zonePlanManagement) {
+        $this->zonePlanManagement = $zonePlanManagement;
+    }
 }
