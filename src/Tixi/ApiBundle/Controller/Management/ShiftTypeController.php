@@ -135,7 +135,7 @@ class ShiftTypeController extends Controller {
             }
             //if no errors/invalids in form
             if (count($form->getErrors()) < 1) {
-                return $this->redirect($this->generateUrl('tixiapi_management_shifttypes_get', array('shifttypeId' => $shiftType->getId())));
+                return $this->redirect($this->generateUrl('tixiapi_management_shifttypes_get'));
             }
         }
         $rootPanel = new RootPanel($this->menuId, 'shifttype.panel.new');
