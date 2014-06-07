@@ -161,7 +161,7 @@ class TestDataDispositionCommand extends ContainerAwareCommand {
                 $pickupTime = clone $stStart;
                 $pickupTime->add(new \DateInterval('PT' . rand(1, $minutes) . 'M'));
 
-                $order = DrivingOrder::registerDrivingOrder($monthDate, $pickupTime, rand(0, 1));
+                $order = DrivingOrder::registerDrivingOrder($passenger, $monthDate, $pickupTime, rand(0, 1));
 
                 $start = $passenger->getAddress();
                 $target = $pois[rand(0, $countPois - 1)]->getAddress();

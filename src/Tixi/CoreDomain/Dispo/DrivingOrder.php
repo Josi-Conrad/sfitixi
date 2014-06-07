@@ -11,6 +11,7 @@ namespace Tixi\CoreDomain\Dispo;
 use Doctrine\ORM\Mapping as ORM;
 use Tixi\CoreDomain\Passenger;
 use Tixi\CoreDomain\Shared\CommonBaseEntity;
+use Tixi\CoreDomain\Zone;
 
 /**
  * Tixi\CoreDomain\Dispo\DrivingOrder
@@ -60,6 +61,19 @@ class DrivingOrder extends CommonBaseEntity {
      */
     protected $repeatedDrivingOrder;
     /**
+     * @ORM\OneToOne(targetEntity="DrivingOrder", mappedBy="correspondingOutwardOrder")
+     */
+    protected $correspondingReturnOrder;
+    /**
+     * @ORM\OneToOne(targetEntity="DrivingOrder", mappedBy="correspondingReturnOrder")
+     */
+    protected $correspondingOutwardOrder;
+    /**
+     * @ORM\ManyToOne(targetEntity="Tixi\CoreDomain\Zone")
+     * @ORM\JoinColumn(name="zone_id", referencedColumnName="id")
+     */
+    protected $zone;
+    /**
      * Number of companies for the traveler within this order.
      * For Example: Passenger needs companion to travel with, so 1 more seat is needed
      * @ORM\Column(type="integer")
@@ -83,20 +97,15 @@ class DrivingOrder extends CommonBaseEntity {
         parent::__construct();
     }
 
-    /**
-     * @param $pickupDate
-     * @param $pickupTime
-     * @param int $companion
-     * @param null $memo
-     * @param int $status
-     * @param int $manualRoute
-     * @return DrivingOrder
-     */
-    public static function registerDrivingOrder($pickupDate, $pickupTime, $companion = 0, $status = self::PENDENT, $manualRoute = 0, $memo = null) {
+
+    public static function registerDrivingOrder(Passenger $passenger, $pickupDate, $pickupTime, $companion = null, $memo = null, $status = self::PENDENT, $manualRoute = 0) {
+        $correctedCompanion = (null !== $companion) ? $companion : 0;
+
         $drivingOrder = new DrivingOrder();
+        $drivingOrder->assignPassenger($passenger);
         $drivingOrder->setPickUpDate($pickupDate);
         $drivingOrder->setPickUpTime($pickupTime);
-        $drivingOrder->setCompanion($companion);
+        $drivingOrder->setCompanion($correctedCompanion);
         $drivingOrder->setStatus($status);
         $drivingOrder->setManualRoute($manualRoute);
         $drivingOrder->setMemo($memo);
@@ -122,6 +131,15 @@ class DrivingOrder extends CommonBaseEntity {
      */
     public function assignPassenger(Passenger $passenger) {
         $this->setPassenger($passenger);
+    }
+
+    public function assignReturnOrder(DrivingOrder $returnOrder) {
+        $this->correspondingReturnOrder = $returnOrder;
+        $returnOrder->correspondingOutwardOrder = $this;
+    }
+
+    public function assignZone(Zone $zone) {
+        $this->zone = $zone;
     }
 
     /**

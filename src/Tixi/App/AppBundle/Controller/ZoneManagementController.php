@@ -30,15 +30,15 @@ class ZoneManagementController extends Controller{
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
-    public function getZonePlanAction(Request $request) {
+    public function getZonePlanForCitiesAction(Request $request) {
         /** @var ZonePlanManagement $zoneManager */
         $zoneManager = $this->get('tixi_app.zoneplanmanagement');
-        $city = $request->get('city');
+        $cities = $request->get('cities');
 
         $error = false;
         $zone = null;
         try {
-            $zone = $zoneManager->getZoneForCity($city);
+            $zone = $zoneManager->getZoneWithHighestPriorityForCities($cities);
         }catch (\InvalidArgumentException $e) {
             $error = true;
         }

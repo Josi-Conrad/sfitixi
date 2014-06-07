@@ -15,10 +15,15 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Tixi\ApiBundle\Form\Dispo\DrivingOrderType;
+use Tixi\ApiBundle\Interfaces\Dispo\DrivingOrderAssembler;
 use Tixi\ApiBundle\Interfaces\Dispo\DrivingOrderRegisterDTO;
 use Tixi\ApiBundle\Menu\MenuService;
 use Tixi\ApiBundle\Tile\Core\RootPanel;
 use Tixi\ApiBundle\Tile\Dispo\DrivingOrderTile;
+use Tixi\App\AppBundle\Interfaces\DrivingOrderHandleDTO;
+use Tixi\App\Driving\DrivingOrderManagement;
+use Tixi\CoreDomain\Dispo\DrivingOrderRepository;
+use Tixi\CoreDomain\Dispo\RepeatedDrivingOrderRepository;
 use Tixi\CoreDomain\Passenger;
 
 /**
@@ -52,7 +57,7 @@ class DrivingOrderController extends Controller{
         $form->handleRequest($request);
         if ($form->isValid()) {
             $registerDto = $form->getData();
-            $this->registerOrUpdateDrivingOrder($registerDto, $passenger);
+            $this->registerDrivingOrder($registerDto, $passenger);
             $this->get('entity_manager')->flush();
             return $this->redirect($this->generateUrl('tixiapi_passenger_get', array('passengerId'=>$passengerId)));
         }
@@ -64,10 +69,24 @@ class DrivingOrderController extends Controller{
     }
 
     /**
-     * @param DrivingOrderRegisterDTO $registerDto
+     * @param DrivingOrderRegisterDTO $registerDTO
      * @param Passenger $passenger
      */
-    protected function registerOrUpdateDrivingOrder(DrivingOrderRegisterDTO $registerDto, Passenger $passenger) {
+    protected function registerDrivingOrder(DrivingOrderRegisterDTO $registerDTO, Passenger $passenger) {
+        /** @var DrivingOrderAssembler $assembler */
+        $assembler = $this->get('tixi_api.assemblerdrivingorder');
+        /** @var DrivingOrderRepository $drivingOrderRepository */
+        $drivingOrderRepository = $this->get('drivingorder_repository');
+        /** @var RepeatedDrivingOrderRepository $repeatedDrivingOrderRepository */
+        $repeatedDrivingOrderRepository = $this->get('repeateddrivingorder_repository');
+        if($registerDTO->isRepeated) {
+            $repeatedDrivingOrder = $assembler->registerDtoToNewRepeatedDrivingOrder($registerDTO);
+        }else {
+            $drivingOrders = $assembler->registerDtoToNewDrivingOrders($registerDTO, $passenger);
+            foreach($drivingOrders as $drivingOrder) {
+                $drivingOrderRepository->store($drivingOrder);
+            }
+        }
 
     }
 

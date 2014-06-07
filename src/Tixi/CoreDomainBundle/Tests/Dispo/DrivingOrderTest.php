@@ -52,7 +52,7 @@ class DrivingOrderTest extends CommonBaseTest {
 
         $this->routeRepo->store($route);
 
-        $drivingOrder = DrivingOrder::registerDrivingOrder($date, $time, 2, 'möchte nicht hinten sitzen');
+        $drivingOrder = DrivingOrder::registerDrivingOrder($passenger, $date, $time, 2, 'möchte nicht hinten sitzen');
         $drivingOrder->assignRoute($route);
         $passenger->assignDrivingOrder($drivingOrder);
         $drivingOrder->assignPassenger($passenger);

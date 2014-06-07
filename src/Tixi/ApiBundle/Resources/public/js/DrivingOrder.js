@@ -48,8 +48,9 @@ function DrivingOrder() {
         _this._trans = trans;
         _this._initElements();
         _this._initRideCheck();
-        _this._initListeners();
         _this._initLookaheadAddresses(lookaheadFromId, lookaheadToId);
+        _this._initListeners();
+
         _this._toggleState();
     }
 
@@ -60,6 +61,7 @@ function DrivingOrder() {
         _lookaheadTo.init('lookahead_'+lookaheadToId, _this._passengerId);
         _this._lookaheadAddressFrom = _lookaheadFrom;
         _this._lookaheadAddressTo = _lookaheadTo;
+        console.log('init')
     }
 
     this._initElements = function() {
@@ -175,23 +177,13 @@ function DrivingOrder() {
     }
 
     this._zoneInformationUpdated = function(zone) {
-        if(!zone || zone.getStatus() == -1) {
-            //error state
-            $(_this._zoneStatusField).val(-1);
-        }else {
+        if(zone && zone.getStatus() != -1) {
             $(_this._zoneNameField).val(zone.getName());
-            $(_this._zoneStatusField).val(zone.getStatus());
-            if(zone.getStatus() != 0) {
-                $(_this._zoneIdField).val(zone.getId());
-            }
         }
     }
 
     this._resetZoneInformation = function() {
-        $(_this._zoneStatusField).val('');
         $(_this._zoneNameField).val('');
-        $(_this._zoneIdField).val('');
-
     }
 
     this.getRideSingleSrcUrl = function() {
@@ -422,34 +414,22 @@ function ZoneManager() {
     var _this = this;
 
     this.requestZoneInformation = function(cityFrom, cityTo, zoneServiceUrl, callback) {
-        var _tempZoneFrom,
-            _tempZoneTo;
-        _this._pollZoneInformation(zoneServiceUrl, _this._createParam(cityFrom)).done(function(data) {
-            _tempZoneFrom = new Zone(data);
-            _this._pollZoneInformation(zoneServiceUrl, _this._createParam(cityTo)).done(function(data) {
-                _tempZoneTo = new Zone(data);
-                if(_tempZoneFrom.getPriority()>_tempZoneTo.getPriority) {
-                    callback(_tempZoneFrom);
-                }else {
-                    callback(_tempZoneTo);
-                }
-            }).fail(function() {
-                callback(null);
-            });
+        _this._pollZoneInformation(zoneServiceUrl, _this._createParam(cityFrom, cityTo)).done(function(data) {
+            callback(new Zone(data));
         }).fail(function() {
             callback(null);
         });
     }
 
-    this._createParam = function(city) {
-        return {'city':city};
+    this._createParam = function(cityFrom, cityTo) {
+        return {'cities':[cityFrom, cityTo]};
 
     }
 
     this._pollZoneInformation = function(srcUrl, params) {
         return $.ajax({
             type: 'GET',
-            url: srcUrl + '?' + $.param(params, true),
+            url: srcUrl + '?' + $.param(params, false),
             dataType: 'json'
         });
     }

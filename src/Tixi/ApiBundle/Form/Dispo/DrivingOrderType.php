@@ -46,8 +46,6 @@ class DrivingOrderType extends CommonAbstractType{
             'late_init' => true
         ));
 
-        $builder->add('zoneStatus','hidden');
-        $builder->add('zoneId','hidden');
         $builder->add('zoneName','text',array(
             'label' => 'drivingorder.field.zone',
             'disabled' => true,
@@ -92,10 +90,16 @@ class DrivingOrderType extends CommonAbstractType{
             'label' => 'sunday.name'
         ));
 
+        $builder->add('additionalTime', 'integer', array(
+            'required' => false,
+            'label' => 'drivingorder.field.additionalTime'
+        ));
+
         $builder->add('compagnion', 'integer', array(
             'required' => false,
             'label' => 'drivingorder.field.compagnion'
         ));
+
 
         $builder->add('memo', 'textarea', array(
             'required' => false,
