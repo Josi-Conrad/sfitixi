@@ -16,10 +16,10 @@ use Tixi\ApiBundle\Form\Shared\CommonAbstractType;
 use Tixi\ApiBundle\Form\Shared\DrivingOrderTime;
 
 /**
- * Class DrivingOrderType
+ * Class RepeatedDrivingOrderEditType
  * @package Tixi\ApiBundle\Form\Dispo
  */
-class DrivingOrderType extends CommonAbstractType{
+class RepeatedDrivingOrderEditType extends CommonAbstractType{
 
     public function buildForm(FormBuilderInterface $builder, array $options) {
         $builder->add('id', 'hidden');
@@ -58,6 +58,7 @@ class DrivingOrderType extends CommonAbstractType{
 
         $builder->add('isRepeated', 'checkbox', array(
             'required' => false,
+            'disabled' => true,
             'label' => 'drivingorder.field.isRepeated'
         ));
 

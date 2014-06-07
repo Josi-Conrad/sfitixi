@@ -65,19 +65,70 @@ class DrivingOrderAssembler {
             $registerDTO->anchorDate,
             $pickupTime,
             $registerDTO->compagnion,
-            $registerDTO->memo
+            $registerDTO->memo,
+            DrivingOrder::PENDENT,
+            false,
+            $registerDTO->additionalTime
         );
         $drivingOrder->assignRoute($route);
         if(null !== $zone) {
             $drivingOrder->assignZone($zone);
         }
+        $passenger->assignDrivingOrder($drivingOrder);
         return $drivingOrder;
+    }
+
+    public function editDTOtoDrivingOrder(DrivingOrderEditDTO $editDTO, DrivingOrder $drivingOrder) {
+        $drivingOrder->update(
+            $editDTO->pickupDate,
+            $editDTO->pickupTime,
+            $editDTO->compagnion,
+            $editDTO->memo,
+            $editDTO->orderStatus,
+            false,
+            $editDTO->additionalTime
+        );
+    }
+
+    public function drivingOrderToEditDto(DrivingOrder $drivingOrder) {
+        $dto = new DrivingOrderEditDTO();
+        $dto->id = $drivingOrder->getId();
+        $dto->pickupDate = $drivingOrder->getPickUpDate();
+        $dto->pickupTime = $drivingOrder->getPickUpTime();
+        $dto->lookaheadaddressFrom = $this->addressAssembler->addressToAddressLookaheadDTO($drivingOrder->getRoute()->getStartAddress());
+        $dto->lookaheadaddressTo = $this->addressAssembler->addressToAddressLookaheadDTO($drivingOrder->getRoute()->getTargetAddress());
+        $dto->zoneName = null;
+        $dto->compagnion = $drivingOrder->getCompanion();
+        $dto->memo = $drivingOrder->getMemo();
+        $dto->additionalTime = null;
+        return $dto;
     }
 
 
     public function registerDtoToNewRepeatedDrivingOrder(DrivingOrderRegisterDTO $registerDTO) {
 
     }
+
+    public function drivingOrdersToDrivingOrderEmbeddedListDTOs($drivingOrders) {
+        $dtoArray = array();
+        foreach ($drivingOrders as $drivingOrder) {
+            $dtoArray[] = $this->drivingOrderToDrivingOrderEmbeddedListDTO($drivingOrder);
+        }
+        return $dtoArray;
+    }
+
+    public function drivingOrderToDrivingOrderEmbeddedListDTO(DrivingOrder $drivingOrder) {
+        $listDTO = new DrivingOrderEmbeddedListDTO();
+        $listDTO->id = $drivingOrder->getId();
+        $listDTO->passengerId = $drivingOrder->getPassenger()->getId();
+        $listDTO->pickupDate = $drivingOrder->getPickUpDate()->format('d.m.Y');
+        $listDTO->pickupTime = $drivingOrder->getPickUpTime()->format('H:i');
+        $listDTO->addressFromString = $drivingOrder->getRoute()->getStartAddress()->toString();
+        $listDTO->addressToString = $drivingOrder->getRoute()->getTargetAddress()->toString();
+        return $listDTO;
+    }
+
+
 
     public function setAddressAssembler(AddressAssembler $assembler) {
         $this->addressAssembler = $assembler;

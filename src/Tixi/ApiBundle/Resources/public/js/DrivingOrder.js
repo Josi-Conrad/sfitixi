@@ -40,16 +40,22 @@ function DrivingOrder() {
     this._trans = null;
 
     this.init = function(lookaheadFromId, lookaheadToId, passengerId, serviceUrls, trans) {
+        console.log('ok')
         _this._passengerId = passengerId;
         _this._routingMachineSrcUrl = serviceUrls.routingMachine;
         _this._zoneServiceSrcUrl = serviceUrls.zone;
         _this._rideCheckSingleSrcUrl = serviceUrls.singleRideCheck;
         _this._rideCheckRepeatedSrcUrl = serviceUrls.repeatedRideCheck;
         _this._trans = trans;
+        console.log('ok')
         _this._initElements();
+        console.log('ok')
         _this._initRideCheck();
+        console.log('ok')
         _this._initLookaheadAddresses(lookaheadFromId, lookaheadToId);
+        console.log('ok')
         _this._initListeners();
+        console.log('ok')
 
         _this._toggleState();
     }

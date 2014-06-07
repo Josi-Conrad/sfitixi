@@ -61,11 +61,11 @@ class DrivingOrder extends CommonBaseEntity {
      */
     protected $repeatedDrivingOrder;
     /**
-     * @ORM\OneToOne(targetEntity="DrivingOrder", mappedBy="correspondingOutwardOrder")
+     * @ORM\OneToOne(targetEntity="DrivingOrder")
      */
     protected $correspondingReturnOrder;
     /**
-     * @ORM\OneToOne(targetEntity="DrivingOrder", mappedBy="correspondingReturnOrder")
+     * @ORM\OneToOne(targetEntity="DrivingOrder")
      */
     protected $correspondingOutwardOrder;
     /**
@@ -91,6 +91,10 @@ class DrivingOrder extends CommonBaseEntity {
      * @ORM\Column(type="boolean")
      */
     protected $manualRoute;
+    /**
+     * @ORM\Column(type="integer")
+     */
+    protected $additionalTime;
 
 
     protected function __construct() {
@@ -98,9 +102,9 @@ class DrivingOrder extends CommonBaseEntity {
     }
 
 
-    public static function registerDrivingOrder(Passenger $passenger, $pickupDate, $pickupTime, $companion = null, $memo = null, $status = self::PENDENT, $manualRoute = 0) {
+    public static function registerDrivingOrder(Passenger $passenger, $pickupDate, $pickupTime, $companion = null, $memo = null, $status = self::PENDENT, $manualRoute = false, $additionalTime = null) {
         $correctedCompanion = (null !== $companion) ? $companion : 0;
-
+        $correctedAdditionalTime = (null !== $additionalTime) ? $additionalTime : 0;
         $drivingOrder = new DrivingOrder();
         $drivingOrder->assignPassenger($passenger);
         $drivingOrder->setPickUpDate($pickupDate);
@@ -109,7 +113,31 @@ class DrivingOrder extends CommonBaseEntity {
         $drivingOrder->setStatus($status);
         $drivingOrder->setManualRoute($manualRoute);
         $drivingOrder->setMemo($memo);
+        $drivingOrder->setAdditionalTime($additionalTime);
         return $drivingOrder;
+    }
+
+    public function update($pickupDate = null, $pickupTime = null, $companion = null, $memo = null, $status = null, $manualRoute = false, $additionalTime = null) {
+        if(null !== $pickupDate) {
+            $this->setPickUpDate($pickupDate);
+        }
+        if(null !== $pickupTime) {
+            $this->setPickUpTime($pickupTime);
+        }
+        if(null !== $companion) {
+            $this->setCompanion($companion);
+        }
+        if(null !== $memo) {
+            $this->setMemo($memo);
+        }
+        if(null !== $additionalTime) {
+            $this->setAdditionalTime($additionalTime);
+        }
+        if(null !== $status) {
+            $this->setStatus($status);
+        }
+        $this->setManualRoute($manualRoute);
+        $this->updateModifiedDate();
     }
 
     /**
@@ -303,4 +331,24 @@ class DrivingOrder extends CommonBaseEntity {
     public function getStatus() {
         return $this->status;
     }
+
+    /**
+     * @param mixed $additionalTime
+     */
+    public function setAdditionalTime($additionalTime)
+    {
+        $this->additionalTime = $additionalTime;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAdditionalTime()
+    {
+        return $this->additionalTime;
+    }
+
+
+
+
 }

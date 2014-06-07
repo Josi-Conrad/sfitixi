@@ -84,15 +84,20 @@ class PassengerController extends Controller {
         $passenger = $this->getPassenger($passengerId);
         $passengerDTO = $assembler->passengerToPassengerRegisterDTO($passenger);
 
-        $gridController = $dataGridControllerFactory->createPassengerAbsentController(true, array('passengerId' => $passengerId));
-        $gridTile = $dataGridHandler->createEmbeddedDataGridTile($this->menuId, $gridController);
+        $absentGridController = $dataGridControllerFactory->createPassengerAbsentController(true, array('passengerId' => $passengerId));
+        $absentGridTile = $dataGridHandler->createEmbeddedDataGridTile($this->menuId, $absentGridController);
+
+        $drivingOrderGridController = $dataGridControllerFactory->createDispoDrivingOrderController(true, array('passengerId' => $passengerId));
+        $drivingOrderGridTile = $dataGridHandler->createEmbeddedDataGridTile($this->menuId, $drivingOrderGridController);
 
         $rootPanel = new RootPanel($this->menuId, 'passenger.panel.name', $passenger->getFirstname() . ' ' . $passenger->getLastname());
         $panelSplitter = $rootPanel->add(new PanelSplitterTile('1:1'));
         $formPanel = $panelSplitter->addLeft(new PanelTile('passenger.panel.details', PanelTile::$primaryType));
         $formPanel->add(new PassengerRegisterFormViewTile('passengerRequest', $passengerDTO, $this->generateUrl('tixiapi_passenger_edit', array('passengerId' => $passengerId))));
-        $gridPanel = $panelSplitter->addRight(new PanelTile('absent.panel.embedded'));
-        $gridPanel->add($gridTile);
+        $absentGridPanel = $panelSplitter->addRight(new PanelTile('absent.panel.embedded'));
+        $absentGridPanel->add($absentGridTile);
+        $drivingOrderGridPanel = $panelSplitter->addRight(new PanelTile('drivingorder.panel.embedded'));
+        $drivingOrderGridPanel->add($drivingOrderGridTile);
         $rootPanel->add(new PanelDeleteFooterTile($this->generateUrl('tixiapi_passenger_delete', array('passengerId' => $passengerId)),'passenger.button.delete'));
 
         return new Response($tileRenderer->render($rootPanel));

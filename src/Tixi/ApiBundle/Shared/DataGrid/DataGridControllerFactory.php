@@ -11,6 +11,7 @@ namespace Tixi\ApiBundle\Shared\DataGrid;
 
 use Symfony\Component\DependencyInjection\ContainerAware;
 use Tixi\ApiBundle\Shared\DataGrid\GridControllers\Dispo\DrivingAssertionDataGridController;
+use Tixi\ApiBundle\Shared\DataGrid\GridControllers\Dispo\DrivingOrderDataGridController;
 use Tixi\ApiBundle\Shared\DataGrid\GridControllers\Dispo\MonthlyPlanDataGridController;
 use Tixi\ApiBundle\Shared\DataGrid\GridControllers\Dispo\MonthlyPlanWorkingDayDataGridController;
 use Tixi\ApiBundle\Shared\DataGrid\GridControllers\Dispo\ProductionPlanDataGridController;
@@ -238,6 +239,10 @@ class DataGridControllerFactory extends ContainerAware {
 
     public function createDispoMonthlyPlanWorkingDayController($embeddedState = false, array $routeProperties = array()) {
         return new MonthlyPlanWorkingDayDataGridController($this->container, $embeddedState, $routeProperties);
+    }
+
+    public function createDispoDrivingOrderController($embeddedState = false, array $routeProperties = array()) {
+        return new DrivingOrderDataGridController($this->container, $embeddedState, $routeProperties);
     }
 
 } 

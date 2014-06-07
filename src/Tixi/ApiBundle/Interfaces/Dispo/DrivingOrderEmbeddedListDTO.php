@@ -30,17 +30,21 @@ class DrivingOrderEmbeddedListDTO implements DataGridSourceClass {
      */
     public $passengerId;
     /**
-     * @GridField(propertyId="DrivingOrder.memo", headerName="drivingorder.field.memo", order=1)
-     */
-    public $memo;
-    /**
-     * @GridField(propertyId="DrivingOrder.anchorDate", headerName="drivingorder.field.anchordate", order=2)
+     * @GridField(propertyId="DrivingOrder.pickUpDate", headerName="drivingorder.field.anchordate", restrictive=true, comparingOperator=">", order=1)
      */
     public $pickupDate;
     /**
-     * @GridField(propertyId="DrivingOrder.endingDate", headerName="drivingorder.field.endDate", restrictive=true, comparingOperator=">", order=3)
+     * @GridField(propertyId="DrivingOrder.pickUpTime", headerName="drivingorder.field.time", order=2)
      */
     public $pickupTime;
+    /**
+     * @GridField(headerName="drivingorder.field.lookaheadaddressFrom", isComputed=true, order=3)
+     */
+    public $addressFromString;
+    /**
+     * @GridField(headerName="drivingorder.field.lookaheadaddressTo", isComputed=true, order=4)
+     */
+    public $addressToString;
 
     /**
      * @return GenericAccessQuery
@@ -57,6 +61,7 @@ class DrivingOrderEmbeddedListDTO implements DataGridSourceClass {
     public static function createReferenceDTOByDriverId($passengerId) {
         $dto = new DrivingOrderEmbeddedListDTO();
         $dto->passengerId = $passengerId;
+        $dto->pickupDate = new \DateTime('yesterday');
         return $dto;
     }
 }

@@ -2,8 +2,8 @@
 /**
  * Created by PhpStorm.
  * User: faustos
- * Date: 17.05.14
- * Time: 20:17
+ * Date: 07.06.14
+ * Time: 18:42
  */
 
 namespace Tixi\ApiBundle\Tile\Dispo;
@@ -12,8 +12,7 @@ namespace Tixi\ApiBundle\Tile\Dispo;
 use Tixi\ApiBundle\Tile\AbstractTile;
 use Tixi\ApiBundle\Tile\Core\FormControlTile;
 
-class DrivingOrderTile extends AbstractTile{
-
+class DrivingOrderEditTile extends AbstractTile{
     protected $formId;
     protected $form;
     protected $passengerId;
@@ -22,8 +21,7 @@ class DrivingOrderTile extends AbstractTile{
     /**
      * @param $form
      * @param $passengerId
-     * @param $routingMachineSrcUrl
-     * @param $zoneServiceSrcUrl
+     * @param $serviceUrls
      */
     public function __construct($form, $passengerId, $serviceUrls) {
         $this->formId = $form->getName();
@@ -47,7 +45,7 @@ class DrivingOrderTile extends AbstractTile{
      */
     public function getTemplateName()
     {
-        return 'TixiApiBundle:Tile:drivingorder.html.twig';
+        return 'TixiApiBundle:Tile:drivingorderedit.html.twig';
     }
 
     /**
@@ -55,6 +53,6 @@ class DrivingOrderTile extends AbstractTile{
      */
     public function getName()
     {
-        return 'drivingOrderForm';
+        return 'drivingOrderEditForm';
     }
 } 
