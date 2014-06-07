@@ -86,7 +86,8 @@ class RideStrategyAnnealing implements RideStrategy {
         $s = microtime(true);
         $initConfig = $this->buildFeasibleConfigFromStrategy(new RideStrategyLeastDistance());
         $e = microtime(true);
-        echo "Feasible init config built in: " . ($e - $s) . "s\n";
+        echo "Total RideNodes: " . count($this->rideNodes);
+        echo "\nFeasible init config built in: " . ($e - $s) . "s\n";
 
         if ($initConfig) {
             $configurations = $this->annealConfigurations($initConfig);
@@ -102,7 +103,8 @@ class RideStrategyAnnealing implements RideStrategy {
      */
     private function buildFeasibleConfigFromStrategy(RideStrategy $strategy) {
         $configurations = $strategy->buildConfigurations($this->rideNodes, $this->drivingPools, $this->emptyRideNodes);
-        if (count($configurations)>1) {
+        if (count($configurations) > 1) {
+            ConfigurationBuilder::removeUnfeasibleConfigurations($configurations);
             ConfigurationBuilder::sortRideConfigurationsByDistance($configurations);
             return $configurations[0];
         }
@@ -128,19 +130,24 @@ class RideStrategyAnnealing implements RideStrategy {
         $currentConfiguration = clone $initialConfiguration;
 
         echo "Annealing with Temperatur: " . $temperature . " and ";
+        //Loop until system has cooled, this is our break criterion
         while ($temperature > $absoluteTemperature) {
+            //swap two nodes
             $nextConfiguration = $this->getNextRandomConfiguration($currentConfiguration);
             if ($nextConfiguration !== null) {
                 $nextDistance = $nextConfiguration->getTotalDistance();
                 $deltaDistance = $nextDistance - $distance;
 
-                //random next double 0.0 > ran < 1.0 gives us Boltzman condition value for acceptance
+                //random next double 0.0 > ran < 1.0
                 $ran = mt_rand(1, 100000000) / 100000000;
                 //we accept the configuration if distance is lower or satisfies Boltzman condition
                 if (($deltaDistance < 0) || ($distance > 0 && exp(-$deltaDistance / $temperature) > $ran)) {
                     $distance = $nextDistance;
+
+                    //keep track of the best configuration
                     if ($distance < $bestDistance) {
                         $bestDistance = $nextDistance;
+                        $currentConfiguration = $nextConfiguration;
                         $configurations[] = clone $nextConfiguration;
                     }
                 }

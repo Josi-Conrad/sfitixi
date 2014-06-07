@@ -75,9 +75,9 @@ class RideStrategyLeastDistance implements RideStrategy {
 
         $this->adjacenceMatrix = ConfigurationBuilder::buildAdjacenceMatrixFromNodes($workNodes, $emptyRideNodes);
 
-        //build some configs and return feasible configs
+        //build some different configurations
         $rideConfigurations = array();
-        $diversity = count($this->rideNodes);
+        $diversity = count($this->drivingPools);
         $factor = $diversity * 2;
 
         //take for each driving pool another start node, and then shuffle the whole node array some times
@@ -132,6 +132,7 @@ class RideStrategyLeastDistance implements RideStrategy {
 
                 //check all nodes in workSet for feasible and best distance
                 foreach ($workRideNodes as $compareNodeKey => $compareNode) {
+                    /**@var RideNode $emptyRide */
                     $emptyRide = $this->adjacenceMatrix[$actualNode->getRideNodeHashId()][$compareNode->getRideNodeHashId()];
                     //not feasible, get next node
                     if ($emptyRide === -1) {

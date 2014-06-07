@@ -211,7 +211,8 @@ class ConfigurationBuilder {
      */
     public static function sortNodesByStartMinute(&$nodes) {
         /**@var $a RideNode
-         * @var $b RideNode */
+         * @var $b RideNode
+         */
         usort($nodes, function ($a, $b) {
             return ($a->startMinute > $b->startMinute);
         });
@@ -224,9 +225,22 @@ class ConfigurationBuilder {
     public static function sortRideConfigurationsByDistance(&$configs) {
         usort($configs, function ($a, $b) {
             /**@var $a RideConfiguration
-             * @var $b RideConfiguration*/
+             * @var $b RideConfiguration
+             */
             return ($a->getTotalDistance() > $b->getTotalDistance());
         });
+    }
+
+    /**
+     * sort Configurations by totalDistance
+     * @param RideConfiguration[] $configs
+     */
+    public static function removeUnfeasibleConfigurations(&$configs) {
+        foreach ($configs as $key => $config) {
+            if ($config->hasNotFeasibleNodes()) {
+                unset ($configs[$key]);
+            }
+        }
     }
 
     /**
@@ -236,7 +250,8 @@ class ConfigurationBuilder {
     public static function sortRideConfigurationsByUsedVehicles(&$configs) {
         usort($configs, function ($a, $b) {
             /**@var $a RideConfiguration
-             * @var $b RideConfiguration*/
+             * @var $b RideConfiguration
+             */
             return ($a->getAmountOfUsedVehicles() > $b->getAmountOfUsedVehicles());
         });
     }
@@ -248,7 +263,8 @@ class ConfigurationBuilder {
     public static function sortRideConfigurationsByUsedVehicleAndDistance(&$configs) {
         usort($configs, function ($a, $b) {
             /**@var $a RideConfiguration
-             * @var $b RideConfiguration*/
+             * @var $b RideConfiguration
+             */
             return ($a->getAmountOfUsedVehicles() * $a->getTotalDistance() >
                 $b->getAmountOfUsedVehicles() * $b->getTotalDistance());
         });
