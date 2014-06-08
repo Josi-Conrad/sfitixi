@@ -30,12 +30,12 @@ class WorkingMonthRepositoryDoctrine extends CommonBaseRepositoryDoctrine implem
 
     /**
      * @param \DateTime $date
-     * @return WorkingMonth
+     * @return null|WorkingMonth
      */
     public function findWorkingMonthByDate(\DateTime $date) {
         $startMonth = $date->modify('first day of this month');
         $qb = parent::createQueryBuilder('e');
-        $qb->where('e.date >= :correctedDate')
+        $qb->where('e.date = :correctedDate')
             ->andWhere('e.isDeleted = 0')
             ->setParameter('correctedDate', $startMonth->format('Y-m-d'));
         return $qb->getQuery()->getOneOrNullResult();
