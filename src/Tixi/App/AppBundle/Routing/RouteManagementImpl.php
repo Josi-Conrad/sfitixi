@@ -65,7 +65,7 @@ class RouteManagementImpl extends ContainerAware implements RouteManagement {
                 $routingInformation->getTotalTime(), $routingInformation->getTotalDistance());
             $routeRepo->store($route);
             //ToDo check if flush is necessary at this point
-            $em->flush();
+//            $em->flush();
             return $route;
         } catch (\Exception $e) {
             return null;

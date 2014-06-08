@@ -14,42 +14,37 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints\Time;
 use Tixi\ApiBundle\Form\Shared\CommonAbstractType;
 use Tixi\ApiBundle\Form\Shared\DrivingOrderTime;
+use Tixi\CoreDomain\Dispo\DrivingOrder;
 
 class DrivingOrderEditType extends CommonAbstractType{
 
     public function buildForm(FormBuilderInterface $builder, array $options) {
         $builder->add('id', 'hidden');
 
-        $builder->add('pickupDate', 'datePicker', array(
-            'attr' => array('title' => 'form.field.title.date'),
-            'label' => 'drivingorder.field.anchordate'
+        $builder->add('pickupDate', 'text', array(
+            'label' => 'drivingorder.field.anchordate',
+            'disabled' => true,
+            'required' => false
         ));
 
-        $builder->add('pickupTime', 'time', array(
+        $builder->add('pickupTime', 'text', array(
             'label' => 'drivingorder.field.pickupTime',
-            'input' => 'datetime',
-            'widget' => 'single_text',
-            'attr' => array(
-                'title' => 'form.field.title.datetime',
-            ),
-            'pattern' => '^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$',
-            'constraints' => array(
-                new Time(),
-            ),
+            'disabled' => true,
+            'required' => false
         ));
 
-
-        $builder->add('lookaheadaddressFrom','addresslookahead', array(
+        $builder->add('lookaheadaddressFrom', 'text', array(
             'label' => 'drivingorder.field.lookaheadaddressFrom',
-            'lookahead_id' => 'addressfrom',
-            'late_init' => true
+            'disabled' => true,
+            'required' => false
         ));
 
-        $builder->add('lookaheadaddressTo','addresslookahead', array(
+        $builder->add('lookaheadaddressTo', 'text', array(
             'label' => 'drivingorder.field.lookaheadaddressTo',
-            'lookahead_id' => 'addressto',
-            'late_init' => true
+            'disabled' => true,
+            'required' => false
         ));
+
 
         $builder->add('zoneName','text',array(
             'label' => 'drivingorder.field.zone',
@@ -58,15 +53,23 @@ class DrivingOrderEditType extends CommonAbstractType{
         ));
 
 
-        $builder->add('additionalTime', 'integer', array(
+        $builder->add('additionalTime', 'text', array(
             'required' => false,
-            'label' => 'drivingorder.field.additionalTime'
+            'label' => 'drivingorder.field.additionalTime',
+            'disabled' => true,
         ));
 
-        $builder->add('compagnion', 'integer', array(
+        $builder->add('compagnion', 'text', array(
             'required' => false,
-            'label' => 'drivingorder.field.compagnion'
+            'label' => 'drivingorder.field.compagnion',
+            'disabled' => true,
         ));
+
+        $builder->add('orderStatus', 'choice', array(
+                'label' => 'drivingorder.field.status',
+                'choices' => DrivingOrder::getStatusArray()
+            )
+        );
 
         $builder->add('memo', 'textarea', array(
             'required' => false,

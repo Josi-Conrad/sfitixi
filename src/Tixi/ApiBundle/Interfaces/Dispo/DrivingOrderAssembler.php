@@ -80,27 +80,23 @@ class DrivingOrderAssembler {
 
     public function editDTOtoDrivingOrder(DrivingOrderEditDTO $editDTO, DrivingOrder $drivingOrder) {
         $drivingOrder->update(
-            $editDTO->pickupDate,
-            $editDTO->pickupTime,
-            $editDTO->compagnion,
             $editDTO->memo,
-            $editDTO->orderStatus,
-            false,
-            $editDTO->additionalTime
+            $editDTO->orderStatus
         );
     }
 
     public function drivingOrderToEditDto(DrivingOrder $drivingOrder) {
         $dto = new DrivingOrderEditDTO();
         $dto->id = $drivingOrder->getId();
-        $dto->pickupDate = $drivingOrder->getPickUpDate();
-        $dto->pickupTime = $drivingOrder->getPickUpTime();
-        $dto->lookaheadaddressFrom = $this->addressAssembler->addressToAddressLookaheadDTO($drivingOrder->getRoute()->getStartAddress());
-        $dto->lookaheadaddressTo = $this->addressAssembler->addressToAddressLookaheadDTO($drivingOrder->getRoute()->getTargetAddress());
-        $dto->zoneName = null;
+        $dto->pickupDate = $drivingOrder->getPickUpDate()->format('d.m.Y');
+        $dto->pickupTime = $drivingOrder->getPickUpTime()->format('H:i');
+        $dto->lookaheadaddressFrom = $drivingOrder->getRoute()->getStartAddress()->toString();
+        $dto->lookaheadaddressTo = $drivingOrder->getRoute()->getTargetAddress()->toString();
+        $dto->zoneName = $drivingOrder->getZone()->getName();
         $dto->compagnion = $drivingOrder->getCompanion();
         $dto->memo = $drivingOrder->getMemo();
-        $dto->additionalTime = null;
+        $dto->additionalTime = $drivingOrder->getAdditionalTime();
+        $dto->orderStatus = $drivingOrder->getStatus();
         return $dto;
     }
 

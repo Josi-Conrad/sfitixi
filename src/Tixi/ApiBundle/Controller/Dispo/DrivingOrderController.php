@@ -21,6 +21,8 @@ use Tixi\ApiBundle\Interfaces\Dispo\DrivingOrderRegisterDTO;
 use Tixi\ApiBundle\Menu\MenuService;
 use Tixi\ApiBundle\Tile\Core\FormTile;
 use Tixi\ApiBundle\Tile\Core\PanelDeleteFooterTile;
+use Tixi\ApiBundle\Tile\Core\PanelSplitterTile;
+use Tixi\ApiBundle\Tile\Core\PanelTile;
 use Tixi\ApiBundle\Tile\Core\RootPanel;
 use Tixi\ApiBundle\Tile\Dispo\DrivingOrderCreateTile;
 use Tixi\ApiBundle\Tile\Dispo\DrivingOrderEditTile;
@@ -100,7 +102,10 @@ class DrivingOrderController extends Controller{
             return $this->redirect($this->generateUrl('tixiapi_passenger_get', array('passengerId' => $passengerId)));
         }
         $rootPanel = new RootPanel($this->menuId, 'drivingorder.panel.edit');
-        $rootPanel->add(new DrivingOrderEditTile($form, $passengerId, $this->constructServiceUrls()));
+        $panelSplitter = $rootPanel->add(new PanelSplitterTile('1:1'));
+        $formPanel = $panelSplitter->addLeft(new PanelTile('vehicle.panel.edit', PanelTile::$primaryType));
+        $formPanel->add(new FormTile($form));
+//        $rootPanel->add(new DrivingOrderEditTile($form, $passengerId, $this->constructServiceUrls()));
 
         return new Response($tileRenderer->render($rootPanel));
     }

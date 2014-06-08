@@ -14,13 +14,37 @@
         <div class="col-md-6">
             <div class="row">
                 <div class="form-group">
-                    <div class="col-md-2 orderDateFromLabel">
+                    <div class="col-md-2">
+                        {{ form_label(form.orderStatus, null, {'label_attr': {'style':'width:100%', 'class':'control-label' }}
+                        ) }}
+                    </div>
+                    <div class="col-md-8">
+                        {{ form_widget(form.orderStatus, { 'attr': {'class': 'form-control zoneName'} }) }}
+                        <div class="error_message">{{ form_errors(form.orderStatus) }}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <div class="col-md-2">
                         {{ form_label(form.pickupDate, null, {'label_attr': {'style':'width:100%', 'class':'control-label' }}
                         ) }}
                     </div>
                     <div class="col-md-3">
                         {{ form_widget(form.pickupDate, { 'attr': {'class': 'form-control dateFromInput'} }) }}
                         <div class="error_message">{{ form_errors(form.pickupDate) }}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <div class="col-md-2">
+                        {{ form_label(form.pickupTime, null, {'label_attr': {'style':'width:100%', 'class':'control-label' }}
+                        ) }}
+                    </div>
+                    <div class="col-md-3">
+                        {{ form_widget(form.pickupTime, { 'attr': {'class': 'form-control zoneName'} }) }}
+                        <div class="error_message">{{ form_errors(form.pickupTime) }}</div>
                     </div>
                 </div>
             </div>
@@ -57,24 +81,6 @@
                     <div class="col-md-8">
                         {{ form_widget(form.zoneName, { 'attr': {'class': 'form-control zoneName'} }) }}
                         <div class="error_message">{{ form_errors(form.zoneName) }}</div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="routingInformationWrapper">
-                        <div class="col-md-3 col-md-offset-2 rideTimeOutward"></div>
-                        <div class="col-md-3 col-md-offset-2 rideTimeReturn"></div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="singleTimeWrapper">
-                    <div class="col-md-2">
-                        {{ form_label(form.pickupTime, null, {'label_attr': {'style':'width:100%', 'class':'control-label' }}
-                        ) }}
-                    </div>
-                    <div class="col-md-8">
-                        {{ form_widget(form.pickupTime, { 'attr': {'class': 'form-control zoneName'} }) }}
-                        <div class="error_message">{{ form_errors(form.pickupTime) }}</div>
                     </div>
                 </div>
             </div>
@@ -116,18 +122,6 @@
     <script type="text/javascript" src="{{ asset('bundles/tixiapi/js/DrivingOrder.js') }}"></script>
     <script type="text/javascript">
         jQuery(function ($) {
-            console.log('start')
-            var drivingOrderController = new DrivingOrder();
-            drivingOrderController.init('addressfrom','addressto','{{ passengerId }}', {
-                'routingMachine':"{{ serviceUrls.routingMachine }}",
-                'zone':"{{ serviceUrls.zone }}",
-                'singleRideCheck':"{{ serviceUrls.singleRideCheck }}",
-                'repeatedRideCheck':"{{ serviceUrls.repeatedRideCheck }}"
-            }, {
-                'dateFromLabelSingleText':"{{ 'drivingorder.field.anchordate' | trans }}",
-                'dateFromLabelRepeatedText':"{{ 'drivingorder.field.anchordatelong' | trans }}",
-                'drivingDuration':"{{ 'drivingorder.drivingDuration' | trans }}"
-            });
             new FormValidationController('{{ formId }}');
         });
     </script>

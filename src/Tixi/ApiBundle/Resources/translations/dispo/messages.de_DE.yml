@@ -116,6 +116,11 @@ drivingorder.field.zone: Zone
 drivingorder.field.additionalTime: Zusätzliche Fahrminuten
 drivingorder.field.compagnion: Anzahl Begleitpersonen
 drivingorder.field.memo: Bemerkungen
+drivingorder.field.status: Status
+
+drivingorder.status.pendent: Pendent
+drivingorder.status.completed: Gefahren
+drivingorder.status.canceled: Abgesagt
 
 drivingorder.drivingDuration: Fahrtdauer
 

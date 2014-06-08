@@ -113,31 +113,26 @@ class DrivingOrder extends CommonBaseEntity {
         $drivingOrder->setStatus($status);
         $drivingOrder->setManualRoute($manualRoute);
         $drivingOrder->setMemo($memo);
-        $drivingOrder->setAdditionalTime($additionalTime);
+        $drivingOrder->setAdditionalTime($correctedAdditionalTime);
         return $drivingOrder;
     }
 
-    public function update($pickupDate = null, $pickupTime = null, $companion = null, $memo = null, $status = null, $manualRoute = false, $additionalTime = null) {
-        if(null !== $pickupDate) {
-            $this->setPickUpDate($pickupDate);
-        }
-        if(null !== $pickupTime) {
-            $this->setPickUpTime($pickupTime);
-        }
-        if(null !== $companion) {
-            $this->setCompanion($companion);
-        }
+    public function update($memo = null, $status = null) {
         if(null !== $memo) {
             $this->setMemo($memo);
-        }
-        if(null !== $additionalTime) {
-            $this->setAdditionalTime($additionalTime);
         }
         if(null !== $status) {
             $this->setStatus($status);
         }
-        $this->setManualRoute($manualRoute);
         $this->updateModifiedDate();
+    }
+
+    public static function getStatusArray() {
+        return array(
+            self::PENDENT=>'drivingorder.status.pendent',
+            self::COMPLETED=>'drivingorder.status.completed',
+            self::CANCELED=>'drivingorder.status.canceled'
+        );
     }
 
     /**
@@ -168,6 +163,13 @@ class DrivingOrder extends CommonBaseEntity {
 
     public function assignZone(Zone $zone) {
         $this->zone = $zone;
+    }
+
+    /**
+     * @return Zone
+     */
+    public function getZone() {
+        return $this->zone;
     }
 
     /**
