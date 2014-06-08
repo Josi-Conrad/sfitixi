@@ -12,7 +12,7 @@ namespace Tixi\App\AppBundle\Tests;
 use Tixi\CoreDomain\Dispo\WorkingMonth;
 use Tixi\CoreDomainBundle\Tests\CommonBaseTest;
 
-class MailManagementTest extends CommonBaseTest {
+class MailServiceTest extends CommonBaseTest {
 
     public function setUp() {
         parent::setUp();
