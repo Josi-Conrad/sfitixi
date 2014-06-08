@@ -6,7 +6,7 @@
  * Time: 17:31
  */
 
-namespace Tixi\CoreDomainBundle\Tests\Entity;
+namespace Tixi\CoreDomainBundle\Tests\Entities;
 
 use Tixi\CoreDomain\ServicePlan;
 use Tixi\CoreDomain\Vehicle;
@@ -15,7 +15,7 @@ use Tixi\CoreDomainBundle\Tests\CommonBaseTest;
 
 /**
  * Class VehicleTest
- * @package Tixi\CoreDomainBundle\Tests\Entity
+ * @package Tixi\CoreDomainBundle\Tests\Entities
  */
 class VehicleTest extends CommonBaseTest {
 

@@ -6,12 +6,16 @@
  * Time: 17:31
  */
 
-namespace Tixi\SecurityBundle\Tests\Entity;
+namespace Tixi\CoreDomainBundle\Tests\Entities\Management;
 
 use Tixi\CoreDomainBundle\Tests\CommonBaseTest;
 use Tixi\SecurityBundle\Entity\Role;
 use Tixi\SecurityBundle\Entity\User;
 
+/**
+ * Class UserTest
+ * @package Tixi\CoreDomainBundle\Tests\Entities\Management
+ */
 class UserTest extends CommonBaseTest {
 
     public function setUp() {

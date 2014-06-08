@@ -9,9 +9,11 @@
 namespace Tixi\SecurityBundle\Provider;
 
 
+use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
+use Tixi\SecurityBundle\Entity\User;
 use Tixi\SecurityBundle\Entity\UserRepository;
 
 /**
@@ -21,7 +23,7 @@ use Tixi\SecurityBundle\Entity\UserRepository;
 class UserProvider implements UserProviderInterface {
 
     /**
-     * @var \Tixi\SecurityBundle\Entity\UserRepository
+     * @var UserRepository
      */
     protected $userRepository;
 
@@ -60,6 +62,7 @@ class UserProvider implements UserProviderInterface {
                 )
             );
         }
+        /**@var $user User*/
         return $this->userRepository->find($user->getId());
     }
 

@@ -129,6 +129,10 @@ class CommonBaseTest extends WebTestCase {
      */
     protected $shiftTypeRepo;
     /**
+     * @var \Tixi\CoreDomainBundle\Repository\BankHolidayRepositoryDoctrine
+     */
+    protected $bankHolidayRepo;
+    /**
      * @var \Tixi\CoreDomainBundle\Repository\Dispo\RouteRepositoryDoctrine
      */
     protected $routeRepo;
@@ -218,6 +222,7 @@ class CommonBaseTest extends WebTestCase {
 
         $this->shiftRepo = $kernel->getContainer()->get('shift_repository');
         $this->shiftTypeRepo = $kernel->getContainer()->get('shifttype_repository');
+        $this->bankHolidayRepo = $kernel->getContainer()->get('bankholiday_repository');
         $this->repeatedDrivingAssertionRepo = $kernel->getContainer()->get('repeateddrivingassertion_repository');
         $this->repeatedDrivingAssertionPlanRepo = $kernel->getContainer()->get('repeateddrivingassertionplan_repository');
         $this->zoneRepo = $kernel->getContainer()->get('zone_repository');
@@ -245,7 +250,6 @@ class CommonBaseTest extends WebTestCase {
         $this->rideManagement = $kernel->getContainer()->get('tixi_app.ridemanagement');
         $this->documentManagement = $kernel->getContainer()->get('tixi_app.documentmanagement');
         $this->mailService = $kernel->getContainer()->get('tixi_app.mailservice');
-
 
         $this->em->beginTransaction();
     }

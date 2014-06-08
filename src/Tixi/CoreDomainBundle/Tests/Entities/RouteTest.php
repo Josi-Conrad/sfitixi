@@ -6,7 +6,7 @@
  * Time: 17:31
  */
 
-namespace Tixi\CoreDomainBundle\Tests\Entity;
+namespace Tixi\CoreDomainBundle\Tests\Entities;
 
 use Symfony\Component\Validator\Constraints\DateTime;
 use Tixi\CoreDomain\Address;
@@ -15,7 +15,7 @@ use Tixi\CoreDomainBundle\Tests\CommonBaseTest;
 
 /**
  * Class RouteTest
- * @package Tixi\CoreDomainBundle\Tests\Entity
+ * @package Tixi\CoreDomainBundle\Tests\Entities
  */
 class RouteTest extends CommonBaseTest {
 

@@ -79,12 +79,6 @@ class EntityChangeListener {
                 . $action . ' by: '
                 . $this->container->get('security.context')->getToken()->getUsername()
             );
-        } else {
-            $this->logger->info('Entity "'
-                . $meta->getTableName() . '" with id: '
-                . $meta->getFieldValue($entity, $meta->getSingleIdentifierFieldName()) . ' '
-                . $action . ' by: no logged in user'
-            );
         }
     }
 }

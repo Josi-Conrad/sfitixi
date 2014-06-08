@@ -6,7 +6,7 @@
  * Time: 17:31
  */
 
-namespace Tixi\CoreDomainBundle\Tests\Entity;
+namespace Tixi\CoreDomainBundle\Tests\Entities\Dispo;
 
 use Symfony\Component\Validator\Constraints\DateTime;
 use Tixi\CoreDomain\Dispo\ShiftType;
@@ -20,7 +20,7 @@ use Tixi\CoreDomainBundle\Tests\CommonBaseTest;
 
 /**
  * Class DriverAssignTest
- * @package Tixi\CoreDomainBundle\Tests\Entity
+ * @package Tixi\CoreDomainBundle\Tests\Entities\Dispo
  */
 class DriverAssignTest extends CommonBaseTest {
 

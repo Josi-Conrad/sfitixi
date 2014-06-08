@@ -164,9 +164,9 @@ class ConfigurationBuilder {
                 $first = reset($sort);
                 $last = count($sort);
 
-                /**@var $sOrder DrivingOrder */
+                /**@var $firstOrder DrivingOrder */
                 $firstOrder = $drivingMission->getDrivingOrders()->get($sort[$first]);
-                /**@var $tOrder DrivingOrder */
+                /**@var $lastOrder DrivingOrder */
                 $lastOrder = $drivingMission->getDrivingOrders()->get($sort[$last]);
 
                 if ($drivingMission->getDirection() === DrivingMission::SAME_START) {

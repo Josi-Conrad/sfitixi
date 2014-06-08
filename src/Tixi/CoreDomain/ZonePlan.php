@@ -67,7 +67,7 @@ class ZonePlan extends CommonBaseEntity {
      * @param $postalCode
      * @param null $memo
      */
-    public function updateZonePlan($city = null, $postalCode, $memo = null) {
+    public function updateZonePlan($city = null, $postalCode = null, $memo = null) {
         if (!empty($city)) {
             $this->setCity($city);
         }
