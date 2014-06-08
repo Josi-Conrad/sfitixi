@@ -33,26 +33,25 @@ class WorkingMonthRepositoryDoctrine extends CommonBaseRepositoryDoctrine implem
      * @return WorkingMonth
      */
     public function findWorkingMonthByDate(\DateTime $date) {
+        $startMonth = $date->modify('first day of this month');
         $qb = parent::createQueryBuilder('e');
-        $qb->where('e.date = :correctedDate')
+        $qb->where('e.date >= :correctedDate')
             ->andWhere('e.isDeleted = 0')
-            ->setParameter('correctedDate', $date->modify('first day of this month')->format('Y-m-d'));
+            ->setParameter('correctedDate', $startMonth->format('Y-m-d'));
         return $qb->getQuery()->getOneOrNullResult();
     }
 
     /**
      * @return WorkingMonth[]
      */
-    public function findProspectiveWorkingMonths()
-    {
+    public function findProspectiveWorkingMonths() {
         $now = new \DateTime();
         $startMonth = $now->modify('first day of this month');
         $qb = parent::createQueryBuilder('e');
         $qb->where('e.date >= :startMonth')
             ->andWhere('e.isDeleted = 0')
-            ->setParameter('startMonth',$startMonth->format('Y-m-d'));
+            ->setParameter('startMonth', $startMonth->format('Y-m-d'));
         return $qb->getQuery()->getResult();
-
 
 
     }

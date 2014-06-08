@@ -55,7 +55,7 @@ class DrivingAssertionManagementImpl extends ContainerAware implements DrivingAs
                     if(!$driver->hasDrivingAssertionForShift($shift)) {
                         $drivingAssertion = DrivingAssertion::registerDrivingAssertion($driver, $shift);
                         $drivingAssertion->assignedRepeatedDrivingAssertionPlan($repeatedDrivingAssertionPlan);
-                        $repeatedDrivingAssertionPlan->assigneDrivingAssertion($drivingAssertion);
+                        $repeatedDrivingAssertionPlan->assignDrivingAssertion($drivingAssertion);
                         $drivingAssertionRepository->store($drivingAssertion);
                     }
                 }

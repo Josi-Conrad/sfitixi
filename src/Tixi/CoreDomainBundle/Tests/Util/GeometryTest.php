@@ -23,12 +23,8 @@ class GeometryTest extends CommonBaseTest{
         $l = GeometryService::deserialize(475408500);
         $this->assertEquals(47.54085, $l);
 
-        $t = 325;
-        $t2 = $t/60;
-        echo round($t2, 0);
-
-        echo "\n " . (new \DateTime('today'))->format('Y-m-d H-i-s');
-        echo "\nMinutes: " . DateTimeService::getMinutesOfDay(new \DateTime('2000-02-01 23:55:00'));
+        $i = GeometryService::serialize(47.54085);
+        $this->assertEquals(475408500, $i);
     }
 
     public function tearDown() {

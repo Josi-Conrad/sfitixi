@@ -27,9 +27,16 @@ class MailServiceSwiftMailer extends ContainerAware implements MailService {
         $mailer = $this->container->get('mailer');
         $fromParameter = $this->container->getParameter('tixi_parameter_admin_mail');
 
-        $attach = Swift_Attachment::fromPath($file);
         $message = Swift_Message::newInstance();
-        $message->attach($attach);
+
+        $attach = null;
+        if (!empty($file)) {
+            $attach = Swift_Attachment::fromPath($file);
+        }
+        if ($attach) {
+            $message->attach($attach);
+        }
+
         $message->setSubject($subject)
             ->setFrom($fromParameter)
             ->setTo($recipients)

@@ -35,7 +35,7 @@ use Tixi\CoreDomain\POI;
 class TestDataDispositionCommand extends ContainerAwareCommand {
     public function configure() {
         $this->setName('project:testdata')
-            ->setDescription('Creates test data for Pools, Orders, Missions')
+            ->setDescription('Creates test data for a month with Pools, Orders, and first day of month with Missions')
             ->addArgument('month', InputArgument::OPTIONAL, 'Set Months ago from today to create DrivingPools in workingMonth');
     }
 
@@ -161,7 +161,7 @@ class TestDataDispositionCommand extends ContainerAwareCommand {
                 $pickupTime = clone $stStart;
                 $pickupTime->add(new \DateInterval('PT' . rand(1, $minutes) . 'M'));
 
-                $order = DrivingOrder::registerDrivingOrder($passenger, $monthDate, $pickupTime, rand(0, 1));
+                $order = DrivingOrder::registerDrivingOrder($passenger, $monthDate, $pickupTime, rand(0, 1), null, 0, 0, 1);
 
                 $start = $passenger->getAddress();
                 $target = $pois[rand(0, $countPois - 1)]->getAddress();

@@ -26,7 +26,7 @@ class DocumentManagementKnp extends ContainerAware implements DocumentManagement
         $workingMonthRepo = $this->container->get('workingmonth_repository');
         $workMonth = $workingMonthRepo->findWorkingMonthByDate($date);
         if(!$workMonth){
-            return false;
+            return null;
         }
         $timeService = $this->container->get('tixi_api.datetimeservice');
 
@@ -103,6 +103,11 @@ class DocumentManagementKnp extends ContainerAware implements DocumentManagement
         return $fileName;
     }
 
+    /**
+     * creates and sends MonthPlan to all drivers with e-mail
+     * @param \DateTime $date
+     * @return mixed
+     */
     public function sendMonthPlanToAllDrivers(\DateTime $date) {
         $file = $this->createMonthPlanDocument($date);
         if ($file === null) {
@@ -121,7 +126,7 @@ class DocumentManagementKnp extends ContainerAware implements DocumentManagement
         }
         if (count($mailAddresses) < 1) {
             echo "no available mail addresses to send";
-            return false;
+            return true;
         }
 
         $renderView = $this->container->get('templating');

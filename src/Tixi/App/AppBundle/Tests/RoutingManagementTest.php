@@ -17,10 +17,10 @@ use Tixi\CoreDomain\Dispo\Route;
 use Tixi\CoreDomainBundle\Tests\CommonBaseTest;
 
 /**
- * Class RoutingServiceTest
+ * Class RoutingManagementTest
  * @package Tixi\App\AppBundle\Tests
  */
-class RoutingServiceTest extends CommonBaseTest {
+class RoutingManagementTest extends CommonBaseTest {
 
     public function setUp() {
         parent::setUp();
@@ -38,37 +38,22 @@ class RoutingServiceTest extends CommonBaseTest {
         $route = $this->routeManagement->getRouteFromAddresses($address1, $address2);
         $this->assertNotEmpty($route->getDurationInMinutes());
     }
-/*
+
     public function testGetMultipleRouteInformations() {
-        $s = microtime(true);
         $address1 = $this->createTestAddressBaar();
         $address2 = $this->createTestAddressGoldau();
 
         $routes = array();
-        for ($i = 0; $i < 10; $i++) {
+        for ($i = 0; $i < 2; $i++) {
             array_push($routes, Route::registerRoute($address1, $address2, null, null));
+            array_push($routes, Route::registerRoute($address2, $address1, null, null));
         }
         $this->routingMachine->fillRoutingInformationForMultipleRoutes($routes);
 
+        /**@var $route Route */
         foreach ($routes as $route) {
-            $this->assertNotEmpty($route->getDuration());
+            $this->assertNotEmpty($route->getDurationInMinutes());
         }
-
-        $e = microtime(true);
-        echo "test executed in: " . ($e - $s) . "s\n";
-    }
-*/
-    public function testGetRouteJSON() {
-        $client = $this->createClient();
-        $client->request('GET', '/service/routing?latFrom=47.498796&lngFrom=7.760499&latTo=47.049796&lngTo=8.548057',
-            array(), array(), array(
-                'PHP_AUTH_USER' => 'admin',
-                'PHP_AUTH_PW' => 'pass',
-            ));
-        $response = $client->getResponse();
-        $json = json_decode($response->getContent());
-        $rd = $json->routeOutwardDuration;
-        $this->assertNotEmpty($rd);
     }
 
     public function tearDown() {

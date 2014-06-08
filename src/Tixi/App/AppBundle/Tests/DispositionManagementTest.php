@@ -25,7 +25,7 @@ use Tixi\CoreDomain\Passenger;
 use Tixi\CoreDomain\POI;
 use Tixi\CoreDomainBundle\Tests\CommonBaseTest;
 
-class DispositionTest extends CommonBaseTest {
+class DispositionManagementTest extends CommonBaseTest {
 
     public function setUp() {
         parent::setUp();

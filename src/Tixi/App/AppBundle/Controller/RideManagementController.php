@@ -26,7 +26,7 @@ use Tixi\App\Ride\RideManagement;
 class RideManagementController extends Controller {
     /**
      * Get json routing information for feasibility, for example:
-     * /service/ride/feasible?day=01.06.2014&time=12.23&direction=1&duration=23&additionalTime=2
+     * /service/ride/feasible?day=01.06.2014&time=12:23&direction=1&duration=23&additionalTime=2
      * @Route("/ride/feasible", name="tixiapp_service_ride_feasible")
      * @Method({"GET"})
      * @param Request $request
@@ -40,7 +40,11 @@ class RideManagementController extends Controller {
         $timeStr = $request->get('time');
         $dayTime = \DateTime::createFromFormat('d.m.Y H:i', $dayStr . ' ' . $timeStr);
         if (!$dayTime) {
-            return new Response('wrong day or time parameters', 500);
+            $response = new JsonResponse();
+            $response->setData(array(
+                'status' => '-1'
+            ));
+            return $response;
         }
 
         $direction = $request->get('direction');
@@ -50,7 +54,11 @@ class RideManagementController extends Controller {
         try {
             $isFeasible = $rideManagement->checkFeasibility($dayTime, $direction, $duration, $additionalTime);
         } catch (\Exception $e) {
-            return new Response($e->getMessage(), 500);
+            $response = new JsonResponse();
+            $response->setData(array(
+                'status' => '-1'
+            ));
+            return $response;
         }
 
         $response = new JsonResponse();
@@ -63,7 +71,7 @@ class RideManagementController extends Controller {
 
     /**
      * Get json routing information for feasibility, for example:
-     * /service/ride/repeatedFeasible?fromDate=01.06.2014&toDate=01.07.2025&weekday=1&time=12.23&direction=1&duration=23&additionalTime=2
+     * /service/ride/repeatedFeasible?fromDate=01.06.2014&toDate=01.07.2025&weekday=1&time=12:23&direction=1&duration=23&additionalTime=2
      * @Route("/ride/repeatedFeasible", name="tixiapp_service_ride_repeated_feasible")
      * @Method({"GET"})
      * @param Request $request
@@ -78,15 +86,18 @@ class RideManagementController extends Controller {
         $timeStr = $request->get('time');
 
         $dayTime = \DateTime::createFromFormat('d.m.Y H:i', $fromDateStr . ' ' . $timeStr);
-        if($toDateStr !== '') {
+        if ($toDateStr !== '') {
             $toDate = \DateTime::createFromFormat('d.m.Y', $toDateStr);
-        }else {
+        } else {
             $toDate = DateTimeService::getMaxDateTime();
         }
 
-
         if (!$dayTime) {
-            return new Response('wrong day or time parameters', 500);
+            $response = new JsonResponse();
+            $response->setData(array(
+                'status' => '-1'
+            ));
+            return $response;
         }
 
         $weekday = $request->get('weekday');
@@ -97,11 +108,16 @@ class RideManagementController extends Controller {
         try {
             $isFeasible = $rideManagement->checkRepeatedFeasibility($dayTime, $toDate, $weekday, $direction, $duration, $additionalTime);
         } catch (\Exception $e) {
-            return new Response($e->getMessage(), 500);
+            $response = new JsonResponse();
+            $response->setData(array(
+                'status' => '-1'
+            ));
+            return $response;
         }
 
         $response = new JsonResponse();
         $response->setData(array(
+            'status' => '0',
             'isFeasible' => $isFeasible
         ));
 
@@ -125,17 +141,28 @@ class RideManagementController extends Controller {
         $shift = $shiftRepo->find($shiftId);
 
         if (!$shift) {
-            return new Response('shift not found', 500);
+            $response = new JsonResponse();
+            $response->setData(array(
+                'status' => '-1',
+                'success' => false
+            ));
+            return $response;
         }
 
         try {
             $success = $rideManagement->getOptimizedPlanForShift($shift);
         } catch (\Exception $e) {
-            return new Response($e->getMessage(), 500);
+            $response = new JsonResponse();
+            $response->setData(array(
+                'status' => '-1',
+                'success' => false
+            ));
+            return $response;
         }
 
         $response = new JsonResponse();
         $response->setData(array(
+            'status' => '0',
             'success' => $success
         ));
 

@@ -7,6 +7,7 @@
  */
 
 namespace Tixi\App\ZonePlan;
+
 use Tixi\CoreDomain\Address;
 use Tixi\CoreDomain\Zone;
 use Tixi\CoreDomain\ZonePlan;
@@ -23,17 +24,32 @@ interface ZonePlanManagement {
      */
     public function getZoneForAddress(Address $address);
 
-//    /**
-//     * returns zone which matches city or plz pattern
-//     * @param $city
-//     * @param $plz
-//     * @return Zone
-//     */
-//    public function getZoneForAddressData($city, $plz);
-
+    /**
+     * @param $cities
+     * @return null|Zone
+     * @throws \Exception
+     * @throws \InvalidArgumentException
+     */
     public function getZoneWithHighestPriorityForCities($cities);
 
+    /**
+     * @param $city
+     * @return null|Zone
+     * @throws \InvalidArgumentException
+     */
     public function getZoneForCity($city);
 
+    /**
+     * @return Zone
+     */
     public function findOrCreateUnclassfiedZone();
+
+    /**
+     * @deprecated
+     * returns zone which matches city or plz pattern
+     * @param $city
+     * @param $plz
+     * @return Zone
+     */
+    public function getZoneForAddressData($city, $plz);
 } 

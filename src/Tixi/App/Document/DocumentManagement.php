@@ -20,5 +20,10 @@ interface DocumentManagement {
      */
     public function createMonthPlanDocument(\DateTime $date);
 
+    /**
+     * creates and sends MonthPlan to all drivers with e-mail
+     * @param \DateTime $date
+     * @return mixed
+     */
     public function sendMonthPlanToAllDrivers(\DateTime $date);
 } 

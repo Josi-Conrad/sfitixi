@@ -37,11 +37,16 @@ class ZoneManagementController extends Controller{
 
         $error = false;
         $zone = null;
-        try {
-            $zone = $zoneManager->getZoneWithHighestPriorityForCities($cities);
-        }catch (\InvalidArgumentException $e) {
+        if($cities){
+            try {
+                $zone = $zoneManager->getZoneWithHighestPriorityForCities($cities);
+            }catch (\InvalidArgumentException $e) {
+                $error = true;
+            }
+        } else {
             $error = true;
         }
+
         $zoneTransfer = ZoneAssembler::zoneToZoneTransferDTO($zone, $error, $this->get('translator'));
         $response = new JsonResponse();
         $response->setData($zoneTransfer->toArray());

@@ -13,7 +13,7 @@ use Tixi\CoreDomain\ZonePlan;
 use Tixi\CoreDomainBundle\Tests\CommonBaseTest;
 
 /**
- * Class ZonePlanTest
+ * Class ZonePlanManagementTest
  * @package Tixi\CoreDomainBundle\Tests\Entities\Management
  */
 class ZonePlanTest extends CommonBaseTest {

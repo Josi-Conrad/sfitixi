@@ -26,7 +26,7 @@ use Tixi\CoreDomain\Passenger;
 use Tixi\CoreDomain\POI;
 use Tixi\CoreDomainBundle\Tests\CommonBaseTest;
 
-class RideTest extends CommonBaseTest {
+class RideManagementTest extends CommonBaseTest {
 
     public function setUp() {
         parent::setUp();

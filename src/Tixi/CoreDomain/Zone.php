@@ -20,8 +20,13 @@ use Tixi\CoreDomain\Shared\CommonBaseEntity;
  * @ORM\Table(name="zone")
  */
 class Zone extends CommonBaseEntity {
-
+    /**
+     * set priorities to zones, a maximum value is needed
+     */
     const MAXZONEPRIORITY = 1000;
+    /**
+     * set priorities to zones, if no priority, then it is unclassified
+     */
     const UNCLASSIFIEDPRIORITY = 1001;
 
     /**
@@ -42,8 +47,6 @@ class Zone extends CommonBaseEntity {
      * @ORM\OneToMany(targetEntity="ZonePlan", mappedBy="zone")
      */
     protected $zonePlans;
-
-
 
     protected function __construct() {
         $this->zonePlans = new ArrayCollection();
@@ -66,6 +69,9 @@ class Zone extends CommonBaseEntity {
         return $zone;
     }
 
+    /**
+     * @return Zone
+     */
     public static function createUnclassifiedZone() {
         $zone = new Zone();
         $zone->setName('zone.unclassified');
@@ -91,6 +97,9 @@ class Zone extends CommonBaseEntity {
         $this->updateModifiedDate();
     }
 
+    /**
+     * @return bool
+     */
     public function isUnclassified() {
         return $this->priority === self::UNCLASSIFIEDPRIORITY;
     }

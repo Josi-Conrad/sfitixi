@@ -9,6 +9,7 @@
 namespace Tixi\CoreDomainBundle\Tests\Entities\Dispo;
 
 use Symfony\Component\Validator\Constraints\DateTime;
+use Tixi\CoreDomain\Dispo\RepeatedMonthlyDrivingAssertion;
 use Tixi\CoreDomain\Dispo\ShiftType;
 use Tixi\CoreDomain\Dispo\RepeatedDrivingAssertionPlan;
 use Tixi\CoreDomain\Dispo\RepeatedWeeklyDrivingAssertion;
@@ -19,10 +20,10 @@ use Tixi\CoreDomain\DriverCategory;
 use Tixi\CoreDomainBundle\Tests\CommonBaseTest;
 
 /**
- * Class DriverAssignTest
+ * Class DrivingAssertionTest
  * @package Tixi\CoreDomainBundle\Tests\Entities\Dispo
  */
-class DriverAssignTest extends CommonBaseTest {
+class DrivingAssertionTest extends CommonBaseTest {
 
     public function setUp() {
         parent::setUp();
@@ -42,21 +43,40 @@ class DriverAssignTest extends CommonBaseTest {
         );
         $this->driverRepo->store($driver);
 
-        $shiftType = $this->createShiftType('Shift 1');
+        $shiftTypes[] = $this->createShiftType('Shift 1');
+        $shiftTypes[] = $this->createShiftType('Shift 2');
 
+        //weekly
         $repeatedDrivingAssertionWeekly = new RepeatedWeeklyDrivingAssertion();
         $repeatedDrivingAssertionWeekly->setWeekday(1);
+        $repeatedDrivingAssertionWeekly->setShiftTypes($shiftTypes);
         $this->repeatedDrivingAssertionRepo->store($repeatedDrivingAssertionWeekly);
 
         $repeatedDrivingAssertionPlan = RepeatedDrivingAssertionPlan::registerRepeatedAssertionPlan(
             'test', new \DateTime(), 'weekly', true);
         $repeatedDrivingAssertionPlan->assignDriver($driver);
+        $repeatedDrivingAssertionPlan->assignRepeatedDrivingAssertion($repeatedDrivingAssertionWeekly);
         $this->repeatedDrivingAssertionPlanRepo->store($repeatedDrivingAssertionPlan);
         $this->em->flush();
 
         $find = $this->repeatedDrivingAssertionPlanRepo->find($repeatedDrivingAssertionPlan->getId());
         $this->assertEquals($find, $repeatedDrivingAssertionPlan);
 
+        //monthly
+        $repeatedDrivingAssertionMonthly = new RepeatedMonthlyDrivingAssertion();
+        $repeatedDrivingAssertionMonthly->setRelativeWeekAsText('first');
+        $repeatedDrivingAssertionMonthly->setWeekdayAsText('monday');
+        $this->repeatedDrivingAssertionRepo->store($repeatedDrivingAssertionMonthly);
+
+        $repeatedDrivingAssertionPlan = RepeatedDrivingAssertionPlan::registerRepeatedAssertionPlan(
+            'test', new \DateTime(), 'monthly', true);
+        $repeatedDrivingAssertionPlan->assignDriver($driver);
+        $repeatedDrivingAssertionPlan->assignRepeatedDrivingAssertion($repeatedDrivingAssertionMonthly);
+        $this->repeatedDrivingAssertionPlanRepo->store($repeatedDrivingAssertionPlan);
+        $this->em->flush();
+
+        $find = $this->repeatedDrivingAssertionPlanRepo->find($repeatedDrivingAssertionPlan->getId());
+        $this->assertEquals($find, $repeatedDrivingAssertionPlan);
     }
 
     private function createDriverCategory($name) {

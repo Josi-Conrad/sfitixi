@@ -14,10 +14,10 @@ use Tixi\CoreDomain\Address;
 use Tixi\CoreDomainBundle\Tests\CommonBaseTest;
 
 /**
- * Class AddressServiceTest
+ * Class AddressManagementTest
  * @package Tixi\App\AppBundle\Tests
  */
-class AddressServiceTest extends CommonBaseTest {
+class AddressManagementTest extends CommonBaseTest {
     /**
      * Fulltext index only creates on a committed flush on database.
      * For testing purposes we can't use transactions with rollbacks.
@@ -47,17 +47,6 @@ class AddressServiceTest extends CommonBaseTest {
                 }
             }
         }
-    }
-
-    public function testSearchAddress() {
-//        $address = Address::registerAddress('Jasldkjasdijsd 12', '6331', 'Zug', 'Schweiz');
-//        $this->addressRepo->store($address);
-//        $address = Address::registerAddress('Jasldkjasdijsd 12', '6330', 'Baar', 'Schweiz');
-//        $this->addressRepo->store($address);
-//        $this->em->flush();
-//
-//        $results = $this->aService->getAddressSuggestionsByString('Jasldkjasd Zug');
-//        $this->assertNotCount(0, $results);
     }
 
     public function tearDown() {

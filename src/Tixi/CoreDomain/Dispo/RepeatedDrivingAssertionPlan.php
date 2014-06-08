@@ -111,10 +111,16 @@ class RepeatedDrivingAssertionPlan extends CommonBaseEntity {
         $this->getRepeatedDrivingAssertions()->add($repeatedDrivingAssertion);
     }
 
-    public function assigneDrivingAssertion(DrivingAssertion $drivingAssertion) {
+    /**
+     * @param DrivingAssertion $drivingAssertion
+     */
+    public function assignDrivingAssertion(DrivingAssertion $drivingAssertion) {
         $this->drivingAssertions->add($drivingAssertion);
     }
 
+    /**
+     * @param DrivingAssertion $drivingAssertion
+     */
     public function removeDrivingAssertion(DrivingAssertion $drivingAssertion) {
         $this->drivingAssertions->removeElement($drivingAssertion);
     }
