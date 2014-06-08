@@ -260,7 +260,7 @@ class CommonBaseTest extends WebTestCase {
 
     protected function createTestAddressBaar() {
         $address = Address::registerAddress('Rathausstrasse 1', '6340',
-            'Baar', 'Schweiz', 'Ganztagesschule mit Montessoriprofil', 47.194715, 8.526096);
+            'Baar', 'Schweiz', 'Ganztagesschule mit Montessoriprofil', 47.294715, 8.326096);
         $this->addressRepo->store($address);
         $this->em->flush();
         return $address;

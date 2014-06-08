@@ -32,13 +32,11 @@ class RideManagementImpl extends ContainerAware implements RideManagement {
      * @return mixed
      */
     public function checkFeasibility(\DateTime $dayTime, $direction, $duration, $additionalTime = 0) {
-        $s = microtime(true);
-
         $dispoManagement = $this->container->get('tixi_app.dispomanagement');
 
         $shift = $dispoManagement->getResponsibleShiftForDayAndTime($dayTime);
+
         //if there is not already a planed shift in future, it should be feasible
-        //TODO: Check with repeatedDrivingMissions, but we cannot check too far in future...
         if ($shift === null) {
             return true;
         }
@@ -66,10 +64,6 @@ class RideManagementImpl extends ContainerAware implements RideManagement {
         //analyze configuration with an feasibleRide object if its fit
         $rideAnalyzer = new ConfigurationAnalyzer($rideConfiguration);
         $isFeasible = $rideAnalyzer->checkIfNodeIsFeasibleInConfiguration($feasibleNode);
-
-        $e = microtime(true);
-//        echo "Check feasibility TimeWindow in: " . ($e - $s) . "s\n";
-//        $this->printConfiguration($rideConfiguration);
 
         return $isFeasible;
     }
@@ -127,13 +121,12 @@ class RideManagementImpl extends ContainerAware implements RideManagement {
      * @return mixed
      */
     public function getOptimizedPlanForShift(Shift $shift) {
-        //TODO: Problem with shift before and after + pool assignments
+        //TODO: checking drivers and missions with shift before and after current shift + pool assignments
         $em = $this->container->get('entity_manager');
         $em->beginTransaction();
 
         //STRATEGY for RideOptimization
         $rideStrategy = new RideStrategyAnnealing();
-//        $rideStrategy = new RideStrategyLeastDistance();
 
         $dispoManagement = $this->container->get('tixi_app.dispomanagement');
 
@@ -239,7 +232,6 @@ class RideManagementImpl extends ContainerAware implements RideManagement {
             }
             /**@var $node RideNode */
             foreach ($rideNodes as $node) {
-//                echo "(" . $node->startMinute . "-" . $node->endMinute . ")\t";
                 echo "(" . $node->drivingMission->getId() . ":" . $node->startAddress->getAddressNameShort() . "->" . $node->targetAddress->getAddressNameShort() . ")\t";
             }
             echo "\n";

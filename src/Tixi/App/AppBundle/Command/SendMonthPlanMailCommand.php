@@ -22,8 +22,7 @@ use Tixi\CoreDomain\Address;
 class SendMonthPlanMailCommand extends ContainerAwareCommand {
     public function configure() {
         $this->setName('project:send-monthplan')
-            ->setDescription('Send Monthplan to drivers')
-            ->addArgument('limit', InputArgument::OPTIONAL, 'Limit the amount of queries');
+            ->setDescription('Send Monthplan to drivers');
     }
 
     /**
@@ -32,10 +31,6 @@ class SendMonthPlanMailCommand extends ContainerAwareCommand {
      * @return int|null|void
      */
     public function execute(InputInterface $input, OutputInterface $output) {
-        $limit = $input->getArgument('limit');
-        if (!$limit) {
-            $limit = 1000;
-        }
 
         $date = \DateTime::createFromFormat('d.m.Y', '01.07.2024');
 

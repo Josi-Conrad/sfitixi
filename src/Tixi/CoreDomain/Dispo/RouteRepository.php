@@ -34,4 +34,9 @@ interface RouteRepository extends CommonBaseRepository {
      * @return bool
      */
     public function storeRouteIfNotExist(Route $route);
+
+    /**
+     * @return Route[]
+     */
+    public function findRoutesOlderThenOneMonth();
 }

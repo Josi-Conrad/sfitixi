@@ -61,4 +61,18 @@ class RouteRepositoryDoctrine extends CommonBaseRepositoryDoctrine implements Ro
             return $route;
         }
     }
+
+    /**
+     * @return Route[]
+     */
+    public function findRoutesOlderThenOneMonth(){
+        $now = new \DateTime();
+        $pastMonth = $now->modify('-1 month');
+        $qb = parent::createQueryBuilder('r');
+        $qb->where('r.modifiedDateTime <= :pastMonth')
+            ->andWhere('r.isDeleted = 0')
+            ->setParameter('pastMonth', $pastMonth->format('Y-m-d'));
+        return $qb->getQuery()->getResult();
+
+    }
 }

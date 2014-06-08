@@ -78,10 +78,18 @@ class Route extends CommonBaseEntity {
      * @param null $distance
      */
     public function updateRouteData($startAddress = null, $targetAddress = null, $duration = null, $distance = null) {
-        $this->setStartAddress($startAddress);
-        $this->setTargetAddress($targetAddress);
-        $this->setDuration($duration);
-        $this->setDistance($distance);
+        if (!empty($startAddress)) {
+            $this->setStartAddress($startAddress);
+        }
+        if (!empty($targetAddress)) {
+            $this->setTargetAddress($targetAddress);
+        }
+        if (!empty($duration)) {
+            $this->setDuration($duration);
+        }
+        if (!empty($distance)) {
+            $this->setDistance($distance);
+        }
         parent::updateModifiedDate();
     }
 
@@ -90,6 +98,7 @@ class Route extends CommonBaseEntity {
      */
     public function setDistance($distance) {
         $this->distance = $distance;
+        parent::updateModifiedDate();
     }
 
     /**
@@ -114,6 +123,7 @@ class Route extends CommonBaseEntity {
      */
     public function setDuration($duration) {
         $this->duration = $duration;
+        parent::updateModifiedDate();
     }
 
     /**

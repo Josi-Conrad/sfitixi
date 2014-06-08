@@ -1,6 +1,12 @@
 #address query
 addrquery:
-  subject: iTIXI - Addressabfragen
+  subject: iTIXI - Addressabfrage
   title: Addressabfrage
   descr1: Es wurden
-  descr2: Addresses aktualisiert mit Koordinaten und Routen-Information
+  descr2: Addresses aktualisiert mit Koordinaten und Routen-Information.
+
+routeupdate:
+  subject: iTIXI - Routen Update
+  title: Routen Update
+  descr: Routen wurden aktualisiert, die älter als einen Monat waren.
+  descr_error: Es konnten keine Routen aktualisiert werden.

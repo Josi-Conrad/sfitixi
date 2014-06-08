@@ -315,8 +315,9 @@ class RoutingMachineOSRM extends ContainerAware implements RoutingMachine {
             $totalTime = $json->route_summary->total_time;
             $totalDistance = $json->route_summary->total_distance;
 
-            $routes[$hashKey]->setDuration($totalTime);
-            $routes[$hashKey]->setDistance($totalDistance);
+            $routes[$hashKey]->updateRouteData(null, null, $totalTime, $totalDistance);
+//            $routes[$hashKey]->setDuration($totalTime);
+//            $routes[$hashKey]->setDistance($totalDistance);
         }
 
         return $routes;

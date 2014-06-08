@@ -96,38 +96,26 @@ class QueryAddressCoordinatesCommand extends ContainerAwareCommand {
         }
         $em->flush();
 
-
         //Mail changes
+        $mailService = $this->getContainer()->get('tixi_app.mailservice');
+
         $renderView = $this->getContainer()->get('templating');
-        $mailer = $this->getContainer()->get('mailer');
         $translator = $this->getContainer()->get('translator');
 
         $subject = $translator->trans('addrquery.subject');
         $title = $translator->trans('addrquery.title');
         $body = $translator->trans('addrquery.descr1') . ' ' . $changedNearest . ' ' . $translator->trans('addrquery.descr2');
 
-        $message = \Swift_Message::newInstance()
-            ->setSubject($subject)
-            ->setFrom("itixi@gmail.com")
-            ->setTo('hertus@gmail.com')
-            ->setReadReceiptTo('itixi@gmail.com')
-            ->
-            setBody(
-                $renderView->render(
-                    'TixiAppBundle:mail:addressQuery.html.twig',
-                    array(
-                        'mail_parameter_name' => $title,
-                        'mail_addrquery_body' => $body,
-                    )
-                ), 'text/html', 'utf8'
-            );
+        $mailTo[] = $this->getContainer()->getParameter('tixi_parameter_admin_mail');
+        $html = $renderView->render(
+            'TixiAppBundle:mail:infoMail.html.twig',
+            array(
+                'mail_parameter_name' => $title,
+                'mail_parameter_body' => $body,
+            )
+        );
 
-        if (!$mailer->send($message, $failures)) {
-            echo "Mail send failures:";
-            print_r($failures);
-        } else {
-            echo "Mail send successfull";
-        }
+        $mailService->mailToSeveralRecipients($mailTo, $subject, $html);
 
         $output->writeln("\n--------------------------------------------\n" .
             "Addresses without coordinates: " . $count . "\n" . "Addresses Updated: " . $changed . "\n" .

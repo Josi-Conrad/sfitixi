@@ -6,7 +6,7 @@
  * Time: 17:53
  */
 
-namespace Tixi\App\AppBundle\Command;
+namespace Tixi\App\AppBundle\Command\Tests;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Helper\DialogHelper;
@@ -18,7 +18,7 @@ use Tixi\CoreDomain\Dispo\Route;
 
 /**
  * Class RunOSRMTestCommand
- * @package Tixi\App\AppBundle\Command
+ * @package Tixi\App\AppBundle\Command\Tests
  */
 class RunOSRMTestCommand extends ContainerAwareCommand {
     public function configure() {
