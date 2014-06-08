@@ -60,8 +60,6 @@ class RouteUpdatesCommand extends ContainerAwareCommand {
             $body = $toUpdate . ' ' . $body;
         }
 
-        $body = $toUpdate . $body;
-
         $mailTo[] = $this->getContainer()->getParameter('tixi_parameter_admin_mail');
         $html = $renderView->render(
             'TixiAppBundle:mail:infoMail.html.twig',
