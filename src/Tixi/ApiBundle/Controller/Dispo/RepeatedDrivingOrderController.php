@@ -127,9 +127,13 @@ class RepeatedDrivingOrderController extends Controller{
      * @param Request $request
      * @param $passengerId
      * @param $orderPlanId
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function deleteRepeatedOrderPlanAction(Request $request, $passengerId, $orderPlanId) {
-
+        $orderPlan = $this->getOrderPlan($orderPlanId);
+        $orderPlan->deleteLogically();
+        $this->get('entity_manager')->flush();
+        return $this->redirect($this->generateUrl('tixiapi_passenger_get',array('passengerId' => $passengerId)));
     }
 
     /**
