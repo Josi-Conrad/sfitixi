@@ -62,6 +62,11 @@ class RepeatedDrivingOrderEditType extends CommonAbstractType{
             'label' => 'drivingorder.field.isRepeated'
         ));
 
+        $builder->add('withHolidays', 'checkbox', array(
+            'required' => false,
+            'label' => 'repeateddrivingorder.field.withHolidays'
+        ));
+
         $builder->add('mondayOrderTime', new DrivingOrderTime('1'), array(
             'required' => false,
             'label' => 'monday.name'

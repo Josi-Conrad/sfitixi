@@ -26,6 +26,7 @@ class DrivingOrderRegisterDTO {
     public $additionalTime;
 
     //repeated part
+    public $withHolidays;
     public $endDate;
     public $mondayOrderTime;
     public $tuesdayOrderTime;

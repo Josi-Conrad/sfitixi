@@ -45,6 +45,35 @@ class RepeatedDrivingOrderController extends Controller{
     }
 
     /**
+     * @Route("", name="tixiapi_driver_repeatedorderplans_get")
+     * @Method({"GET","POST"})
+     * @param Request $request
+     * @param $passengerId
+     * @param bool $embeddedState
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function getRepeatedOrderPlansAction(Request $request, $passengerId, $embeddedState = false) {
+        $embeddedState = $embeddedState || $request->get('embedded') === "true";
+        $isPartial = $request->get('partial') === "true";
+
+        $dataGridHandler = $this->get('tixi_api.datagridhandler');
+        $dataGridControllerFactory = $this->get('tixi_api.datagridcontrollerfactory');
+        $tileRenderer = $this->get('tixi_api.tilerenderer');
+
+        $gridController = $dataGridControllerFactory->createDispoRepeatedDrivingOrderPlanController($embeddedState, array('passengerId' => $passengerId));
+        $dataGridTile = $dataGridHandler->createDataGridTileByRequest($request, $this->menuId, $gridController);
+
+        $rootPanel = null;
+        if(!$embeddedState && !$isPartial) {
+            // doesn't exist at the moment
+        }else {
+            $rootPanel = $dataGridTile;
+        }
+
+        return new Response($tileRenderer->render($rootPanel));
+    }
+
+    /**
      * @Route("/{orderPlanId}/edit", name="tixiapi_driver_repeatedorderplan_edit")
      * @Method({"GET","POST"})
      * @param Request $request
@@ -103,7 +132,9 @@ class RepeatedDrivingOrderController extends Controller{
 
     }
 
-
+    /**
+     * @return array
+     */
     protected function constructServiceUrls() {
         $serviceUrls = [];
         $serviceUrls['routingMachine'] = $this->generateUrl('tixiapp_service_routing');
@@ -128,6 +159,11 @@ class RepeatedDrivingOrderController extends Controller{
         return $passenger;
     }
 
+    /**
+     * @param $orderPlanId
+     * @return mixed
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     */
     protected function getOrderPlan($orderPlanId) {
         /** @var RepeatedDrivingOrderPlanRepository $repeatedDrivingOrderPlanRepository */
         $repeatedDrivingOrderPlanRepository = $this->get('repeateddrivingorderplan_repository');

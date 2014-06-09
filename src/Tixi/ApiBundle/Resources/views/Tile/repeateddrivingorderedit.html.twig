@@ -90,6 +90,15 @@
                     <div class="col-md-2">
                         {{ form_widget(form.isRepeated, { 'attr': {'class': 'isRepeatedCheckbox'} }) }}
                     </div>
+                    <div class="repeatedOrderWithHolidays">
+                        <div class="col-md-3">
+                            {{ form_label(form.withHolidays, null, {'label_attr': {'style':'width:100%', 'class':'control-label' }}
+                            ) }}
+                        </div>
+                        <div class="col-md-2">
+                            {{ form_widget(form.withHolidays)}}
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="repeatedTimeWrapper">

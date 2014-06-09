@@ -125,6 +125,13 @@ drivingorder.status.canceled: Abgesagt
 drivingorder.drivingDuration: Fahrtdauer
 
 #RepeatedDrivingOrder
+repeateddrivingorder.panel.embedded: Wiederkehrende Fahraufträge
 repeateddrivingorder.panel.edit: Dauerauftrag editieren
 repeateddrivingorder.button.delete: Dauerauftrag löschen
+repeateddrivingorder.field.anchordate: AB
+repeateddrivingorder.field.endDate: Bis
+repeateddrivingorder.field.withHolidays: inklusive Feiertage
+repeateddrivingorder.field.subject: Betreff
+
+repeateddrivingorder.validtillrecalled: Auf Widerruf
 
