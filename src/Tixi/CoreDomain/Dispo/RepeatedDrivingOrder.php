@@ -20,6 +20,10 @@ use Tixi\CoreDomain\Shared\CommonBaseEntity;
  * @ORM\Table(name="repeated_driving_order")
  */
 class RepeatedDrivingOrder {
+
+    const OUTWARD_DIRECTION = 0;
+    const RETURN_DIRECTION = 1;
+
     /**
      * Repeated-Order Number
      * @ORM\Id
@@ -49,6 +53,10 @@ class RepeatedDrivingOrder {
      * @ORM\Column(type="utcdatetime")
      */
     protected $pickUpTime;
+    /**
+     * @ORM\Column(type="smallint")
+     */
+    protected $direction;
 
 
     protected function __construct() {
@@ -58,12 +66,15 @@ class RepeatedDrivingOrder {
     /**
      * @param $weekday
      * @param \DateTime $pickUpTime
+     * @param null $direction
      * @return RepeatedDrivingOrder
      */
-    public static function registerRepeatedDrivingOrder($weekday, \DateTime $pickUpTime) {
+    public static function registerRepeatedDrivingOrder($weekday, \DateTime $pickUpTime, $direction = null) {
+        $correctedDirection = (null !== $direction) ? $direction : self::OUTWARD_DIRECTION;
         $rdOrder = new RepeatedDrivingOrder();
         $rdOrder->setWeekday($weekday);
         $rdOrder->setPickUpTime($pickUpTime);
+        $rdOrder->setDirection($correctedDirection);
         return $rdOrder;
     }
 
@@ -154,5 +165,23 @@ class RepeatedDrivingOrder {
     public function getDrivingOrders() {
         return $this->drivingOrders;
     }
+
+    /**
+     * @param mixed $direction
+     */
+    public function setDirection($direction)
+    {
+        $this->direction = $direction;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDirection()
+    {
+        return $this->direction;
+    }
+
+
 
 }

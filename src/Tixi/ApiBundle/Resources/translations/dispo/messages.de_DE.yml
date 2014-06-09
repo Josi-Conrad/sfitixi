@@ -124,3 +124,7 @@ drivingorder.status.canceled: Abgesagt
 
 drivingorder.drivingDuration: Fahrtdauer
 
+#RepeatedDrivingOrder
+repeateddrivingorder.panel.edit: Dauerauftrag editieren
+repeateddrivingorder.button.delete: Dauerauftrag löschen
+

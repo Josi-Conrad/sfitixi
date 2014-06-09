@@ -39,7 +39,7 @@ function DrivingOrder() {
 
     this._trans = null;
 
-    this.init = function(lookaheadFromId, lookaheadToId, passengerId, serviceUrls, trans) {
+    this.init = function(lookaheadFromId, lookaheadToId, passengerId, serviceUrls, trans, isEdit) {
         _this._passengerId = passengerId;
         _this._routingMachineSrcUrl = serviceUrls.routingMachine;
         _this._zoneServiceSrcUrl = serviceUrls.zone;
@@ -50,8 +50,11 @@ function DrivingOrder() {
         _this._initRideCheck();
         _this._initLookaheadAddresses(lookaheadFromId, lookaheadToId);
         _this._initListeners();
-
         _this._toggleState();
+        //force route poll if view is in edit state
+        if(isEdit) {
+            _this._onAddressChanged();
+        }
     }
 
     this._initLookaheadAddresses = function(lookaheadFromId, lookaheadToId) {
@@ -61,7 +64,6 @@ function DrivingOrder() {
         _lookaheadTo.init('lookahead_'+lookaheadToId, _this._passengerId);
         _this._lookaheadAddressFrom = _lookaheadFrom;
         _this._lookaheadAddressTo = _lookaheadTo;
-        console.log('init')
     }
 
     this._initElements = function() {
@@ -211,7 +213,6 @@ function DrivingOrder() {
     }
 
     this.createRideRepeatedCheckParams = function(timeInput, direction, weekday) {
-        console.log(weekday);
         var _params = {},
             _duration;
         if(_this.isRideCheckPossible()) {

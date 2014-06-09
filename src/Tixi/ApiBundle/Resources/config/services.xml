@@ -23,6 +23,7 @@
         <parameter key="tixi_api.addressassembler.class">Tixi\ApiBundle\Interfaces\AddressAssembler</parameter>
         <parameter key="tixi_api.drivingassertionassembler.class">Tixi\ApiBundle\Interfaces\Dispo\DrivingAssertionAssembler</parameter>
         <parameter key="tixi_api.drivingorderassembler.class">Tixi\ApiBundle\Interfaces\Dispo\DrivingOrderAssembler</parameter>
+        <parameter key="tixi_api.repeateddrivingorderassembler.class">Tixi\ApiBundle\Interfaces\Dispo\RepeatedDrivingOrderAssembler</parameter>
         <parameter key="tixi_api.productionplanassembler.class">Tixi\ApiBundle\Interfaces\Dispo\ProductionView\ProductionPlanAssembler</parameter>
         <parameter key="tixi_api.monthlyplanassembler.class">Tixi\ApiBundle\Interfaces\Dispo\MonthlyView\MonthlyPlanAssembler</parameter>
 
@@ -146,6 +147,17 @@
         </service>
         <service id="tixi_api.assemblerDrivingAssertion" class="%tixi_api.drivingassertionassembler.class%"/>
         <service id="tixi_api.assemblerDrivingOrder" class="%tixi_api.drivingorderassembler.class%">
+            <call method="setAddressAssembler">
+                <argument type="service" id="tixi_api.assemblerAddress" />
+            </call>
+            <call method="setRouteManagement">
+                <argument type="service" id="tixi_app.routemanagement" />
+            </call>
+            <call method="setZonePlaneManagement">
+                <argument type="service" id="tixi_app.zoneplanmanagement" />
+            </call>
+        </service>
+        <service id="tixi_api.assemblerRepeatedDrivingOrder" class="%tixi_api.repeateddrivingorderassembler.class%">
             <call method="setAddressAssembler">
                 <argument type="service" id="tixi_api.assemblerAddress" />
             </call>

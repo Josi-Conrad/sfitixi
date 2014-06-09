@@ -34,6 +34,7 @@ class MenuService extends ContainerAware {
     public static $menuDriverRepeatedAssertionId = 'driver_repeatedassertions';
     public static $menuPassengerAbsentId = 'passenger_absents';
     public static $menuPassengerDrivingOrderId = 'passenger_drivingorder';
+    public static $menuPassengerRepeatedDrivingOrderId = 'passenger_repeatedorder';
     public static $menuUserProfileId = 'user_profile';
 
     public static $menuSelectionDispositionId = 'disposition';

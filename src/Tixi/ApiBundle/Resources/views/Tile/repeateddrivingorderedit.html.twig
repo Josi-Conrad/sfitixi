@@ -1,0 +1,214 @@
+<div class="col-md-12 drivingOrderWrapper">
+
+    <div class="text-right">
+        {% for resolvedElement in children %}
+            {% if 'formcontrol' in resolvedElement.viewIndentifiers %}
+                {{ resolvedElement.rawData | raw }}
+            {% endif %}
+        {% endfor %}
+    </div>
+
+    {{ form_start(form, {'attr':{'id':formId, 'class':'form-horizontal customForm'} }) }}
+    {{ form_widget(form._token) }}
+    <div class="row">
+        <div class="col-md-6">
+            <div class="row">
+                <div class="form-group">
+                    <div class="col-md-2 orderDateFromLabel">
+                        {{ form_label(form.anchorDate, null, {'label_attr': {'style':'width:100%', 'class':'control-label' }}
+                        ) }}
+                    </div>
+                    <div class="col-md-3">
+                        {{ form_widget(form.anchorDate, { 'attr': {'class': 'form-control dateFromInput'} }) }}
+                        <div class="error_message">{{ form_errors(form.anchorDate) }}</div>
+                    </div>
+                    <div class="repeatedEndDateWrapper">
+                        <div class="col-md-2">
+                            {{ form_label(form.endDate, null, {'label_attr': {'style':'width:100%', 'class':'control-label' }}
+                            ) }}
+                        </div>
+                        <div class="col-md-3 orderDateToLabel">
+                            {{ form_widget(form.endDate, { 'attr': {'class': 'form-control dateToInput'} }) }}
+                            <div class="error_message">{{ form_errors(form.anchorDate) }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <div class="col-md-2">
+                        {{ form_label(form.lookaheadaddressFrom, null, {'label_attr': {'style':'width:100%', 'class':'control-label' }}
+                        ) }}
+                    </div>
+                    <div class="col-md-8">
+                        {{ form_widget(form.lookaheadaddressFrom, { 'attr': {'class': 'form-control'} }) }}
+                        <div class="error_message">{{ form_errors(form.lookaheadaddressFrom) }}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <div class="col-md-2">
+                        {{ form_label(form.lookaheadaddressTo, null, {'label_attr': {'style':'width:100%', 'class':'control-label' }}
+                        ) }}
+                    </div>
+                    <div class="col-md-8">
+                        {{ form_widget(form.lookaheadaddressTo, { 'attr': {'class': 'form-control'} }) }}
+                        <div class="error_message">{{ form_errors(form.lookaheadaddressTo) }}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <div class="col-md-2">
+                        {{ form_label(form.zoneName, null, {'label_attr': {'style':'width:100%', 'class':'control-label' }}
+                        ) }}
+                    </div>
+                    <div class="col-md-8">
+                        {{ form_widget(form.zoneName, { 'attr': {'class': 'form-control zoneName'} }) }}
+                        <div class="error_message">{{ form_errors(form.zoneName) }}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="routingInformationWrapper">
+                        <div class="col-md-3 col-md-offset-2 rideTimeOutward"></div>
+                        <div class="col-md-3 col-md-offset-2 rideTimeReturn"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="singleTimeWrapper">
+                    {{ form_widget(form.orderTime) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <div class="col-md-2">
+                        {{ form_label(form.isRepeated, null, {'label_attr': {'style':'width:100%', 'class':'control-label' }}
+                        ) }}
+                    </div>
+                    <div class="col-md-2">
+                        {{ form_widget(form.isRepeated, { 'attr': {'class': 'isRepeatedCheckbox'} }) }}
+                    </div>
+                </div>
+            </div>
+            <div class="repeatedTimeWrapper">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-2">
+                            {{ form_label(form.mondayOrderTime, null, {'label_attr': {'style':'width:100%', 'class':'control-label' }}
+                            ) }}
+                        </div>
+                        <div class="col-md-9">
+                            {{ form_widget(form.mondayOrderTime, { 'attr': {'class': 'form-control'} }) }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2">
+                            {{ form_label(form.tuesdayOrderTime, null, {'label_attr': {'style':'width:100%', 'class':'control-label' }}
+                            ) }}
+                        </div>
+                        <div class="col-md-9">
+                            {{ form_widget(form.tuesdayOrderTime, { 'attr': {'class': 'form-control'} }) }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2">
+                            {{ form_label(form.wednesdayOrderTime, null, {'label_attr': {'style':'width:100%', 'class':'control-label' }}
+                            ) }}
+                        </div>
+                        <div class="col-md-9">
+                            {{ form_widget(form.wednesdayOrderTime, { 'attr': {'class': 'form-control'} }) }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2">
+                            {{ form_label(form.thursdayOrderTime, null, {'label_attr': {'style':'width:100%', 'class':'control-label' }}
+                            ) }}
+                        </div>
+                        <div class="col-md-9">
+                            {{ form_widget(form.thursdayOrderTime, { 'attr': {'class': 'form-control'} }) }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2">
+                            {{ form_label(form.fridayOrderTime, null, {'label_attr': {'style':'width:100%', 'class':'control-label' }}
+                            ) }}
+                        </div>
+                        <div class="col-md-9">
+                            {{ form_widget(form.fridayOrderTime, { 'attr': {'class': 'form-control'} }) }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2">
+                            {{ form_label(form.saturdayOrderTime, null, {'label_attr': {'style':'width:100%', 'class':'control-label' }}
+                            ) }}
+                        </div>
+                        <div class="col-md-9">
+                            {{ form_widget(form.saturdayOrderTime, { 'attr': {'class': 'form-control'} }) }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2">
+                            {{ form_label(form.sundayOrderTime, null, {'label_attr': {'style':'width:100%', 'class':'control-label' }}
+                            ) }}
+                        </div>
+                        <div class="col-md-9">
+                            {{ form_widget(form.sundayOrderTime, { 'attr': {'class': 'form-control'} }) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <div class="col-md-2">
+                        {{ form_label(form.additionalTime, null, {'label_attr': {'style':'width:100%', 'class':'control-label' }}
+                        ) }}
+                    </div>
+                    <div class="col-md-2">
+                        {{ form_widget(form.additionalTime, { 'attr': {'class': 'form-control'} }) }}
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <div class="col-md-2">
+                        {{ form_label(form.compagnion, null, {'label_attr': {'style':'width:100%', 'class':'control-label' }}
+                        ) }}
+                    </div>
+                    <div class="col-md-2">
+                        {{ form_widget(form.compagnion, { 'attr': {'class': 'form-control'} }) }}
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <div class="col-md-2">
+                        {{ form_label(form.memo, null, {'label_attr': {'style':'width:100%', 'class':'control-label' }}
+                        ) }}
+                    </div>
+                    <div class="col-md-8">
+                        {{ form_widget(form.memo, { 'attr': {'class': 'form-control'} }) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="{{ asset('bundles/tixiapi/js/DrivingOrder.js') }}"></script>
+    <script type="text/javascript">
+        jQuery(function ($) {
+            var drivingOrderController = new DrivingOrder();
+            drivingOrderController.init('addressfrom','addressto','{{ passengerId }}', {
+                'routingMachine':"{{ serviceUrls.routingMachine }}",
+                'zone':"{{ serviceUrls.zone }}",
+                'singleRideCheck':"{{ serviceUrls.singleRideCheck }}",
+                'repeatedRideCheck':"{{ serviceUrls.repeatedRideCheck }}"
+            }, {
+                'dateFromLabelSingleText':"{{ 'drivingorder.field.anchordate' | trans }}",
+                'dateFromLabelRepeatedText':"{{ 'drivingorder.field.anchordatelong' | trans }}",
+                'drivingDuration':"{{ 'drivingorder.drivingDuration' | trans }}"
+            },true);
+            new FormValidationController('{{ formId }}');
+        });
+    </script>
+</div>

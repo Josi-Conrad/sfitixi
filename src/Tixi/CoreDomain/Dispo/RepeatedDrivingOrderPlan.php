@@ -13,6 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Tixi\ApiBundle\Helper\DateTimeService;
 use Tixi\CoreDomain\Passenger;
 use Tixi\CoreDomain\Shared\CommonBaseEntity;
+use Tixi\CoreDomain\Zone;
 
 /**
  * Class DrivingOrderPlan
@@ -56,6 +57,11 @@ class RepeatedDrivingOrderPlan extends CommonBaseEntity {
      */
     protected $repeatedDrivingOrders;
     /**
+     * @ORM\ManyToOne(targetEntity="Tixi\CoreDomain\Zone")
+     * @ORM\JoinColumn(name="zone_id", referencedColumnName="id")
+     */
+    protected $zone;
+    /**
      * Number of companies for the traveler within this order.
      * For Example: Passenger needs companion to travel with, so 1 more seat is needed
      * @ORM\Column(type="integer")
@@ -65,6 +71,10 @@ class RepeatedDrivingOrderPlan extends CommonBaseEntity {
      * @ORM\Column(type="text")
      */
     protected $memo;
+    /**
+     * @ORM\Column(type="integer")
+     */
+    protected $additionalTime;
 
     protected function __construct() {
         $this->repeatedDrivingOrders = new ArrayCollection();
@@ -72,22 +82,45 @@ class RepeatedDrivingOrderPlan extends CommonBaseEntity {
     }
 
     /**
-     * @param $anchorDate
-     * @param $endingDate
-     * @param $withHolidays
-     * @param int $companion
+     * @param \DateTime $anchorDate
+     * @param null $withHolidays
+     * @param null $companion
+     * @param \DateTime $endingDate
      * @param null $memo
+     * @param null $additionalTime
      * @return RepeatedDrivingOrderPlan
      */
-    public static function registerRepeatedDrivingOrderPlan(\DateTime $anchorDate, $withHolidays, $companion = 0, \DateTime $endingDate, $memo = null) {
-        $endingDate = ($endingDate !== null) ? $endingDate : DateTimeService::getMaxDateTime();
+    public static function registerRepeatedDrivingOrderPlan(\DateTime $anchorDate, $withHolidays = null, $companion = null, \DateTime $endingDate = null, $memo = null, $additionalTime = null) {
+        $correctedWithHolidays = (null !== $withHolidays) ? $withHolidays : false;
+        $correctedCompanion = (null !== $companion) ? $companion : 0;
+        $correctedAdditionalTime = (null !== $additionalTime) ? $additionalTime : 0;
+        $correctedEndingDate = ($endingDate !== null) ? $endingDate : DateTimeService::getMaxDateTime();
+        $correctedMemo = ($memo !== null) ? $memo : '';
         $rdPlan = new RepeatedDrivingOrderPlan();
         $rdPlan->setAnchorDate($anchorDate);
-        $rdPlan->setEndingDate($endingDate);
-        $rdPlan->setWithHolidays($withHolidays);
-        $rdPlan->setCompanion($companion);
-        $rdPlan->setMemo($memo);
+        $rdPlan->setEndingDate($correctedEndingDate);
+        $rdPlan->setWithHolidays($correctedWithHolidays);
+        $rdPlan->setCompanion($correctedCompanion);
+        $rdPlan->setMemo($correctedMemo);
+        $rdPlan->setAdditionalTime($correctedAdditionalTime);
         return $rdPlan;
+    }
+
+    public function update(\DateTime $anchorDate = null, $withHolidays = null, $companion = null, \DateTime $endingDate = null, $memo = null, $additionalTime = null) {
+        $correctedWithHolidays = (null !== $withHolidays) ? $withHolidays : false;
+        $correctedCompanion = (null !== $companion) ? $companion : 0;
+        $correctedAdditionalTime = (null !== $additionalTime) ? $additionalTime : 0;
+        $correctedEndingDate = ($endingDate !== null) ? $endingDate : DateTimeService::getMaxDateTime();
+        if(null !== $anchorDate) {
+            $this->setAnchorDate($anchorDate);
+        }
+        if(null !== $memo) {
+            $this->setMemo($memo);
+        }
+        $this->setEndingDate($correctedEndingDate);
+        $this->setWithHolidays($correctedWithHolidays);
+        $this->setCompanion($correctedCompanion);
+        $this->setAdditionalTime($correctedAdditionalTime);
     }
 
     /**
@@ -125,6 +158,29 @@ class RepeatedDrivingOrderPlan extends CommonBaseEntity {
         $this->setRoute($route);
     }
 
+    public function assignZone(Zone $zone) {
+        $this->setZone($zone);
+    }
+
+    /**
+     * @param mixed $zone
+     */
+    public function setZone($zone)
+    {
+        $this->zone = $zone;
+    }
+
+    /**
+     * @return Zone
+     */
+    public function getZone()
+    {
+        return $this->zone;
+    }
+
+
+
+
     /**
      * @return mixed
      */
@@ -158,6 +214,10 @@ class RepeatedDrivingOrderPlan extends CommonBaseEntity {
      */
     public function getRepeatedDrivingOrders() {
         return $this->repeatedDrivingOrders;
+    }
+
+    public function getRepeatedDrivingOrdersAsArray() {
+        return $this->repeatedDrivingOrders->toArray();
     }
 
 
@@ -225,7 +285,7 @@ class RepeatedDrivingOrderPlan extends CommonBaseEntity {
     }
 
     /**
-     * @return mixed
+     * @return Route
      */
     public function getRoute() {
         return $this->route;
@@ -244,5 +304,23 @@ class RepeatedDrivingOrderPlan extends CommonBaseEntity {
     public function getWithHolidays() {
         return $this->withHolidays;
     }
+
+    /**
+     * @param mixed $additionalTime
+     */
+    public function setAdditionalTime($additionalTime)
+    {
+        $this->additionalTime = $additionalTime;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAdditionalTime()
+    {
+        return $this->additionalTime;
+    }
+
+
 
 }

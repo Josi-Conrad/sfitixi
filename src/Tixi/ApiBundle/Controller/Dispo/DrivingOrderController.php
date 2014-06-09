@@ -18,6 +18,7 @@ use Tixi\ApiBundle\Form\Dispo\DrivingOrderCreateType;
 use Tixi\ApiBundle\Form\Dispo\DrivingOrderEditType;
 use Tixi\ApiBundle\Interfaces\Dispo\DrivingOrderAssembler;
 use Tixi\ApiBundle\Interfaces\Dispo\DrivingOrderRegisterDTO;
+use Tixi\ApiBundle\Interfaces\Dispo\RepeatedDrivingOrderAssembler;
 use Tixi\ApiBundle\Menu\MenuService;
 use Tixi\ApiBundle\Tile\Core\FormTile;
 use Tixi\ApiBundle\Tile\Core\PanelDeleteFooterTile;
@@ -29,6 +30,8 @@ use Tixi\ApiBundle\Tile\Dispo\DrivingOrderEditTile;
 use Tixi\App\AppBundle\Interfaces\DrivingOrderHandleDTO;
 use Tixi\App\Driving\DrivingOrderManagement;
 use Tixi\CoreDomain\Dispo\DrivingOrderRepository;
+use Tixi\CoreDomain\Dispo\RepeatedDrivingOrder;
+use Tixi\CoreDomain\Dispo\RepeatedDrivingOrderPlanRepository;
 use Tixi\CoreDomain\Dispo\RepeatedDrivingOrderRepository;
 use Tixi\CoreDomain\Passenger;
 
@@ -152,16 +155,29 @@ class DrivingOrderController extends Controller{
      * @param Passenger $passenger
      */
     protected function registerDrivingOrder(DrivingOrderRegisterDTO $registerDTO, Passenger $passenger) {
-        /** @var DrivingOrderAssembler $assembler */
-        $assembler = $this->get('tixi_api.assemblerdrivingorder');
+        /** @var DrivingOrderAssembler $assemblerSingleDrivingOrder */
+        $assemblerSingleDrivingOrder = $this->get('tixi_api.assemblerdrivingorder');
+        /** @var RepeatedDrivingOrderAssembler $assemblerRepeatedDrivingOrder */
+        $assemblerRepeatedDrivingOrder = $this->get('tixi_api.assemblerrepeateddrivingorder');
         /** @var DrivingOrderRepository $drivingOrderRepository */
         $drivingOrderRepository = $this->get('drivingorder_repository');
+        /** @var RepeatedDrivingOrderPlanRepository $repeatedDrivingOrderPlanRepository */
+        $repeatedDrivingOrderPlanRepository = $this->get('repeateddrivingorderplan_repository');
         /** @var RepeatedDrivingOrderRepository $repeatedDrivingOrderRepository */
         $repeatedDrivingOrderRepository = $this->get('repeateddrivingorder_repository');
+
         if($registerDTO->isRepeated) {
-            $repeatedDrivingOrder = $assembler->registerDtoToNewRepeatedDrivingOrder($registerDTO);
+            $repeatedDrivingOrderPlan = $assemblerRepeatedDrivingOrder->registerDTOtoNewDrivingOrderPlan($registerDTO, $passenger);
+            $repeatedOrders = $assemblerRepeatedDrivingOrder->registerDTOtoRepeatedDrivingOrders($registerDTO);
+            /** @var RepeatedDrivingOrder $repeatedOrder */
+            foreach($repeatedOrders as $repeatedOrder) {
+                $repeatedOrder->assignRepeatedDrivingOrderPlan($repeatedDrivingOrderPlan);
+                $repeatedDrivingOrderRepository->store($repeatedOrder);
+            }
+            $repeatedDrivingOrderPlan->replaceRepeatedDrivingOrders($repeatedOrders);
+            $repeatedDrivingOrderPlanRepository->store($repeatedDrivingOrderPlan);
         }else {
-            $drivingOrders = $assembler->registerDtoToNewDrivingOrders($registerDTO, $passenger);
+            $drivingOrders = $assemblerSingleDrivingOrder->registerDtoToNewDrivingOrders($registerDTO, $passenger);
             foreach($drivingOrders as $drivingOrder) {
                 $drivingOrderRepository->store($drivingOrder);
             }
@@ -184,7 +200,7 @@ class DrivingOrderController extends Controller{
      * @return null|object
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
-    public function getPassenger($passengerId) {
+    protected function getPassenger($passengerId) {
         $passengerRepository = $this->get('passenger_repository');
         $passenger = $passengerRepository->find($passengerId);
         if(null === $passenger) {
@@ -193,7 +209,7 @@ class DrivingOrderController extends Controller{
         return $passenger;
     }
 
-    public function getDrivingOrder($drivingOrderId) {
+    protected function getDrivingOrder($drivingOrderId) {
         /** @var DrivingOrderRepository $drivingOrderRepository */
         $drivingOrderRepository = $this->get('drivingorder_repository');
         $drivingOrder = $drivingOrderRepository->find($drivingOrderId);

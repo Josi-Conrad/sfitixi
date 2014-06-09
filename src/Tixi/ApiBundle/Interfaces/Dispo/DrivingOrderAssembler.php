@@ -100,11 +100,6 @@ class DrivingOrderAssembler {
         return $dto;
     }
 
-
-    public function registerDtoToNewRepeatedDrivingOrder(DrivingOrderRegisterDTO $registerDTO) {
-
-    }
-
     public function drivingOrdersToDrivingOrderEmbeddedListDTOs($drivingOrders) {
         $dtoArray = array();
         foreach ($drivingOrders as $drivingOrder) {
