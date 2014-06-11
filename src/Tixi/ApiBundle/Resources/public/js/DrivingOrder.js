@@ -21,6 +21,7 @@ function DrivingOrder() {
     this._repeatedEndDateWrapper = null;
     this._singleTimeWrapper = null;
     this._repeatedTimeWrapper = null;
+    this._repeatedWithHolidaysWrapper = null;
 
     this._zoneServiceSrcUrl = null;
     this._zoneIdField = null;
@@ -73,6 +74,7 @@ function DrivingOrder() {
             _dateFromField = _wrapper.find('.dateFromInput'),
             _dateToField = _wrapper.find('.dateToInput'),
             _repeatedEndDateWrapper = _wrapper.find('.repeatedEndDateWrapper'),
+            _repeatedWithHolidaysWrapper = _wrapper.find('.repeatedOrderWithHolidays'),
             _singleTimeWrapper = _wrapper.find('.singleTimeWrapper'),
             _repeatedTimeWrapper = _wrapper.find('.repeatedTimeWrapper'),
             _routingInformationWrapper = _wrapper.find('.routingInformationWrapper'),
@@ -86,6 +88,7 @@ function DrivingOrder() {
         _this._dateFromField = _dateFromField;
         _this._dateToField = _dateToField;
         _this._repeatedEndDateWrapper = _repeatedEndDateWrapper;
+        _this._repeatedWithHolidaysWrapper = _repeatedWithHolidaysWrapper;
         _this._singleTimeWrapper = _singleTimeWrapper;
         _this._repeatedTimeWrapper = _repeatedTimeWrapper;
         _this._routingInformationWrapper = _routingInformationWrapper;
@@ -125,6 +128,7 @@ function DrivingOrder() {
     this._switchToSingleState = function() {
         $(_this._repeatedEndDateWrapper).hide();
         $(_this._repeatedTimeWrapper).hide();
+        $(_this._repeatedWithHolidaysWrapper).hide();
         $(_this._singleTimeWrapper).show();
         $(_this._dateFromLabel).text(_this._trans.dateFromLabelSingleText);
 
@@ -134,6 +138,7 @@ function DrivingOrder() {
         $(_this._singleTimeWrapper).hide();
         $(_this._repeatedEndDateWrapper).show();
         $(_this._repeatedTimeWrapper).show();
+        $(_this._repeatedWithHolidaysWrapper).show();
         $(_this._dateFromLabel).text(_this._trans.dateFromLabelRepeatedText);
     }
 

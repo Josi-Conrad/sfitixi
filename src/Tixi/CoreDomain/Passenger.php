@@ -177,6 +177,10 @@ class Passenger extends Person {
         $this->getDrivingOrders()->add($drivingOrder);
     }
 
+    public function removeDrivingOrder(DrivingOrder $drivingOrder) {
+        $this->drivingOrders->removeElement($drivingOrder);
+    }
+
     /**
      * @param RepeatedDrivingOrderPlan $repeatedDrivingOrderPlan
      */

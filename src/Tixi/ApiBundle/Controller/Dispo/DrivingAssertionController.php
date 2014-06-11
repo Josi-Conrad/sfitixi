@@ -60,6 +60,7 @@ class DrivingAssertionController extends Controller{
      * @param Request $request
      * @param $driverId
      * @param $drivingAssertionId
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function deleteDrivingAssertionAction(Request $request, $driverId, $drivingAssertionId) {
         $repository = $this->get('drivingassertion_repository');

@@ -127,6 +127,16 @@ class DrivingOrder extends CommonBaseEntity {
         $this->updateModifiedDate();
     }
 
+    public function deletePhysically() {
+        $this->passenger->removeDrivingOrder($this);
+        if(!empty($this->correspondingReturnOrder)) {
+            $this->correspondingReturnOrder->removeOutwardOrder();
+        }
+        if(!empty($this->correspondingOutwardOrder)) {
+            $this->correspondingOutwardOrder->removeReturnOrder();
+        }
+    }
+
     public static function getStatusArray() {
         return array(
             self::PENDENT=>'drivingorder.status.pendent',
@@ -159,6 +169,14 @@ class DrivingOrder extends CommonBaseEntity {
     public function assignReturnOrder(DrivingOrder $returnOrder) {
         $this->correspondingReturnOrder = $returnOrder;
         $returnOrder->correspondingOutwardOrder = $this;
+    }
+
+    public function removeOutwardOrder() {
+        $this->correspondingOutwardOrder = null;
+    }
+
+    public function removeReturnOrder() {
+        $this->correspondingReturnOrder = null;
     }
 
     public function assignZone(Zone $zone) {

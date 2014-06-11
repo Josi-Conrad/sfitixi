@@ -15,6 +15,7 @@ use Tixi\ApiBundle\Shared\DataGrid\GridControllers\Dispo\DrivingOrderDataGridCon
 use Tixi\ApiBundle\Shared\DataGrid\GridControllers\Dispo\MonthlyPlanDataGridController;
 use Tixi\ApiBundle\Shared\DataGrid\GridControllers\Dispo\MonthlyPlanWorkingDayDataGridController;
 use Tixi\ApiBundle\Shared\DataGrid\GridControllers\Dispo\ProductionPlanDataGridController;
+use Tixi\ApiBundle\Shared\DataGrid\GridControllers\Dispo\RepeatedDrivingOrderDataGridController;
 use Tixi\ApiBundle\Shared\DataGrid\GridControllers\DriverAbsentDataGridController;
 use Tixi\ApiBundle\Shared\DataGrid\GridControllers\DriverDataGridController;
 use Tixi\ApiBundle\Shared\DataGrid\GridControllers\Management\BankHolidayDataGridController;
@@ -225,24 +226,58 @@ class DataGridControllerFactory extends ContainerAware {
         return new ZonePlanDataGridController($this->container, $embeddedState, $routeProperties);
     }
 
+    /**
+     * @param bool $embeddedState
+     * @param array $routeProperties
+     * @return DrivingAssertionDataGridController
+     */
     public function createDispoDrivingAssertionController($embeddedState = false, array $routeProperties = array()) {
         return new DrivingAssertionDataGridController($this->container, $embeddedState, $routeProperties);
     }
 
+    /**
+     * @param bool $embeddedState
+     * @param array $routeProperties
+     * @return ProductionPlanDataGridController
+     */
     public function createDispoProductionPlanController($embeddedState = false, array $routeProperties = array()) {
         return new ProductionPlanDataGridController($this->container, $embeddedState, $routeProperties);
     }
 
+    /**
+     * @param bool $embeddedState
+     * @param array $routeProperties
+     * @return MonthlyPlanDataGridController
+     */
     public function createDispoMonthlyPlanController($embeddedState = false, array $routeProperties = array()) {
         return new MonthlyPlanDataGridController($this->container, $embeddedState, $routeProperties);
     }
 
+    /**
+     * @param bool $embeddedState
+     * @param array $routeProperties
+     * @return MonthlyPlanWorkingDayDataGridController
+     */
     public function createDispoMonthlyPlanWorkingDayController($embeddedState = false, array $routeProperties = array()) {
         return new MonthlyPlanWorkingDayDataGridController($this->container, $embeddedState, $routeProperties);
     }
 
+    /**
+     * @param bool $embeddedState
+     * @param array $routeProperties
+     * @return DrivingOrderDataGridController
+     */
     public function createDispoDrivingOrderController($embeddedState = false, array $routeProperties = array()) {
         return new DrivingOrderDataGridController($this->container, $embeddedState, $routeProperties);
+    }
+
+    /**
+     * @param bool $embeddedState
+     * @param array $routeProperties
+     * @return DrivingOrderDataGridController
+     */
+    public function createDispoRepeatedDrivingOrderPlanController($embeddedState = false, array $routeProperties = array()) {
+        return new RepeatedDrivingOrderDataGridController($this->container, $embeddedState, $routeProperties);
     }
 
 } 

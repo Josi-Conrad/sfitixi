@@ -119,9 +119,16 @@ class DrivingOrderController extends Controller{
      * @param Request $request
      * @param $passengerId
      * @param $drivingOrderId
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function deleteDrivingOrderAction(Request $request, $passengerId, $drivingOrderId) {
-
+        /** @var DrivingOrderRepository $drivingOrderRepository */
+        $drivingOrderRepository = $this->get('drivingorder_repository');
+        $drivingOrder = $this->getDrivingOrder($drivingOrderId);
+        $drivingOrder->deletePhysically();
+        $drivingOrderRepository->remove($drivingOrder);
+        $this->get('entity_manager')->flush();
+        return $this->redirect($this->generateUrl('tixiapi_passenger_get',array('passengerId' => $passengerId)));
     }
 
     /**

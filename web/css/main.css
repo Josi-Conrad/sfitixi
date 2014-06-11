@@ -101,6 +101,10 @@
     font-weight: normal;
 }
 
+.repeatedOrderWithHolidays {
+    display: none;
+}
+
 /* Top Action */
 .upperRightMargin {
     margin-top: 15px;

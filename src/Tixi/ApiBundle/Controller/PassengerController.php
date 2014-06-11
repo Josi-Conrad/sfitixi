@@ -17,6 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Tixi\ApiBundle\Form\PassengerType;
 use Tixi\ApiBundle\Interfaces\PassengerRegisterDTO;
 use Tixi\ApiBundle\Menu\MenuService;
+use Tixi\ApiBundle\Shared\DataGrid\DataGridControllerFactory;
 use Tixi\ApiBundle\Tile\Core\FormTile;
 use Tixi\ApiBundle\Tile\Core\PanelDeleteFooterTile;
 use Tixi\ApiBundle\Tile\Core\PanelSplitterTile;
@@ -76,6 +77,7 @@ class PassengerController extends Controller {
      */
     public function getPassengerAction(Request $request, $passengerId) {
         $dataGridHandler = $this->get('tixi_api.datagridhandler');
+        /** @var DataGridControllerFactory $dataGridControllerFactory */
         $dataGridControllerFactory = $this->get('tixi_api.datagridcontrollerfactory');
         $tileRenderer = $this->get('tixi_api.tilerenderer');
         $assembler = $this->get('tixi_api.assemblerpassenger');
@@ -87,8 +89,13 @@ class PassengerController extends Controller {
         $absentGridController = $dataGridControllerFactory->createPassengerAbsentController(true, array('passengerId' => $passengerId));
         $absentGridTile = $dataGridHandler->createEmbeddedDataGridTile($this->menuId, $absentGridController);
 
+        $repeatedDrivingOrderGridController = $dataGridControllerFactory->createDispoRepeatedDrivingOrderPlanController(true, array('passengerId' => $passengerId));
+        $repeatedDrivingOrderGridTile = $dataGridHandler->createEmbeddedDataGridTile($this->menuId, $repeatedDrivingOrderGridController);
+
         $drivingOrderGridController = $dataGridControllerFactory->createDispoDrivingOrderController(true, array('passengerId' => $passengerId));
         $drivingOrderGridTile = $dataGridHandler->createEmbeddedDataGridTile($this->menuId, $drivingOrderGridController);
+
+
 
         $rootPanel = new RootPanel($this->menuId, 'passenger.panel.name', $passenger->getFirstname() . ' ' . $passenger->getLastname());
         $panelSplitter = $rootPanel->add(new PanelSplitterTile('1:1'));
@@ -96,6 +103,8 @@ class PassengerController extends Controller {
         $formPanel->add(new PassengerRegisterFormViewTile('passengerRequest', $passengerDTO, $this->generateUrl('tixiapi_passenger_edit', array('passengerId' => $passengerId))));
         $absentGridPanel = $panelSplitter->addRight(new PanelTile('absent.panel.embedded'));
         $absentGridPanel->add($absentGridTile);
+        $repeatedDrivingOrderGridPanel = $panelSplitter->addRight(new PanelTile('repeateddrivingorder.panel.embedded'));
+        $repeatedDrivingOrderGridPanel->add($repeatedDrivingOrderGridTile);
         $drivingOrderGridPanel = $panelSplitter->addRight(new PanelTile('drivingorder.panel.embedded'));
         $drivingOrderGridPanel->add($drivingOrderGridTile);
         $rootPanel->add(new PanelDeleteFooterTile($this->generateUrl('tixiapi_passenger_delete', array('passengerId' => $passengerId)),'passenger.button.delete'));

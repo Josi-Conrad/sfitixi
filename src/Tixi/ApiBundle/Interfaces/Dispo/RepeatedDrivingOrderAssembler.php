@@ -11,6 +11,7 @@ namespace Tixi\ApiBundle\Interfaces\Dispo;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Tixi\ApiBundle\Form\Shared\DrivingOrderTime;
+use Tixi\ApiBundle\Helper\DateTimeService;
 use Tixi\ApiBundle\Interfaces\AddressAssembler;
 use Tixi\App\Routing\RouteManagement;
 use Tixi\App\ZonePlan\ZonePlanManagement;
@@ -41,7 +42,7 @@ class RepeatedDrivingOrderAssembler {
 
         $drivingOrderPlan = RepeatedDrivingOrderPlan::registerRepeatedDrivingOrderPlan(
             $registerDTO->anchorDate,
-            false,
+            $registerDTO->withHolidays,
             $registerDTO->compagnion,
             $registerDTO->endDate,
             $registerDTO->memo,
@@ -59,7 +60,7 @@ class RepeatedDrivingOrderAssembler {
     public function registerDTOtoDrivingOrderPlan(DrivingOrderRegisterDTO $registerDTO, RepeatedDrivingOrderPlan $drivingOrderPlan) {
         $drivingOrderPlan->update(
             $registerDTO->anchorDate,
-            null,
+            $registerDTO->withHolidays,
             $registerDTO->compagnion,
             $registerDTO->endDate,
             $registerDTO->memo,
@@ -122,10 +123,11 @@ class RepeatedDrivingOrderAssembler {
         $registerDTO->lookaheadaddressTo = $this->addressAssembler->addressToAddressLookaheadDTO($repeatedDrivingOrderPlan->getRoute()->getTargetAddress());
         $registerDTO->zoneName = $repeatedDrivingOrderPlan->getZone()->getName();
         $registerDTO->isRepeated = true;
+        $registerDTO->withHolidays = $repeatedDrivingOrderPlan->getWithHolidays();
         $registerDTO->compagnion = $repeatedDrivingOrderPlan->getCompanion();
         $registerDTO->memo = $repeatedDrivingOrderPlan->getMemo();
         $registerDTO->additionalTime = $repeatedDrivingOrderPlan->getAdditionalTime();
-        $registerDTO->endDate = $repeatedDrivingOrderPlan->getEndingDate();
+        $registerDTO->endDate = ($repeatedDrivingOrderPlan->getEndingDate() != DateTimeService::getMaxDateTime()) ? $repeatedDrivingOrderPlan->getEndingDate() : null;
         $repeatedOrders = $repeatedDrivingOrderPlan->getRepeatedDrivingOrdersAsArray();
         /** @var RepeatedDrivingOrder $repeatedOrder*/
         foreach($repeatedOrders as $repeatedOrder) {
@@ -201,6 +203,23 @@ class RepeatedDrivingOrderAssembler {
             $orderTimeDTO->returnTime = $returnTime;
         }
         return $orderTimeDTO;
+    }
+
+    public function orderPlansToEmbeddedListDTOs($orderPlans) {
+        $dtoArray = array();
+        foreach ($orderPlans as $orderPlan) {
+            $dtoArray[] = $this->orderPlanToEmbeddedListDTOs($orderPlan);
+        }
+        return $dtoArray;
+    }
+
+    public function orderPlanToEmbeddedListDTOs(RepeatedDrivingOrderPlan $orderPlan) {
+        $dto = new RepeatedDrivingOrderEmbeddedListDTO();
+        $dto->id = $orderPlan->getId();
+        $dto->anchorDate = $orderPlan->getAnchorDate()->format('d.m.Y');
+        $dto->endDate = ($orderPlan->getEndingDate()!=DateTimeService::getMaxDateTime()) ? $orderPlan->getEndingDate()->format('d.m.Y') : 'repeateddrivingorder.validtillrecalled';
+        $dto->memo = $orderPlan->getMemo();
+        return $dto;
     }
 
 
