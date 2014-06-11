@@ -21,7 +21,7 @@ use Tixi\CoreDomain\Dispo\RouteRepository;
 class RouteManagementImpl extends ContainerAware implements RouteManagement {
     /**
      * checks if existing route in database is available or query new routing informations from an routing machine
-     * and return an Route object
+     * and return a Route object
      * @param Address $from
      * @param Address $to
      * @return Route
@@ -64,8 +64,7 @@ class RouteManagementImpl extends ContainerAware implements RouteManagement {
             $route = Route::registerRoute($from, $to,
                 $routingInformation->getTotalTime(), $routingInformation->getTotalDistance());
             $routeRepo->store($route);
-            //ToDo check if flush is necessary at this point
-//            $em->flush();
+            $em->flush();
             return $route;
         } catch (\Exception $e) {
             return null;

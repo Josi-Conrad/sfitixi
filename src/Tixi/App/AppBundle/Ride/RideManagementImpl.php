@@ -12,7 +12,7 @@ namespace Tixi\App\AppBundle\Ride;
 use Symfony\Component\DependencyInjection\ContainerAware;
 use Tixi\ApiBundle\Helper\DateTimeService;
 use Tixi\ApiBundle\Helper\WeekdayService;
-use Tixi\App\AppBundle\Ride\RideStrategies\RideStrategyLeastDistance;
+use Tixi\App\AppBundle\Ride\RideStrategies\RideStrategyGenericLeastDistance;
 use Tixi\App\AppBundle\Ride\RideStrategies\RideStrategyAnnealing;
 use Tixi\App\AppBundle\Ride\RideStrategies\RideStrategyTimeWindow;
 use Tixi\App\Ride\RideManagement;
@@ -29,7 +29,7 @@ class RideManagementImpl extends ContainerAware implements RideManagement {
      * @param $direction
      * @param $duration
      * @param $additionalTime
-     * @return mixed
+     * @return bool
      */
     public function checkFeasibility(\DateTime $dayTime, $direction, $duration, $additionalTime = 0) {
         $dispoManagement = $this->container->get('tixi_app.dispomanagement');
@@ -77,7 +77,7 @@ class RideManagementImpl extends ContainerAware implements RideManagement {
      * @param $duration
      * @param int $additionalTime
      * @throws \LogicException
-     * @return mixed
+     * @return bool
      */
     public function checkRepeatedFeasibility(\DateTime $fromDateTime, \DateTime $toDate, $weekday, $direction, $duration, $additionalTime = 0) {
         if ($weekday < 1 || $weekday > 7) {
@@ -118,9 +118,9 @@ class RideManagementImpl extends ContainerAware implements RideManagement {
     /**
      * runs routing algorithm to set optimized missions and orders for a Shift
      * @param \Tixi\CoreDomain\Dispo\Shift $shift
-     * @return mixed
+     * @return bool
      */
-    public function getOptimizedPlanForShift(Shift $shift) {
+    public function buildOptimizedPlanForShift(Shift $shift) {
         //TODO: checking drivers and missions with shift before and after current shift + pool assignments
         $em = $this->container->get('entity_manager');
         $em->beginTransaction();
@@ -190,7 +190,7 @@ class RideManagementImpl extends ContainerAware implements RideManagement {
             $rideConfiguration = array_shift($rideConfigurations);
             $configurationAnalyzer = new ConfigurationAnalyzer($rideConfiguration);
 
-            if ($configurationAnalyzer->assignVehiclesToBestConfiguration($vehicles)) {
+            if ($configurationAnalyzer->assignVehiclesToConfiguration($vehicles)) {
                 $success = $configurationAnalyzer->assignPoolsToRideNodeList();
             }
         }

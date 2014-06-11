@@ -15,7 +15,7 @@ use Tixi\ApiBundle\Helper\DateTimeService;
 use Tixi\ApiBundle\Interfaces\Dispo\MonthlyView\MonthlyPlanDriversPerShiftDTO;
 use Tixi\ApiBundle\Interfaces\Dispo\MonthlyView\MonthlyPlanDrivingAssertionDTO;
 use Tixi\ApiBundle\Interfaces\Dispo\MonthlyView\MonthlyPlanEditDTO;
-use Tixi\App\AppBundle\Ride\RideStrategies\RideStrategyLeastDistance;
+use Tixi\App\AppBundle\Ride\RideStrategies\RideStrategyGenericLeastDistance;
 use Tixi\App\AppBundle\Ride\RideStrategies\RideStrategyTimeWindow;
 use Symfony\Component\Validator\Constraints\DateTime;
 use Tixi\App\Disposition\DispositionManagement;

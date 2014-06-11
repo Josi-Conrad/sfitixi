@@ -401,7 +401,7 @@ class Address extends CommonBaseEntity {
      * @return string
      */
     public function getHashFromBigIntCoordinates() {
-        return hash('md2', $this->lat + $this->lng);
+        return hash('md4', $this->lat + $this->lng);
     }
 
     /**

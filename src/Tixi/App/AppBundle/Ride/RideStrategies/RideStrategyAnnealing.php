@@ -44,8 +44,8 @@ class RideStrategyAnnealing implements RideStrategy {
      * @param $rideNodes
      * @param $drivingPools
      * @param $emptyRideNodes
-     * @param \Tixi\App\AppBundle\Ride\RideConfiguration $existingConfiguration
-     * @return \Tixi\App\AppBundle\Ride\RideConfiguration
+     * @param RideConfiguration $existingConfiguration
+     * @return RideConfiguration
      */
     public function buildConfiguration($rideNodes, $drivingPools, $emptyRideNodes, RideConfiguration $existingConfiguration = null) {
         $this->rideNodes = $rideNodes;
@@ -57,7 +57,7 @@ class RideStrategyAnnealing implements RideStrategy {
 
         $this->adjacenceMatrix = ConfigurationBuilder::buildAdjacenceMatrixFromNodes($workNodes, $emptyRideNodes);
 
-        $initConfig = $this->buildFeasibleConfigFromStrategy(new RideStrategyLeastDistance());
+        $initConfig = $this->buildFeasibleConfigFromStrategy(new RideStrategyGenericLeastDistance());
         if ($initConfig) {
             $configurations = $this->annealConfigurations($initConfig);
             //sort and return best configuration
@@ -71,7 +71,7 @@ class RideStrategyAnnealing implements RideStrategy {
      * @param $rideNodes
      * @param $emptyRideNodes
      * @param $drivingPools
-     * @return \Tixi\App\AppBundle\Ride\RideConfiguration[]
+     * @return RideConfiguration[]
      */
     public function buildConfigurations($rideNodes, $drivingPools, $emptyRideNodes) {
         $this->rideNodes = $rideNodes;
@@ -84,7 +84,7 @@ class RideStrategyAnnealing implements RideStrategy {
 
         //Initial Config by LeastDistance Strategy
         $s = microtime(true);
-        $initConfig = $this->buildFeasibleConfigFromStrategy(new RideStrategyLeastDistance());
+        $initConfig = $this->buildFeasibleConfigFromStrategy(new RideStrategyGenericLeastDistance());
         $e = microtime(true);
         echo "Total RideNodes: " . count($this->rideNodes);
         echo "\nFeasible init config built in: " . ($e - $s) . "s\n";
@@ -99,13 +99,17 @@ class RideStrategyAnnealing implements RideStrategy {
     /**
      * build a good and feasible rideConfiguration to anneal from
      * @param RideStrategy $strategy
-     * @return null|RideConfiguration
+     * @return RideConfiguration
      */
     private function buildFeasibleConfigFromStrategy(RideStrategy $strategy) {
         $configurations = $strategy->buildConfigurations($this->rideNodes, $this->drivingPools, $this->emptyRideNodes);
         if (count($configurations) > 1) {
             ConfigurationBuilder::removeUnfeasibleConfigurations($configurations);
-            ConfigurationBuilder::sortRideConfigurationsByDistance($configurations);
+            if(count($configurations)>1){
+                ConfigurationBuilder::sortRideConfigurationsByDistance($configurations);
+            } else {
+                return null;
+            }
             return $configurations[0];
         }
         return null;
@@ -130,7 +134,7 @@ class RideStrategyAnnealing implements RideStrategy {
         $currentConfiguration = clone $initialConfiguration;
 
         echo "Annealing with Temperatur: " . $temperature . " and ";
-        //Loop until system has cooled, this is our break criterion
+        //loop until system has cooled, this is our break criterion
         while ($temperature > $absoluteTemperature) {
             //swap two nodes
             $nextConfiguration = $this->getNextRandomConfiguration($currentConfiguration);

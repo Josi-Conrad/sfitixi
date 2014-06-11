@@ -18,10 +18,10 @@ use Tixi\App\Disposition\DispositionVariables;
 use Tixi\CoreDomain\Dispo\DrivingPool;
 
 /**
- * Class RideStrategyLeastDistance
+ * Class RideStrategyGenericLeastDistance
  * @package Tixi\App\AppBundle\Ride\RideStrategies
  */
-class RideStrategyLeastDistance implements RideStrategy {
+class RideStrategyGenericLeastDistance implements RideStrategy {
     /**
      * @var $emptyRides RideNode[]
      */
@@ -43,8 +43,8 @@ class RideStrategyLeastDistance implements RideStrategy {
      * @param $rideNodes
      * @param $drivingPools
      * @param $emptyRideNodes
-     * @param \Tixi\App\AppBundle\Ride\RideConfiguration $existingConfiguration
-     * @return \Tixi\App\AppBundle\Ride\RideConfiguration
+     * @param RideConfiguration $existingConfiguration
+     * @return RideConfiguration
      */
     public function buildConfiguration($rideNodes, $drivingPools, $emptyRideNodes, RideConfiguration $existingConfiguration = null) {
         $this->rideNodes = $rideNodes;
@@ -56,14 +56,14 @@ class RideStrategyLeastDistance implements RideStrategy {
 
         $this->adjacenceMatrix = ConfigurationBuilder::buildAdjacenceMatrixFromNodes($workNodes, $emptyRideNodes);
 
-        return $this->buildLeastDistanceConfiguration($workNodes);
+        return $this->buildGenericLeastDistanceConfiguration($workNodes);
     }
 
     /**
      * @param $rideNodes
      * @param $emptyRideNodes
      * @param $drivingPools
-     * @return \Tixi\App\AppBundle\Ride\RideConfiguration[]
+     * @return RideConfiguration[]
      */
     public function buildConfigurations($rideNodes, $drivingPools, $emptyRideNodes) {
         $this->rideNodes = $rideNodes;
@@ -92,16 +92,16 @@ class RideStrategyLeastDistance implements RideStrategy {
                 $workRideNodes[$i] = $switch;
             }
 
-            $rideConfigurations[] = $this->buildLeastDistanceConfiguration($workRideNodes);
+            $rideConfigurations[] = $this->buildGenericLeastDistanceConfiguration($workRideNodes);
         }
         return $rideConfigurations;
     }
 
     /**
      * @param $rideNodes RideNode[]
-     * @return \Tixi\App\AppBundle\Ride\RideConfiguration
+     * @return RideConfiguration
      */
-    private function buildLeastDistanceConfiguration($rideNodes) {
+    private function buildGenericLeastDistanceConfiguration($rideNodes) {
         $rideConfiguration = new RideConfiguration($this->drivingPools);
         $workRideNodes = $rideNodes;
 

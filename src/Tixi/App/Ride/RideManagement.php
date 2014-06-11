@@ -28,14 +28,14 @@ interface RideManagement {
      * @param $direction
      * @param $duration
      * @param int $additionalTime
-     * @return mixed
+     * @return bool
      */
     public function checkRepeatedFeasibility(\DateTime $fromDateTime, \DateTime $toDate, $weekday, $direction, $duration, $additionalTime = 0);
 
     /**
      * runs routing algorithm to set optimized missions and orders for a shift
      * @param Shift $shift
-     * @return mixed
+     * @return bool
      */
-    public function getOptimizedPlanForShift(Shift $shift);
+    public function buildOptimizedPlanForShift(Shift $shift);
 } 

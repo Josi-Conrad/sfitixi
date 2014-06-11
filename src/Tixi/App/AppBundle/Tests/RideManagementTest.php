@@ -50,7 +50,7 @@ class RideManagementTest extends CommonBaseTest {
         $dayTime = \DateTime::createFromFormat('d.m.Y H.i', '01.07.2024 08.15');
         $shift = $this->dispoManagement->getResponsibleShiftForDayAndTime($dayTime);
         if ($shift !== null) {
-            $this->rideManagement->getOptimizedPlanForShift($shift);
+            $this->rideManagement->buildOptimizedPlanForShift($shift);
         }
     }
 

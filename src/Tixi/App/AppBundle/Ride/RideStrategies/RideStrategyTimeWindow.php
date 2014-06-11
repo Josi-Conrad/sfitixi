@@ -145,6 +145,7 @@ class RideStrategyTimeWindow implements RideStrategy {
      */
     public function buildConfigurations($rideNodes, $emptyRideNodes, $drivingPools) {
         //no implementation needed
-        return $this->buildConfiguration($rideNodes, $emptyRideNodes, $drivingPools);
+        $configurations[] = $this->buildConfiguration($rideNodes, $emptyRideNodes, $drivingPools);
+        return $configurations;
     }
 }

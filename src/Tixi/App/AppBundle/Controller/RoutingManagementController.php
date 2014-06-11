@@ -26,44 +26,8 @@ use Tixi\App\Routing\RoutingMachine;
  */
 class RoutingManagementController extends Controller {
     /**
-     * gets single routing information for lat,lng
-     * /service/route?latFrom=47.498796&lngFrom=7.760499&latTo=47.049796&lngTo=8.548057
-     * @Route("/route",name="tixiapp_service_route")
-     * @Method({"GET"})
-     * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\JsonResponse
-     */
-    public function getSingleRoutingInformationAction(Request $request) {
-        /**@var $routingMachine RoutingMachine */
-        $routingMachine = $this->container->get('tixi_app.routingmachine');
-
-        $latFrom = $request->get('latFrom');
-        $lngFrom = $request->get('lngFrom');
-
-        $latTo = $request->get('latTo');
-        $lngTo = $request->get('lngTo');
-
-        try {
-            $routingInformation = $routingMachine->getRoutingInformationFromCoordinates($latFrom, $lngFrom, $latTo, $lngTo);
-        } catch (\Exception $e) {
-            $response = new JsonResponse();
-            $response->setData(array(
-                'status' => '-1',
-            ));
-            return $response;
-        }
-
-        $response = new JsonResponse();
-        $response->setData(array(
-            'status' => '0',
-            'routeDuration' => $routingInformation->getTotalTime(),
-            'routeDistance' => $routingInformation->getTotalDistance()
-        ));
-        return $response;
-    }
-
-    /**
-     * gets RoutingInformations for outward and return routes for lat/lng
+     * gets RoutingInformations to the outward and return routes for lat/lng
+     * /service/routing?latFrom=47.498796&lngFrom=7.760499&latTo=47.049796&lngTo=8.548057
      * outwardRoute = coordinates From -> coordinates To
      * returnToue = coordinates To -> coordinates From
      * @Route("/routing",name="tixiapp_service_routing")
@@ -71,7 +35,7 @@ class RoutingManagementController extends Controller {
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
-    public function getOutAndReturnRoutingInformationAction(Request $request) {
+    public function getOutwardAndReturnRoutingInformationAction(Request $request) {
         /**@var $routingMachine RoutingMachine */
         $routingMachine = $this->container->get('tixi_app.routingmachine');
 

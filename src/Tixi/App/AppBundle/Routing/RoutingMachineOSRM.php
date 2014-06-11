@@ -89,7 +89,7 @@ class RoutingMachineOSRM extends ContainerAware implements RoutingMachine {
     /**
      * @param RoutingCoordinate $cordFrom
      * @param RoutingCoordinate $cordTo
-     * @return mixed|null|RoutingInformationOSRM
+     * @return null|RoutingInformationOSRM
      * @throws RoutingMachineException
      */
     public function getRoutingInformationFromRoutingCoordinates(RoutingCoordinate $cordFrom, RoutingCoordinate $cordTo) {
@@ -316,8 +316,6 @@ class RoutingMachineOSRM extends ContainerAware implements RoutingMachine {
             $totalDistance = $json->route_summary->total_distance;
 
             $routes[$hashKey]->updateRouteData(null, null, $totalTime, $totalDistance);
-//            $routes[$hashKey]->setDuration($totalTime);
-//            $routes[$hashKey]->setDistance($totalDistance);
         }
 
         return $routes;

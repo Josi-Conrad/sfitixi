@@ -20,6 +20,8 @@ use Tixi\CoreDomain\Address;
 interface RouteManagement {
 
     /**
+     * checks if existing route in database is available or query new routing informations from an routing machine
+     * and return a Route object
      * @param Address $from
      * @param Address $to
      * @return mixed
@@ -27,6 +29,7 @@ interface RouteManagement {
     public function getRouteFromAddresses(Address $from, Address $to);
 
     /**
+     * fills routing informations (duration and distance) for multiple rideNode objects
      * @param $rideNodes
      * @return mixed
      */
