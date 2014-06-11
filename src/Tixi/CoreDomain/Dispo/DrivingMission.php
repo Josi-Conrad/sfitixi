@@ -149,20 +149,6 @@ class DrivingMission {
     }
 
     /**
-     * returns earliest pickUpType of orders
-     * @return \DateTime
-     */
-    protected function getAnchorTime() {
-    }
-
-    /**
-     * returns mission duration in tbd(seconds|minutes)
-     * @return mixed
-     */
-    protected function getDuration() {
-    }
-
-    /**
      * @param mixed $drivingOrders
      */
     public function setDrivingOrders($drivingOrders) {
