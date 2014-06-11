@@ -39,7 +39,7 @@ class RideManagementTest extends CommonBaseTest {
     }
 
     public function testFeasibility() {
-        $dayTime = \DateTime::createFromFormat('d.m.Y H.i', '01.07.2024 08.15');
+        $dayTime = \DateTime::createFromFormat('d.m.Y H.i', '01.07.2024 18.15');
         $isFeasible = $this->rideManagement->checkFeasibility($dayTime, DrivingMission::SAME_START, 120, 2);
         $this->assertNotNull($isFeasible);
         $isFeasible ? $str = "\nIs feasible" : $str = "\nIs NOT feasible";
@@ -47,7 +47,7 @@ class RideManagementTest extends CommonBaseTest {
     }
 
     public function testOptimization() {
-        $dayTime = \DateTime::createFromFormat('d.m.Y H.i', '01.07.2024 08.15');
+        $dayTime = \DateTime::createFromFormat('d.m.Y H.i', '01.07.2024 12.15');
         $shift = $this->dispoManagement->getResponsibleShiftForDayAndTime($dayTime);
         if ($shift !== null) {
             $this->rideManagement->buildOptimizedPlanForShift($shift);

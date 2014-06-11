@@ -12,7 +12,7 @@ namespace Tixi\App\AppBundle\Ride;
 use Symfony\Component\DependencyInjection\ContainerAware;
 use Tixi\ApiBundle\Helper\DateTimeService;
 use Tixi\ApiBundle\Helper\WeekdayService;
-use Tixi\App\AppBundle\Ride\RideStrategies\RideStrategyGenericLeastDistance;
+use Tixi\App\AppBundle\Ride\RideStrategies\RideStrategyLeastDistance;
 use Tixi\App\AppBundle\Ride\RideStrategies\RideStrategyAnnealing;
 use Tixi\App\AppBundle\Ride\RideStrategies\RideStrategyTimeWindow;
 use Tixi\App\Ride\RideManagement;
@@ -121,7 +121,6 @@ class RideManagementImpl extends ContainerAware implements RideManagement {
      * @return bool
      */
     public function buildOptimizedPlanForShift(Shift $shift) {
-        //TODO: checking drivers and missions with shift before and after current shift + pool assignments
         $em = $this->container->get('entity_manager');
         $em->beginTransaction();
 
@@ -232,7 +231,7 @@ class RideManagementImpl extends ContainerAware implements RideManagement {
             }
             /**@var $node RideNode */
             foreach ($rideNodes as $node) {
-                echo "(" . $node->drivingMission->getId() . ":" . $node->startAddress->getAddressNameShort() . "->" . $node->targetAddress->getAddressNameShort() . ")\t";
+                echo "(" . $node->drivingMission->getId(). ")\t";
             }
             echo "\n";
         }

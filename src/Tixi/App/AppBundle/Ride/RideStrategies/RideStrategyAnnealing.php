@@ -57,7 +57,7 @@ class RideStrategyAnnealing implements RideStrategy {
 
         $this->adjacenceMatrix = ConfigurationBuilder::buildAdjacenceMatrixFromNodes($workNodes, $emptyRideNodes);
 
-        $initConfig = $this->buildFeasibleConfigFromStrategy(new RideStrategyGenericLeastDistance());
+        $initConfig = $this->buildFeasibleConfigFromStrategy(new RideStrategyLeastDuration());
         if ($initConfig) {
             $configurations = $this->annealConfigurations($initConfig);
             //sort and return best configuration
@@ -84,7 +84,8 @@ class RideStrategyAnnealing implements RideStrategy {
 
         //Initial Config by LeastDistance Strategy
         $s = microtime(true);
-        $initConfig = $this->buildFeasibleConfigFromStrategy(new RideStrategyGenericLeastDistance());
+//        $initConfig = $this->buildFeasibleConfiguration();
+        $initConfig = $this->buildFeasibleConfigFromStrategy(new RideStrategyLeastDuration());
         $e = microtime(true);
         echo "Total RideNodes: " . count($this->rideNodes);
         echo "\nFeasible init config built in: " . ($e - $s) . "s\n";
@@ -102,17 +103,7 @@ class RideStrategyAnnealing implements RideStrategy {
      * @return RideConfiguration
      */
     private function buildFeasibleConfigFromStrategy(RideStrategy $strategy) {
-        $configurations = $strategy->buildConfigurations($this->rideNodes, $this->drivingPools, $this->emptyRideNodes);
-        if (count($configurations) > 1) {
-            ConfigurationBuilder::removeUnfeasibleConfigurations($configurations);
-            if(count($configurations)>1){
-                ConfigurationBuilder::sortRideConfigurationsByDistance($configurations);
-            } else {
-                return null;
-            }
-            return $configurations[0];
-        }
-        return null;
+        return $strategy->buildConfiguration($this->rideNodes, $this->drivingPools, $this->emptyRideNodes);
     }
 
     /**
@@ -144,14 +135,14 @@ class RideStrategyAnnealing implements RideStrategy {
 
                 //random next double 0.0 > ran < 1.0
                 $ran = mt_rand(1, 100000000) / 100000000;
-                //we accept the configuration if distance is lower or satisfies Boltzman condition
+                //we accept the configuration if distance is lower or satisfies Boltzmann condition
                 if (($deltaDistance < 0) || ($distance > 0 && exp(-$deltaDistance / $temperature) > $ran)) {
                     $distance = $nextDistance;
+                    $currentConfiguration = $nextConfiguration;
 
                     //keep track of the best configuration
                     if ($distance < $bestDistance) {
                         $bestDistance = $nextDistance;
-                        $currentConfiguration = $nextConfiguration;
                         $configurations[] = clone $nextConfiguration;
                     }
                 }
@@ -286,12 +277,13 @@ class RideStrategyAnnealing implements RideStrategy {
     }
 
     /**
-     * @param $rideNodes RideNode[]
-     * @return \Tixi\App\AppBundle\Ride\RideConfiguration
+     * Builds a configuration within least duration, so most rideNodes should be possible to generate a feasible
+     * feasible configuration.
+     * @return RideConfiguration
      */
-    private function buildFeasibleConfiguration($rideNodes) {
+    private function buildFeasibleConfiguration() {
         $rideConfiguration = new RideConfiguration($this->drivingPools);
-        $workRideNodes = $rideNodes;
+        $workRideNodes = $this->rideNodes;
 
         //always loop all available pools - but stop when no missions are left so it is
         //possible to have empty rideNodeLists (no driver/vehicle needed for these)
@@ -317,6 +309,7 @@ class RideStrategyAnnealing implements RideStrategy {
                 $bestNodeKey = null;
                 $bestEmptyRide = null;
                 $actualDuration = -1;
+
                 //check all nodes in workSet for feasible and best distance
                 foreach ($workRideNodes as $compareNodeKey => $compareNode) {
                     //not feasible, get next node
