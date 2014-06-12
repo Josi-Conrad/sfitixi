@@ -122,4 +122,8 @@ class DrivingOrderCreateType extends CommonAbstractType{
             'data_class' => 'Tixi\ApiBundle\Interfaces\Dispo\DrivingOrderRegisterDTO'
         ));
     }
+
+    public static function createOutwardError() {
+
+    }
 } 

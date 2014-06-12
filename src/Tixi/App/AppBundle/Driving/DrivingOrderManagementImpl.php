@@ -71,7 +71,7 @@ class DrivingOrderManagementImpl extends ContainerAware implements DrivingOrderM
         $prospectiveWorkingMonths = $workingMonthRepository->findProspectiveWorkingMonths();
         /** @var WorkingMonth $workingMonth */
         foreach ($prospectiveWorkingMonths as $workingMonth) {
-            $this->handleRepeatedDrivingOrdersForWorkingMonth($drivingOrderPlan, $workingMonth);
+//            $this->handleRepeatedDrivingOrdersForWorkingMonth($drivingOrderPlan, $workingMonth);
         }
     }
 

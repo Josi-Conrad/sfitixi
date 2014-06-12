@@ -70,12 +70,14 @@
                     </div>
                 </div>
             </div>
+
             <div class="row">
                 <div class="routingInformationWrapper">
                         <div class="col-md-3 col-md-offset-2 rideTimeOutward"></div>
                         <div class="col-md-3 col-md-offset-2 rideTimeReturn"></div>
                 </div>
             </div>
+            <div class="error_message">{{ form_errors(form) }}</div>
             <div class="row">
                 <div class="singleTimeWrapper">
                     {{ form_widget(form.orderTime) }}

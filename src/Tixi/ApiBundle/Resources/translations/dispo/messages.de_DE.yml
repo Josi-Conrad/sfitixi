@@ -124,6 +124,9 @@ drivingorder.status.canceled: Abgesagt
 
 drivingorder.drivingDuration: Fahrtdauer
 
+drivingorder.form.outwardError: Bitte Hinfahrtzeit angeben
+drivingorder.form.returnError: Bitte Rückfahrtzeit angeben
+
 #RepeatedDrivingOrder
 repeateddrivingorder.panel.embedded: Wiederkehrende Fahraufträge
 repeateddrivingorder.panel.edit: Dauerauftrag editieren

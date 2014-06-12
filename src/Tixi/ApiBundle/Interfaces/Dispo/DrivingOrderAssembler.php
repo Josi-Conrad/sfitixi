@@ -8,6 +8,8 @@
 
 namespace Tixi\ApiBundle\Interfaces\Dispo;
 
+use Tixi\ApiBundle\Form\Dispo\DrivingOrderOutwardTimeException;
+use Tixi\ApiBundle\Form\Dispo\DrivingOrderReturnTimeException;
 use Tixi\ApiBundle\Interfaces\AddressAssembler;
 use Tixi\App\Routing\RouteManagement;
 use Tixi\App\ZonePlan\ZonePlanManagement;
@@ -32,9 +34,20 @@ class DrivingOrderAssembler {
     /** @var  ZonePlanManagement $zonePlanManagement */
     protected $zonePlanManagement;
 
+    /**
+     * @param DrivingOrderRegisterDTO $registerDTO
+     * @param Passenger $passenger
+     * @throws \Exception
+     * @throws \InvalidArgumentException
+     * @return array
+     */
     public function registerDtoToNewDrivingOrders(DrivingOrderRegisterDTO $registerDTO, Passenger $passenger) {
         $orders = [];
-        $outwardOrder = $this->registerDtoToDrivingOrder($registerDTO, $passenger, self::OUTWARD_DIRECTION);
+        try {
+            $outwardOrder = $this->registerDtoToDrivingOrder($registerDTO, $passenger, self::OUTWARD_DIRECTION);
+        }catch (\InvalidArgumentException $e) {
+            throw $e;
+        }
         $orders[] = $outwardOrder;
         if(null !== $registerDTO->orderTime->returnTime) {
             $returnOrder = $this->registerDtoToDrivingOrder($registerDTO, $passenger, self::RETURN_DIRECTION);
@@ -44,6 +57,14 @@ class DrivingOrderAssembler {
         return $orders;
     }
 
+    /**
+     * @param DrivingOrderRegisterDTO $registerDTO
+     * @param Passenger $passenger
+     * @param $direction
+     * @throws \DrivingOrderReturnTimeException
+     * @throws \DrivingOrderOutwardTimeException
+     * @return DrivingOrder
+     */
     protected function registerDtoToDrivingOrder(DrivingOrderRegisterDTO $registerDTO, Passenger $passenger, $direction) {
         $route = null;
         /** @var Address $fromAddress */
@@ -53,13 +74,18 @@ class DrivingOrderAssembler {
         /** @var Zone $zone */
         $zone = $this->zonePlanManagement->getZoneWithHighestPriorityForCities(array($fromAddress->getCity(), $toAddress->getCity()));
         if($direction===self::OUTWARD_DIRECTION) {
+            if(null === $registerDTO->orderTime) {
+                throw new DrivingOrderOutwardTimeException();
+            }
             $pickupTime = $registerDTO->orderTime->outwardTime;
             $route = $this->routeManagement->getRouteFromAddresses($fromAddress, $toAddress);
         }else {
+            if(null === $registerDTO->orderTime) {
+                throw new DrivingOrderReturnTimeException();
+            }
             $pickupTime = $registerDTO->orderTime->returnTime;
             $route = $this->routeManagement->getRouteFromAddresses($toAddress, $fromAddress);
         }
-
         $drivingOrder = DrivingOrder::registerDrivingOrder(
             $passenger,
             $registerDTO->anchorDate,
@@ -78,6 +104,10 @@ class DrivingOrderAssembler {
         return $drivingOrder;
     }
 
+    /**
+     * @param DrivingOrderEditDTO $editDTO
+     * @param DrivingOrder $drivingOrder
+     */
     public function editDTOtoDrivingOrder(DrivingOrderEditDTO $editDTO, DrivingOrder $drivingOrder) {
         $drivingOrder->update(
             $editDTO->memo,
@@ -85,6 +115,10 @@ class DrivingOrderAssembler {
         );
     }
 
+    /**
+     * @param DrivingOrder $drivingOrder
+     * @return DrivingOrderEditDTO
+     */
     public function drivingOrderToEditDto(DrivingOrder $drivingOrder) {
         $dto = new DrivingOrderEditDTO();
         $dto->id = $drivingOrder->getId();
@@ -100,6 +134,10 @@ class DrivingOrderAssembler {
         return $dto;
     }
 
+    /**
+     * @param $drivingOrders
+     * @return array
+     */
     public function drivingOrdersToDrivingOrderEmbeddedListDTOs($drivingOrders) {
         $dtoArray = array();
         foreach ($drivingOrders as $drivingOrder) {
@@ -108,6 +146,10 @@ class DrivingOrderAssembler {
         return $dtoArray;
     }
 
+    /**
+     * @param DrivingOrder $drivingOrder
+     * @return DrivingOrderEmbeddedListDTO
+     */
     public function drivingOrderToDrivingOrderEmbeddedListDTO(DrivingOrder $drivingOrder) {
         $listDTO = new DrivingOrderEmbeddedListDTO();
         $listDTO->id = $drivingOrder->getId();
@@ -119,16 +161,23 @@ class DrivingOrderAssembler {
         return $listDTO;
     }
 
-
-
+    /**
+     * @param AddressAssembler $assembler
+     */
     public function setAddressAssembler(AddressAssembler $assembler) {
         $this->addressAssembler = $assembler;
     }
 
+    /**
+     * @param RouteManagement $routeManagement
+     */
     public function setRouteManagement(RouteManagement $routeManagement) {
         $this->routeManagement = $routeManagement;
     }
 
+    /**
+     * @param ZonePlanManagement $zonePlanManagement
+     */
     public function setZonePlaneManagement(ZonePlanManagement $zonePlanManagement) {
         $this->zonePlanManagement = $zonePlanManagement;
     }

@@ -10,8 +10,10 @@ namespace Tixi\ApiBundle\Controller\Dispo;
 
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Tixi\ApiBundle\Form\Dispo\DrivingOrderOutwardTimeException;
 use Tixi\ApiBundle\Form\Dispo\RepeatedDrivingOrderEditType;
 use Tixi\ApiBundle\Interfaces\Dispo\RepeatedDrivingAssertionAssembler;
 use Tixi\ApiBundle\Interfaces\Dispo\RepeatedDrivingOrderAssembler;
@@ -102,15 +104,25 @@ class RepeatedDrivingOrderController extends Controller{
             foreach($orderPlan->getRepeatedDrivingOrdersAsArray() as $previousOrder) {
                 $repeatedDrivingOrderRepository->remove($previousOrder);
             }
-            $newOrders = $assembler->registerDTOtoRepeatedDrivingOrders($registerDTO);
-            /** @var RepeatedDrivingOrder $newOrder */
-            foreach($newOrders as $newOrder) {
-                $newOrder->assignRepeatedDrivingOrderPlan($orderPlan);
-                $repeatedDrivingOrderRepository->store($newOrder);
+            try {
+                $newOrders = $assembler->registerDTOtoRepeatedDrivingOrders($registerDTO);
+                /** @var RepeatedDrivingOrder $newOrder */
+                foreach($newOrders as $newOrder) {
+                    $newOrder->assignRepeatedDrivingOrderPlan($orderPlan);
+                    $repeatedDrivingOrderRepository->store($newOrder);
+                }
+                $orderPlan->replaceRepeatedDrivingOrders($newOrders);
+                $this->get('entity_manager')->flush();
+                return $this->redirect($this->generateUrl('tixiapi_passenger_get', array('passengerId'=>$passengerId)));
+            }catch (DrivingOrderOutwardTimeException $e) {
+                $errorMsg = $this->get('translator')->trans('drivingorder.form.outwardError');
+                $form->get('orderTime')->addError(new FormError($errorMsg));
+            }catch(DrivingOrderReturnTimeException $e) {
+                $errorMsg = $this->get('translator')->trans('drivingorder.form.returnError');
+                $form->get('orderTime')->get('returnTime')->addError(new FormError($errorMsg));
             }
-            $orderPlan->replaceRepeatedDrivingOrders($newOrders);
-            $this->get('entity_manager')->flush();
-            return $this->redirect($this->generateUrl('tixiapi_passenger_get', array('passengerId'=>$passengerId)));
+
+
         }
 
         $rootPanel = new RootPanel($this->menuId, 'repeateddrivingorder.panel.edit');

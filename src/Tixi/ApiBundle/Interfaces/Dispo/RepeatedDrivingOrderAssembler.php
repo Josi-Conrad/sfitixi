@@ -10,6 +10,7 @@ namespace Tixi\ApiBundle\Interfaces\Dispo;
 
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Tixi\ApiBundle\Form\Dispo\DrivingOrderOutwardTimeException;
 use Tixi\ApiBundle\Form\Shared\DrivingOrderTime;
 use Tixi\ApiBundle\Helper\DateTimeService;
 use Tixi\ApiBundle\Interfaces\AddressAssembler;
@@ -74,42 +75,63 @@ class RepeatedDrivingOrderAssembler {
             $repeatedDrivingOrders[] = RepeatedDrivingOrder::registerRepeatedDrivingOrder(1, $registerDTO->mondayOrderTime->outwardTime, RepeatedDrivingOrder::OUTWARD_DIRECTION);
         }
         if(!empty($registerDTO->mondayOrderTime->returnTime)) {
+            if(empty($registerDTO->mondayOrderTime->outwardTime)) {
+                throw new DrivingOrderOutwardTimeException();
+            }
             $repeatedDrivingOrders[] = RepeatedDrivingOrder::registerRepeatedDrivingOrder(1, $registerDTO->mondayOrderTime->returnTime, RepeatedDrivingOrder::RETURN_DIRECTION);
         }
         if(!empty($registerDTO->tuesdayOrderTime->outwardTime)) {
             $repeatedDrivingOrders[] = RepeatedDrivingOrder::registerRepeatedDrivingOrder(2, $registerDTO->tuesdayOrderTime->outwardTime, RepeatedDrivingOrder::OUTWARD_DIRECTION);
         }
         if(!empty($registerDTO->tuesdayOrderTime->returnTime)) {
+            if(empty($registerDTO->tuesdayOrderTime->outwardTime)) {
+                throw new DrivingOrderOutwardTimeException();
+            }
             $repeatedDrivingOrders[] = RepeatedDrivingOrder::registerRepeatedDrivingOrder(2, $registerDTO->tuesdayOrderTime->returnTime, RepeatedDrivingOrder::RETURN_DIRECTION);
         }
         if(!empty($registerDTO->wednesdayOrderTime->outwardTime)) {
             $repeatedDrivingOrders[] = RepeatedDrivingOrder::registerRepeatedDrivingOrder(3, $registerDTO->wednesdayOrderTime->outwardTime, RepeatedDrivingOrder::OUTWARD_DIRECTION);
         }
         if(!empty($registerDTO->wednesdayOrderTime->returnTime)) {
+            if(empty($registerDTO->wednesdayOrderTime->outwardTime)) {
+                throw new DrivingOrderOutwardTimeException();
+            }
             $repeatedDrivingOrders[] = RepeatedDrivingOrder::registerRepeatedDrivingOrder(3, $registerDTO->wednesdayOrderTime->returnTime, RepeatedDrivingOrder::RETURN_DIRECTION);
         }
         if(!empty($registerDTO->thursdayOrderTime->outwardTime)) {
             $repeatedDrivingOrders[] = RepeatedDrivingOrder::registerRepeatedDrivingOrder(4, $registerDTO->thursdayOrderTime->outwardTime, RepeatedDrivingOrder::OUTWARD_DIRECTION);
         }
         if(!empty($registerDTO->thursdayOrderTime->returnTime)) {
+            if(empty($registerDTO->thursdayOrderTime->outwardTime)) {
+                throw new DrivingOrderOutwardTimeException();
+            }
             $repeatedDrivingOrders[] = RepeatedDrivingOrder::registerRepeatedDrivingOrder(4, $registerDTO->thursdayOrderTime->returnTime, RepeatedDrivingOrder::RETURN_DIRECTION);
         }
         if(!empty($registerDTO->fridayOrderTime->outwardTime)) {
             $repeatedDrivingOrders[] = RepeatedDrivingOrder::registerRepeatedDrivingOrder(5, $registerDTO->fridayOrderTime->outwardTime, RepeatedDrivingOrder::OUTWARD_DIRECTION);
         }
         if(!empty($registerDTO->fridayOrderTime->returnTime)) {
+            if(empty($registerDTO->fridayOrderTime->outwardTime)) {
+                throw new DrivingOrderOutwardTimeException();
+            }
             $repeatedDrivingOrders[] = RepeatedDrivingOrder::registerRepeatedDrivingOrder(5, $registerDTO->fridayOrderTime->returnTime, RepeatedDrivingOrder::RETURN_DIRECTION);
         }
         if(!empty($registerDTO->saturdayOrderTime->outwardTime)) {
             $repeatedDrivingOrders[] = RepeatedDrivingOrder::registerRepeatedDrivingOrder(6, $registerDTO->saturdayOrderTime->outwardTime, RepeatedDrivingOrder::OUTWARD_DIRECTION);
         }
         if(!empty($registerDTO->saturdayOrderTime->returnTime)) {
+            if(empty($registerDTO->saturdayOrderTime->outwardTime)) {
+                throw new DrivingOrderOutwardTimeException();
+            }
             $repeatedDrivingOrders[] = RepeatedDrivingOrder::registerRepeatedDrivingOrder(6, $registerDTO->saturdayOrderTime->returnTime, RepeatedDrivingOrder::RETURN_DIRECTION);
         }
         if(!empty($registerDTO->sundayOrderTime->outwardTime)) {
             $repeatedDrivingOrders[] = RepeatedDrivingOrder::registerRepeatedDrivingOrder(7, $registerDTO->sundayOrderTime->outwardTime, RepeatedDrivingOrder::OUTWARD_DIRECTION);
         }
         if(!empty($registerDTO->sundayOrderTime->returnTime)) {
+            if(empty($registerDTO->sundayOrderTime->outwardTime)) {
+                throw new DrivingOrderOutwardTimeException();
+            }
             $repeatedDrivingOrders[] = RepeatedDrivingOrder::registerRepeatedDrivingOrder(7, $registerDTO->sundayOrderTime->returnTime, RepeatedDrivingOrder::RETURN_DIRECTION);
         }
         return $repeatedDrivingOrders;

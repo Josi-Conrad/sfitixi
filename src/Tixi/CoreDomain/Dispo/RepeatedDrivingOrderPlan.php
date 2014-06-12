@@ -111,6 +111,14 @@ class RepeatedDrivingOrderPlan extends CommonBaseEntity {
         return $rdPlan;
     }
 
+    /**
+     * @param \DateTime $anchorDate
+     * @param null $withHolidays
+     * @param null $companion
+     * @param \DateTime $endingDate
+     * @param null $memo
+     * @param null $additionalTime
+     */
     public function update(\DateTime $anchorDate = null, $withHolidays = null, $companion = null, \DateTime $endingDate = null, $memo = null, $additionalTime = null) {
         $correctedWithHolidays = (null !== $withHolidays) ? $withHolidays : false;
         $correctedCompanion = (null !== $companion) ? $companion : 0;
@@ -145,10 +153,16 @@ class RepeatedDrivingOrderPlan extends CommonBaseEntity {
         $this->getRepeatedDrivingOrders()->add($drivingOrder);
     }
 
+    /**
+     * @param DrivingOrder $drivingOrder
+     */
     public function assignDrivingOrder(DrivingOrder $drivingOrder) {
         $this->drivingOrders->add($drivingOrder);
     }
 
+    /**
+     * @param DrivingOrder $drivingOrder
+     */
     public function removeDrivingOrder(DrivingOrder $drivingOrder) {
         $this->drivingOrders->removeElement($drivingOrder);
     }
@@ -160,11 +174,12 @@ class RepeatedDrivingOrderPlan extends CommonBaseEntity {
         $this->setPassenger($passenger);
     }
 
+    /**
+     *
+     */
     public function removePassenger() {
         $this->setPassenger(null);
     }
-
-
 
     /**
      * @param Route $route
@@ -192,9 +207,6 @@ class RepeatedDrivingOrderPlan extends CommonBaseEntity {
     {
         return $this->zone;
     }
-
-
-
 
     /**
      * @return mixed
@@ -234,7 +246,6 @@ class RepeatedDrivingOrderPlan extends CommonBaseEntity {
     public function getRepeatedDrivingOrdersAsArray() {
         return $this->repeatedDrivingOrders->toArray();
     }
-
 
     /**
      * @param mixed $anchorDate

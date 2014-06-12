@@ -12,10 +12,13 @@ use APY\BreadcrumbTrailBundle\Annotation\Breadcrumb;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Tixi\ApiBundle\Form\Dispo\DrivingOrderCreateType;
 use Tixi\ApiBundle\Form\Dispo\DrivingOrderEditType;
+use Tixi\ApiBundle\Form\Dispo\DrivingOrderOutwardTimeException;
+use Tixi\ApiBundle\Form\Dispo\DrivingOrderReturnTimeException;
 use Tixi\ApiBundle\Interfaces\Dispo\DrivingOrderAssembler;
 use Tixi\ApiBundle\Interfaces\Dispo\DrivingOrderRegisterDTO;
 use Tixi\ApiBundle\Interfaces\Dispo\RepeatedDrivingOrderAssembler;
@@ -146,9 +149,17 @@ class DrivingOrderController extends Controller{
         $form->handleRequest($request);
         if ($form->isValid()) {
             $registerDto = $form->getData();
-            $this->registerDrivingOrder($registerDto, $passenger);
-            $this->get('entity_manager')->flush();
-            return $this->redirect($this->generateUrl('tixiapi_passenger_get', array('passengerId'=>$passengerId)));
+            try {
+                $this->registerDrivingOrder($registerDto, $passenger);
+                $this->get('entity_manager')->flush();
+                return $this->redirect($this->generateUrl('tixiapi_passenger_get', array('passengerId'=>$passengerId)));
+            }catch (DrivingOrderOutwardTimeException $e) {
+                $errorMsg = $this->get('translator')->trans('drivingorder.form.outwardError');
+                $form->get('orderTime')->addError(new FormError($errorMsg));
+            }catch(DrivingOrderReturnTimeException $e) {
+                $errorMsg = $this->get('translator')->trans('drivingorder.form.returnError');
+                $form->get('orderTime')->get('returnTime')->addError(new FormError($errorMsg));
+            }
         }
 
         $rootPanel = new RootPanel($this->menuId, 'drivingorder.panel.new',$passenger->getNameString());
@@ -160,6 +171,8 @@ class DrivingOrderController extends Controller{
     /**
      * @param DrivingOrderRegisterDTO $registerDTO
      * @param Passenger $passenger
+     * @throws \Exception
+     * @throws \InvalidArgumentException
      */
     protected function registerDrivingOrder(DrivingOrderRegisterDTO $registerDTO, Passenger $passenger) {
         /** @var DrivingOrderAssembler $assemblerSingleDrivingOrder */
@@ -173,10 +186,16 @@ class DrivingOrderController extends Controller{
         /** @var DrivingOrderManagement $drivingOrderService */
         $drivingOrderService = $this->get('tixi_app.drivingordermanagement');
 
-
         if($registerDTO->isRepeated) {
             $repeatedDrivingOrderPlan = $assemblerRepeatedDrivingOrder->registerDTOtoNewDrivingOrderPlan($registerDTO, $passenger);
-            $repeatedOrders = $assemblerRepeatedDrivingOrder->registerDTOtoRepeatedDrivingOrders($registerDTO);
+            try {
+                $repeatedOrders = $assemblerRepeatedDrivingOrder->registerDTOtoRepeatedDrivingOrders($registerDTO);
+            }catch (DrivingOrderOutwardTimeException $e) {
+                throw $e;
+            }catch(DrivingOrderReturnTimeException $e) {
+                throw $e;
+            }
+
             /** @var RepeatedDrivingOrder $repeatedOrder */
             foreach($repeatedOrders as $repeatedOrder) {
                 $repeatedOrder->assignRepeatedDrivingOrderPlan($repeatedDrivingOrderPlan);
@@ -186,7 +205,13 @@ class DrivingOrderController extends Controller{
             $repeatedDrivingOrderPlanRepository->store($repeatedDrivingOrderPlan);
             $drivingOrderService->handleNewRepeatedDrivingOrder($repeatedDrivingOrderPlan);
         }else {
-            $drivingOrders = $assemblerSingleDrivingOrder->registerDtoToNewDrivingOrders($registerDTO, $passenger);
+            try {
+                $drivingOrders = $assemblerSingleDrivingOrder->registerDtoToNewDrivingOrders($registerDTO, $passenger);
+            }catch(DrivingOrderOutwardTimeException $e) {
+                throw $e;
+            }catch(DrivingOrderReturnTimeException $e) {
+                throw $e;
+            }
             foreach($drivingOrders as $drivingOrder) {
                 $drivingOrderService->handleNewDrivingOrder($drivingOrder);
             }
