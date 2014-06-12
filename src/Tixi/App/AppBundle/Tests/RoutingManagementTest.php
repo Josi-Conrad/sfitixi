@@ -44,11 +44,14 @@ class RoutingManagementTest extends CommonBaseTest {
         $address2 = $this->createTestAddressGoldau();
 
         $routes = array();
-        for ($i = 0; $i < 2; $i++) {
+        for ($i = 0; $i < 100; $i++) {
             array_push($routes, Route::registerRoute($address1, $address2, null, null));
             array_push($routes, Route::registerRoute($address2, $address1, null, null));
         }
+        $s = microtime(true);
         $this->routingMachine->fillRoutingInformationForMultipleRoutes($routes);
+        $e = microtime(true);
+        echo "\n\nFilled " . count($routes) . " routes from RoutingMachine in: " . ($e - $s) . "s\n";
 
         /**@var $route Route */
         foreach ($routes as $route) {

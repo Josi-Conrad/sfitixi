@@ -194,7 +194,7 @@ class RideNode {
      * @return string
      */
     public function getRideNodeHashId() {
-        return hash('md2', $this->startAddress->getHashFromBigIntCoordinates()
+        return hash('md4', $this->startAddress->getHashFromBigIntCoordinates()
             . $this->targetAddress->getHashFromBigIntCoordinates()
             . $this->startMinute . $this->endMinute
             . $this->drivingMission->getId());
@@ -207,7 +207,7 @@ class RideNode {
      * @return string
      */
     public function getRideRouteHash() {
-        return hash('md2', $this->startAddress->getHashFromBigIntCoordinates()
+        return hash('md4', $this->startAddress->getHashFromBigIntCoordinates()
             . $this->targetAddress->getHashFromBigIntCoordinates());
     }
 

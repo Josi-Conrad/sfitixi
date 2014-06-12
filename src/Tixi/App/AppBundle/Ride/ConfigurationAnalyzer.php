@@ -115,7 +115,7 @@ class ConfigurationAnalyzer {
      * @param $vehicles Vehicle[]
      * @return bool
      */
-    public function assignVehiclesToBestConfiguration($vehicles) {
+    public function assignVehiclesToConfiguration($vehicles) {
         $config = $this->rideConfiguration;
         $workVehicles = $vehicles;
         $this->sortVehiclesBySize($workVehicles);

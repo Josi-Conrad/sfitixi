@@ -57,12 +57,6 @@ class Driver extends Person {
      */
     protected $drivingAssertions;
 
-//    /**
-//     * @ORM\OneToMany(targetEntity="Tixi\CoreDomain\Dispo\DrivingPool", mappedBy="driver")
-//     * @ORM\JoinColumn(name="driving_pool_id", referencedColumnName="id")
-//     */
-//    protected $drivingPools;
-
     /**
      * @ORM\Column(type="text", nullable=true)
      */
@@ -247,10 +241,16 @@ class Driver extends Person {
         $this->repeatedDrivingAssertionPlans->removeElement($assertionPlan);
     }
 
+    /**
+     * @param DrivingAssertion $drivingAssertion
+     */
     public function assignDrivingAssertion(DrivingAssertion $drivingAssertion) {
         $this->drivingAssertions->add($drivingAssertion);
     }
 
+    /**
+     * @param DrivingAssertion $drivingAssertion
+     */
     public function removeDrivingAssertion(DrivingAssertion $drivingAssertion) {
         $this->drivingAssertions->removeElement($drivingAssertion);
     }
@@ -348,7 +348,7 @@ class Driver extends Person {
     }
 
     /**
-     * drives ceratin vehicle categories
+     * drives certain vehicle categories
      * @param VehicleCategory $vehicleCategory
      * @return bool
      */

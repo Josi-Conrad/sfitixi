@@ -83,15 +83,16 @@ class MenuService extends ContainerAware {
 
 
         /**Disposition*/
+
         $dispositionSelectionTile =
             $menuTile->add(new MenuSelectionItemTile(self::$menuSelectionDispositionId,
                 'disposition.panel.name', $this->checkSelectionRootActivity(self::$menuSelectionDispositionId, $activeItem)));
         if ($this->container->get('security.context')->isGranted('ROLE_MANAGER')) {
             $dispositionSelectionTile->add(new MenuItemTile(self::$menuDispositionProductionPlanId,
                 $this->generateUrl('tixiapi_dispo_productionplans_get'), 'productionplan.panel.name', $this->checkSelectionChildActivity(self::$menuDispositionProductionPlanId, $activeItem)));
+            $dispositionSelectionTile->add(new MenuItemTile(self::$menuDispositionMonthlyPlanId,
+                $this->generateUrl('tixiapi_dispo_monthlyplans_get'), 'monthlyplan.panel.name', $this->checkSelectionChildActivity(self::$menuDispositionMonthlyPlanId, $activeItem)));
         }
-        $dispositionSelectionTile->add(new MenuItemTile(self::$menuDispositionMonthlyPlanId,
-            $this->generateUrl('tixiapi_dispo_monthlyplans_get'), 'monthlyplan.panel.name', $this->checkSelectionChildActivity(self::$menuDispositionMonthlyPlanId, $activeItem)));
 
         /**Prepare*/
         $menuTile->add(new MenuItemTile(self::$menuPrepareId, '#', 'prepare.panel.name', $rootId === self::$menuPrepareId));

@@ -322,7 +322,7 @@ class ConfigurationBuilder {
      * @return string
      */
     public static function getRideHashFromTwoNodes(RideNode $startNode, RideNode $targetNode) {
-        return hash('md2', $startNode->targetAddress->getHashFromBigIntCoordinates()
+        return hash('md4', $startNode->targetAddress->getHashFromBigIntCoordinates()
             . $targetNode->startAddress->getHashFromBigIntCoordinates());
     }
 
@@ -335,4 +335,12 @@ class ConfigurationBuilder {
     public static function getEmptyRideFromTwoNodes(RideNode $startNode, RideNode $targetNode, $emptyRideNodes) {
         return $emptyRideNodes[self::getRideHashFromTwoNodes($startNode, $targetNode)];
     }
+
+    /**
+     * @param \Tixi\App\AppBundle\Ride\RideStrategies\RideStrategy $strategy
+     */
+    public function setStrategy(RideStrategy $strategy) {
+        $this->strategy = $strategy;
+    }
+
 }

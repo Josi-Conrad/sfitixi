@@ -61,7 +61,7 @@ class RideOptimizationCommand extends ContainerAwareCommand {
         $startTime = microtime(true);
         foreach ($shifts as $shift) {
             if ($shift) {
-                $rideManagement->getOptimizedPlanForShift($shift);
+                $rideManagement->buildOptimizedPlanForShift($shift);
             }
         }
         $endTime = microtime(true);

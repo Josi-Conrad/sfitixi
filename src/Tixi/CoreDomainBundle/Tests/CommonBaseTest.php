@@ -261,6 +261,8 @@ class CommonBaseTest extends WebTestCase {
     protected function createTestAddressBaar() {
         $address = Address::registerAddress('Rathausstrasse 1', '6340',
             'Baar', 'Schweiz', 'Ganztagesschule mit Montessoriprofil', 47.294715, 8.326096);
+        $address->setNearestLat(47.049375);
+        $address->setNearestLng(8.547916);
         $this->addressRepo->store($address);
         $this->em->flush();
         return $address;
@@ -277,6 +279,8 @@ class CommonBaseTest extends WebTestCase {
     protected function createTestAddressGoldau() {
         $address = Address::registerAddress('Bahnhofstrasse 9', '6410',
             'Arth', 'Schweiz', 'CSS', 47.049536, 8.547931);
+        $address->setNearestLat(47.292726);
+        $address->setNearestLng(8.328394);
         $this->addressRepo->store($address);
         $this->em->flush();
         return $address;

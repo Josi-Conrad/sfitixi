@@ -150,7 +150,7 @@ class RideManagementController extends Controller {
         }
 
         try {
-            $success = $rideManagement->getOptimizedPlanForShift($shift);
+            $success = $rideManagement->buildOptimizedPlanForShift($shift);
         } catch (\Exception $e) {
             $response = new JsonResponse();
             $response->setData(array(

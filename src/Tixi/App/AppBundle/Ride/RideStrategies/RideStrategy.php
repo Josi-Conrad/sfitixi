@@ -21,7 +21,7 @@ interface RideStrategy {
      * @param $drivingPools
      * @param $emptyRideNodes
      * @param RideConfiguration $existingConfiguration
-     * @return mixed
+     * @return RideConfiguration
      */
     public function buildConfiguration($rideNodes, $drivingPools, $emptyRideNodes, RideConfiguration $existingConfiguration = null);
 
@@ -29,7 +29,7 @@ interface RideStrategy {
      * @param $rideNodes
      * @param $emptyRideNodes
      * @param $drivingPools
-     * @return \Tixi\App\AppBundle\Ride\RideConfiguration[]
+     * @return RideConfiguration[]
      */
     public function buildConfigurations($rideNodes, $drivingPools, $emptyRideNodes);
 } 
