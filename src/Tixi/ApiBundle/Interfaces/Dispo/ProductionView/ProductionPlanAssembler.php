@@ -15,11 +15,20 @@ use Tixi\CoreDomain\Dispo\WorkingDay;
 use Tixi\CoreDomain\Dispo\WorkingMonth;
 use Tixi\CoreDomain\Dispo\WorkingMonthRepository;
 
+/**
+ * Class ProductionPlanAssembler
+ * @package Tixi\ApiBundle\Interfaces\Dispo\ProductionView
+ */
 class ProductionPlanAssembler {
 
     /** @var  DispositionManagement $dispoService */
     protected $dispoService;
 
+    /**
+     * @param ProductionPlanCreateDTO $createDTO
+     * @param WorkingMonthRepository $workingMonthRepository
+     * @return null|WorkingMonth
+     */
     public function createDTOtoNewProductionPlan(ProductionPlanCreateDTO $createDTO, WorkingMonthRepository $workingMonthRepository) {
         try {
             $date = new \DateTime();
@@ -38,6 +47,10 @@ class ProductionPlanAssembler {
         return $workingMonth;
     }
 
+    /**
+     * @param WorkingMonth $workingMonth
+     * @return ProductionPlanEditDTO
+     */
     public function workingMonthToEditDTO(WorkingMonth $workingMonth) {
         $dto = new ProductionPlanEditDTO();
         $dto->workingMonthId = $workingMonth->getId();
@@ -126,6 +139,9 @@ class ProductionPlanAssembler {
         return $dto;
     }
 
+    /**
+     * @param DispositionManagement $dispoService
+     */
     public function setDispoService(DispositionManagement $dispoService) {
         $this->dispoService = $dispoService;
     }

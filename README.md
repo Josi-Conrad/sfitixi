@@ -42,7 +42,7 @@ PHP Parameters shall be set to:
 
 Symfony Bundle Parameters on build shall be set:
 
-`wkhtmltopdf_path` must lead to wkhtmltopdf binary
+`wkhtmltopdf_path` must lead to wkhtmltopdf binary (take care with empty spaces like c:\my projects\...)
 
 
 2) Build and Deploy

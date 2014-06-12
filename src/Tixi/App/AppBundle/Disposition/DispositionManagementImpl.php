@@ -37,6 +37,10 @@ use Tixi\CoreDomain\Dispo\WorkingMonthRepository;
 use Tixi\CoreDomain\Driver;
 use Tixi\CoreDomain\DriverRepository;
 
+/**
+ * Class DispositionManagementImpl
+ * @package Tixi\App\AppBundle\Disposition
+ */
 class DispositionManagementImpl extends ContainerAware implements DispositionManagement {
     /**
      * @param \DateTime $dayTime
@@ -80,7 +84,6 @@ class DispositionManagementImpl extends ContainerAware implements DispositionMan
             $startMinute = $drivingMission->getServiceMinuteOfDay();
             $endMinute = $startMinute + $drivingMission->getServiceDuration();
 
-            //TODO: Tactic if all missions with beginnTime in Shift or also with a part of endTime?
             /** start or end of the order laps into a shift time */
             if ($shiftMinutesEnd > $shiftMinutesStart) {
                 if ($startMinute >= $shiftMinutesStart && $endMinute <= $shiftMinutesEnd ||
@@ -97,7 +100,6 @@ class DispositionManagementImpl extends ContainerAware implements DispositionMan
                     array_push($matchingDrivingMissions, $drivingMission);
                 }
             }
-
         }
         return $matchingDrivingMissions;
     }
@@ -223,7 +225,10 @@ class DispositionManagementImpl extends ContainerAware implements DispositionMan
         return $workingMonth;
     }
 
-
+    /**
+     * @param MonthlyPlanEditDTO $monthlyPlan
+     * @return mixed|void
+     */
     public function createDrivingAssertionsFromMonthlyPlan(MonthlyPlanEditDTO $monthlyPlan) {
         /** @var DrivingAssertionManagement $drivingAssertionService */
         $drivingAssertionService = $this->container->get('tixi_app.drivingassertionmanagement');

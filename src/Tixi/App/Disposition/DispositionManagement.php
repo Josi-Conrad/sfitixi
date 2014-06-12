@@ -10,9 +10,7 @@ namespace Tixi\App\Disposition;
 
 
 use Tixi\ApiBundle\Interfaces\Dispo\MonthlyView\MonthlyPlanEditDTO;
-use Tixi\App\AppBundle\Ride\RideNode;
 use Tixi\CoreDomain\Dispo\DrivingMission;
-use Tixi\CoreDomain\Dispo\DrivingOrder;
 use Tixi\CoreDomain\Dispo\Shift;
 use Tixi\CoreDomain\Dispo\WorkingMonth;
 use Tixi\CoreDomain\Vehicle;
