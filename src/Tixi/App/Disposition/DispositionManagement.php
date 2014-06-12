@@ -14,6 +14,7 @@ use Tixi\App\AppBundle\Ride\RideNode;
 use Tixi\CoreDomain\Dispo\DrivingMission;
 use Tixi\CoreDomain\Dispo\DrivingOrder;
 use Tixi\CoreDomain\Dispo\Shift;
+use Tixi\CoreDomain\Dispo\WorkingMonth;
 use Tixi\CoreDomain\Vehicle;
 
 /**
@@ -22,10 +23,27 @@ use Tixi\CoreDomain\Vehicle;
  */
 interface DispositionManagement {
 
+    /**
+     * Creates all the needed entities for a new working month.
+     * @param $year
+     * @param $month
+     * @return array|null|WorkingMonth
+     */
     public function openWorkingMonth($year, $month);
 
+    /**
+     * Creates or removes working pools if more or less drivers are needed for a given shift
+     * @param Shift $shift
+     * @param $oldAmount
+     * @param $newAmount
+     * @return mixed
+     */
     public function processChangeInAmountOfDriversPerShift(Shift $shift, $oldAmount, $newAmount);
 
+    /**
+     * @param MonthlyPlanEditDTO $monthlyPlan
+     * @return mixed
+     */
     public function createDrivingAssertionsFromMonthlyPlan(MonthlyPlanEditDTO $monthlyPlan);
 
     /**

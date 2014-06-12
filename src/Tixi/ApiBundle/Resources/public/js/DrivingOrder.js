@@ -365,7 +365,7 @@ function Route(from, to) {
             _this._distanceReturn = data.routeReturnDistance;
             callback(_this);
         }).fail(function() {
-            //ToDo on routing fail
+            //fail silently
         })
     }
 

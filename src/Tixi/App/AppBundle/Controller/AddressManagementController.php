@@ -41,7 +41,7 @@ class AddressManagementController extends Controller {
             $passengerId = $request->get('passengerid');
             $addresses = $addressManager->getAddressHandleByPassengerId($passengerId);
         } else {
-            //ToDo throw proper exception (invalid request)
+            //
         }
         $response->setData(array('models' => $addresses));
         return $response;

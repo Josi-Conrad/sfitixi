@@ -151,7 +151,7 @@ function GoogleMapWrapper() {
                     _this._setMapCenter(results[0].geometry.location);
                     _this._moveMarker(results[0].geometry.location);
                 } else {
-                    //ToDo geocoder fail state
+                    //fail silently
                 }
             });
         }

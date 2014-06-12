@@ -128,6 +128,13 @@ class DrivingPool {
     }
 
     /**
+     * @param DrivingMission $drivingMission
+     */
+    public function removeDrivingMission(DrivingMission $drivingMission) {
+        $this->drivingMissions->removeElement($drivingMission);
+    }
+
+    /**
      * removes all associations from missions * <-> 1 orders
      */
     public function removeDrivingMissions() {

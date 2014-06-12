@@ -75,9 +75,14 @@ class RepeatedDrivingOrderPlan extends CommonBaseEntity {
      * @ORM\Column(type="integer")
      */
     protected $additionalTime;
+    /**
+     * @ORM\OneToMany(targetEntity="DrivingOrder", mappedBy="repeatedDrivingOrderPlan")
+     */
+    protected $drivingOrders;
 
     protected function __construct() {
         $this->repeatedDrivingOrders = new ArrayCollection();
+        $this->drivingOrders = new ArrayCollection();
         parent::__construct();
     }
 
@@ -134,6 +139,21 @@ class RepeatedDrivingOrderPlan extends CommonBaseEntity {
     }
 
     /**
+     * @param RepeatedDrivingOrder $drivingOrder
+     */
+    public function assignRepeatedDrivingOrder(RepeatedDrivingOrder $drivingOrder){
+        $this->getRepeatedDrivingOrders()->add($drivingOrder);
+    }
+
+    public function assignDrivingOrder(DrivingOrder $drivingOrder) {
+        $this->drivingOrders->add($drivingOrder);
+    }
+
+    public function removeDrivingOrder(DrivingOrder $drivingOrder) {
+        $this->drivingOrders->removeElement($drivingOrder);
+    }
+
+    /**
      * @param Passenger $passenger
      */
     public function assignPassenger(Passenger $passenger) {
@@ -144,12 +164,7 @@ class RepeatedDrivingOrderPlan extends CommonBaseEntity {
         $this->setPassenger(null);
     }
 
-    /**
-     * @param RepeatedDrivingOrder $drivingOrder
-     */
-    public function assignRepeatedDrivingOrder(RepeatedDrivingOrder $drivingOrder){
-        $this->getRepeatedDrivingOrders()->add($drivingOrder);
-    }
+
 
     /**
      * @param Route $route

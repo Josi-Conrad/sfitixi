@@ -167,7 +167,7 @@ function AddressLookahead() {
                 $(_this._addressSelectionsContainer).append(_this._constructAddManuallyLink());
                 _this._showAddressSelections();
             }).fail(function() {
-                //ToDo Exception handling
+                //fail silently
             })
         }else {
             _this._hideAddressSelections();

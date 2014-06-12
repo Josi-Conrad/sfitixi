@@ -10,6 +10,7 @@ namespace Tixi\CoreDomain\Dispo;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Tixi\ApiBundle\Helper\DateTimeService;
 use Tixi\CoreDomain\Shared\CommonBaseEntity;
 
 /**
@@ -107,7 +108,7 @@ class RepeatedDrivingOrder {
      * @return mixed|void
      */
     public function matching(\DateTime $date) {
-        // TODO: Implement matching() method.
+        return DateTimeService::getWeekday($date) == $this->getWeekday();
     }
 
     /**

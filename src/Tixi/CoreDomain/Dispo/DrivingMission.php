@@ -100,7 +100,7 @@ class DrivingMission {
     public static function registerDrivingMissionFromOrder(DrivingOrder $drivingOrder) {
         $drivingMission = new DrivingMission();
         $drivingMission->setDirection(self::SAME_START);
-
+        $drivingMission->setServiceOrder(array($drivingOrder->getId()));
         $boardingTime = DispositionVariables::getBoardingTimes();
         $extraMinutesPassenger = $drivingOrder->getPassenger()->getExtraMinutes();
         $additionalTimesOnRide = $boardingTime + $extraMinutesPassenger;
@@ -116,8 +116,18 @@ class DrivingMission {
         //DrivingMission <-> Order
         $drivingMission->assignDrivingOrder($drivingOrder);
         $drivingOrder->assignDrivingMission($drivingMission);
-
         return $drivingMission;
+    }
+
+    public function deletePhysically() {
+        /** @var DrivingOrder $drivingOrder */
+        foreach($this->drivingOrders as $drivingOrder) {
+            $drivingOrder->removeDrivingMission();
+        }
+        if(!empty($this->drivingPool)) {
+            $this->drivingPool->removeDrivingMission($this);
+        }
+        $this->removeDrivingPool();
     }
 
     /**
@@ -138,14 +148,14 @@ class DrivingMission {
      * @param DrivingOrder $drivingOrder
      */
     public function assignDrivingOrder(DrivingOrder $drivingOrder) {
-        $this->getDrivingOrders()->add($drivingOrder);
+        $this->drivingOrders->add($drivingOrder);
     }
 
     /**
      * @param DrivingOrder $drivingOrder
      */
     public function removeDrivingOrder(DrivingOrder $drivingOrder) {
-        $this->getDrivingOrders()->removeElement($drivingOrder);
+        $this->drivingOrders->removeElement($drivingOrder);
     }
 
     /**

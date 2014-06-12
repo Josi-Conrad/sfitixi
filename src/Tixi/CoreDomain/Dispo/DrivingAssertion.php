@@ -58,7 +58,7 @@ class DrivingAssertion extends CommonBaseEntity implements DrivingAssertionInter
      * @return bool
      */
     public function matchingDateTime(\DateTime $dateTime) {
-        //TODO: if necessary
+        //to be implemented if necessary
     }
 
     /**

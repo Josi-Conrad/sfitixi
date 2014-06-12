@@ -171,7 +171,7 @@ function DataGrid(outline, gridId, dblClickCallback, isEmbedded, trans) {
                 _this._paginator.refresh(_this._getTotalAmountOfRows());
             }
         }).fail(function () {
-            //ToDo Exception handling
+            //fail silently
         });
     }
 

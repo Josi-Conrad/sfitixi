@@ -36,7 +36,7 @@ class DrivingAssertionManagementImpl extends ContainerAware implements DrivingAs
         }
     }
 
-    public function handleRepeatedDrivingAssertionsForWorkingMonth(
+    protected function handleRepeatedDrivingAssertionsForWorkingMonth(
         RepeatedDrivingAssertionPlan $repeatedDrivingAssertionPlan, WorkingMonth $workingMonth) {
 
         /** @var DrivingAssertionRepository $drivingAssertionRepository */

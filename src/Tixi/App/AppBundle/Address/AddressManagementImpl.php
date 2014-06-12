@@ -41,7 +41,6 @@ class AddressManagementImpl extends ContainerAware implements AddressManagement 
         return $addressSuggestions;
     }
 
-
     /**
      * Get array of AddressHandleDTOs with size of one containing the users home address associated with the given
      * user id

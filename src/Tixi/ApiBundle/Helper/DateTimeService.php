@@ -97,6 +97,15 @@ class DateTimeService extends ContainerAware {
     }
 
     /**
+     * @param \DateTime $dateTime
+     * @return string
+     * SO-8601 numeric representation of the day of the week [1 (for Monday) through 7 (for Sunday)]
+     */
+    public static function getWeekday(\DateTime $dateTime) {
+        return $dateTime->format('N');
+    }
+
+    /**
      * @param \DateTime $utcDate
      * @return \DateTime
      */

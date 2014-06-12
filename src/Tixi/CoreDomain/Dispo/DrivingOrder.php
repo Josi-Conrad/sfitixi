@@ -95,6 +95,11 @@ class DrivingOrder extends CommonBaseEntity {
      * @ORM\Column(type="integer")
      */
     protected $additionalTime;
+    /**
+     * @ORM\ManyToOne(targetEntity="RepeatedDrivingOrderPlan", inversedBy="drivingOrders")
+     * @ORM\JoinColumn(name="repeateddrivingassertionplan_id", referencedColumnName="id")
+     */
+    protected $repeatedDrivingOrderPlan;
 
 
     protected function __construct() {
@@ -127,7 +132,11 @@ class DrivingOrder extends CommonBaseEntity {
         $this->updateModifiedDate();
     }
 
+
     public function deletePhysically() {
+        if(null !== $this->drivingMission) {
+            throw new \LogicException('please delete corresponding driving mission first');
+        }
         $this->passenger->removeDrivingOrder($this);
         if(!empty($this->correspondingReturnOrder)) {
             $this->correspondingReturnOrder->removeOutwardOrder();
@@ -136,6 +145,8 @@ class DrivingOrder extends CommonBaseEntity {
             $this->correspondingOutwardOrder->removeReturnOrder();
         }
     }
+
+
 
     public static function getStatusArray() {
         return array(
@@ -153,10 +164,26 @@ class DrivingOrder extends CommonBaseEntity {
     }
 
     /**
+     * @param RepeatedDrivingOrderPlan $repeatedDrivingOrderPlan
+     */
+    public function assignRepeatedDrivingOrderPlan(RepeatedDrivingOrderPlan $repeatedDrivingOrderPlan) {
+        $this->repeatedDrivingOrderPlan = $repeatedDrivingOrderPlan;
+    }
+
+    public function removeRepeatedDrivingOrderPlan(RepeatedDrivingOrderPlan $repeatedDrivingOrderPlan) {
+        $this->repeatedDrivingOrderPlan = null;
+    }
+
+
+    /**
      * @param DrivingMission $drivingMission
      */
     public function assignDrivingMission(DrivingMission $drivingMission) {
         $this->setDrivingMission($drivingMission);
+    }
+
+    public function removeDrivingMission() {
+        $this->drivingMission = null;
     }
 
     /**
@@ -318,7 +345,7 @@ class DrivingOrder extends CommonBaseEntity {
     }
 
     /**
-     * @return mixed
+     * @return DrivingMission | null
      */
     public function getDrivingMission() {
         return $this->drivingMission;

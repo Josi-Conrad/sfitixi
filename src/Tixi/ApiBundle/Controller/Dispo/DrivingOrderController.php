@@ -122,11 +122,11 @@ class DrivingOrderController extends Controller{
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function deleteDrivingOrderAction(Request $request, $passengerId, $drivingOrderId) {
-        /** @var DrivingOrderRepository $drivingOrderRepository */
-        $drivingOrderRepository = $this->get('drivingorder_repository');
+        /** @var DrivingOrderManagement $drivingOrderService */
+        $drivingOrderService = $this->get('tixi_app.drivingordermanagement');
+
         $drivingOrder = $this->getDrivingOrder($drivingOrderId);
-        $drivingOrder->deletePhysically();
-        $drivingOrderRepository->remove($drivingOrder);
+        $drivingOrderService->handleDeletionOfDrivingOrder($drivingOrder);
         $this->get('entity_manager')->flush();
         return $this->redirect($this->generateUrl('tixiapi_passenger_get',array('passengerId' => $passengerId)));
     }
@@ -166,12 +166,13 @@ class DrivingOrderController extends Controller{
         $assemblerSingleDrivingOrder = $this->get('tixi_api.assemblerdrivingorder');
         /** @var RepeatedDrivingOrderAssembler $assemblerRepeatedDrivingOrder */
         $assemblerRepeatedDrivingOrder = $this->get('tixi_api.assemblerrepeateddrivingorder');
-        /** @var DrivingOrderRepository $drivingOrderRepository */
-        $drivingOrderRepository = $this->get('drivingorder_repository');
         /** @var RepeatedDrivingOrderPlanRepository $repeatedDrivingOrderPlanRepository */
         $repeatedDrivingOrderPlanRepository = $this->get('repeateddrivingorderplan_repository');
         /** @var RepeatedDrivingOrderRepository $repeatedDrivingOrderRepository */
         $repeatedDrivingOrderRepository = $this->get('repeateddrivingorder_repository');
+        /** @var DrivingOrderManagement $drivingOrderService */
+        $drivingOrderService = $this->get('tixi_app.drivingordermanagement');
+
 
         if($registerDTO->isRepeated) {
             $repeatedDrivingOrderPlan = $assemblerRepeatedDrivingOrder->registerDTOtoNewDrivingOrderPlan($registerDTO, $passenger);
@@ -183,15 +184,18 @@ class DrivingOrderController extends Controller{
             }
             $repeatedDrivingOrderPlan->replaceRepeatedDrivingOrders($repeatedOrders);
             $repeatedDrivingOrderPlanRepository->store($repeatedDrivingOrderPlan);
+            $drivingOrderService->handleNewRepeatedDrivingOrder($repeatedDrivingOrderPlan);
         }else {
             $drivingOrders = $assemblerSingleDrivingOrder->registerDtoToNewDrivingOrders($registerDTO, $passenger);
             foreach($drivingOrders as $drivingOrder) {
-                $drivingOrderRepository->store($drivingOrder);
+                $drivingOrderService->handleNewDrivingOrder($drivingOrder);
             }
         }
-
     }
 
+    /**
+     * @return array
+     */
     protected function constructServiceUrls() {
         $serviceUrls = [];
         $serviceUrls['routingMachine'] = $this->generateUrl('tixiapp_service_routing');
@@ -216,6 +220,11 @@ class DrivingOrderController extends Controller{
         return $passenger;
     }
 
+    /**
+     * @param $drivingOrderId
+     * @return mixed
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     */
     protected function getDrivingOrder($drivingOrderId) {
         /** @var DrivingOrderRepository $drivingOrderRepository */
         $drivingOrderRepository = $this->get('drivingorder_repository');

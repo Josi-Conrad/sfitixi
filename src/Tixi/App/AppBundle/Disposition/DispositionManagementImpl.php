@@ -61,7 +61,7 @@ class DispositionManagementImpl extends ContainerAware implements DispositionMan
 
     /**
      * @param Shift $shift
-     * @return DrivingMission[]
+     * @return array|\Tixi\CoreDomain\Dispo\DrivingMission[]
      */
     public function getDrivingMissionsInShift(Shift $shift) {
         $timeService = $this->container->get('tixi_api.datetimeservice');
@@ -104,7 +104,7 @@ class DispositionManagementImpl extends ContainerAware implements DispositionMan
 
     /**
      * @param \DateTime $day
-     * @return array
+     * @return array|\Tixi\CoreDomain\Vehicle[]
      */
     public function getAvailableVehiclesForDay(\DateTime $day) {
         $timeService = $this->container->get('tixi_api.datetimeservice');
@@ -137,6 +137,7 @@ class DispositionManagementImpl extends ContainerAware implements DispositionMan
      * @param Shift $shift
      * @param $oldAmount
      * @param $newAmount
+     * @return mixed|void
      * @throws \LogicException
      */
     public function processChangeInAmountOfDriversPerShift(Shift $shift, $oldAmount, $newAmount) {
@@ -179,6 +180,11 @@ class DispositionManagementImpl extends ContainerAware implements DispositionMan
         $shift->setAmountOfDrivers($newAmount);
     }
 
+    /**
+     * @param $year
+     * @param $month
+     * @return array|null|WorkingMonth
+     */
     public function openWorkingMonth($year, $month) {
         /** @var WorkingMonthRepository $workingMonthRepository */
         $workingMonthRepository = $this->container->get('workingmonth_repository');
