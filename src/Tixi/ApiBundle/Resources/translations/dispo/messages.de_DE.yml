@@ -97,7 +97,7 @@ fourthweek.name: 4. Woche
 lastweek.name: 5. Woche
 
 #DrivingOrder
-drivingorder.panel.embedded: Nächsten Aufträge
+drivingorder.panel.embedded: Fahraufträge
 drivingorder.button.new: Neuer Fahrauftrag
 drivingorder.button.delete: Fahrauftrag löschen
 drivingorder.panel.new: Neuer Fahrauftrag für
@@ -131,7 +131,7 @@ drivingorder.form.returnError: Bitte Rückfahrtzeit angeben
 repeateddrivingorder.panel.embedded: Wiederkehrende Fahraufträge
 repeateddrivingorder.panel.edit: Dauerauftrag editieren
 repeateddrivingorder.button.delete: Dauerauftrag löschen
-repeateddrivingorder.field.anchordate: AB
+repeateddrivingorder.field.anchordate: Ab
 repeateddrivingorder.field.endDate: Bis
 repeateddrivingorder.field.withHolidays: inklusive Feiertage
 repeateddrivingorder.field.subject: Betreff
