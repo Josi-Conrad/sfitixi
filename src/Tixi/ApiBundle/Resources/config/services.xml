@@ -156,6 +156,9 @@
             <call method="setZonePlaneManagement">
                 <argument type="service" id="tixi_app.zoneplanmanagement" />
             </call>
+            <call method="setDateTimeService">
+                <argument type="service" id="tixi_api.datetimeservice" />
+            </call>
         </service>
         <service id="tixi_api.assemblerRepeatedDrivingOrder" class="%tixi_api.repeateddrivingorderassembler.class%">
             <call method="setAddressAssembler">
