@@ -65,11 +65,11 @@ function AddressLookahead() {
         _this._saveManualAddLink = _saveManualAddLink;
         _this._inputField = _inputField;
         _this._editManuallyLink = _editManuallyLink;
-    }
+    };
 
     this._initDataSrcUrl = function() {
         _this._dataUrl = $(_this._wrapper).data('datasrc');
-    }
+    };
 
     this._initListeners = function() {
         $(_this._inputField).on('keydown', function(event) {
@@ -80,7 +80,7 @@ function AddressLookahead() {
         $(_this._cancelManualAddLink).on('click', _this._onCancelManualAddClicked);
         $(_this._saveManualAddLink).on('click', _this._onSaveManualAddClicked);
         $(_this._editManuallyLink).on('click', _this._onEditManuallyClicked);
-    }
+    };
 
     this._initPassengerHomeAddressLink = function(passengerId) {
         var _passengerId = (undefined !== passengerId) ? passengerId : null,
@@ -92,7 +92,7 @@ function AddressLookahead() {
             });
             $(_userHomeLink).show();
         }
-    }
+    };
 
     this._initGoogleMapWrapper = function(mapCanvasId) {
         var _wrapper =  new GoogleMapWrapper(),
@@ -100,17 +100,17 @@ function AddressLookahead() {
             _googleMapCanvas = $(_googleMapCanvasWrapper).find('.googleMapCanvas').get(0);
         _wrapper.init(_googleMapCanvasWrapper, _googleMapCanvas);
         _this._googleMapWrapper = _wrapper;
-    }
+    };
 
     this._initSelectedAddress = function() {
         if(_this._getAddressFieldValue('id') !== '') {
             _this._setSelectedAddress(_this._createAddressFromAddressContainerValues());
         }
-    }
+    };
 
     this.getAddress = function() {
         return _this._selectedAddress;
-    }
+    };
 
     this.getAddressCity = function() {
         var _city = null;
@@ -118,11 +118,11 @@ function AddressLookahead() {
             _city = _this._getAddressFieldValue('city');
         }
         return _city;
-    }
+    };
 
 
     this._switchToManualAddState = function(edit) {
-        var _edit = (undefined === edit) ? false : true;
+        var _edit = (undefined !== edit);
         if(!_edit) {
             _this._resetAddressContainer();
             _this._resetInputField();
@@ -136,22 +136,22 @@ function AddressLookahead() {
             _this._googleMapWrapper.displayGeocodeEditableCanvas(_this._onGoogleMapMarkerDrop);
         }
         _this._state = _this.MANUALADDSTATE;
-    }
+    };
 
     this._switchToLookaheadState = function() {
         $(_this._addressContainerWrapper).hide();
         $(_this._lookaheadWrapper).show();
         _this._state = _this.LOOKAHEADSTATE;
-    }
+    };
 
     this._showAddressSelections = function() {
         $(_this._editManuallyLink).hide();
         $(_this._addressSelectionsWrapper).show();
-    }
+    };
 
     this._hideAddressSelections = function() {
         $(_this._addressSelectionsWrapper).hide();
-    }
+    };
 
     this._updateAddressSelections = function() {
         var _model,
@@ -172,7 +172,7 @@ function AddressLookahead() {
         }else {
             _this._hideAddressSelections();
         }
-    }
+    };
 
     this._updateAddressWithUserHomeAddress = function(passengerId) {
         var _model;
@@ -182,23 +182,23 @@ function AddressLookahead() {
                 _this._onAddressSelectionClick(_model);
             }
         }).fail(function() {
-            //ToDo Exception handling
+            //fail silently
         });
-    }
+    };
 
     this._constructParamsForSearch = function() {
         var _jsonToReturn = {};
         _jsonToReturn['requeststate'] = _this.SEARCHREQUESTSTATE;
         _jsonToReturn['searchstr'] = $(_this._inputField).val();
         return _jsonToReturn;
-    }
+    };
 
     this._constructParamsForUserHomeAddress = function(passengerId) {
         var _jsonToReturn = {};
         _jsonToReturn['requeststate'] = _this.USERADDRESSREQUESTSTATE;
         _jsonToReturn['passengerid'] = passengerId;
         return _jsonToReturn;
-    }
+    };
 
     this._pollDataFromSource = function (params) {
         return $.ajax({
@@ -206,13 +206,13 @@ function AddressLookahead() {
             url: _this._dataUrl + '?' + $.param(params, true),
             dataType: 'json'
         });
-    }
+    };
 
     this._updateAddressContainer = function(model) {
         for(var _field in model.fields) {
             _this._setAddressFieldValue(_field, model.fields[_field]);
         }
-    }
+    };
 
     this._resetAddressContainer = function() {
         var _dummyAddress = new Address();
@@ -220,7 +220,7 @@ function AddressLookahead() {
         for(var _field in _dummyAddress.fields) {
             _this._setAddressFieldValue(_field, '');
         }
-    }
+    };
 
     this._resetInputField = function() {
         $(_this._inputField).val('');
@@ -235,7 +235,7 @@ function AddressLookahead() {
             _this._onSelectionDisplayMouseOver(model);
         })
         return _selectionDisplay;
-    }
+    };
 
     this._constructAddManuallyLink = function() {
         var _selection = $('<li style="padding-top: 12px"></li>'),
@@ -245,7 +245,7 @@ function AddressLookahead() {
         });
         _selection.append(_link);
         return _selection;
-    }
+    };
 
     this._createAddressFromAddressContainerValues = function() {
         var _dummyAddress = new Address(),
@@ -256,46 +256,46 @@ function AddressLookahead() {
         }
         _address['displayName'] = $(_this._inputField).val();
         return new Address(_address, 0);
-    }
+    };
 
     this._fillLatLng = function(lat, lng) {
         _this._setAddressFieldValue('lat', lat);
         _this._setAddressFieldValue('lng', lng);
-    }
+    };
 
     this._setAddressFieldValue = function(fieldName, value) {
         $(_this._addressContainer).find('[id*='+fieldName+']').val(value);
-    }
+    };
 
     this._getAddressFieldValue = function(fieldName) {
         return $(_this._addressContainer).find('[id*='+fieldName+']').val();
-    }
+    };
 
     this._setSelectedAddress = function(model) {
         _this._selectedAddress = model;
         $('body').trigger('addressChanged',[_this]);
-    }
+    };
 
     this._onAddressSelectionClick = function(model) {
         $(_this._inputField).val(model.getDisplayName());
         _this._updateAddressContainer(model);
         _this._setSelectedAddress(model);
         _this._hideAddressSelections();
-    }
+    };
 
     this._onUserHomeLinkClick = function(passengerId) {
         _this._updateAddressWithUserHomeAddress(passengerId);
-    }
+    };
 
     this._onEditManuallyClicked = function(event) {
         event.preventDefault();
         _this._switchToManualAddState(true);
-    }
+    };
 
     this._onAddManuallyClicked = function(event) {
         event.preventDefault();
         _this._switchToManualAddState();
-    }
+    };
 
     this._onCancelManualAddClicked = function(event) {
         event.preventDefault();
@@ -304,7 +304,7 @@ function AddressLookahead() {
         }
         _this._googleMapWrapper.hideCanvas();
         _this._switchToLookaheadState();
-    }
+    };
 
     this._onSaveManualAddClicked = function(event) {
         event.preventDefault();
@@ -312,7 +312,7 @@ function AddressLookahead() {
         $(_this._inputField).val(_this._selectedAddress.getDisplayName());
         _this._googleMapWrapper.hideCanvas();
         _this._switchToLookaheadState();
-    }
+    };
 
     this._onInputKeyDown = function(event) {
         //do not trigger on tab key
@@ -325,7 +325,7 @@ function AddressLookahead() {
                 _this._updateAddressSelections();
             },300);
         }
-    }
+    };
 
     this._onInputIn = function() {
         if(_this._selectedAddress) {
@@ -333,7 +333,7 @@ function AddressLookahead() {
                 _this._selectedAddress.fields.lat, _this._selectedAddress.fields.lng, true);
             $(_this._editManuallyLink).show();
         }
-    }
+    };
 
     this._onInputOut = function() {
         setTimeout(function() {
@@ -347,19 +347,19 @@ function AddressLookahead() {
             $(_this._editManuallyLink).hide();
         },100);
         _this._googleMapWrapper.hideCanvas();
-    }
+    };
 
     this._onSelectionDisplayMouseOver = function(model) {
         _this._googleMapWrapper.displayAddress(model.fields.lat, model.fields.lng);
-    }
+    };
 
     this._onGoogleMapMarkerDrop = function(lat, lng) {
         _this._fillLatLng(lat, lng);
-    }
+    };
 
     this._resetLookahead = function() {
         $(_this._addressSelectionsContainer).empty();
-    }
+    };
 }
 
 function Address(address, index) {
@@ -380,18 +380,16 @@ function Address(address, index) {
 
     _this.getDisplayName = function() {
         return _this.fields.displayName ? _this.fields.displayName :  _this._constructAlternativeDisplayName();
-    }
+    };
 
     _this.getCoordinates = function() {
         var _jsonToReturn = {};
         _jsonToReturn['lat'] = _this.fields.lat;
         _jsonToReturn['lng'] = _this.fields.lng;
         return _jsonToReturn;
-    }
+    };
 
     _this._constructAlternativeDisplayName = function() {
         return _this.fields.street+', '+_this.fields.postalCode+' '+_this.fields.city+', '+_this.fields.country;
-    }
-
-
+    };
 }

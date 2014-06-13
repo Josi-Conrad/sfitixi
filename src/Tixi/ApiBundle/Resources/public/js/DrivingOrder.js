@@ -56,7 +56,7 @@ function DrivingOrder() {
         if(isEdit) {
             _this._onAddressChanged();
         }
-    }
+    };
 
     this._initLookaheadAddresses = function(lookaheadFromId, lookaheadToId) {
         var _lookaheadFrom = new AddressLookahead(),
@@ -65,7 +65,7 @@ function DrivingOrder() {
         _lookaheadTo.init('lookahead_'+lookaheadToId, _this._passengerId);
         _this._lookaheadAddressFrom = _lookaheadFrom;
         _this._lookaheadAddressTo = _lookaheadTo;
-    }
+    };
 
     this._initElements = function() {
         var _wrapper = $('.drivingOrderWrapper'),
@@ -97,7 +97,7 @@ function DrivingOrder() {
         _this._zoneStatusField = _zoneStatusField;
         _this._zoneIdField = _zoneIdField;
         _this._zoneNameField = _zoneNameField;
-    }
+    };
 
     this._initRideCheck = function() {
         _this._rideTimes.push(new RideTime($(_this._singleTimeWrapper).find('.outwardTimeWrapper').first(), _this._rideOutwardDirection, false, _this));
@@ -108,14 +108,14 @@ function DrivingOrder() {
         $(_this._repeatedTimeWrapper).find('.returnTimeWrapper').each(function() {
             _this._rideTimes.push(new RideTime(this, _this._rideReturnDirection, true, _this));
         });
-    }
+    };
 
     this._initListeners = function() {
         $(_this._isRepeatedCheckbox).on('change', _this._toggleState);
         $('body').on('addressChanged', _this._onAddressChanged);
         $(_this._dateFromField).on('change', _this._onDateFieldChanged);
         $(_this._dateToField).on('change', _this._onDateFieldChanged);
-    }
+    };
 
     this._toggleState = function() {
         if($(_this._isRepeatedCheckbox).prop('checked')) {
@@ -123,7 +123,7 @@ function DrivingOrder() {
         }else {
             _this._switchToSingleState();
         }
-    }
+    };
 
     this._switchToSingleState = function() {
         $(_this._repeatedEndDateWrapper).hide();
@@ -131,8 +131,7 @@ function DrivingOrder() {
         $(_this._repeatedWithHolidaysWrapper).hide();
         $(_this._singleTimeWrapper).show();
         $(_this._dateFromLabel).text(_this._trans.dateFromLabelSingleText);
-
-    }
+    };
 
     this._switchToRepeatedState = function() {
         $(_this._singleTimeWrapper).hide();
@@ -140,7 +139,7 @@ function DrivingOrder() {
         $(_this._repeatedTimeWrapper).show();
         $(_this._repeatedWithHolidaysWrapper).show();
         $(_this._dateFromLabel).text(_this._trans.dateFromLabelRepeatedText);
-    }
+    };
 
     this._onAddressChanged = function() {
         var _addressFrom = _this._lookaheadAddressFrom.getAddress(),
@@ -155,28 +154,28 @@ function DrivingOrder() {
             _this._resetZoneInformation();
         }
         _this._resetRideCheckInformations();
-    }
+    };
 
     this._onDateFieldChanged =function() {
         _this._resetRideCheckInformations();
-    }
+    };
 
     this._updateRouteInformation = function(addressFrom, addressTo) {
         var _route = new Route(addressFrom, addressTo);
         _route.updateRoutingInformation(_this._routingMachineSrcUrl, _this._routeInformationUpdated)
         _this._route = _route;
-    }
+    };
 
     this._routeInformationUpdated = function(route) {
         $(_this._rideTimeOutwardWrapper).html(_this._trans['drivingDuration']+': '+route.getOutwardDurationAsString());
         $(_this._rideTimeReturnWrapper).html(_this._trans['drivingDuration']+': '+route.getReturnDurationAsString());
-    }
+    };
 
     this._resetRouteInformation = function() {
         _this._route = null;
         $(_this._rideTimeOutwardWrapper).html('');
         $(_this._rideTimeReturnWrapper).html('');
-    }
+    };
 
     this._updateZoneInformation = function(cityFrom, cityTo) {
         var _zoneManager = new ZoneManager();
@@ -187,23 +186,23 @@ function DrivingOrder() {
         if(zone && zone.getStatus() != -1) {
             $(_this._zoneNameField).val(zone.getName());
         }
-    }
+    };
 
     this._resetZoneInformation = function() {
         $(_this._zoneNameField).val('');
-    }
+    };
 
     this.getRideSingleSrcUrl = function() {
         return _this._rideCheckSingleSrcUrl;
-    }
+    };
 
     this.getRideRepeatedSrcUrl = function() {
         return _this._rideCheckRepeatedSrcUrl;
-    }
+    };
 
     this.isRideCheckPossible = function(timeInput) {
         return (_this._route !== null && timeInput !== '' && $(_this._dateFromField).val() !== '');
-    }
+    };
 
     this.createRideSingleCheckParams = function(timeInput, direction) {
         var _params = {},
@@ -215,7 +214,7 @@ function DrivingOrder() {
             _params['duration'] = _duration;
         }
         return _params;
-    }
+    };
 
     this.createRideRepeatedCheckParams = function(timeInput, direction, weekday) {
         var _params = {},
@@ -229,13 +228,13 @@ function DrivingOrder() {
             _params['weekday'] = weekday;
         }
         return _params;
-    }
+    };
 
     this._resetRideCheckInformations = function() {
         _this._rideTimes.forEach(function(rideTime) {
             rideTime.reset();
-        })
-    }
+        });
+    };
 }
 
 function RideTime(elementWrapper, direction, isRepeated, orderController) {
@@ -261,15 +260,15 @@ function RideTime(elementWrapper, direction, isRepeated, orderController) {
         _this._weekday = $(_this._inputField).data('weekday');
         _this._feedbackWrapper = $(elementWrapper).find('span');
         _this._initListeners();
-    }
+    };
 
     this.reset = function() {
         _this._resetFeasableState();
-    }
+    };
 
     this._initListeners = function() {
         $(_this._inputField).on('focusout', _this._onInputChange);
-    }
+    };
 
     this._onInputChange = function() {
         if(orderController.isRideCheckPossible($(_this._inputField).val())) {
@@ -295,9 +294,7 @@ function RideTime(elementWrapper, direction, isRepeated, orderController) {
                 });
             }
         }
-
-
-    }
+    };
 
     this._pollFeasabilityInformationForSingleCheck = function() {
         var _src = _this._orderController.getRideSingleSrcUrl(),
@@ -308,7 +305,7 @@ function RideTime(elementWrapper, direction, isRepeated, orderController) {
             url: _src + '?' + $.param(_params, true),
             dataType: 'json'
         });
-    }
+    };
 
     this._pollFeasabilityInformationForRepeatedCheck = function() {
         var _src = _this._orderController.getRideRepeatedSrcUrl(),
@@ -319,24 +316,24 @@ function RideTime(elementWrapper, direction, isRepeated, orderController) {
             url: _src + '?' + $.param(_params, true),
             dataType: 'json'
         });
-    }
+    };
 
     this._setFeasableState = function(){
         _this._resetFeasableState();
         $(_this._feedbackWrapper).addClass('glyphicon-ok');
         $(_this._formGroupWrapper).addClass('has-success');
-    }
+    };
 
     this._setUnfeasableState = function() {
         _this._resetFeasableState();
         $(_this._feedbackWrapper).addClass('glyphicon-remove');
         $(_this._formGroupWrapper).addClass('has-error');
-    }
+    };
 
     this._resetFeasableState = function() {
         $(_this._formGroupWrapper).removeClass('has-success has-error');
         $(_this._feedbackWrapper).removeClass('glyphicon-ok glyphicon-remove');
-    }
+    };
 
 
     _this._init();
@@ -355,7 +352,7 @@ function Route(from, to) {
     this._init = function(from, to) {
         _this._from = from;
         _this._to = to;
-    }
+    };
 
     this.updateRoutingInformation = function(srcUrl, callback) {
         _this._pollRoutingInformation(srcUrl, _this._constructParams()).done(function(data) {
@@ -366,8 +363,8 @@ function Route(from, to) {
             callback(_this);
         }).fail(function() {
             //fail silently
-        })
-    }
+        });
+    };
 
     this._constructParams = function() {
         var _jsonToReturn = {},
@@ -378,13 +375,13 @@ function Route(from, to) {
         _jsonToReturn['latTo'] = _toLatLng.lat;
         _jsonToReturn['lngTo'] = _toLatLng.lng;
         return _jsonToReturn;
-    }
+    };
 
     if(undefined === from || undefined === to) {
         return null;
     }else {
         _this._init(from, to);
-    }
+    };
 
     this._pollRoutingInformation = function(srcUrl, params) {
         return $.ajax({
@@ -392,27 +389,27 @@ function Route(from, to) {
             url: srcUrl + '?' + $.param(params, true),
             dataType: 'json'
         });
-    }
+    };
 
     this.getOutwardDurationAsString = function() {
         return _this._convertSecToMin(_this._durationOutward)+' min';
-    }
+    };
 
     this.getOutwardDuration = function() {
         return _this._durationOutward;
-    }
+    };
 
     this.getReturnDurationAsString = function() {
         return _this._convertSecToMin(_this._durationReturn)+' min';
-    }
+    };
 
     this.getReturnDuration = function() {
         return _this._durationReturn;
-    }
+    };
 
     this._convertSecToMin = function(sec) {
         return Math.ceil(sec/60);
-    }
+    };
 
 }
 
@@ -425,12 +422,11 @@ function ZoneManager() {
         }).fail(function() {
             callback(null);
         });
-    }
+    };
 
     this._createParam = function(cityFrom, cityTo) {
         return {'cities':[cityFrom, cityTo]};
-
-    }
+    };
 
     this._pollZoneInformation = function(srcUrl, params) {
         return $.ajax({
@@ -438,7 +434,7 @@ function ZoneManager() {
             url: srcUrl + '?' + $.param(params, false),
             dataType: 'json'
         });
-    }
+    };
 
 }
 
@@ -460,23 +456,23 @@ function Zone(zoneTransferJson) {
                 _this._id = zoneTransferJson.zoneid;
             }
         }
-    }
+    };
 
     this.getStatus = function() {
         return _this._status;
-    }
+    };
 
     this.getId = function() {
         return _this._id;
-    }
+    };
 
     this.getName = function() {
         return _this._name;
-    }
+    };
 
     this.getPriority = function() {
         return _this._priority;
-    }
+    };
 
     _this._init(zoneTransferJson);
 

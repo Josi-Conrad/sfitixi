@@ -99,9 +99,11 @@ class DataGrid {
             $dataGridFieldAnnotation = $this->reader->getPropertyAnnotation($reflProperty, $this->fieldAnnotationClass);
             if(null !== $dataGridFieldAnnotation) {
                 if(!empty($dataGridFieldAnnotation->headerName)) {
+                    $isComputed = $dataGridFieldAnnotation->isComputed;
                     $rowId = $dataGridFieldAnnotation->propertyId;
                     if(null === $rowId) {throw new \Exception('no propertyId found on field '.$reflProperty->getName());}
-                    $headers[] = new DataGridHeader($rowId, $dataGridFieldAnnotation->headerName, $dataGridFieldAnnotation->order);
+                    $headers[] = new DataGridHeader($rowId, $dataGridFieldAnnotation->headerName,
+                        $dataGridFieldAnnotation->order, $isComputed);
                 }
             }
         }
