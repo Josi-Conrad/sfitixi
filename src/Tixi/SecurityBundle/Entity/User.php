@@ -282,7 +282,7 @@ class User extends CommonBaseEntity implements AdvancedUserInterface, \Serializa
      * the plain-text password is stored on this object.
      */
     public function eraseCredentials() {
-        $this->setPassword(null);
+        //unnecessary
     }
 
     /**

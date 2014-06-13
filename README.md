@@ -18,7 +18,7 @@ PHP Version 5.5
 
 MySQL Version 5.6
 
-Doctrine 2.4
+Doctrine 2.4 (or latest)
 
 Additional libraries installed
 http://wkhtmltopdf.org/
