@@ -10,6 +10,7 @@ namespace Tixi\ApiBundle\Interfaces\Dispo;
 
 use Tixi\ApiBundle\Form\Dispo\DrivingOrderOutwardTimeException;
 use Tixi\ApiBundle\Form\Dispo\DrivingOrderReturnTimeException;
+use Tixi\ApiBundle\Helper\DateTimeService;
 use Tixi\ApiBundle\Interfaces\AddressAssembler;
 use Tixi\App\Routing\RouteManagement;
 use Tixi\App\ZonePlan\ZonePlanManagement;
@@ -33,6 +34,8 @@ class DrivingOrderAssembler {
     protected $routeManagement;
     /** @var  ZonePlanManagement $zonePlanManagement */
     protected $zonePlanManagement;
+    /** @var $dateTimeService DateTimeService */
+    protected $dateTimeService;
 
     /**
      * @param DrivingOrderRegisterDTO $registerDTO
@@ -122,8 +125,8 @@ class DrivingOrderAssembler {
     public function drivingOrderToEditDto(DrivingOrder $drivingOrder) {
         $dto = new DrivingOrderEditDTO();
         $dto->id = $drivingOrder->getId();
-        $dto->pickupDate = $drivingOrder->getPickUpDate()->format('d.m.Y');
-        $dto->pickupTime = $drivingOrder->getPickUpTime()->format('H:i');
+        $dto->pickupDate = $this->dateTimeService->convertToLocalDateTime($drivingOrder->getPickUpDate())->format('d.m.Y');
+        $dto->pickupTime = $this->dateTimeService->convertToLocalDateTime($drivingOrder->getPickUpTime())->format('H:i');
         $dto->lookaheadaddressFrom = $drivingOrder->getRoute()->getStartAddress()->toString();
         $dto->lookaheadaddressTo = $drivingOrder->getRoute()->getTargetAddress()->toString();
         $dto->zoneName = $drivingOrder->getZone()->getName();
@@ -154,8 +157,8 @@ class DrivingOrderAssembler {
         $listDTO = new DrivingOrderEmbeddedListDTO();
         $listDTO->id = $drivingOrder->getId();
         $listDTO->passengerId = $drivingOrder->getPassenger()->getId();
-        $listDTO->pickupDate = $drivingOrder->getPickUpDate()->format('d.m.Y');
-        $listDTO->pickupTime = $drivingOrder->getPickUpTime()->format('H:i');
+        $listDTO->pickupDate = $this->dateTimeService->convertToLocalDateTime($drivingOrder->getPickUpDate())->format('d.m.Y');
+        $listDTO->pickupTime = $this->dateTimeService->convertToLocalDateTime($drivingOrder->getPickUpTime())->format('H:i');
         $listDTO->addressFromString = $drivingOrder->getRoute()->getStartAddress()->toString();
         $listDTO->addressToString = $drivingOrder->getRoute()->getTargetAddress()->toString();
         return $listDTO;
@@ -180,5 +183,12 @@ class DrivingOrderAssembler {
      */
     public function setZonePlaneManagement(ZonePlanManagement $zonePlanManagement) {
         $this->zonePlanManagement = $zonePlanManagement;
+    }
+
+    /**
+     * @param $dateTimeService
+     */
+    public function setDateTimeService(DateTimeService $dateTimeService) {
+        $this->dateTimeService = $dateTimeService;
     }
 }
