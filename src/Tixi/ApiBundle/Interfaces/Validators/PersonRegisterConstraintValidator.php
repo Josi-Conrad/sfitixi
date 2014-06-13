@@ -23,8 +23,6 @@ class PersonRegisterConstraintValidator extends ConstraintValidator {
      *
      * @param PersonRegisterDTO $dto
      * @param Constraint $constraint The constraint for the validation
-     *
-     * @api
      */
     public function validate($dto, Constraint $constraint) {
         if ($dto->birthday !== null) {

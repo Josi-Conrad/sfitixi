@@ -23,8 +23,6 @@ class ShiftTypeRegisterConstraintValidator extends ConstraintValidator {
      *
      * @param ShiftTypeRegisterDTO $dto
      * @param Constraint $constraint The constraint for the validation
-     *
-     * @api
      */
     public function validate($dto, Constraint $constraint) {
         if ($dto->start !== null && $dto->end !== null) {

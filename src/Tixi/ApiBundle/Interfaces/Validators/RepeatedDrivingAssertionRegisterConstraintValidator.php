@@ -23,8 +23,6 @@ class RepeatedDrivingAssertionRegisterConstraintValidator extends ConstraintVali
      *
      * @param RepeatedDrivingAssertionRegisterDTO $dto
      * @param Constraint $constraint The constraint for the validation
-     *
-     * @api
      */
     public function validate($dto, Constraint $constraint) {
         if ($dto->anchorDate !== null && $dto->endDate !== null) {

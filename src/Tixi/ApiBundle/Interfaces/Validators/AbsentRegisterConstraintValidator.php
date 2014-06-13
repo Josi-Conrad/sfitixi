@@ -23,8 +23,6 @@ class AbsentRegisterConstraintValidator extends ConstraintValidator {
      *
      * @param AbsentRegisterDTO $dto
      * @param Constraint $constraint The constraint for the validation
-     *
-     * @api
      */
     public function validate($dto, Constraint $constraint) {
         if ($dto->startDate !== null && $dto->endDate !== null) {
