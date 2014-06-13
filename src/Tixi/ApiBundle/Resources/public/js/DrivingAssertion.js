@@ -19,7 +19,7 @@ function RepeatedDrivingAssertion() {
         _this._monthlyAssertionController.init('monthlyShiftSelections', trans, formId);
         _this._initListeners();
         if(frequency) {_this._toggleFrequency(frequency);}
-    }
+    };
 
     this._initListeners = function() {
         $('.repeatedDrivingAssertionFrequencyControl').on('change', function() {
@@ -27,13 +27,13 @@ function RepeatedDrivingAssertion() {
         });
         _this._initWeeklyListeners();
         _this._initMonthlyListeners();
-    }
+    };
 
     this._initWeeklyListeners = function() {
         $('.weeklyDaySelection input').on('change', function() {
             _this._weeklyAssertionController.onSelectorChange(this, 'day');
         });
-    }
+    };
 
     this._initMonthlyListeners = function() {
         $('#'+_this._formId+'_monthlyFirstWeeklySelector input').on('change', function() {
@@ -51,7 +51,7 @@ function RepeatedDrivingAssertion() {
         $('#'+_this._formId+'_monthlyLastWeeklySelector input').on('change', function() {
             _this._monthlyAssertionController.onSelectorChange(this, 'last');
         });
-    }
+    };
 
     this._toggleFrequency = function(frequency) {
         if(frequency === 'weekly') {
@@ -61,7 +61,7 @@ function RepeatedDrivingAssertion() {
             _this._weeklyView.hide();
             _this._monthlyView.show();
         }
-    }
+    };
 
 }
 
@@ -84,7 +84,7 @@ function ShiftSelectionController() {
         _this._shiftSelectionIndex = _this._shiftSelectionHolder.find('li').length;
         _this._shiftSelections = new Array();
         _this._initExistingShiftSelections();
-    }
+    };
 
     this._initExistingShiftSelections = function() {
         _this._shiftSelectionHolder.find('li').each(function() {
@@ -97,7 +97,7 @@ function ShiftSelectionController() {
             $(this).find('label').first().html(_labelText);
             _this._shiftSelections.push(new ShiftSelection(_selectionId, this));
         })
-    }
+    };
 
     this.onSelectorChange = function(element, sourceOccruency) {
         var _selectionText = _this._constructSelectionText(sourceOccruency, $(element).val());
@@ -106,7 +106,7 @@ function ShiftSelectionController() {
         }else {
             _this._deleteShiftSelection(sourceOccruency, $(element).val());
         }
-    }
+    };
 
     this._deleteShiftSelection = function(selectedOccurency, selectedDay) {
         var _selectionId = _this._constructSelectionId(selectedOccurency, selectedDay);
@@ -119,8 +119,7 @@ function ShiftSelectionController() {
                 return false;
             }
         });
-
-    }
+    };
 
     this._addShiftSelection = function(selectedOccurency, selectedDay, selectionText) {
         var _prototype = _this._shiftSelectionHolder.data('prototype'),
@@ -131,11 +130,11 @@ function ShiftSelectionController() {
         _this._shiftSelectionHolder.append(_selectionDomElement);
         $('#'+_this._formId+'_'+_this._selectionIdentifier+'_'+_index+'_selectionId').val(_this._constructSelectionId(selectedOccurency,selectedDay));
         _this._shiftSelections.push(new ShiftSelection(_this._constructSelectionId(selectedOccurency, selectedDay), _selectionDomElement));
-    }
+    };
 
     this._constructSelectionId = function(selectedOccurency, selectedDay) {
         return selectedOccurency+'_'+selectedDay;
-    }
+    };
 
     this._deconstructSelectionId = function(selectionId) {
         var _exploded = selectionId.split('_');
@@ -143,7 +142,7 @@ function ShiftSelectionController() {
             'selectedOccurency':_exploded[0],
             'selectedDay': _exploded[1]
         }
-    }
+    };
 
     this._constructSelectionText = function(selectedOccurency, selectedDay) {
         var _labelText;
@@ -161,7 +160,7 @@ function ShiftSelectionController() {
             _labelText = _this._trans[selectedDay]+'<br/> ('+_this._trans['lastweek.name']+')';
         }
         return _labelText;
-    }
+    };
 }
 
 function ShiftSelection(selectionId, domElement) {
@@ -171,9 +170,9 @@ function ShiftSelection(selectionId, domElement) {
 
     this.isElement = function(selectionIdentifier) {
         return _this._selectionId === selectionIdentifier;
-    }
+    };
 
     this.removeElement = function() {
         _this._domElement.remove();
-    }
+    };
 }

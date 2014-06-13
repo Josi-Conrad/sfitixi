@@ -7,7 +7,6 @@ function DataGridManager() {
     if (this == global) {
         return new DataGridManager(arguments);
     }
-
     var _this = this,
         _dataGridClass = '.dataGrid',
         _dataGridIdDataAttribut = 'data-gridid',
@@ -15,7 +14,6 @@ function DataGridManager() {
         _callback,
         _isEmbedded,
         _trans;
-
 
     this._dataGrids = [];
 
@@ -31,7 +29,7 @@ function DataGridManager() {
                 _this._dataGrids.push(new DataGrid(outline, _gridId, _callback, _isEmbedded, _trans));
             }
         });
-    }
+    };
 }
 
 function DataGrid(outline, gridId, dblClickCallback, isEmbedded, trans) {
@@ -73,7 +71,7 @@ function DataGrid(outline, gridId, dblClickCallback, isEmbedded, trans) {
         } else {
             _this._paginator.refresh(_this._getTotalAmountOfRows());
         }
-    }
+    };
 
     this._initHeaders = function () {
         _this._headers = [];
@@ -83,17 +81,17 @@ function DataGrid(outline, gridId, dblClickCallback, isEmbedded, trans) {
                 _isComputed = $(_header).data('iscomputed');
             _this._headers.push(new DataGridHeader(headerWrapper,_fieldId, _this._onHeaderClick,_isComputed));
         });
-    }
+    };
 
     this._initDataSrcUrl = function () {
         _this._dataSrcUrl = _this._outline.find('.tableWrapper table').attr('data-srcurl');
-    }
+    };
 
     this._initControls = function () {
         _this._initFilterControl();
         _this._initPaginationControl();
         _this._initCustomControls();
-    }
+    };
 
     this._initFilterControl = function () {
         var _filterControlOutline = _this._outline.find('.filterControl'),
@@ -116,12 +114,12 @@ function DataGrid(outline, gridId, dblClickCallback, isEmbedded, trans) {
         _filterCommitButton.on('click', function () {
             _this._onFilterControlActivation(_filterTextInput.val());
         });
-    }
+    };
 
     this._initPaginationControl = function () {
         _this._paginator = new DataGridPaginator();
         _this._paginator.init(_this._outline, _defaultLimit, _this._onPaginationActivity);
-    }
+    };
 
     this._initCustomControlsWithSelection = function () {
         var _url,
@@ -144,7 +142,7 @@ function DataGrid(outline, gridId, dblClickCallback, isEmbedded, trans) {
                 }
             });
         });
-    }
+    };
 
     this._initCustomControls = function () {
         var _url;
@@ -155,7 +153,7 @@ function DataGrid(outline, gridId, dblClickCallback, isEmbedded, trans) {
                 window.location = _url;
             });
         });
-    }
+    };
 
     this._updateData = function (resetPagination) {
         _this._pollDataFromSource(_this._constructDataParams()).done(function (data) {
@@ -173,15 +171,15 @@ function DataGrid(outline, gridId, dblClickCallback, isEmbedded, trans) {
         }).fail(function () {
             //fail silently
         });
-    }
+    };
 
     this._getTableBody = function () {
         return $(_this._outline.find('.tableWrapper tbody'));
-    }
+    };
 
     this._getTotalAmountOfRows = function () {
         return _this._getTableBody().attr('data-totalamountofrows');
-    }
+    };
 
     this._initRowListener = function () {
         var _rowId;
@@ -193,7 +191,7 @@ function DataGrid(outline, gridId, dblClickCallback, isEmbedded, trans) {
                 _this._dblClickCallback(_this._getIdFromRow(this));
             });
         });
-    }
+    };
 
     this._pollDataFromSource = function (params) {
         return $.ajax({
@@ -201,7 +199,7 @@ function DataGrid(outline, gridId, dblClickCallback, isEmbedded, trans) {
             url: _this._dataSrcUrl + '?' + $.param(params, true),
             dataType: 'html'
         });
-    }
+    };
 
     this._constructDataParams = function () {
         var _jsonToReturn = {};
@@ -217,7 +215,7 @@ function DataGrid(outline, gridId, dblClickCallback, isEmbedded, trans) {
         _jsonToReturn['page'] = _this._paginator.getPage();
         _jsonToReturn['limit'] = _this._paginator.getLimit();
         return _jsonToReturn;
-    }
+    };
 
     this._onHeaderClick = function (sourceHeader) {
         _this._orderedByHeader = sourceHeader;
@@ -227,14 +225,14 @@ function DataGrid(outline, gridId, dblClickCallback, isEmbedded, trans) {
             }
         });
         _this._updateData(true);
-    }
+    };
 
     this._onCustomButtonClick = function (button) {
         var _target = $(button).attr('data-targetSrc');
         if (_target) {
             window.location = _target;
         }
-    }
+    };
 
     this._onRowClick = function (row) {
         if (_this._activeRow && _this._activeRow === row) {
@@ -248,7 +246,7 @@ function DataGrid(outline, gridId, dblClickCallback, isEmbedded, trans) {
             _this._activeRow = row;
         }
         _this._updateVisibilityOfCustomActionButton();
-    }
+    };
 
     this._updateVisibilityOfCustomActionButton = function () {
         if (_this._activeRow) {
@@ -256,30 +254,30 @@ function DataGrid(outline, gridId, dblClickCallback, isEmbedded, trans) {
         } else {
             $(_this._customActionWithSelectionButton).prop("disabled", true);
         }
-    }
+    };
 
     this._onFilterControlActivation = function (filterStr) {
         _this._filterstr = filterStr;
         _this._paginator.reset();
         _this._updateData(true);
-    }
+    };
 
     this._onPaginationActivity = function () {
         _this._updateData(false);
-    }
+    };
 
     this._getIdFromRow = function (row) {
         return _this._removeRowPrefix($(row).attr('data-rowid'));
-    }
+    };
 
     this._removeRowPrefix = function (prefixedId) {
         var _prefixLength = (_this._gridId + '_').length;
         return prefixedId.substr(_prefixLength, prefixedId.length);
-    }
+    };
 
     this._createEmptyDataRow = function () {
         return $('<tbody data-totalamountofrows="0"><tr><td colspan="' + _this._headers.length + '">' + _this._emptyDefaultText + '</td> </tr></tbody>');
-    }
+    };
 
     _this._init(outline, gridId, dblClickCallback, isEmbedded, trans);
 }
@@ -310,33 +308,31 @@ function DataGridHeader(headerWrapper, fieldId, callback, isComputed) {
                 _this._onHeaderClick()
             }
         });
-
-    }
+    };
 
     this._orderingState = null;
 
     this.resetOrdering = function () {
         _this._orderingState = null;
         _this._updateSortIcon();
-    }
+    };
 
     this._getFieldId = function () {
         return _this._fieldId;
-    }
+    };
 
     this.getOrderingState = function () {
         return _this._orderingState;
-    }
+    };
 
     this.isOrdered = function () {
         return (_this._orderingState !== null);
-    }
+    };
 
     this._onHeaderClick = function () {
         _this._toggleOrderingState();
         _this._callback(_this);
-    }
-
+    };
 
     this._toggleOrderingState = function () {
         if (!_this._orderingState) {
@@ -347,7 +343,7 @@ function DataGridHeader(headerWrapper, fieldId, callback, isComputed) {
             _this._orderingState = null;
         }
         _this._updateSortIcon();
-    }
+    };
 
     this._updateSortIcon = function () {
         var _headerSortIcon = $(_this._headerWrapper).find('.sortIcon');
@@ -360,7 +356,7 @@ function DataGridHeader(headerWrapper, fieldId, callback, isComputed) {
             $(_headerSortIcon).removeClass('glyphicon-sort-by-alphabet');
             $(_headerSortIcon).removeClass('glyphicon-sort-by-alphabet-alt');
         }
-    }
+    };
 
     this._init();
 }
@@ -391,15 +387,15 @@ function DataGridPaginator() {
         _this._limit = defaultLimit;
         _this._callback = notifyCallback;
         _this._initControls(outline);
-    }
+    };
 
     this.getPage = function () {
         return _this._page;
-    }
+    };
 
     this.getLimit = function () {
         return _this._limit;
-    }
+    };
 
     this._initControls = function (outline) {
         var _controlOutline = outline.find('.paginationControl'),
@@ -420,7 +416,7 @@ function DataGridPaginator() {
         _this._nextButton = _nextButton;
         _this._lastButton = _lastButton;
         _this._pageIndicator = _pageIndicator;
-    }
+    };
 
     this.refresh = function (totalAmountOfRows, limit) {
         if (typeof limit !== 'undefined') {
@@ -430,34 +426,34 @@ function DataGridPaginator() {
         _this._page = 1;
         _this._updatePageIndication();
         _this._toggleControlVisiability();
-    }
+    };
 
     this.reset = function () {
         _this._page = 1;
-    }
+    };
 
     _this._updatePageIndication = function () {
         _this._pageIndicator.html(_this._page + '/' + _this._totalAmountOfPages);
-    }
+    };
 
     this._onFirstButtonClick = function () {
         _this._page = 1;
         _this._notifyDataGrid();
-    }
+    };
 
     this._onPreviousButtonClick = function () {
         if (_this._page > 1) {
             _this._page--;
             _this._notifyDataGrid();
         }
-    }
+    };
 
     this._onNextButtonClick = function () {
         if (_this._page < _this._totalAmountOfPages) {
             _this._page++;
             _this._notifyDataGrid();
         }
-    }
+    };
 
     this._onLastButtonClick = function () {
         _this._page = _this._totalAmountOfPages;
@@ -468,7 +464,7 @@ function DataGridPaginator() {
     this._notifyDataGrid = function () {
         _this._updatePageIndication();
         _this._callback();
-    }
+    };
 
     this._toggleControlVisiability = function () {
         if (_this._totalAmountOfPages <= 1) {
@@ -476,13 +472,13 @@ function DataGridPaginator() {
         } else {
             _this._showControl();
         }
-    }
+    };
 
     this._hideControl = function () {
         _this._controlOutline.hide();
-    }
+    };
 
     this._showControl = function () {
         _this._controlOutline.show();
-    }
+    };
 }

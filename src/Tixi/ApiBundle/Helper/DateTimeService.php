@@ -111,12 +111,12 @@ class DateTimeService extends ContainerAware {
      * @return \DateTime
      */
     public function convertToLocalDateTime($utcDate) {
+        $localDate = null;
         if (null !== $utcDate) {
             $localDate = clone $utcDate;
             $localDate->setTimeZone(new \DateTimeZone($this->container->getParameter('time_zone')));
-            return $localDate;
         }
-        return $utcDate;
+        return $localDate;
     }
 
     /**
@@ -126,12 +126,12 @@ class DateTimeService extends ContainerAware {
      * @return \DateTime
      */
     public function convertToUTCDateTime($localDate) {
+        $utcDate = null;
         if (null !== $localDate) {
             $utcDate = clone $localDate;
             $utcDate->setTimezone(new \DateTimeZone('UTC'));
-            return $utcDate;
         }
-        return $localDate;
+        return $utcDate;
     }
 
     /**
@@ -139,11 +139,12 @@ class DateTimeService extends ContainerAware {
      * @return string
      */
     public function convertToLocalDateTimeString($utcDate) {
+        $localDateTimeString = '';
         if (null !== $utcDate) {
             $localDateTime = $this->convertToLocalDateTime($utcDate);
-            return $this->convertDateTimeToDateTimeString($localDateTime);
+            $localDateTimeString = $this->convertDateTimeToDateTimeString($localDateTime);
         }
-        return $utcDate;
+        return $localDateTimeString;
     }
 
     public function convertDateTimeToDateTimeString(\DateTime $dateTime) {
@@ -157,10 +158,11 @@ class DateTimeService extends ContainerAware {
      * @return string
      */
     public function convertToLocalTimeString($utcDate) {
+        $localDateTimeString = '';
         if (null !== $utcDate) {
-            return $this->convertToLocalDateTime($utcDate)->format('H:i');
+            $localDateTimeString = $this->convertToLocalDateTime($utcDate)->format('H:i');
         }
-        return $utcDate;
+        return $localDateTimeString;
     }
 
     /**
@@ -168,13 +170,13 @@ class DateTimeService extends ContainerAware {
      * @return \DateTime
      */
     public function convertDateTimeStringToUTCDateTime($localDateStr) {
+        $localDate = null;
         if (null !== $localDateStr) {
             $localDate = \DateTime::createFromFormat('d.m.Y H:i', $localDateStr);
             if ($localDate) {
                 $this->convertToUTCDateTime($localDate);
             }
-            return $localDate;
         }
-        return $localDateStr;
+        return $localDate;
     }
 }

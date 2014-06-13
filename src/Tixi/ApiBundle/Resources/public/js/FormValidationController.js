@@ -11,7 +11,7 @@ function FormValidationController(formId) {
         _this._form = $('#' + formId);
         _this._initCorrespondingSubmitButton();
         _this._initListeners();
-    }
+    };
 
     this._initCorrespondingSubmitButton = function () {
         $(':submit').each(function () {
@@ -20,7 +20,7 @@ function FormValidationController(formId) {
             }
             return false;
         });
-    }
+    };
 
     this._initListeners = function () {
         $(_this._submitButton).on('click', function (event) {
@@ -41,7 +41,7 @@ function FormValidationController(formId) {
             (_this._form).submit();
         });
         _this._initFormChangeListener();
-    }
+    };
 
     //when a form value has changed, the user should be informed when leaving page without saving
     this._initFormChangeListener = function() {
@@ -50,21 +50,21 @@ function FormValidationController(formId) {
                 _this._setConfirmUnload();
             });
         });
-    }
+    };
 
     this._hasHtml5Validation = function () {
         return typeof document.createElement('input').checkValidity === 'function';
-    }
+    };
 
     this._setConfirmUnload = function () {
         $(window).on('beforeunload', function() {
             return '';
         });
-    }
+    };
 
     this._resetConfirmUnload = function() {
         $(window).off('beforeunload');
-    }
+    };
 
     _this.init();
 }
