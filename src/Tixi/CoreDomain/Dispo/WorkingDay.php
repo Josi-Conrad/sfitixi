@@ -84,14 +84,23 @@ class WorkingDay {
         $this->shifts->add($shift);
     }
 
+    /**
+     * @return string
+     */
     public function getDateString() {
         return $this->getDate()->format('d.m.Y');
     }
 
+    /**
+     * @return string
+     */
     public function getWeekDayAsString() {
         return WeekdayService::$numericToWeekdayConverter[$this->getDate()->format('N')] . '.name';
     }
 
+    /**
+     * @return mixed
+     */
     public function getShiftsOrderedByStartTime() {
         $orderedShifts = $this->getShifts()->toArray();
         usort($orderedShifts, function (Shift $a, Shift $b) {
@@ -127,18 +136,8 @@ class WorkingDay {
     }
 
     /**
-     * @param DrivingMission $mission
+     * @return mixed
      */
-    protected function getPossibleDrivingPoolForMission(DrivingMission $mission) {
-        $responsibleShift = null;
-        foreach ($this->shifts as $shift) {
-            if ($shift->isResponsibleForTime($shift)) {
-                $responsibleShift = $shift;
-            }
-        }
-
-    }
-
     public function getWorkingMonth() {
         return $this->workingMonth;
     }
@@ -166,12 +165,15 @@ class WorkingDay {
     }
 
     /**
-     * @return Shift[]
+     * @return ArrayCollection
      */
     public function getShifts() {
         return $this->shifts;
     }
 
+    /**
+     * @return array
+     */
     public function getShiftsAsArray() {
         return $this->shifts->toArray();
     }

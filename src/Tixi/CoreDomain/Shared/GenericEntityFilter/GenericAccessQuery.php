@@ -8,13 +8,21 @@
 
 namespace Tixi\CoreDomain\Shared\GenericEntityFilter;
 
-
+/**
+ * Class GenericAccessQuery
+ * @package Tixi\CoreDomain\Shared\GenericEntityFilter
+ */
 class GenericAccessQuery {
 
     protected $selectPart;
     protected $fromPart;
     protected $idPart;
 
+    /**
+     * @param $selectPart
+     * @param $fromPart
+     * @param $idPart
+     */
     public function __construct($selectPart, $fromPart, $idPart) {
         $this->selectPart = $selectPart;
         $this->fromPart = $fromPart;

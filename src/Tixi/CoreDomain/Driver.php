@@ -11,7 +11,6 @@ namespace Tixi\CoreDomain;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Tixi\CoreDomain\Dispo\DrivingAssertion;
-use Tixi\CoreDomain\Dispo\DrivingPool;
 use Tixi\CoreDomain\Dispo\RepeatedDrivingAssertion;
 use Tixi\CoreDomain\Dispo\RepeatedDrivingAssertionPlan;
 use Tixi\CoreDomain\Dispo\Shift;
@@ -81,6 +80,7 @@ class Driver extends Person {
                                    $extraMinutes = null, $details = null, $fax = null) {
 
         $this->supervisedVehicles = new ArrayCollection();
+        $this->drivingAssertions = new ArrayCollection();
         $this->repeatedDrivingAssertionPlans = new ArrayCollection();
         parent::__construct($gender, $firstname, $lastname, $telephone, $address, $title,
             $email, $entryDate, $birthday, $extraMinutes, $details, null, null, null, $fax);
@@ -183,6 +183,7 @@ class Driver extends Person {
         }
         //uses direct return statements to improve performance
         foreach ($this->getRepeatedDrivingAssertionPlans() as $rDrivingAssertionPlan) {
+            /**@var $rDrivingAssertion RepeatedDrivingAssertion */
             foreach ($rDrivingAssertionPlan->getRepeatedDrivingAssertions() as $rDrivingAssertion) {
                 if ($rDrivingAssertion->matching($shift)) {
                     if ($isBankHoliday) {
@@ -199,6 +200,10 @@ class Driver extends Person {
         return false;
     }
 
+    /**
+     * @param Shift $shift
+     * @return bool
+     */
     public function hasDrivingAssertionForShift(Shift $shift) {
         /** @var DrivingAssertion $drivingAssertion */
         foreach($this->drivingAssertions as $drivingAssertion) {
@@ -326,13 +331,6 @@ class Driver extends Person {
     }
 
     /**
-     * @return DrivingPool[]
-     */
-    public function getDrivingPools() {
-        return $this->drivingPools;
-    }
-
-    /**
      * @return string
      */
     public function getWheelChairAttendanceAsString() {
@@ -353,6 +351,7 @@ class Driver extends Person {
      * @return bool
      */
     public function isCompatibleWithVehicleCategory(VehicleCategory $vehicleCategory) {
+        /**@var $contradict VehicleCategory */
         foreach ($this->contradictVehicleCategories as $contradict) {
             if ($vehicleCategory->getId() === $contradict->getId()) {
                 return false;
@@ -360,4 +359,12 @@ class Driver extends Person {
         }
         return true;
     }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getDrivingAssertions() {
+        return $this->drivingAssertions;
+    }
+
 }

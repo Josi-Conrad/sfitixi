@@ -175,7 +175,7 @@ class RepeatedDrivingOrderPlan extends CommonBaseEntity {
     }
 
     /**
-     *
+     * removes association to a passenger
      */
     public function removePassenger() {
         $this->setPassenger(null);

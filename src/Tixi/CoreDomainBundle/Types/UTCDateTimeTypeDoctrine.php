@@ -14,6 +14,8 @@ use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\DateTimeType;
 
 /**
+ * This doctrine type is used for DateTime,
+ * to change TimeZone always to UTC from database and vice versa to database
  * Class UTCDateTimeTypeDoctrine
  * @package Tixi\CoreDomainBundle\Types
  */

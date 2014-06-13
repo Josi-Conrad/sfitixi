@@ -15,6 +15,10 @@ use Tixi\CoreDomain\Dispo\RepeatedDrivingAssertionPlan;
 use Tixi\CoreDomain\Dispo\Shift;
 use Tixi\CoreDomainBundle\Repository\CommonBaseRepositoryDoctrine;
 
+/**
+ * Class DrivingAssertionRepositoryDoctrine
+ * @package Tixi\CoreDomainBundle\Repository\Dispo
+ */
 class DrivingAssertionRepositoryDoctrine extends CommonBaseRepositoryDoctrine implements DrivingAssertionRepository{
 
     /**
@@ -35,6 +39,10 @@ class DrivingAssertionRepositoryDoctrine extends CommonBaseRepositoryDoctrine im
         $this->getEntityManager()->remove($drivingAssertion);
     }
 
+    /**
+     * @param Shift $shift
+     * @return array|mixed
+     */
     public function findAllActiveByShift(Shift $shift)
     {
         $qb = parent::createQueryBuilder('e');
@@ -44,6 +52,10 @@ class DrivingAssertionRepositoryDoctrine extends CommonBaseRepositoryDoctrine im
         return $qb->getQuery()->getResult();
     }
 
+    /**
+     * @param RepeatedDrivingAssertionPlan $repeatedDrivingAssertionPlan
+     * @return array|mixed
+     */
     public function findAllProspectiveByRepeatedDrivingAssertionPlan(RepeatedDrivingAssertionPlan $repeatedDrivingAssertionPlan)
     {
         $now = new \DateTime();

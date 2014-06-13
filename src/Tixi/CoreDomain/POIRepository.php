@@ -21,5 +21,9 @@ interface POIRepository extends CommonBaseRepository{
      */
     public function remove(POI $poi);
 
+    /**
+     * @param POIKeyword $poiKeyword
+     * @return mixed
+     */
     public function getAmountByPOIKeyword(POIKeyword $poiKeyword);
 } 

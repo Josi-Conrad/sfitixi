@@ -36,8 +36,16 @@ interface RepeatedDrivingAssertionPlanRepository extends CommonBaseRepository {
      */
     public function findPlanForDate(\DateTime $date);
 
+    /**
+     * @param WorkingMonth $workingMonth
+     * @return mixed
+     */
     public function findActivePlansInRangeOfWorkingMonth(WorkingMonth $workingMonth);
 
+    /**
+     * @param Driver $driver
+     * @return mixed
+     */
     public function findAllProspectiveForDriver(Driver $driver);
 
 }

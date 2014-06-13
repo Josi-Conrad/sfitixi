@@ -134,10 +134,16 @@ class Shift {
         return false;
     }
 
+    /**
+     * @return mixed
+     */
     public function getAmountOfMissingDrivers() {
         return ($this->getAmountOfDrivers() - count($this->drivingAssertions));
     }
 
+    /**
+     * @return array
+     */
     public function getAssignedDrivers() {
         $drivers = array();
         /** @var DrivingAssertion $assertion */
@@ -161,6 +167,10 @@ class Shift {
         $this->drivingPools->add($drivingPool);
     }
 
+    /**
+     * @param DrivingPool $drivingPool
+     * @throws \LogicException
+     */
     public function removeDrivingPool(DrivingPool $drivingPool) {
         if($drivingPool->getAmountOfAssociatedDrivingMissions() !== 0) {
             throw new \LogicException('the driving pool with id '.$drivingPool->getId().' is not empty');
@@ -189,6 +199,9 @@ class Shift {
         $this->drivingAssertions->add($drivingAssertion);
     }
 
+    /**
+     * @param DrivingAssertion $drivingAssertion
+     */
     public function removeDrivingAssertion(DrivingAssertion $drivingAssertion) {
         $this->drivingAssertions->removeElement($drivingAssertion);
     }
@@ -200,6 +213,9 @@ class Shift {
         return $this->drivingAssertions;
     }
 
+    /**
+     * @return array
+     */
     public function getDrivingAssertionsAsArray() {
         return $this->drivingAssertions->toArray();
     }

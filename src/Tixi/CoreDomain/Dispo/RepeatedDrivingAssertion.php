@@ -58,7 +58,7 @@ abstract class RepeatedDrivingAssertion implements DrivingAssertionInterface {
      */
     public abstract function matchingDateTime(\DateTime $dateTime);
 
-        /**
+    /**
      * @param RepeatedDrivingAssertionPlan $assertionPlan
      */
     public function setAssertionPlan(RepeatedDrivingAssertionPlan $assertionPlan) {

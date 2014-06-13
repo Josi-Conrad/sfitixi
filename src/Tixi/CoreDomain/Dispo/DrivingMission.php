@@ -42,6 +42,7 @@ class DrivingMission {
     /**
      * @ORM\ManyToOne(targetEntity="DrivingPool", inversedBy="drivingMissions")
      * @ORM\JoinColumn(name="driving_pool_id", referencedColumnName="id")
+     * @var $drivingPool DrivingPool
      */
     protected $drivingPool;
 
@@ -120,11 +121,12 @@ class DrivingMission {
     }
 
     public function deletePhysically() {
-        /** @var DrivingOrder $drivingOrder */
-        foreach($this->drivingOrders as $drivingOrder) {
+        /** @var $drivingOrder DrivingOrder */
+        foreach ($this->drivingOrders as $drivingOrder) {
             $drivingOrder->removeDrivingMission();
         }
-        if(!empty($this->drivingPool)) {
+        if (!empty($this->drivingPool)) {
+            /**@var $drivingPool DrivingPool */
             $this->drivingPool->removeDrivingMission($this);
         }
         $this->removeDrivingPool();

@@ -16,8 +16,8 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Security\Core\SecurityContext;
 
 /**
- * Class EntityChangeListener
  * Listens to DBAL Updates and logs changes
+ * Class EntityChangeListener
  * @package Tixi\CoreDomainBundle\Listener
  */
 class EntityChangeListener {

@@ -15,6 +15,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
+ * Adds Fulltext Index to Address-Table, or probably more tables in future release
  * Class AddFullTextIndexCommand
  * @package Tixi\CoreDomainBundle\Command
  */

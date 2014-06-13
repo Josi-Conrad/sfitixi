@@ -43,17 +43,11 @@ class DrivingPool {
      * @ORM\JoinColumn(name="shift_id", referencedColumnName="id")
      */
     protected $shift;
-
     /**
      * @ORM\OneToOne(targetEntity="DrivingAssertion", inversedBy="drivingPool")
      * @ORM\JoinColumn(name="driving_assertion_id", referencedColumnName="id")
      */
     protected $drivingAssertion;
-//    /**
-//     * @ORM\ManyToOne(targetEntity="Tixi\CoreDomain\Driver", inversedBy="drivingPools")
-//     * @ORM\JoinColumn(name="driver_id", referencedColumnName="id")
-//     */
-//    protected $driver;
     /**
      * @ORM\ManyToOne(targetEntity="Tixi\CoreDomain\Vehicle")
      * @ORM\JoinColumn(name="vehicle_id", referencedColumnName="id")
@@ -109,6 +103,9 @@ class DrivingPool {
         return ($this->hasAssociatedDriver() && $this->hasAssociatedVehicle());
     }
 
+    /**
+     * @return int
+     */
     public function getAmountOfAssociatedDrivingMissions() {
         return count($this->drivingMissions);
     }
@@ -145,13 +142,6 @@ class DrivingPool {
         $this->drivingMissions->clear();
     }
 
-//    /**
-//     * @param Driver $driver
-//     */
-//    public function assignDriver(Driver $driver) {
-//        $this->driver = $driver;
-//    }
-
     /**
      * @param Vehicle $vehicle
      */
@@ -159,14 +149,23 @@ class DrivingPool {
         $this->vehicle = $vehicle;
     }
 
-    public function removeVehicle(){
+    /**
+     * removes vehicle association
+     */
+    public function removeVehicle() {
         $this->vehicle = null;
     }
 
+    /**
+     * @param DrivingAssertion $drivingAssertion
+     */
     public function assignDrivingAssertion(DrivingAssertion $drivingAssertion) {
         $this->drivingAssertion = $drivingAssertion;
     }
 
+    /**
+     * removes drivingAssertion association
+     */
     public function removeDrivingAssertion() {
         $this->drivingAssertion = null;
     }

@@ -1,5 +1,6 @@
 #!/bin/sh
 echo "Starting new project build"
+echo "Please ensure that the MySQL Connection to the given parameters is available!"
 while true; do
     echo .
     read -p "This will completely recreate the TIXI project database! Confirm with y(es) or n(o):  " yn
@@ -13,6 +14,7 @@ done
 echo .
 echo "Starting Composer dependencies"
 php composer.phar install
+php composer.phar update
 
 echo .
 echo "Recreate database"

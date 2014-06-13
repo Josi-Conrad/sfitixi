@@ -11,6 +11,10 @@ namespace Tixi\CoreDomain\Shared\GenericEntityFilter\FilterProperties;
 
 use Tixi\CoreDomain\Shared\GenericEntityFilter\GenericEntityProperty;
 
+/**
+ * Class OrderBy
+ * @package Tixi\CoreDomain\Shared\GenericEntityFilter\FilterProperties
+ */
 class OrderBy {
 
     /**
@@ -30,6 +34,10 @@ class OrderBy {
      */
     protected $direction;
 
+    /**
+     * @param GenericEntityProperty $entityProperty
+     * @param $direction
+     */
     public function __construct(GenericEntityProperty $entityProperty, $direction) {
         $this->entityProperty = $entityProperty;
         $this->direction = $direction;

@@ -81,6 +81,9 @@ class VehicleDepot extends CommonBaseEntity {
         $this->setMemo($memo);
     }
 
+    /**
+     * @param Address $address
+     */
     public function assignAddress(Address $address) {
         $this->address = $address;
     }

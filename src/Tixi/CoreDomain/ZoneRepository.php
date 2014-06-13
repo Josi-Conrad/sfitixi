@@ -21,6 +21,9 @@ interface ZoneRepository extends CommonBaseRepository {
      */
     public function remove(Zone $zone);
 
+    /**
+     * @return mixed
+     */
     public function findUnclassifiedZone();
 
 }

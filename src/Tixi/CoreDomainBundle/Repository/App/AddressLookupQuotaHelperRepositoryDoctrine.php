@@ -13,6 +13,10 @@ use Tixi\CoreDomain\App\AddressLookupQuotaHelper;
 use Tixi\CoreDomain\App\AddressLookupQuotaHelperRepository;
 use Tixi\CoreDomainBundle\Repository\CommonBaseRepositoryDoctrine;
 
+/**
+ * Class AddressLookupQuotaHelperRepositoryDoctrine
+ * @package Tixi\CoreDomainBundle\Repository\App
+ */
 class AddressLookupQuotaHelperRepositoryDoctrine extends CommonBaseRepositoryDoctrine implements AddressLookupQuotaHelperRepository{
 
     /**

@@ -146,6 +146,9 @@ class Vehicle extends CommonBaseEntity {
         $this->updateModifiedDate();
     }
 
+    /**
+     * @param Vehicle $vehicle
+     */
     public static function removeVehicle(Vehicle $vehicle) {
         foreach ($vehicle->getServicePlans() as $s) {
             /**@var $s ServicePlan */
@@ -154,10 +157,16 @@ class Vehicle extends CommonBaseEntity {
         $vehicle->removeSupervisor();
     }
 
+    /**
+     * if used, activate vehicle (field from data migration)
+     */
     public function activate() {
         $this->isActive = true;
     }
 
+    /**
+     * if not used, deactivate vehicle (field from data migration)
+     */
     public function inactivate() {
         $this->isActive = false;
     }

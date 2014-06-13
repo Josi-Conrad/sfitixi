@@ -70,10 +70,16 @@ class POIKeyword extends CommonBaseEntity {
         $this->updateModifiedDate();
     }
 
+    /**
+     * @param $poi
+     */
     public function assignPOI($poi) {
         $this->pois->add($poi);
     }
 
+    /**
+     * @param $poi
+     */
     public function unsignPOI($poi) {
         $this->pois->removeElement($poi);
     }

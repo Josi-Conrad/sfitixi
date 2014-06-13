@@ -15,6 +15,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
+ * Creates OAuth 2.0 Client
  * Class ClientCreateCommand
  * @package Tixi\SecurityBundle\Command
  */

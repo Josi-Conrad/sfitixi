@@ -8,14 +8,22 @@
 
 namespace Tixi\CoreDomain\Shared\GenericEntityFilter;
 
-
+/**
+ * Class GenericEntityProperty
+ * @package Tixi\CoreDomain\Shared\GenericEntityFilter
+ */
 class GenericEntityProperty {
     protected $entityByName;
     protected $propertyByName;
     protected $propertyValue;
     protected $comparingOperator;
 
-
+    /**
+     * @param $entityByName
+     * @param $propertyByName
+     * @param null $propertyValue
+     * @param string $comparingOperator
+     */
     public function __construct($entityByName, $propertyByName, $propertyValue=null, $comparingOperator='=') {
         $this->entityByName = $entityByName;
         $this->propertyByName = $propertyByName;
@@ -48,6 +56,9 @@ class GenericEntityProperty {
         return $this->propertyValue;
     }
 
+    /**
+     * @return string
+     */
     public function getEntityPropertyString() {
         return $this->entityByName . '.' . $this->propertyByName;
     }

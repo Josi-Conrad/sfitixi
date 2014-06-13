@@ -8,12 +8,19 @@
 
 namespace Tixi\CoreDomain\Shared\GenericEntityFilter\FilterProperties;
 
-
+/**
+ * Class Search
+ * @package Tixi\CoreDomain\Shared\GenericEntityFilter\FilterProperties
+ */
 class Search {
 
     protected $searchStr;
     protected $entityProperties;
 
+    /**
+     * @param $searchString
+     * @param array $entityProperties
+     */
     public function __construct($searchString, array $entityProperties) {
         $this->searchStr = $searchString;
         $this->entityProperties = $entityProperties;

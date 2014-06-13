@@ -177,6 +177,9 @@ class Passenger extends Person {
         $this->getDrivingOrders()->add($drivingOrder);
     }
 
+    /**
+     * @param DrivingOrder $drivingOrder
+     */
     public function removeDrivingOrder(DrivingOrder $drivingOrder) {
         $this->drivingOrders->removeElement($drivingOrder);
     }
@@ -343,6 +346,7 @@ class Passenger extends Person {
      */
     public static function constructInsurancesString($insurances) {
         $string = '';
+        /**@var $insurance Insurance */
         foreach ($insurances as $key => $insurance) {
             if ($key !== 0) {
                 $string .= ', ';
@@ -362,6 +366,7 @@ class Passenger extends Person {
                 return false;
             }
         }
+        /**@var $contradict VehicleCategory */
         foreach ($this->contradictVehicleCategories as $contradict) {
             if ($vehicleCategory->getId() === $contradict->getId()) {
                 return false;

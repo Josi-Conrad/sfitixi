@@ -92,10 +92,16 @@ class WorkingMonth extends CommonBaseEntity {
         }
     }
 
+    /**
+     * @return mixed
+     */
     public function getDateString() {
         return $this->getDate()->format('m - Y');
     }
 
+    /**
+     * @param WorkingDay $workingDay
+     */
     public function assignWorkingDay(WorkingDay $workingDay) {
         $this->workingDays->add($workingDay);
     }
@@ -163,6 +169,10 @@ class WorkingMonth extends CommonBaseEntity {
         return $this->status;
     }
 
+    /**
+     * status as translation string
+     * @return string
+     */
     public function getStatusAsTransString() {
         $transString = '';
         if($this->status === self::OPEN) {

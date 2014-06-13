@@ -48,6 +48,7 @@ class DrivingOrder extends CommonBaseEntity {
     /**
      * @ORM\ManyToOne(targetEntity="Tixi\CoreDomain\Passenger", inversedBy="drivingOrders")
      * @ORM\JoinColumn(name="passenger_id", referencedColumnName="id")
+     * @var $passenger Passenger
      */
     protected $passenger;
     /**
@@ -106,7 +107,17 @@ class DrivingOrder extends CommonBaseEntity {
         parent::__construct();
     }
 
-
+    /**
+     * @param Passenger $passenger
+     * @param $pickupDate
+     * @param $pickupTime
+     * @param null $companion
+     * @param null $memo
+     * @param int $status
+     * @param bool $manualRoute
+     * @param null $additionalTime
+     * @return DrivingOrder
+     */
     public static function registerDrivingOrder(Passenger $passenger, $pickupDate, $pickupTime, $companion = null, $memo = null, $status = self::PENDENT, $manualRoute = false, $additionalTime = null) {
         $correctedCompanion = (null !== $companion) ? $companion : 0;
         $correctedAdditionalTime = (null !== $additionalTime) ? $additionalTime : 0;
@@ -122,37 +133,45 @@ class DrivingOrder extends CommonBaseEntity {
         return $drivingOrder;
     }
 
+    /**
+     * @param null $memo
+     * @param null $status
+     */
     public function update($memo = null, $status = null) {
-        if(null !== $memo) {
+        if (null !== $memo) {
             $this->setMemo($memo);
         }
-        if(null !== $status) {
+        if (null !== $status) {
             $this->setStatus($status);
         }
         $this->updateModifiedDate();
     }
 
-
+    /**
+     * @throws \LogicException
+     */
     public function deletePhysically() {
-        if(null !== $this->drivingMission) {
+        if (null !== $this->drivingMission) {
             throw new \LogicException('please delete corresponding driving mission first');
         }
-        $this->passenger->removeDrivingOrder($this);
-        if(!empty($this->correspondingReturnOrder)) {
-            $this->correspondingReturnOrder->removeOutwardOrder();
+        /**@var $this ->passenger Passenger */
+        $this->getPassenger()->removeDrivingOrder($this);
+        if (!empty($this->correspondingReturnOrder)) {
+            $this->getCorrespondingReturnOrder()->removeOutwardOrder();
         }
-        if(!empty($this->correspondingOutwardOrder)) {
-            $this->correspondingOutwardOrder->removeReturnOrder();
+        if (!empty($this->correspondingOutwardOrder)) {
+            $this->getCorrespondingOutwardOrder()->removeReturnOrder();
         }
     }
 
-
-
+    /**
+     * @return array
+     */
     public static function getStatusArray() {
         return array(
-            self::PENDENT=>'drivingorder.status.pendent',
-            self::COMPLETED=>'drivingorder.status.completed',
-            self::CANCELED=>'drivingorder.status.canceled'
+            self::PENDENT => 'drivingorder.status.pendent',
+            self::COMPLETED => 'drivingorder.status.completed',
+            self::CANCELED => 'drivingorder.status.canceled'
         );
     }
 
@@ -170,6 +189,9 @@ class DrivingOrder extends CommonBaseEntity {
         $this->repeatedDrivingOrderPlan = $repeatedDrivingOrderPlan;
     }
 
+    /**
+     * @param RepeatedDrivingOrderPlan $repeatedDrivingOrderPlan
+     */
     public function removeRepeatedDrivingOrderPlan(RepeatedDrivingOrderPlan $repeatedDrivingOrderPlan) {
         $this->repeatedDrivingOrderPlan = null;
     }
@@ -182,6 +204,9 @@ class DrivingOrder extends CommonBaseEntity {
         $this->setDrivingMission($drivingMission);
     }
 
+    /**
+     * remove drivingMission association
+     */
     public function removeDrivingMission() {
         $this->drivingMission = null;
     }
@@ -193,19 +218,31 @@ class DrivingOrder extends CommonBaseEntity {
         $this->setPassenger($passenger);
     }
 
+    /**
+     * @param DrivingOrder $returnOrder
+     */
     public function assignReturnOrder(DrivingOrder $returnOrder) {
         $this->correspondingReturnOrder = $returnOrder;
         $returnOrder->correspondingOutwardOrder = $this;
     }
 
+    /**
+     * removes self-referenced association
+     */
     public function removeOutwardOrder() {
         $this->correspondingOutwardOrder = null;
     }
 
+    /**
+     * removes  self-referenced association
+     */
     public function removeReturnOrder() {
         $this->correspondingReturnOrder = null;
     }
 
+    /**
+     * @param Zone $zone
+     */
     public function assignZone(Zone $zone) {
         $this->zone = $zone;
     }
@@ -257,7 +294,7 @@ class DrivingOrder extends CommonBaseEntity {
      * @return mixed|void
      */
     public function matching(\DateTime $date) {
-        // TODO: Implement matching() method.
+        //implement if necessary to check if this orders matches a certain DateTime
     }
 
     /**
@@ -382,20 +419,57 @@ class DrivingOrder extends CommonBaseEntity {
     /**
      * @param mixed $additionalTime
      */
-    public function setAdditionalTime($additionalTime)
-    {
+    public function setAdditionalTime($additionalTime) {
         $this->additionalTime = $additionalTime;
     }
 
     /**
      * @return mixed
      */
-    public function getAdditionalTime()
-    {
+    public function getAdditionalTime() {
         return $this->additionalTime;
     }
 
+    /**
+     * @param DrivingOrder $correspondingOutwardOrder
+     */
+    public function setCorrespondingOutwardOrder($correspondingOutwardOrder) {
+        $this->correspondingOutwardOrder = $correspondingOutwardOrder;
+    }
 
+    /**
+     * @param DrivingOrder $correspondingReturnOrder
+     */
+    public function setCorrespondingReturnOrder($correspondingReturnOrder) {
+        $this->correspondingReturnOrder = $correspondingReturnOrder;
+    }
 
+    /**
+     * @param RepeatedDrivingOrderPlan $repeatedDrivingOrderPlan
+     */
+    public function setRepeatedDrivingOrderPlan($repeatedDrivingOrderPlan) {
+        $this->repeatedDrivingOrderPlan = $repeatedDrivingOrderPlan;
+    }
+
+    /**
+     * @return DrivingOrder
+     */
+    public function getCorrespondingOutwardOrder() {
+        return $this->correspondingOutwardOrder;
+    }
+
+    /**
+     * @return DrivingOrder
+     */
+    public function getCorrespondingReturnOrder() {
+        return $this->correspondingReturnOrder;
+    }
+
+    /**
+     * @return RepeatedDrivingOrderPlan
+     */
+    public function getRepeatedDrivingOrderPlan() {
+        return $this->repeatedDrivingOrderPlan;
+    }
 
 }

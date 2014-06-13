@@ -183,9 +183,10 @@ class Address extends CommonBaseEntity {
         $addressName = (null !== $this->getName()) ? $this->getName() : $this->constructAlternativeName();
         $poiSuffix = '';
         //if there are pois, we take the concatinated poi name
+        /**@var $poi POI */
         foreach ($this->pois as $key => $poi) {
             if ($key > 0) {
-                $poiSuffix . ' ';
+                $poiSuffix .= ' ';
             }
             $poiSuffix .= $poi->getName();
         }

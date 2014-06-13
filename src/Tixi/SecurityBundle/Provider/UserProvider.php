@@ -17,6 +17,7 @@ use Tixi\SecurityBundle\Entity\User;
 use Tixi\SecurityBundle\Entity\UserRepository;
 
 /**
+ * Used to change default User Profice from Symfony
  * Class UserProvider
  * @package Tixi\SecurityBundle\Provider
  */
@@ -62,7 +63,7 @@ class UserProvider implements UserProviderInterface {
                 )
             );
         }
-        /**@var $user User*/
+        /**@var $user User */
         return $this->userRepository->find($user->getId());
     }
 

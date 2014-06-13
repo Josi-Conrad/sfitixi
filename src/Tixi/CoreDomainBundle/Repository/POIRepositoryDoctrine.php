@@ -27,6 +27,10 @@ class POIRepositoryDoctrine extends CommonBaseRepositoryDoctrine implements POIR
         $this->getEntityManager()->remove($poi);
     }
 
+    /**
+     * @param POIKeyword $poiKeyword
+     * @return mixed
+     */
     public function getAmountByPOIKeyword(POIKeyword $poiKeyword)
     {
         $qb = parent::createQueryBuilder('e');

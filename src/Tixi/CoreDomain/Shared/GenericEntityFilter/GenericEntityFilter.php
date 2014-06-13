@@ -12,6 +12,10 @@ namespace Tixi\CoreDomain\Shared\GenericEntityFilter;
 use Tixi\CoreDomain\Shared\GenericEntityFilter\FilterProperties\OrderBy;
 use Tixi\CoreDomain\Shared\GenericEntityFilter\FilterProperties\Search;
 
+/**
+ * Class GenericEntityFilter
+ * @package Tixi\CoreDomain\Shared\GenericEntityFilter
+ */
 class GenericEntityFilter {
 
     /**
@@ -27,6 +31,9 @@ class GenericEntityFilter {
     protected $orderedBy;
     protected $search;
 
+    /**
+     * @param GenericAccessQuery $accessQuery
+     */
     public function __construct(GenericAccessQuery $accessQuery) {
         $this->accessQuery = $accessQuery;
         $this->restrictiveProperties = null;
@@ -36,6 +43,9 @@ class GenericEntityFilter {
         $this->search = null;
     }
 
+    /**
+     * @param array $entityProperties
+     */
     public function setRestrictiveProperties(array $entityProperties) {
         $this->restrictiveProperties = $entityProperties;
     }
