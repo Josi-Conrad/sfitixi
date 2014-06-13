@@ -14,13 +14,13 @@ use Tixi\App\AppBundle\Interfaces\AddressHandleAssembler;
 use Tixi\CoreDomain\Address;
 
 /**
- * Class AddressLookupServiceLocalDoctrineMysql
- * @package Tixi\App\AppBundle\Address
- *
  * This class makes use of mysql fulltext index.
  * Please make sure that the following defaults are set in the mysql config file:
  * ft_min_word_len=1
  * innodb_ft_min_token_size=1
+ *
+ * Class AddressLookupServiceLocalDoctrineMysql
+ * @package Tixi\App\AppBundle\Address
  */
 class AddressLookupServiceLocalDoctrineMysql extends AddressLookupService {
     /**
