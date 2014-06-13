@@ -182,7 +182,7 @@ function AddressLookahead() {
                 _this._onAddressSelectionClick(_model);
             }
         }).fail(function() {
-            //ToDo Exception handling
+
         });
     }
 

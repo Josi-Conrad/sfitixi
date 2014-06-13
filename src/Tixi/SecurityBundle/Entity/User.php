@@ -82,6 +82,7 @@ class User extends CommonBaseEntity implements AdvancedUserInterface, \Serializa
         }
         parent::updateModifiedDate();
     }
+
     /**
      * deletes entity logically and deactivate user
      */
@@ -281,7 +282,7 @@ class User extends CommonBaseEntity implements AdvancedUserInterface, \Serializa
      * the plain-text password is stored on this object.
      */
     public function eraseCredentials() {
-        // TODO: Implement eraseCredentials() method.
+        $this->setPassword(null);
     }
 
     /**

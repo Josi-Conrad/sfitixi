@@ -116,6 +116,7 @@ class DateTimeService extends ContainerAware {
             $localDate->setTimeZone(new \DateTimeZone($this->container->getParameter('time_zone')));
             return $localDate;
         }
+        return $utcDate;
     }
 
     /**
@@ -130,6 +131,7 @@ class DateTimeService extends ContainerAware {
             $utcDate->setTimezone(new \DateTimeZone('UTC'));
             return $utcDate;
         }
+        return $localDate;
     }
 
     /**
@@ -141,6 +143,7 @@ class DateTimeService extends ContainerAware {
             $localDateTime = $this->convertToLocalDateTime($utcDate);
             return $this->convertDateTimeToDateTimeString($localDateTime);
         }
+        return $utcDate;
     }
 
     public function convertDateTimeToDateTimeString(\DateTime $dateTime) {
@@ -157,6 +160,7 @@ class DateTimeService extends ContainerAware {
         if (null !== $utcDate) {
             return $this->convertToLocalDateTime($utcDate)->format('H:i');
         }
+        return $utcDate;
     }
 
     /**
@@ -171,5 +175,6 @@ class DateTimeService extends ContainerAware {
             }
             return $localDate;
         }
+        return $localDateStr;
     }
 }
