@@ -9,8 +9,10 @@
 namespace Tixi\ApiBundle\Interfaces\Dispo\ProductionView;
 
 
-
-
+/**
+ * Class ProductionPlanEditDTO
+ * @package Tixi\ApiBundle\Interfaces\Dispo\ProductionView
+ */
 class ProductionPlanEditDTO {
 
     public $workingMonthId;
@@ -19,6 +21,10 @@ class ProductionPlanEditDTO {
     public $workingDays = array();
     public $workingShiftsDisplayNames = array();
 
+    /**
+     * @param $id
+     * @return null
+     */
     public function getWorkingDayPerId($id) {
         $toReturn = null;
         foreach($this->workingDays as $workingDay) {

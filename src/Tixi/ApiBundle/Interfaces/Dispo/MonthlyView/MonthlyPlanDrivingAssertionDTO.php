@@ -8,7 +8,10 @@
 
 namespace Tixi\ApiBundle\Interfaces\Dispo\MonthlyView;
 
-
+/**
+ * Class MonthlyPlanDrivingAssertionDTO
+ * @package Tixi\ApiBundle\Interfaces\Dispo\MonthlyView
+ */
 class MonthlyPlanDrivingAssertionDTO {
     public $driver;
 } 

@@ -8,7 +8,10 @@
 
 namespace Tixi\ApiBundle\Interfaces\Dispo;
 
-
+/**
+ * Class DrivingOrderEditDTO
+ * @package Tixi\ApiBundle\Interfaces\Dispo
+ */
 class DrivingOrderEditDTO {
     public $id;
     public $pickupDate;

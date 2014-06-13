@@ -17,7 +17,9 @@ use Tixi\ApiBundle\Tile\Core\FormRowView;
  * @package Tixi\ApiBundle\Tile\CustomFormView
  */
 class VehicleRegisterFormViewTile extends AbstractFormViewTile{
-
+    /**
+     * @return mixed|void
+     */
     public function createFormRows()
     {
         $this->basicFormRows[] = new FormRowView('name','vehicle.field.name',$this->dto->name);

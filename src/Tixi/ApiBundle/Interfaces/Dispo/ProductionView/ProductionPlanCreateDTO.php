@@ -8,7 +8,10 @@
 
 namespace Tixi\ApiBundle\Interfaces\Dispo\ProductionView;
 
-
+/**
+ * Class ProductionPlanCreateDTO
+ * @package Tixi\ApiBundle\Interfaces\Dispo\ProductionView
+ */
 class ProductionPlanCreateDTO {
 
     public $year;

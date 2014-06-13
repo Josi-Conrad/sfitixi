@@ -40,6 +40,10 @@ class AddressLookupQuotaHelper {
 
     }
 
+    /**
+     * @param $id
+     * @return AddressLookupQuotaHelper
+     */
     public static function registerLookupQuotaHelper($id) {
         $volume = new AddressLookupQuotaHelper();
         $volume->setId($id);
@@ -49,11 +53,19 @@ class AddressLookupQuotaHelper {
         return $volume;
     }
 
+    /**
+     * @param $maxDailyQuota
+     * @param $maxMonthlyQuota
+     * @return bool
+     */
     public function hasCapacity($maxDailyQuota, $maxMonthlyQuota) {
         return ((($this->getCurrentDailyLookups()+1)<=$maxDailyQuota) &&
             (($this->getCurrentMonthlyLookups()+1)<=$maxMonthlyQuota));
     }
 
+    /**
+     * counts each lookup, necessary for several API's
+     */
     public function countLookup() {
         $now = DateTimeService::getUTCnow();
         if($this->isNewLookupMonth($now)) {
@@ -66,6 +78,10 @@ class AddressLookupQuotaHelper {
         $this->currentMonthlyLookups++;
     }
 
+    /**
+     * @param $now
+     * @return bool
+     */
     protected function isNewLookupDay($now) {
         $toReturn = false;
         if(DateTimeService::getYear($now)!==DateTimeService::getYear($this->lastLookupDateTime) ||
@@ -76,6 +92,10 @@ class AddressLookupQuotaHelper {
         return $toReturn;
     }
 
+    /**
+     * @param $now
+     * @return bool
+     */
     protected function isNewLookupMonth($now) {
         $toReturn = false;
         if(DateTimeService::getYear($now)!==DateTimeService::getYear($this->lastLookupDateTime) ||
@@ -85,10 +105,16 @@ class AddressLookupQuotaHelper {
         return $toReturn;
     }
 
+    /**
+     * resets daily lookup count
+     */
     protected function resetDailyStatus() {
         $this->setCurrentDailyLookups(0);
     }
 
+    /**
+     * resets monthly lookup
+     */
     protected function resetMonthlyStatus() {
         $this->setCurrentMonthlyLookups(0);
     }

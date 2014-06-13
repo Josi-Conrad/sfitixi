@@ -11,6 +11,10 @@ namespace Tixi\ApiBundle\Form\Shared;
 
 use Symfony\Component\Form\AbstractType;
 
+/**
+ * Class CommonAbstractType
+ * @package Tixi\ApiBundle\Form\Shared
+ */
 abstract class CommonAbstractType extends AbstractType{
 
     /**

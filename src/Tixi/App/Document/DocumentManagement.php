@@ -9,6 +9,7 @@
 namespace Tixi\App\Document;
 
 /**
+ * responsible to create files, pdf files etc. for given business case
  * Interface DocumentManagement
  * @package Tixi\App\Document
  */

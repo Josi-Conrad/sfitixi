@@ -63,6 +63,7 @@ class ShiftTypeDataGridController extends DataGridAbstractController{
         if (!$this->isInEmbeddedState()) {
             return new ShiftTypeListDTO();
         }
+        return null;
     }
 
     /**

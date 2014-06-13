@@ -19,6 +19,10 @@ use Tixi\ApiBundle\Tile\Core\SelectionButtonTile;
 use Tixi\ApiBundle\Tile\Core\TextLinkSelectionTile;
 use Tixi\CoreDomain\Shared\GenericEntityFilter\GenericEntityFilter;
 
+/**
+ * Class ProductionPlanDataGridController
+ * @package Tixi\ApiBundle\Shared\DataGrid\GridControllers\Dispo
+ */
 class ProductionPlanDataGridController extends DataGridAbstractController{
 
     /**

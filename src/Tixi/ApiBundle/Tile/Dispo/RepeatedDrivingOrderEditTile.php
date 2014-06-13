@@ -12,6 +12,10 @@ namespace Tixi\ApiBundle\Tile\Dispo;
 use Tixi\ApiBundle\Tile\AbstractTile;
 use Tixi\ApiBundle\Tile\Core\FormControlTile;
 
+/**
+ * Class RepeatedDrivingOrderEditTile
+ * @package Tixi\ApiBundle\Tile\Dispo
+ */
 class RepeatedDrivingOrderEditTile extends AbstractTile{
 
     protected $formId;

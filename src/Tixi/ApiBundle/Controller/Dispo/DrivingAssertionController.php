@@ -71,6 +71,11 @@ class DrivingAssertionController extends Controller{
         return $this->redirect($this->generateUrl('tixiapi_driver_get',array('driverId' => $driverId)));
     }
 
+    /**
+     * @param $drivingAssertionId
+     * @return null|object
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     */
     public function getDrivingAssertionById($drivingAssertionId) {
         $drivingAssertion = $this->get('drivingassertion_repository')->find($drivingAssertionId);
         if (null === $drivingAssertion) {

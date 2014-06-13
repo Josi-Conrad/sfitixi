@@ -21,6 +21,10 @@ use Tixi\ApiBundle\Tile\Core\TextLinkSelectionDeleteTile;
 use Tixi\ApiBundle\Tile\Core\TextLinkSelectionTile;
 use Tixi\CoreDomain\Shared\GenericEntityFilter\GenericEntityFilter;
 
+/**
+ * Class DrivingOrderDataGridController
+ * @package Tixi\ApiBundle\Shared\DataGrid\GridControllers\Dispo
+ */
 class DrivingOrderDataGridController extends DataGridAbstractController{
 
     /**

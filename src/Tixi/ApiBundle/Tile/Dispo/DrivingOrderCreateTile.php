@@ -12,6 +12,10 @@ namespace Tixi\ApiBundle\Tile\Dispo;
 use Tixi\ApiBundle\Tile\AbstractTile;
 use Tixi\ApiBundle\Tile\Core\FormControlTile;
 
+/**
+ * Class DrivingOrderCreateTile
+ * @package Tixi\ApiBundle\Tile\Dispo
+ */
 class DrivingOrderCreateTile extends AbstractTile{
 
     protected $formId;

@@ -30,6 +30,9 @@ class TextOnlyTranslatedType extends AbstractType {
         ));
     }
 
+    /**
+     * @return null|string|\Symfony\Component\Form\FormTypeInterface
+     */
     public function getParent() {
         return 'text';
     }

@@ -17,6 +17,7 @@ use Tixi\CoreDomain\Address;
 use Tixi\CoreDomain\Dispo\Route;
 
 /**
+ * Runs multiple OSRM Route Queries for testing purpose
  * Class RunOSRMTestCommand
  * @package Tixi\App\AppBundle\Command\Tests
  */

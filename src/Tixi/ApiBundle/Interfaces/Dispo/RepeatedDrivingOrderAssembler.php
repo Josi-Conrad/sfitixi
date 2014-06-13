@@ -31,7 +31,11 @@ class RepeatedDrivingOrderAssembler {
     /** @var  ZonePlanManagement $zonePlanManagement */
     protected $zonePlanManagement;
 
-
+    /**
+     * @param DrivingOrderRegisterDTO $registerDTO
+     * @param Passenger $passenger
+     * @return RepeatedDrivingOrderPlan
+     */
     public function registerDTOtoNewDrivingOrderPlan(DrivingOrderRegisterDTO $registerDTO, Passenger $passenger) {
         /** @var Address $fromAddress */
         $fromAddress = $this->addressAssembler->addressLookaheadDTOtoAddress($registerDTO->lookaheadaddressFrom);
@@ -58,6 +62,10 @@ class RepeatedDrivingOrderAssembler {
         return $drivingOrderPlan;
     }
 
+    /**
+     * @param DrivingOrderRegisterDTO $registerDTO
+     * @param RepeatedDrivingOrderPlan $drivingOrderPlan
+     */
     public function registerDTOtoDrivingOrderPlan(DrivingOrderRegisterDTO $registerDTO, RepeatedDrivingOrderPlan $drivingOrderPlan) {
         $drivingOrderPlan->update(
             $registerDTO->anchorDate,
@@ -69,6 +77,11 @@ class RepeatedDrivingOrderAssembler {
         );
     }
 
+    /**
+     * @param DrivingOrderRegisterDTO $registerDTO
+     * @return array|ArrayCollection
+     * @throws \Tixi\ApiBundle\Form\Dispo\DrivingOrderOutwardTimeException
+     */
     public function registerDTOtoRepeatedDrivingOrders(DrivingOrderRegisterDTO $registerDTO) {
         $repeatedDrivingOrders = new ArrayCollection();
         if(!empty($registerDTO->mondayOrderTime->outwardTime)) {
@@ -137,6 +150,10 @@ class RepeatedDrivingOrderAssembler {
         return $repeatedDrivingOrders;
     }
 
+    /**
+     * @param RepeatedDrivingOrderPlan $repeatedDrivingOrderPlan
+     * @return DrivingOrderRegisterDTO
+     */
     public function drivingOrderPlanToRegisterDTO(RepeatedDrivingOrderPlan $repeatedDrivingOrderPlan) {
         $registerDTO = new DrivingOrderRegisterDTO();
         $registerDTO->id = $repeatedDrivingOrderPlan->getId();
@@ -216,6 +233,12 @@ class RepeatedDrivingOrderAssembler {
 
     }
 
+    /**
+     * @param null $outwardTime
+     * @param null $returnTime
+     * @param DrivingOrderTimeDTO $orderTimeDTO
+     * @return DrivingOrderTimeDTO
+     */
     protected function createOrUpdateOrderTimeDTO($outwardTime = null, $returnTime = null, DrivingOrderTimeDTO $orderTimeDTO = null) {
         $orderTimeDTO = (null !== $orderTimeDTO) ? $orderTimeDTO : new DrivingOrderTimeDTO();
         if(null !== $outwardTime) {
@@ -227,6 +250,10 @@ class RepeatedDrivingOrderAssembler {
         return $orderTimeDTO;
     }
 
+    /**
+     * @param $orderPlans
+     * @return array
+     */
     public function orderPlansToEmbeddedListDTOs($orderPlans) {
         $dtoArray = array();
         foreach ($orderPlans as $orderPlan) {
@@ -235,6 +262,10 @@ class RepeatedDrivingOrderAssembler {
         return $dtoArray;
     }
 
+    /**
+     * @param RepeatedDrivingOrderPlan $orderPlan
+     * @return RepeatedDrivingOrderEmbeddedListDTO
+     */
     public function orderPlanToEmbeddedListDTOs(RepeatedDrivingOrderPlan $orderPlan) {
         $dto = new RepeatedDrivingOrderEmbeddedListDTO();
         $dto->id = $orderPlan->getId();
@@ -244,18 +275,23 @@ class RepeatedDrivingOrderAssembler {
         return $dto;
     }
 
-
-
-
-
+    /**
+     * @param AddressAssembler $assembler
+     */
     public function setAddressAssembler(AddressAssembler $assembler) {
         $this->addressAssembler = $assembler;
     }
 
+    /**
+     * @param RouteManagement $routeManagement
+     */
     public function setRouteManagement(RouteManagement $routeManagement) {
         $this->routeManagement = $routeManagement;
     }
 
+    /**
+     * @param ZonePlanManagement $zonePlanManagement
+     */
     public function setZonePlaneManagement(ZonePlanManagement $zonePlanManagement) {
         $this->zonePlanManagement = $zonePlanManagement;
     }

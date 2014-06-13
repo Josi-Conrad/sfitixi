@@ -14,6 +14,10 @@ use Tixi\ApiBundle\Shared\DataGrid\DataGridSourceClass;
 use Tixi\CoreDomain\Shared\GenericEntityFilter\GenericAccessQuery;
 use Tixi\ApiBundle\Helper\DateTimeService;
 
+/**
+ * Class RepeatedDrivingOrderEmbeddedListDTO
+ * @package Tixi\ApiBundle\Interfaces\Dispo
+ */
 class RepeatedDrivingOrderEmbeddedListDTO implements DataGridSourceClass {
     /**
      * @GridField(rowIdentifier=true, propertyId="RepeatedDrivingOrderPlan.id")
@@ -48,6 +52,10 @@ class RepeatedDrivingOrderEmbeddedListDTO implements DataGridSourceClass {
         return new GenericAccessQuery('RepeatedDrivingOrderPlan', 'Tixi\CoreDomain\Dispo\RepeatedDrivingOrderPlan RepeatedDrivingOrderPlan JOIN RepeatedDrivingOrderPlan.passenger Passenger', 'RepeatedDrivingOrderPlan.id');
     }
 
+    /**
+     * @param $passengerId
+     * @return RepeatedDrivingOrderEmbeddedListDTO
+     */
     public static function createReferenceDTOByPassengerId($passengerId) {
         $dto = new RepeatedDrivingOrderEmbeddedListDTO();
         $dto->passengerId = $passengerId;

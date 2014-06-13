@@ -8,7 +8,11 @@
 
 namespace Tixi\ApiBundle\Controller\Dispo;
 
-
+/**
+ * For future release
+ * Class DailyViewController
+ * @package Tixi\ApiBundle\Controller\Dispo
+ */
 class DailyViewController {
 
 } 

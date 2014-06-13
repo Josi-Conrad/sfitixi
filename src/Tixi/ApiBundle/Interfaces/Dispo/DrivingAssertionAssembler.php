@@ -11,8 +11,15 @@ namespace Tixi\ApiBundle\Interfaces\Dispo;
 
 use Tixi\CoreDomain\Dispo\DrivingAssertion;
 
+/**
+ * Class DrivingAssertionAssembler
+ * @package Tixi\ApiBundle\Interfaces\Dispo
+ */
 class DrivingAssertionAssembler {
-
+    /**
+     * @param $drivingAssertions
+     * @return array
+     */
     public function drivingAssertionToDrivngAssertionEmbeddedListDTOs($drivingAssertions) {
         $dtoArray = array();
         foreach ($drivingAssertions as $drivingAssertion) {
@@ -21,6 +28,10 @@ class DrivingAssertionAssembler {
         return $dtoArray;
     }
 
+    /**
+     * @param DrivingAssertion $drivingAssertion
+     * @return DrivingAssertionEmbeddedListDTO
+     */
     public function drivingAssertionToDrivngAssertionEmbeddedListDTO(DrivingAssertion $drivingAssertion) {
         $dto = new DrivingAssertionEmbeddedListDTO();
         $dto->id = $drivingAssertion->getId();

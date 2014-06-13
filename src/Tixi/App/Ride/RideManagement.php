@@ -11,6 +11,11 @@ namespace Tixi\App\Ride;
 
 use Tixi\CoreDomain\Dispo\Shift;
 
+/**
+ * responsible for optimization processes, like rideOptimization , or feasibility check methods
+ * Interface RideManagement
+ * @package Tixi\App\Ride
+ */
 interface RideManagement {
     /**
      * @param \DateTime $dayTime

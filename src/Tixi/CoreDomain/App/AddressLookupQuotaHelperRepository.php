@@ -12,6 +12,10 @@ namespace Tixi\CoreDomain\App;
 use Tixi\CoreDomain\Shared\CommonBaseRepository;
 use Tixi\CoreDomainBundle\Repository\CommonBaseRepositoryDoctrine;
 
+/**
+ * Interface AddressLookupQuotaHelperRepository
+ * @package Tixi\CoreDomain\App
+ */
 interface AddressLookupQuotaHelperRepository extends CommonBaseRepository{
     /**
      * @param AddressLookupQuotaHelper $addressLookupQuotaHelper

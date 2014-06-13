@@ -16,8 +16,15 @@ use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Tixi\ApiBundle\Interfaces\Dispo\ProductionView\ProductionViewWorkingDayDTO;
 
+/**
+ * Class ProductionViewWorkingDayType
+ * @package Tixi\ApiBundle\Form\Dispo\ProductionView
+ */
 class ProductionViewWorkingDayType extends AbstractType{
-
+    /**
+     * @param FormBuilderInterface $builder
+     * @param array $options
+     */
     public function buildForm(FormBuilderInterface $builder, array $options) {
 
         $builder->add('workingShifts', 'collection', array(
@@ -32,6 +39,11 @@ class ProductionViewWorkingDayType extends AbstractType{
 
     }
 
+    /**
+     * @param FormView $view
+     * @param FormInterface $form
+     * @param array $options
+     */
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
         /** @var ProductionViewWorkingDayDTO $data */

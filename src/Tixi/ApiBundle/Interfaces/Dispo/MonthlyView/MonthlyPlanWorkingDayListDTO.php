@@ -12,6 +12,10 @@ use Tixi\ApiBundle\Shared\DataGrid\Annotations\GridField;
 use Tixi\ApiBundle\Shared\DataGrid\DataGridSourceClass;
 use Tixi\CoreDomain\Shared\GenericEntityFilter\GenericAccessQuery;
 
+/**
+ * Class MonthlyPlanWorkingDayListDTO
+ * @package Tixi\ApiBundle\Interfaces\Dispo\MonthlyView
+ */
 class MonthlyPlanWorkingDayListDTO implements DataGridSourceClass{
     /**
      * @GridField(rowIdentifier=true, propertyId="WorkingDay.id")

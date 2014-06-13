@@ -8,7 +8,10 @@
 
 namespace Tixi\ApiBundle\Interfaces\Dispo\ProductionView;
 
-
+/**
+ * Class ProductionViewWorkingShiftDTO
+ * @package Tixi\ApiBundle\Interfaces\Dispo\ProductionView
+ */
 class ProductionViewWorkingShiftDTO {
     public $id;
     public $amountOfDrivers;

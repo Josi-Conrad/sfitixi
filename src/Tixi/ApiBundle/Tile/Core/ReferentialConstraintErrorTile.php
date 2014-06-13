@@ -11,10 +11,17 @@ namespace Tixi\ApiBundle\Tile\Core;
 
 use Tixi\ApiBundle\Tile\AbstractTile;
 
+/**
+ * Class ReferentialConstraintErrorTile
+ * @package Tixi\ApiBundle\Tile\Core
+ */
 class ReferentialConstraintErrorTile extends AbstractTile{
 
     protected $amountOfObjects;
 
+    /**
+     * @param $amountOfObjects
+     */
     public function __construct($amountOfObjects) {
         $this->add(new BackButtonTile());
         $this->amountOfObjects = $amountOfObjects;

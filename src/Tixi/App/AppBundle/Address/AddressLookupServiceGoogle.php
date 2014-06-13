@@ -55,7 +55,6 @@ class AddressLookupServiceGoogle extends AddressLookupService {
      */
     protected function getAddressHandlingDTOs($lookupStr) {
         $url = $this->constructApiURL($lookupStr);
-//        $jsonResponseString = file_get_contents($url);
         $jsonResponseString = $this->getJSONResponse($url);
         $responseObject = json_decode($jsonResponseString);
         $statusCode = $this->googleStatusCodeMapper[$responseObject->status];
@@ -85,7 +84,6 @@ class AddressLookupServiceGoogle extends AddressLookupService {
      */
     protected function getSingleAddressHandleDTO($lookupStr) {
         $url = $this->constructApiURL($lookupStr);
-//        $jsonResponseString = file_get_contents($url);
         $jsonResponseString = $this->getJSONResponse($url);
         $responseObject = json_decode($jsonResponseString);
         $statusCode = $this->googleStatusCodeMapper[$responseObject->status];

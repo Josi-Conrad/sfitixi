@@ -11,7 +11,11 @@ namespace Tixi\CoreDomain\Dispo;
 
 use Tixi\CoreDomain\Shared\CommonBaseRepository;
 
-interface DrivingAssertionRepository extends CommonBaseRepository{
+/**
+ * Interface DrivingAssertionRepository
+ * @package Tixi\CoreDomain\Dispo
+ */
+interface DrivingAssertionRepository extends CommonBaseRepository {
 
     /**
      * @param DrivingAssertion $drivingAssertion
@@ -25,8 +29,16 @@ interface DrivingAssertionRepository extends CommonBaseRepository{
      */
     public function remove(DrivingAssertion $drivingAssertion);
 
+    /**
+     * @param Shift $shift
+     * @return mixed
+     */
     public function findAllActiveByShift(Shift $shift);
 
+    /**
+     * @param RepeatedDrivingAssertionPlan $repeatedDrivingAssertionPlan
+     * @return mixed
+     */
     public function findAllProspectiveByRepeatedDrivingAssertionPlan(RepeatedDrivingAssertionPlan $repeatedDrivingAssertionPlan);
-       
+
 } 

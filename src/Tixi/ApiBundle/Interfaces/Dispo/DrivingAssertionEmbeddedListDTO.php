@@ -12,6 +12,10 @@ use Tixi\ApiBundle\Shared\DataGrid\Annotations\GridField;
 use Tixi\ApiBundle\Shared\DataGrid\DataGridSourceClass;
 use Tixi\CoreDomain\Shared\GenericEntityFilter\GenericAccessQuery;
 
+/**
+ * Class DrivingAssertionEmbeddedListDTO
+ * @package Tixi\ApiBundle\Interfaces\Dispo
+ */
 class DrivingAssertionEmbeddedListDTO implements DataGridSourceClass{
     /**
      * @GridField(rowIdentifier=true, propertyId="DrivingAssertion.id")

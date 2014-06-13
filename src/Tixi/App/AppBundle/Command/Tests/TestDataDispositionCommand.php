@@ -29,6 +29,7 @@ use Tixi\CoreDomain\Passenger;
 use Tixi\CoreDomain\POI;
 
 /**
+ * Creates multiple random DrivingOrders/Mission and DrivingPools
  * Class TestDataDispositionCommand
  * @package Tixi\App\AppBundle\Command\Tests
  */

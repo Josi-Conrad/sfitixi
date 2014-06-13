@@ -22,6 +22,11 @@ class MonthlyPlanAssembler {
     /** @var  DispositionManagement $dispoService */
     protected $dispoService;
 
+    /**
+     * @param WorkingDay $workingDay
+     * @param $workingMonthId
+     * @return MonthlyPlanEditDTO
+     */
     public function workingDayToEditDTO(WorkingDay $workingDay, $workingMonthId) {
         $dto = new MonthlyPlanEditDTO();
         $dto->workingMonthId = $workingMonthId;
@@ -46,6 +51,9 @@ class MonthlyPlanAssembler {
         return $dto;
     }
 
+    /**
+     * @param MonthlyPlanEditDTO $editDTO
+     */
     public function editDTOtoWorkingDay(MonthlyPlanEditDTO $editDTO) {
         $this->dispoService->createDrivingAssertionsFromMonthlyPlan($editDTO);
     }
@@ -62,6 +70,10 @@ class MonthlyPlanAssembler {
         return $dtoArray;
     }
 
+    /**
+     * @param WorkingMonth $workingMonth
+     * @return MonthlyPlanListDTO
+     */
     public function workingMonthToListDTO(WorkingMonth $workingMonth) {
         $dto = new MonthlyPlanListDTO();
         $dto->id = $workingMonth->getId();
@@ -82,6 +94,10 @@ class MonthlyPlanAssembler {
         return $dtoArray;
     }
 
+    /**
+     * @param WorkingDay $workingDay
+     * @return MonthlyPlanWorkingDayListDTO
+     */
     public function workingMonthToWorkingDayListDTO(WorkingDay $workingDay) {
         $dto = new MonthlyPlanWorkingDayListDTO();
         $dto->id = $workingDay->getId();
@@ -93,10 +109,11 @@ class MonthlyPlanAssembler {
         return $dto;
     }
 
+    /**
+     * @param DispositionManagement $dispoService
+     */
     public function setDispoService(DispositionManagement $dispoService) {
         $this->dispoService = $dispoService;
     }
-
-
 
 }

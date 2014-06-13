@@ -16,6 +16,10 @@ use Tixi\CoreDomain\POI;
 use Tixi\CoreDomain\POIRepository;
 use Tixi\CoreDomainBundle\Repository\AddressRepositoryDoctrine;
 
+/**
+ * Class PoiLookupServiceLocalDoctrineMysql
+ * @package Tixi\App\AppBundle\Address
+ */
 class PoiLookupServiceLocalDoctrineMysql extends AddressLookupService{
     /**
      * @return bool|mixed

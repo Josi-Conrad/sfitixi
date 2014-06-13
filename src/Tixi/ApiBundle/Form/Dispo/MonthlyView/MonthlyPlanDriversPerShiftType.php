@@ -16,6 +16,10 @@ use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Tixi\ApiBundle\Interfaces\Dispo\MonthlyView\MonthlyPlanDriversPerShiftDTO;
 
+/**
+ * Class MonthlyPlanDriversPerShiftType
+ * @package Tixi\ApiBundle\Form\Dispo\MonthlyView
+ */
 class MonthlyPlanDriversPerShiftType extends AbstractType{
 
     public function buildForm(FormBuilderInterface $builder, array $options) {

@@ -59,6 +59,7 @@ class PersonCategoryDataGridController extends DataGridAbstractController {
         if (!$this->isInEmbeddedState()) {
             return new PersonCategoryListDTO();
         }
+        return null;
     }
 
     /**

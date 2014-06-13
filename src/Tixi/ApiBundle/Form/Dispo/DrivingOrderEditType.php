@@ -16,8 +16,15 @@ use Tixi\ApiBundle\Form\Shared\CommonAbstractType;
 use Tixi\ApiBundle\Form\Shared\DrivingOrderTime;
 use Tixi\CoreDomain\Dispo\DrivingOrder;
 
+/**
+ * Class DrivingOrderEditType
+ * @package Tixi\ApiBundle\Form\Dispo
+ */
 class DrivingOrderEditType extends CommonAbstractType{
-
+    /**
+     * @param FormBuilderInterface $builder
+     * @param array $options
+     */
     public function buildForm(FormBuilderInterface $builder, array $options) {
         $builder->add('id', 'hidden');
 

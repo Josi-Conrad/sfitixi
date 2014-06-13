@@ -18,8 +18,15 @@ use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Tixi\ApiBundle\Form\Shared\AddressHandleType;
 
+/**
+ * Class AddressLookaheadType
+ * @package Tixi\ApiBundle\Form\Shared\Lookahead
+ */
 class AddressLookaheadType extends AbstractLookaheadType {
-
+    /**
+     * @param FormBuilderInterface $builder
+     * @param array $options
+     */
     public function buildForm(FormBuilderInterface $builder, array $options) {
         $builder->add('addressDisplayName','text');
         $builder->add('addressHandle', new AddressHandleType());
@@ -55,11 +62,17 @@ class AddressLookaheadType extends AbstractLookaheadType {
         return 'addresslookahead';
     }
 
+    /**
+     * @return mixed
+     */
     protected function getDataSrc()
     {
         return $this->generateUrl('tixiapp_service_address');
     }
 
+    /**
+     * @return mixed
+     */
     protected function getGoogleMapsApiKey() {
         return $this->container->getParameter('tixi_parameter_google_apikey');
     }

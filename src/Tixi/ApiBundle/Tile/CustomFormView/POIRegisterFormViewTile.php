@@ -18,7 +18,9 @@ use Tixi\CoreDomain\POI;
  * @package Tixi\ApiBundle\Tile\CustomFormView
  */
 class POIRegisterFormViewTile extends AbstractFormViewTile {
-
+    /**
+     * @return mixed|void
+     */
     public function createFormRows() {
         $dto = $this->dto;
         $this->basicFormRows[] = new FormRowView('id', 'poi.field.id', $dto->id);

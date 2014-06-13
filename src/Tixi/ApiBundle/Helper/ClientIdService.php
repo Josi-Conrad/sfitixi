@@ -11,6 +11,11 @@ namespace Tixi\ApiBundle\Helper;
 
 use Symfony\Component\DependencyInjection\ContainerAware;
 
+/**
+ * Sets ClientID and region search in Google API for a client.
+ * Class ClientIdService
+ * @package Tixi\ApiBundle\Helper
+ */
 class ClientIdService extends ContainerAware{
 
     const ZUGID = 'tixi_zug';
@@ -20,6 +25,9 @@ class ClientIdService extends ContainerAware{
         'TIXIZUG' => self::ZUGID
     );
 
+    /**
+     * @return null|string
+     */
     public function getClientId() {
         $clientId = $this->container->getParameter('tixi_parameter_client');
         $approvedId = null;

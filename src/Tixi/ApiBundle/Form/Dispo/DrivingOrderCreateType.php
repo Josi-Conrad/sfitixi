@@ -20,7 +20,10 @@ use Tixi\ApiBundle\Form\Shared\DrivingOrderTime;
  * @package Tixi\ApiBundle\Form\Dispo
  */
 class DrivingOrderCreateType extends CommonAbstractType{
-
+    /**
+     * @param FormBuilderInterface $builder
+     * @param array $options
+     */
     public function buildForm(FormBuilderInterface $builder, array $options) {
         $builder->add('id', 'hidden');
 
@@ -123,7 +126,4 @@ class DrivingOrderCreateType extends CommonAbstractType{
         ));
     }
 
-    public static function createOutwardError() {
-
-    }
 } 

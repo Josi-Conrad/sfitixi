@@ -19,8 +19,11 @@ use Tixi\ApiBundle\Tile\Core\SelectionButtonTile;
 use Tixi\ApiBundle\Tile\Core\TextLinkSelectionTile;
 use Tixi\CoreDomain\Shared\GenericEntityFilter\GenericEntityFilter;
 
+/**
+ * Class MonthlyPlanWorkingDayDataGridController
+ * @package Tixi\ApiBundle\Shared\DataGrid\GridControllers\Dispo
+ */
 class MonthlyPlanWorkingDayDataGridController extends DataGridAbstractController{
-
 
     /**
      * @return mixed
@@ -40,7 +43,6 @@ class MonthlyPlanWorkingDayDataGridController extends DataGridAbstractController
         $selectionButton->add(new TextLinkSelectionTile('edit', $this->generateUrl('tixiapi_dispo_monthlyplan_edit', array('workingMonthId'=>$this->routeProperties['workingMonthId'],'workingDayId' => DataGridHandler::$dataGirdReplaceIdentifier)), 'button.edit', true));
         $selectionButton->add(new SelectionButtonDividerTile()
         );
-//        $customControlTile->add(new LinkButtonTile($this->getGridIdentifier() . '_new', $this->generateUrl('tixiapi_dispo_productionplan_new'), 'productionplan.button.new', LinkButtonTile::$primaryType));
         return $customControlTile;
     }
 

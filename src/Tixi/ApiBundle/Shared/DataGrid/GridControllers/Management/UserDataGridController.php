@@ -59,6 +59,7 @@ class UserDataGridController extends DataGridAbstractController {
         if (!$this->isInEmbeddedState()) {
             return new UserListDTO();
         }
+        return null;
     }
 
     /**

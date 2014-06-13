@@ -64,14 +64,12 @@ class VehicleController extends Controller {
         $dataGridTile = $dataGridHandler->createDataGridTileByRequest($request, $this->menuId, $gridController);
 
         $rootPanel = null;
-        if(!$embeddedState && !$isPartial) {
+        if (!$embeddedState && !$isPartial) {
             $rootPanel = new RootPanel($this->menuId, 'vehicle.list.name');
             $rootPanel->add($dataGridTile);
-        }else {
+        } else {
             $rootPanel = $dataGridTile;
         }
-
-
 
 
         return new Response($tileRenderer->render($rootPanel));
@@ -99,13 +97,15 @@ class VehicleController extends Controller {
         $gridTile = $dataGridHandler->createEmbeddedDataGridTile($this->menuId, $gridController);
 
         $rootPanel = new RootPanel($this->menuId, 'vehicle.panel.name', $vehicle->getName());
+        /**@var $panelSplitter PanelSplitterTile */
         $panelSplitter = $rootPanel->add(new PanelSplitterTile('1:1'));
+        /**@var $formPanel PanelTile */
         $formPanel = $panelSplitter->addLeft(new PanelTile('vehicle.panel.details', PanelTile::$primaryType));
 
         $formPanel->add(new VehicleRegisterFormViewTile('vehicleRequest', $vehicleDTO, $this->generateUrl('tixiapi_vehicle_edit', array('vehicleId' => $vehicleId))));
         $gridPanel = $panelSplitter->addRight(new PanelTile('serviceplan.panel.embedded'));
         $gridPanel->add($gridTile);
-        $rootPanel->add(new PanelDeleteFooterTile($this->generateUrl('tixiapi_vehicle_delete', array('vehicleId' => $vehicleId)),'vehicle.button.delete'));
+        $rootPanel->add(new PanelDeleteFooterTile($this->generateUrl('tixiapi_vehicle_delete', array('vehicleId' => $vehicleId)), 'vehicle.button.delete'));
 
         return new Response($tileRenderer->render($rootPanel));
     }
@@ -186,7 +186,7 @@ class VehicleController extends Controller {
         $formPanel->add(new FormTile($form));
         $gridPanel = $panelSplitter->addRight(new PanelTile('vehicle.panel.serviceplans'));
         $gridPanel->add($gridTile);
-        $rootPanel->add(new PanelDeleteFooterTile($this->generateUrl('tixiapi_vehicle_delete', array('vehicleId' => $vehicleId)),'vehicle.button.delete'));
+        $rootPanel->add(new PanelDeleteFooterTile($this->generateUrl('tixiapi_vehicle_delete', array('vehicleId' => $vehicleId)), 'vehicle.button.delete'));
 
         return new Response($tileRenderer->render($rootPanel));
     }
@@ -226,7 +226,7 @@ class VehicleController extends Controller {
             $options = array();
         }
         return $this->createForm(new VehicleType(
-            $this->menuId, $this->get('security.context')->getToken()->getUser()),
+                $this->menuId, $this->get('security.context')->getToken()->getUser()),
             $vehicleDTO, $options);
     }
 

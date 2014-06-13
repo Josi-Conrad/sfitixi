@@ -64,6 +64,7 @@ class ZonePlanDataGridController extends DataGridAbstractController {
         if(!$this->isInEmbeddedState()) {
             return new ZonePlanListDTO();
         }
+        return null;
     }
 
     /**

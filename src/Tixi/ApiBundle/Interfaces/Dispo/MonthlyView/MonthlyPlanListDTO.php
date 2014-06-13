@@ -8,10 +8,15 @@
 
 namespace Tixi\ApiBundle\Interfaces\Dispo\MonthlyView;
 
+use Tixi\ApiBundle\Interfaces\Dispo\ProductionView\ProductionPlanListDTO;
 use Tixi\ApiBundle\Shared\DataGrid\Annotations\GridField;
 use Tixi\ApiBundle\Shared\DataGrid\DataGridSourceClass;
 use Tixi\CoreDomain\Shared\GenericEntityFilter\GenericAccessQuery;
 
+/**
+ * Class MonthlyPlanListDTO
+ * @package Tixi\ApiBundle\Interfaces\Dispo\MonthlyView
+ */
 class MonthlyPlanListDTO implements DataGridSourceClass{
     /**
      * @GridField(rowIdentifier=true, propertyId="WorkingMonth.id")

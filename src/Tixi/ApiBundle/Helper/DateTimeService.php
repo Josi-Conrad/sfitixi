@@ -13,6 +13,7 @@ use Symfony\Component\DependencyInjection\ContainerAware;
 use Symfony\Component\Validator\Constraints\DateTime;
 
 /**
+ * This Class helps with time-calculations
  * Class DateTimeService
  * @package Tixi\ApiBundle\Helper
  */

@@ -19,7 +19,9 @@ use Tixi\CoreDomain\Person;
  * @package Tixi\ApiBundle\Tile\CustomFormView
  */
 class DriverRegisterFormViewTile extends AbstractFormViewTile {
-
+    /**
+     * @return mixed|void
+     */
     public function createFormRows() {
         /**@var $dto \Tixi\ApiBundle\Interfaces\DriverRegisterDTO */
         $dto = $this->dto;

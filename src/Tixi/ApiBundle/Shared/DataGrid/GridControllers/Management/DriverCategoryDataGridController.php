@@ -59,6 +59,7 @@ class DriverCategoryDataGridController extends DataGridAbstractController {
         if (!$this->isInEmbeddedState()) {
             return new DriverCategoryListDTO();
         }
+        return null;
     }
 
     /**

@@ -16,6 +16,10 @@ use Tixi\App\AppBundle\Interfaces\AddressHandleDTO;
 use Tixi\CoreDomain\Address;
 use Tixi\CoreDomainBundle\Repository\AddressRepositoryDoctrine;
 
+/**
+ * Class AddressManagementImpl
+ * @package Tixi\App\AppBundle\Address
+ */
 class AddressManagementImpl extends ContainerAware implements AddressManagement {
 
     /**

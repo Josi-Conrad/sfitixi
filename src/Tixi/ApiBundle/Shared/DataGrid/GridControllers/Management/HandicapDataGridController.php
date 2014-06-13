@@ -64,6 +64,7 @@ class HandicapDataGridController extends DataGridAbstractController {
         if(!$this->isInEmbeddedState()) {
             return new HandicapListDTO();
         }
+        return null;
     }
 
     /**

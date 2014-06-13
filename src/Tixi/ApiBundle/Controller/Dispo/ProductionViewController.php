@@ -34,7 +34,7 @@ use Tixi\CoreDomain\Dispo\WorkingMonthRepository;
  * @Route("/disposition/productionplan")
  * @Breadcrumb("productionplan.panel.name", route="tixiapi_dispo_productionplans_get")
  */
-class ProductionViewController extends Controller{
+class ProductionViewController extends Controller {
 
     protected $menuId;
 
@@ -97,16 +97,16 @@ class ProductionViewController extends Controller{
 
         $form->handleRequest($request);
 
-        if($form->isValid()) {
+        if ($form->isValid()) {
             $editDTO = $form->getData();
             try {
                 $assembler->editDtoToWorkingMonth($editDTO, $workingMonth);
                 $this->get('entity_manager')->flush();
                 return $this->redirect($this->generateUrl('tixiapi_dispo_productionplans_get'));
-            }catch (\LogicException $e) {
-                $form->addError(new FormError($e->getMessage().': '.$this->get('translator')->trans('productionplan.form.drivingpoolerror')));
-            }catch (\InvalidArgumentException $e) {
+            } catch (\InvalidArgumentException $e) {
                 $form->addError(new FormError($this->get('translator')->trans('productionplan.form.drivingpoolerror')));
+            } catch (\LogicException $e) {
+                $form->addError(new FormError($e->getMessage() . ': ' . $this->get('translator')->trans('productionplan.form.drivingpoolerror')));
             }
         }
 
@@ -140,7 +140,7 @@ class ProductionViewController extends Controller{
             $createDTO = $form->getData();
             /** @var WorkingMonth $workingMonth */
             $workingMonth = $assembler->createDTOtoNewProductionPlan($createDTO, $workingMonthRepository);
-            if(null === $workingMonth) {
+            if (null === $workingMonth) {
                 throw $this->createNotFoundException('a problem occured during the creation process.');
             }
             $this->get('entity_manager')->flush();
@@ -152,10 +152,15 @@ class ProductionViewController extends Controller{
         return new Response($tileRenderer->render($rootPanel));
     }
 
+    /**
+     * @param $workingMonthId
+     * @return null|object
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     */
     protected function getWorkingMonthById($workingMonthId) {
         $workingMonthRepository = $this->get('workingmonth_repository');
         $workingMonth = $workingMonthRepository->find($workingMonthId);
-        if(null === $workingMonth) {
+        if (null === $workingMonth) {
             throw $this->createNotFoundException('The workingMonth with id ' . $workingMonthId . ' does not exist');
         }
         return $workingMonth;

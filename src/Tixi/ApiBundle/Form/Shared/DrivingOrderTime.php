@@ -14,10 +14,17 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints\Time;
 
+/**
+ * Class DrivingOrderTime
+ * @package Tixi\ApiBundle\Form\Shared
+ */
 class DrivingOrderTime extends AbstractType{
 
     protected $weekday;
 
+    /**
+     * @param string $weekday
+     */
     public function __construct($weekday = '') {
         $this->weekday = $weekday;
     }

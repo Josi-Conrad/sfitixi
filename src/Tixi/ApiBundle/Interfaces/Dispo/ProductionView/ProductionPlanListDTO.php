@@ -13,6 +13,10 @@ use Tixi\ApiBundle\Shared\DataGrid\Annotations\GridField;
 use Tixi\ApiBundle\Shared\DataGrid\DataGridSourceClass;
 use Tixi\CoreDomain\Shared\GenericEntityFilter\GenericAccessQuery;
 
+/**
+ * Class ProductionPlanListDTO
+ * @package Tixi\ApiBundle\Interfaces\Dispo\ProductionView
+ */
 class ProductionPlanListDTO implements DataGridSourceClass{
     /**
      * @GridField(rowIdentifier=true, propertyId="WorkingMonth.id")

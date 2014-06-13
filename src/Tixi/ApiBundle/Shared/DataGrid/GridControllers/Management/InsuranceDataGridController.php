@@ -64,6 +64,7 @@ class InsuranceDataGridController extends DataGridAbstractController{
         if(!$this->isInEmbeddedState()) {
             return new InsuranceListDTO();
         }
+        return null;
     }
 
     /**

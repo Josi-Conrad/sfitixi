@@ -64,6 +64,7 @@ class PoiKeywordDataGridController extends DataGridAbstractController{
         if(!$this->isInEmbeddedState()) {
             return new PoiKeywordListDTO();
         }
+        return null;
     }
 
     /**

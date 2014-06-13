@@ -16,6 +16,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Tixi\CoreDomain\Address;
 
 /**
+ * sends mail to all drivers for given month
  * Class SendMonthPlanMailCommand
  * @package Tixi\App\AppBundle\Command
  */

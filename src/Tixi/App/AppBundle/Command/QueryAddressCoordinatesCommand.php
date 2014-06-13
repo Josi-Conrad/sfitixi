@@ -17,6 +17,7 @@ use Tixi\CoreDomain\Address;
 use Tixi\CoreDomain\Dispo\Route;
 
 /**
+ * Queries all addresses for coordinate, if non available, fill them
  * Class QueryAddressCoordinatesCommand
  * @package Tixi\App\AppBundle\Command
  */

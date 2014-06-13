@@ -9,6 +9,7 @@
 namespace Tixi\ApiBundle\Helper;
 
 /**
+ * This Class helps with ASCI String-codes
  * Class StringService
  * @package Tixi\ApiBundle\Helper
  */

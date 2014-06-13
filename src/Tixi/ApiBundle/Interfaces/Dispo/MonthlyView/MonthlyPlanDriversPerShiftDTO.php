@@ -8,7 +8,10 @@
 
 namespace Tixi\ApiBundle\Interfaces\Dispo\MonthlyView;
 
-
+/**
+ * Class MonthlyPlanDriversPerShiftDTO
+ * @package Tixi\ApiBundle\Interfaces\Dispo\MonthlyView
+ */
 class MonthlyPlanDriversPerShiftDTO {
 
     public $shiftDisplayName;

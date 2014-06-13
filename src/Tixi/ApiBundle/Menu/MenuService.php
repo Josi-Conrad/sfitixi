@@ -17,6 +17,8 @@ use Tixi\ApiBundle\Tile\Core\SelectionButtonDividerTile;
 use Tixi\ApiBundle\Tile\TileRenderer;
 
 /**
+ * To realize ID-concept within fronted views, this class gives a MenuID to each frontend controller.
+ * The bootstrap navigation panel depends on the MenuSerivce
  * Class MenuService
  * @package Tixi\ApiBundle\Menu
  */

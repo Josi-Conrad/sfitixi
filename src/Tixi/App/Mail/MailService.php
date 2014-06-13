@@ -10,6 +10,7 @@ namespace Tixi\App\Mail;
 
 
 /**
+ * responsible and facade for an easy use of the mail service
  * Interface MailService
  * @package Tixi\App\Routing
  */

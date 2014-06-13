@@ -42,7 +42,9 @@ class DateTimeArrayTransformer implements DataTransformerInterface {
      * @return mixed|null
      */
     public function reverseTransform($array) {
+        /**@var $date \DateTime */
         $date = $array['date'];
+        /**@var $time \DateTime */
         $time = $array['time'];
 
         if (null == $date || null == $time) {

@@ -17,6 +17,7 @@ use Tixi\CoreDomain\Address;
 use Tixi\CoreDomain\Dispo\Route;
 
 /**
+ * runs ride optimization for all shifts per given day
  * Class RideOptimizationCommand
  * @package Tixi\App\AppBundle\Command
  */

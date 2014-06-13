@@ -16,8 +16,15 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Tixi\ApiBundle\Form\Shared\CommonAbstractType;
 use Tixi\ApiBundle\Interfaces\Dispo\MonthlyView\MonthlyPlanEditDTO;
 
+/**
+ * Class MonthlyPlanEditType
+ * @package Tixi\ApiBundle\Form\Dispo\MonthlyView
+ */
 class MonthlyPlanEditType extends CommonAbstractType{
-
+    /**
+     * @param FormBuilderInterface $builder
+     * @param array $options
+     */
     public function buildForm(FormBuilderInterface $builder, array $options) {
         $builder->add('shifts', 'collection', array(
             'type' => new MonthlyPlanDriversPerShiftType(),

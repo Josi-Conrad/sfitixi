@@ -9,6 +9,7 @@
 namespace Tixi\ApiBundle\Helper;
 
 /**
+ * This Class gives Weekday Numbers and strings within the ISO-8601 format
  * Class WeekdayService
  * @package Tixi\ApiBundle\Helper
  */

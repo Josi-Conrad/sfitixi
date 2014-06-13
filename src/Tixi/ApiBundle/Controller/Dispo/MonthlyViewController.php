@@ -130,10 +130,21 @@ class MonthlyViewController extends Controller{
         return new Response($tileRenderer->render($rootPanel));
     }
 
+    /**
+     * For future release, delete DrivingAssertion directly in MonthPlanView
+     * @param Request $request
+     * @param $workingMonthId
+     * @param $workingDayId
+     */
     public function deleteDrivingAssertion(Request $request, $workingMonthId, $workingDayId) {
 
     }
 
+    /**
+     * @param $workingDayId
+     * @return null|object
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     */
     public function getWorkingDayById($workingDayId) {
         $workingDayRepository = $this->get('workingday_repository');
         $workingDay = $workingDayRepository->find($workingDayId);

@@ -61,9 +61,9 @@ class DrivingOrderAssembler {
      * @param DrivingOrderRegisterDTO $registerDTO
      * @param Passenger $passenger
      * @param $direction
-     * @throws \DrivingOrderReturnTimeException
-     * @throws \DrivingOrderOutwardTimeException
      * @return DrivingOrder
+     * @throws \Tixi\ApiBundle\Form\Dispo\DrivingOrderReturnTimeException
+     * @throws \Tixi\ApiBundle\Form\Dispo\DrivingOrderOutwardTimeException
      */
     protected function registerDtoToDrivingOrder(DrivingOrderRegisterDTO $registerDTO, Passenger $passenger, $direction) {
         $route = null;

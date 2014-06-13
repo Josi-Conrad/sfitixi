@@ -14,6 +14,11 @@ use Tixi\App\AppBundle\Routing\RoutingCoordinate;
 use Tixi\App\AppBundle\Routing\RoutingMachineException;
 use Tixi\CoreDomain\Dispo\Route;
 
+/**
+ * Service for RoutingMachine Requests
+ * Interface RoutingMachine
+ * @package Tixi\App\Routing
+ */
 interface RoutingMachine {
 
     /**

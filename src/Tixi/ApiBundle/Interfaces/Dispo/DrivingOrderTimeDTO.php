@@ -8,7 +8,10 @@
 
 namespace Tixi\ApiBundle\Interfaces\Dispo;
 
-
+/**
+ * Class DrivingOrderTimeDTO
+ * @package Tixi\ApiBundle\Interfaces\Dispo
+ */
 class DrivingOrderTimeDTO {
     public $outwardTime;
     public $returnTime;

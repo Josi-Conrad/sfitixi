@@ -11,6 +11,7 @@ namespace Tixi\App\AppBundle\Address;
 
 use Doctrine\ORM\Query\ResultSetMappingBuilder;
 use Tixi\App\AppBundle\Interfaces\AddressHandleAssembler;
+use Tixi\CoreDomain\Address;
 
 /**
  * Class AddressLookupServiceLocalDoctrineMysql

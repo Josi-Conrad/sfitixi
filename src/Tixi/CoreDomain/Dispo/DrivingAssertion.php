@@ -18,25 +18,28 @@ use Tixi\CoreDomain\Shared\CommonBaseEntity;
  * @ORM\Entity(repositoryClass="Tixi\CoreDomainBundle\Repository\Dispo\DrivingAssertionRepositoryDoctrine")
  * @ORM\Table(name="driving_assertion")
  */
-class DrivingAssertion extends CommonBaseEntity implements DrivingAssertionInterface{
+class DrivingAssertion extends CommonBaseEntity implements DrivingAssertionInterface {
     /**
      * @ORM\Id
      * @ORM\Column(type="bigint", name="id")
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     protected $id;
-     /**
+    /**
      * @ORM\ManyToOne(targetEntity="Tixi\CoreDomain\Driver", inversedBy="drivingAssertions")
      * @ORM\JoinColumn(name="driver_id", referencedColumnName="id")
+     * @var $driver Driver
      */
     protected $driver;
     /**
      * @ORM\ManyToOne(targetEntity="Shift", inversedBy="drivingAssertions")
      * @ORM\JoinColumn(name="shift_id", referencedColumnName="id")
+     * @var $shift Shift
      */
     protected $shift;
     /**
      * @ORM\OneToOne(targetEntity="DrivingPool", mappedBy="drivingAssertion")
+     * @var $drivingPool DrivingPool
      */
     protected $drivingPool;
     /**
@@ -44,12 +47,12 @@ class DrivingAssertion extends CommonBaseEntity implements DrivingAssertionInter
      * @ORM\JoinColumn(name="repeateddrivingassertionplan_id", referencedColumnName="id")
      */
     protected $repeatedDrivingAssertionPlan;
+
     /**
      * @param Shift $shift
      * @return mixed
      */
-    public function matching(Shift $shift)
-    {
+    public function matching(Shift $shift) {
         return $shift->getId() === $this->shift->getId();
     }
 
@@ -73,37 +76,60 @@ class DrivingAssertion extends CommonBaseEntity implements DrivingAssertionInter
         return $drivingAssertion;
     }
 
+    /**
+     * deletes this drivingAssertion physically, for example if production plan changes
+     */
     public function deletePhysically() {
+        /**@var $this->driver Driver */
         $this->driver->removeDrivingAssertion($this);
         $this->shift->removeDrivingAssertion($this);
-        if(null !== $this->drivingPool) {
+        if (null !== $this->drivingPool) {
+            /**@var $this->drivingPool DrivingPool */
             $this->drivingPool->removeDrivingAssertion();
         }
     }
 
+    /**
+     * @param Driver $driver
+     */
     public function assignDriver(Driver $driver) {
         $this->driver = $driver;
         $driver->assignDrivingAssertion($this);
     }
 
+    /**
+     * @param Shift $shift
+     */
     public function assignShift(Shift $shift) {
         $this->shift = $shift;
         $shift->assignDrivingAssertion($this);
     }
 
+    /**
+     * @param DrivingPool $drivingPool
+     */
     public function assignDrivingPool(DrivingPool $drivingPool) {
         $this->drivingPool = $drivingPool;
         $drivingPool->assignDrivingAssertion($this);
     }
 
+    /**
+     * @return bool
+     */
     public function isAssignedToDrivingPool() {
-        return (isset($this->drivingPool) && null!==$this->drivingPool);
+        return (isset($this->drivingPool) && null !== $this->drivingPool);
     }
 
+    /**
+     * @param RepeatedDrivingAssertionPlan $repeatedDrivingAssertionPlan
+     */
     public function assignedRepeatedDrivingAssertionPlan(RepeatedDrivingAssertionPlan $repeatedDrivingAssertionPlan) {
         $this->repeatedDrivingAssertionPlan = $repeatedDrivingAssertionPlan;
     }
 
+    /**
+     * removes corresponding repeatedDrivingAssertionPlan from creation process for repeated
+     */
     public function removeRepeatedDrivingAssertionPlan() {
         $this->repeatedDrivingAssertionPlan = null;
     }
@@ -111,28 +137,21 @@ class DrivingAssertion extends CommonBaseEntity implements DrivingAssertionInter
     /**
      * @return mixed
      */
-    public function getDriver()
-    {
+    public function getDriver() {
         return $this->driver;
     }
 
     /**
      * @return mixed
      */
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
     }
 
     /**
      * @return mixed
      */
-    public function getShift()
-    {
+    public function getShift() {
         return $this->shift;
     }
-
-
-
-
 }

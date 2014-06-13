@@ -36,22 +36,4 @@ class DrivingOrderRegisterDTO {
     public $saturdayOrderTime;
     public $sundayOrderTime;
 
-//    public $passengerId;
-//    public $passengerFirstName;
-//    public $passengerLastName;
-//    public $passengerAddressId;
-//
-//    public $pickupDate;
-//    public $pickupTime;
-//    public $memo;
-//    public $companion;
-//
-//    public $addressFromId;
-//    public $addressToId;
-//
-//    public $routeId;
-//
-//    public $zoneType;
-//
-//    public $withDrivingOrderBack;
 } 

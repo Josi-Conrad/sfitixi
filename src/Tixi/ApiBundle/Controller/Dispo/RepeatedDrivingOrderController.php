@@ -29,6 +29,7 @@ use Tixi\ApiBundle\Tile\Dispo\RepeatedDrivingOrderEditTile;
 use Tixi\CoreDomain\Dispo\RepeatedDrivingAssertionPlan;
 use Tixi\CoreDomain\Dispo\RepeatedDrivingOrder;
 use Tixi\CoreDomain\Dispo\RepeatedDrivingOrderPlan;
+use Tixi\CoreDomain\Dispo\RepeatedDrivingOrderPlanRepository;
 use Tixi\CoreDomain\Dispo\RepeatedDrivingOrderRepository;
 
 /**

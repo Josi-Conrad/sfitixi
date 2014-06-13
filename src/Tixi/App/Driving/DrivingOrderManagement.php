@@ -15,6 +15,11 @@ use Tixi\CoreDomain\Address;
 use Tixi\CoreDomain\Dispo\DrivingOrder;
 use Tixi\CoreDomain\Dispo\RepeatedDrivingOrderPlan;
 
+/**
+ * responsible for driving order change management
+ * Interface DrivingOrderManagement
+ * @package Tixi\App\Driving
+ */
 interface DrivingOrderManagement {
     /**
      * @param DrivingOrder $drivingOrder

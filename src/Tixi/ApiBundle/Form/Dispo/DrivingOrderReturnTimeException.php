@@ -8,7 +8,10 @@
 
 namespace Tixi\ApiBundle\Form\Dispo;
 
-
+/**
+ * Class DrivingOrderReturnTimeException
+ * @package Tixi\ApiBundle\Form\Dispo
+ */
 class DrivingOrderReturnTimeException extends \Exception{
     /**
      * @var string

@@ -8,7 +8,10 @@
 
 namespace Tixi\App\Routing;
 
-
+/**
+ * Class RoutingInformation
+ * @package Tixi\App\Routing
+ */
 abstract class RoutingInformation {
 
     protected $totalTime;

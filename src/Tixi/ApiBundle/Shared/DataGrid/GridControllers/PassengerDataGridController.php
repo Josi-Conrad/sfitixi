@@ -62,6 +62,7 @@ class PassengerDataGridController extends DataGridAbstractController {
         if (!$this->isInEmbeddedState()) {
             return new PassengerListDTO();
         }
+        return null;
     }
 
     /**

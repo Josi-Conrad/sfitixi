@@ -13,8 +13,15 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Tixi\ApiBundle\Form\Shared\CommonAbstractType;
 
+/**
+ * Class ProductionPlanCreateType
+ * @package Tixi\ApiBundle\Form\Dispo\ProductionView
+ */
 class ProductionPlanCreateType extends CommonAbstractType {
-
+    /**
+     * @param FormBuilderInterface $builder
+     * @param array $options
+     */
     public function buildForm(FormBuilderInterface $builder, array $options) {
         $yearRange = range(date('Y'), date('Y') + 5);
         $builder->add('year', 'choice', array(

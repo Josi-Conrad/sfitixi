@@ -17,6 +17,10 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Tixi\ApiBundle\Form\Shared\CommonAbstractType;
 use Tixi\ApiBundle\Interfaces\Dispo\ProductionView\ProductionPlanEditDTO;
 
+/**
+ * Class ProductionPlanEditType
+ * @package Tixi\ApiBundle\Form\Dispo\ProductionView
+ */
 class ProductionPlanEditType extends CommonAbstractType{
 
     /**

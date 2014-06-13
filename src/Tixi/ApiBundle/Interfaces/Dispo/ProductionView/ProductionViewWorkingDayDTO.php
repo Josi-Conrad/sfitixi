@@ -8,7 +8,10 @@
 
 namespace Tixi\ApiBundle\Interfaces\Dispo\ProductionView;
 
-
+/**
+ * Class ProductionViewWorkingDayDTO
+ * @package Tixi\ApiBundle\Interfaces\Dispo\ProductionView
+ */
 class ProductionViewWorkingDayDTO {
     public $id;
     public $comment;

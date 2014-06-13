@@ -64,6 +64,7 @@ class VehicleDepotDataGridController extends DataGridAbstractController {
         if(!$this->isInEmbeddedState()) {
             return new VehicleDepotListDTO();
         }
+        return null;
     }
 
     /**

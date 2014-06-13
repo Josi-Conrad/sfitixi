@@ -17,7 +17,9 @@ use Tixi\ApiBundle\Tile\Core\FormRowView;
  * @package Tixi\ApiBundle\Tile\CustomFormView
  */
 class AbsentRegisterFormViewTile extends AbstractFormViewTile{
-
+    /**
+     * @return mixed|void
+     */
     public function createFormRows()
     {
         $this->basicFormRows[] = new FormRowView('subject', 'absent.field.subject',$this->dto->subject);

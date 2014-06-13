@@ -9,6 +9,7 @@
 namespace Tixi\ApiBundle\Tile\Core;
 
 
+use Symfony\Component\Form\Form;
 use Tixi\ApiBundle\Tile\AbstractTile;
 
 /**
@@ -22,7 +23,7 @@ class FormTile extends AbstractTile{
     protected $isStandalone;
 
     /**
-     * @param $form
+     * @param $form Form
      * @param bool $isStandalone
      */
     public function __construct($form, $isStandalone=false) {

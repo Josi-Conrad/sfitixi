@@ -17,14 +17,29 @@ use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
+/**
+ * Class AbstractLookaheadType
+ * @package Tixi\ApiBundle\Form\Shared\Lookahead
+ */
 abstract class AbstractLookaheadType extends AbstractType implements ContainerAwareInterface{
-
+    /**
+     * @var $container ContainerInterface
+     */
     protected $container;
 
+    /**
+     * @param ContainerInterface $container
+     */
     public function setContainer(ContainerInterface $container = null) {
         $this->container = $container;
     }
 
+    /**
+     * @param $route
+     * @param array $parameters
+     * @param bool $referenceType
+     * @return mixed
+     */
     protected function generateUrl($route, $parameters = array(), $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH) {
         return $this->container->get('router')->generate($route, $parameters, $referenceType);
     }
@@ -52,5 +67,8 @@ abstract class AbstractLookaheadType extends AbstractType implements ContainerAw
 
     }
 
+    /**
+     * @return mixed
+     */
     abstract protected function getDataSrc();
 } 

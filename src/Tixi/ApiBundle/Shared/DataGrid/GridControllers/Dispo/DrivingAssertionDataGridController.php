@@ -21,6 +21,10 @@ use Tixi\ApiBundle\Tile\Core\TextLinkSelectionDeleteTile;
 use Tixi\ApiBundle\Tile\Core\TextLinkSelectionTile;
 use Tixi\CoreDomain\Shared\GenericEntityFilter\GenericEntityFilter;
 
+/**
+ * Class DrivingAssertionDataGridController
+ * @package Tixi\ApiBundle\Shared\DataGrid\GridControllers\Dispo
+ */
 class DrivingAssertionDataGridController extends DataGridAbstractController{
     /**
      * @return mixed|string
@@ -47,7 +51,6 @@ class DrivingAssertionDataGridController extends DataGridAbstractController{
     public function getDblClickPath()
     {
         return null;
-//        return $this->generateUrl('tixiapi_driver_absent_get',array('driverId'=>$this->routeProperties['driverId'], 'absentId'=>DataGridHandler::$dataGirdReplaceIdentifier));
     }
 
     /**

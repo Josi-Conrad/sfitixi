@@ -16,6 +16,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Tixi\CoreDomain\Address;
 
 /**
+ * queries routes for old data, if old, update them
  * Class RouteUpdatesCommand
  * @package Tixi\App\AppBundle\Command
  */

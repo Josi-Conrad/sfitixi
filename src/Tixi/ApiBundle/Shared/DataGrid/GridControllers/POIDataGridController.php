@@ -60,6 +60,7 @@ class POIDataGridController extends DataGridAbstractController {
         if (!$this->isInEmbeddedState()) {
             return new POIListDTO();
         }
+        return null;
     }
 
     /**

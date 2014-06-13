@@ -8,7 +8,10 @@
 
 namespace Tixi\ApiBundle\Interfaces\Dispo\MonthlyView;
 
-
+/**
+ * Class MonthlyPlanEditDTO
+ * @package Tixi\ApiBundle\Interfaces\Dispo\MonthlyView
+ */
 class MonthlyPlanEditDTO {
 
     public $workingMonthId;

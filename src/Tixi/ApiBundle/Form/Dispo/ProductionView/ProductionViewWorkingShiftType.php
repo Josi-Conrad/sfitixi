@@ -14,6 +14,10 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints\Regex;
 
+/**
+ * Class ProductionViewWorkingShiftType
+ * @package Tixi\ApiBundle\Form\Dispo\ProductionView
+ */
 class ProductionViewWorkingShiftType extends AbstractType{
 
     /**
