@@ -64,7 +64,9 @@ class RouteManagementImpl extends ContainerAware implements RouteManagement {
             $route = Route::registerRoute($from, $to,
                 $routingInformation->getTotalTime(), $routingInformation->getTotalDistance());
             $routeRepo->store($route);
-            $em->flush();
+            //faustos 27.06. only controller functions should trigger em->flush; this flush causes unpredictable error
+            //if used in combination with drivingorder-functionallity. Please check if necessary at different point.
+//            $em->flush();
             return $route;
         } catch (\Exception $e) {
             return null;

@@ -48,12 +48,19 @@ class DrivingOrderAssembler {
         $orders = [];
         try {
             $outwardOrder = $this->registerDtoToDrivingOrder($registerDTO, $passenger, self::OUTWARD_DIRECTION);
-        }catch (\InvalidArgumentException $e) {
+        }catch (DrivingOrderOutwardTimeException $e) {
             throw $e;
         }
         $orders[] = $outwardOrder;
         if(null !== $registerDTO->orderTime->returnTime) {
-            $returnOrder = $this->registerDtoToDrivingOrder($registerDTO, $passenger, self::RETURN_DIRECTION);
+            if(empty($registerDTO->orderTime->outwardTime)) {
+                throw new DrivingOrderOutwardTimeException();
+            }
+            try {
+                $returnOrder = $this->registerDtoToDrivingOrder($registerDTO, $passenger, self::RETURN_DIRECTION);
+            }catch (DrivingOrderReturnTimeException $e) {
+                throw $e;
+            }
             $outwardOrder->assignReturnOrder($returnOrder);
             $orders[] = $returnOrder;
         }
