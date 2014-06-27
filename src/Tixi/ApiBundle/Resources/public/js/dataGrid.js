@@ -55,6 +55,8 @@ function DataGrid(outline, gridId, dblClickCallback, isEmbedded, trans) {
     this._filterstr = null;
     this._orderedByHeader = null;
 
+    this._showAllInput = null;
+
     this._init = function (outline, gridId, dblClickCallback, isEmbedded, trans) {
         _this._outline = $(outline);
         _this._dblClickCallback = dblClickCallback;
@@ -89,6 +91,7 @@ function DataGrid(outline, gridId, dblClickCallback, isEmbedded, trans) {
 
     this._initControls = function () {
         _this._initFilterControl();
+        _this._initShowAllControl();
         _this._initPaginationControl();
         _this._initCustomControls();
     };
@@ -115,6 +118,12 @@ function DataGrid(outline, gridId, dblClickCallback, isEmbedded, trans) {
             _this._onFilterControlActivation(_filterTextInput.val());
         });
     };
+
+    this._initShowAllControl = function() {
+        var _showAll = _this._outline.find('.gridShowAllInput');
+        $(_showAll).on('change', _this._onShowAllToggle);
+        _this._showAllInput = _showAll;
+    }
 
     this._initPaginationControl = function () {
         _this._paginator = new DataGridPaginator();
@@ -214,6 +223,7 @@ function DataGrid(outline, gridId, dblClickCallback, isEmbedded, trans) {
         }
         _jsonToReturn['page'] = _this._paginator.getPage();
         _jsonToReturn['limit'] = _this._paginator.getLimit();
+        _jsonToReturn['showall'] = $(_this._showAllInput).prop('checked');
         return _jsonToReturn;
     };
 
@@ -261,6 +271,10 @@ function DataGrid(outline, gridId, dblClickCallback, isEmbedded, trans) {
         _this._paginator.reset();
         _this._updateData(true);
     };
+
+    this._onShowAllToggle = function() {
+        _this._updateData(true);
+    }
 
     this._onPaginationActivity = function () {
         _this._updateData(false);

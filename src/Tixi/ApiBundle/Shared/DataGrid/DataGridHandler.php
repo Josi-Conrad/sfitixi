@@ -83,7 +83,8 @@ class DataGridHandler {
         $filterstr = $request->get('filterstr');
         $correctedPage = Paginator::adjustPageForPagination($page);
         $partial = $request->get('partial');
-        return new DataGridInputState($referenceDTO, $orderByField, $orderByDirection, $correctedPage, $limit, $filterstr, $partial);
+        $showAll = $request->get('showall')==='true';
+        return new DataGridInputState($referenceDTO, $orderByField, $orderByDirection, $correctedPage, $limit, $filterstr, $partial, $showAll);
     }
 
     /**
@@ -122,7 +123,7 @@ class DataGridHandler {
         $properties = $this->createEntityPropertiesArray($state->getSourceDTO());
         $restrictiveProperties = DataGridEntityProperty::getRestrictiveProperties($properties);
         $headerProperties = DataGridEntityProperty::getHeaderProperties($properties);
-        if(count($restrictiveProperties)>0) {
+        if(!$state->isInShowAllState() && (count($restrictiveProperties)>0)) {
             $filter->setRestrictiveProperties($restrictiveProperties);
         }
         if(null !== $state->getOrderByDirection() && null !== $state->getOrderByField()) {

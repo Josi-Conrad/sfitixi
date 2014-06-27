@@ -2,7 +2,7 @@
     <div class="row">
         <div class="topControlWrapper">
             <div class="row">
-                <div class="col-md-5 filterControl">
+                <div class="col-md-4 filterControl">
                     <div class="input-group">
                         <input type="text" id="{{ 'fpw_' ~ menuId ~ '_' ~ gridId ~ '_search'}}" class="form-control gridFilterInput input-sm" />
                             <span class="input-group-btn btn-group-sm">
@@ -10,7 +10,12 @@
                             </span>
                     </div>
                 </div>
-                <div class="col-md-7 text-right actionControl">
+                <div class="col-md-3 showAllControl">
+                    <input type="checkbox" id="{{ 'fpx_' ~ menuId ~ '_' ~ gridId ~ '_showall'}}" class="gridShowAllInput" style="margin-right:2px;"/>
+                    {{ 'datagrid.showall'|trans }}
+
+                </div>
+                <div class="col-md-5 text-right actionControl">
                     {% for resolvedElement in children %}
                         {% if 'datagridcustomcontrol' in resolvedElement.viewIndentifiers %}
                             {{ resolvedElement.rawData | raw }}

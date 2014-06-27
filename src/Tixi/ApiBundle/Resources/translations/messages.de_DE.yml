@@ -23,6 +23,7 @@ delete.logically.standardtext: Möchten Sie das Dokument wirklich löschen? Sie 
 
 #Datagrid
 datagrid.empty.defaulttext: Es wurden keine Dokumente gefunden.
+datagrid.showall: alle anzeigen
 
 #Home
 home.panel.name: Home

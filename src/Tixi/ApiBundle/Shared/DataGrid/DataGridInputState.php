@@ -31,6 +31,9 @@ class DataGridInputState {
     protected $sourceDTO = null;
     protected $partial = null;
 
+    //if true, all restrictive properties are disabled
+    protected $showAll = false;
+
     /**
      * @param $sourceDTO
      * @param null $orderByField
@@ -39,8 +42,9 @@ class DataGridInputState {
      * @param null $limit
      * @param null $filterStr
      * @param bool $partial
+     * @param bool $showAll
      */
-    public function __construct($sourceDTO, $orderByField=null, $orderByDirection=null, $page=null, $limit=null, $filterStr=null, $partial=false) {
+    public function __construct($sourceDTO, $orderByField=null, $orderByDirection=null, $page=null, $limit=null, $filterStr=null, $partial=false, $showAll=false) {
         $this->sourceDTO = $sourceDTO;
         $this->orderByField = $orderByField;
         $this->orderByDirection = $orderByDirection;
@@ -48,6 +52,7 @@ class DataGridInputState {
         $this->limit = (!is_null($limit)) ? $limit : $this->defaultLimitPerPage;
         $this->filterStr = $filterStr;
         $this->partial = $partial;
+        $this->showAll = $showAll;
     }
 
     /**
@@ -111,5 +116,9 @@ class DataGridInputState {
     public function isPartial()
     {
         return $this->partial;
+    }
+
+    public function isInShowAllState() {
+        return $this->showAll;
     }
 } 
