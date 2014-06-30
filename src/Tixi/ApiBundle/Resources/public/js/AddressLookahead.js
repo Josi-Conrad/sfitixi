@@ -80,6 +80,7 @@ function AddressLookahead() {
         $(_this._cancelManualAddLink).on('click', _this._onCancelManualAddClicked);
         $(_this._saveManualAddLink).on('click', _this._onSaveManualAddClicked);
         $(_this._editManuallyLink).on('click', _this._onEditManuallyClicked);
+        $('body').on('formSaveAttempt', _this._onFormSaveAttempt);
     };
 
     this._initPassengerHomeAddressLink = function(passengerId) {
@@ -222,6 +223,17 @@ function AddressLookahead() {
         }
     };
 
+    this._checkIfAddressContainerIsValid = function() {
+        var _dummyAddress = new Address(),
+            _isValid = true;
+        for(var _field in _dummyAddress.fields) {
+            if(_this._getAddressFieldValue(_field)==='') {
+                _isValid = false;
+            }
+        }
+        return _isValid;
+    }
+
     this._resetInputField = function() {
         $(_this._inputField).val('');
     }
@@ -275,6 +287,16 @@ function AddressLookahead() {
         _this._selectedAddress = model;
         $('body').trigger('addressChanged',[_this]);
     };
+
+    this._onFormSaveAttempt = function() {
+        //the form can't be saved if a field in the address container isn't properly set. We need to check this and
+        //display the address container if there is a value missing.
+        if($(_this._inputField).val()!=='' && ! _this._checkIfAddressContainerIsValid()) {
+            if(_this._state !== _this.MANUALADDSTATE) {
+                _this._switchToManualAddState(true);
+            }
+        }
+    }
 
     this._onAddressSelectionClick = function(model) {
         $(_this._inputField).val(model.getDisplayName());

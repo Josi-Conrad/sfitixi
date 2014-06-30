@@ -25,6 +25,7 @@ function FormValidationController(formId) {
     this._initListeners = function () {
         $(_this._submitButton).on('click', function (event) {
             event.preventDefault();
+            $('body').trigger('formSaveAttempt');
             _this._resetConfirmUnload();
             if (_this._hasHtml5Validation()) {
                 $(_this._form).submit(function (event) {
@@ -38,6 +39,7 @@ function FormValidationController(formId) {
                     }
                 });
             }
+
             (_this._form).submit();
         });
         _this._initFormChangeListener();
