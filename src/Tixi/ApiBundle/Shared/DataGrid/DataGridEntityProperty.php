@@ -16,21 +16,13 @@ use Tixi\CoreDomain\Shared\GenericEntityFilter\GenericEntityProperty;
  * @package Tixi\ApiBundle\Shared\DataGrid
  */
 class DataGridEntityProperty extends GenericEntityProperty{
-    protected $isRestrictive;
-    protected $isHeader;
 
-    /**
-     * @param $entityByName
-     * @param $propertyByName
-     * @param string $comparingOperator
-     * @param null $propertyValue
-     * @param bool $isRestrictive
-     * @param bool $isHeader
-     */
-    public function __construct($entityByName, $propertyByName, $comparingOperator='=', $propertyValue=null, $isRestrictive=false, $isHeader=false) {
-        parent::__construct($entityByName, $propertyByName, $propertyValue, $comparingOperator);
-        $this->isRestrictive = $isRestrictive;
-        $this->isHeader = $isHeader;
+    /** @var  DataGridEntityPropertyOptions */
+    protected $propertyOptions;
+
+    public function __construct($entityByName, $propertyByName, DataGridEntityPropertyOptions $propertyOptions, $propertyValue=null) {
+        $this->propertyOptions = $propertyOptions;
+        parent::__construct($entityByName, $propertyByName, $propertyValue, $propertyOptions->comparingOperator);
     }
 
     /**
@@ -62,11 +54,36 @@ class DataGridEntityProperty extends GenericEntityProperty{
     }
 
     /**
+     * @param array $properties
+     * @throws \Exception
+     * @return null | DataGridEntityProperty
+     */
+    public static function getDefaultSortProperty(array $properties) {
+        $defaultSortProperty = null;
+        /** @var DataGridEntityProperty $property*/
+        foreach($properties as $property) {
+            if($property->isDefaultSort()) {
+                if(null !== $defaultSortProperty) {
+                    throw new \Exception('multiple default sort properties found; it is only allowed to set one default property per list.');
+                }
+                if(!($property->getPropertyOptions()->defaultSort === DataGridEntityPropertyOptions::DEFAULTSORT_ASC
+                    || $property->getPropertyOptions()->defaultSort === DataGridEntityPropertyOptions::DEFDAULTSORT_DESC)) {
+                    throw new \Exception('missformatted default sort property found. Must match one of the following (case-sensitive): '
+                        .DataGridEntityPropertyOptions::DEFAULTSORT_ASC.', '
+                        .DataGridEntityPropertyOptions::DEFDAULTSORT_DESC);
+                }
+                $defaultSortProperty = $property;
+            }
+        }
+        return $defaultSortProperty;
+    }
+
+    /**
      * @return boolean
      */
     public function isHeader()
     {
-        return $this->isHeader;
+        return $this->propertyOptions->isHeader;
     }
 
     /**
@@ -74,8 +91,19 @@ class DataGridEntityProperty extends GenericEntityProperty{
      */
     public function isRestrictive()
     {
-        return $this->isRestrictive;
+        return $this->propertyOptions->isRestrictive;
+
     }
+
+    public function isDefaultSort()
+    {
+        return ($this->propertyOptions->defaultSort !== null && $this->propertyOptions->defaultSort !== '');
+    }
+
+    public function getPropertyOptions() {
+        return $this->propertyOptions;
+    }
+
 
 
 } 

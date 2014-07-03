@@ -27,11 +27,11 @@ class BankHolidayListDTO implements DataGridSourceClass{
      */
     public $isDeleted = 'false';
     /**
-     * @GridField(propertyId="BankHoliday.name", headerName="bankholiday.field.name", order=1)
+     * @GridField(propertyId="BankHoliday.name", headerName="bankholiday.field.name", order=1))
      */
     public $name;
     /**
-     * @GridField(propertyId="BankHoliday.date", headerName="bankholiday.field.date", restrictive=true, comparingOperator=">", order=2)
+     * @GridField(propertyId="BankHoliday.date", headerName="bankholiday.field.date", restrictive=true, comparingOperator=">", order=2, defaultSort="ASC")
      */
     public $date;
 

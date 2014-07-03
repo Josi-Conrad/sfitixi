@@ -37,6 +37,11 @@ class GridField {
     public $isComputed = false;
     /**
      * @var string
+     * empty | ASC | DESC
+     */
+    public $defaultSort = '';
+    /**
+     * @var string
      * Format: EntityName.PropertyName
      */
     public $propertyId;
@@ -48,5 +53,7 @@ class GridField {
      * @var int
      */
     public $order;
+
+
 
 } 

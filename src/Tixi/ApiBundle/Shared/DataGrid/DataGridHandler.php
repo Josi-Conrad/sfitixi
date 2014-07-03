@@ -123,6 +123,8 @@ class DataGridHandler {
         $properties = $this->createEntityPropertiesArray($state->getSourceDTO());
         $restrictiveProperties = DataGridEntityProperty::getRestrictiveProperties($properties);
         $headerProperties = DataGridEntityProperty::getHeaderProperties($properties);
+        $defaultSortProperty = DataGridEntityProperty::getDefaultSortProperty($properties);
+
         if(!$state->isInShowAllState() && (count($restrictiveProperties)>0)) {
             $filter->setRestrictiveProperties($restrictiveProperties);
         }
@@ -130,6 +132,10 @@ class DataGridHandler {
             $orderFieldExploded = explode('.',$state->getOrderByField());
             if(count($orderFieldExploded)<2) {throw new \Exception('misformatted propertyId found on field '.$state->getOrderByField());}
             $filter->setOrderedBy(new OrderBy(new GenericEntityProperty($orderFieldExploded[0],$orderFieldExploded[1]), $state->getOrderByDirection()));
+        }else {
+            if(null !== $defaultSortProperty) {
+                $filter->setOrderedBy(new OrderBy($defaultSortProperty, $defaultSortProperty->getPropertyOptions()->defaultSort));
+            }
         }
         if(null !== $state->getFilterStr()) {
             $filter->setSearch(new Search($state->getFilterStr(), $headerProperties));
@@ -160,11 +166,14 @@ class DataGridHandler {
                 if(count($explodedPropertyId)<2) {throw new \Exception('misformatted propertyId found on field '.$reflProperty->getName());}
                 $entityName = $explodedPropertyId[0];
                 $propertyName = $explodedPropertyId[1];
-                $comparingOperator = $dataGridFieldAnnotation->comparingOperator;
-                $isRestrictive = $dataGridFieldAnnotation->restrictive;
-                $isHeader = !empty($dataGridFieldAnnotation->headerName);
                 $propertyValue = $reflProperty->getValue($sourceClassInstance);
-                $properties[] = new DataGridEntityProperty($entityName, $propertyName, $comparingOperator, $propertyValue, $isRestrictive, $isHeader);
+                $propertyOptions = new DataGridEntityPropertyOptions();
+                $propertyOptions->isHeader = !empty($dataGridFieldAnnotation->headerName);
+                $propertyOptions->isRestrictive = $dataGridFieldAnnotation->restrictive;
+                $propertyOptions->comparingOperator = $dataGridFieldAnnotation->comparingOperator;
+                $propertyOptions->defaultSort = $dataGridFieldAnnotation->defaultSort;
+
+                $properties[] = new DataGridEntityProperty($entityName, $propertyName, $propertyOptions, $propertyValue);
             }
         }
         return $properties;
