@@ -133,7 +133,7 @@ class DataGridHandler {
             if(count($orderFieldExploded)<2) {throw new \Exception('misformatted propertyId found on field '.$state->getOrderByField());}
             $filter->setOrderedBy(new OrderBy(new GenericEntityProperty($orderFieldExploded[0],$orderFieldExploded[1]), $state->getOrderByDirection()));
         }else {
-            if(null !== $defaultSortProperty) {
+            if(null !== $defaultSortProperty && !$defaultSortProperty->isComputed()) {
                 $filter->setOrderedBy(new OrderBy($defaultSortProperty, $defaultSortProperty->getPropertyOptions()->defaultSort));
             }
         }
@@ -172,7 +172,7 @@ class DataGridHandler {
                 $propertyOptions->isRestrictive = $dataGridFieldAnnotation->restrictive;
                 $propertyOptions->comparingOperator = $dataGridFieldAnnotation->comparingOperator;
                 $propertyOptions->defaultSort = $dataGridFieldAnnotation->defaultSort;
-
+                $propertyOptions->isComputed = $dataGridFieldAnnotation->isComputed;
                 $properties[] = new DataGridEntityProperty($entityName, $propertyName, $propertyOptions, $propertyValue);
             }
         }

@@ -17,4 +17,5 @@ class DataGridEntityPropertyOptions {
     public $isRestrictive;
     public $isHeader;
     public $defaultSort;
+    public $isComputed;
 }

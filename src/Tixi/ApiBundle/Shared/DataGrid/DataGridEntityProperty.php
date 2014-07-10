@@ -100,6 +100,10 @@ class DataGridEntityProperty extends GenericEntityProperty{
         return ($this->propertyOptions->defaultSort !== null && $this->propertyOptions->defaultSort !== '');
     }
 
+    public function isComputed() {
+        return $this->propertyOptions->isComputed;
+    }
+
     public function getPropertyOptions() {
         return $this->propertyOptions;
     }
