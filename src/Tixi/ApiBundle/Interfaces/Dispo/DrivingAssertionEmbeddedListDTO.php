@@ -38,6 +38,8 @@ class DrivingAssertionEmbeddedListDTO implements DataGridSourceClass{
      */
     public $shift;
 
+    public $dateAsDateTime;
+
     /**
      * @return GenericAccessQuery
      */

@@ -13,6 +13,7 @@ use Tixi\CoreDomain\Dispo\DrivingAssertion;
 use Tixi\CoreDomain\Dispo\DrivingAssertionRepository;
 use Tixi\CoreDomain\Dispo\RepeatedDrivingAssertionPlan;
 use Tixi\CoreDomain\Dispo\Shift;
+use Tixi\CoreDomain\Driver;
 use Tixi\CoreDomainBundle\Repository\CommonBaseRepositoryDoctrine;
 
 /**
@@ -51,6 +52,20 @@ class DrivingAssertionRepositoryDoctrine extends CommonBaseRepositoryDoctrine im
             ->setParameter('shift', $shift);
         return $qb->getQuery()->getResult();
     }
+
+    public function findAllProspectiveByDriver(Driver $driver) {
+        $now = new \DateTime();
+        $qb = parent::createQueryBuilder('e');
+        $qb->join('e.driver', 'd')
+            ->join('e.shift','s')
+            ->join('s.workingDay','w')
+            ->where('d = :driver')
+            ->andWhere('w.date >= :now')
+            ->setParameter('driver',$driver)
+            ->setParameter('now',$now->format('Y-m-d'));
+        return $qb->getQuery()->getResult();
+    }
+
 
     /**
      * @param RepeatedDrivingAssertionPlan $repeatedDrivingAssertionPlan

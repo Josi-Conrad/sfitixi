@@ -177,7 +177,7 @@ class Driver extends Person {
     public function isAvailableOn(Shift $shift, $isBankHoliday = false) {
         //check absents, if match = driver is not available
         foreach ($this->getAbsents() as $absent) {
-            if ($absent->matchDate($shift->getDate())) {
+            if (!$absent->isDeleted && $absent->matchDate($shift->getDate())) {
                 return false;
             }
         }

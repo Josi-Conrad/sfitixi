@@ -9,6 +9,7 @@
 namespace Tixi\CoreDomain\Dispo;
 
 
+use Tixi\CoreDomain\Driver;
 use Tixi\CoreDomain\Shared\CommonBaseRepository;
 
 /**
@@ -34,6 +35,12 @@ interface DrivingAssertionRepository extends CommonBaseRepository {
      * @return mixed
      */
     public function findAllActiveByShift(Shift $shift);
+
+    /**
+     * @param Driver $driver
+     * @return mixed
+     */
+    public function findAllProspectiveByDriver(Driver $driver);
 
     /**
      * @param RepeatedDrivingAssertionPlan $repeatedDrivingAssertionPlan

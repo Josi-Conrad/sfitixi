@@ -99,10 +99,14 @@ class DrivingAssertionManagementImpl extends ContainerAware implements DrivingAs
         $repeatedDrivingAssertionPlanRepository = $this->container->get('repeateddrivingassertionplan_repository');
         /** @var DrivingAssertionRepository $drivingAssertionRepository */
         $drivingAssertionRepository = $this->container->get('drivingassertion_repository');
+
+        //check all prospectiveAssertions and delete those that can't be fulfilled anymore
+        $prospectiveAssertions = $drivingAssertionRepository->findAllProspectiveByDriver($driver);
+        $this->recheckDrivingAssertions($drivingAssertionRepository, $prospectiveAssertions, $driver);
+        //maybe some assertions from repeated plans can now be possible. We need to check that
         $prospectivePlans = $repeatedDrivingAssertionPlanRepository->findAllProspectiveForDriver($driver);
         foreach($prospectivePlans as $prospectivePlan) {
-            $assertions = $drivingAssertionRepository->findAllProspectiveByRepeatedDrivingAssertionPlan($prospectivePlan);
-            $this->recheckDrivingAssertions($drivingAssertionRepository, $assertions, $driver);
+            $this->handleNewRepeatedDrivingAssertion($prospectivePlan);
         }
     }
 

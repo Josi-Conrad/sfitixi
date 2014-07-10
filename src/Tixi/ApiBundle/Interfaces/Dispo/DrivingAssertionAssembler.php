@@ -24,6 +24,11 @@ class DrivingAssertionAssembler {
         $dtoArray = array();
         foreach ($drivingAssertions as $drivingAssertion) {
             $dtoArray[] = $this->drivingAssertionToDrivngAssertionEmbeddedListDTO($drivingAssertion);
+            //manually sort list because fields are computed
+            usort($dtoArray, function(DrivingAssertionEmbeddedListDTO $a, DrivingAssertionEmbeddedListDTO $b) {
+                if($a->dateAsDateTime == $b->dateAsDateTime) return 0;
+                return ($a->dateAsDateTime < $b->dateAsDateTime ? -1 : 1);
+            });
         }
         return $dtoArray;
     }
@@ -37,6 +42,7 @@ class DrivingAssertionAssembler {
         $dto->id = $drivingAssertion->getId();
         $dto->driverId = $drivingAssertion->getDriver()->getId();
         $dto->date = $drivingAssertion->getShift()->getWorkingDay()->getDateString();
+        $dto->dateAsDateTime = $drivingAssertion->getShift()->getWorkingDay();
         $dto->shift = $drivingAssertion->getShift()->getShiftType()->getName();
         return $dto;
     }

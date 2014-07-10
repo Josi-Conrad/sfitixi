@@ -103,6 +103,9 @@ class DriverAbsentController extends Controller {
     public function deleteAbsentAction(Request $request, $driverId, $absentId) {
         $absent = $this->getAbsent($absentId);
         $absent->deleteLogically();
+        /** @var DrivingAssertionManagement $drivingAssertionService */
+        $drivingAssertionService = $this->get('tixi_app.drivingassertionmanagement');
+        $drivingAssertionService->handleNewOrChangedAbsent($this->getDriver($driverId));
         $this->get('entity_manager')->flush();
         return $this->redirect($this->generateUrl('tixiapi_driver_get',array('driverId' => $driverId)));
     }
